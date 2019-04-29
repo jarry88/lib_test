@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">Twant</string>
+
+    <string name="copyright">© %s Takewant版權所有</string>
+
+    <string name="register_fragment_title">注冊賬號</string>
+    <string name="login_fragment_title">登入</string>
+    <string name="mobile_zone_text">地區區號</string>
+    <string name="ok">確定</string>
+    <string name="input_mobile_hint">請輸入手機號碼</string>
+
+    <string name="input_sms_code_hint">請輸入動態碼</string>
+    <string name="input_captcha_hint">請輸入驗證碼</string>
+
+    <string name="input_password_hint">請輸入6–20位英文字母，符號或數字</string>
+    <string name="input_password_confirm_hint">再次輸入想要設置的密碼</string>
+    <string name="input_nickname_hint">請輸入您的暱稱</string>
+    <string name="input_login_password_hint">請輸入密碼</string>
+    <string name="get_sms_code">獲取動態碼</string>
+
+    <string name="login_way_password">密碼</string>
+    <string name="login_way_dynamic_code">動態碼</string>
+
+
+    <string name="bottom_bar_title_home">首頁</string>
+    <string name="bottom_bar_title_message">消息</string>
+    <string name="bottom_bar_title_circle">想要圈</string>
+    <string name="bottom_bar_title_cart">購物車</string>
+    <string name="bottom_bar_title_my">我的</string>
+
+    <string name="my_bill">我的訂單</string>
+    <string name="my_bill_to_be_paid">待付款</string>
+    <string name="my_bill_to_be_sent">待發貨</string>
+    <string name="my_bill_to_be_received">待收貨</string>
+    <string name="my_bill_to_be_commented">待評價</string>
+    <string name="my_bill_return_or_exchange">退換貨</string>
+
+    <string name="my_coupon">我的優惠券</string>
+    <string name="my_follow">我的關注</string>
+    <string name="my_footprint">我的足跡</string>
+    <string name="my_address">我的收貨地址</string>
+    <string name="my_bonus">我的積分</string>
+    <string name="my_trust_value">我的信賴值</string>
+</resources>

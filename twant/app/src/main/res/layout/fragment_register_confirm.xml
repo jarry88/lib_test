@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back"
+            />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:text="@string/register_fragment_title"
+            />
+    </RelativeLayout>
+
+
+    <!-- 已發送提示 -->
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:text="短信已發送至%s，請在%d分鐘內完成驗證"
+        />
+
+    <!-- 動態碼 -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="120dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/mobile"
+            />
+
+        <EditText
+            android:id="@+id/et_sms_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_sms_code_hint"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+    <!-- 密碼 -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="180dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/mobile"
+            />
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_password_hint"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+
+    <!-- 確認密碼 -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="240dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/mobile"
+            />
+
+        <EditText
+            android:id="@+id/et_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_password_confirm_hint"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+
+    <!-- nickname -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="300dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/mobile"
+            />
+
+        <EditText
+            android:id="@+id/et_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_nickname_hint"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+
+
+    <ImageView
+        android:id="@+id/btn_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="23dp"
+        android:src="@drawable/red_button"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

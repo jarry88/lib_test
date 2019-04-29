@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- 地區區號 -->
+    <include layout="@layout/mobile_zone_select" />
+    <!-- 手機號 -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="140dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/mobile"
+            />
+
+        <EditText
+            android:id="@+id/et_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_mobile_hint"
+            android:text="13425038750"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+    <!-- 驗證碼 -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="220dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/captcha"
+            />
+
+        <ImageView
+            android:id="@+id/btn_refresh_captcha"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+
+        <EditText
+            android:id="@+id/et_captcha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/btn_refresh_captcha"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_captcha_hint"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+    <!-- 動態碼 -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="280dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/dynamic_code"
+            />
+
+
+        <TextView
+            android:id="@+id/btn_get_sms_code"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="40dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:text="@string/get_sms_code"
+            android:textSize="14sp"
+            />
+
+
+        <EditText
+            android:id="@+id/et_sms_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:layout_toLeftOf="@id/btn_get_sms_code"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_sms_code_hint"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="23dp"
+        android:src="@drawable/red_button"
+        />
+</android.support.constraint.ConstraintLayout>

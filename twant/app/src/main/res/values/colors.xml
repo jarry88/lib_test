@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="tw_red">#F50057</color>
+    <color name="tw_blue">#00B0FF</color>
+    <color name="tw_black">#2A292A</color>
+    <color name="tw_grey">#BBBBBB</color>
+</resources>
