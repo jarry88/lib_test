@@ -95,6 +95,13 @@ public class Api {
      */
     public static final String PATH_EDIT_PAYMENT_PASSWORD = "/api/member/security/edit/payPwd";
 
+
+    /**
+     * 重置密碼
+     */
+    public static final String PATH_RESET_PASSWORD = "/api/loginconnect/mobile/findpwd";
+
+
     /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行

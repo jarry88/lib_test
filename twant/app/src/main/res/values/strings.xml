@@ -10,6 +10,8 @@
     <string name="payment_password_hint">支付密碼由6-20個大小寫英文字母、符號或數字組成</string>
     <string name="payment_password_text">設置密碼</string>
     <string name="confirm_payment_password_text">再次設置密碼</string>
+    <string name="reset_password_fragment_title">重置密碼</string>
+    <string name="reset_password_confirm_password_hint">請再次輸入密碼</string>
 
 
     <string name="mobile_zone_text">地區區號</string>
@@ -29,6 +31,8 @@
     <string name="login_way_dynamic_code">動態碼</string>
 
     <string name="text_register">註冊</string>
+    <string name="text_next_step">下一步</string>
+    <string name="text_ok">確認</string>
 
 
     <string name="bottom_bar_title_home">首頁</string>
