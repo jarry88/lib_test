@@ -21,6 +21,8 @@
     <string name="login_way_password">密碼</string>
     <string name="login_way_dynamic_code">動態碼</string>
 
+    <string name="text_register">註冊</string>
+
 
     <string name="bottom_bar_title_home">首頁</string>
     <string name="bottom_bar_title_message">消息</string>
