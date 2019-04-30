@@ -39,6 +39,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
         Util.setOnClickListener(view, R.id.btn_register, this);
         Util.setOnClickListener(view, R.id.btn_login, this);
+        Util.setOnClickListener(view, R.id.btn_setting, this);
     }
 
     @Override
@@ -51,6 +52,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         } else if (id == R.id.btn_login) {
             MainFragment mainFragment = (MainFragment) getParentFragment();
             mainFragment.start(LoginFragment.newInstance());
+        } else if (id == R.id.btn_setting) {
+            MainFragment mainFragment = (MainFragment) getParentFragment();
+            mainFragment.start(SettingFragment.newInstance());
         }
     }
 }

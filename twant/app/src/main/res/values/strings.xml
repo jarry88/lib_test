@@ -5,6 +5,7 @@
 
     <string name="register_fragment_title">注冊賬號</string>
     <string name="login_fragment_title">登入</string>
+    <string name="setting_fragment_title">設置</string>
     <string name="mobile_zone_text">地區區號</string>
     <string name="ok">確定</string>
     <string name="input_mobile_hint">請輸入手機號碼</string>
@@ -43,4 +44,19 @@
     <string name="my_address">我的收貨地址</string>
     <string name="my_bonus">我的積分</string>
     <string name="my_trust_value">我的信賴值</string>
+
+    <string name="setting_personal_info">個人資料</string>
+    <string name="setting_personal_info_hint">設置個人詳細資料</string>
+    <string name="setting_login_password">登入密碼</string>
+    <string name="setting_login_password_hint">可通過手機動態碼修改登入密碼</string>
+    <string name="setting_change_mobile">手機修改</string>
+    <string name="setting_change_mobile_hint">若您的手機已丟失或停用，請立即修改更換</string>
+    <string name="setting_payment_password">支付密碼</string>
+    <string name="setting_payment_password_hint">通過手機動態碼可在此設置支付密碼</string>
+    <string name="setting_realname_authentication">實名認證</string>
+    <string name="setting_realname_authentication_hint">您認證的實名信息</string>
+
+
+
+    <string name="btn_logout_text">安全退出</string>
 </resources>

@@ -34,4 +34,14 @@ public class User {
         SLog.info("用戶【未】登錄");
         return 0;
     }
+
+    /**
+     * 退出登錄，清空數據
+     */
+    public static void logout() {
+        Hawk.delete(SPField.FIELD_USER_ID);
+        Hawk.delete(SPField.FIELD_TOKEN);
+        Hawk.delete(SPField.FIELD_NICKNAME);
+        Hawk.delete(SPField.FIELD_LAST_LOGIN_TIME);
+    }
 }
