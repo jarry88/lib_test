@@ -6,6 +6,12 @@
     <string name="register_fragment_title">注冊賬號</string>
     <string name="login_fragment_title">登入</string>
     <string name="setting_fragment_title">設置</string>
+    <string name="payment_password_fragment_title">設置支付密碼</string>
+    <string name="payment_password_hint">支付密碼由6-20個大小寫英文字母、符號或數字組成</string>
+    <string name="payment_password_text">設置密碼</string>
+    <string name="confirm_payment_password_text">再次設置密碼</string>
+
+
     <string name="mobile_zone_text">地區區號</string>
     <string name="ok">確定</string>
     <string name="input_mobile_hint">請輸入手機號碼</string>
@@ -59,4 +65,5 @@
 
 
     <string name="btn_logout_text">安全退出</string>
+    <string name="btn_commit_text">確認提交</string>
 </resources>

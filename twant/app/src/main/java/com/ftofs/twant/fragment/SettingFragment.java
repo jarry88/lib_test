@@ -34,7 +34,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_logout, this);
-
+        Util.setOnClickListener(view, R.id.btn_payment_password, this);
     }
 
 
@@ -44,6 +44,11 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         if (id == R.id.btn_logout) {
             User.logout();
             pop();
+        } else if (id == R.id.btn_payment_password) {
+            MainFragment mainFragment = MainFragment.getInstance();
+            if (mainFragment != null) {
+                mainFragment.start(PaymentPasswordFragment.newInstance());
+            }
         }
     }
 }

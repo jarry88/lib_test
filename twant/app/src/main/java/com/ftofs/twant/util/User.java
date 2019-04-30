@@ -44,4 +44,12 @@ public class User {
         Hawk.delete(SPField.FIELD_NICKNAME);
         Hawk.delete(SPField.FIELD_LAST_LOGIN_TIME);
     }
+
+    /**
+     * 獲取當前已登錄用戶的Token
+     * @return
+     */
+    public static String getToken() {
+        return Hawk.get(SPField.FIELD_TOKEN);
+    }
 }
