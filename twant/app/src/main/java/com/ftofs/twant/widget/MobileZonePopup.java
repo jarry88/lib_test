@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.MobileZoneAdapter;
-import com.ftofs.twant.data.MobileZone;
+import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.fragment.RegisterFragment;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;

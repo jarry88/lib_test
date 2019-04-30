@@ -1,4 +1,4 @@
-package com.ftofs.twant.data;
+package com.ftofs.twant.entity;
 
 /**
  * 區號結構體

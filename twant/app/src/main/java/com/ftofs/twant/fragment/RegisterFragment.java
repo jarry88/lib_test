@@ -13,14 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
-import com.ftofs.twant.data.MobileZone;
+import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;

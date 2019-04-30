@@ -10,9 +10,12 @@ import android.util.Pair;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.ResponseCode;
+import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.twant.entity.MobileZoneReadyMsg;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.StringUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -20,9 +23,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -298,6 +305,41 @@ public class Api {
             @Override
             public Object doWork() {
                 return Api.getCaptcha();
+            }
+        });
+    }
+
+    public static void getMobileZoneList(TaskObserver taskObserver) {
+        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            @Override
+            public Object doWork() {
+                List<MobileZone> mobileZoneList = new ArrayList<>();
+                try {
+                    String responseStr = Api.syncGet(Api.PATH_MOBILE_ZONE, null);
+                    if (StringUtil.isEmpty(responseStr)) {
+                        return null;
+                    }
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (responseObj == null) {
+                        return null;
+                    }
+
+                    EasyJSONArray adminMobileAreaList = responseObj.getArray("datas.adminMobileAreaList");
+
+                    for (Object object : adminMobileAreaList) {
+                        final MobileZone mobileZone = (MobileZone) EasyJSONBase.jsonDecode(MobileZone.class, object.toString());
+                        SLog.info("mobileZone: %s", mobileZone);
+                        mobileZoneList.add(mobileZone);
+                    }
+
+                    SLog.info("获取MobileZone数据成功");
+                    return mobileZoneList;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
             }
         });
     }

@@ -18,6 +18,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
+import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.SharedPreferenceUtil;
@@ -25,6 +26,8 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -37,11 +40,13 @@ import okhttp3.Response;
  * @author zwm
  */
 public class DynamicCodeLoginFragment extends BaseFragment implements View.OnClickListener {
+    List<MobileZone> mobileZoneList = new ArrayList<>();
     ImageView btnRefreshCaptcha;
     String captchaKey;
     EditText etMobile;
     EditText etCaptcha;
     EditText etSmsCode;
+    TextView tvAreaName;
 
     // !!!暫時寫死
     String areaCode = "0086";
@@ -75,7 +80,10 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
         etMobile = view.findViewById(R.id.et_mobile);
         etCaptcha = view.findViewById(R.id.et_captcha);
         etSmsCode = view.findViewById(R.id.et_sms_code);
+        tvAreaName = view.findViewById(R.id.tv_area_name);
+
         refreshCaptcha();
+        getMobileZoneList();
     }
 
 
@@ -173,6 +181,22 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
                 }
                 captchaKey = result.second;
                 btnRefreshCaptcha.setImageBitmap(result.first);
+            }
+        });
+    }
+
+    /**
+     * 获取区号列表
+     */
+    private void getMobileZoneList() {
+        Api.getMobileZoneList(new TaskObserver() {
+            @Override
+            public void onMessage() {
+                mobileZoneList = (List<MobileZone>) message;
+                SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
+                if (mobileZoneList.size() > 0) {
+                    tvAreaName.setText(mobileZoneList.get(0).areaName);
+                }
             }
         });
     }

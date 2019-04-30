@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.SharedPreferenceUtil;
@@ -22,6 +24,8 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -36,11 +40,13 @@ public class PasswordLoginFragment extends BaseFragment implements View.OnClickL
     // !!!暫時寫死
     String areaCode = "0086";
 
+    List<MobileZone> mobileZoneList = new ArrayList<>();
     ImageView btnRefreshCaptcha;
     String captchaKey;
     EditText etMobile;
     EditText etPassword;
     EditText etCaptcha;
+    TextView tvAreaName;
 
     public static PasswordLoginFragment newInstance() {
         Bundle args = new Bundle();
@@ -69,8 +75,10 @@ public class PasswordLoginFragment extends BaseFragment implements View.OnClickL
         etMobile = view.findViewById(R.id.et_mobile);
         etPassword = view.findViewById(R.id.et_password);
         etCaptcha = view.findViewById(R.id.et_captcha);
+        tvAreaName = view.findViewById(R.id.tv_area_name);
 
         refreshCaptcha();
+        getMobileZoneList();
     }
 
     @Override
@@ -129,6 +137,22 @@ public class PasswordLoginFragment extends BaseFragment implements View.OnClickL
                 }
                 captchaKey = result.second;
                 btnRefreshCaptcha.setImageBitmap(result.first);
+            }
+        });
+    }
+
+    /**
+     * 获取区号列表
+     */
+    private void getMobileZoneList() {
+        Api.getMobileZoneList(new TaskObserver() {
+            @Override
+            public void onMessage() {
+                mobileZoneList = (List<MobileZone>) message;
+                SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
+                if (mobileZoneList.size() > 0) {
+                    tvAreaName.setText(mobileZoneList.get(0).areaName);
+                }
             }
         });
     }

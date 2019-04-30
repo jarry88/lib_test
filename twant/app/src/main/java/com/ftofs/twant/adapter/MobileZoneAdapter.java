@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.data.MobileZone;
+import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.log.SLog;
 
 import java.util.List;
