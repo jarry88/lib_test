@@ -9,6 +9,7 @@ import me.yokeyword.fragmentation.SupportActivity;
 /**
  * 所有Activity的公共基類
  * @author zwm
+ * @create 2019-04-28
  */
 public class BaseActivity extends SupportActivity {
     @Override
@@ -17,5 +18,6 @@ public class BaseActivity extends SupportActivity {
 
         // 全部activity禁用横屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
     }
 }
