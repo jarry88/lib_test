@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ftofs.twant.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -24,12 +25,14 @@ import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.SharedPreferenceUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.MobileZonePopup;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONArray;
+
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -39,7 +42,12 @@ import okhttp3.Response;
  * 動態碼登入
  * @author zwm
  */
-public class DynamicCodeLoginFragment extends BaseFragment implements View.OnClickListener {
+public class DynamicCodeLoginFragment extends BaseFragment implements
+        View.OnClickListener, MobileZoneSelectedListener {
+    /**
+     * 當前選中的區號索引
+     */
+    private int selectedMobileZoneIndex = 0;
     List<MobileZone> mobileZoneList = new ArrayList<>();
     ImageView btnRefreshCaptcha;
     String captchaKey;
@@ -47,9 +55,6 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
     EditText etCaptcha;
     EditText etSmsCode;
     TextView tvAreaName;
-
-    // !!!暫時寫死
-    String areaCode = "0086";
 
     public static DynamicCodeLoginFragment newInstance() {
         Bundle args = new Bundle();
@@ -73,6 +78,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
 
         Util.setOnClickListener(view, R.id.btn_get_sms_code, this);
         Util.setOnClickListener(view, R.id.btn_login, this);
+        Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
 
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
@@ -93,8 +99,13 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
         if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();
         } else if (id == R.id.btn_get_sms_code) {
+            if (mobileZoneList.size() <= selectedMobileZoneIndex) {
+                return;
+            }
+            MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+
             String mobile = etMobile.getText().toString().trim();
-            String fullMobile = areaCode + "," + mobile;
+            String fullMobile = mobileZone.areaCode + "," + mobile;
             String captchaText = etCaptcha.getText().toString().trim();
 
             EasyJSONObject params = EasyJSONObject.generate(
@@ -132,8 +143,13 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
                 }
             });
         } else if (id == R.id.btn_login) {
+            if (mobileZoneList.size() <= selectedMobileZoneIndex) {
+                return;
+            }
+            MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+
             String mobile = etMobile.getText().toString().trim();
-            String fullMobile = areaCode + "," + mobile;
+            String fullMobile = mobileZone.areaCode + "," + mobile;
             String smsCode = etSmsCode.getText().toString().trim();
             EasyJSONObject params = EasyJSONObject.generate(
                     "mobile", fullMobile,
@@ -155,6 +171,8 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
                             ToastUtil.show(_mActivity, responseObj.getString("datas.error"));
+                            // 如果出錯，刷新驗證碼
+                            refreshCaptcha();
                             return;
                         }
 
@@ -165,6 +183,12 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
                     }
                 }
             });
+        } else if (id == R.id.btn_mobile_zone) {
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new MobileZonePopup(_mActivity, mobileZoneList, selectedMobileZoneIndex, this))
+                    .show();
         }
     }
 
@@ -199,5 +223,17 @@ public class DynamicCodeLoginFragment extends BaseFragment implements View.OnCli
                 }
             }
         });
+    }
+
+    @Override
+    public void onMobileZoneSelected(int selectedIndex) {
+        SLog.info("selectedMobileZoneIndex[%d], selectedIndex[%d]", selectedMobileZoneIndex, selectedIndex);
+        if (this.selectedMobileZoneIndex == selectedIndex) {
+            return;
+        }
+
+        this.selectedMobileZoneIndex = selectedIndex;
+        String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
+        tvAreaName.setText(areaName);
     }
 }

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ftofs.twant.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -29,8 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONBase;
+
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -41,17 +41,19 @@ import okhttp3.Response;
  * 注冊
  * @author zwm
  */
-public class RegisterFragment extends BaseFragment implements View.OnClickListener {
-    // 當前選中的區號索引
+public class RegisterFragment extends BaseFragment implements
+        View.OnClickListener, MobileZoneSelectedListener {
+    /**
+     * 當前選中的區號索引
+     */
     private int selectedMobileZoneIndex = 0;
     List<MobileZone> mobileZoneList = new ArrayList<>();
-
-    TextView tvAreaName;
 
     String captchaKey;
     ImageView btnRefreshCaptcha;
     EditText etMobile;
     EditText etCaptcha;
+    TextView tvAreaName;
 
 
     public static RegisterFragment newInstance() {
@@ -78,52 +80,16 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_get_sms_code, this);
 
-        tvAreaName = view.findViewById(R.id.tv_area_name);
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
 
         etMobile = view.findViewById(R.id.et_mobile);
         etCaptcha = view.findViewById(R.id.et_captcha);
+        tvAreaName = view.findViewById(R.id.tv_area_name);
 
-        Api.getUI(Api.PATH_MOBILE_ZONE, null, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                SLog.info("Error!onFailure, %s", e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseStr = response.body().string();
-                SLog.info("responseStr[%s]", responseStr);
-
-                EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                try {
-                    int code = easyJSONObject.getInt("code");
-                    if (code != ResponseCode.SUCCESS) {
-                        return;
-                    }
-
-                    int counter = 0;
-                    EasyJSONArray adminMobileAreaList = easyJSONObject.getArray("datas.adminMobileAreaList");
-                    for (Object object : adminMobileAreaList) {
-                        final MobileZone mobileZone = (MobileZone) EasyJSONBase.jsonDecode(MobileZone.class, object.toString());
-                        SLog.info("mobileZone: %s", mobileZone);
-                        mobileZoneList.add(mobileZone);
-
-                        // 默認選中第1個
-                        if (counter == 0) {
-                            tvAreaName.setText(mobileZone.areaName);
-                        }
-                        ++counter;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
-                }
-            }
-        });
 
         refreshCaptcha();
+        getMobileZoneList();
     }
 
 
@@ -170,6 +136,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
+                            // 如果出錯，刷新驗證碼
+                            refreshCaptcha();
                             ToastUtil.show(_mActivity, responseObj.getString("datas.error"));
                             return;
                         }
@@ -184,17 +152,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 }
             });
         }
-    }
-
-    public void setSelectedMobileZoneIndex(int selectedMobileZoneIndex) {
-        SLog.info("selectedMobileZoneIndex[%d], this.selectedMobileZoneIndex[%d]", selectedMobileZoneIndex, this.selectedMobileZoneIndex);
-        if (this.selectedMobileZoneIndex == selectedMobileZoneIndex) {
-            return;
-        }
-
-        this.selectedMobileZoneIndex = selectedMobileZoneIndex;
-        String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
-        tvAreaName.setText(areaName);
     }
 
 
@@ -213,5 +170,33 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 btnRefreshCaptcha.setImageBitmap(result.first);
             }
         });
+    }
+
+    /**
+     * 获取区号列表
+     */
+    private void getMobileZoneList() {
+        Api.getMobileZoneList(new TaskObserver() {
+            @Override
+            public void onMessage() {
+                mobileZoneList = (List<MobileZone>) message;
+                SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
+                if (mobileZoneList.size() > 0) {
+                    tvAreaName.setText(mobileZoneList.get(0).areaName);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onMobileZoneSelected(int selectedIndex) {
+        SLog.info("selectedMobileZoneIndex[%d], selectedIndex[%d]", selectedMobileZoneIndex, selectedIndex);
+        if (this.selectedMobileZoneIndex == selectedIndex) {
+            return;
+        }
+
+        this.selectedMobileZoneIndex = selectedIndex;
+        String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
+        tvAreaName.setText(areaName);
     }
 }

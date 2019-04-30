@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.ftofs.twant.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.MobileZoneAdapter;
 import com.ftofs.twant.entity.MobileZone;
@@ -21,7 +22,7 @@ import java.util.List;
  * @author zwm
  */
 public class MobileZonePopup extends BottomPopupView {
-    RegisterFragment registerFragment;
+    MobileZoneSelectedListener mobileZoneSelectedListener;
     RecyclerView recyclerView;
     MobileZoneAdapter adapter;
     List<MobileZone> mobileZoneList;
@@ -32,13 +33,14 @@ public class MobileZonePopup extends BottomPopupView {
      */
     int highlightedIndex;
     
-    public MobileZonePopup(@NonNull Context context, List<MobileZone> mobileZoneList, int selectedIndex, RegisterFragment registerFragment) {
+    public MobileZonePopup(@NonNull Context context, List<MobileZone> mobileZoneList, int selectedIndex,
+                           MobileZoneSelectedListener mobileZoneSelectedListener) {
         super(context);
 
         this.context = context;
         this.mobileZoneList = mobileZoneList;
         this.highlightedIndex = selectedIndex;
-        this.registerFragment = registerFragment;
+        this.mobileZoneSelectedListener = mobileZoneSelectedListener;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class MobileZonePopup extends BottomPopupView {
             @Override
             public void onClick(View v) {
                 highlightedIndex = adapter.getHighlightedIndex();
-                registerFragment.setSelectedMobileZoneIndex(highlightedIndex);
+                mobileZoneSelectedListener.onMobileZoneSelected(highlightedIndex);
 
                 dismiss();
             }
