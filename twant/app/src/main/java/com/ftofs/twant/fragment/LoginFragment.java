@@ -59,7 +59,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         fragmentList.add(PasswordLoginFragment.newInstance());
         fragmentList.add(DynamicCodeLoginFragment.newInstance());
 
-        LoginFragmentPagerAdapter adapter = new LoginFragmentPagerAdapter(_mActivity.getSupportFragmentManager(), titleList, fragmentList);
+        // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
+        // ViewPager中Fragment不回調onCreateView的問題
+        LoginFragmentPagerAdapter adapter = new LoginFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);
