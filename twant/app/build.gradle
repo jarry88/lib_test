@@ -38,6 +38,8 @@ dependencies {
 
     implementation 'org.litepal.android:java:3.0.0'
 
+    implementation 'com.github.pinguo-zhouwei:MZBannerView:v2.0.2'
+
     // 基础依赖包，必须要依赖
     // implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta02'
     // fragment快速实现（可选）

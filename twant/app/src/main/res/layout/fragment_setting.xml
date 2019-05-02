@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_personal_info_hint"
-                android:textColor="#FFBBBBBB"
+                android:textColor="@color/tw_grey"
                 android:textSize="14sp"
                 />
         </LinearLayout>
@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_login_password_hint"
-                android:textColor="#FFBBBBBB"
+                android:textColor="@color/tw_grey"
                 android:textSize="14sp"
                 />
         </LinearLayout>
@@ -161,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_change_mobile_hint"
-                android:textColor="#FFBBBBBB"
+                android:textColor="@color/tw_grey"
                 android:textSize="14sp"
                 />
         </LinearLayout>
@@ -203,7 +203,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_payment_password_hint"
-                android:textColor="#FFBBBBBB"
+                android:textColor="@color/tw_grey"
                 android:textSize="14sp"
                 />
         </LinearLayout>
@@ -245,7 +245,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_realname_authentication_hint"
-                android:textColor="#FFBBBBBB"
+                android:textColor="@color/tw_grey"
                 android:textSize="14sp"
                 />
         </LinearLayout>

@@ -15,9 +15,12 @@ import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,16 +36,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.ftofs.twant.config.Config.API_BASE_URL;
+
 
 /**
  * Api接口
  * @author zwm
  */
 public class Api {
-    public static String API_BASE_URL = "http://192.168.5.28";
-    // public static String API_BASE_URL = "https://www.snailpad.cn";
-    // public static String API_BASE_URL = "http://www.wnwb.com";
-
     public static final int BUFFER_SIZE = 4096;
 
     /**
@@ -100,6 +101,11 @@ public class Api {
      * 重置密碼
      */
     public static final String PATH_RESET_PASSWORD = "/api/loginconnect/mobile/findpwd";
+
+    /**
+     * 首頁輪播圖
+     */
+    public static final String PATH_HOME_CAROUSEL = "/api/app/home/index";
 
 
     /**
@@ -248,6 +254,54 @@ public class Api {
      */
     public static String syncGet(String path, EasyJSONObject params) {
         return getInternal(path, params, null, null);
+    }
+
+    /**
+     * 同步下載文件，并保存到file中
+     * @param url
+     * @param file
+     * @return true -- 成功 false -- 失敗
+     */
+    public static boolean syncDownloadFile(String url, File file) {
+        FileOutputStream fos = null;
+        InputStream is = null;
+        try {
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(url).build();
+
+            Response response = client.newCall(request).execute();
+            byte[] buffer = new byte[BUFFER_SIZE];
+
+            is = response.body().byteStream();
+            fos = new FileOutputStream(file);
+
+            while (true) {
+                int n = is.read(buffer);
+                if (n == -1) {
+                    break;
+                }
+                if (n == 0) {
+                    continue;
+                }
+                fos.write(buffer, 0, n);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return true;
     }
 
 

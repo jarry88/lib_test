@@ -67,4 +67,52 @@ public class Util {
             e.printStackTrace();
         }
     }
+
+
+    /**
+     * 將byte數組轉換為字符串
+     * @param byteArray
+     * @return
+     */
+    public static String byteArrayToString(byte[] byteArray) {
+        return byteArrayToString(byteArray, 0, byteArray.length);
+    }
+
+    /**
+     * 將byte數組轉換為字符串
+     * @param byteArray
+     * @param len
+     * @return
+     */
+    public static String byteArrayToString(byte[] byteArray, int len) {
+        return byteArrayToString(byteArray, 0, len);
+    }
+
+
+    /**
+     * 將byte數組轉換為字符串
+     * @param byteArray
+     * @param begin 開始位置(inclusive)
+     * @param end 結束位置(exclusive)
+     * @return
+     */
+    public static String byteArrayToString(byte[] byteArray, int begin, int end) {
+        if (byteArray == null || begin >= end) {
+            return null;
+        }
+
+        int len = byteArray.length;
+        if (len < 1) {
+            return "";
+        }
+
+
+        byte[] buffer = new byte[end - begin];
+
+        for (int i = begin; i < end; ++i) {
+            buffer[i - begin] = byteArray[i];
+        }
+
+        return new String(buffer);
+    }
 }

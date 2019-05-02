@@ -27,6 +27,8 @@
     <string name="input_login_password_hint">請輸入密碼</string>
     <string name="get_sms_code">獲取動態碼</string>
 
+    <string name="input_search_keyword_hint">請輸入搜索關鍵字</string>
+
     <string name="login_way_password">密碼</string>
     <string name="login_way_dynamic_code">動態碼</string>
 
