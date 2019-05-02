@@ -91,4 +91,83 @@
             />
     </RelativeLayout>
 
+    <!-- 真實、社交、優選 -->
+    <RelativeLayout
+        android:id="@+id/rl_slogan"
+        android:layout_width="0dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/carousel_container"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@color/tw_red">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="41dp"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_height="37dp"
+                android:layout_width="37dp"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/icon_slogan_real"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/slogan_real"
+                android:textSize="12sp"
+                android:textColor="#FFF"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_height="37dp"
+                android:layout_width="37dp"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/icon_slogan_social"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/slogan_social"
+                android:textSize="12sp"
+                android:textColor="#FFF"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="41dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_height="37dp"
+                android:layout_width="37dp"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/icon_slogan_best"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/slogan_best"
+                android:textSize="12sp"
+                android:textColor="#FFF"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

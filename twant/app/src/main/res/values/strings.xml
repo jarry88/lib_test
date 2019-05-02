@@ -36,6 +36,10 @@
     <string name="text_next_step">下一步</string>
     <string name="text_ok">確認</string>
 
+    <string name="slogan_real">真實Real</string>
+    <string name="slogan_social">社交Social</string>
+    <string name="slogan_best">優選Best</string>
+
 
     <string name="bottom_bar_title_home">首頁</string>
     <string name="bottom_bar_title_message">消息</string>
