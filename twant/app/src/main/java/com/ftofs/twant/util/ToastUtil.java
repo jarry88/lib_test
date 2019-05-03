@@ -29,20 +29,30 @@ public class ToastUtil {
      * @return 如果有錯，返回true; 否則，返回false
      */
     public static boolean checkError(Context context, EasyJSONObject responseObj) {
-        if (responseObj == null) {
+        if (isError(responseObj)) {
             show(context, COMMON_ERROR_MESSAGE);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 檢查服務器API返回是否有錯
+     * @param responseObj
+     * @return
+     */
+    public static boolean isError(EasyJSONObject responseObj) {
+        if (responseObj == null) {
             return true;
         }
 
         try {
             int code = responseObj.getInt("code");
             if (code != ResponseCode.SUCCESS) {
-                show(context, COMMON_ERROR_MESSAGE);
                 return true;
             }
         } catch (EasyJSONException e) {
             e.printStackTrace();
-            show(context, COMMON_ERROR_MESSAGE);
             return true;
         }
         return false;

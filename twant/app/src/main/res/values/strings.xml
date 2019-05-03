@@ -72,7 +72,11 @@
     <string name="setting_realname_authentication">實名認證</string>
     <string name="setting_realname_authentication_hint">您認證的實名信息</string>
 
+    <string name="text_new_arrivals_chinese">最新入駐</string>
+    <string name="text_new_arrivals_english">NEW ARRIVALS</string>
 
+    <string name="text_like">點贊</string>
+    <string name="text_follow">關注</string>
 
     <string name="btn_logout_text">安全退出</string>
     <string name="btn_commit_text">確認提交</string>

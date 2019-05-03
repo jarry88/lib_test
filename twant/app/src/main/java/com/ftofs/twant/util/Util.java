@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.view.View;
 import android.view.Window;
@@ -114,5 +115,17 @@ public class Util {
         }
 
         return new String(buffer);
+    }
+
+    /**
+     * dp和pixel转换
+     *
+     * @param dipValue
+     *            dp值
+     * @return 像素值
+     */
+    public static int dip2px(Context context, float dipValue) {
+        float m = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * m + 0.5f);
     }
 }
