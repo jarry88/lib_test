@@ -14,7 +14,7 @@ import com.ftofs.twant.R;
  * 購物車
  * @author zwm
  */
-public class CartFragment extends BaseFragment {
+public class CartFragment extends BaseFragment implements View.OnClickListener {
     public static CartFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -34,6 +34,21 @@ public class CartFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
 

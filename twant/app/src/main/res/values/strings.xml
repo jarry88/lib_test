@@ -28,9 +28,14 @@
     <string name="get_sms_code">獲取動態碼</string>
 
     <string name="input_search_keyword_hint">請輸入搜索關鍵字</string>
+    <string name="search_keyword_hint">搜索關鍵字</string>
 
     <string name="login_way_password">密碼</string>
     <string name="login_way_dynamic_code">動態碼</string>
+
+    <string name="category_shop">店鋪</string>
+    <string name="category_commodity">商品</string>
+    <string name="category_brand">品牌</string>
 
     <string name="text_register">註冊</string>
     <string name="text_next_step">下一步</string>

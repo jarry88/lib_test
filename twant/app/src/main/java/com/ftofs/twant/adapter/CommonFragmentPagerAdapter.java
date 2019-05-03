@@ -8,14 +8,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.List;
 
 /**
- * 登入頁面Adapter
+ * 通用頁面Adapter
  * @author zwm
  */
-public class LoginFragmentPagerAdapter extends FragmentPagerAdapter {
+public class CommonFragmentPagerAdapter extends FragmentPagerAdapter {
     private List<String> titleList;
     private List<Fragment> fragmentList;
 
-    public LoginFragmentPagerAdapter(FragmentManager fm, List<String> titleList, List<Fragment> fragmentList) {
+    public CommonFragmentPagerAdapter(FragmentManager fm, List<String> titleList, List<Fragment> fragmentList) {
         super(fm);
 
         this.titleList = titleList;

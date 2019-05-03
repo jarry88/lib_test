@@ -45,9 +45,11 @@ import cn.snailpad.easyjson.EasyJSONObject;
  * 首頁
  * @author zwm
  */
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements View.OnClickListener {
     LinearLayout llNewArrivalsContainer;
     MZBannerView bannerView;
+    ImageView btnCategory;
+
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -67,6 +69,8 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Util.setOnClickListener(view, R.id.btn_category, this);
 
         llNewArrivalsContainer = view.findViewById(R.id.ll_new_arrivals_container);
         bannerView = view.findViewById(R.id.banner_view);
@@ -88,6 +92,15 @@ public class HomeFragment extends BaseFragment {
     public void onSupportInvisible() {
         super.onSupportInvisible();
         bannerView.pause();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_category) {
+            MainFragment mainFragment = (MainFragment) getParentFragment();
+            mainFragment.start(CategoryFragment.newInstance());
+        }
     }
 
     public static class BannerViewHolder implements MZViewHolder<File> {
