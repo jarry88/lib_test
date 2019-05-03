@@ -10,7 +10,6 @@
         android:layout_width="70dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:background="#ffa"
         />
 
     <android.support.v7.widget.RecyclerView
@@ -19,6 +18,5 @@
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/rv_category_menu"
         android:layout_alignParentRight="true"
-        android:background="#aaf"
         />
 </RelativeLayout>
