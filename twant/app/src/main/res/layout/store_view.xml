@@ -17,8 +17,16 @@
         android:id="@+id/tv_store_class"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@id/img_store_figure"
+        android:layout_alignTop="@id/img_store_figure"
+        android:gravity="center"
+        android:background="@drawable/store_class_bg"
+        android:textSize="12sp"
+        android:textColor="#fff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         />
 
 

@@ -179,6 +179,12 @@ public class HomeFragment extends BaseFragment {
                         // 設置店鋪名稱
                         TextView tvStoreName = storeView.findViewById(R.id.tv_store_name);
                         tvStoreName.setText(storeObject.getString("storeName"));
+                        // 設置店鋪類別
+                        TextView tvStoreClass = storeView.findViewById(R.id.tv_store_class);
+                        String className = storeObject.getString("className");
+                        // 拆分中英文
+                        String[] classNameArr = className.split(",");
+                        tvStoreClass.setText(classNameArr[0]);
                         // 設置點贊數據
                         TextView tvLikeData = storeView.findViewById(R.id.tv_like_data);
                         String likeDataStr = getResources().getString(R.string.text_like) + " " + storeObject.getInt("likeCount");
