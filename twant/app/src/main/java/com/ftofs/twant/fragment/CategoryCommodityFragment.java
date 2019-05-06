@@ -153,10 +153,9 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
             return;
         }
 
-        /*
+
         CategoryCommodityAdapter adapter = new CategoryCommodityAdapter(_mActivity, categoryCommodityList.list);
         rvCommodityList.setAdapter(adapter);
-        */
     }
 
 
@@ -167,6 +166,6 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
 
     @Override
     public void onSelected(int id) {
-
+        loadCategoryCommodityData(id);
     }
 }

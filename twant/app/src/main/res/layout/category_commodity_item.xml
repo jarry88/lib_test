@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginTop="11dp"
+    android:layout_marginBottom="11dp"
     android:orientation="vertical">
 
     <ImageView
@@ -11,9 +13,10 @@
 
     <TextView
         android:id="@+id/tv_commodity_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
         android:textSize="13sp"
         android:textColor="@color/tw_black"
         />

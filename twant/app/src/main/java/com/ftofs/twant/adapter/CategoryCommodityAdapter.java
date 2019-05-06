@@ -46,7 +46,7 @@ public class CategoryCommodityAdapter extends RecyclerView.Adapter<CategoryCommo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.category_shop_item, parent, false);
+                .inflate(R.layout.category_commodity_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -58,6 +58,7 @@ public class CategoryCommodityAdapter extends RecyclerView.Adapter<CategoryCommo
         String imageUrl = Config.OSS_BASE_URL + "/" + categoryCommodity.imageUrl;
         SLog.info("imageUrl[%s]", imageUrl);
         Glide.with(context).load(imageUrl).placeholder(R.drawable.icon__bottom_bar_want).into(holder.imgCommodity);
+        holder.tvCommodityName.setText(categoryCommodity.categoryName);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
