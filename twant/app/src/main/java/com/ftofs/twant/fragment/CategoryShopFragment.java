@@ -147,6 +147,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
 
 
     private void loadCategoryShopData(int categoryId) {
+        // TODO: 2019/5/6 優化
         SLog.info("categoryId[%d]", categoryId);
         List<CategoryShop> categoryShopList = categoryShopListMap.get(categoryId);
         CategoryShopAdapter adapter = new CategoryShopAdapter(_mActivity, categoryShopList);

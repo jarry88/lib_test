@@ -40,9 +40,9 @@ public class CategoryShopAdapter extends RecyclerView.Adapter<CategoryShopAdapte
         }
     }
 
-    public CategoryShopAdapter(Context context, List<CategoryShop> CategoryShopList) {
+    public CategoryShopAdapter(Context context, List<CategoryShop> categoryShopList) {
         this.context = context;
-        this.categoryShopList = CategoryShopList;
+        this.categoryShopList = categoryShopList;
     }
 
     @Override

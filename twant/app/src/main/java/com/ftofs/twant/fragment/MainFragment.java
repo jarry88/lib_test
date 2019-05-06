@@ -36,7 +36,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     /**
      * 當前正在顯示的Fragment的下標
      */
-    private int selectedFragmentIndex = MY_FRAGMENT;
+    private int selectedFragmentIndex = HOME_FRAGMENT;
 
     private static MainFragment instance;
 

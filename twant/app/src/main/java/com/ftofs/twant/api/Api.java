@@ -115,9 +115,15 @@ public class Api {
 
 
     /**
-     *
+     * 店鋪分類
      */
     public static final String PATH_SHOP_CATEGORY = "/api/app/home/store_class_nav";
+
+
+    /**
+     * 商品分類
+     */
+    public static final String PATH_COMMODITY_CATEGORY = "/api/app/home/goods_class_nav";
 
     /**
      * 發送Http請求

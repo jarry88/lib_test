@@ -85,6 +85,8 @@
 
     <string name="text_shop">店鋪</string>
     <string name="text_commodity">商品</string>
+    <string name="text_cart">購物車</string>
+    <string name="text_edit">編輯</string>
 
     <string name="btn_logout_text">安全退出</string>
     <string name="btn_commit_text">確認提交</string>
