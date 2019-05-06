@@ -147,7 +147,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 List <File> imageFileList = new ArrayList<>();
                 try {
                     String responseStr = Api.syncGet(Api.PATH_HOME_CAROUSEL, null);
+                    SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.isError(responseObj)) {
+                        return null;
+                    }
                     int code = responseObj.getInt("code");
                     if (code != ResponseCode.SUCCESS) {
                         return null;

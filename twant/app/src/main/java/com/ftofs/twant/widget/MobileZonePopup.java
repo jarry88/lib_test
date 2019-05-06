@@ -6,11 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.ftofs.twant.MobileZoneSelectedListener;
+import com.ftofs.twant.interfaces.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.MobileZoneAdapter;
 import com.ftofs.twant.entity.MobileZone;
-import com.ftofs.twant.fragment.RegisterFragment;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 

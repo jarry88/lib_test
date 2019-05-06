@@ -12,17 +12,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ftofs.twant.MobileZoneSelectedListener;
+import com.ftofs.twant.interfaces.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
-import com.ftofs.twant.util.SharedPreferenceUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.MobileZonePopup;

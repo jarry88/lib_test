@@ -9,11 +9,17 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.CategoryMenu;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 
 import java.util.List;
 
+/**
+ * 店鋪分類菜單adapter
+ * @author zwm
+ */
 public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapter.ViewHolder> {
     private Context context;
+    private OnSelectedListener onSelectedListener;
     private int selectedIndex = 0;
     private List<CategoryMenu> categoryMenuList;
 
@@ -33,9 +39,10 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
         }
     }
 
-    public CategoryMenuAdapter(Context context, List<CategoryMenu> categoryMenuList) {
+    public CategoryMenuAdapter(Context context, List<CategoryMenu> categoryMenuList, OnSelectedListener onSelectedListener) {
         this.context = context;
         this.categoryMenuList = categoryMenuList;
+        this.onSelectedListener = onSelectedListener;
 
         twRed = context.getResources().getColor(R.color.tw_red, null);
         twBlack = context.getResources().getColor(R.color.tw_black, null);
@@ -51,7 +58,7 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        CategoryMenu categoryMenu = categoryMenuList.get(position);
+        final CategoryMenu categoryMenu = categoryMenuList.get(position);
 
         holder.tvCategoryNameChinese.setText(categoryMenu.categoryNameChinese);
         holder.tvCategoryNameEnglish.setText(categoryMenu.categoryNameEnglish);
@@ -65,6 +72,10 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
                 selectedIndex = position;
                 notifyItemChanged(preSelectedIndex);
                 notifyItemChanged(position);
+
+                if (onSelectedListener != null) {
+                    onSelectedListener.onSelected(categoryMenu.categoryId);
+                }
             }
         });
     }
@@ -97,6 +108,5 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
             holder.tvCategoryNameEnglish.setTextColor(twBlack);
             holder.vwIndicator.setVisibility(View.INVISIBLE);
         }
-
     }
 }

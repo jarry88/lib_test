@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ftofs.twant.MobileZoneSelectedListener;
+import com.ftofs.twant.interfaces.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;

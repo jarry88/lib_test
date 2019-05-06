@@ -1,7 +1,8 @@
-package com.ftofs.twant;
+package com.ftofs.twant.interfaces;
 
 /**
  * 確認選中區號時調用的接口
+ * @author zwm
  */
 public interface MobileZoneSelectedListener {
     /**
