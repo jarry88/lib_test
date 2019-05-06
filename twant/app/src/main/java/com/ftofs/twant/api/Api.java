@@ -125,6 +125,13 @@ public class Api {
      */
     public static final String PATH_COMMODITY_CATEGORY = "/api/app/home/goods_class_nav";
 
+
+    /**
+     * 品牌分類
+     */
+    public static final String PATH_BRAND_CATEGORY = "/api/app/home/brand_label_nav";
+
+
     /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行

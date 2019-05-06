@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CategoryCommodityAdapter;
-import com.ftofs.twant.adapter.CategoryCommodityMenuAdapter;
 import com.ftofs.twant.adapter.CategoryMenuAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.CategoryCommodityList;
 import com.ftofs.twant.entity.CategoryMenu;
@@ -134,7 +134,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                         categoryCommodityListMap.put(categoryId, categoryCommodityList);
                     }
 
-                    CategoryCommodityMenuAdapter adapter = new CategoryCommodityMenuAdapter(_mActivity, categoryMenuList, CategoryCommodityFragment.this);
+                    CategoryMenuAdapter adapter = new CategoryMenuAdapter(_mActivity, Constant.CATEGORY_TYPE_COMMODITY, categoryMenuList, CategoryCommodityFragment.this);
                     rvCategoryMenu.setAdapter(adapter);
 
                     loadCategoryCommodityData(defaultCategoryId);

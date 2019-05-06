@@ -8,17 +8,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 
 import java.util.List;
 
 /**
- * 店鋪分類菜單adapter
+ * 分類菜單adapter
  * @author zwm
  */
 public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapter.ViewHolder> {
     private Context context;
+    // 分類類型
+    int categoryType;
     private OnSelectedListener onSelectedListener;
     private int selectedIndex = 0;
     private List<CategoryMenu> categoryMenuList;
@@ -39,8 +42,10 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
         }
     }
 
-    public CategoryMenuAdapter(Context context, List<CategoryMenu> categoryMenuList, OnSelectedListener onSelectedListener) {
+    public CategoryMenuAdapter(Context context, int categoryType, List<CategoryMenu> categoryMenuList,
+                               OnSelectedListener onSelectedListener) {
         this.context = context;
+        this.categoryType = categoryType;
         this.categoryMenuList = categoryMenuList;
         this.onSelectedListener = onSelectedListener;
 
@@ -50,8 +55,14 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.category_menu_item, parent, false);
+        View view;
+        if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.category_shop_menu_item, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.category_commodity_brand_menu_item, parent, false);
+        }
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
@@ -61,7 +72,9 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
         final CategoryMenu categoryMenu = categoryMenuList.get(position);
 
         holder.tvCategoryNameChinese.setText(categoryMenu.categoryNameChinese);
-        holder.tvCategoryNameEnglish.setText(categoryMenu.categoryNameEnglish);
+        if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
+            holder.tvCategoryNameEnglish.setText(categoryMenu.categoryNameEnglish);
+        }
 
         changeItemStatus(holder, position == selectedIndex);
 
@@ -85,13 +98,6 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
         return categoryMenuList.size();
     }
 
-    public int getSelectedIndex() {
-        return selectedIndex;
-    }
-
-    public void setSelectedIndex(int selectedIndex) {
-        this.selectedIndex = selectedIndex;
-    }
 
     /**
      * 改變某一項的狀態
@@ -100,13 +106,17 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
      */
     private void changeItemStatus(ViewHolder holder, boolean select) {
         if (select) {
-            holder.tvCategoryNameChinese.setTextColor(twRed);
-            holder.tvCategoryNameEnglish.setTextColor(twRed);
             holder.vwIndicator.setVisibility(View.VISIBLE);
+            holder.tvCategoryNameChinese.setTextColor(twRed);
+            if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
+                holder.tvCategoryNameEnglish.setTextColor(twRed);
+            }
         } else {
-            holder.tvCategoryNameChinese.setTextColor(twBlack);
-            holder.tvCategoryNameEnglish.setTextColor(twBlack);
             holder.vwIndicator.setVisibility(View.INVISIBLE);
+            holder.tvCategoryNameChinese.setTextColor(twBlack);
+            if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
+                holder.tvCategoryNameEnglish.setTextColor(twBlack);
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ import com.ftofs.twant.adapter.CategoryMenuAdapter;
 import com.ftofs.twant.adapter.CategoryShopAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -134,7 +135,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
                         categoryShopListMap.put(categoryId, categoryShopList);
                     }
 
-                    CategoryMenuAdapter adapter = new CategoryMenuAdapter(_mActivity, categoryMenuList, CategoryShopFragment.this);
+                    CategoryMenuAdapter adapter = new CategoryMenuAdapter(_mActivity, Constant.CATEGORY_TYPE_COMMODITY, categoryMenuList, CategoryShopFragment.this);
                     rvCategoryMenu.setAdapter(adapter);
 
                     loadCategoryShopData(defaultCategoryId);
