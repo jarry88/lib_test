@@ -48,7 +48,6 @@ import cn.snailpad.easyjson.EasyJSONObject;
 public class HomeFragment extends BaseFragment implements View.OnClickListener {
     LinearLayout llNewArrivalsContainer;
     MZBannerView bannerView;
-    ImageView btnCategory;
 
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -71,6 +70,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_category, this);
+        Util.setOnClickListener(view, R.id.ll_search_box, this);
 
         llNewArrivalsContainer = view.findViewById(R.id.ll_new_arrivals_container);
         bannerView = view.findViewById(R.id.banner_view);
@@ -100,6 +100,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.btn_category) {
             MainFragment mainFragment = (MainFragment) getParentFragment();
             mainFragment.start(CategoryFragment.newInstance());
+        } else if (id == R.id.ll_search_box) {
+            MainFragment mainFragment = (MainFragment) getParentFragment();
+            mainFragment.start(SearchFragment.newInstance());
         }
     }
 

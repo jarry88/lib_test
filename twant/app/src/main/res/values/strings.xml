@@ -89,6 +89,13 @@
     <string name="text_edit">編輯</string>
     <string name="text_search">搜索</string>
 
+    <string name="text_history_search">歷史搜索</string>
+    <string name="text_hot_search">熱門搜索</string>
+
+    <string name="search_tab_title_shop">店鋪</string>
+    <string name="search_tab_title_commodity">商品</string>
+    <string name="search_tab_title_article">文章</string>
+
     <string name="btn_logout_text">安全退出</string>
     <string name="btn_commit_text">確認提交</string>
 </resources>
