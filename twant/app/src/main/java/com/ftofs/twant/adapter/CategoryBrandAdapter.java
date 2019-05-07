@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,15 +28,28 @@ public class CategoryBrandAdapter extends RecyclerView.Adapter<CategoryBrandAdap
     private List<CategoryBrand> categoryBrandList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView brandImage;
-        TextView tvBrandNameChinese;
-        TextView tvBrandNameEnglish;
+        LinearLayout llContainerLeft;
+        LinearLayout llContainerRight;
+
+        ImageView brandImageLeft;
+        TextView tvBrandNameChineseLeft;
+        TextView tvBrandNameEnglishLeft;
+        ImageView brandImageRight;
+        TextView tvBrandNameChineseRight;
+        TextView tvBrandNameEnglishRight;
 
         public ViewHolder(View view) {
             super(view);
-            brandImage = view.findViewById(R.id.brand_image);
-            tvBrandNameChinese = view.findViewById(R.id.tv_brand_name_chinese);
-            tvBrandNameEnglish = view.findViewById(R.id.tv_brand_name_english);
+
+            llContainerLeft = view.findViewById(R.id.ll_left_container);
+            llContainerRight = view.findViewById(R.id.ll_right_container);
+
+            brandImageLeft = view.findViewById(R.id.brand_image_left);
+            tvBrandNameChineseLeft = view.findViewById(R.id.tv_brand_name_chinese_left);
+            tvBrandNameEnglishLeft = view.findViewById(R.id.tv_brand_name_english_left);
+            brandImageRight = view.findViewById(R.id.brand_image_right);
+            tvBrandNameChineseRight = view.findViewById(R.id.tv_brand_name_chinese_right);
+            tvBrandNameEnglishRight = view.findViewById(R.id.tv_brand_name_english_right);
         }
     }
 
@@ -54,14 +68,38 @@ public class CategoryBrandAdapter extends RecyclerView.Adapter<CategoryBrandAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        int remainder = position % 8;
+
+        // 品牌LOGO显示在左右还是右边的规则
+        boolean showLeft = true;
+        if (remainder == 1 || remainder == 4 || remainder >= 6) {
+            showLeft = false;
+        }
         CategoryBrand categoryBrand = categoryBrandList.get(position);
 
         String imageUrl = Config.OSS_BASE_URL + "/" + categoryBrand.imageUrl;
         SLog.info("imageUrl[%s]", imageUrl);
-        Glide.with(context).load(imageUrl).placeholder(R.drawable.icon__bottom_bar_want).into(holder.brandImage);
 
-        holder.tvBrandNameChinese.setText(categoryBrand.brandNameChinese);
-        holder.tvBrandNameEnglish.setText(categoryBrand.brandNameEnglish);
+        if (showLeft) {
+            // 显示左边，隐藏右边的控件
+            holder.llContainerLeft.setVisibility(View.VISIBLE);
+            holder.llContainerRight.setVisibility(View.GONE);
+
+            Glide.with(context).load(imageUrl).placeholder(R.drawable.icon__bottom_bar_want).into(holder.brandImageLeft);
+
+            holder.tvBrandNameChineseLeft.setText(categoryBrand.brandNameChinese);
+            holder.tvBrandNameEnglishLeft.setText(categoryBrand.brandNameEnglish);
+        } else {
+            // 显示左边，隐藏右边的控件
+            holder.llContainerRight.setVisibility(View.VISIBLE);
+            holder.llContainerLeft.setVisibility(View.GONE);
+
+            Glide.with(context).load(imageUrl).placeholder(R.drawable.icon__bottom_bar_want).into(holder.brandImageRight);
+
+            holder.tvBrandNameChineseRight.setText(categoryBrand.brandNameChinese);
+            holder.tvBrandNameEnglishRight.setText(categoryBrand.brandNameEnglish);
+        }
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
