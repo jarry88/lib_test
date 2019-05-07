@@ -178,6 +178,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 加載最新入駐
      */
     private void loadNewArrivals() {
+        SLog.info("loadNewArrivals");
         TaskObserver taskObserver = new TaskObserver() {
             @Override
             public void onMessage() {
@@ -232,6 +233,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public Object doWork() {
                 String token = User.getToken();
+                SLog.info("token[%s]", token);
                 // 必須是登錄用戶才可以
                 if (StringUtil.isEmpty(token)) {
                     return null;
@@ -243,7 +245,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
 
                 String responseStr = Api.syncPost(Api.PATH_NEW_ARRIVALS, params);
-                SLog.info("responseStr[%s]", responseStr);
+                SLog.info("PATH_NEW_ARRIVALS, responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.isError(responseObj)) {

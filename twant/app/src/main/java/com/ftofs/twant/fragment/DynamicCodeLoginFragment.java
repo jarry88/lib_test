@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
@@ -56,12 +57,18 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     EditText etSmsCode;
     TextView tvAreaName;
 
-    public static DynamicCodeLoginFragment newInstance() {
+    CommonCallback commonCallback;
+    public void setCommonCallback(CommonCallback commonCallback) {
+        this.commonCallback = commonCallback;
+    }
+
+    public static DynamicCodeLoginFragment newInstance(CommonCallback commonCallback) {
         Bundle args = new Bundle();
 
         DynamicCodeLoginFragment fragment = new DynamicCodeLoginFragment();
         fragment.setArguments(args);
 
+        fragment.setCommonCallback(commonCallback);
         return fragment;
     }
 
@@ -178,6 +185,11 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
 
                         ToastUtil.show(_mActivity, "登入成功");
                         SharedPreferenceUtil.saveUserInfo(responseObj);
+
+                        if (commonCallback != null) {
+                            SLog.info("Fragment出棧");
+                            commonCallback.onSuccess(null);
+                        }
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }

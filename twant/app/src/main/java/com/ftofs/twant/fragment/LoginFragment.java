@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.interfaces.CommonCallback;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import java.util.List;
  * 登入
  * @author zwm
  */
-public class LoginFragment extends BaseFragment implements View.OnClickListener {
+public class LoginFragment extends BaseFragment implements View.OnClickListener, CommonCallback {
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
@@ -56,8 +58,8 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
 
-        fragmentList.add(PasswordLoginFragment.newInstance());
-        fragmentList.add(DynamicCodeLoginFragment.newInstance());
+        fragmentList.add(PasswordLoginFragment.newInstance(this));
+        fragmentList.add(DynamicCodeLoginFragment.newInstance(this));
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
@@ -78,5 +80,17 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
 
             mainFragment.start(RegisterFragment.newInstance());
         }
+    }
+
+    @Override
+    public String onSuccess(@Nullable String data) {
+        SLog.info("LoginFragment::onSuccess");
+        pop();
+        return null;
+    }
+
+    @Override
+    public String onFailure(@Nullable String data) {
+        return null;
     }
 }

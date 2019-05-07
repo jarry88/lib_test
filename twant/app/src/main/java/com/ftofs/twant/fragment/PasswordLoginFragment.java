@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
@@ -53,12 +54,18 @@ public class PasswordLoginFragment extends BaseFragment implements
     EditText etCaptcha;
     TextView tvAreaName;
 
-    public static PasswordLoginFragment newInstance() {
+    CommonCallback commonCallback;
+    public void setCommonCallback(CommonCallback commonCallback) {
+        this.commonCallback = commonCallback;
+    }
+
+    public static PasswordLoginFragment newInstance(CommonCallback commonCallback) {
         Bundle args = new Bundle();
 
         PasswordLoginFragment fragment = new PasswordLoginFragment();
         fragment.setArguments(args);
 
+        fragment.setCommonCallback(commonCallback);
         return fragment;
     }
 
@@ -130,6 +137,13 @@ public class PasswordLoginFragment extends BaseFragment implements
 
                     ToastUtil.show(_mActivity, "登錄成功");
                     SharedPreferenceUtil.saveUserInfo(responseObj);
+
+                    SLog.info("登錄成功");
+
+                    if (commonCallback != null) {
+                        SLog.info("Fragment出棧");
+                        commonCallback.onSuccess(null);
+                    }
                 }
             });
         } else if (id == R.id.btn_refresh_captcha) {
