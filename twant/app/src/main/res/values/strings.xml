@@ -45,12 +45,19 @@
     <string name="slogan_social">社交Social</string>
     <string name="slogan_best">優選Best</string>
 
-
+    <!-- APP的底部工具欄 -->
     <string name="bottom_bar_title_home">首頁</string>
     <string name="bottom_bar_title_message">消息</string>
     <string name="bottom_bar_title_circle">想要圈</string>
     <string name="bottom_bar_title_cart">購物車</string>
     <string name="bottom_bar_title_my">我的</string>
+
+    <!-- 店鋪的底部工具欄 -->
+    <string name="shop_bottom_bar_title_home">首頁</string>
+    <string name="shop_bottom_bar_title_commodity">商品</string>
+    <string name="shop_bottom_bar_title_category">分類</string>
+    <string name="shop_bottom_bar_title_activity">活動</string>
+    <string name="shop_bottom_bar_title_customer_service">客服</string>
 
     <string name="my_bill">我的訂單</string>
     <string name="my_bill_to_be_paid">待付款</string>

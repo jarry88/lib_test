@@ -14,7 +14,7 @@ import com.ftofs.twant.util.Util;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
- * 主Fragment
+ * 主Fragment容器
  * @author zwm
  */
 public class MainFragment extends BaseFragment implements View.OnClickListener {
@@ -67,11 +67,9 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Util.setOnClickListener(view, R.id.btn_home, this);
-        Util.setOnClickListener(view, R.id.btn_message, this);
-        Util.setOnClickListener(view, R.id.btn_circle, this);
-        Util.setOnClickListener(view, R.id.btn_cart, this);
-        Util.setOnClickListener(view, R.id.btn_my, this);
+        for (int id : bottomBarButtonIds) {
+            Util.setOnClickListener(view, id, this);
+        }
     }
 
     @Override

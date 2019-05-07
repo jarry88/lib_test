@@ -198,6 +198,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                         Bitmap bitmap = BitmapFactory.decodeFile(storeObject.getString("figureImagePath"));
                         imgStoreFigure.setImageBitmap(bitmap);
 
+                        // 獲取店鋪Id
+                        int shopId = storeObject.getInt("storeId");
+
                         // 設置店鋪名稱
                         TextView tvStoreName = storeView.findViewById(R.id.tv_store_name);
                         tvStoreName.setText(storeObject.getString("storeName"));
@@ -223,6 +226,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                         int marginTop = Util.dip2px(_mActivity, 15);
                         int marginBottom = Util.dip2px(_mActivity, 20);
                         layoutParams.setMargins(0, marginTop, 0, marginBottom);
+
+
+                        storeView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                MainFragment mainFragment = (MainFragment) getParentFragment();
+                                mainFragment.start(ShopMainFragment.newInstance());
+                            }
+                        });
                         llNewArrivalsContainer.addView(storeView, layoutParams);
                     }
 
