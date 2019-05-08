@@ -18,6 +18,10 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @author zwm
  */
 public class ShopMainFragment extends BaseFragment implements View.OnClickListener {
+    // 店鋪Id
+    int shopId;
+
+
     /** 首頁 */
     public static final int HOME_FRAGMENT = 0;
     /** 商品 */
@@ -38,9 +42,10 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
      */
     private int selectedFragmentIndex = HOME_FRAGMENT;
 
-    public static ShopMainFragment newInstance() {
+    public static ShopMainFragment newInstance(int shopId) {
         Bundle args = new Bundle();
 
+        args.putInt("shopId", shopId);
         ShopMainFragment fragment = new ShopMainFragment();
         fragment.setArguments(args);
 
@@ -58,6 +63,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle args = getArguments();
+        shopId = args.getInt("shopId");
+
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
         }
@@ -70,7 +78,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         SupportFragment homeFragment = findChildFragment(ShopHomeFragment.class);
 
         if (homeFragment == null) {
-            mFragments[HOME_FRAGMENT] = ShopHomeFragment.newInstance();
+            mFragments[HOME_FRAGMENT] = ShopHomeFragment.newInstance(shopId);
             mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance();
             mFragments[CATEGORY_FRAGMENT] = ShopCategoryFragment.newInstance();
             mFragments[ACTIVITY_FRAGMENT] = ShopActivityFragment.newInstance();
