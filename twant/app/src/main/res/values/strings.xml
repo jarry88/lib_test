@@ -87,6 +87,9 @@
     <string name="text_new_arrivals_chinese">最新入駐</string>
     <string name="text_new_arrivals_english">NEW ARRIVALS</string>
 
+    <string name="text_new_in_chinese">最新商品</string>
+    <string name="text_new_in_english">NEW IN</string>
+
     <string name="text_like">點贊</string>
     <string name="text_follow">關注</string>
 
@@ -98,6 +101,13 @@
 
     <string name="text_history_search">歷史搜索</string>
     <string name="text_hot_search">熱門搜索</string>
+
+    <string name="text_shop_open_day_prefix">開店</string>
+    <string name="text_shop_friend">店友</string>
+    <string name="text_share">分享</string>
+    <string name="text_map">地圖</string>
+    <string name="text_shop_comment">店鋪評論</string>
+    <string name="text_view_all">查看全部</string>
 
     <string name="search_tab_title_shop">店鋪</string>
     <string name="search_tab_title_commodity">商品</string>
@@ -111,5 +121,5 @@
     <string name="menu_item_shop_home_customer_service">諮詢客服</string>
     <string name="menu_item_shop_home_message">消息</string>
 
-
+    <string name="business_time_template">工作日：%s - %s\n週 末 ：%s - %s</string>
 </resources>

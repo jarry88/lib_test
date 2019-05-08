@@ -3,4 +3,7 @@
     <dimen name="toolbar_height">44dp</dimen>
     <dimen name="toolbar_margin_left">15dp</dimen>
     <dimen name="toolbar_margin_right">15dp</dimen>
+
+    <!-- 設置為80dp是為了防止底部導航條擋住內容區 -->
+    <dimen name="bottom_toolbar_max_height">80dp</dimen>
 </resources>

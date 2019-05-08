@@ -78,7 +78,7 @@ public class TwantApplication extends Application {
 
         Fragmentation.builder()
                 // show stack view. Mode: BUBBLE, SHAKE, NONE
-                .stackViewMode(Fragmentation.BUBBLE)
+                .stackViewMode(Fragmentation.NONE)
                 .debug(BuildConfig.DEBUG)
                 .install();
 

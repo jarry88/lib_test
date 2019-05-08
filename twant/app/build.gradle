@@ -42,6 +42,8 @@ dependencies {
 
     implementation 'com.nex3z:flow-layout:1.2.4'
 
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
+
     // 基础依赖包，必须要依赖
     // implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta02'
     // fragment快速实现（可选）
