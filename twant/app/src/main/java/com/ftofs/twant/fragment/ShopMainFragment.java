@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
@@ -21,6 +23,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     // 店鋪Id
     int shopId;
 
+    ImageView imgBottomBarShopAvatar;
 
     /** 首頁 */
     public static final int HOME_FRAGMENT = 0;
@@ -65,6 +68,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         Bundle args = getArguments();
         shopId = args.getInt("shopId");
+
+        imgBottomBarShopAvatar = view.findViewById(R.id.img_bottom_bar_shop_avatar);
 
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
@@ -123,5 +128,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
             selectedFragmentIndex = index;
         }
+    }
+
+    public void setImgBottomBarShopAvatar(String url) {
+        Glide.with(this).load(url).into(imgBottomBarShopAvatar);
     }
 }

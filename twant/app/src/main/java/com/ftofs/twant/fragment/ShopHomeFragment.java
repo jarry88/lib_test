@@ -28,6 +28,7 @@ import java.io.IOException;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import cn.snailpad.easyjson.json.JSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -141,6 +142,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         String shopAvatarUrl = responseObj.getString("datas.storeInfo.storeAvatar");
                         // 店鋪頭像
                         Glide.with(ShopHomeFragment.this).load(shopAvatarUrl).into(imgShopAvatar);
+                        // 將店鋪頭像設置到工具欄按鈕
+                        ShopMainFragment shopMainFragment = (ShopMainFragment) getParentFragment();
+                        shopMainFragment.setImgBottomBarShopAvatar(shopAvatarUrl);
 
                         // 店鋪簽名
                         tvShopSignature.setText(responseObj.getString("datas.storeInfo.storeSignature"));
@@ -206,6 +210,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         if (commentCount > 0) { // 如果有評論，顯示第1條評論
                             // 取第1條評論
                             EasyJSONObject firstComment = responseObj.getObject("datas.wantCommentVoInfoList[0]");
+                            SLog.info("firstComment[%s]", firstComment);
 
                             // 評論者的頭像
                             String authorAvatarUrl = Config.OSS_BASE_URL + "/" + firstComment.getString("memberVo.avatar");
@@ -213,7 +218,12 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             // 評論者的昵稱
                             String authorNickname = firstComment.getString("memberVo.nickName");
                             // 評論內容
-                            String content = firstComment.getString("content");
+                            String content = "";
+                            Object contentObject = firstComment.get("content");
+                            SLog.info("contentObject[%s]", contentObject);
+                            if (contentObject != null && !contentObject.equals(JSONObject.NULL)) {
+                                content = (String) contentObject;
+                            }
 
                             Glide.with(ShopHomeFragment.this).load(authorAvatarUrl).into(imgAuthorAvatar);
                             tvAuthorNickname.setText(authorNickname);
