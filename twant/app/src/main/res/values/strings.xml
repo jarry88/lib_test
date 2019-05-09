@@ -109,6 +109,9 @@
     <string name="text_shop_comment">店鋪評論</string>
     <string name="text_view_all">查看全部</string>
 
+    <string name="text_search_goods">搜索商品</string>
+    <string name="text_all_goods">全部商品</string>
+
     <string name="search_tab_title_shop">店鋪</string>
     <string name="search_tab_title_commodity">商品</string>
     <string name="search_tab_title_article">文章</string>

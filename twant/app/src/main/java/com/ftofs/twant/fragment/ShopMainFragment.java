@@ -86,6 +86,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         }
 
         Util.setOnClickListener(view, R.id.btn_menu, this);
+        Util.setOnClickListener(view, R.id.btn_back, this);
     }
 
     @Override
@@ -120,8 +121,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
-        if (id == R.id.btn_menu) {
+        if (id == R.id.btn_back) {
+            pop();
+        } if (id == R.id.btn_menu) {
             SLog.info("here");
             new XPopup.Builder(getContext())
                     .offsetX(-50)
