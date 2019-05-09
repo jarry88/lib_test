@@ -113,6 +113,11 @@
     <string name="search_tab_title_commodity">商品</string>
     <string name="search_tab_title_article">文章</string>
 
+    <string name="goods_tab_title_general">綜合</string>
+    <string name="goods_tab_title_sale">銷量</string>
+    <string name="goods_tab_title_new">上新</string>
+    <string name="goods_tab_title_price">價格</string>
+
     <string name="btn_logout_text">安全退出</string>
     <string name="btn_commit_text">確認提交</string>
     
@@ -120,6 +125,9 @@
     <string name="menu_item_shop_home_search">全站搜索</string>
     <string name="menu_item_shop_home_customer_service">諮詢客服</string>
     <string name="menu_item_shop_home_message">消息</string>
+
+    <!-- 貨幣種類標志 -->
+    <string name="currency_type_sign">$</string>
 
     <string name="business_time_template">工作日：%s - %s\n週 末 ：%s - %s</string>
 </resources>

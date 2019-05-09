@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.lxj.xpopup.XPopup;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -23,7 +26,13 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     // 店鋪Id
     int shopId;
 
+    TextView tvShopTitle;
+
+    // 店鋪頭像圓形按鈕
     ImageView imgBottomBarShopAvatar;
+
+    // 店鋪名稱
+    String shopName = "";
 
     /** 首頁 */
     public static final int HOME_FRAGMENT = 0;
@@ -69,11 +78,14 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         Bundle args = getArguments();
         shopId = args.getInt("shopId");
 
+        tvShopTitle = view.findViewById(R.id.tv_shop_title);
         imgBottomBarShopAvatar = view.findViewById(R.id.img_bottom_bar_shop_avatar);
 
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
         }
+
+        Util.setOnClickListener(view, R.id.btn_menu, this);
     }
 
     @Override
@@ -83,7 +95,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         SupportFragment homeFragment = findChildFragment(ShopHomeFragment.class);
 
         if (homeFragment == null) {
-            mFragments[HOME_FRAGMENT] = ShopHomeFragment.newInstance(shopId);
+            mFragments[HOME_FRAGMENT] = ShopHomeFragment.newInstance();
             mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance();
             mFragments[CATEGORY_FRAGMENT] = ShopCategoryFragment.newInstance();
             mFragments[ACTIVITY_FRAGMENT] = ShopActivityFragment.newInstance();
@@ -109,28 +121,49 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
 
-        int len = bottomBarButtonIds.length;
-        // 想要选中的Fragment的下标
-        int index = -1;
-        for (int i = 0; i < len; i++) {
-            if (id == bottomBarButtonIds[i]) {
-                index = i;
+        if (id == R.id.btn_menu) {
+            SLog.info("here");
+            new XPopup.Builder(getContext())
+                    .offsetX(-50)
+                    .offsetY(-20)
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                    .hasShadowBg(false) // 去掉半透明背景
+                    .atView(v)
+                    .asCustom(new BlackDropdownMenu(_mActivity))
+                    .show();
+        } else { // 點擊底部導航欄
+            int len = bottomBarButtonIds.length;
+            // 想要选中的Fragment的下标
+            int index = -1;
+            for (int i = 0; i < len; i++) {
+                if (id == bottomBarButtonIds[i]) {
+                    index = i;
+                }
             }
-        }
 
-        SLog.info("index[%d], selectedFragmentIndex[%d]", index, selectedFragmentIndex);
-        // 如果index不等于-1，表示是按下BottomBar的按鈕
-        if (index != -1) {
-            if (index == selectedFragmentIndex) {
-                // 已經是當前Fragment，返回
-                return;
+            SLog.info("index[%d], selectedFragmentIndex[%d]", index, selectedFragmentIndex);
+            // 如果index不等于-1，表示是按下BottomBar的按鈕
+            if (index != -1) {
+                if (index == selectedFragmentIndex) {
+                    // 已經是當前Fragment，返回
+                    return;
+                }
+                showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
+                selectedFragmentIndex = index;
             }
-            showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
-            selectedFragmentIndex = index;
         }
     }
 
     public void setImgBottomBarShopAvatar(String url) {
         Glide.with(this).load(url).into(imgBottomBarShopAvatar);
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+        tvShopTitle.setText(shopName);
+    }
+
+    public int getShopId() {
+        return shopId;
     }
 }

@@ -15,6 +15,8 @@ import com.ftofs.twant.R;
  * @author zwm
  */
 public class ShopCategoryFragment extends BaseFragment implements View.OnClickListener {
+    ShopMainFragment parentFragment;
+
     public static ShopCategoryFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -34,6 +36,7 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        parentFragment = (ShopMainFragment) getParentFragment();
     }
 
 

@@ -29,7 +29,6 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import cn.snailpad.easyjson.json.JSONObject;
-import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -39,10 +38,7 @@ import okhttp3.Response;
  * @author zwm
  */
 public class ShopHomeFragment extends BaseFragment implements View.OnClickListener {
-    // 店鋪Id
-    int shopId;
-
-    TextView tvShopTitle;
+    ShopMainFragment parentFragment;
 
     ImageView imgShopAvatar;
     TextView tvShopSignature;
@@ -63,10 +59,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     LinearLayout llFirstCommentContainer;
 
-    public static ShopHomeFragment newInstance(int shopId) {
+
+    public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
 
-        args.putInt("shopId", shopId);
         ShopHomeFragment fragment = new ShopHomeFragment();
         fragment.setArguments(args);
 
@@ -83,10 +79,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Util.setOnClickListener(view, R.id.btn_menu, this);
-
-        tvShopTitle = view.findViewById(R.id.tv_shop_title);
+        parentFragment = (ShopMainFragment) getParentFragment();
 
         imgShopAvatar = view.findViewById(R.id.img_shop_avatar);
         tvShopSignature = view.findViewById(R.id.tv_shop_signature);
@@ -108,12 +101,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
 
         try {
-            Bundle args = getArguments();
-            shopId = args.getInt("shopId");
-            SLog.info("shopId[%d]", shopId);
-
             // 獲取店鋪首頁信息
-            String path = Api.PATH_SHOP_HOME + "/" + shopId;
+            String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getShopId();
             String token = User.getToken();
             EasyJSONObject params = EasyJSONObject.generate();
             if (StringUtil.isEmpty(token)) {
@@ -138,13 +127,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         }
 
                         String shopName = responseObj.getString("datas.storeInfo.storeName");
-                        tvShopTitle.setText(shopName);
+                        parentFragment.setShopName(shopName);
+
                         String shopAvatarUrl = responseObj.getString("datas.storeInfo.storeAvatar");
                         // 店鋪頭像
                         Glide.with(ShopHomeFragment.this).load(shopAvatarUrl).into(imgShopAvatar);
                         // 將店鋪頭像設置到工具欄按鈕
-                        ShopMainFragment shopMainFragment = (ShopMainFragment) getParentFragment();
-                        shopMainFragment.setImgBottomBarShopAvatar(shopAvatarUrl);
+                        parentFragment.setImgBottomBarShopAvatar(shopAvatarUrl);
 
                         // 店鋪簽名
                         tvShopSignature.setText(responseObj.getString("datas.storeInfo.storeSignature"));
@@ -246,16 +235,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_menu) {
-            SLog.info("here");
-            new XPopup.Builder(getContext())
-                    .offsetX(-50)
-                    .offsetY(-20)
-//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
-                    .hasShadowBg(false) // 去掉半透明背景
-                    .atView(v)
-                    .asCustom(new BlackDropdownMenu(_mActivity))
-                    .show();
-        }
+
     }
 }
