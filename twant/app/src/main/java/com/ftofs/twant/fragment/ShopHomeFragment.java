@@ -20,8 +20,6 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.BlackDropdownMenu;
-import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 
@@ -207,12 +205,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             // 評論者的昵稱
                             String authorNickname = firstComment.getString("memberVo.nickName");
                             // 評論內容
-                            String content = "";
-                            Object contentObject = firstComment.get("content");
-                            SLog.info("contentObject[%s]", contentObject);
-                            if (contentObject != null && !contentObject.equals(JSONObject.NULL)) {
-                                content = (String) contentObject;
-                            }
+                            String content = firstComment.getString("content");
 
                             Glide.with(ShopHomeFragment.this).load(authorAvatarUrl).into(imgAuthorAvatar);
                             tvAuthorNickname.setText(authorNickname);

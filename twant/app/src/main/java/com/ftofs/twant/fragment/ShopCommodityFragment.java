@@ -15,6 +15,7 @@ import com.ftofs.twant.adapter.ShopGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.Goods;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.util.ToastUtil;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ import okhttp3.Response;
  * 店鋪商品Fragment
  * @author zwm
  */
-public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener {
+public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     ShopMainFragment parentFragment;
 
     RecyclerView rvGoodsList;
@@ -111,7 +112,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);
                     layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
                     rvGoodsList.setLayoutManager(layoutManagerCommodity);
-                    ShopGoodsAdapter adapter = new ShopGoodsAdapter(_mActivity, goodsList);
+                    ShopGoodsAdapter adapter = new ShopGoodsAdapter(_mActivity, goodsList, ShopCommodityFragment.this);
                     rvGoodsList.setAdapter(adapter);
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
@@ -125,4 +126,14 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
 
     }
+
+    /**
+     * 打開商品詳情頁
+     * @param id 商品Id
+     */
+    @Override
+    public void onSelected(int id) {
+        parentFragment.start(GoodsDetailFragment.newInstance(id));
+    }
 }
+

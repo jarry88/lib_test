@@ -112,6 +112,12 @@
     <string name="text_search_goods">搜索商品</string>
     <string name="text_all_goods">全部商品</string>
 
+    <string name="text_add_to_cart">想放購物車</string>
+    <string name="text_buy">想要購買</string>
+
+    <string name="text_customer_service">客服</string>
+    <string name="text_liked">已關注</string>
+
     <string name="search_tab_title_shop">店鋪</string>
     <string name="search_tab_title_commodity">商品</string>
     <string name="search_tab_title_article">文章</string>

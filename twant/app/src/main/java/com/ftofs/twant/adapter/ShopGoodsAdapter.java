@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.Goods;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class ShopGoodsAdapter extends RecyclerView.Adapter<ShopGoodsAdapter.View
     private Context context;
     private List<Goods> goodsList;
     String currencyTypeSign;
+    OnSelectedListener onSelectedListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView goodsImage;
@@ -41,9 +43,10 @@ public class ShopGoodsAdapter extends RecyclerView.Adapter<ShopGoodsAdapter.View
         }
     }
 
-    public ShopGoodsAdapter(Context context, List<Goods> goodsList) {
+    public ShopGoodsAdapter(Context context, List<Goods> goodsList, OnSelectedListener onSelectedListener) {
         this.context = context;
         this.goodsList = goodsList;
+        this.onSelectedListener = onSelectedListener;
 
         currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
     }
@@ -59,7 +62,7 @@ public class ShopGoodsAdapter extends RecyclerView.Adapter<ShopGoodsAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         SLog.info("position[%d]", position);
-        Goods goods = goodsList.get(position);
+        final Goods goods = goodsList.get(position);
         Glide.with(context).load(goods.imageUrl).into(holder.goodsImage);
         holder.tvGoodsName.setText(goods.name);
         holder.tvJingle.setText(goods.jingle);
@@ -69,6 +72,7 @@ public class ShopGoodsAdapter extends RecyclerView.Adapter<ShopGoodsAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onSelectedListener.onSelected(goods.id);
             }
         });
     }

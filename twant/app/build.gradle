@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     implementation 'com.orhanobut:hawk:2.0.1'
 
-    implementation 'cn.snailpad:EasyJSON:1.0.11'
+    implementation 'cn.snailpad:EasyJSON:1.0.12'
 
     implementation 'org.litepal.android:java:3.0.0'
 

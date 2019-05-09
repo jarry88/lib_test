@@ -143,6 +143,13 @@ public class Api {
      */
     public static final String PATH_SEARCH_GOODS = "/api/app/store/search/goods";
 
+
+    /**
+     * 商品詳情
+     */
+    public static final String PATH_GOODS_DETAIL = "/api/app/goods";
+
+
     /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
