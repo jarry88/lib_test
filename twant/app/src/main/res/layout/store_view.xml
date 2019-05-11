@@ -61,14 +61,14 @@
                 android:id="@+id/tv_like_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FF838383"
+                android:textColor="@color/tw_dark_grey"
                 android:textSize="11sp"
                 />
             <TextView
                 android:id="@+id/tv_follow_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FF838383"
+                android:textColor="@color/tw_dark_grey"
                 android:textSize="11sp"
                 />
         </LinearLayout>

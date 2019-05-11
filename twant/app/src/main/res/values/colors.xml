@@ -8,4 +8,5 @@
     <color name="tw_blue">#00B0FF</color>
     <color name="tw_black">#2A292A</color>
     <color name="tw_grey">#BBBBBB</color>
+    <color name="tw_dark_grey">#838383</color>
 </resources>

@@ -1,28 +1,361 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!-- 可滾動的內容區 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="252dp"
-        android:text="GoodsDetailFragment"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <!-- 商品圖片 -->
+            <ImageView
+                android:id="@+id/goods_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+            <!-- 商品價格信息 -->
+            <RelativeLayout
+                android:id="@+id/rl_price_info_container"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                app:layout_constraintTop_toBottomOf="@id/goods_image"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="@color/tw_red">
+                <LinearLayout
+                    android:id="@+id/ll_price_info_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/currency_type_sign"
+                        android:textColor="#fff"
+                        android:textSize="16sp"
+                        />
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="149.80"
+                        android:textColor="#fff"
+                        android:textSize="34sp"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+            <!-- 商品名稱標題區 -->
+            <LinearLayout
+                android:id="@+id/ll_goods_name_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/rl_price_info_container"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:padding="15dp"
+                android:background="@drawable/bottom_separator_box"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_goods_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textColor="@color/tw_black"
+                    />
+                <TextView
+                    android:id="@+id/tv_goods_jingle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_red"
+                    android:textSize="14sp"
+                    />
+                
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp">
+                    <TextView
+                        android:id="@+id/tv_fans_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/tv_goods_sale"
+                        android:textColor="@color/tw_dark_grey"
+                        android:textSize="13sp"
+                        android:text="粉絲235"
+                        app:layout_constraintHorizontal_chainStyle="spread_inside"
+                        />
+                    <TextView
+                        android:id="@+id/tv_goods_sale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/tv_fans_count"
+                        app:layout_constraintRight_toLeftOf="@+id/ll_goods_made_in_container"
+                        android:textColor="@color/tw_dark_grey"
+                        android:textSize="13sp"
+                        android:text="月銷量19筆"
+                        />
+                    <LinearLayout
+                        android:id="@+id/ll_goods_made_in_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="parent"
+                        app:layout_constraintLeft_toRightOf="@id/tv_goods_sale"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:orientation="horizontal">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/img_goods_national_flag"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_vertical"
+                            />
+                        <TextView
+                            android:id="@+id/tv_goods_country_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_gravity="center_vertical"
+                            android:textSize="13sp"
+                            android:textColor="@color/tw_dark_grey"
+                            />
+                    </LinearLayout>
+                </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+
+            <!-- 規格 -->
+            <RelativeLayout
+                android:id="@+id/rl_spec_container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/toolbar_height"
+                android:layout_marginLeft="@dimen/toolbar_margin_left"
+                android:layout_marginRight="@dimen/toolbar_margin_right"
+                android:background="@drawable/bottom_separator_box"
+                android:orientation="horizontal"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_goods_name_container">
+
+                <TextView
+                    android:id="@+id/text_spec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/text_spec"
+                    android:textColor="@color/tw_dark_grey"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_toRightOf="@id/text_spec"
+                    android:text="@string/text_select_spec_hint"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_button" />
+            </RelativeLayout>
+
+            <!-- 送至 -->
+            <RelativeLayout
+                android:id="@+id/rl_send_to_container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/toolbar_height"
+                android:layout_marginLeft="@dimen/toolbar_margin_left"
+                android:layout_marginRight="@dimen/toolbar_margin_right"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_spec_container"
+                android:background="@drawable/bottom_separator_box"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/text_send_to"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/text_send_to"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_dark_grey"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_toRightOf="@id/text_send_to"
+                    android:layout_centerVertical="true"
+                    android:text="澳門 路環"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_black"
+                    />
+                <ImageView
+                    android:id="@+id/img_expand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_button"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@id/img_expand"
+                    android:layout_centerVertical="true"
+                    android:text="運費15.00"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_black"
+                    />
+            </RelativeLayout>
+
+            <!-- 評論 -->
+            <RelativeLayout
+                android:id="@+id/rl_comment_container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/toolbar_height"
+                android:layout_marginLeft="@dimen/toolbar_margin_left"
+                android:layout_marginRight="@dimen/toolbar_margin_right"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_send_to_container"
+                android:background="@drawable/bottom_separator_box"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/text_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/text_comment"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_dark_grey"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_button"
+                    />
+            </RelativeLayout>
+
+            <!-- 店友 -->
+            <RelativeLayout
+                android:id="@+id/rl_shop_friend_container"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/toolbar_height"
+                android:layout_marginLeft="@dimen/toolbar_margin_left"
+                android:layout_marginRight="@dimen/toolbar_margin_right"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_comment_container"
+                android:background="@drawable/bottom_separator_box"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/text_shop_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/text_shop_friend"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_dark_grey"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_button"
+                    />
+            </RelativeLayout>
+
+            <!-- 分隔條1 -->
+            <View
+                android:id="@+id/vw_separator_1"
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_shop_friend_container"
+                android:background="#ededed"
+                />
+
+            <!-- 商品詳情 -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/vw_separator_1">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp">
+                    <TextView
+                        android:id="@+id/text_goods_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="13dp"
+                        android:layout_marginRight="13dp"
+                        android:layout_centerInParent="true"
+                        android:text="@string/text_goods_detail"
+                        android:textColor="@color/tw_black"
+                        android:textSize="16sp"
+                        />
+                    <View
+                        android:layout_width="60dp"
+                        android:layout_height="1dp"
+                        android:layout_toLeftOf="@id/text_goods_detail"
+                        android:layout_centerVertical="true"
+                        android:background="@color/tw_black"
+                        />
+                    <View
+                        android:layout_width="60dp"
+                        android:layout_height="1dp"
+                        android:layout_toRightOf="@id/text_goods_detail"
+                        android:layout_centerVertical="true"
+                        android:background="@color/tw_black"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+    <!-- 底部工具欄 -->
     <RelativeLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="49dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#6B6868">
+        android:background="@drawable/top_separator_box">
 
         <LinearLayout
             android:id="@+id/ll_big_button_container"
@@ -33,6 +366,7 @@
             android:layout_centerVertical="true"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/btn_add_to_cart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_add_to_cart_bg"
@@ -45,6 +379,7 @@
                 android:text="@string/text_add_to_cart"
                 />
             <TextView
+                android:id="@+id/btn_buy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_buy_bg"
@@ -100,7 +435,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_shop_bottom_bar_customer_service"
+                    android:src="@drawable/icon_customer_service_grey"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -140,4 +475,4 @@
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>
     </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Twant</string>
+    <string name="app_name">Takewant想要</string>
 
     <string name="copyright">© %s Takewant版權所有</string>
 
@@ -98,6 +98,7 @@
     <string name="text_cart">購物車</string>
     <string name="text_edit">編輯</string>
     <string name="text_search">搜索</string>
+    <string name="text_quantity">數量</string>
 
     <string name="text_history_search">歷史搜索</string>
     <string name="text_hot_search">熱門搜索</string>
@@ -117,6 +118,11 @@
 
     <string name="text_customer_service">客服</string>
     <string name="text_liked">已關注</string>
+    <string name="text_spec">規格</string>
+    <string name="text_send_to">送至</string>
+    <string name="text_comment">評論</string>
+    <string name="text_select_spec_hint">選擇顏色分類</string>
+    <string name="text_goods_detail">商品詳情</string>
 
     <string name="search_tab_title_shop">店鋪</string>
     <string name="search_tab_title_commodity">商品</string>

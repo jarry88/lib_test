@@ -119,7 +119,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:textSize="14sp"
-                android:textColor="#FF838383"
+                android:textColor="@color/tw_dark_grey"
                 android:text="@string/text_shop_friend"
                 />
             <ImageView
@@ -426,7 +426,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:textColor="#838383"
+                    android:textColor="@color/tw_dark_grey"
                     android:textSize="16sp"
                     />
 
@@ -443,7 +443,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="@string/text_view_all"
-                        android:textColor="#838383"
+                        android:textColor="@color/tw_dark_grey"
                         android:textSize="14sp"
                         />
                     <ImageView
@@ -480,7 +480,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:layout_gravity="center_vertical"
-                        android:textColor="#838383"
+                        android:textColor="@color/tw_dark_grey"
                         android:textSize="13sp"
                         />
                 </LinearLayout>

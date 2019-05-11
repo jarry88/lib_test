@@ -83,7 +83,7 @@ public class ShopGoodsAdapter extends RecyclerView.Adapter<ShopGoodsAdapter.View
         if (goodsList != null) {
             count = goodsList.size();
         }
-        SLog.info("count[%d]", count);
+        // SLog.info("count[%d]", count);
         return count;
     }
 }

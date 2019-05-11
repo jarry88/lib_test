@@ -164,7 +164,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         for (Object object : snsArray) {
                             EasyJSONObject snsObject = (EasyJSONObject) object;
                             String snsImageUrl = Config.OSS_BASE_URL + "/" + snsObject.getString("socialLogoChecked");
-                            SLog.info("snsImageUrl[%s]", snsImageUrl);
+                            // SLog.info("snsImageUrl[%s]", snsImageUrl);
                             ImageView snsImage = new ImageView(_mActivity);
 
                             LinearLayout.LayoutParams layoutParams =
@@ -179,7 +179,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         for (Object object : paymentArray) {
                             EasyJSONObject paymentObject = (EasyJSONObject) object;
                             String payWayImageUrl = Config.OSS_BASE_URL + "/" + paymentObject.getString("paymentLogo");
-                            SLog.info("payWayImageUrl[%s]", payWayImageUrl);
+                            // SLog.info("payWayImageUrl[%s]", payWayImageUrl);
                             ImageView payWayImage = new ImageView(_mActivity);
 
                             LinearLayout.LayoutParams layoutParams =
