@@ -27,6 +27,7 @@ public class SpecSelectPopup extends BottomPopupView {
     Context context;
     List<Spec> specList;
     int selectedIndex;  // 當前選中的索引
+    ImageView skuImage;
 
     public SpecSelectPopup(@NonNull Context context, List<Spec> specList) {
         super(context);
@@ -44,12 +45,13 @@ public class SpecSelectPopup extends BottomPopupView {
     protected void onCreate() {
         super.onCreate();
 
-        ImageView skuImage = findViewById(R.id.sku_image);
+        skuImage = findViewById(R.id.sku_image);
 
         SLog.info("specList.size[%d]", specList.size());
         if (specList.size() < 1) {
             return;
         }
+
         // 找到第1個規格的照片
         Spec firstSpec = specList.get(0);
         String firstImageSrc = firstSpec.specValueList.get(0).imageSrc;
@@ -84,6 +86,7 @@ public class SpecSelectPopup extends BottomPopupView {
             }
             llSpecContainer.addView(llSpec);
         }
+
     }
 
     //完全可见执行
