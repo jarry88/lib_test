@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="15dp">
 
@@ -44,34 +44,9 @@
             />
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/goods_image"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginLeft="32dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/cs_avatar_160"
-            />
-        <TextView
-            android:id="@+id/tv_goods_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="11dp"
-            android:layout_marginLeft="16dp"
-            android:textSize="14sp"
-            android:textColor="@color/tw_black"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_cart_sku_item_container"
+        android:id="@+id/ll_cart_spu_item_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
+        android:orientation="vertical">
     </LinearLayout>
 </LinearLayout>

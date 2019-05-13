@@ -20,6 +20,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 
@@ -36,7 +37,7 @@ import okhttp3.Response;
  */
 public class CartFragment extends BaseFragment implements View.OnClickListener {
     TextView tvFragmentTitle;
-    LinearLayout llCartContent;
+    LinearLayout cartStoreItemContainer;
 
     public static CartFragment newInstance() {
         Bundle args = new Bundle();
@@ -59,7 +60,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
-        llCartContent = view.findViewById(R.id.ll_cart_content);
+        cartStoreItemContainer = view.findViewById(R.id.ll_cart_store_item_container);
 
         loadCartData();
     }
@@ -112,22 +113,37 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
                         EasyJSONObject cartStoreVo = (EasyJSONObject) object;
 
-                        View cartStoreView = LayoutInflater.from(_mActivity).inflate(R.layout.cart_item, null, false);
-                        TextView tvStoreName = cartStoreView.findViewById(R.id.tv_store_name);
-                        TextView tvGoodsName = cartStoreView.findViewById(R.id.tv_goods_name);
-                        ImageView goodsImage = cartStoreView.findViewById(R.id.goods_image);
-
+                        View cartStoreItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_store_item, null, false);
+                        TextView tvStoreName = cartStoreItem.findViewById(R.id.tv_store_name);
 
                         tvStoreName.setText(cartStoreVo.getString("storeName"));
 
                         EasyJSONArray cartSpuVoList = cartStoreVo.getArray("cartSpuVoList");
+                        LinearLayout cartSpuItemContainer = cartStoreItem.findViewById(R.id.ll_cart_spu_item_container);
                         for (Object object2 : cartSpuVoList) {
+                            View cartSpuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_spu_item, null, false);
+
+                            TextView tvGoodsName = cartSpuItem.findViewById(R.id.tv_goods_name);
+                            ImageView goodsImage = cartSpuItem.findViewById(R.id.goods_image);
+
                             EasyJSONObject cartSpuVo = (EasyJSONObject) object2;
                             tvGoodsName.setText(cartSpuVo.getString("goodsName"));
                             Glide.with(CartFragment.this).load(cartSpuVo.getString("imageSrc")).into(goodsImage);
+
+                            EasyJSONArray cartItemVoList = cartSpuVo.getArray("cartItemVoList");
+                            LinearLayout cartSkuItemContainer = cartSpuItem.findViewById(R.id.ll_cart_sku_item_container);
+                            for (Object object3 : cartItemVoList) {
+                                View cartSkuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_sku_item, null, false);
+
+                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                layoutParams.setMargins(0, Util.dip2px(_mActivity, 15), 0, 0);
+                                cartSkuItemContainer.addView(cartSkuItem, layoutParams);
+                            }
+
+                            cartSpuItemContainer.addView(cartSpuItem);
                         }
 
-                        llCartContent.addView(cartStoreView);
+                        cartStoreItemContainer.addView(cartStoreItem);
                     }
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
