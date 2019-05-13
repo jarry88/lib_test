@@ -38,6 +38,7 @@ import okhttp3.Response;
 public class CartFragment extends BaseFragment implements View.OnClickListener {
     TextView tvFragmentTitle;
     LinearLayout cartStoreItemContainer;
+    String currencyTypeSign;
 
     public static CartFragment newInstance() {
         Bundle args = new Bundle();
@@ -58,6 +59,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        currencyTypeSign = getResources().getString(R.string.currency_type_sign);
 
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         cartStoreItemContainer = view.findViewById(R.id.ll_cart_store_item_container);
@@ -134,6 +137,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                             LinearLayout cartSkuItemContainer = cartSpuItem.findViewById(R.id.ll_cart_sku_item_container);
                             for (Object object3 : cartItemVoList) {
                                 View cartSkuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_sku_item, null, false);
+                                TextView tvGoodsFullSpecs = cartSkuItem.findViewById(R.id.tv_goods_full_specs);
+                                TextView tvPriceSum = cartSkuItem.findViewById(R.id.tv_price_sum);
+
+
+                                EasyJSONObject cartSkuVo = (EasyJSONObject) object3;
+                                tvGoodsFullSpecs.setText(cartSkuVo.getString("goodsFullSpecs"));
+                                tvPriceSum.setText(currencyTypeSign + String.valueOf(cartSkuVo.getDouble("goodsPrice")));
 
                                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                 layoutParams.setMargins(0, Util.dip2px(_mActivity, 15), 0, 0);
