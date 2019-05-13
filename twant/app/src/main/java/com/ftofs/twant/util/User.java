@@ -27,7 +27,7 @@ public class User {
 
         if (userId > 0 && !StringUtil.isEmpty(token) && !StringUtil.isEmpty(nickname) &&
                 now - lastLoginTime < Config.LOGIN_VALID_TIME) {
-            SLog.info("用戶已登錄");
+            SLog.info("用戶已登錄, token[%s]", token);
             return userId;
         }
 

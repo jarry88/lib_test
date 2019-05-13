@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.nex3z:flow-layout:1.2.4'
 
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 
     // 基础依赖包，必须要依赖
     // implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta02'

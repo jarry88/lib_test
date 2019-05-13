@@ -6,8 +6,28 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
+
+import java.io.IOException;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
+import okhttp3.Response;
 
 
 /**
@@ -15,6 +35,9 @@ import com.ftofs.twant.R;
  * @author zwm
  */
 public class CartFragment extends BaseFragment implements View.OnClickListener {
+    TextView tvFragmentTitle;
+    LinearLayout llCartContent;
+
     public static CartFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -34,6 +57,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
+        llCartContent = view.findViewById(R.id.ll_cart_content);
+
+        loadCartData();
     }
 
     @Override
@@ -44,6 +72,69 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+    private void loadCartData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "clientType", Constant.CLIENT_TYPE_ANDROID);
+
+        Api.postUI(Api.PATH_CART_LIST, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseStr = response.body().string();
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    String cartText = getResources().getString(R.string.text_cart);
+                    int cartItemCount = responseObj.getInt("datas.skuCount");
+                    cartText = String.format(cartText + "(%d)", cartItemCount);
+                    tvFragmentTitle.setText(cartText);
+
+
+                    EasyJSONArray cartStoreVoList = responseObj.getArray("datas.cartStoreVoList");
+                    for (Object object : cartStoreVoList) {
+
+                        EasyJSONObject cartStoreVo = (EasyJSONObject) object;
+
+                        View cartStoreView = LayoutInflater.from(_mActivity).inflate(R.layout.cart_item, null, false);
+                        TextView tvStoreName = cartStoreView.findViewById(R.id.tv_store_name);
+                        TextView tvGoodsName = cartStoreView.findViewById(R.id.tv_goods_name);
+                        ImageView goodsImage = cartStoreView.findViewById(R.id.goods_image);
+
+
+                        tvStoreName.setText(cartStoreVo.getString("storeName"));
+
+                        EasyJSONArray cartSpuVoList = cartStoreVo.getArray("cartSpuVoList");
+                        for (Object object2 : cartSpuVoList) {
+                            EasyJSONObject cartSpuVo = (EasyJSONObject) object2;
+                            tvGoodsName.setText(cartSpuVo.getString("goodsName"));
+                            Glide.with(CartFragment.this).load(cartSpuVo.getString("imageSrc")).into(goodsImage);
+                        }
+
+                        llCartContent.addView(cartStoreView);
+                    }
+                } catch (EasyJSONException e) {
+                    e.printStackTrace();
+                    SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
     }
 
     @Override

@@ -23,7 +23,7 @@
         app:layout_constraintTop_toBottomOf="@id/ll_title_padding"
         android:orientation="horizontal"
         android:background="@drawable/title_padding_bg">
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/sku_image"
             android:layout_width="91dp"
             android:layout_height="91dp"
@@ -32,6 +32,7 @@
             android:layout_gravity="bottom"
             android:scaleType="fitXY"
             android:src="@drawable/cs_avatar_160"
+            app:riv_corner_radius="10dp"
             />
         <RelativeLayout
             android:layout_width="match_parent"

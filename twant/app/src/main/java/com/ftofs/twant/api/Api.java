@@ -149,6 +149,17 @@ public class Api {
      */
     public static final String PATH_GOODS_DETAIL = "/api/app/goods";
 
+    /**
+     * 添加購物車
+     */
+    public static final String PATH_ADD_CART = "/api/cart/add";
+
+
+    /**
+     * 購物車列表
+     */
+    public static final String PATH_CART_LIST = "/api/cart/list";
+
 
     /**
      * 發送Http請求

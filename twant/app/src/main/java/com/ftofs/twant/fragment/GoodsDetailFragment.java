@@ -52,6 +52,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvGoodsCountryName;
 
     List<Spec> specList = new ArrayList<>();
+    // 從逗號連接的specValueId定位出goodsId的Map
+    Map<String, Integer> specValueIdMap = new HashMap<>();
 
     public static GoodsDetailFragment newInstance(int commonId) {
         Bundle args = new Bundle();
@@ -101,7 +103,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new SpecSelectPopup(_mActivity, specList))
+                    .asCustom(new SpecSelectPopup(_mActivity, specList, specValueIdMap))
                     .show();
         }
     }
@@ -141,17 +143,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tvGoodsCountryName.setText(responseObj.getString("datas.goodsCountry.countryCn"));
 
                     // 下面開始組裝規格數據列表
-                    // key為specValueId, value為goodsId
-                    Map<Integer, Integer> goodsSpecValueMap = new HashMap<>();
-                    EasyJSONArray goodsSpecValueJson = goodsDetail.getArray("goodsSpecValueJson");
-                    for (Object object : goodsSpecValueJson) {
-                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-                        int goodsId = easyJSONObject.getInt("goodsId");
-                        for (Object specValueId : easyJSONObject.getArray("specValueIds")) {
-                            goodsSpecValueMap.put((Integer) specValueId, goodsId);
-                        }
-                    }
-
                     EasyJSONArray specJson = goodsDetail.getArray("specJson");
                     SLog.info("specJson[%s]", specJson);
                     for (Object object : specJson) {
@@ -170,13 +161,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             String specValueName = specValue.getString("specValueName");
                             String imageSrc = specValue.getString("imageSrc");
 
-                            int goodsId = goodsSpecValueMap.get(specValueId);
-
-                            SpecValue specValueItem = new SpecValue(specValueId, goodsId, specValueName, imageSrc);
+                            SpecValue specValueItem = new SpecValue(specValueId, specValueName, imageSrc);
                             specItem.specValueList.add(specValueItem);
                         }
 
                         specList.add(specItem);
+                    }
+
+
+                    String goodsSpecValues = goodsDetail.getString("goodsSpecValues");
+                    EasyJSONArray goodsSpecValueArr = (EasyJSONArray) EasyJSONArray.parse(goodsSpecValues);
+                    for (Object object : goodsSpecValueArr) {
+                        EasyJSONObject mapItem = (EasyJSONObject) object;
+                        specValueIdMap.put(mapItem.getString("specValueIds"), mapItem.getInt("goodsId"));
                     }
 
                     SLog.info("specList.size[%d]", specList.size());
