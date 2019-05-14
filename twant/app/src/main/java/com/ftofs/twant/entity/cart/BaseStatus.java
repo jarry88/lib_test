@@ -21,8 +21,6 @@ public class BaseStatus {
 
     protected ScaledButton radio;
     protected boolean checked;
-    protected int count;  // 數量
-    protected float price;  // 價錢
 
     /**
      * 改變是否選中的狀態
@@ -48,21 +46,5 @@ public class BaseStatus {
 
     public boolean isChecked() {
         return checked;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
     }
 }

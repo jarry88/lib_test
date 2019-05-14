@@ -1,5 +1,6 @@
 package com.ftofs.twant.entity.cart;
 
+import android.util.Pair;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -31,5 +32,28 @@ public class TotalStatus extends BaseStatus {
 
             super.changeCheckStatus(allChecked, PHRASE_BUBBLE);
         }
+    }
+
+    /**
+     * 獲取合計數據
+     * @return
+     */
+    public Pair<Float, Integer> getTotalData() {
+        float totalPrice = 0f;
+        int totalCount = 0;
+        for (StoreStatus storeStatus : storeStatusList) {
+            for (SpuStatus spuStatus : storeStatus.spuStatusList) {
+                for (SkuStatus skuStatus : spuStatus.skuStatusList) {
+                    if (!skuStatus.isChecked()) {
+                        continue;
+                    }
+
+                    totalCount += skuStatus.getCount();
+                    totalPrice += skuStatus.getCount() * skuStatus.getPrice();
+                }
+            }
+        }
+
+        return new Pair<>(totalPrice, totalCount);
     }
 }

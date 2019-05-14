@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     TextView tvFragmentTitle;
     LinearLayout cartStoreItemContainer;
     String currencyTypeSign;
+    String textSettlement;
     TotalStatus totalStatus = new TotalStatus();
+
+    TextView btnSettlement;
+    TextView tvTotalPrice;
 
     public static CartFragment newInstance() {
         Bundle args = new Bundle();
@@ -69,6 +74,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         currencyTypeSign = getResources().getString(R.string.currency_type_sign);
+        textSettlement = getResources().getString(R.string.text_settlement);
 
         ScaledButton btnSelectAll = view.findViewById(R.id.btn_select_all);
         btnSelectAll.setTag(totalStatus);
@@ -78,7 +84,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         cartStoreItemContainer = view.findViewById(R.id.ll_cart_store_item_container);
 
+        btnSettlement = view.findViewById(R.id.btn_settlement);
+        tvTotalPrice = view.findViewById(R.id.tv_total_price);
+
         loadCartData();
+        updateTotalData();
     }
 
     @Override
@@ -170,14 +180,22 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
                                 // 購買數量調節按鈕
                                 AdjustButton abQuantity = cartSkuItem.findViewById(R.id.ab_quantity);
+                                abQuantity.setMinValue(1);  // 調節數量不能小于1
+                                abQuantity.setSkuStatus(skuStatus);
+                                setAdjustButtonOnClickListener(abQuantity);
                                 setCheckButtonOnClickListener(btnCheckSku);
                                 skuStatus.setRadio(btnCheckSku);
 
 
                                 EasyJSONObject cartSkuVo = (EasyJSONObject) object3;
                                 tvGoodsFullSpecs.setText(cartSkuVo.getString("goodsFullSpecs"));
-                                tvPriceSum.setText(currencyTypeSign + String.valueOf(cartSkuVo.getDouble("goodsPrice")));
-                                abQuantity.setValue(cartSkuVo.getInt("buyNum"));
+                                float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
+                                int buyNum = cartSkuVo.getInt("buyNum");
+                                tvPriceSum.setText(currencyTypeSign + goodsPrice);
+                                abQuantity.setValue(buyNum);
+
+                                skuStatus.setPrice(goodsPrice);
+                                skuStatus.setCount(buyNum);
 
                                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                 layoutParams.setMargins(0, Util.dip2px(_mActivity, 15), 0, 0);
@@ -213,7 +231,37 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                 ScaledButton btnCheck = (ScaledButton) v;
                 BaseStatus status = (BaseStatus) btnCheck.getTag();
                 status.changeCheckStatus(!status.isChecked(), BaseStatus.PHRASE_TARGET);
+                updateTotalData();
             }
         });
+    }
+
+
+    private void setAdjustButtonOnClickListener(View adjustButton) {
+        adjustButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SLog.info("hererefffffffffffffffffffffffff");
+                updateTotalData();
+            }
+        });
+    }
+
+
+    /**
+     * 更新合計數據
+     */
+    private void updateTotalData() {
+        Pair<Float, Integer> totalData = totalStatus.getTotalData();
+
+        float totalPrice = totalData.first;  // 總價錢
+        int totalCount = totalData.second;  // 總件數
+        tvTotalPrice.setText(currencyTypeSign + totalPrice);
+        String btnSettlementText = textSettlement;
+
+        if (totalCount > 0) {
+            btnSettlementText += "(" + totalCount + ")";
+        }
+        btnSettlement.setText(btnSettlementText);
     }
 }

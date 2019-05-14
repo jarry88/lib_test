@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.entity.cart.SkuStatus;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
@@ -16,6 +17,8 @@ import com.ftofs.twant.util.Util;
  */
 public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
     public static final float DEFAULT_THRESHOLD = 0.28f;
+
+    private SkuStatus skuStatus;
 
     int minValue = 0;
     int value;
@@ -42,7 +45,7 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         int action = event.getAction();
 
         if (action != MotionEvent.ACTION_UP) {
-            return true;
+            return super.onTouchEvent(event);
         }
 
         float x = event.getX();
@@ -55,17 +58,15 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         float proportion = x / width;
         if (proportion < threshold) {
             if (value <= minValue) {
-                return true;
+                return super.onTouchEvent(event);
             }
-            --value;
-            updateView();
+            setValue(value - 1);
         }
         if (proportion > 1 - threshold) {
-            ++value;
-            updateView();
+            setValue(value + 1);
         }
 
-        return true;
+        return super.onTouchEvent(event);
     }
 
     private void updateView() {
@@ -78,6 +79,15 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
 
     public void setValue(int value) {
         this.value = value;
+        skuStatus.setCount(value);
         updateView();
+    }
+
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
+    }
+
+    public void setSkuStatus(SkuStatus skuStatus) {
+        this.skuStatus = skuStatus;
     }
 }
