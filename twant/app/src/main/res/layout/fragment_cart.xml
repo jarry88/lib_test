@@ -54,7 +54,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tool_bar"
-        app:layout_constraintBottom_toTopOf="@+id/ll_total_operation_container">
+        app:layout_constraintBottom_toTopOf="@+id/ll_total_operation_container"
+        android:background="#fff">
         <LinearLayout
             android:id="@+id/ll_cart_store_item_container"
             android:layout_width="match_parent"
@@ -82,7 +83,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/icon_cart_item_checked"
+                android:src="@drawable/icon_cart_item_unchecked"
                 />
 
             <TextView

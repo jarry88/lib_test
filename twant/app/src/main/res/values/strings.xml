@@ -137,7 +137,7 @@
 
     <string name="btn_logout_text">安全退出</string>
     <string name="btn_commit_text">確認提交</string>
-    
+
     <string name="menu_item_shop_home_home">商城首頁</string>
     <string name="menu_item_shop_home_search">全站搜索</string>
     <string name="menu_item_shop_home_customer_service">諮詢客服</string>

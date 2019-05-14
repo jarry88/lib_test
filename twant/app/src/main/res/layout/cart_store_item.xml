@@ -3,50 +3,63 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="15dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/icon_cart_item_checked"
-            />
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/icon_shop"
-            />
-
-        <TextView
-            android:id="@+id/tv_store_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_gravity="center_vertical"
-            android:text=""
-            android:textSize="14sp"
-            android:textColor="@color/tw_black"
-            />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/expand_button"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_cart_spu_item_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:padding="15dp"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/btn_check_store"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/icon_cart_item_unchecked"
+                />
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/icon_shop"
+                />
+
+            <TextView
+                android:id="@+id/tv_store_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_gravity="center_vertical"
+                android:text=""
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/expand_button"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_cart_spu_item_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
     </LinearLayout>
+
+    <!-- 分隔條 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="#ffededed"
+        />
 </LinearLayout>
