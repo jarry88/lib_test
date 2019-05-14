@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ScaledButton -->
+    <attr name="icon_src" format="reference"></attr>
+    <attr name="icon_width" format="dimension"></attr>
+    <attr name="icon_height" format="dimension"></attr>
+    <declare-styleable name="ScaledButton">
+        <attr name="icon_src"></attr>
+        <attr name="icon_width"></attr>
+        <attr name="icon_height"></attr>
+    </declare-styleable>
+</resources>

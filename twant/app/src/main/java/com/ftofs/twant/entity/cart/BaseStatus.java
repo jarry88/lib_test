@@ -2,29 +2,52 @@ package com.ftofs.twant.entity.cart;
 
 import android.widget.ImageView;
 
-public class BaseStatus {
-    public static final boolean STATUS_CHECKED = true;
-    public static final boolean STATUS_UNCHECKED = false;
+import com.ftofs.twant.R;
+import com.ftofs.twant.widget.ScaledButton;
 
-    protected ImageView radio;
+public class BaseStatus {
+    /**
+     * 狀態改變的傳播 仿照
+     * DOM事件三个阶段
+     * 当一个DOM事件被触发时，它不仅仅只是单纯地在本身对象上触发一次，而是会经历三个不同的阶段：
+     *
+     * 捕获阶段：先由文档的根节点document往事件触发对象，从外向内捕获事件对象；
+     * 目标阶段：到达目标事件位置（事发地），触发事件；
+     * 冒泡阶段：再从目标事件位置往文档的根节点方向回溯，从内向外冒泡事件对象。
+     */
+    public static final int PHRASE_CAPTURE = 1;  // 狀態傳播方向 total => store => spu => sku
+    public static final int PHRASE_TARGET = 2;   // 自己處理，然后，雙向傳播
+    public static final int PHRASE_BUBBLE = 3;   // 狀態傳播方向 sku => spu => store => total
+
+    protected ScaledButton radio;
     protected boolean checked;
     protected int count;  // 數量
     protected float price;  // 價錢
 
-    public ImageView getRadio() {
+    /**
+     * 改變是否選中的狀態
+     * @param checked
+     * @param phrase 狀態傳播階段
+     */
+    public void changeCheckStatus(boolean checked, int phrase) {
+        this.checked = checked;
+        if (checked) {
+            radio.setIconResource(R.drawable.icon_cart_item_checked);
+        } else {
+            radio.setIconResource(R.drawable.icon_cart_item_unchecked);
+        }
+    }
+
+    public ScaledButton getRadio() {
         return radio;
     }
 
-    public void setRadio(ImageView radio) {
+    public void setRadio(ScaledButton radio) {
         this.radio = radio;
     }
 
     public boolean isChecked() {
         return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
     }
 
     public int getCount() {

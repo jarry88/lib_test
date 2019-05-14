@@ -27,6 +27,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
+import com.ftofs.twant.widget.ScaledButton;
 
 import java.io.IOException;
 
@@ -68,6 +69,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         currencyTypeSign = getResources().getString(R.string.currency_type_sign);
+
+        ScaledButton btnSelectAll = view.findViewById(R.id.btn_select_all);
+        btnSelectAll.setTag(totalStatus);
+        setCheckButtonOnClickListener(btnSelectAll);
+        totalStatus.setRadio(btnSelectAll);
 
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         cartStoreItemContainer = view.findViewById(R.id.ll_cart_store_item_container);
@@ -126,7 +132,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
                         View cartStoreItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_store_item, null, false);
                         TextView tvStoreName = cartStoreItem.findViewById(R.id.tv_store_name);
-                        ImageView btnCheckStore = cartStoreItem.findViewById(R.id.btn_check_store);
+                        ScaledButton btnCheckStore = cartStoreItem.findViewById(R.id.btn_check_store);
                         btnCheckStore.setTag(storeStatus);
                         setCheckButtonOnClickListener(btnCheckStore);
                         storeStatus.setRadio(btnCheckStore);
@@ -142,7 +148,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
                             TextView tvGoodsName = cartSpuItem.findViewById(R.id.tv_goods_name);
                             ImageView goodsImage = cartSpuItem.findViewById(R.id.goods_image);
-                            ImageView btnCheckSpu = cartSpuItem.findViewById(R.id.btn_check_spu);
+                            ScaledButton btnCheckSpu = cartSpuItem.findViewById(R.id.btn_check_spu);
                             btnCheckSpu.setTag(spuStatus);
                             setCheckButtonOnClickListener(btnCheckSpu);
                             spuStatus.setRadio(btnCheckSpu);
@@ -159,7 +165,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 View cartSkuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_sku_item, null, false);
                                 TextView tvGoodsFullSpecs = cartSkuItem.findViewById(R.id.tv_goods_full_specs);
                                 TextView tvPriceSum = cartSkuItem.findViewById(R.id.tv_price_sum);
-                                ImageView btnCheckSku = cartSkuItem.findViewById(R.id.btn_check_sku);
+                                ScaledButton btnCheckSku = cartSkuItem.findViewById(R.id.btn_check_sku);
                                 btnCheckSku.setTag(skuStatus);
 
                                 // 購買數量調節按鈕
@@ -200,21 +206,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    private void setCheckButtonOnClickListener(ImageView checkButton) {
+    private void setCheckButtonOnClickListener(View checkButton) {
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageView btnCheck = (ImageView) v;
+                ScaledButton btnCheck = (ScaledButton) v;
                 BaseStatus status = (BaseStatus) btnCheck.getTag();
-                if (status.isChecked()) {
-                    status.setChecked(false);
-                    btnCheck.setImageResource(R.drawable.icon_cart_item_unchecked);
-                } else {
-                    status.setChecked(true);
-                    btnCheck.setImageResource(R.drawable.icon_cart_item_checked);
-                }
+                status.changeCheckStatus(!status.isChecked(), BaseStatus.PHRASE_TARGET);
             }
         });
     }
 }
-
