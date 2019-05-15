@@ -160,6 +160,11 @@ public class Api {
      */
     public static final String PATH_CART_LIST = "/api/cart/list";
 
+    /**
+     * 购买第一步：显示商品信息
+     */
+    public static final String PATH_BILL_DATA = "/api/member/buy/step1";
+
 
     /**
      * 發送Http請求

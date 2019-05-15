@@ -43,9 +43,10 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
+        SLog.info("onTouchEvent, action[%d]", action);
 
         if (action != MotionEvent.ACTION_UP) {
-            return super.onTouchEvent(event);
+            return true;
         }
 
         float x = event.getX();
@@ -59,7 +60,7 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         if (proportion < threshold) {
             if (value <= minValue) {
                 // 不能小于最小值
-                return super.onTouchEvent(event);
+                return true;
             }
             changeValue(-1);
         }
@@ -67,7 +68,7 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
             changeValue(1);
         }
 
-        return super.onTouchEvent(event);
+        return true;
     }
 
     private void updateView() {

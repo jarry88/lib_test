@@ -16,6 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.cart.BaseStatus;
 import com.ftofs.twant.entity.cart.SkuStatus;
 import com.ftofs.twant.entity.cart.SpuStatus;
@@ -28,6 +29,10 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CartAdjustButton;
 import com.ftofs.twant.widget.ScaledButton;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
@@ -71,6 +76,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        EventBus.getDefault().register(this);
 
         currencyTypeSign = getResources().getString(R.string.currency_type_sign);
         textSettlement = getResources().getString(R.string.text_settlement);
@@ -133,7 +140,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     cartText = String.format(cartText + "(%d)", cartItemCount);
                     tvFragmentTitle.setText(cartText);
 
-
                     EasyJSONArray cartStoreVoList = responseObj.getArray("datas.cartStoreVoList");
                     for (Object object : cartStoreVoList) { // store LOOP
                         StoreStatus storeStatus = new StoreStatus();
@@ -182,13 +188,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 CartAdjustButton abQuantity = cartSkuItem.findViewById(R.id.ab_quantity);
                                 abQuantity.setMinValue(1);  // 調節數量不能小于1
                                 abQuantity.setSkuStatus(skuStatus);
-                                setAdjustButtonOnClickListener(abQuantity);
                                 setCheckButtonOnClickListener(btnCheckSku);
                                 skuStatus.setRadio(btnCheckSku);
 
                                 EasyJSONObject cartSkuVo = (EasyJSONObject) object3;
 
                                 skuStatus.setGoodsId(cartSkuVo.getInt("goodsId"));
+                                skuStatus.setCartId(cartSkuVo.getInt("cartId"));
                                 tvGoodsFullSpecs.setText(cartSkuVo.getString("goodsFullSpecs"));
                                 float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
                                 int buyNum = cartSkuVo.getInt("buyNum");
@@ -222,8 +228,17 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        MainFragment mainFragment = (MainFragment) getParentFragment();
-        mainFragment.start(BillFragment.newInstance());
+        int id = v.getId();
+        if (id == R.id.btn_settlement) {
+            String buyData = totalStatus.getBuyData();
+            if (buyData == null) {
+                // 如果沒有勾選什么數據，返回
+                return;
+            }
+
+            MainFragment mainFragment = (MainFragment) getParentFragment();
+            mainFragment.start(ConfirmBillFragment.newInstance(buyData));
+        }
     }
 
     private void setCheckButtonOnClickListener(View checkButton) {
@@ -237,17 +252,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             }
         });
     }
-
-
-    private void setAdjustButtonOnClickListener(View adjustButton) {
-        adjustButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateTotalData();
-            }
-        });
-    }
-
 
     /**
      * 更新合計數據
@@ -264,5 +268,19 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             btnSettlementText += "(" + totalCount + ")";
         }
         btnSettlement.setText(btnSettlementText);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessage.MESSAGE_TYPE_ADD_CART) {
+            updateTotalData();
+        }
     }
 }

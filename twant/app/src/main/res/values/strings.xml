@@ -126,7 +126,16 @@
     <string name="text_select_all">全選</string>
     <string name="text_settlement">結算</string>
 
+    <string name="text_confirm_bill">確認訂單</string>
+    <string name="text_add_shipping_address">新增收貨地址</string>
+
+
     <string name="text_goods_bill">商品訂單</string>
+    <string name="text_bill_all">全部</string>
+    <string name="text_bill_to_be_paid">待付款</string>
+    <string name="text_bill_to_be_sent">待發貨</string>
+    <string name="text_bill_to_be_received">待收貨</string>
+    <string name="text_bill_to_be_commented">待評價</string>
 
     <string name="search_tab_title_shop">店鋪</string>
     <string name="search_tab_title_commodity">商品</string>

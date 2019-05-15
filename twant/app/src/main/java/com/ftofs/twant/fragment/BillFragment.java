@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,12 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        TabLayout tabLayout = view.findViewById(R.id.bill_tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.text_bill_all)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.text_bill_to_be_paid)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.text_bill_to_be_sent)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.text_bill_to_be_received)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.text_bill_to_be_commented)));
     }
 
     @Override

@@ -6,6 +6,7 @@ public class SkuStatus extends BaseStatus {
     public SpuStatus parent;
 
     private int goodsId; // Sku Id
+    private int cartId;
     private int count;  // 數量
     private float price;  // 價錢
 
@@ -43,5 +44,14 @@ public class SkuStatus extends BaseStatus {
 
     public void setGoodsId(int goodsId) {
         this.goodsId = goodsId;
+    }
+
+
+    public int getCartId() {
+        return cartId;
+    }
+
+    public void setCartId(int cartId) {
+        this.cartId = cartId;
     }
 }

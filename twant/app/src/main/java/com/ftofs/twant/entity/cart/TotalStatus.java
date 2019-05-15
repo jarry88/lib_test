@@ -6,6 +6,9 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+
 /**
  * 合計狀態
  * @author zwm
@@ -55,5 +58,32 @@ public class TotalStatus extends BaseStatus {
         }
 
         return new Pair<>(totalPrice, totalCount);
+    }
+
+    /**
+     * 獲取要購買的Sku的數據，用于提交訂單
+     * @return 如果沒勾選Sku，則返回null
+     */
+    public String getBuyData() {
+        EasyJSONArray buyData = EasyJSONArray.generate();
+        for (StoreStatus storeStatus : storeStatusList) {
+            for (SpuStatus spuStatus : storeStatus.spuStatusList) {
+                for (SkuStatus skuStatus : spuStatus.skuStatusList) {
+                    if (!skuStatus.isChecked()) {
+                        continue;
+                    }
+
+                    buyData.append(EasyJSONObject.generate(
+                            "buyNum", skuStatus.getCount(),
+                            "goodsId", skuStatus.getCartId()));
+                }
+            }
+        }
+
+        if (buyData.length() < 1) {
+            return null;
+        }
+
+        return buyData.toString();
     }
 }
