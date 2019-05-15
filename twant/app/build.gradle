@@ -14,6 +14,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    outputFileName = "twant_${defaultConfig.versionName.replace(".", "")}.apk"
+                }
+            }
+            zipAlignEnabled true
         }
     }
 }
@@ -44,12 +50,6 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.makeramen:roundedimageview:2.3.0'
-
-    // 基础依赖包，必须要依赖
-    // implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta02'
-    // fragment快速实现（可选）
-    // implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0-beta02'
-
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'

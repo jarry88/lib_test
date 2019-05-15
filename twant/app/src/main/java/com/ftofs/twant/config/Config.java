@@ -14,10 +14,6 @@ public class Config {
     public static String OSS_BASE_URL = "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com";
 
     public static String API_BASE_URL = "http://192.168.5.29";
-    // public static String API_BASE_URL = "https://www.snailpad.cn";
-    // public static String API_BASE_URL = "http://www.wnwb.com";
-
-
 
     /**
      * 登錄有效期(秒)

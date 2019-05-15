@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.StrictMode;
 
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.handler.CrashHandler;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.util.SqliteUtil;
@@ -36,20 +37,30 @@ public class TwantApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // 添加全局異常處理
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
+
         // 在開發過程中，啟用 StrictMode
         if (Config.DEVELOPER_MODE) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectNetwork()   // or .detectAll() for all detectable problems
-                    .penaltyLog()
-                    .build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectLeakedSqlLiteObjects()
-                    .detectLeakedClosableObjects()
-                    .penaltyLog()
-                    .penaltyDeath()
-                    .build());
+            StrictMode.setThreadPolicy(
+                    new StrictMode
+                            .ThreadPolicy
+                            .Builder()
+                            .detectDiskReads()
+                            .detectDiskWrites()
+                            .detectNetwork()
+                            .penaltyLog()
+                            .build());
+
+            StrictMode.setVmPolicy(
+                    new StrictMode
+                            .VmPolicy
+                            .Builder()
+                            .detectLeakedSqlLiteObjects()
+                            .detectLeakedClosableObjects()
+                            .penaltyLog()
+                            .build());
         }
 
         // 初始化Hawk
