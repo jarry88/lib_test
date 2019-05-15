@@ -128,6 +128,17 @@
 
     <string name="text_confirm_bill">確認訂單</string>
     <string name="text_add_shipping_address">新增收貨地址</string>
+    <string name="text_leave_message">留言</string>
+    <string name="text_leave_message_hint">選填, 給商家留言  ( 100字以內 )</string>
+    <string name="text_receipt">發票</string>
+    <string name="text_coupon">優惠券</string>
+    <string name="text_send_time">配送時間</string>
+    <string name="text_pay_way">支付方式</string>
+    <string name="text_goods_price">商品金額</string>
+    <string name="text_freight">運費</string>
+    <string name="text_store_discount">店鋪優惠</string>
+    <string name="text_mall_discount">商城優惠</string>
+    <string name="text_commit_bill">提交訂單</string>
 
 
     <string name="text_goods_bill">商品訂單</string>

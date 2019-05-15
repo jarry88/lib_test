@@ -76,7 +76,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "buyData", buyData,
-                "clientType", Constant.CLIENT_TYPE_ANDROID);
+                "clientType", Constant.CLIENT_TYPE_ANDROID,
+                "isCart", 1);
+        SLog.info("params[%s]", params.toString());
         Api.postUI(Api.PATH_BILL_DATA, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {

@@ -47,9 +47,12 @@ public class User {
 
     /**
      * 獲取當前已登錄用戶的Token
-     * @return
+     * @return 如果用戶未登錄，返回null
      */
     public static String getToken() {
+        if (getUserId() == 0) {
+            return null;
+        }
         return Hawk.get(SPField.FIELD_TOKEN);
     }
 }
