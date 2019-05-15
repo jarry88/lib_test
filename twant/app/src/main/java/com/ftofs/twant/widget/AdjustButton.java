@@ -18,7 +18,7 @@ import com.ftofs.twant.util.Util;
 public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
     public static final float DEFAULT_THRESHOLD = 0.28f;
 
-    private SkuStatus skuStatus;
+    protected SkuStatus skuStatus;
 
     int minValue = 0;
     int value;
@@ -58,12 +58,13 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         float proportion = x / width;
         if (proportion < threshold) {
             if (value <= minValue) {
+                // 不能小于最小值
                 return super.onTouchEvent(event);
             }
-            setValue(value - 1);
+            changeValue(-1);
         }
         if (proportion > 1 - threshold) {
-            setValue(value + 1);
+            changeValue(1);
         }
 
         return super.onTouchEvent(event);
@@ -81,6 +82,14 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         this.value = value;
         skuStatus.setCount(value);
         updateView();
+    }
+
+    /**
+     * 通過按鈕增減數值
+     * @param delta 負數減少，正數增加
+     */
+    public void changeValue(int delta) {
+        setValue(value + delta);
     }
 
     public void setMinValue(int minValue) {

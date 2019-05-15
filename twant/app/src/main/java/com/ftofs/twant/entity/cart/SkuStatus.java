@@ -5,6 +5,7 @@ package com.ftofs.twant.entity.cart;
 public class SkuStatus extends BaseStatus {
     public SpuStatus parent;
 
+    private int goodsId; // Sku Id
     private int count;  // 數量
     private float price;  // 價錢
 
@@ -34,5 +35,13 @@ public class SkuStatus extends BaseStatus {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public int getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(int goodsId) {
+        this.goodsId = goodsId;
     }
 }

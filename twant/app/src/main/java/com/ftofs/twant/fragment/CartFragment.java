@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,7 +26,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.AdjustButton;
+import com.ftofs.twant.widget.CartAdjustButton;
 import com.ftofs.twant.widget.ScaledButton;
 
 import java.io.IOException;
@@ -85,6 +84,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         cartStoreItemContainer = view.findViewById(R.id.ll_cart_store_item_container);
 
         btnSettlement = view.findViewById(R.id.btn_settlement);
+        btnSettlement.setOnClickListener(this);
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
 
         loadCartData();
@@ -179,15 +179,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 btnCheckSku.setTag(skuStatus);
 
                                 // 購買數量調節按鈕
-                                AdjustButton abQuantity = cartSkuItem.findViewById(R.id.ab_quantity);
+                                CartAdjustButton abQuantity = cartSkuItem.findViewById(R.id.ab_quantity);
                                 abQuantity.setMinValue(1);  // 調節數量不能小于1
                                 abQuantity.setSkuStatus(skuStatus);
                                 setAdjustButtonOnClickListener(abQuantity);
                                 setCheckButtonOnClickListener(btnCheckSku);
                                 skuStatus.setRadio(btnCheckSku);
 
-
                                 EasyJSONObject cartSkuVo = (EasyJSONObject) object3;
+
+                                skuStatus.setGoodsId(cartSkuVo.getInt("goodsId"));
                                 tvGoodsFullSpecs.setText(cartSkuVo.getString("goodsFullSpecs"));
                                 float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
                                 int buyNum = cartSkuVo.getInt("buyNum");
@@ -221,7 +222,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        MainFragment mainFragment = (MainFragment) getParentFragment();
+        mainFragment.start(BillFragment.newInstance());
     }
 
     private void setCheckButtonOnClickListener(View checkButton) {
@@ -241,7 +243,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         adjustButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SLog.info("hererefffffffffffffffffffffffff");
                 updateTotalData();
             }
         });

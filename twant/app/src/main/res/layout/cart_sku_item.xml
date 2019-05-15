@@ -42,7 +42,7 @@
             android:textSize="16sp"
             />
 
-        <com.ftofs.twant.widget.AdjustButton
+        <com.ftofs.twant.widget.CartAdjustButton
             android:id="@+id/ab_quantity"
             android:layout_width="92dp"
             android:layout_height="25dp"

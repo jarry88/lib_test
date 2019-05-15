@@ -126,6 +126,8 @@
     <string name="text_select_all">全選</string>
     <string name="text_settlement">結算</string>
 
+    <string name="text_goods_bill">商品訂單</string>
+
     <string name="search_tab_title_shop">店鋪</string>
     <string name="search_tab_title_commodity">商品</string>
     <string name="search_tab_title_article">文章</string>

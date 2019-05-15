@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/bottom_separator_box">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:text="@string/text_goods_bill"
+            android:textColor="@color/tw_black"
+            />
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_menu"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="7dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            app:icon_src="@drawable/icon_shop_menu"
+            />
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_search"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="7dp"
+            android:layout_toLeftOf="@id/btn_menu"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_shop_search"
+            />
+    </RelativeLayout>
+
+
+</android.support.constraint.ConstraintLayout>
