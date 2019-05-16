@@ -140,6 +140,9 @@
     <string name="text_mall_discount">商城優惠</string>
     <string name="text_commit_bill">提交訂單</string>
 
+    <string name="text_pay_online">在線支付</string>
+    <string name="text_pay_delivery">貨到付款</string>
+    <string name="text_pay_fetch">門店自提</string>
 
     <string name="text_goods_bill">商品訂單</string>
     <string name="text_bill_all">全部</string>

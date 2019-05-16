@@ -7,17 +7,24 @@ import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.MobileZonePopup;
+import com.ftofs.twant.widget.PayWayPopup;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -28,8 +35,14 @@ import okhttp3.Response;
  * 確認訂單Fragment
  * @author zwm
  */
-public class ConfirmBillFragment extends BaseFragment implements View.OnClickListener {
+public class ConfirmBillFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     String buyData;
+
+    // 當前支付方式
+    int payWay = Constant.PAY_WAY_ONLINE;
+    List<String> textPayWay = new ArrayList<>();
+
+    TextView tvPayWay;
 
     public static ConfirmBillFragment newInstance(String buyData) {
         Bundle args = new Bundle();
@@ -57,8 +70,14 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         buyData = args.getString("buyData");
         SLog.info("buyData[%s]", buyData);
 
-        Util.setOnClickListener(view, R.id.btn_back, this);
+        // 初始化支付方式文本
+        textPayWay.add(getResources().getString(R.string.text_pay_online));
+        textPayWay.add(getResources().getString(R.string.text_pay_delivery));
+        textPayWay.add(getResources().getString(R.string.text_pay_fetch));
 
+        tvPayWay = view.findViewById(R.id.tv_pay_way);
+        Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_change_pay_way, this);
 
         loadBillData();
     }
@@ -68,6 +87,12 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         int id = v.getId();
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_change_pay_way) {
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new PayWayPopup(_mActivity, payWay, this))
+                    .show();
         }
     }
 
@@ -93,9 +118,13 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 if (ToastUtil.checkError(getContext(), responseObj)) {
                     return;
                 }
-
-
             }
         });
+    }
+
+    @Override
+    public void onSelected(int id) {
+        payWay = id;
+        tvPayWay.setText(textPayWay.get(payWay));
     }
 }

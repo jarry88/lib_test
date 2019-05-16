@@ -9,7 +9,7 @@ import com.ftofs.twant.R;
  * 測試用
  * @author zwm
  */
-public class TestActivity extends AppCompatActivity {
+public class TestActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
