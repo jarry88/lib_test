@@ -3,6 +3,7 @@ package com.ftofs.twant.api;
 import java.io.File;
 import java.io.IOException;
 
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -57,6 +58,22 @@ public class HttpHelper {
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
+    /**
+     * POST請求
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    public static String post(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(new FormBody.Builder().build())
                 .build();
         Response response = client.newCall(request).execute();
         return response.body().string();

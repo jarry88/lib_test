@@ -18,8 +18,7 @@ public class Config {
     /**
      * 登錄有效期(秒)
      */
-    public static final int LOGIN_VALID_TIME = 60 * 24 * 3600;
-
+    public static final int LOGIN_VALID_TIME = 10 * 24 * 3600;
 
     /**
      * 開發模式
