@@ -132,7 +132,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
      * @param id 商品Id
      */
     @Override
-    public void onSelected(int id) {
+    public void onSelected(int type, int id, Object extra) {
         parentFragment.start(GoodsDetailFragment.newInstance(id));
     }
 }

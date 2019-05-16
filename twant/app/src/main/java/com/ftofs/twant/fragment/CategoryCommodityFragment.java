@@ -165,7 +165,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     }
 
     @Override
-    public void onSelected(int id) {
+    public void onSelected(int type, int id, Object extra) {
         loadCategoryCommodityData(id);
     }
 }

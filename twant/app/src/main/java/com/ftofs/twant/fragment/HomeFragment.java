@@ -18,6 +18,7 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.ResponseCode;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
@@ -28,6 +29,9 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.MobileZonePopup;
+import com.lxj.xpopup.XPopup;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -45,7 +49,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
  * 首頁
  * @author zwm
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     LinearLayout llNewArrivalsContainer;
     MZBannerView bannerView;
 
@@ -71,6 +75,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         Util.setOnClickListener(view, R.id.btn_category, this);
         Util.setOnClickListener(view, R.id.ll_search_box, this);
+        Util.setOnClickListener(view, R.id.btn_message, this);
 
         llNewArrivalsContainer = view.findViewById(R.id.ll_new_arrivals_container);
         bannerView = view.findViewById(R.id.banner_view);
@@ -103,7 +108,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         } else if (id == R.id.ll_search_box) {
             MainFragment mainFragment = (MainFragment) getParentFragment();
             mainFragment.start(SearchFragment.newInstance());
+        } else if (id == R.id.btn_message) {
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.start(AddrManageFragment.newInstance());
         }
+    }
+
+    @Override
+    public void onSelected(int type, int id, Object extra) {
+        SLog.info("onSelected, type[%d], id[%d], extra[%s]", type, id, extra);
     }
 
     public static class BannerViewHolder implements MZViewHolder<File> {
@@ -328,4 +341,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
         return file;
     }
+
+
 }

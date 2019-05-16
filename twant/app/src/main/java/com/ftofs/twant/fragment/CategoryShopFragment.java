@@ -160,7 +160,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
      * @param categoryId 菜單對應的分類Id
      */
     @Override
-    public void onSelected(int categoryId) {
+    public void onSelected(int type, int categoryId, Object extra) {
         loadCategoryShopData(categoryId);
     }
 }

@@ -132,7 +132,7 @@
     <string name="text_leave_message_hint">選填, 給商家留言  ( 100字以內 )</string>
     <string name="text_receipt">發票</string>
     <string name="text_coupon">優惠券</string>
-    <string name="text_send_time">配送時間</string>
+    <string name="text_shipping_time">配送時間</string>
     <string name="text_pay_way">支付方式</string>
     <string name="text_goods_price">商品金額</string>
     <string name="text_freight">運費</string>
@@ -150,6 +150,20 @@
     <string name="text_bill_to_be_sent">待發貨</string>
     <string name="text_bill_to_be_received">待收貨</string>
     <string name="text_bill_to_be_commented">待評價</string>
+
+    <string name="text_address_management">地址管理</string>
+    <string name="text_add">添加</string>
+    <string name="text_add_address">地址添加</string>
+    <string name="text_receiver_name">收貨姓名</string>
+    <string name="hint_input_receiver_name">請輸入收貨人姓名</string>
+    <string name="text_mobile">手機號碼</string>
+    <string name="text_select_area">地區選擇</string>
+    <string name="hint_select_area">請選擇地區</string>
+    <string name="text_detail_address">詳細地址</string>
+    <string name="hint_input_detail_address">請輸入詳細地址</string>
+    <string name="text_default_address">默認地址</string>
+    <string name="text_select_big_area">區域選擇</string>
+    <string name="text_shipping_to">配送至</string>
 
     <string name="search_tab_title_shop">店鋪</string>
     <string name="search_tab_title_commodity">商品</string>

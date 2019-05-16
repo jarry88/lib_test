@@ -72,7 +72,7 @@ public class ShopGoodsAdapter extends RecyclerView.Adapter<ShopGoodsAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSelectedListener.onSelected(goods.id);
+                onSelectedListener.onSelected(OnSelectedListener.TYPE_DEFAULT, goods.id, null);
             }
         });
     }

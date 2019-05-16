@@ -165,7 +165,7 @@ public class CategoryBrandFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
-    public void onSelected(int id) {
+    public void onSelected(int type, int id, Object extra) {
         loadCategoryBrandData(id);
     }
 }

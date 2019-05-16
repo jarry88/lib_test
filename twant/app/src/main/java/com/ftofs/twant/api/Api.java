@@ -165,6 +165,10 @@ public class Api {
      */
     public static final String PATH_BILL_DATA = "/api/member/buy/step1";
 
+    /**
+     * 地區列表
+     */
+    public static final String PATH_AREA_LIST = "/api/area/list";
 
     /**
      * 發送Http請求
@@ -457,6 +461,41 @@ public class Api {
                 }
 
                 return null;
+            }
+        });
+    }
+
+    public static void getMobileZoneList(final List<MobileZone> mobileZoneList) {
+        Api.getUI(Api.PATH_MOBILE_ZONE, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    String responseStr = response.body().string();
+                    if (StringUtil.isEmpty(responseStr)) {
+                        return;
+                    }
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (responseObj == null) {
+                        return;
+                    }
+
+                    EasyJSONArray adminMobileAreaList = responseObj.getArray("datas.adminMobileAreaList");
+                    for (Object object : adminMobileAreaList) {
+                        MobileZone mobileZone = (MobileZone) EasyJSONBase.jsonDecode(MobileZone.class, object.toString());
+                        SLog.info("mobileZone: %s", mobileZone);
+                        mobileZoneList.add(mobileZone);
+                    }
+
+                    SLog.info("获取MobileZone数据成功");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

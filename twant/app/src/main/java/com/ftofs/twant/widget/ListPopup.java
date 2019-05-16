@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ftofs.twant.adapter.ListPopupAdapter;
+import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.MobileZoneSelectedListener;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.MobileZoneAdapter;
@@ -21,46 +23,46 @@ import java.util.List;
 
 
 /**
- * 支付方式選擇
+ * 配送時間選擇
  * @author zwm
  */
-public class PayWayPopup extends BottomPopupView implements View.OnClickListener {
+public class ListPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
     Context context;
 
-    private int[] buttonIds = new int[] {R.id.btn_pay_online, R.id.btn_pay_delivery, R.id.btn_pay_fetch};
-    private int[] textIds = new int[] {R.id.text_pay_online, R.id.text_pay_delivery, R.id.text_pay_fetch};
-    private int[] indcatorIds = new int[] {R.id.ind_pay_online, R.id.ind_pay_delivery, R.id.ind_pay_fetch};
-
-    int payWay;
+    String title; // 彈出框的標題
+    List<ListPopupItem> itemList;
+    int index; // 選中的index
     OnSelectedListener onSelectedListener;
-    
-    public PayWayPopup(@NonNull Context context, int payWay, OnSelectedListener onSelectedListener) {
+
+    int type;
+    public ListPopup(@NonNull Context context, String title, int type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
-        this.payWay = payWay;
+        this.title = title;
+        this.type = type;
+        this.index = index;
+        this.itemList = itemList;
         this.onSelectedListener = onSelectedListener;
     }
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.pay_way_popup;
+        return R.layout.list_popup;
     }
 
     @Override
     protected void onCreate() {
         super.onCreate();
 
-        for (int buttonId : buttonIds) {
-            findViewById(buttonId).setOnClickListener(this);
-        }
-
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
+        ((TextView) findViewById(R.id.tv_popup_title)).setText(title);
 
-        // 高亮文本
-        TextView tvTextPay = findViewById(textIds[payWay]);
-        tvTextPay.setTextColor(getResources().getColor(R.color.tw_red, null));
-        findViewById(indcatorIds[payWay]).setVisibility(VISIBLE);
+        RecyclerView rvList = findViewById(R.id.rv_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        rvList.setLayoutManager(layoutManager);
+        ListPopupAdapter adapter = new ListPopupAdapter(context, type, this, itemList, index);
+        rvList.setAdapter(adapter);
     }
 
     //完全可见执行
@@ -83,20 +85,16 @@ public class PayWayPopup extends BottomPopupView implements View.OnClickListener
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        SLog.info("id[%d]", id);
-        int index = 0;
-        for (int buttonId : buttonIds) {
-            SLog.info("id[%d], buttonId[%d]", id, buttonId);
-            if (id == buttonId) {
-                onSelectedListener.onSelected(index);
-                dismiss();
-                return;
-            }
-            ++index;
-        }
 
         if (id == R.id.btn_dismiss) {
             dismiss();
         }
+    }
+
+    @Override
+    public void onSelected(int type, int id, Object extra) {
+        SLog.info("onSelected, type[%d], id[%d], extra[%s]", type, id, extra);
+        onSelectedListener.onSelected(type, id, extra);
+        dismiss();
     }
 }
