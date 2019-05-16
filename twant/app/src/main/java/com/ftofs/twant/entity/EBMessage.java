@@ -1,5 +1,7 @@
 package com.ftofs.twant.entity;
 
+import com.ftofs.twant.constant.EBMessageType;
+
 import org.greenrobot.eventbus.EventBus;
 
 /**
@@ -7,17 +9,12 @@ import org.greenrobot.eventbus.EventBus;
  * @author zwm
  */
 public class EBMessage {
-    /**
-     * 添加購物車完成的消息
-     */
-    public static final int MESSAGE_TYPE_ADD_CART = 1;
-
-    public EBMessage(int messageType, String data) {
+    public EBMessage(EBMessageType messageType, String data) {
         this.messageType = messageType;
         this.data = data;
     }
 
-    public int messageType;
+    public EBMessageType messageType;
     public String data;
 
     /**
@@ -25,7 +22,7 @@ public class EBMessage {
      * @param messageType
      * @param data
      */
-    public static void postMessage(int messageType, String data) {
+    public static void postMessage(EBMessageType messageType, String data) {
         EventBus.getDefault().post(new EBMessage(messageType, data));
     }
 }

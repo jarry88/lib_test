@@ -16,6 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.cart.BaseStatus;
 import com.ftofs.twant.entity.cart.SkuStatus;
@@ -279,7 +280,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        if (message.messageType == EBMessage.MESSAGE_TYPE_ADD_CART) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_CART) {
             updateTotalData();
         }
     }

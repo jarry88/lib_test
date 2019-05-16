@@ -9,10 +9,8 @@ import com.ftofs.twant.util.User;
 
 
 public class Repository {
-    private static String Token = User.getToken();
-
     private static String UrlWrap(String url) {
-        return url.concat(String.format("?token=%s&clientType=%s", Token, Constant.CLIENT_TYPE_ANDROID));
+        return url.concat(String.format("?token=%s&clientType=%s", User.getToken(), Constant.CLIENT_TYPE_ANDROID));
     }
 
     private static ApiResultEntity getApiResultEntity(String json) throws Exception {
@@ -20,8 +18,13 @@ public class Repository {
         return apiResultEntity;
     }
 
+    /**
+     * 購物車列表
+     * @return
+     */
     public static ApiResultEntity getShoppingCartList() throws Exception {
         ApiResultEntity apiResultEntity = getApiResultEntity(HttpHelper.post(UrlWrap(Uri.API_SHOPPING_CART_LIST)));
         return apiResultEntity;
     }
+
 }

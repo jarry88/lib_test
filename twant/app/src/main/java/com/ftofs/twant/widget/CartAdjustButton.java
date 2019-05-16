@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
@@ -66,7 +67,7 @@ public class CartAdjustButton extends AdjustButton {
                 }
 
                 CartAdjustButton.super.changeValue(delta);
-                EBMessage.postMessage(EBMessage.MESSAGE_TYPE_ADD_CART, null);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_ADD_CART, null);
             }
         });
     }
