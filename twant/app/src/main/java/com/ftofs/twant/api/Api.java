@@ -170,6 +170,12 @@ public class Api {
      */
     public static final String PATH_AREA_LIST = "/api/area/list";
 
+
+    /**
+     * 会员收货地址添加
+     */
+    public static final String PATH_ADD_ADDRESS = "/api/member/address/add";
+
     /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行

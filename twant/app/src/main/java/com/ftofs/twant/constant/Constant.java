@@ -31,4 +31,9 @@ public class Constant {
      * 門店自提
      */
     public static final int PAY_WAY_FETCH = 2;
+
+
+    public static final int POPUP_TYPE_DEFAULT = 0;
+    public static final int POPUP_TYPE_MOBILE_ZONE = 1;
+    public static final int POPUP_TYPE_AREA = 2;
 }

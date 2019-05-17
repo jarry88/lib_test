@@ -87,7 +87,7 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
                 notifyItemChanged(position);
 
                 if (onSelectedListener != null) {
-                    onSelectedListener.onSelected(OnSelectedListener.TYPE_DEFAULT, categoryMenu.categoryId, null);
+                    onSelectedListener.onSelected(Constant.POPUP_TYPE_DEFAULT, categoryMenu.categoryId, null);
                 }
             }
         });

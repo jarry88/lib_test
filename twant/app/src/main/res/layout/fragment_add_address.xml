@@ -65,6 +65,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="17sp"
                 android:textColor="@color/tw_black"
+                android:text="zwm"
                 android:hint="@string/hint_input_receiver_name"
                 android:background="@null"
                 />
@@ -99,6 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:text="13417785707"
                     android:textSize="17sp"
                     android:textColor="@color/tw_black"
                     android:hint="@string/input_mobile_hint"
@@ -158,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
                 <TextView
-                    android:id="@+id/et_area"
+                    android:id="@+id/tv_area"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -206,6 +208,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:text="人民東路"
                     android:textSize="17sp"
                     android:textColor="@color/tw_black"
                     android:hint="@string/hint_input_detail_address"

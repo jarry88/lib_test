@@ -8,8 +8,7 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="@drawable/bottom_separator_box">
+        android:layout_height="65dp">
         <TextView
             android:id="@+id/tv_popup_title"
             android:layout_width="wrap_content"
@@ -30,37 +29,47 @@
             app:icon_src="@drawable/btn_close"
             />
     </RelativeLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:text="@string/text_shipping_to"
-        android:textColor="@color/tw_black"
-        android:textSize="15sp"
-        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:background="@drawable/bottom_separator_box">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:text="@string/text_shipping_to"
             android:textColor="@color/tw_black"
+            android:textSize="15sp"
             />
 
-
+        <LinearLayout
+            android:id="@+id/ll_area_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="horizontal">
+            <!-- 这个放在这里是做占位符，填充高度 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="@color/tw_black"
+                android:text=""
+                />
+        </LinearLayout>
     </LinearLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_area_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
-
 </LinearLayout>
 

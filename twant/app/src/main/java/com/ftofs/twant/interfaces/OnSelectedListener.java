@@ -6,8 +6,6 @@ package com.ftofs.twant.interfaces;
  * @author zwm
  */
 public interface OnSelectedListener {
-    public static final int TYPE_DEFAULT = 0;
-
     /**
      * 選中后的通知回調
      * @param type 類型
