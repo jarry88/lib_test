@@ -163,7 +163,7 @@ public class Api {
     /**
      * 购买第一步：显示商品信息
      */
-    public static final String PATH_BILL_DATA = "/api/member/buy/step1";
+    public static final String PATH_DISPLAY_BILL_DATA = "/api/member/buy/step1";
 
     /**
      * 地區列表
@@ -175,6 +175,13 @@ public class Api {
      * 会员收货地址添加
      */
     public static final String PATH_ADD_ADDRESS = "/api/member/address/add";
+
+    /**
+     * 购买第二步：保存生成订单
+     */
+    public static final String PATH_COMMIT_BILL_DATA = "/api/member/buy/step2";
+
+
 
     /**
      * 發送Http請求

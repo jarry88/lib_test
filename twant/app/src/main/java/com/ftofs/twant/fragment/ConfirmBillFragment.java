@@ -16,6 +16,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -40,6 +41,12 @@ import okhttp3.Response;
 public class ConfirmBillFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     String buyData;
 
+    /**
+     * 是否來源于購物車
+     * todo 暫時寫死
+     */
+    boolean isFromCart = true;
+
     List<ListPopupItem> payWayItemList = new ArrayList<>();
     List<ListPopupItem> shippingItemList = new ArrayList<>();
 
@@ -51,8 +58,16 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     // 當前配送時間索引
     int shippingTimeIndex = 0;
 
+    int addressId = 0;
+    int isExistTrys;
+
     TextView tvPayWay;
     TextView tvShippingTime;
+
+    /**
+     * 提交訂單時上去的店鋪列表
+     */
+    EasyJSONArray commitStoreList = EasyJSONArray.generate();
 
     public static ConfirmBillFragment newInstance(String buyData) {
         Bundle args = new Bundle();
@@ -91,6 +106,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_change_pay_way, this);
         Util.setOnClickListener(view, R.id.btn_change_shipping_time, this);
+        Util.setOnClickListener(view, R.id.btn_commit, this);
 
         loadBillData();
     }
@@ -114,6 +130,53 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_pay_fetch),
                             LIST_POPUP_TYPE_SHIPPING_TIME, shippingItemList, shippingTimeIndex, this))
                     .show();
+        } else if (id == R.id.btn_commit) {
+            if (addressId == 0) {
+                SLog.info("Error!地址信息無效");
+                ToastUtil.show(_mActivity, "地址信息無效");
+                return;
+            }
+
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+
+
+            // 收集表單信息
+            EasyJSONObject commitBuyData = EasyJSONObject.generate(
+                    "addressId", addressId,
+                    "paymentTypeCode", "online",
+                    "isCart", 1,
+                    "isExistTrys", isExistTrys,
+                    "storeList", commitStoreList
+            );
+
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "clientType", Constant.CLIENT_TYPE_ANDROID,
+                    "buyData", commitBuyData.toString()
+            );
+
+            SLog.info("params[%s]", params.toString());
+            Api.postUI(Api.PATH_COMMIT_BILL_DATA, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseStr = response.body().string();
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(getContext(), responseObj)) {
+                        return;
+                    }
+                    ToastUtil.show(_mActivity, "提交訂單成功");
+                    pop();
+                }
+            });
         }
     }
 
@@ -125,7 +188,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 "clientType", Constant.CLIENT_TYPE_ANDROID,
                 "isCart", 1);
         SLog.info("params[%s]", params.toString());
-        Api.postUI(Api.PATH_BILL_DATA, params, new UICallback() {
+        Api.postUI(Api.PATH_DISPLAY_BILL_DATA, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -147,6 +210,38 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                         shippingItemList.add(new ListPopupItem(easyJSONObject.getInt("id"), easyJSONObject.getString("name"), null));
                     }
+
+                    EasyJSONObject address = responseObj.getObject("datas.address");
+                    if (address != null) {
+                        addressId = address.getInt("addressId");
+                    }
+
+                    isExistTrys = responseObj.getInt("datas.isExistTrys");
+
+                    easyJSONArray = responseObj.getArray("datas.buyStoreVoList");
+                    for (Object object : easyJSONArray) {
+                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                        int storeId = easyJSONObject.getInt("storeId");
+                        String storeName = easyJSONObject.getString("storeName");
+                        int shipTimeType = 0;
+
+                        EasyJSONArray goodsList = EasyJSONArray.generate();
+                        EasyJSONArray buyGoodsItemVoList = easyJSONObject.getArray("buyGoodsItemVoList");
+                        for (Object object2 : buyGoodsItemVoList) {
+                            EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
+                            int cartId = buyGoodsItem.getInt("cartId");
+                            int buyNum = buyGoodsItem.getInt("buyNum");
+                            goodsList.append(EasyJSONObject.generate("cartId", cartId, "buyNum", buyNum));
+                        }
+
+                        commitStoreList.append(EasyJSONObject.generate(
+                                "storeId", storeId,
+                                "storeName", storeName,
+                                "goodsList", goodsList,
+                                "shipTimeType", shipTimeType));
+                    }
+
+                    SLog.info("commitStoreList[%s]", commitStoreList.toString());
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
                 }
@@ -163,6 +258,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             shippingTimeIndex = id;
             tvShippingTime.setText(shippingItemList.get(shippingTimeIndex).title);
         }
-
     }
+
+    /*
+    {"code":200,"datas":{"address":null,
+     */
 }
