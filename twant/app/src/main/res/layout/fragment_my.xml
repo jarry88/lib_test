@@ -75,7 +75,7 @@
 
     <!-- 我的訂單 -->
     <RelativeLayout
-        android:id="@+id/my_bill"
+        android:id="@+id/btn_my_bill"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/banner"
@@ -111,7 +111,7 @@
         android:id="@+id/bill_status_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/my_bill"
+        app:layout_constraintTop_toBottomOf="@id/btn_my_bill"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="22dp"

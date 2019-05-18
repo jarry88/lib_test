@@ -7,15 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ListPopupAdapter;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.interfaces.MobileZoneSelectedListener;
-import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.MobileZoneAdapter;
-import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 

@@ -182,6 +182,12 @@ public class Api {
     public static final String PATH_COMMIT_BILL_DATA = "/api/member/buy/step2";
 
 
+    /**
+     * 訂單列表
+     */
+    public static final String PATH_ORDER_LIST = "/api/member/orders/list";
+
+
 
     /**
      * 發送Http請求

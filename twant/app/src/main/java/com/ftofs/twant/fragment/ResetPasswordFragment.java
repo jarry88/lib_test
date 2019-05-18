@@ -12,18 +12,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ftofs.twant.interfaces.MobileZoneSelectedListener;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
 import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.MobileZonePopup;
+import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
@@ -41,7 +43,7 @@ import okhttp3.Response;
  * @author zwm
  */
 public class ResetPasswordFragment extends BaseFragment implements
-        View.OnClickListener, MobileZoneSelectedListener {
+        View.OnClickListener, OnSelectedListener {
     /**
      * 當前選中的區號索引
      */
@@ -147,10 +149,17 @@ public class ResetPasswordFragment extends BaseFragment implements
         } else if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();
         } else if (id == R.id.btn_mobile_zone) {
+            List<ListPopupItem> itemList = new ArrayList<>();
+            for (MobileZone mobileZone : mobileZoneList) {
+                ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);
+                itemList.add(item);
+            }
+
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new MobileZonePopup(_mActivity, mobileZoneList, selectedMobileZoneIndex, this))
+                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
+                            Constant.POPUP_TYPE_MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
         }
     }
@@ -190,13 +199,13 @@ public class ResetPasswordFragment extends BaseFragment implements
     }
 
     @Override
-    public void onMobileZoneSelected(int selectedIndex) {
-        SLog.info("selectedMobileZoneIndex[%d], selectedIndex[%d]", selectedMobileZoneIndex, selectedIndex);
-        if (this.selectedMobileZoneIndex == selectedIndex) {
+    public void onSelected(int type, int id, Object extra) {
+        SLog.info("selectedMobileZoneIndex[%d], id[%d]", selectedMobileZoneIndex, id);
+        if (this.selectedMobileZoneIndex == id) {
             return;
         }
 
-        this.selectedMobileZoneIndex = selectedIndex;
+        this.selectedMobileZoneIndex = id;
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
     }

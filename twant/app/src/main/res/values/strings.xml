@@ -147,7 +147,7 @@
     <string name="text_goods_bill">商品訂單</string>
     <string name="text_bill_all">全部</string>
     <string name="text_bill_to_be_paid">待付款</string>
-    <string name="text_bill_to_be_sent">待發貨</string>
+    <string name="text_bill_to_be_shipped">待發貨</string>
     <string name="text_bill_to_be_received">待收貨</string>
     <string name="text_bill_to_be_commented">待評價</string>
 
@@ -184,6 +184,8 @@
 
     <!-- 貨幣種類標志 -->
     <string name="currency_type_sign">$</string>
+    <!-- 乘号 -->
+    <string name="times_sign">X</string>
 
     <string name="business_time_template">工作日：%s - %s\n週 末 ：%s - %s</string>
 </resources>

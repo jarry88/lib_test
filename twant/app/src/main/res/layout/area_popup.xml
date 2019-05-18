@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="351dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/mobile_zone_popup_bg"
+    android:background="@drawable/list_popup_bg"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
