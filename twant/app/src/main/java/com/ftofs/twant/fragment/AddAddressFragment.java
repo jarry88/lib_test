@@ -78,6 +78,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         tvArea = view.findViewById(R.id.tv_area);
         etDetailAddress = view.findViewById(R.id.et_detail_address);
 
+        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_select_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_select_area, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
@@ -90,7 +91,9 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         SLog.info("id[%d]", id);
-        if (id == R.id.btn_select_mobile_zone) {
+        if (id == R.id.btn_back) {
+            pop();
+        } else if (id == R.id.btn_select_mobile_zone) {
             List<ListPopupItem> itemList = new ArrayList<>();
             for (MobileZone mobileZone : mobileZoneList) {
                 ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);

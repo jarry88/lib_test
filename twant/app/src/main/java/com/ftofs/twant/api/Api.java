@@ -177,6 +177,21 @@ public class Api {
     public static final String PATH_ADD_ADDRESS = "/api/member/address/add";
 
     /**
+     * 会员收货地址列表
+     */
+    public static final String PATH_LIST_ADDRESS = "/api/member/address/list";
+
+    /**
+     * 会员收货地址编辑
+     */
+    public static final String PATH_EDIT_ADDRESS = "/api/member/address/edit";
+
+    /**
+     * 刪除会员收货地址
+     */
+    public static final String PATH_DELETE_ADDRESS = "/api/member/address/delete";
+
+    /**
      * 购买第二步：保存生成订单
      */
     public static final String PATH_COMMIT_BILL_DATA = "/api/member/buy/step2";

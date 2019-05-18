@@ -16,6 +16,10 @@ import com.ftofs.twant.entity.OrderSkuItem;
 
 import java.util.List;
 
+/**
+ * 訂單列表Adapter
+ * @author zwm
+ */
 public class OrderListAdapter extends BaseQuickAdapter<OrderItem, BaseViewHolder> {
     Context context;
     String currencyTypeSign;

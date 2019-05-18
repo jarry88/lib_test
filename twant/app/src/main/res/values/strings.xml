@@ -172,6 +172,7 @@
     <string name="text_default_address">默認地址</string>
     <string name="text_select_big_area">區域選擇</string>
     <string name="text_shipping_to">配送至</string>
+    <string name="text_set_as_default">設為默認</string>
 
     <string name="search_tab_title_shop">店鋪</string>
     <string name="search_tab_title_commodity">商品</string>
