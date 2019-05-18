@@ -49,6 +49,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_register, this);
         Util.setOnClickListener(view, R.id.img_avatar, this);
         Util.setOnClickListener(view, R.id.btn_setting, this);
+        Util.setOnClickListener(view, R.id.btn_my_address, this);
     }
 
     @Override
@@ -76,6 +77,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         } else if (id == R.id.btn_my_bill) {
             MainFragment mainFragment = (MainFragment) getParentFragment();
             mainFragment.start(BillFragment.newInstance());
+        } else if (id == R.id.btn_my_address) {
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.start(AddrManageFragment.newInstance());
         }
     }
 

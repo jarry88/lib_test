@@ -7,6 +7,8 @@ import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
@@ -63,6 +65,12 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
     TextView tvPayWay;
     TextView tvShippingTime;
+    TextView tvReceiverName;
+    TextView tvMobile;
+    TextView tvAddress;
+
+    RelativeLayout btnAddShippingAddress;
+    LinearLayout btnChangeShippingAddress;
 
     /**
      * 提交訂單時上去的店鋪列表
@@ -103,10 +111,19 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         tvPayWay = view.findViewById(R.id.tv_pay_way);
         tvShippingTime = view.findViewById(R.id.tv_shipping_time);
 
+        tvReceiverName = view.findViewById(R.id.tv_receiver_name);
+        tvMobile = view.findViewById(R.id.tv_mobile);
+        tvAddress = view.findViewById(R.id.tv_address);
+
+        btnAddShippingAddress = view.findViewById(R.id.btn_add_shipping_address);
+        btnChangeShippingAddress = view.findViewById(R.id.btn_change_shipping_address);
+
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_change_pay_way, this);
         Util.setOnClickListener(view, R.id.btn_change_shipping_time, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
+        Util.setOnClickListener(view, R.id.btn_add_shipping_address, this);
+        Util.setOnClickListener(view, R.id.btn_change_shipping_address, this);
 
         loadBillData();
     }
@@ -127,7 +144,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_pay_fetch),
+                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_shipping_time),
                             LIST_POPUP_TYPE_SHIPPING_TIME, shippingItemList, shippingTimeIndex, this))
                     .show();
         } else if (id == R.id.btn_commit) {
@@ -177,7 +194,17 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     pop();
                 }
             });
+        } else if (id == R.id.btn_add_shipping_address) {
+            startForResult(AddAddressFragment.newInstance(), Constant.REQUEST_CODE_ADD_ADDRESS);
+        } else if (id == R.id.btn_change_shipping_address) {
+            startForResult(AddrManageFragment.newInstance(), Constant.REQUEST_CODE_CHANGE_ADDRESS);
         }
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        SLog.info("requestCode[%d], resultCode[%d]", requestCode, resultCode);
     }
 
     private void loadBillData() {
@@ -213,7 +240,17 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                     EasyJSONObject address = responseObj.getObject("datas.address");
                     if (address != null) {
+                        btnAddShippingAddress.setVisibility(View.GONE);
+                        btnChangeShippingAddress.setVisibility(View.VISIBLE);
                         addressId = address.getInt("addressId");
+
+                        tvReceiverName.setText(getResources().getString(R.string.text_receiver) + ": " + address.getString("realName"));
+                        tvMobile.setText(address.getString("mobPhone"));
+                        tvAddress.setText(address.getString("areaInfo") + " " + address.getString("address"));
+                    } else {
+                        // 用戶沒有收貨地址，顯示【新增收貨地址】按鈕
+                        btnAddShippingAddress.setVisibility(View.VISIBLE);
+                        btnChangeShippingAddress.setVisibility(View.GONE);
                     }
 
                     isExistTrys = responseObj.getInt("datas.isExistTrys");

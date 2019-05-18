@@ -36,4 +36,13 @@ public class Constant {
     public static final int POPUP_TYPE_DEFAULT = 0;
     public static final int POPUP_TYPE_MOBILE_ZONE = 1;
     public static final int POPUP_TYPE_AREA = 2;
+
+    /**
+     * 添加收貨地址
+     */
+    public static final int REQUEST_CODE_ADD_ADDRESS = 1;
+    /**
+     * 切換收貨地址
+     */
+    public static final int REQUEST_CODE_CHANGE_ADDRESS = 1;
 }

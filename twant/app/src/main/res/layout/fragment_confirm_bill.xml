@@ -56,10 +56,12 @@
                 app:layout_constraintTop_toBottomOf="@id/tool_bar"
                 android:orientation="vertical"
                 android:background="#fff">
+                <!-- 新增收貨地址 -->
                 <RelativeLayout
                     android:id="@+id/btn_add_shipping_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_marginTop="23dp">
                     <TextView
                         android:layout_width="wrap_content"
@@ -79,6 +81,67 @@
                         app:icon_src="@drawable/expand_button"
                         />
                 </RelativeLayout>
+
+                <!-- 切換收貨地址 -->
+                <LinearLayout
+                    android:id="@+id/btn_change_shipping_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/tv_receiver_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginLeft="20dp"
+                            android:textSize="16sp"
+                            android:textColor="@color/tw_black"
+                            android:text="收貨人: 白小白"
+                            />
+                        <TextView
+                            android:id="@+id/tv_mobile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16sp"
+                            android:textColor="@color/tw_black"
+                            android:text="13417785707"
+                            />
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_shop_location"
+                            />
+                        <TextView
+                            android:id="@+id/tv_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_weight="1"
+                            android:textColor="@color/tw_dark_grey"
+                            android:textSize="13sp"
+                            android:text="澳門藍花前地246號信和廣場96舖澳門藍花前地號信和廣場澳門藍花前地246號信和廣場96舖澳門藍花前地號信和廣場"
+                            />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/expand_button"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/img_blue_red_separator"

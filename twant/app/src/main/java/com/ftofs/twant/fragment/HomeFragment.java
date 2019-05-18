@@ -114,8 +114,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             MainFragment mainFragment = (MainFragment) getParentFragment();
             mainFragment.start(SearchFragment.newInstance());
         } else if (id == R.id.btn_message) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(AddrManageFragment.newInstance());
         }
     }
 

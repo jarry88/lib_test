@@ -40,6 +40,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_clear_all, this);
+        Util.setOnClickListener(view, R.id.btn_back, this);
 
         etKeyword = view.findViewById(R.id.et_keyword);
 
@@ -53,7 +54,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_clear_all) {
+        if (id == R.id.btn_back) {
+            pop();
+        } else if (id == R.id.btn_clear_all) {
             // 清空搜索關鍵字
             etKeyword.setText("");
         }

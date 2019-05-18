@@ -133,6 +133,7 @@
     <string name="text_goods_detail">商品詳情</string>
     <string name="text_select_all">全選</string>
     <string name="text_settlement">結算</string>
+    <string name="text_receiver">收貨人</string>
 
     <string name="text_confirm_bill">確認訂單</string>
     <string name="text_add_shipping_address">新增收貨地址</string>
