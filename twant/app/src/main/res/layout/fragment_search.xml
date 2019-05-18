@@ -63,6 +63,9 @@
                 android:textColor="@color/tw_black"
                 android:background="@null"
                 android:hint="@string/search_keyword_hint"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:textColorHint="#FFA8A8A8"
                 />
         </RelativeLayout>
