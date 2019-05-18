@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.R;
@@ -138,6 +140,7 @@ public class PasswordLoginFragment extends BaseFragment implements
 
                     ToastUtil.show(_mActivity, "登錄成功");
                     SharedPreferenceUtil.saveUserInfo(responseObj);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
 
                     SLog.info("登錄成功");
 

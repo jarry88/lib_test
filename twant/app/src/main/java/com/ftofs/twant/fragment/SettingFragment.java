@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
@@ -48,6 +50,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         int id = v.getId();
         if (id == R.id.btn_logout) {
             User.logout();
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS, null);
             pop();
         } else if (id == R.id.btn_payment_password) {
             MainFragment mainFragment = MainFragment.getInstance();

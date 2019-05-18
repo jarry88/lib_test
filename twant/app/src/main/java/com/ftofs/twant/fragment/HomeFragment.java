@@ -17,7 +17,9 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.ResponseCode;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -32,6 +34,10 @@ import com.ftofs.twant.util.Util;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,6 +75,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        EventBus.getDefault().register(this);
 
         Util.setOnClickListener(view, R.id.btn_category, this);
         Util.setOnClickListener(view, R.id.ll_search_box, this);
@@ -339,5 +347,22 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         return file;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS) {
+            SLog.info("登錄成功消息");
+            llNewArrivalsContainer.removeAllViews();
+            loadNewArrivals();
+
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) {
+            SLog.info("登出成功消息");
+            llNewArrivalsContainer.removeAllViews();
+        }
+    }
 }
