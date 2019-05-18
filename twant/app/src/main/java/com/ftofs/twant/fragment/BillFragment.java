@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -49,6 +50,12 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
 
     List<OrderItem> orderItemList = new ArrayList<>();
     OrderListAdapter adapter;
+    TextView[] tvOrderStatusArr = new TextView[5];
+    int[] orderStatusIds = new int[] {R.id.btn_bill_all, R.id.btn_bill_to_be_paid, R.id.btn_bill_to_be_shipped,
+           R.id.btn_bill_to_be_received, R.id.btn_bill_to_be_commented};
+
+    int twRed;
+    int twBlack;
 
     public static BillFragment newInstance() {
         Bundle args = new Bundle();
@@ -70,7 +77,17 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        twBlack = getResources().getColor(R.color.tw_black, null);
+        twRed = getResources().getColor(R.color.tw_red, null);
+
         Util.setOnClickListener(view, R.id.btn_back, this);
+        int index = 0;
+        for (int id : orderStatusIds) {
+            TextView tvOrderStatus = view.findViewById(id);
+            tvOrderStatusArr[index] = tvOrderStatus;
+            tvOrderStatus.setOnClickListener(this);
+            ++index;
+        }
 
         RecyclerView rvOrderList = view.findViewById(R.id.rv_order_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -98,6 +115,41 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.btn_back) {
             pop();
         }
+
+        if (handleOrderStatusSwitch(id)) {
+            return;
+        }
+    }
+
+    /**
+     * 處理狀態切換按鈕
+     * @param id
+     * @return 事件是否被處理
+     */
+    private boolean handleOrderStatusSwitch(int id) {
+        boolean consumed = false;
+        int index = 0;
+        for (int i = 0; i < orderStatusIds.length; i++) {
+            if (orderStatusIds[i] == id) {
+                index = i;
+                consumed = true;
+                break;
+            }
+        }
+
+        if (!consumed) {
+            return false;
+        }
+
+        for (int i = 0; i < orderStatusIds.length; i++) {
+            int textColor = twBlack;
+            if (index == i) {
+                textColor = twRed;
+            }
+
+            tvOrderStatusArr[i].setTextColor(textColor);
+        }
+        return true;
     }
 
     private void loadBillData(int billStatus) {

@@ -75,7 +75,7 @@
             android:gravity="center"
             android:text="@string/text_bill_all"
             android:textSize="16sp"
-            android:textColor="@color/tw_black"
+            android:textColor="@color/tw_red"
             />
         <TextView
             android:id="@+id/btn_bill_to_be_paid"
