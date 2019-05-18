@@ -13,6 +13,14 @@
     <string name="reset_password_fragment_title">重置密碼</string>
     <string name="reset_password_confirm_password_hint">請再次輸入密碼</string>
 
+    <string name="personal_info_fragment_title">個人信息</string>
+    <string name="text_avatar">頭像</string>
+    <string name="text_user_name">用戶名</string>
+    <string name="text_real_name">真實姓名</string>
+    <string name="text_gender">性別</string>
+    <string name="text_birthday">出生日期</string>
+    <string name="text_location">所在地</string>
+
 
     <string name="mobile_zone_text">地區區號</string>
     <string name="ok">確定</string>
