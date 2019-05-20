@@ -34,6 +34,8 @@ public class ConfirmOrderStoreAdapter extends BaseQuickAdapter<ConfirmOrderStore
     @Override
     protected void convert(BaseViewHolder helper, ConfirmOrderStoreItem item) {
         helper.setText(R.id.tv_store_name, item.storeName);
+        helper.setText(R.id.tv_buy_item_amount, currencyTypeSign + item.buyItemAmount);
+        helper.setText(R.id.tv_freight_amount, currencyTypeSign + item.freightAmount);
 
         LinearLayout llSkuItemContainer = helper.getView(R.id.ll_sku_item_container);
         for (ConfirmOrderSkuItem confirmOrderSkuItem : item.confirmOrderSkuItemList) {

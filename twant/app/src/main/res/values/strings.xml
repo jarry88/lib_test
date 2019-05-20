@@ -198,4 +198,5 @@
     <string name="times_sign">X</string>
 
     <string name="business_time_template">工作日：%s - %s\n週 末 ：%s - %s</string>
+    <string name="text_confirm_order_total_item_count">共%d件, 合計:</string>
 </resources>

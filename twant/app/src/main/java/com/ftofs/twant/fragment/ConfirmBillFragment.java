@@ -73,12 +73,17 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     TextView tvReceiverName;
     TextView tvMobile;
     TextView tvAddress;
+    TextView tvItemCount;  // 共xxx件
+    TextView tvTotalPrice;  // 合計:多少錢
 
     RelativeLayout btnAddShippingAddress;
     LinearLayout btnChangeShippingAddress;
 
     BaseQuickAdapter adapter;
     List<ConfirmOrderStoreItem> confirmOrderStoreItemList = new ArrayList<>();
+
+    String currencyTypeSign;
+    String textConfirmOrderTotalItemCount;
 
     /**
      * 提交訂單時上去的店鋪列表
@@ -111,6 +116,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         buyData = args.getString("buyData");
         SLog.info("buyData[%s]", buyData);
 
+        currencyTypeSign = getResources().getString(R.string.currency_type_sign);
+        textConfirmOrderTotalItemCount = getResources().getString(R.string.text_confirm_order_total_item_count);
+
         // 初始化支付方式數據
         payWayItemList.add(new ListPopupItem(0, getResources().getString(R.string.text_pay_online), null));
         payWayItemList.add(new ListPopupItem(1, getResources().getString(R.string.text_pay_delivery), null));
@@ -122,6 +130,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         tvReceiverName = view.findViewById(R.id.tv_receiver_name);
         tvMobile = view.findViewById(R.id.tv_mobile);
         tvAddress = view.findViewById(R.id.tv_address);
+        tvItemCount = view.findViewById(R.id.tv_item_count);
+        tvTotalPrice = view.findViewById(R.id.tv_total_price);
 
         btnAddShippingAddress = view.findViewById(R.id.btn_add_shipping_address);
         btnChangeShippingAddress = view.findViewById(R.id.btn_change_shipping_address);
@@ -277,6 +287,10 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                         int storeId = easyJSONObject.getInt("storeId");
                         String storeName = easyJSONObject.getString("storeName");
+                        int itemCount = easyJSONObject.getInt("itemCount");
+                        float freightAmount = (float) easyJSONObject.getDouble("freightAmount");
+                        float buyItemAmount = (float) easyJSONObject.getDouble("buyItemAmount");
+
                         int shipTimeType = 0;
 
                         EasyJSONArray goodsList = EasyJSONArray.generate();
@@ -298,7 +312,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             goodsList.append(EasyJSONObject.generate("cartId", cartId, "buyNum", buyNum));
                         }
 
-                        confirmOrderStoreItemList.add(new ConfirmOrderStoreItem(storeId, storeName, confirmOrderSkuItemList));
+                        confirmOrderStoreItemList.add(new ConfirmOrderStoreItem(storeId, storeName, buyItemAmount,
+                                freightAmount, itemCount, confirmOrderSkuItemList));
 
                         commitStoreList.append(EasyJSONObject.generate(
                                 "storeId", storeId,
@@ -306,6 +321,16 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                                 "goodsList", goodsList,
                                 "shipTimeType", shipTimeType));
                     }
+
+                    // 合計件數和價錢
+                    int itemCount = 0;
+                    float totalPrice = 0f;
+                    for (ConfirmOrderStoreItem confirmOrderStoreItem : confirmOrderStoreItemList) {
+                        itemCount += confirmOrderStoreItem.itemCount;
+                        totalPrice += confirmOrderStoreItem.buyItemAmount;
+                    }
+                    tvItemCount.setText(String.format(textConfirmOrderTotalItemCount, itemCount));
+                    tvTotalPrice.setText(String.valueOf(totalPrice));
 
                     adapter.setNewData(confirmOrderStoreItemList);
 
