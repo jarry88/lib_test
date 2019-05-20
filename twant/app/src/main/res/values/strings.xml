@@ -152,6 +152,8 @@
     <string name="text_pay_online">在線支付</string>
     <string name="text_pay_delivery">貨到付款</string>
     <string name="text_pay_fetch">門店自提</string>
+    <string name="text_pay_result_success">訂單支付成功</string>
+    <string name="text_pay_result_fail">訂單支付失敗</string>
 
     <string name="text_goods_bill">商品訂單</string>
     <string name="text_bill_all">全部</string>

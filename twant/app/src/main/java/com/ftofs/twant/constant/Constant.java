@@ -55,9 +55,19 @@ public class Constant {
     /**
      * 切換收貨地址
      */
+
     public static final int REQUEST_CODE_CHANGE_ADDRESS = 2;
     /**
      * 確認訂單
      */
     public static final int REQUEST_CODE_CONFIRM_ORDER = 3;
+
+
+    /**
+     * 數字定義
+     */
+    public final static Integer ZERO = 0;
+    public final static Integer ONE = 1;
+    public final static Integer TWO = 2;
+
 }
