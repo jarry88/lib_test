@@ -16,6 +16,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -70,7 +72,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
 
         EasyJSONObject params = EasyJSONObject.generate("storeId", parentFragment.getShopId());
-        Api.getUI(Api.PATH_SEARCH_GOODS, params, new UICallback() {
+        Api.getUI(Api.PATH_SEARCH_GOODS_IN_STORE, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -134,6 +136,13 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onSelected(int type, int id, Object extra) {
         parentFragment.start(GoodsDetailFragment.newInstance(id));
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        ((SupportFragment) getParentFragment()).pop();
+        return true;
     }
 }
 

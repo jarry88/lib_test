@@ -209,4 +209,11 @@ public class ResetPasswordFragment extends BaseFragment implements
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
+    }
 }

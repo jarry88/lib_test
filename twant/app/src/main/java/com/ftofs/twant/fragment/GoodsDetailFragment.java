@@ -187,4 +187,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             }
         });
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
+    }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
 /**
@@ -44,5 +45,12 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         if (id == R.id.btn_back) {
             pop();
         }
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
     }
 }

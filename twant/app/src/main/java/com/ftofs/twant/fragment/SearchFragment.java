@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
 /**
@@ -46,8 +47,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
 
         TabLayout tabLayout = view.findViewById(R.id.search_tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_shop)));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_commodity)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_shop)));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_article)));
     }
 
@@ -60,5 +61,12 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             // 清空搜索關鍵字
             etKeyword.setText("");
         }
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
     }
 }

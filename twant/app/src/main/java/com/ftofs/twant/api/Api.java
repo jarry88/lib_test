@@ -137,11 +137,20 @@ public class Api {
      */
     public static final String PATH_SHOP_HOME = "/api/app/store";
 
-
     /**
      * 商品搜索
      */
-    public static final String PATH_SEARCH_GOODS = "/api/app/store/search/goods";
+    public static final String PATH_SEARCH_GOODS = "/api/search";
+
+    /**
+     * 店鋪搜索
+     */
+    public static final String PATH_SEARCH_STORE = "/api/search/store";
+
+    /**
+     * 店铺内商品搜索
+     */
+    public static final String PATH_SEARCH_GOODS_IN_STORE = "/api/app/store/search/goods";
 
 
     /**

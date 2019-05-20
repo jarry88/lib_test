@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.log.SLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,5 +69,12 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
     }
 }

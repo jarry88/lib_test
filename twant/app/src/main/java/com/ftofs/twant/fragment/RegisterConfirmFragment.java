@@ -142,4 +142,11 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
             });
         }
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
+    }
 }

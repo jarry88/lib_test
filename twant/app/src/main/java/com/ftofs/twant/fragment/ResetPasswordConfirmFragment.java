@@ -137,4 +137,11 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
             });
         }
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
+    }
 }

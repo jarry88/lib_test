@@ -93,4 +93,11 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     public String onFailure(@Nullable String data) {
         return null;
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
+    }
 }

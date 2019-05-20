@@ -15,6 +15,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.Uri;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.log.SLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -91,5 +92,12 @@ public class ICBCFragment extends BaseFragment {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ICBC_PAY_FINISH) {
 
         }
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
     }
 }

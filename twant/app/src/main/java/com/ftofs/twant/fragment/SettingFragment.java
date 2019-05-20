@@ -10,8 +10,11 @@ import android.view.ViewGroup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+
+import me.yokeyword.fragmentation.SupportFragment;
 
 public class SettingFragment extends BaseFragment implements View.OnClickListener {
     public static SettingFragment newInstance() {
@@ -63,5 +66,12 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 mainFragment.start(ResetPasswordFragment.newInstance());
             }
         }
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
     }
 }

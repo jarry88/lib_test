@@ -58,6 +58,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     TextView btnSettlement;
     TextView tvTotalPrice;
 
+    boolean needReloadData = true;
+
     public static CartFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -99,10 +101,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        SLog.info("onSupportVisible");
 
-        totalStatus.storeStatusList.clear();
-        loadCartData();
-        updateTotalData();
+        if (needReloadData) {
+            totalStatus.storeStatusList.clear();
+            loadCartData();
+            updateTotalData();
+        }
     }
 
     @Override
@@ -240,7 +245,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             }
 
             MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.start(ConfirmBillFragment.newInstance(buyData));
+            mainFragment.startForResult(ConfirmBillFragment.newInstance(buyData), Constant.REQUEST_CODE_CONFIRM_ORDER);
         }
     }
 

@@ -153,10 +153,25 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     }
 
     @Override
+    public boolean onBackPressedSupport() {
+        popWithOutRefresh();
+        return true;
+    }
+
+
+    /**
+     * 彈出，并且父Fragment不刷新
+     */
+    private void popWithOutRefresh() {
+        // TODO: 2019/5/20 通知上一級不刷新數據
+        pop();
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            popWithOutRefresh();
         } else if (id == R.id.btn_change_pay_way) {
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面

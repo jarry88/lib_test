@@ -81,7 +81,9 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
 
     public void setValue(int value) {
         this.value = value;
-        skuStatus.setCount(value);
+        if (skuStatus != null) {
+            skuStatus.setCount(value);
+        }
         updateView();
     }
 

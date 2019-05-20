@@ -53,6 +53,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     // 當前選中的SpecValueId
     List<Integer> selSpecValueIdList;
 
+    // 調整數量
+    AdjustButton abQuantity;
+
     public SpecSelectPopup(@NonNull Context context, List<Spec> specList, Map<String, Integer> specValueIdMap) {
         super(context);
 
@@ -88,6 +91,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         findViewById(R.id.btn_ok).setOnClickListener(this);
 
         skuImage = findViewById(R.id.sku_image);
+        abQuantity = findViewById(R.id.ab_quantity);
+        abQuantity.setValue(1);
 
         SLog.info("specList.size[%d]", specList.size());
         if (specList.size() < 1) {
@@ -205,12 +210,16 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             // 當前選中的goodsId
             int goodsId = getSelectedGoodsId();
 
-            EasyJSONArray buyData = EasyJSONArray.generate(EasyJSONObject.generate("buyNum", 1, "goodsId", goodsId));
+            EasyJSONArray buyData = EasyJSONArray.generate(EasyJSONObject.generate(
+                    "buyNum", abQuantity.getValue(),
+                    "goodsId", goodsId));
 
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "buyData", buyData.toString(),
                     "clientType", Constant.CLIENT_TYPE_ANDROID);
+
+            SLog.info("params[%s]", params.toString());
 
             Api.postUI(Api.PATH_ADD_CART, params, new UICallback() {
                 @Override

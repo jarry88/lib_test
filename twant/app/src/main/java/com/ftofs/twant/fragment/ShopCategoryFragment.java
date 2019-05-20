@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.log.SLog;
+
+import me.yokeyword.fragmentation.SupportFragment;
 
 
 /**
@@ -43,5 +46,12 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        ((SupportFragment) getParentFragment()).pop();
+        return true;
     }
 }

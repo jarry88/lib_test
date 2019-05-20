@@ -230,4 +230,11 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             }
         });
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
+    }
 }

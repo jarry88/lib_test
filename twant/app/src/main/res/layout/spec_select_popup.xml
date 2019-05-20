@@ -31,7 +31,7 @@
             android:layout_marginBottom="10dp"
             android:layout_gravity="bottom"
             android:scaleType="fitXY"
-            android:src="@drawable/cs_avatar_160"
+            android:src="@mipmap/ic_launcher"
             app:riv_corner_radius="10dp"
             />
         <RelativeLayout
@@ -114,21 +114,15 @@
                 />
 
             <!-- 調節按鈕 -->
-            <RelativeLayout
+            <com.ftofs.twant.widget.AdjustButton
+                android:id="@+id/ab_quantity"
                 android:layout_width="100dp"
                 android:layout_height="27dp"
                 android:layout_marginTop="15dp"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
                 android:background="@drawable/quantity_adjust_bg">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="1"
-                    />
-
-            </RelativeLayout>
+            </com.ftofs.twant.widget.AdjustButton>
         </LinearLayout>
         <TextView
             android:id="@+id/btn_ok"

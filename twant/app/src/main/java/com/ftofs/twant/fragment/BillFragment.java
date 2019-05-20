@@ -264,4 +264,11 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
         }
         return null;
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
+    }
 }
