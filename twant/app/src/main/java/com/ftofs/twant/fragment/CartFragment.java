@@ -100,6 +100,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     public void onSupportVisible() {
         super.onSupportVisible();
 
+        totalStatus.storeStatusList.clear();
         loadCartData();
         updateTotalData();
     }

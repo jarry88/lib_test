@@ -37,6 +37,17 @@ public class Constant {
     public static final int POPUP_TYPE_MOBILE_ZONE = 1;
     public static final int POPUP_TYPE_AREA = 2;
 
+
+    /**
+     * 訂單狀態
+     */
+    public static final int ORDER_STATUS_ALL = 0;
+    public static final int ORDER_STATUS_TO_BE_PAID = 1;
+    public static final int ORDER_STATUS_TO_BE_SHIPPED = 2;
+    public static final int ORDER_STATUS_TO_BE_RECEIVED = 3;
+    public static final int ORDER_STATUS_TO_BE_COMMENTED = 4;
+
+
     /**
      * 添加收貨地址
      */

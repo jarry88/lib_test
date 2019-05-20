@@ -21,12 +21,14 @@ import java.util.List;
 public class ConfirmOrderStoreAdapter extends BaseQuickAdapter<ConfirmOrderStoreItem, BaseViewHolder> {
     Context context;
     String timesSign;
+    String currencyTypeSign;
 
     public ConfirmOrderStoreAdapter(Context context, int layoutResId, @Nullable List<ConfirmOrderStoreItem> data) {
         super(layoutResId, data);
         this.context = context;
 
         timesSign = context.getResources().getString(R.string.times_sign);
+        currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
     }
 
     @Override
@@ -46,6 +48,9 @@ public class ConfirmOrderStoreAdapter extends BaseQuickAdapter<ConfirmOrderStore
             TextView tvBuyNum = skuItemView.findViewById(R.id.tv_sku_count);
             String buyNum = timesSign + " " + confirmOrderSkuItem.buyNum;
             tvBuyNum.setText(buyNum);
+            TextView tvSkuPrice = skuItemView.findViewById(R.id.tv_sku_price);
+            String skuPrice = currencyTypeSign + confirmOrderSkuItem.skuPrice;
+            tvSkuPrice.setText(skuPrice);
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(0, Util.dip2px(context, 15), 0, 0);

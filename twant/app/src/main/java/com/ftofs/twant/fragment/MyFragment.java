@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -46,6 +47,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         tvMobile = view.findViewById(R.id.tv_mobile);
 
         Util.setOnClickListener(view, R.id.btn_my_bill, this);
+
+        Util.setOnClickListener(view, R.id.btn_to_be_paid, this);
+        Util.setOnClickListener(view, R.id.btn_to_be_shipped, this);
+        Util.setOnClickListener(view, R.id.btn_to_be_received, this);
+        Util.setOnClickListener(view, R.id.btn_to_be_commented, this);
+
         Util.setOnClickListener(view, R.id.btn_register, this);
         Util.setOnClickListener(view, R.id.img_avatar, this);
         Util.setOnClickListener(view, R.id.btn_setting, this);
@@ -76,10 +83,24 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             mainFragment.start(SettingFragment.newInstance());
         } else if (id == R.id.btn_my_bill) {
             MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.start(BillFragment.newInstance());
+            mainFragment.start(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
         } else if (id == R.id.btn_my_address) {
             MainFragment mainFragment = MainFragment.getInstance();
             mainFragment.start(AddrManageFragment.newInstance());
+        } else if (id == R.id.btn_to_be_paid || id == R.id.btn_to_be_shipped || id == R.id.btn_to_be_received ||
+                   id == R.id.btn_to_be_commented) {
+            int orderStatus;
+            if (id == R.id.btn_to_be_paid) {
+                orderStatus = Constant.ORDER_STATUS_TO_BE_PAID;
+            } else if (id == R.id.btn_to_be_shipped) {
+                orderStatus = Constant.ORDER_STATUS_TO_BE_SHIPPED;
+            } else if (id == R.id.btn_to_be_received) {
+                orderStatus = Constant.ORDER_STATUS_TO_BE_RECEIVED;
+            } else {
+                orderStatus = Constant.ORDER_STATUS_TO_BE_COMMENTED;
+            }
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.start(BillFragment.newInstance(orderStatus));
         }
     }
 

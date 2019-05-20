@@ -290,9 +290,10 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             String imageSrc = buyGoodsItem.getString("imageSrc");
                             String goodsName = buyGoodsItem.getString("goodsName");
                             String goodsFullSpecs = buyGoodsItem.getString("goodsFullSpecs");
+                            float goodsPrice = (float) buyGoodsItem.getDouble("goodsPrice");
 
 
-                            ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, cartId, goodsName, goodsFullSpecs, buyNum);
+                            ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, cartId, goodsName, goodsFullSpecs, buyNum, goodsPrice);
                             confirmOrderSkuItemList.add(confirmOrderSkuItem);
                             goodsList.append(EasyJSONObject.generate("cartId", cartId, "buyNum", buyNum));
                         }

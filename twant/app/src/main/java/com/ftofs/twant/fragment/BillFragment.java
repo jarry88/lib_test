@@ -17,6 +17,7 @@ import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.OrderSkuItem;
 import com.ftofs.twant.log.SLog;
@@ -40,13 +41,7 @@ import okhttp3.Response;
  * @author zwm
  */
 public class BillFragment extends BaseFragment implements View.OnClickListener {
-    private static final int BILL_STATUS_ALL = 1;
-    private static final int BILL_STATUS_TO_BE_PAID = 2;
-    private static final int BILL_STATUS_TO_BE_SHIPPED = 3;
-    private static final int BILL_STATUS_TO_BE_RECEIVED = 4;
-    private static final int BILL_STATUS_TO_BE_COMMENTED = 5;
-
-    int billStatus = BILL_STATUS_ALL;
+    int billStatus;
 
     List<OrderItem> orderItemList = new ArrayList<>();
     OrderListAdapter adapter;
@@ -57,9 +52,10 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
     int twRed;
     int twBlack;
 
-    public static BillFragment newInstance() {
+    public static BillFragment newInstance(int billStatus) {
         Bundle args = new Bundle();
 
+        args.putInt("billStatus", billStatus);
         BillFragment fragment = new BillFragment();
         fragment.setArguments(args);
 
@@ -76,6 +72,10 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle args = getArguments();
+        billStatus = args.getInt("billStatus", Constant.ORDER_STATUS_ALL);
+        SLog.info("billStatus[%d]", billStatus);
 
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
@@ -106,7 +106,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
         });
         rvOrderList.setAdapter(adapter);
 
-        loadBillData(billStatus);
+        handleOrderStatusSwitch(orderStatusIds[billStatus]);
     }
 
     @Override
@@ -117,6 +117,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
         }
 
         if (handleOrderStatusSwitch(id)) {
+            loadBillData(billStatus);
             return;
         }
     }
@@ -141,6 +142,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
             return false;
         }
 
+        billStatus = index;
         for (int i = 0; i < orderStatusIds.length; i++) {
             int textColor = twBlack;
             if (index == i) {
@@ -149,84 +151,117 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
 
             tvOrderStatusArr[i].setTextColor(textColor);
         }
+
+        loadBillData(billStatus);
         return true;
     }
 
     private void loadBillData(int billStatus) {
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            SLog.info("Error!token 為空");
-            return;
-        }
-
-        EasyJSONObject params = EasyJSONObject.generate("token", token);
-        Api.postUI(Api.PATH_ORDER_LIST, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
+        try {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                SLog.info("Error!token 為空");
+                return;
             }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseStr = response.body().string();
-                SLog.info("responseStr[%s]", responseStr);
+            EasyJSONObject params = EasyJSONObject.generate("token", token);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                if (ToastUtil.checkError(_mActivity, responseObj)) {
-                    return;
+            String ordersState = getOrdersState(billStatus);
+            if (!StringUtil.isEmpty(ordersState)) {
+                params.set("ordersState", ordersState);
+            }
+            SLog.info("params[%s]", params);
+
+            Api.postUI(Api.PATH_ORDER_LIST, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
                 }
 
-                try {
-                    EasyJSONArray ordersPayVoList = responseObj.getArray("datas.ordersPayVoList");
-                    for (Object object : ordersPayVoList) {
-                        EasyJSONObject ordersPayVo = (EasyJSONObject) object;
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseStr = response.body().string();
+                    SLog.info("responseStr[%s]", responseStr);
 
-                        int payId = ordersPayVo.getInt("payId");
-                        EasyJSONArray ordersVoList = ordersPayVo.getArray("ordersVoList");
-                        int len = ordersPayVoList.length();
-                        int index = 0;
-                        for (Object object2 : ordersVoList) {
-                            EasyJSONObject ordersVo = (EasyJSONObject) object2;
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
 
-                            String ordersStateName = ordersVo.getString("ordersStateName");
-                            String storeName = ordersVo.getString("storeName");
-                            float freightAmount = (float) ordersVo.getDouble("freightAmount");
-                            float ordersAmount = (float) ordersVo.getDouble("ordersAmount");
+                    try {
+                        EasyJSONArray ordersPayVoList = responseObj.getArray("datas.ordersPayVoList");
+                        orderItemList.clear();
+                        for (Object object : ordersPayVoList) { // PayObject
+                            EasyJSONObject ordersPayVo = (EasyJSONObject) object;
 
-                            List<OrderSkuItem> orderSkuItemList = new ArrayList<>();
+                            int payId = ordersPayVo.getInt("payId");
+                            EasyJSONArray ordersVoList = ordersPayVo.getArray("ordersVoList");
+                            int len = ordersPayVoList.length();
+                            int index = 0;
+                            for (Object object2 : ordersVoList) { // OrderVo
+                                EasyJSONObject ordersVo = (EasyJSONObject) object2;
 
-                            // 獲取Sku列表
-                            EasyJSONArray ordersGoodsVoList = ordersVo.getArray("ordersGoodsVoList");
-                            for (Object object3 : ordersGoodsVoList) {
-                                EasyJSONObject ordersGoodsVo = (EasyJSONObject) object3;
+                                String ordersStateName = ordersVo.getString("ordersStateName");
+                                String storeName = ordersVo.getString("storeName");
+                                float freightAmount = (float) ordersVo.getDouble("freightAmount");
+                                float ordersAmount = (float) ordersVo.getDouble("ordersAmount");
 
-                                String goodsName = ordersGoodsVo.getString("goodsName");
-                                String imageSrc = ordersGoodsVo.getString("imageSrc");
-                                float goodsPrice = (float) ordersGoodsVo.getDouble("goodsPrice");
-                                String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
-                                int buyNum = ordersGoodsVo.getInt("buyNum");
+                                List<OrderSkuItem> orderSkuItemList = new ArrayList<>();
 
-                                orderSkuItemList.add(new OrderSkuItem(goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
+                                // 獲取Sku列表
+                                EasyJSONArray ordersGoodsVoList = ordersVo.getArray("ordersGoodsVoList");
+                                for (Object object3 : ordersGoodsVoList) { // Sku
+                                    EasyJSONObject ordersGoodsVo = (EasyJSONObject) object3;
+
+                                    String goodsName = ordersGoodsVo.getString("goodsName");
+                                    String imageSrc = ordersGoodsVo.getString("imageSrc");
+                                    float goodsPrice = (float) ordersGoodsVo.getDouble("goodsPrice");
+                                    String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                                    int buyNum = ordersGoodsVo.getInt("buyNum");
+
+                                    orderSkuItemList.add(new OrderSkuItem(goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
+                                }
+
+                                OrderItem orderItem = new OrderItem(storeName, ordersStateName, freightAmount, ordersAmount, orderSkuItemList);
+                                // 最后一個顯示【支付訂單】按鈕
+                                if (index == len -1) {
+                                    orderItem.setShowPayButton(true);
+                                    orderItem.setPayId(payId);
+                                }
+
+                                orderItemList.add(orderItem);
+                                ++index;
                             }
-
-                            OrderItem orderItem = new OrderItem(storeName, ordersStateName, freightAmount, ordersAmount, orderSkuItemList);
-                            // 最后一個顯示【支付訂單】按鈕
-                            if (index == len -1) {
-                                orderItem.setShowPayButton(true);
-                                orderItem.setPayId(payId);
-                            }
-
-                            orderItemList.add(orderItem);
-                            ++index;
                         }
-
                         SLog.info("orderItemList:count[%d]", orderItemList.size());
                         adapter.setNewData(orderItemList);
+                    } catch (EasyJSONException e) {
+                        e.printStackTrace();
+                        SLog.info("Error!loadBillData failed");
                     }
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
+    /**
+     * 獲取訂單狀態描述文本
+     * @param orderStatus
+     * @return
+     */
+    private String getOrdersState(int orderStatus) {
+        // new-待付款,pay-待发货,send-待收货,noeval-待评价,finish-已完成,cancel-已取消
+        if (orderStatus == Constant.ORDER_STATUS_TO_BE_PAID) {
+            return "new";
+        } else if (orderStatus == Constant.ORDER_STATUS_TO_BE_SHIPPED) {
+            return "pay";
+        } else if (orderStatus == Constant.ORDER_STATUS_TO_BE_RECEIVED) {
+            return "send";
+        } else if (orderStatus == Constant.ORDER_STATUS_TO_BE_COMMENTED) {
+            return "noeval";
+        }
+        return null;
     }
 }
