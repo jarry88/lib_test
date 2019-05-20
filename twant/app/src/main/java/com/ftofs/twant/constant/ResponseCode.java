@@ -5,5 +5,5 @@ package com.ftofs.twant.constant;
  * @author zwm
  */
 public class ResponseCode {
-    public static final int SUCCESS = 200;
+    public static final Integer SUCCESS = 200;
 }

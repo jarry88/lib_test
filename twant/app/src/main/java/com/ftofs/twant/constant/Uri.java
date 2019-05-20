@@ -21,4 +21,9 @@ public class Uri {
      * ICBC支付
      */
     public final static String API_ICBC_PAY = WEB_DOMAIN.concat("/buy/pay/icbc/ios");
+
+    /**
+     * ICBC支付查詢
+     */
+    public final static String API_ICBC_PAY_ENQUIRY = API_DOMAIN.concat("/member/icbc/pay/query");
 }
