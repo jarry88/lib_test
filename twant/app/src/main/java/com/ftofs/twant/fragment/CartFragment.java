@@ -94,14 +94,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         btnSettlement = view.findViewById(R.id.btn_settlement);
         btnSettlement.setOnClickListener(this);
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
-
-        loadCartData();
-        updateTotalData();
     }
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+
+        loadCartData();
+        updateTotalData();
     }
 
     @Override
@@ -142,6 +142,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     tvFragmentTitle.setText(cartText);
 
                     EasyJSONArray cartStoreVoList = responseObj.getArray("datas.cartStoreVoList");
+                    cartStoreItemContainer.removeAllViews();
                     for (Object object : cartStoreVoList) { // store LOOP
                         StoreStatus storeStatus = new StoreStatus();
                         storeStatus.parent = totalStatus;

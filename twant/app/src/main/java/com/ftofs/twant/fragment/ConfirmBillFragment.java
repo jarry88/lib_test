@@ -3,7 +3,8 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.ConfirmOrderStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.ConfirmOrderSkuItem;
+import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -72,6 +77,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     RelativeLayout btnAddShippingAddress;
     LinearLayout btnChangeShippingAddress;
 
+    BaseQuickAdapter adapter;
+    List<ConfirmOrderStoreItem> confirmOrderStoreItemList = new ArrayList<>();
+
     /**
      * 提交訂單時上去的店鋪列表
      */
@@ -124,6 +132,12 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_commit, this);
         Util.setOnClickListener(view, R.id.btn_add_shipping_address, this);
         Util.setOnClickListener(view, R.id.btn_change_shipping_address, this);
+
+        RecyclerView rvStoreList = view.findViewById(R.id.rv_store_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        rvStoreList.setLayoutManager(layoutManager);
+        adapter = new ConfirmOrderStoreAdapter(_mActivity, R.layout.confirm_order_store_item, confirmOrderStoreItemList);
+        rvStoreList.setAdapter(adapter);
 
         loadBillData();
     }
@@ -227,6 +241,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(getContext(), responseObj)) {
+                    // 如果加載訂單數據失敗，退出當前頁面
+                    pop();
                     return;
                 }
 
@@ -255,6 +271,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                     isExistTrys = responseObj.getInt("datas.isExistTrys");
 
+                    // 店鋪Sku數據
                     easyJSONArray = responseObj.getArray("datas.buyStoreVoList");
                     for (Object object : easyJSONArray) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
@@ -264,12 +281,23 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                         EasyJSONArray goodsList = EasyJSONArray.generate();
                         EasyJSONArray buyGoodsItemVoList = easyJSONObject.getArray("buyGoodsItemVoList");
+                        List<ConfirmOrderSkuItem> confirmOrderSkuItemList = new ArrayList<>();
                         for (Object object2 : buyGoodsItemVoList) {
                             EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
                             int cartId = buyGoodsItem.getInt("cartId");
                             int buyNum = buyGoodsItem.getInt("buyNum");
+
+                            String imageSrc = buyGoodsItem.getString("imageSrc");
+                            String goodsName = buyGoodsItem.getString("goodsName");
+                            String goodsFullSpecs = buyGoodsItem.getString("goodsFullSpecs");
+
+
+                            ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, cartId, goodsName, goodsFullSpecs, buyNum);
+                            confirmOrderSkuItemList.add(confirmOrderSkuItem);
                             goodsList.append(EasyJSONObject.generate("cartId", cartId, "buyNum", buyNum));
                         }
+
+                        confirmOrderStoreItemList.add(new ConfirmOrderStoreItem(storeId, storeName, confirmOrderSkuItemList));
 
                         commitStoreList.append(EasyJSONObject.generate(
                                 "storeId", storeId,
@@ -277,6 +305,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                                 "goodsList", goodsList,
                                 "shipTimeType", shipTimeType));
                     }
+
+                    adapter.setNewData(confirmOrderStoreItemList);
 
                     SLog.info("commitStoreList[%s]", commitStoreList.toString());
                 } catch (EasyJSONException e) {
