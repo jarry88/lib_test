@@ -13,6 +13,10 @@ import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
+/**
+ * 商品搜索結果Adapter
+ * @author zwm
+ */
 public class GoodsSearchResultAdapter extends BaseQuickAdapter<GoodsSearchItem, BaseViewHolder> {
     Context context;
     String currencyTypeSign;

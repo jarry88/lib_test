@@ -11,19 +11,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.Util;
 import com.nex3z.flowlayout.FlowLayout;
-import com.orhanobut.hawk.Hawk;
-
-import org.litepal.LitePal;
 
 import java.util.Set;
-
-import cn.snailpad.easyjson.EasyJSONArray;
 
 
 /**

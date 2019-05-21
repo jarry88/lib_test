@@ -8,6 +8,11 @@ import java.util.Set;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 
+/**
+ * 搜索歷史工具類
+ * todo 改為HashMap按最近搜索的放在前面
+ * @author zwm
+ */
 public class SearchHistoryUtil {
     /**
      * 加載搜索歷史記錄
