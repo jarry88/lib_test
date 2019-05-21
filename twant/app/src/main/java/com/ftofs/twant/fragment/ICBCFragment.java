@@ -162,12 +162,10 @@ public class ICBCFragment extends BaseFragment {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ICBC_PAY_FINISH) {
             EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(message.data);
             try {
-                paymentView.setVisibility(View.INVISIBLE);
-                payResult.setVisibility(View.VISIBLE);
                 if (easyJSONObject.getInt("payResult") == Constant.ONE) {
+                    paymentView.setVisibility(View.INVISIBLE);
+                    payResult.setVisibility(View.VISIBLE);
                     payResultInfo.setText(R.string.text_pay_result_success);
-                } else {
-                    payResultInfo.setText(R.string.text_pay_result_fail);
                 }
             } catch (EasyJSONException e) {
                 Log.e(TAG, e.getMessage());

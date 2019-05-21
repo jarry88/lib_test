@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/wv_pay">
     </WebView>
+
     <RelativeLayout
-        android:visibility="invisible"
+        android:id="@+id/rl_pay_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rl_pay_result">
-        <TextView
-            android:textAlignment="center"
+        android:layout_height="240dp"
+        android:background="#F50057"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_marginRight="10dp"
             android:layout_centerInParent="true"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/tv_pay_result"
+            android:src="@drawable/icon_pay_success" />
+        <TextView
             android:id="@+id/tv_pay_result"
-            android:text="@string/text_pay_result_success"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/text_pay_result_success"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="21sp" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
