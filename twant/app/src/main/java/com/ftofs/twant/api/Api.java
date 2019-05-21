@@ -20,7 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,160 +55,160 @@ public class Api {
     /**
      * 1.1 获取区号列表
      */
-    public static final String PATH_MOBILE_ZONE = "/api/app/mobile/zone";
+    public static final String PATH_MOBILE_ZONE = "/app/mobile/zone";
 
     /**
      * 1.2 获取key
      */
-    public static final String PATH_MAKE_CAPTCHA_KEY = "/api/captcha/makecaptchakey";
+    public static final String PATH_MAKE_CAPTCHA_KEY = "/captcha/makecaptchakey";
 
     /**
      * 1.3 获取验证码图片
      */
-    public static final String PATH_MAKE_CAPTCHA = "/api/captcha/makecaptcha";
+    public static final String PATH_MAKE_CAPTCHA = "/captcha/makecaptcha";
 
     /**
      * 1.4 验证码发送
      */
-    public static final String PATH_SEND_SMS_CODE = "/api/loginconnect/smscode/send";
+    public static final String PATH_SEND_SMS_CODE = "/loginconnect/smscode/send";
 
 
     /**
      * 1.6 账号注册
      */
-    public static final String PATH_MOBILE_REGISTER = "/api/loginconnect/mobile/register";
+    public static final String PATH_MOBILE_REGISTER = "/loginconnect/mobile/register";
 
 
     /**
      * 1.7 驗證碼登錄
      */
-    public static final String PATH_MOBILE_LOGIN = "/api/loginconnect/mobile/login";
+    public static final String PATH_MOBILE_LOGIN = "/loginconnect/mobile/login";
 
 
     /**
      * 1.7 普通登錄
      */
-    public static final String PATH_LOGIN = "/api/login";
+    public static final String PATH_LOGIN = "/login";
 
     /**
      * 修改会员支付密码
      */
-    public static final String PATH_EDIT_PAYMENT_PASSWORD = "/api/member/security/edit/payPwd";
+    public static final String PATH_EDIT_PAYMENT_PASSWORD = "/member/security/edit/payPwd";
 
 
     /**
      * 重置密碼
      */
-    public static final String PATH_RESET_PASSWORD = "/api/loginconnect/mobile/findpwd";
+    public static final String PATH_RESET_PASSWORD = "/loginconnect/mobile/findpwd";
 
     /**
      * 首頁輪播圖
      */
-    public static final String PATH_HOME_CAROUSEL = "/api/app/home/index";
+    public static final String PATH_HOME_CAROUSEL = "/app/home/index";
 
 
     /**
      * 最新入駐
      */
-    public static final String PATH_NEW_ARRIVALS = "/api/app/home/recommend";
+    public static final String PATH_NEW_ARRIVALS = "/app/home/recommend";
 
 
     /**
      * 店鋪分類
      */
-    public static final String PATH_SHOP_CATEGORY = "/api/app/home/store_class_nav";
+    public static final String PATH_SHOP_CATEGORY = "/app/home/store_class_nav";
 
 
     /**
      * 商品分類
      */
-    public static final String PATH_COMMODITY_CATEGORY = "/api/app/home/goods_class_nav";
+    public static final String PATH_COMMODITY_CATEGORY = "/app/home/goods_class_nav";
 
 
     /**
      * 品牌分類
      */
-    public static final String PATH_BRAND_CATEGORY = "/api/app/home/brand_label_nav";
+    public static final String PATH_BRAND_CATEGORY = "/app/home/brand_label_nav";
 
 
     /**
      * 店鋪首頁
      */
-    public static final String PATH_SHOP_HOME = "/api/app/store";
+    public static final String PATH_SHOP_HOME = "/app/store";
 
     /**
      * 商品搜索
      */
-    public static final String PATH_SEARCH_GOODS = "/api/search";
+    public static final String PATH_SEARCH_GOODS = "/search";
 
     /**
      * 店鋪搜索
      */
-    public static final String PATH_SEARCH_STORE = "/api/search/store";
+    public static final String PATH_SEARCH_STORE = "/search/store";
 
     /**
      * 店铺内商品搜索
      */
-    public static final String PATH_SEARCH_GOODS_IN_STORE = "/api/app/store/search/goods";
+    public static final String PATH_SEARCH_GOODS_IN_STORE = "/app/store/search/goods";
 
 
     /**
      * 商品詳情
      */
-    public static final String PATH_GOODS_DETAIL = "/api/app/goods";
+    public static final String PATH_GOODS_DETAIL = "/app/goods";
 
     /**
      * 添加購物車
      */
-    public static final String PATH_ADD_CART = "/api/cart/add";
+    public static final String PATH_ADD_CART = "/cart/add";
 
 
     /**
      * 購物車列表
      */
-    public static final String PATH_CART_LIST = "/api/cart/list";
+    public static final String PATH_CART_LIST = "/cart/list";
 
     /**
      * 购买第一步：显示商品信息
      */
-    public static final String PATH_DISPLAY_BILL_DATA = "/api/member/buy/step1";
+    public static final String PATH_DISPLAY_BILL_DATA = "/member/buy/step1";
 
     /**
      * 地區列表
      */
-    public static final String PATH_AREA_LIST = "/api/area/list";
+    public static final String PATH_AREA_LIST = "/area/list";
 
 
     /**
      * 会员收货地址添加
      */
-    public static final String PATH_ADD_ADDRESS = "/api/member/address/add";
+    public static final String PATH_ADD_ADDRESS = "/member/address/add";
 
     /**
      * 会员收货地址列表
      */
-    public static final String PATH_LIST_ADDRESS = "/api/member/address/list";
+    public static final String PATH_LIST_ADDRESS = "/member/address/list";
 
     /**
      * 会员收货地址编辑
      */
-    public static final String PATH_EDIT_ADDRESS = "/api/member/address/edit";
+    public static final String PATH_EDIT_ADDRESS = "/member/address/edit";
 
     /**
      * 刪除会员收货地址
      */
-    public static final String PATH_DELETE_ADDRESS = "/api/member/address/delete";
+    public static final String PATH_DELETE_ADDRESS = "/member/address/delete";
 
     /**
      * 购买第二步：保存生成订单
      */
-    public static final String PATH_COMMIT_BILL_DATA = "/api/member/buy/step2";
+    public static final String PATH_COMMIT_BILL_DATA = "/member/buy/step2";
 
 
     /**
      * 訂單列表
      */
-    public static final String PATH_ORDER_LIST = "/api/member/orders/list";
+    public static final String PATH_ORDER_LIST = "/member/orders/list";
 
 
 

@@ -165,7 +165,7 @@ public class ICBCFragment extends BaseFragment {
                 if (easyJSONObject.getInt("payResult") == Constant.ONE) {
                     paymentView.setVisibility(View.INVISIBLE);
                     payResult.setVisibility(View.VISIBLE);
-                    payResultInfo.setText(R.string.text_pay_result_success);
+                    payResultInfo.setText(getResources().getString(R.string.text_pay_result_success));
                 }
             } catch (EasyJSONException e) {
                 Log.e(TAG, e.getMessage());
