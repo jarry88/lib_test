@@ -11,10 +11,6 @@ public class Config {
      */
     public static final int DB_VERSION = 2;
 
-    public static String OSS_BASE_URL = "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com";
-
-    public static String API_BASE_URL = "http://192.168.5.29";
-
     /**
      * 登錄有效期(秒)
      */
@@ -24,4 +20,13 @@ public class Config {
      * 開發模式
      */
     public static final boolean DEVELOPER_MODE = true;
+
+    public static String OSS_BASE_URL = DEVELOPER_MODE ?
+            "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com"
+            : "https://img.twant.com";
+
+    public static String API_BASE_URL = DEVELOPER_MODE ?
+            "http://192.168.5.29/api"
+            : "http://f2.twant.com/api";
+
 }
