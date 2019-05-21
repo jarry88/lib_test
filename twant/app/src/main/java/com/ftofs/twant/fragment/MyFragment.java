@@ -57,50 +57,64 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.img_avatar, this);
         Util.setOnClickListener(view, R.id.btn_setting, this);
         Util.setOnClickListener(view, R.id.btn_my_address, this);
+
+        Util.setOnClickListener(view, R.id.icon_return_or_exchange, this);
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        MainFragment mainFragment = (MainFragment) getParentFragment();
 
-        if (id == R.id.btn_register) {
-            MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.start(RegisterFragment.newInstance());
-        } else if (id == R.id.img_avatar) {
-            MainFragment mainFragment = (MainFragment) getParentFragment();
+        switch (id) {
+            case R.id.btn_register:
+                mainFragment.start(RegisterFragment.newInstance());
+                break;
 
-            // 判斷是否已經登錄，采取不同的動作
-            int userId = User.getUserId();
-            if (userId > 0) {
-                // 已經登錄，顯示【個人信息】
-                mainFragment.start(PersonalInfoFragment.newInstance());
-            } else {
-                // 未登錄，顯示【登錄】頁面
-                mainFragment.start(LoginFragment.newInstance());
-            }
-        } else if (id == R.id.btn_setting) {
-            MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.start(SettingFragment.newInstance());
-        } else if (id == R.id.btn_my_bill) {
-            MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.start(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
-        } else if (id == R.id.btn_my_address) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(AddrManageFragment.newInstance());
-        } else if (id == R.id.btn_to_be_paid || id == R.id.btn_to_be_shipped || id == R.id.btn_to_be_received ||
-                   id == R.id.btn_to_be_commented) {
-            int orderStatus;
-            if (id == R.id.btn_to_be_paid) {
-                orderStatus = Constant.ORDER_STATUS_TO_BE_PAID;
-            } else if (id == R.id.btn_to_be_shipped) {
-                orderStatus = Constant.ORDER_STATUS_TO_BE_SHIPPED;
-            } else if (id == R.id.btn_to_be_received) {
-                orderStatus = Constant.ORDER_STATUS_TO_BE_RECEIVED;
-            } else {
-                orderStatus = Constant.ORDER_STATUS_TO_BE_COMMENTED;
-            }
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(BillFragment.newInstance(orderStatus));
+            case R.id.img_avatar:
+                // 判斷是否已經登錄，采取不同的動作
+                int userId = User.getUserId();
+                if (userId > 0) {
+                    // 已經登錄，顯示【個人信息】
+                    mainFragment.start(PersonalInfoFragment.newInstance());
+                } else {
+                    // 未登錄，顯示【登錄】頁面
+                    mainFragment.start(LoginFragment.newInstance());
+                }
+                break;
+
+            case R.id.btn_setting:
+                mainFragment.start(SettingFragment.newInstance());
+                break;
+
+            case R.id.btn_my_bill:
+                mainFragment.start(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
+                break;
+
+            case R.id.btn_my_address:
+                mainFragment.start(AddrManageFragment.newInstance());
+                break;
+
+            case R.id.btn_to_be_paid:
+            case R.id.btn_to_be_shipped:
+            case R.id.btn_to_be_received:
+            case R.id.btn_to_be_commented:
+                int orderStatus;
+                if (id == R.id.btn_to_be_paid) {
+                    orderStatus = Constant.ORDER_STATUS_TO_BE_PAID;
+                } else if (id == R.id.btn_to_be_shipped) {
+                    orderStatus = Constant.ORDER_STATUS_TO_BE_SHIPPED;
+                } else if (id == R.id.btn_to_be_received) {
+                    orderStatus = Constant.ORDER_STATUS_TO_BE_RECEIVED;
+                } else {
+                    orderStatus = Constant.ORDER_STATUS_TO_BE_COMMENTED;
+                }
+                mainFragment.start(BillFragment.newInstance(orderStatus));
+                break;
+
+            case R.id.icon_return_or_exchange:
+                mainFragment.start(RefundFragment.newInstance());
+                break;
         }
     }
 
