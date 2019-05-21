@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.handler.CrashHandler;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.SearchHistory;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.User;
@@ -85,7 +86,7 @@ public class TwantApplication extends Application {
 
         /* 添加各個表，如果新增表，需要在這里添加表，然后增加數據庫版本號
            例如： SqliteUtil.addTables(Table1.class.getName(), Table2.class.getName()); */
-        SqliteUtil.addTables(Test.class.getName());
+        SqliteUtil.addTables(Test.class.getName(), SearchHistory.class.getName());
 
         Fragmentation.builder()
                 // show stack view. Mode: BUBBLE, SHAKE, NONE

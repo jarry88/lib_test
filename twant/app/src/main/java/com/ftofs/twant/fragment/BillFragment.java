@@ -101,6 +101,8 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
                 if (id == R.id.btn_pay_order) {
                     int payId = (int) view.getTag();
                     SLog.info("payId[%d]", payId);
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(ICBCFragment.newInstance(String.valueOf(payId)));
                 }
             }
         });

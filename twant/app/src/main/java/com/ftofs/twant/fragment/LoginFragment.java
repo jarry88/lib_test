@@ -47,6 +47,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_register, this);
 
         TabLayout tabLayout = view.findViewById(R.id.login_tab_layout);
@@ -72,7 +73,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_register) {
+        if (id == R.id.btn_back) {
+            pop();
+        } if (id == R.id.btn_register) {
             MainFragment mainFragment = MainFragment.getInstance();
             if (mainFragment == null) {
                 return;

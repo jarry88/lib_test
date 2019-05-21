@@ -177,8 +177,8 @@
     <string name="text_shipping_to">配送至</string>
     <string name="text_set_as_default">設為默認</string>
 
-    <string name="search_tab_title_shop">店鋪</string>
-    <string name="search_tab_title_commodity">商品</string>
+    <string name="search_tab_title_goods">商品</string>
+    <string name="search_tab_title_store">店鋪</string>
     <string name="search_tab_title_article">文章</string>
 
     <string name="goods_tab_title_general">綜合</string>
