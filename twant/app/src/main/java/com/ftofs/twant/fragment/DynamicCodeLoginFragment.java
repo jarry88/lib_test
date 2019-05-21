@@ -27,6 +27,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.SharedPreferenceUtil;
+import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
@@ -188,8 +189,10 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                         }
 
                         ToastUtil.show(_mActivity, "登入成功");
+                        int userId = responseObj.getInt("datas.memberId");
                         SharedPreferenceUtil.saveUserInfo(responseObj);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                        SqliteUtil.switchUserDB(userId);
 
                         if (commonCallback != null) {
                             SLog.info("Fragment出棧");

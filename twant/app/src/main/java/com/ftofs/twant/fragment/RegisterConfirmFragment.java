@@ -18,6 +18,7 @@ import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.SharedPreferenceUtil;
+import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.orhanobut.hawk.Hawk;
@@ -131,8 +132,10 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                         }
 
                         // 保存服務器端返回的數據
+                        int userId = responseObj.getInt("datas.memberId");
                         SharedPreferenceUtil.saveUserInfo(responseObj);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                        SqliteUtil.switchUserDB(userId);
 
                         ToastUtil.show(_mActivity, "注冊成功");
                     } catch (EasyJSONException e) {

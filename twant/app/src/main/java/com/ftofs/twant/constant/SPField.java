@@ -11,4 +11,5 @@ public class SPField {
     public static final String FIELD_NICKNAME = "nickname";
     public static final String FIELD_LAST_LOGIN_TIME = "last_login_time";
     public static final String FIELD_MOBILE_ENCRYPT = "mobile_encrypt";
+    public static final String FIELD_SEARCH_TYPE = "search_type_";
 }

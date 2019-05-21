@@ -25,6 +25,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.SharedPreferenceUtil;
+import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
@@ -110,7 +111,6 @@ public class PasswordLoginFragment extends BaseFragment implements
             String password = etPassword.getText().toString().trim();
             String captcha = etCaptcha.getText().toString().trim();
 
-
             String fullMobile = mobileZone.areaCode + "," + mobile;
 
             EasyJSONObject params = EasyJSONObject.generate(
@@ -129,24 +129,30 @@ public class PasswordLoginFragment extends BaseFragment implements
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    String responseStr = response.body().string();
-                    SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        // 如果出錯，刷新驗證碼
-                        refreshCaptcha();
-                        return;
-                    }
+                    try {
+                        String responseStr = response.body().string();
+                        SLog.info("responseStr[%s]", responseStr);
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            // 如果出錯，刷新驗證碼
+                            refreshCaptcha();
+                            return;
+                        }
 
-                    ToastUtil.show(_mActivity, "登錄成功");
-                    SharedPreferenceUtil.saveUserInfo(responseObj);
-                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                        ToastUtil.show(_mActivity, "登錄成功");
+                        int userId = responseObj.getInt("datas.memberId");
+                        SharedPreferenceUtil.saveUserInfo(responseObj);
+                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                        SqliteUtil.switchUserDB(userId);
 
-                    SLog.info("登錄成功");
+                        SLog.info("登錄成功");
 
-                    if (commonCallback != null) {
-                        SLog.info("Fragment出棧");
-                        commonCallback.onSuccess(null);
+                        if (commonCallback != null) {
+                            SLog.info("Fragment出棧");
+                            commonCallback.onSuccess(null);
+                        }
+                    } catch (Exception e) {
+
                     }
                 }
             });

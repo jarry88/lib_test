@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -15,10 +16,14 @@ import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.domain.search.SearchHistory;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+
+import org.litepal.LitePal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +42,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     GoodsSearchResultAdapter adapter;
 
     List<GoodsSearchItem> goodsItemList = new ArrayList<>();
+    EditText etKeyword;
 
     public static SearchResultFragment newInstance(String searchTypeStr, String keyword) {
         Bundle args = new Bundle();
@@ -66,6 +72,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         String keyword = args.getString("keyword");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        etKeyword = view.findViewById(R.id.et_keyword);
+        etKeyword.setText(keyword);
 
         RecyclerView rvGoodsList = view.findViewById(R.id.rv_goods_list);
         GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, GridLayoutManager.VERTICAL, false);
@@ -80,6 +88,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             }
         });
         rvGoodsList.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                GoodsSearchItem goodsSearchItem = goodsItemList.get(position);
+                int commonId = goodsSearchItem.commonId;
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+            }
+        });
 
         doSearch(searchType, keyword);
     }
@@ -87,6 +104,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     private void doSearch(SearchType searchType, String keyword) {
         SLog.info("searchType[%s], keyword[%s]", searchType, keyword);
+
+        int searchTypeInt = searchType.ordinal();
+        SearchHistoryUtil.saveSearchHistory(searchTypeInt, keyword);
+
         EasyJSONObject params;
         if (searchType == SearchType.GOODS) {
             params = EasyJSONObject.generate("keyword", keyword);

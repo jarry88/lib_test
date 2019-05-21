@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.Set;
+
 
 /**
  * 常用工具類
@@ -137,4 +139,6 @@ public class Util {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) ((pxValue / scale) + 0.5f);
     }
+
+
 }
