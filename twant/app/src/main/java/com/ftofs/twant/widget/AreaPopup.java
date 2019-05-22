@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -43,12 +44,14 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
 
     List<Area> areaList = new ArrayList<>();
     List<Area> selectedAreaList = new ArrayList<>();
+    List<AreaItemView> areaItemViewList = new ArrayList<>();
 
     OnSelectedListener onSelectedListener;
     AreaPopupAdapter adapter;
     int twBlack;
 
     LinearLayout llAreaContainer;
+    TextView btnOk;
 
     public AreaPopup(@NonNull Context context, int popupType, OnSelectedListener onSelectedListener) {
         super(context);
@@ -82,7 +85,8 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                 if (position >= areaList.size()) {
                     return;
                 }
-                TextView tvArea = new TextView(getContext());
+
+                AreaItemView areaItemView = new AreaItemView(getContext());
                 Area area = areaList.get(position);
 
                 int depth = area.getAreaDeep();
@@ -92,17 +96,53 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                 }
                 selectedAreaList.add(area);
 
-                tvArea.setText(area.getAreaName());
-                tvArea.setTextSize(15);
-                tvArea.setTextColor(twBlack);
+                // 將之前的AreaItemView取消高亮
+                for (AreaItemView itemView : areaItemViewList) {
+                    itemView.setStatus(AreaItemView.STATUS_UNSELECTED);
+                }
+                areaItemView.setText(area.getAreaName());
+                areaItemView.setStatus(AreaItemView.STATUS_SELECTED);
+                areaItemView.setDepth(depth);
+                areaItemView.setAreaId(area.getAreaId());
+                areaItemView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 如果點擊自己，將后面的數據出隊列，重新加載本級的地址列表
+                        AreaItemView itemView = (AreaItemView) v;
+                        int depth = itemView.getDepth();
+                        for (int i = selectedAreaList.size() - 1; i >= depth ; i--) {
+                            selectedAreaList.remove(i);
+                        }
+
+                        for (int i = areaItemViewList.size() - 1; i >= depth ; i--) {
+                            areaItemViewList.remove(i);
+                        }
+
+                        int childCount = llAreaContainer.getChildCount();
+                        if (childCount - depth > 0) {
+                            llAreaContainer.removeViews(depth, childCount - depth);
+                        }
+
+                        itemView.setStatus(AreaItemView.STATUS_SELECTED);
+                        loadAreaData(itemView.getAreaId());
+                    }
+                });
+                areaItemViewList.add(areaItemView);
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, Util.dip2px(getContext(), 15), 0);
-                llAreaContainer.addView(tvArea, layoutParams);
+                llAreaContainer.addView(areaItemView, layoutParams);
 
                 loadAreaData(area.getAreaId());
             }
         });
+
+        View emptyView = LayoutInflater.from(context).inflate(R.layout.area_popup_empty_view, null, false);
+        btnOk = emptyView.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(this);
+        adapter.setEmptyView(emptyView);
+
+
         rvList.setAdapter(adapter);
         loadAreaData(0);
     }
@@ -117,7 +157,6 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
     @Override
     protected void onDismiss() {
         SLog.info("onDismiss");
-        onSelectedListener.onSelected(popupType, 0, selectedAreaList);
     }
 
     @Override
@@ -129,12 +168,21 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.btn_dismiss) {
-            dismiss();
+        switch (id) {
+            case R.id.btn_dismiss:
+                dismiss();
+                break;
+            case R.id.btn_ok:
+                onSelectedListener.onSelected(popupType, 0, selectedAreaList);
+                dismiss();
+                break;
+            default:
+                break;
         }
     }
 
     private void loadAreaData(int areaId) {
+        SLog.info("loadAreaData, areaId[%d]", areaId);
         EasyJSONObject params = EasyJSONObject.generate(
                 "areaId", areaId);
         Api.getUI(Api.PATH_AREA_LIST, params, new UICallback() {
@@ -149,7 +197,9 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                if (ToastUtil.checkError(context, responseObj)) {
+                if (ToastUtil.isError(responseObj)) {
+                    areaList.clear();
+                    adapter.setNewData(areaList);
                     return;
                 }
 

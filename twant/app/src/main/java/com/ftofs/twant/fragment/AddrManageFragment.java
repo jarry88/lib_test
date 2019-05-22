@@ -78,12 +78,8 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                 int id = view.getId();
                 if (id == R.id.btn_use_this_addr) {
                     // 選擇收貨地址，并將地址傳回給上一個Fragment
-                    Bundle bundle = new Bundle();
                     AddrItem addrItem = addrItemList.get(position);
-                    bundle.putString("from", AddrManageFragment.class.getName());
-                    bundle.putParcelable("addrItem", addrItem);
-                    setFragmentResult(Constant.REQUEST_CODE_SELECT_ADDR, bundle);
-                    pop();
+                    pop(addrItem);
                 } else if (id == R.id.img_default_addr_indicator) {
                     SLog.info("設為默認地址");
 
@@ -177,7 +173,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            pop(null);
         } else if (id == R.id.btn_add_address) {
             MainFragment mainFragment = MainFragment.getInstance();
             mainFragment.start(AddAddressFragment.newInstance());
@@ -273,10 +269,25 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
         });
     }
 
+    /**
+     * pop操作的統一入口
+     * @param addrItem 選中哪個地址項
+     */
+    private void pop(AddrItem addrItem) {
+        Bundle bundle = new Bundle();
+
+        bundle.putString("from", AddrManageFragment.class.getName());
+        bundle.putBoolean("isNoAddress", addrItemList.size() == 0);  // 標記是否已經刪除所有收貨地址
+        bundle.putParcelable("addrItem", addrItem);
+
+        setFragmentResult(Constant.REQUEST_CODE_SELECT_ADDR, bundle);
+        pop();
+    }
+
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        pop(null);
         return true;
     }
 }

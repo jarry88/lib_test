@@ -251,8 +251,16 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         // 從哪個Fragment返回
         String from = data.getString("from");
         SLog.info("requestCode[%d], resultCode[%d], from[%s]", requestCode, resultCode, from);
-        if (AddrManageFragment.class.getName().equals(from)) {
-            // 從地址管理Fragment返回
+        if (AddrManageFragment.class.getName().equals(from) || AddAddressFragment.class.getName().equals(from)) {
+            // 從地址管理Fragment返回 或 從地址添加Fragment返回
+            boolean isNoAddress = data.getBoolean("isNoAddress", false); // 標記是否刪除了所有地址
+            if (isNoAddress) {
+                mAddrItem = null;
+                updateAddrView();
+                return;
+            }
+
+            // 上一級Fragment返回的地址項
             AddrItem addrItem = data.getParcelable("addrItem");
             if (addrItem == null) {
                 return;

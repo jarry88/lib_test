@@ -14,6 +14,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.domain.Area;
+import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -25,6 +26,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.ScaledButton;
 import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
@@ -50,6 +52,8 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     EditText etMobile;
     TextView tvArea;
     EditText etDetailAddress;
+    ScaledButton mSbDefaultAddr;
+    int mIsDefaultAddr;
 
 
     public static AddAddressFragment newInstance() {
@@ -77,11 +81,15 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         etMobile = view.findViewById(R.id.et_mobile);
         tvArea = view.findViewById(R.id.tv_area);
         etDetailAddress = view.findViewById(R.id.et_detail_address);
+        mSbDefaultAddr = view.findViewById(R.id.sb_default_addr);
+        mSbDefaultAddr.setOnClickListener(this);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_select_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_select_area, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
+        Util.setOnClickListener(view, R.id.btn_clear_detail_address, this);
+
 
         getMobileZoneList();
     }
@@ -94,6 +102,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_select_mobile_zone) {
+            hideSoftInput();
             List<ListPopupItem> itemList = new ArrayList<>();
             for (MobileZone mobileZone : mobileZoneList) {
                 ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);
@@ -107,11 +116,22 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                             Constant.POPUP_TYPE_MOBILE_ZONE, itemList, mobileZoneIndex, this))
                     .show();
         } else if (id == R.id.btn_select_area) {
+            hideSoftInput();
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new AreaPopup(_mActivity, Constant.POPUP_TYPE_AREA, this))
                     .show();
+        } else if (id == R.id.sb_default_addr) {
+            if (mIsDefaultAddr == 1) {
+                mSbDefaultAddr.setIconResource(R.drawable.icon_cart_item_unchecked);
+            } else {
+                mSbDefaultAddr.setIconResource(R.drawable.icon_cart_item_checked);
+            }
+            mIsDefaultAddr = 1 - mIsDefaultAddr;
+            SLog.info("mIsDefaultAddr[%d]", mIsDefaultAddr);
+        } else if (id == R.id.btn_clear_detail_address) {
+            etDetailAddress.setText("");
         } else if (id == R.id.btn_ok) {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
@@ -120,13 +140,13 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
 
             // 收集信息
             try {
-                String realName = etReceiverName.getText().toString().trim();
+                final String realName = etReceiverName.getText().toString().trim();
                 if (realName.length() < 1) {
                     ToastUtil.show(_mActivity, getResources().getText(R.string.hint_input_receiver_name).toString());
                     return;
                 }
 
-                String mobile = etMobile.getText().toString().trim();
+                final String mobile = etMobile.getText().toString().trim();
                 if (mobile.length() < 1) {
                     ToastUtil.show(_mActivity, getResources().getText(R.string.input_mobile_hint).toString());
                     return;
@@ -137,7 +157,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                     return;
                 }
 
-                String detailAddress = etDetailAddress.getText().toString().trim();
+                final String detailAddress = etDetailAddress.getText().toString().trim();
                 if (detailAddress.length() < 1) {
                     ToastUtil.show(_mActivity, getResources().getText(R.string.hint_input_detail_address).toString());
                     return;
@@ -149,7 +169,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                         "realName", realName,
                         "address", detailAddress,
                         "mobPhone", fullMobile,
-                        "isDefault", 1);
+                        "isDefault", mIsDefaultAddr);
 
                 int areaId = 0;
                 int i = 1;
@@ -162,7 +182,9 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
 
                 // 最后一層areaId
                 params.set("areaId", areaId);
-                params.set("areaInfo", tvArea.getText().toString());
+                final int finalAreaId = areaId;
+                final String areaInfo = tvArea.getText().toString();
+                params.set("areaInfo", areaInfo);
 
                 SLog.info("params[%s]", params.toString());
 
@@ -174,16 +196,30 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        String responseStr = response.body().string();
-                        SLog.info("responseStr[%s]", responseStr);
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        try {
+                            String responseStr = response.body().string();
+                            SLog.info("responseStr[%s]", responseStr);
+                            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                        if (ToastUtil.checkError(_mActivity, responseObj)) {
-                            return;
+                            if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                return;
+                            }
+
+                            ToastUtil.show(_mActivity, "地址添加成功");
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("from", AddAddressFragment.class.getName());
+                            int addressId = responseObj.getInt("datas.addressId");
+                            AddrItem addrItem = new AddrItem(addressId, realName, null, finalAreaId, areaInfo,
+                                    detailAddress, "", mobile, 0);
+                            SLog.info("addrItem: %s", addrItem);
+                            bundle.putParcelable("addrItem", addrItem);
+
+                            setFragmentResult(Constant.REQUEST_CODE_ADD_ADDRESS, bundle);
+                            pop();
+                        } catch (Exception e) {
+                            SLog.info("Error!%s", e.getMessage());
                         }
-
-                        ToastUtil.show(_mActivity, "地址添加成功");
-                        pop();
                     }
                 });
             } catch (EasyJSONException e) {
@@ -208,7 +244,6 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
 
             tvArea.setText(text);
         }
-
     }
 
     /**

@@ -98,7 +98,7 @@
                         android:layout_marginLeft="20dp"
                         android:textSize="16sp"
                         android:textColor="@color/tw_black"
-                        android:text="收貨人: 白小白"
+                        android:text=""
                         />
                     <TextView
                         android:id="@+id/tv_mobile"
@@ -107,7 +107,7 @@
                         android:layout_alignParentRight="true"
                         android:textSize="16sp"
                         android:textColor="@color/tw_black"
-                        android:text="13417785707"
+                        android:text=""
                         />
                 </RelativeLayout>
                 <LinearLayout
@@ -129,7 +129,7 @@
                         android:layout_weight="1"
                         android:textColor="@color/tw_dark_grey"
                         android:textSize="13sp"
-                        android:text="澳門藍花前地246號信和廣場96舖澳門藍花前地號信和廣場澳門藍花前地246號信和廣場96舖澳門藍花前地號信和廣場"
+                        android:text=""
                         />
                     <ImageView
                         android:layout_width="wrap_content"
