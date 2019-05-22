@@ -15,6 +15,7 @@ import com.ftofs.twant.adapter.AddrListAdapter;
 import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -75,7 +76,15 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onItemChildClick(final BaseQuickAdapter adapter, View view, final int position) {
                 int id = view.getId();
-                if (id == R.id.img_default_addr_indicator) {
+                if (id == R.id.btn_use_this_addr) {
+                    // 選擇收貨地址，并將地址傳回給上一個Fragment
+                    Bundle bundle = new Bundle();
+                    AddrItem addrItem = addrItemList.get(position);
+                    bundle.putString("from", AddrManageFragment.class.getName());
+                    bundle.putParcelable("addrItem", addrItem);
+                    setFragmentResult(Constant.REQUEST_CODE_SELECT_ADDR, bundle);
+                    pop();
+                } else if (id == R.id.img_default_addr_indicator) {
                     SLog.info("設為默認地址");
 
                     try {

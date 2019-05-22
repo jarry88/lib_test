@@ -28,7 +28,8 @@ public class AddrListAdapter extends BaseQuickAdapter<AddrItem, BaseViewHolder> 
             scaledButton.setIconResource(R.drawable.icon_cart_item_unchecked);
         }
 
-        helper.addOnClickListener(R.id.img_default_addr_indicator)
+        helper.addOnClickListener(R.id.btn_use_this_addr)
+                .addOnClickListener(R.id.img_default_addr_indicator)
                 .addOnClickListener(R.id.btn_edit)
                 .addOnClickListener(R.id.btn_delete);
     }

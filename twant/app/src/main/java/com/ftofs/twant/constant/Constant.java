@@ -62,6 +62,11 @@ public class Constant {
      */
     public static final int REQUEST_CODE_CONFIRM_ORDER = 3;
 
+    /**
+     * 選擇收貨地址
+     */
+    public static final int REQUEST_CODE_SELECT_ADDR = 4;
+
 
     /**
      * 數字定義

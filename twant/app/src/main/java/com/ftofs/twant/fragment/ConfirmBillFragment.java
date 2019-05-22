@@ -18,6 +18,7 @@ import com.ftofs.twant.adapter.ConfirmOrderStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ListPopupItem;
@@ -65,7 +66,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     // 當前配送時間索引
     int shippingTimeIndex = 0;
 
-    int addressId = 0;
+    AddrItem mAddrItem;
     int isExistTrys;
 
     TextView tvPayWay;
@@ -187,7 +188,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             LIST_POPUP_TYPE_SHIPPING_TIME, shippingItemList, shippingTimeIndex, this))
                     .show();
         } else if (id == R.id.btn_commit) {
-            if (addressId == 0) {
+            if (mAddrItem == null) {
                 SLog.info("Error!地址信息無效");
                 ToastUtil.show(_mActivity, "地址信息無效");
                 return;
@@ -201,7 +202,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
             // 收集表單信息
             EasyJSONObject commitBuyData = EasyJSONObject.generate(
-                    "addressId", addressId,
+                    "addressId", mAddrItem.addressId,
                     "paymentTypeCode", "online",
                     "isCart", 1,
                     "isExistTrys", isExistTrys,
@@ -243,7 +244,41 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
-        SLog.info("requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (data == null) {
+            return;
+        }
+        // 從哪個Fragment返回
+        String from = data.getString("from");
+        SLog.info("requestCode[%d], resultCode[%d], from[%s]", requestCode, resultCode, from);
+        if (AddrManageFragment.class.getName().equals(from)) {
+            // 從地址管理Fragment返回
+            AddrItem addrItem = data.getParcelable("addrItem");
+            if (addrItem == null) {
+                return;
+            }
+            SLog.info("addrItem: %s", addrItem);
+            mAddrItem = addrItem;
+            updateAddrView();
+        }
+    }
+
+    /**
+     * 更新地址信息的顯示
+     */
+    private void updateAddrView() {
+        if (mAddrItem == null) {
+            // 用戶沒有收貨地址，顯示【新增收貨地址】按鈕
+            btnAddShippingAddress.setVisibility(View.VISIBLE);
+            btnChangeShippingAddress.setVisibility(View.GONE);
+        } else {
+            btnAddShippingAddress.setVisibility(View.GONE);
+            btnChangeShippingAddress.setVisibility(View.VISIBLE);
+
+            tvReceiverName.setText(getResources().getString(R.string.text_receiver) + ": " + mAddrItem.realName);
+            tvMobile.setText(mAddrItem.mobPhone);
+            tvAddress.setText(mAddrItem.areaInfo + " " + mAddrItem.address);
+        }
     }
 
     private void loadBillData() {
@@ -281,18 +316,10 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                     EasyJSONObject address = responseObj.getObject("datas.address");
                     if (address != null) {
-                        btnAddShippingAddress.setVisibility(View.GONE);
-                        btnChangeShippingAddress.setVisibility(View.VISIBLE);
-                        addressId = address.getInt("addressId");
-
-                        tvReceiverName.setText(getResources().getString(R.string.text_receiver) + ": " + address.getString("realName"));
-                        tvMobile.setText(address.getString("mobPhone"));
-                        tvAddress.setText(address.getString("areaInfo") + " " + address.getString("address"));
-                    } else {
-                        // 用戶沒有收貨地址，顯示【新增收貨地址】按鈕
-                        btnAddShippingAddress.setVisibility(View.VISIBLE);
-                        btnChangeShippingAddress.setVisibility(View.GONE);
+                        mAddrItem = new AddrItem(address);
+                        SLog.info("mAddrItem[%s]", mAddrItem);
                     }
+                    updateAddrView();
 
                     isExistTrys = responseObj.getInt("datas.isExistTrys");
 
@@ -352,6 +379,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     SLog.info("commitStoreList[%s]", commitStoreList.toString());
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });
