@@ -21,9 +21,13 @@ import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.StoreSearchItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.enums.PopupPosition;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,8 +78,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         String keyword = args.getString("keyword");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_goods_filter, this);
         etKeyword = view.findViewById(R.id.et_keyword);
         etKeyword.setText(keyword);
+        EditTextUtil.cursorSeekToEnd(etKeyword);
+
+        if (searchType == SearchType.GOODS) {
+            view.findViewById(R.id.ll_goods_filter).setVisibility(View.VISIBLE);
+        } else if (searchType == SearchType.STORE) {
+            view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
+        }
 
         RecyclerView rvSearchResultList = view.findViewById(R.id.rv_search_result_list);
 
@@ -119,12 +131,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     StoreSearchItem storeSearchItem = storeItemList.get(position);
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(ShopMainFragment.newInstance(storeSearchItem.storeId));
                 }
             });
         } else {
 
         }
-
 
         doSearch(searchType, keyword);
     }
@@ -208,17 +221,24 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                         for (Object object : easyJSONArray) {
                             EasyJSONObject store = (EasyJSONObject) object;
 
+                            int storeId = store.getInt("storeId");
                             String storeAvatarUrl = store.getString("storeAvatarUrl");
                             String storeName = store.getString("storeName");
                             String storeFigureImage = store.getString("storeFigureImage");
+                            float distance = Float.valueOf(store.getString("distance"));
+                            String shopDay = store.getString("shopDay");
+                            int likeCount = store.getInt("likeCount");
+                            int goodsCommonCount = store.getInt("goodsCommonCount");
 
-                            storeItemList.add(new StoreSearchItem(storeAvatarUrl, storeName, storeFigureImage));
+                            storeItemList.add(new StoreSearchItem(storeId, storeAvatarUrl, storeName, storeFigureImage,
+                                    distance, shopDay, likeCount, goodsCommonCount));
                         }
 
                         SLog.info("storeItemList.size[%d]", storeItemList.size());
                         mStoreAdapter.setNewData(storeItemList);
                     } catch (Exception e) {
-
+                        SLog.info("Error!%s", e.getMessage());
+                        e.printStackTrace();
                     }
                 }
             });
@@ -230,7 +250,26 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.btn_back:
+                pop();
+                break;
+            case R.id.btn_goods_filter:
+                showGoodsFilterPopup();
+                break;
+            default:
+                break;
+        }
+    }
 
+
+    private void showGoodsFilterPopup() {
+        new XPopup.Builder(getContext())
+                .popupPosition(PopupPosition.Right)//右边
+                .hasStatusBarShadow(true) //启用状态栏阴影
+                .asCustom(new GoodsFilterDrawerPopupView(_mActivity))
+                .show();
     }
 
     @Override

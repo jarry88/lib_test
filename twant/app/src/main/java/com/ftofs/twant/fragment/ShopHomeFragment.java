@@ -149,11 +149,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         tvPhoneNumber.setText(responseObj.getString("datas.storeInfo.chainPhone"));
                         // 營業時間
                         String businessTimeTemplate = getResources().getString(R.string.business_time_template);
+
+                        String weekDayStart = getStoreBusinessTime(responseObj, "datas.storeInfo.weekDayStart");
+                        String weekDayEnd = getStoreBusinessTime(responseObj, "datas.storeInfo.weekDayEnd");
+                        String restDayStart = getStoreBusinessTime(responseObj, "datas.storeInfo.restDayStart");
+                        String restDayEnd = getStoreBusinessTime(responseObj, "datas.storeInfo.restDayEnd");
+
                         String businessTime = String.format(businessTimeTemplate,
-                                responseObj.getString("datas.storeInfo.weekDayStart").substring(0, 5),
-                                responseObj.getString("datas.storeInfo.weekDayEnd").substring(0, 5),
-                                responseObj.getString("datas.storeInfo.restDayStart").substring(0, 5),
-                                responseObj.getString("datas.storeInfo.restDayEnd").substring(0, 5));
+                                weekDayStart, weekDayEnd, restDayStart, restDayEnd);
                         tvBusinessTime.setText(businessTime);
 
                         // 店鋪地址
@@ -216,6 +219,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         }
 
                     } catch (EasyJSONException e) {
+                        SLog.info("Error!%s", e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -230,6 +234,21 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
 
+    }
+
+    /**
+     * 獲取店鋪的營業時間
+     * @param responseObj
+     * @param path
+     * @return
+     */
+    private String getStoreBusinessTime(EasyJSONObject responseObj, String path) throws EasyJSONException {
+        String timeStr = responseObj.getString(path);
+        if (StringUtil.isEmpty(timeStr)) {
+            return "";
+        } else {
+            return timeStr.substring(0, 5);
+        }
     }
 
     @Override

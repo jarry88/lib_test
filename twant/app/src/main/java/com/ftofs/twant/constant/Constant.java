@@ -70,4 +70,10 @@ public class Constant {
     public final static Integer ONE = 1;
     public final static Integer TWO = 2;
 
+
+    /**
+     * 店鋪距離閾值
+     */
+    public static final float STORE_DISTANCE_THRESHOLD = 0.0000001f;
+
 }

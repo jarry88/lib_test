@@ -72,11 +72,75 @@
     </RelativeLayout>
     <!-- END OF 工具欄 -->
 
+    <!-- 篩選欄 -->
+    <LinearLayout
+        android:id="@+id/ll_filter_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_goods_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                android:text="@string/goods_tab_title_general"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                android:text="@string/goods_tab_title_sale"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                android:text="@string/goods_tab_title_price"
+                />
+            <TextView
+                android:id="@+id/btn_goods_filter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                android:text="@string/text_filter"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_store_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:visibility="gone">
+
+        </LinearLayout>
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_search_result_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintTop_toBottomOf="@id/ll_filter_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">

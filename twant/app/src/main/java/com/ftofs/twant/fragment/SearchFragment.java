@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.Util;
 import com.nex3z.flowlayout.FlowLayout;
@@ -133,6 +134,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 TextView tv = (TextView) v;
                 String keyword = tv.getText().toString();
                 MainFragment mainFragment = MainFragment.getInstance();
+                // 將keyword填充到搜索欄中，并跳轉到搜索結果頁面
+                etKeyword.setText(keyword);
+                EditTextUtil.cursorSeekToEnd(etKeyword);
                 mainFragment.start(SearchResultFragment.newInstance(searchType.name(), keyword));
             }
         });
