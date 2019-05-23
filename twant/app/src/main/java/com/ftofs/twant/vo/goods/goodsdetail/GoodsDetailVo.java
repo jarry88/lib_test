@@ -15,7 +15,7 @@ import com.ftofs.twant.vo.promotion.GiftVo;
 import com.ftofs.twant.vo.store.StoreVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -262,12 +262,12 @@ public class GoodsDetailVo {
      * 促销开始时间
      */
 
-    private Timestamp promotionStartTime;
+    private String promotionStartTime;
     /**
      * 促销结束时间
      */
 
-    private Timestamp promotionEndTime;
+    private String promotionEndTime;
     /**
      * 活动类型
      */
@@ -924,19 +924,19 @@ public class GoodsDetailVo {
         this.promotionId = promotionId;
     }
 
-    public Timestamp getPromotionStartTime() {
+    public String getPromotionStartTime() {
         return promotionStartTime;
     }
 
-    public void setPromotionStartTime(Timestamp promotionStartTime) {
+    public void setPromotionStartTime(String promotionStartTime) {
         this.promotionStartTime = promotionStartTime;
     }
 
-    public Timestamp getPromotionEndTime() {
+    public String getPromotionEndTime() {
         return promotionEndTime;
     }
 
-    public void setPromotionEndTime(Timestamp promotionEndTime) {
+    public void setPromotionEndTime(String promotionEndTime) {
         this.promotionEndTime = promotionEndTime;
     }
 

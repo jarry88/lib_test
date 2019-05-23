@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.store;
 
-import java.sql.Timestamp;
+
 
 public class StoreJoinin {
     /**
@@ -62,7 +62,7 @@ public class StoreJoinin {
     /**
      * 申请提交时间
      */
-    private Timestamp joininSubmitTime;
+    private String joininSubmitTime;
 
     /**
      * 发布海外购商品
@@ -176,11 +176,11 @@ public class StoreJoinin {
         this.payingCertificateExp = payingCertificateExp;
     }
 
-    public Timestamp getJoininSubmitTime() {
+    public String getJoininSubmitTime() {
         return joininSubmitTime;
     }
 
-    public void setJoininSubmitTime(Timestamp joininSubmitTime) {
+    public void setJoininSubmitTime(String joininSubmitTime) {
         this.joininSubmitTime = joininSubmitTime;
     }
 

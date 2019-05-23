@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.chain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class ChainMember implements Serializable,Cloneable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 会员标签ID，例如,1,2,4,6,
@@ -78,11 +78,11 @@ public class ChainMember implements Serializable,Cloneable {
         this.memberId = memberId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

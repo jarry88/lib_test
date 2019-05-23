@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class MemberAccessStat implements Serializable{
     /**
@@ -27,16 +27,16 @@ public class MemberAccessStat implements Serializable{
     /**
      * 最後活動時間
      */
-    private Timestamp activeTime;
+    private String activeTime;
 
     /**
      * 進店時間
      */
-    private Timestamp accessTime;
+    private String accessTime;
 
     public MemberAccessStat(){}
 
-    public MemberAccessStat(int id, String memberName, String ip,int storeId, Timestamp activeTime, Timestamp accessTime) {
+    public MemberAccessStat(int id, String memberName, String ip,int storeId, String activeTime, String accessTime) {
         this.id = id;
         this.memberName = memberName;
         this.ip = ip;
@@ -69,19 +69,19 @@ public class MemberAccessStat implements Serializable{
         this.storeId = storeId;
     }
 
-    public Timestamp getActiveTime() {
+    public String getActiveTime() {
         return activeTime;
     }
 
-    public void setActiveTime(Timestamp activeTime) {
+    public void setActiveTime(String activeTime) {
         this.activeTime = activeTime;
     }
 
-    public Timestamp getAccessTime() {
+    public String getAccessTime() {
         return accessTime;
     }
 
-    public void setAccessTime(Timestamp accessTime) {
+    public void setAccessTime(String accessTime) {
         this.accessTime = accessTime;
     }
 

@@ -1,7 +1,6 @@
 package com.ftofs.twant.domain.activity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 public class Activity implements Serializable {
     private int activityId;
@@ -25,7 +24,7 @@ public class Activity implements Serializable {
     /**
      * 修改日期
      */
-    private Timestamp updateTime ;
+    private String updateTime ;
 
     public int getActivityId() {
         return activityId;
@@ -51,11 +50,11 @@ public class Activity implements Serializable {
         this.activityJson = activityJson;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

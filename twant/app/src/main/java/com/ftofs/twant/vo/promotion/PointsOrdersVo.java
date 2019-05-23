@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.promotion;
 import com.ftofs.twant.domain.member.Member;
 import com.ftofs.twant.domain.promotion.PointsOrders;
 
-import java.sql.Timestamp;
+
 
 /**
  * Copyright: Bizpower多用户商城系统
@@ -36,7 +36,7 @@ public class PointsOrdersVo {
      * 下单时间
      */
 
-    private Timestamp createTime;
+    private String createTime;
     /**
      * 购买数量
      */
@@ -83,11 +83,11 @@ public class PointsOrdersVo {
         this.avatarUrl = avatarUrl;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class StoreCurrencyClear implements Serializable {
 	//主键
@@ -18,15 +18,15 @@ public class StoreCurrencyClear implements Serializable {
 	//状态：1-正常，0-删除
 	private Integer state;
 	//创建时间
-	private Timestamp createTime;
+	private String createTime;
 	//更新时间
-	private Timestamp updateTime;
+	private String updateTime;
 
 	public StoreCurrencyClear() {
 	}
 
 	public StoreCurrencyClear(BigDecimal amount, String description, Integer storeId,
-			 Integer clearStatus, Integer state, Timestamp createTime,Timestamp updateTime) {
+			 Integer clearStatus, Integer state, String createTime,String updateTime) {
 		this.amount = amount;
 		this.description = description;
 		this.storeId = storeId;
@@ -84,19 +84,19 @@ public class StoreCurrencyClear implements Serializable {
 		this.state = state;
 	}
 
-	public Timestamp getCreateTime() {
+	public String getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 
-	public Timestamp getUpdateTime() {
+	public String getUpdateTime() {
 		return this.updateTime;
 	}
 
-	public void setUpdateTime(Timestamp updateTime) {
+	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
 	}
 

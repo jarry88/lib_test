@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.logistics;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
+
 
 public class CustomerOrderEntity {
     private int logisticsId;
@@ -29,7 +29,7 @@ public class CustomerOrderEntity {
     /**
      * 創建時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 寄件人公司名稱
@@ -74,7 +74,7 @@ public class CustomerOrderEntity {
     /**
      * 物流完成時間
      */
-    private Timestamp updated ;
+    private String updated ;
 
     /**
      * 訂單創建時間
@@ -121,11 +121,11 @@ public class CustomerOrderEntity {
         this.logisticsType = logisticsType;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -193,7 +193,7 @@ public class CustomerOrderEntity {
         this.originalOrderNumber = originalOrderNumber;
     }
 
-    public void setUpdated(Timestamp updated) {
+    public void setUpdated(String updated) {
         this.updated = updated;
     }
 

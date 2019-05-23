@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.im;
 
-import java.sql.Timestamp;
+
 
 public class FriendRequest {
     /**
@@ -31,12 +31,12 @@ public class FriendRequest {
     /**
      * 發起申請時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 處理時間
      */
-    private Timestamp updateTime;
+    private String updateTime;
 
     public int getId() {
         return id;
@@ -78,19 +78,19 @@ public class FriendRequest {
         this.state = state;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 }

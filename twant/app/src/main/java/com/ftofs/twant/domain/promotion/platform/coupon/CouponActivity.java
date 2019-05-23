@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 
 public class CouponActivity implements Serializable,Cloneable {
@@ -56,7 +56,7 @@ public class CouponActivity implements Serializable,Cloneable {
     /**
      * 活动开始时间（即开始领取券时间，为空表示立即开始）
      */
-    private Timestamp activityStartTime = null;
+    private String activityStartTime = null;
 
 
     //以下为平台券使用规则
@@ -68,12 +68,12 @@ public class CouponActivity implements Serializable,Cloneable {
     /**
      * 券使用有效期开始时间
      */
-    private Timestamp useStartTime = null;
+    private String useStartTime = null;
 
     /**
      * 券使用有效期结束时间
      */
-    private Timestamp useEndTime = null;
+    private String useEndTime = null;
 
     /**
      * 从领取时间开始券有效天数，券分为设置有效开始时间和结束时间或者设置有效天数两种（活动赠送类型）
@@ -121,12 +121,12 @@ public class CouponActivity implements Serializable,Cloneable {
     /**
      * 活动创建时间
      */
-    private Timestamp addTime = null;
+    private String addTime = null;
 
     /**
      * 活动最后更新时间
      */
-    private Timestamp updateTime = null;
+    private String updateTime = null;
 
     /**
      * 最后更新的管理员编号
@@ -286,11 +286,11 @@ public class CouponActivity implements Serializable,Cloneable {
         this.expendPoints = expendPoints;
     }
 
-    public Timestamp getActivityStartTime() {
+    public String getActivityStartTime() {
         return activityStartTime;
     }
 
-    public void setActivityStartTime(Timestamp activityStartTime) {
+    public void setActivityStartTime(String activityStartTime) {
         this.activityStartTime = activityStartTime;
     }
 
@@ -302,19 +302,19 @@ public class CouponActivity implements Serializable,Cloneable {
         this.limitAmount = limitAmount;
     }
 
-    public Timestamp getUseStartTime() {
+    public String getUseStartTime() {
         return useStartTime;
     }
 
-    public void setUseStartTime(Timestamp useStartTime) {
+    public void setUseStartTime(String useStartTime) {
         this.useStartTime = useStartTime;
     }
 
-    public Timestamp getUseEndTime() {
+    public String getUseEndTime() {
         return useEndTime;
     }
 
-    public void setUseEndTime(Timestamp useEndTime) {
+    public void setUseEndTime(String useEndTime) {
         this.useEndTime = useEndTime;
     }
 
@@ -382,19 +382,19 @@ public class CouponActivity implements Serializable,Cloneable {
         this.haveCreated = haveCreated;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

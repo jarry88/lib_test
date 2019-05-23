@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class MemberToken implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class MemberToken implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     public int getTokenId() {
         return tokenId;
@@ -48,11 +48,11 @@ public class MemberToken implements Serializable {
         this.token = token;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

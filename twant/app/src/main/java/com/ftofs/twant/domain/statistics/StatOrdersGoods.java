@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.statistics;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class StatOrdersGoods implements Serializable {
     /**
@@ -119,12 +119,12 @@ public class StatOrdersGoods implements Serializable {
     /**
      * 下单时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 下单时间 具体到天
      */
-    private Timestamp createTimeDate;
+    private String createTimeDate;
 
     /**
      * 下单时间 小时
@@ -317,19 +317,19 @@ public class StatOrdersGoods implements Serializable {
         this.bundlingId = bundlingId;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getCreateTimeDate() {
+    public String getCreateTimeDate() {
         return createTimeDate;
     }
 
-    public void setCreateTimeDate(Timestamp createTimeDate) {
+    public void setCreateTimeDate(String createTimeDate) {
         this.createTimeDate = createTimeDate;
     }
 

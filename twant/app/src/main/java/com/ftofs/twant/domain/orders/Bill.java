@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.orders;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 
 public class Bill implements Serializable {
@@ -19,12 +19,12 @@ public class Bill implements Serializable {
     /**
      * (结算周期)开始时间
      */
-    private Timestamp startTime;
+    private String startTime;
 
     /**
      * (结算周期)截止时间
      */
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 订单金额
@@ -59,7 +59,7 @@ public class Bill implements Serializable {
     /**
      * 出账时间(生成结算单的时间)
      */
-    private Timestamp createTime = new Timestamp(System.currentTimeMillis());
+    private String createTime = "";
 
     /**
      * 账单状态
@@ -70,7 +70,7 @@ public class Bill implements Serializable {
     /**
      * (平台给商家)付款日期
      */
-    private Timestamp paymentTime;
+    private String paymentTime;
 
     /**
      * (平台给商家)付款备注
@@ -112,14 +112,6 @@ public class Bill implements Serializable {
      */
     private BigDecimal distributionAmount = new BigDecimal(0);
 
-    public BigDecimal getDistributionAmount() {
-        return distributionAmount;
-    }
-
-    public void setDistributionAmount(BigDecimal distributionAmount) {
-        this.distributionAmount = distributionAmount;
-    }
-
     public int getBillId() {
         return billId;
     }
@@ -136,19 +128,19 @@ public class Bill implements Serializable {
         this.billSn = billSn;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -200,11 +192,11 @@ public class Bill implements Serializable {
         this.billAmount = billAmount;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -216,11 +208,11 @@ public class Bill implements Serializable {
         this.billState = billState;
     }
 
-    public Timestamp getPaymentTime() {
+    public String getPaymentTime() {
         return paymentTime;
     }
 
-    public void setPaymentTime(Timestamp paymentTime) {
+    public void setPaymentTime(String paymentTime) {
         this.paymentTime = paymentTime;
     }
 
@@ -272,45 +264,20 @@ public class Bill implements Serializable {
         this.refundCouponAmount = refundCouponAmount;
     }
 
-    /**
-     * 自定义函数，返回结算状态标志
-     * @return
-     */
-    public int getBillStateNew() {
-        return billState;
-    }
-    public int getBillStateConfirm() {
-        return billState;
-    }
-    public int getBillStateAccess() {
-        return billState;
-    }
-    public int getBillStatePay() {
-        return billState;
-    }
-
-    public String getStartDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(startTime);
-    }
-
-    public String getEndDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(endTime);
-    }
-
-    public String getCreateDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(createTime);
-    }
-
-    public String getBillStateName() {
-        return "";
-    }
-
     public BigDecimal getBookAmount() {
         return bookAmount;
     }
 
     public void setBookAmount(BigDecimal bookAmount) {
         this.bookAmount = bookAmount;
+    }
+
+    public BigDecimal getDistributionAmount() {
+        return distributionAmount;
+    }
+
+    public void setDistributionAmount(BigDecimal distributionAmount) {
+        this.distributionAmount = distributionAmount;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class StoreCost implements Serializable {
     /**
@@ -48,7 +48,7 @@ public class StoreCost implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     public int getCostId() {
         return costId;
@@ -114,11 +114,11 @@ public class StoreCost implements Serializable {
         this.costState = costState;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class CouponGifts implements Serializable,Cloneable {
     /**
@@ -45,12 +45,12 @@ public class CouponGifts implements Serializable,Cloneable {
     /**
      * 礼包活动开始时间（即开始领取礼包时间，为空表示立即开始）
      */
-    private Timestamp giftsStartTime = null;
+    private String giftsStartTime = null;
 
     /**
      * 礼包活动结束时间（即结束领取礼包时间，为空表示长期有效）
      */
-    private Timestamp giftsEndTime = null;
+    private String giftsEndTime = null;
 
 
     //领取礼包页面设置
@@ -74,12 +74,12 @@ public class CouponGifts implements Serializable,Cloneable {
     /**
      * 礼包创建时间
      */
-    private Timestamp addTime = null;
+    private String addTime = null;
 
     /**
      * 礼包最后更新时间
      */
-    private Timestamp updateTime = null;
+    private String updateTime = null;
 
     /**
      * 最后更新的管理员编号
@@ -210,19 +210,19 @@ public class CouponGifts implements Serializable,Cloneable {
         this.totalNum = totalNum;
     }
 
-    public Timestamp getGiftsStartTime() {
+    public String getGiftsStartTime() {
         return giftsStartTime;
     }
 
-    public void setGiftsStartTime(Timestamp giftsStartTime) {
+    public void setGiftsStartTime(String giftsStartTime) {
         this.giftsStartTime = giftsStartTime;
     }
 
-    public Timestamp getGiftsEndTime() {
+    public String getGiftsEndTime() {
         return giftsEndTime;
     }
 
-    public void setGiftsEndTime(Timestamp giftsEndTime) {
+    public void setGiftsEndTime(String giftsEndTime) {
         this.giftsEndTime = giftsEndTime;
     }
 
@@ -250,19 +250,19 @@ public class CouponGifts implements Serializable,Cloneable {
         this.bannerImgApp = bannerImgApp;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

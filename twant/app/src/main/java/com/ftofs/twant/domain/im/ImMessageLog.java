@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.im;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class ImMessageLog implements Serializable {
     /**
@@ -42,7 +42,7 @@ public class ImMessageLog implements Serializable {
     /**
      * 發送時間
      */
-    private Timestamp sendTime;
+    private String sendTime;
 
     public int getId() {
         return id;
@@ -100,11 +100,11 @@ public class ImMessageLog implements Serializable {
         this.messageType = messageType;
     }
 
-    public Timestamp getSendTime() {
+    public String getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Timestamp sendTime) {
+    public void setSendTime(String sendTime) {
         this.sendTime = sendTime;
     }
 }

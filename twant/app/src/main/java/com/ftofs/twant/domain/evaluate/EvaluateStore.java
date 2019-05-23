@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.evaluate;
 
-import java.sql.Timestamp;
+
 
 public class EvaluateStore {
     /**
@@ -46,7 +46,7 @@ public class EvaluateStore {
     /**
      * 评价时间
      */
-    private Timestamp evaluateTime;
+    private String evaluateTime;
 
     /**
      * 描述相符评分
@@ -111,11 +111,11 @@ public class EvaluateStore {
         this.storeName = storeName;
     }
 
-    public Timestamp getEvaluateTime() {
+    public String getEvaluateTime() {
         return evaluateTime;
     }
 
-    public void setEvaluateTime(Timestamp evaluateTime) {
+    public void setEvaluateTime(String evaluateTime) {
         this.evaluateTime = evaluateTime;
     }
 

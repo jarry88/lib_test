@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.api;
 
-import java.sql.Timestamp;
-
 public class ApiCaptchaCode {
     /**
      * 自增编号
@@ -21,7 +19,7 @@ public class ApiCaptchaCode {
     /**
      * 创建时间
      */
-    private Timestamp createTime = new Timestamp(0);
+    private String createTime = "";
 
     /**
      * 客户端类型
@@ -52,11 +50,11 @@ public class ApiCaptchaCode {
         this.codeVal = codeVal;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

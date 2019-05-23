@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.comment;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
+
 
 public class WantComment {
     /**
@@ -57,7 +57,7 @@ public class WantComment {
     /**
      * 評論時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 0-禁用,1-啟用
@@ -186,11 +186,11 @@ public class WantComment {
         this.createBy = createBy;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

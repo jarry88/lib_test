@@ -4,7 +4,7 @@ import com.ftofs.twant.domain.advertorial.AdvertorialArticle;
 import com.ftofs.twant.domain.advertorial.AdvertorialAuthor;
 import com.ftofs.twant.vo.goods.ArticleGoodsCommonVo;
 
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,13 +115,13 @@ public class AdvertorialArticleVo {
      * 添加时间
      */
 
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      *  处理时间
      */
 
-    private Timestamp handleTime;
+    private String handleTime;
 
     /**
      * 浏览次数
@@ -224,7 +224,7 @@ public class AdvertorialArticleVo {
      * 最后评论的时间
      */
 
-    private Timestamp lastCommentTime;
+    private String lastCommentTime;
     /**
      * 推文来源  推文来源  商家2、雇员3   会员1
      * Modify By yangjian 2018/12/22 14:26
@@ -407,19 +407,19 @@ public class AdvertorialArticleVo {
         this.remark = remark;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getHandleTime() {
+    public String getHandleTime() {
         return handleTime;
     }
 
-    public void setHandleTime(Timestamp handleTime) {
+    public void setHandleTime(String handleTime) {
         this.handleTime = handleTime;
     }
 
@@ -576,11 +576,11 @@ public class AdvertorialArticleVo {
         this.commentAmount = commentAmount;
     }
 
-    public Timestamp getLastCommentTime() {
+    public String getLastCommentTime() {
         return lastCommentTime;
     }
 
-    public void setLastCommentTime(Timestamp lastCommentTime) {
+    public void setLastCommentTime(String lastCommentTime) {
         this.lastCommentTime = lastCommentTime;
     }
 

@@ -4,7 +4,7 @@ import com.ftofs.twant.domain.advertorial.AdvertorialArticleComment;
 import com.ftofs.twant.domain.member.Member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class AdvertorialArticleCommentVo implements Serializable {
      */
 
 
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 状态
@@ -181,11 +181,11 @@ public class AdvertorialArticleCommentVo implements Serializable {
         this.content = content;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

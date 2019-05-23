@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain;
 
-import java.sql.Timestamp;
+
 
 public class Article {
     /**
@@ -31,7 +31,7 @@ public class Article {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 是否允许删除
@@ -86,11 +86,11 @@ public class Article {
         this.content = content;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

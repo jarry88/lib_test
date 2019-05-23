@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.activity;
 
-import java.sql.Timestamp;
-
 public class ActivityAcceptPrize {
     private int acceptPrizeId;
     /**
@@ -75,7 +73,7 @@ public class ActivityAcceptPrize {
     /**
      * 获奖时间
      */
-    private Timestamp giveOutTime;
+    private String giveOutTime;
 
     /**
      * 奖品类型
@@ -100,7 +98,7 @@ public class ActivityAcceptPrize {
     /**
      * 获奖时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      *  快递公司名称
@@ -227,11 +225,11 @@ public class ActivityAcceptPrize {
     }
 
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -315,11 +313,11 @@ public class ActivityAcceptPrize {
         this.shipSn = shipSn;
     }
 
-    public Timestamp getGiveOutTime() {
+    public String getGiveOutTime() {
         return giveOutTime;
     }
 
-    public void setGiveOutTime(Timestamp giveOutTime) {
+    public void setGiveOutTime(String giveOutTime) {
         this.giveOutTime = giveOutTime;
     }
 
@@ -348,11 +346,11 @@ public class ActivityAcceptPrize {
     }
 
     public String getAcceptStateText() {
-        return acceptState == 1 ? "已认领" : "未认领" ;
+        return acceptStateText;
     }
 
     public String getGiveOutStateText() {
-        return giveOutState == 1 ? "已发放" :"未发放" ;
+        return giveOutStateText;
     }
 
     @Override

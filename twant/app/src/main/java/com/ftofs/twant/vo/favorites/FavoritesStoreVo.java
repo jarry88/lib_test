@@ -6,7 +6,7 @@ import com.ftofs.twant.domain.member.FavoritesStore;
 import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.store.StoreServiceStaffVo;
 
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class FavoritesStoreVo {
      * 關注时间
      */
 
-    private Timestamp addTime = new Timestamp(0);
+    private String addTime = "";
     /**
      * 店铺详情
      */
@@ -166,11 +166,11 @@ public class FavoritesStoreVo {
         this.storeId = storeId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

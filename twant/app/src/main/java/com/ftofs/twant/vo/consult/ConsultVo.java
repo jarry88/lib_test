@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.consult;
 import com.ftofs.twant.domain.goods.GoodsCommon;
 import com.ftofs.twant.domain.member.Consult;
 
-import java.sql.Timestamp;
+
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -56,7 +56,7 @@ public class ConsultVo {
      * 添加时间
      */
 
-    private Timestamp addTime = new Timestamp(0);
+    private String addTime = "";
     /**
      * 卖家是否已回复
      * 0未回复 1已回复
@@ -70,7 +70,7 @@ public class ConsultVo {
      * 回复时间
      */
 
-    private Timestamp replyTime = new Timestamp(0);
+    private String replyTime = "";
     /**
      * 匿名状态
      */
@@ -176,11 +176,11 @@ public class ConsultVo {
         this.consultContent = consultContent;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -200,11 +200,11 @@ public class ConsultVo {
         this.consultReply = consultReply;
     }
 
-    public Timestamp getReplyTime() {
+    public String getReplyTime() {
         return replyTime;
     }
 
-    public void setReplyTime(Timestamp replyTime) {
+    public void setReplyTime(String replyTime) {
         this.replyTime = replyTime;
     }
 

@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class Distributor implements Serializable {
     /**
@@ -85,12 +85,12 @@ public class Distributor implements Serializable {
     /**
      * 入住时间
      */
-    private Timestamp joininTime;
+    private String joininTime;
 
     /**
      * 最后登录时间
      */
-    private Timestamp lastLoginTime;
+    private String lastLoginTime;
 
     /**
      * 分销单数
@@ -231,19 +231,19 @@ public class Distributor implements Serializable {
         this.state = state;
     }
 
-    public Timestamp getJoininTime() {
+    public String getJoininTime() {
         return joininTime;
     }
 
-    public void setJoininTime(Timestamp joininTime) {
+    public void setJoininTime(String joininTime) {
         this.joininTime = joininTime;
     }
 
-    public Timestamp getLastLoginTime() {
+    public String getLastLoginTime() {
         return lastLoginTime;
     }
 
-    public void setLastLoginTime(Timestamp lastLoginTime) {
+    public void setLastLoginTime(String lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 

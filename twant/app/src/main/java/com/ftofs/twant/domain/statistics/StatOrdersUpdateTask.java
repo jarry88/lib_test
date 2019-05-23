@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.statistics;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class StatOrdersUpdateTask implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class StatOrdersUpdateTask implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 是否已经执行完成的状态 0未完成 1已完成 2执行失败(StatOrdersUpdateTaskState)
@@ -53,11 +53,11 @@ public class StatOrdersUpdateTask implements Serializable {
         this.taskType = taskType;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

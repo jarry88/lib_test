@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.wantpost;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Timestamp;
+
 
 public class WantPost {
     /**
@@ -48,7 +48,7 @@ public class WantPost {
     /**
      * 創建時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 創建人
@@ -68,7 +68,7 @@ public class WantPost {
     /**
      * 有效期
      */
-    private Timestamp expiresDate;
+    private String expiresDate;
 
     /**
      * 預算價格
@@ -181,11 +181,11 @@ public class WantPost {
         this.keyWord = keyWord;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -205,11 +205,11 @@ public class WantPost {
         this.isPublish = isPublish;
     }
 
-    public Timestamp getExpiresDate() {
+    public String getExpiresDate() {
         return expiresDate;
     }
 
-    public void setExpiresDate(Timestamp expiresDate) {
+    public void setExpiresDate(String expiresDate) {
         this.expiresDate = expiresDate;
     }
 

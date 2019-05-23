@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class DistributorFavorites implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class DistributorFavorites implements Serializable {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 是否是默认文件夹
@@ -53,11 +53,11 @@ public class DistributorFavorites implements Serializable {
         this.distributorFavoritesName = distributorFavoritesName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.contract;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class ContractCostlog implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
@@ -49,7 +49,7 @@ public class ContractCostlog implements java.io.Serializable {
 	/**
 	 * 添加时间
 	 */
-	private Timestamp clogAddtime;
+	private String clogAddtime;
 	
 	/**
 	 * 描述
@@ -120,11 +120,11 @@ public class ContractCostlog implements java.io.Serializable {
 		this.clogPrice = clogPrice;
 	}
 
-	public Timestamp getClogAddtime() {
+	public String getClogAddtime() {
 		return clogAddtime;
 	}
 
-	public void setClogAddtime(Timestamp clogAddtime) {
+	public void setClogAddtime(String clogAddtime) {
 		this.clogAddtime = clogAddtime;
 	}
 

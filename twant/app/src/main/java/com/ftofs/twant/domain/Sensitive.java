@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class Sensitive implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class Sensitive implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     public int getSensitiveId() {
         return sensitiveId;
@@ -48,11 +48,11 @@ public class Sensitive implements Serializable {
         this.isUse = isUse;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

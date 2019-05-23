@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class Exchange {
     /**
@@ -37,12 +37,12 @@ public class Exchange {
     /**
      * 更新時間
      */
-    private Timestamp modifyTime;
+    private String modifyTime;
 
     public Exchange() {
     }
 
-    public Exchange(String currencyOrigin, String currencyOriginDesc, String currencyTarget, String currencyTargetDesc, BigDecimal exchangeRate, Timestamp modifyTime) {
+    public Exchange(String currencyOrigin, String currencyOriginDesc, String currencyTarget, String currencyTargetDesc, BigDecimal exchangeRate, String modifyTime) {
         this.currencyOrigin = currencyOrigin;
         this.currencyOriginDesc = currencyOriginDesc;
         this.currencyTarget = currencyTarget;
@@ -51,11 +51,11 @@ public class Exchange {
         this.modifyTime = modifyTime;
     }
 
-    public Timestamp getModifyTime() {
+    public String getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 

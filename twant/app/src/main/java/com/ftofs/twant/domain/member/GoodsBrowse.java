@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class GoodsBrowse implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class GoodsBrowse implements Serializable {
     /**
      * 浏览时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 商品分类ID
@@ -68,11 +68,11 @@ public class GoodsBrowse implements Serializable {
         this.memberId = memberId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

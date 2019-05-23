@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class PredepositCash implements Serializable {
     /**
@@ -43,12 +43,12 @@ public class PredepositCash implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 付款时间
      */
-    private Timestamp payTime;
+    private String payTime;
 
     /**
      * 状态（PredepositCashState状态 0未处理 1提现成功  2提现失败）
@@ -131,19 +131,19 @@ public class PredepositCash implements Serializable {
         this.receiveUser = receiveUser;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getPayTime() {
+    public String getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Timestamp payTime) {
+    public void setPayTime(String payTime) {
         this.payTime = payTime;
     }
 

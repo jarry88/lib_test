@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.advertorial;
 import java.io.Serializable;
 
 public class AdvertorialArticleLike implements Serializable {
-
     /**
      * id
      */

@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.refund;
 import com.ftofs.twant.domain.refund.RefundDetail;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
  * @license    http://www.shopnc.net
@@ -73,13 +73,13 @@ public class RefundDetailVo {
      * 添加时间
      */
 
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 在线退款完成时间,默认为0
      */
 
-    private Timestamp payTime;
+    private String payTime;
 
     /**
      * 支付名称
@@ -179,19 +179,19 @@ public class RefundDetailVo {
         this.refundState = refundState;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getPayTime() {
+    public String getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Timestamp payTime) {
+    public void setPayTime(String payTime) {
         this.payTime = payTime;
     }
 

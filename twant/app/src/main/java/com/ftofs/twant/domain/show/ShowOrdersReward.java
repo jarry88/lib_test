@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.show;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class ShowOrdersReward implements Serializable {
     /**
@@ -28,7 +28,7 @@ public class ShowOrdersReward implements Serializable {
     /**
      * 支付时间
      */
-    private Timestamp payTime;
+    private String payTime;
 
     /**
      * 支付成功标识
@@ -109,11 +109,11 @@ public class ShowOrdersReward implements Serializable {
         this.payCode = payCode;
     }
 
-    public Timestamp getPayTime() {
+    public String getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Timestamp payTime) {
+    public void setPayTime(String payTime) {
         this.payTime = payTime;
     }
 

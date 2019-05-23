@@ -4,7 +4,7 @@ import com.ftofs.twant.domain.im.ImGroupDetail;
 import com.ftofs.twant.domain.im.ImMemberStatus;
 import com.ftofs.twant.vo.store.StoreVo;
 
-import java.sql.Timestamp;
+
 import java.util.List;
 
 /**
@@ -65,7 +65,7 @@ public class ImRecentContactsVo {
      * 最後發送時間
      */
 
-    private Timestamp sendTime;
+    private String sendTime;
     /**
      * 指定時間段或者指定條數的消息記錄
      */
@@ -136,11 +136,11 @@ public class ImRecentContactsVo {
         this.messageContent = messageContent;
     }
 
-    public Timestamp getSendTime() {
+    public String getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Timestamp sendTime) {
+    public void setSendTime(String sendTime) {
         this.sendTime = sendTime;
     }
 

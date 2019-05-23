@@ -4,7 +4,7 @@ import com.ftofs.twant.vo.promotion.GiftVo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +32,12 @@ public class Conform implements Serializable {
     /**
      * 活动开始时间
      */
-    private Timestamp startTime;
+    private String startTime;
 
     /**
      * 活动结束时间
      */
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 活动状态
@@ -146,19 +146,19 @@ public class Conform implements Serializable {
         this.conformTileFinal = conformTileFinal;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

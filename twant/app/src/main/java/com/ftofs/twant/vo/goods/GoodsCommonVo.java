@@ -8,7 +8,7 @@ import com.ftofs.twant.vo.store.StoreVo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Timestamp;
+
 
 public class GoodsCommonVo implements Serializable{
 	private Integer commonId;
@@ -45,7 +45,7 @@ public class GoodsCommonVo implements Serializable{
     /**
      * 发布时间
      */
-	private Timestamp updateTime = new Timestamp(0);
+	private String updateTime = "";
 
     /**
      * 商品一級分類
@@ -189,11 +189,11 @@ public class GoodsCommonVo implements Serializable{
         this.goodsVideo = goodsVideo;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

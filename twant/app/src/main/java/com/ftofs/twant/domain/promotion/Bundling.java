@@ -3,7 +3,7 @@ package com.ftofs.twant.domain.promotion;
 import com.ftofs.twant.domain.goods.GoodsCommon;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.util.List;
 
 public class Bundling implements Serializable {
@@ -35,12 +35,12 @@ public class Bundling implements Serializable {
     /**
      * 开始时间
      */
-    private Timestamp startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 店铺编号
@@ -97,19 +97,19 @@ public class Bundling implements Serializable {
         this.bundlingExplain = bundlingExplain;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

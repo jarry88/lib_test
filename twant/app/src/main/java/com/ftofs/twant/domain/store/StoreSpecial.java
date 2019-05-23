@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.store;
 
-import java.sql.Timestamp;
+
 
 public class StoreSpecial {
     /**
@@ -43,7 +43,7 @@ public class StoreSpecial {
     /**
      * 更新时间
      */
-    private Timestamp updateTime;
+    private String updateTime;
 
     /**
      * 店铺编号
@@ -111,11 +111,11 @@ public class StoreSpecial {
         this.specialState = specialState;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

@@ -4,7 +4,7 @@ import com.ftofs.twant.domain.goods.GoodsImage;
 import com.ftofs.twant.vo.goods.BatchNumPriceVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -210,11 +210,11 @@ public class SearchGoodsVo {
     /**
      * 促销开始时间
      */
-    private Timestamp promotionStartTime;
+    private String promotionStartTime;
     /**
      * 促销结束时间
      */
-    private Timestamp promotionEndTime;
+    private String promotionEndTime;
     /**
      * 活动状态
      */
@@ -365,17 +365,17 @@ public class SearchGoodsVo {
     private BigDecimal extendPrice9 = BigDecimal.ZERO;
 
     //Modify By liusf 2019/1/2 14:58 商品創建時間
-    private Timestamp extendTime0;
+    private String extendTime0;
 
-    private Timestamp extendTime1;
-    private Timestamp extendTime2;
-    private Timestamp extendTime3;
-    private Timestamp extendTime4;
-    private Timestamp extendTime5;
-    private Timestamp extendTime6;
-    private Timestamp extendTime7;
-    private Timestamp extendTime8;
-    private Timestamp extendTime9;
+    private String extendTime1;
+    private String extendTime2;
+    private String extendTime3;
+    private String extendTime4;
+    private String extendTime5;
+    private String extendTime6;
+    private String extendTime7;
+    private String extendTime8;
+    private String extendTime9;
 
     public SearchGoodsVo() {
     }
@@ -724,19 +724,19 @@ public class SearchGoodsVo {
         this.promotionId = promotionId;
     }
 
-    public Timestamp getPromotionStartTime() {
+    public String getPromotionStartTime() {
         return promotionStartTime;
     }
 
-    public void setPromotionStartTime(Timestamp promotionStartTime) {
+    public void setPromotionStartTime(String promotionStartTime) {
         this.promotionStartTime = promotionStartTime;
     }
 
-    public Timestamp getPromotionEndTime() {
+    public String getPromotionEndTime() {
         return promotionEndTime;
     }
 
-    public void setPromotionEndTime(Timestamp promotionEndTime) {
+    public void setPromotionEndTime(String promotionEndTime) {
         this.promotionEndTime = promotionEndTime;
     }
 
@@ -1204,83 +1204,83 @@ public class SearchGoodsVo {
         this.extendPrice9 = extendPrice9;
     }
 
-    public Timestamp getExtendTime0() {
+    public String getExtendTime0() {
         return extendTime0;
     }
 
-    public void setExtendTime0(Timestamp extendTime0) {
+    public void setExtendTime0(String extendTime0) {
         this.extendTime0 = extendTime0;
     }
 
-    public Timestamp getExtendTime1() {
+    public String getExtendTime1() {
         return extendTime1;
     }
 
-    public void setExtendTime1(Timestamp extendTime1) {
+    public void setExtendTime1(String extendTime1) {
         this.extendTime1 = extendTime1;
     }
 
-    public Timestamp getExtendTime2() {
+    public String getExtendTime2() {
         return extendTime2;
     }
 
-    public void setExtendTime2(Timestamp extendTime2) {
+    public void setExtendTime2(String extendTime2) {
         this.extendTime2 = extendTime2;
     }
 
-    public Timestamp getExtendTime3() {
+    public String getExtendTime3() {
         return extendTime3;
     }
 
-    public void setExtendTime3(Timestamp extendTime3) {
+    public void setExtendTime3(String extendTime3) {
         this.extendTime3 = extendTime3;
     }
 
-    public Timestamp getExtendTime4() {
+    public String getExtendTime4() {
         return extendTime4;
     }
 
-    public void setExtendTime4(Timestamp extendTime4) {
+    public void setExtendTime4(String extendTime4) {
         this.extendTime4 = extendTime4;
     }
 
-    public Timestamp getExtendTime5() {
+    public String getExtendTime5() {
         return extendTime5;
     }
 
-    public void setExtendTime5(Timestamp extendTime5) {
+    public void setExtendTime5(String extendTime5) {
         this.extendTime5 = extendTime5;
     }
 
-    public Timestamp getExtendTime6() {
+    public String getExtendTime6() {
         return extendTime6;
     }
 
-    public void setExtendTime6(Timestamp extendTime6) {
+    public void setExtendTime6(String extendTime6) {
         this.extendTime6 = extendTime6;
     }
 
-    public Timestamp getExtendTime7() {
+    public String getExtendTime7() {
         return extendTime7;
     }
 
-    public void setExtendTime7(Timestamp extendTime7) {
+    public void setExtendTime7(String extendTime7) {
         this.extendTime7 = extendTime7;
     }
 
-    public Timestamp getExtendTime8() {
+    public String getExtendTime8() {
         return extendTime8;
     }
 
-    public void setExtendTime8(Timestamp extendTime8) {
+    public void setExtendTime8(String extendTime8) {
         this.extendTime8 = extendTime8;
     }
 
-    public Timestamp getExtendTime9() {
+    public String getExtendTime9() {
         return extendTime9;
     }
 
-    public void setExtendTime9(Timestamp extendTime9) {
+    public void setExtendTime9(String extendTime9) {
         this.extendTime9 = extendTime9;
     }
 

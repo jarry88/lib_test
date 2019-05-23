@@ -1,6 +1,6 @@
 package com.ftofs.twant.vo.im;
 
-import java.sql.Timestamp;
+
 
 /**
  * @author liusf
@@ -46,7 +46,7 @@ public class SearchImMessageLogVo {
     /**
      * 發送時間
      */
-    private Timestamp sendTime;
+    private String sendTime;
 
     public int getId() {
         return id;
@@ -104,11 +104,11 @@ public class SearchImMessageLogVo {
         this.messageType = messageType;
     }
 
-    public Timestamp getSendTime() {
+    public String getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Timestamp sendTime) {
+    public void setSendTime(String sendTime) {
         this.sendTime = sendTime;
     }
 }

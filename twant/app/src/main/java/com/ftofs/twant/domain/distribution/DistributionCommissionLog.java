@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class DistributionCommissionLog implements Serializable {
     /**
@@ -53,7 +53,7 @@ public class DistributionCommissionLog implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 描述
@@ -129,11 +129,11 @@ public class DistributionCommissionLog implements Serializable {
         this.freezeAmount = freezeAmount;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

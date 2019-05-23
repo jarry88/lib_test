@@ -1,7 +1,6 @@
 package com.ftofs.twant.domain.advertorial;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 public class AdvertorialArticleComment implements Serializable {
     /**
@@ -42,7 +41,7 @@ public class AdvertorialArticleComment implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 状态
@@ -106,11 +105,11 @@ public class AdvertorialArticleComment implements Serializable {
         this.content = content;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

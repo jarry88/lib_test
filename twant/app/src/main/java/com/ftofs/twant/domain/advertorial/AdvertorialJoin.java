@@ -1,7 +1,6 @@
 package com.ftofs.twant.domain.advertorial;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 public class AdvertorialJoin implements Serializable {
     /**
@@ -57,12 +56,12 @@ public class AdvertorialJoin implements Serializable {
     /**
      * 申请提交时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 处理时间
      */
-    private Timestamp handleTime;
+    private String handleTime;
 
     /**
      *  身份证正面照 图片地址
@@ -156,19 +155,19 @@ public class AdvertorialJoin implements Serializable {
         this.message = message;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getHandleTime() {
+    public String getHandleTime() {
         return handleTime;
     }
 
-    public void setHandleTime(Timestamp handleTime) {
+    public void setHandleTime(String handleTime) {
         this.handleTime = handleTime;
     }
 

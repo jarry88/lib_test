@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.chain;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class ChainGoods {
     /**
@@ -47,7 +47,7 @@ public class ChainGoods {
     /**
      * 商品更新时间（只有在门店店员更新门店商品时需要更新时间。）
      */
-    private Timestamp updateTime;
+    private String updateTime;
 
     public int getChainGoodsId() {
         return chainGoodsId;
@@ -113,11 +113,11 @@ public class ChainGoods {
         this.chainName = chainName;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

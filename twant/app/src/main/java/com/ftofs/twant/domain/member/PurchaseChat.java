@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.member;
 
-import java.sql.Timestamp;
+
 
 public class PurchaseChat {
 	/**
@@ -31,7 +31,7 @@ public class PurchaseChat {
 	/**
 	 * 创建时间
 	 */
-	private Timestamp createTime;
+	private String createTime;
 
 	/**
 	 * 买家采购计划ID
@@ -74,10 +74,10 @@ public class PurchaseChat {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public Timestamp getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 	

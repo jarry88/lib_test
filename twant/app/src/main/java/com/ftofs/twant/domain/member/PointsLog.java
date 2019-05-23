@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class PointsLog implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class PointsLog implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 操作描述
@@ -73,11 +73,11 @@ public class PointsLog implements Serializable {
         this.points = points;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

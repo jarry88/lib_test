@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class PurchaseQuotedprice {
 	/**
@@ -47,7 +47,7 @@ public class PurchaseQuotedprice {
 	/**
 	 * 答复日期
 	 */
-	private Timestamp replyTime;
+	private String replyTime;
 
 	/**
 	 * 公司名称
@@ -67,7 +67,7 @@ public class PurchaseQuotedprice {
 	/**
 	 * 创建时间
 	 */
-	private Timestamp createTime;
+	private String createTime;
 	
 	/**
 	 * 状态 0关闭 1开启
@@ -180,16 +180,16 @@ public class PurchaseQuotedprice {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public Timestamp getReplyTime() {
+	public String getReplyTime() {
 		return replyTime;
 	}
-	public void setReplyTime(Timestamp replyTime) {
+	public void setReplyTime(String replyTime) {
 		this.replyTime = replyTime;
 	}
-	public Timestamp getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 }

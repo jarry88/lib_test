@@ -1,7 +1,6 @@
 package com.ftofs.twant.domain.advertorial;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 public class AdvertorialSubscribe implements Serializable {
     /**
@@ -27,7 +26,7 @@ public class AdvertorialSubscribe implements Serializable {
     /**
      * 添加时间用于排序
      */
-    private Timestamp addTime;
+    private String addTime;
 
     public int getMemberId() {
         return memberId;
@@ -45,11 +44,11 @@ public class AdvertorialSubscribe implements Serializable {
         this.authorId = authorId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

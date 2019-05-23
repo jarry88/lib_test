@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class IndexFloor implements Serializable {
     private int floorId;
@@ -29,7 +29,7 @@ public class IndexFloor implements Serializable {
     /**
      * 更新时间
      */
-    private Timestamp floorUpdateTime;
+    private String floorUpdateTime;
 
     /**
      * 楼层编号
@@ -84,11 +84,11 @@ public class IndexFloor implements Serializable {
         this.floorTemplateName = floorTemplateName;
     }
 
-    public Timestamp getFloorUpdateTime() {
+    public String getFloorUpdateTime() {
         return floorUpdateTime;
     }
 
-    public void setFloorUpdateTime(Timestamp floorUpdateTime) {
+    public void setFloorUpdateTime(String floorUpdateTime) {
         this.floorUpdateTime = floorUpdateTime;
     }
 

@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.search;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class SearchHistory implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class SearchHistory implements Serializable {
     /**
      * 最后搜索时间
      */
-    private Timestamp lastTime;
+    private String lastTime;
 
     public int getHistoryId() {
         return historyId;
@@ -48,11 +48,11 @@ public class SearchHistory implements Serializable {
         this.searchCount = searchCount;
     }
 
-    public Timestamp getLastTime() {
+    public String getLastTime() {
         return lastTime;
     }
 
-    public void setLastTime(Timestamp lastTime) {
+    public void setLastTime(String lastTime) {
         this.lastTime = lastTime;
     }
 

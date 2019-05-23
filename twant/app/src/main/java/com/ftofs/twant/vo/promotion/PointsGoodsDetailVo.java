@@ -8,7 +8,7 @@ import com.ftofs.twant.vo.goods.goodsdetail.GoodsAttrVo;
 import com.ftofs.twant.vo.goods.goodsdetail.GoodsSpecValueJsonVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -273,7 +273,7 @@ public class PointsGoodsDetailVo {
      * 积分商品创建时间
      */
 
-    private Timestamp createTime;
+    private String createTime;
 
     public BigDecimal getAppPriceMin() {
         return appPriceMin;
@@ -763,11 +763,11 @@ public class PointsGoodsDetailVo {
         this.limitMemberGradeName = limitMemberGradeName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

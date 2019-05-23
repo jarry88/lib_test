@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.chain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class ChainServices implements Serializable,Cloneable {
     /**
@@ -32,7 +32,7 @@ public class ChainServices implements Serializable,Cloneable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 服务用状态 0已禁用 1可使用
@@ -84,11 +84,11 @@ public class ChainServices implements Serializable,Cloneable {
         this.chainName = chainName;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

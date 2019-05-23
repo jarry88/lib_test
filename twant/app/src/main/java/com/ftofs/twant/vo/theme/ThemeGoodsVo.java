@@ -6,7 +6,7 @@ import com.ftofs.twant.domain.theme.ThemeGoods;
 import com.ftofs.twant.vo.goods.BatchNumPriceVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class ThemeGoodsVo {
      * 创建时间
      */
 
-    private Timestamp createTime=new Timestamp(0);
+    private String createTime="";
     /**
      * 是否推荐
      */
@@ -179,7 +179,7 @@ public class ThemeGoodsVo {
      * 添加时间
      */
 
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 店铺编号
@@ -212,7 +212,7 @@ public class ThemeGoodsVo {
      */
 
 
-    private Timestamp verifyTime;
+    private String verifyTime;
 
     /**
      * 审核状态前台展示
@@ -265,11 +265,11 @@ public class ThemeGoodsVo {
         this.goodsName = goodsName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -529,11 +529,11 @@ public class ThemeGoodsVo {
         this.commissionRate = commissionRate;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -585,11 +585,11 @@ public class ThemeGoodsVo {
         this.verifyRemark = verifyRemark;
     }
 
-    public Timestamp getVerifyTime() {
+    public String getVerifyTime() {
         return verifyTime;
     }
 
-    public void setVerifyTime(Timestamp verifyTime) {
+    public void setVerifyTime(String verifyTime) {
         this.verifyTime = verifyTime;
     }
 

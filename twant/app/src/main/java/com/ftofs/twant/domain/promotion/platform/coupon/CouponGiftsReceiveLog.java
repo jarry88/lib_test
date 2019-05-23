@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class CouponGiftsReceiveLog implements Serializable,Cloneable {
     /**
@@ -28,7 +28,7 @@ public class CouponGiftsReceiveLog implements Serializable,Cloneable {
     /**
      * 领取时间
      */
-    private Timestamp activeTime;
+    private String activeTime;
 
     /**
      * 拥有者会员ID
@@ -78,11 +78,11 @@ public class CouponGiftsReceiveLog implements Serializable,Cloneable {
         this.giftsPrice = giftsPrice;
     }
 
-    public Timestamp getActiveTime() {
+    public String getActiveTime() {
         return activeTime;
     }
 
-    public void setActiveTime(Timestamp activeTime) {
+    public void setActiveTime(String activeTime) {
         this.activeTime = activeTime;
     }
 

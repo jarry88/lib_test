@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class DistributionStoreStat implements Serializable {
     /**
@@ -18,7 +18,7 @@ public class DistributionStoreStat implements Serializable {
     /**
      * 日期(具体到天)
      */
-    private Timestamp statDate;
+    private String statDate;
 
     /**
      * 小时
@@ -51,11 +51,11 @@ public class DistributionStoreStat implements Serializable {
         this.storeId = storeId;
     }
 
-    public Timestamp getStatDate() {
+    public String getStatDate() {
         return statDate;
     }
 
-    public void setStatDate(Timestamp statDate) {
+    public void setStatDate(String statDate) {
         this.statDate = statDate;
     }
 

@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.show;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class ShowOrders implements Serializable {
     /**
@@ -48,7 +48,7 @@ public class ShowOrders implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 状态
@@ -71,7 +71,7 @@ public class ShowOrders implements Serializable {
     /**
      * 推荐时间
      */
-    private Timestamp recommendTime;
+    private String recommendTime;
 
     /**
      * 阅读量
@@ -146,11 +146,11 @@ public class ShowOrders implements Serializable {
         this.templateId = templateId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -202,11 +202,11 @@ public class ShowOrders implements Serializable {
         this.musicAuto = musicAuto;
     }
 
-    public Timestamp getRecommendTime() {
+    public String getRecommendTime() {
         return recommendTime;
     }
 
-    public void setRecommendTime(Timestamp recommendTime) {
+    public void setRecommendTime(String recommendTime) {
         this.recommendTime = recommendTime;
     }
 

@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.refund;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class Refund implements Serializable {
     /**
@@ -145,22 +145,22 @@ public class Refund implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 卖家处理时间
      */
-    private Timestamp sellerTime;
+    private String sellerTime;
 
     /**
      * 平台处理时间
      */
-    private Timestamp adminTime;
+    private String adminTime;
 
     /**
      * 结算时间
      */
-    private Timestamp billTime;
+    private String billTime;
 
     /**
      * 退款原因id
@@ -206,17 +206,17 @@ public class Refund implements Serializable {
     /**
      * 发货时间
      */
-    private Timestamp shipTime;
+    private String shipTime;
 
     /**
      * 收货延时时间
      */
-    private Timestamp delayTime;
+    private String delayTime;
 
     /**
      * 收货时间
      */
-    private Timestamp receiveTime;
+    private String receiveTime;
 
     /**
      * 收货备注
@@ -245,11 +245,11 @@ public class Refund implements Serializable {
      */
     private int refundSource = 1;
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -261,11 +261,11 @@ public class Refund implements Serializable {
         this.adminMessage = adminMessage;
     }
 
-    public Timestamp getAdminTime() {
+    public String getAdminTime() {
         return adminTime;
     }
 
-    public void setAdminTime(Timestamp adminTime) {
+    public void setAdminTime(String adminTime) {
         this.adminTime = adminTime;
     }
 
@@ -414,11 +414,11 @@ public class Refund implements Serializable {
         this.receiveMessage = receiveMessage;
     }
 
-    public Timestamp getReceiveTime() {
+    public String getReceiveTime() {
         return receiveTime;
     }
 
-    public void setReceiveTime(Timestamp receiveTime) {
+    public void setReceiveTime(String receiveTime) {
         this.receiveTime = receiveTime;
     }
 
@@ -486,11 +486,11 @@ public class Refund implements Serializable {
         this.sellerState = sellerState;
     }
 
-    public Timestamp getSellerTime() {
+    public String getSellerTime() {
         return sellerTime;
     }
 
-    public void setSellerTime(Timestamp sellerTime) {
+    public void setSellerTime(String sellerTime) {
         this.sellerTime = sellerTime;
     }
 
@@ -510,11 +510,11 @@ public class Refund implements Serializable {
         this.shipSn = shipSn;
     }
 
-    public Timestamp getShipTime() {
+    public String getShipTime() {
         return shipTime;
     }
 
-    public void setShipTime(Timestamp shipTime) {
+    public void setShipTime(String shipTime) {
         this.shipTime = shipTime;
     }
 
@@ -534,11 +534,11 @@ public class Refund implements Serializable {
         this.storeName = storeName;
     }
 
-    public Timestamp getDelayTime() {
+    public String getDelayTime() {
         return delayTime;
     }
 
-    public void setDelayTime(Timestamp delayTime) {
+    public void setDelayTime(String delayTime) {
         this.delayTime = delayTime;
     }
 
@@ -566,11 +566,11 @@ public class Refund implements Serializable {
         this.commonId = commonId;
     }
 
-    public Timestamp getBillTime() {
+    public String getBillTime() {
         return billTime;
     }
 
-    public void setBillTime(Timestamp billTime) {
+    public void setBillTime(String billTime) {
         this.billTime = billTime;
     }
 

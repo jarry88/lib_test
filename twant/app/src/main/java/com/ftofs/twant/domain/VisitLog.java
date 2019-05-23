@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
+
 
 public class VisitLog {
     /**
@@ -27,7 +27,7 @@ public class VisitLog {
     /**
      * 時間
      */
-    private Timestamp visitTime;
+    private String visitTime;
 
     public BigInteger getVisitLogId() {
         return visitLogId;
@@ -61,11 +61,11 @@ public class VisitLog {
         this.channel = channel;
     }
 
-    public Timestamp getVisitTime() {
+    public String getVisitTime() {
         return visitTime;
     }
 
-    public void setVisitTime( Timestamp visitTime) {
+    public void setVisitTime( String visitTime) {
         this.visitTime = visitTime;
     }
 

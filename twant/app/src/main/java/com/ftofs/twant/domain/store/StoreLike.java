@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class StoreLike implements Serializable {
     private int id;
@@ -19,11 +19,11 @@ public class StoreLike implements Serializable {
     /**
      * 點想時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     public  StoreLike(){}
 
-    public StoreLike(int id, int memberId, int storeId, Timestamp createTime) {
+    public StoreLike(int id, int memberId, int storeId, String createTime) {
         this.id = id;
         this.memberId = memberId;
         this.storeId = storeId;
@@ -54,11 +54,11 @@ public class StoreLike implements Serializable {
         this.storeId = storeId;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

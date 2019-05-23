@@ -6,7 +6,7 @@ import com.ftofs.twant.vo.goods.GoodsVo;
 import com.ftofs.twant.vo.goods.SpecJsonVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class ThemeListGoodsVo {
      * 创建时间
      */
 
-    private Timestamp createTime=new Timestamp(0);
+    private String createTime="";
     /**
      * 是否推荐
      */
@@ -552,11 +552,11 @@ public class ThemeListGoodsVo {
         this.categoryName = categoryName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.contract;
 
-import java.sql.Timestamp;
+
 
 public class ContractQuitapply implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +33,7 @@ public class ContractQuitapply implements java.io.Serializable {
 	/**
 	 * 添加时间
 	 */
-	private Timestamp ctqAddtime;
+	private String ctqAddtime;
 	
 	/**
 	 * 审核状态0未审核1审核通过2审核失败
@@ -80,11 +80,11 @@ public class ContractQuitapply implements java.io.Serializable {
 		this.ctqStorename = ctqStorename;
 	}
 
-	public Timestamp getCtqAddtime() {
+	public String getCtqAddtime() {
 		return ctqAddtime;
 	}
 
-	public void setCtqAddtime(Timestamp ctqAddtime) {
+	public void setCtqAddtime(String ctqAddtime) {
 		this.ctqAddtime = ctqAddtime;
 	}
 

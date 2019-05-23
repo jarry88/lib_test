@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.goods;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class ArrivalNotice implements Serializable {
     /**
@@ -37,7 +37,7 @@ public class ArrivalNotice implements Serializable {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     public int getArrivalId() {
         return arrivalId;
@@ -87,11 +87,11 @@ public class ArrivalNotice implements Serializable {
         this.email = email;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

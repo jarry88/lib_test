@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.api;
 
-import java.sql.Timestamp;
-
 public class ApiMemberToken {
     /**
      * 令牌编号
@@ -26,12 +24,12 @@ public class ApiMemberToken {
     /**
      * 创建时间
      */
-    private Timestamp createTime=new Timestamp(0);
+    private String createTime="";
 
     /**
      * 最后登录时间
      */
-    private Timestamp lastLoginTime;
+    private String lastLoginTime;
 
     /**
      * 客户端类型
@@ -71,19 +69,19 @@ public class ApiMemberToken {
         this.token = token;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getLastLoginTime() {
+    public String getLastLoginTime() {
         return lastLoginTime;
     }
 
-    public void setLastLoginTime(Timestamp lastLoginTime) {
+    public void setLastLoginTime(String lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 

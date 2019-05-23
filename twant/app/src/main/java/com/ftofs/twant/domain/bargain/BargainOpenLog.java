@@ -1,7 +1,6 @@
 package com.ftofs.twant.domain.bargain;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 
 public class BargainOpenLog {
     /**
@@ -42,7 +41,7 @@ public class BargainOpenLog {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     public int getLogId() {
         return logId;
@@ -100,11 +99,11 @@ public class BargainOpenLog {
         this.avatarUrl = avatarUrl;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

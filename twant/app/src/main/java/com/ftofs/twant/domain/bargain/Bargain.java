@@ -1,7 +1,6 @@
 package com.ftofs.twant.domain.bargain;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 
 public class Bargain {
     /**
@@ -27,12 +26,12 @@ public class Bargain {
     /**
      * 开始时间
      */
-    private Timestamp startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 砍价库存
@@ -96,19 +95,19 @@ public class Bargain {
         this.bottomPrice = bottomPrice;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

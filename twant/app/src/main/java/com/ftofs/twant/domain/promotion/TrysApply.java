@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.promotion;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class TrysApply {
     /**
      * 申请时间
      */
-    private Timestamp applyTime;
+    private String applyTime;
 
     /**
      * 会员Id
@@ -106,7 +106,7 @@ public class TrysApply {
     /**
      * 提交评价时间
      */
-    private Timestamp reportTime;
+    private String reportTime;
 
     /**
      * 申请状态 0-审核中，1-审核成功，2-审核失败
@@ -152,12 +152,12 @@ public class TrysApply {
     /**
      * 试用资格购买商品的最后期限
      */
-    private Timestamp buyEndTime;
+    private String buyEndTime;
 
     /**
      * 获得试用资格后，提交试用报告的最后期限
      */
-    private Timestamp reportEndTime;
+    private String reportEndTime;
 
     /**
      * 是否送出过店铺券(只针对返券试用有效)
@@ -275,11 +275,11 @@ public class TrysApply {
         this.trysId = trysId;
     }
 
-    public Timestamp getApplyTime() {
+    public String getApplyTime() {
         return applyTime;
     }
 
-    public void setApplyTime(Timestamp applyTime) {
+    public void setApplyTime(String applyTime) {
         this.applyTime = applyTime;
     }
 
@@ -379,11 +379,11 @@ public class TrysApply {
         this.contentImage = contentImage;
     }
 
-    public Timestamp getReportTime() {
+    public String getReportTime() {
         return reportTime;
     }
 
-    public void setReportTime(Timestamp reportTime) {
+    public void setReportTime(String reportTime) {
         this.reportTime = reportTime;
     }
 
@@ -588,11 +588,11 @@ public class TrysApply {
         this.goodsFullSpecs = goodsFullSpecs;
     }
 
-    public Timestamp getBuyEndTime() {
+    public String getBuyEndTime() {
         return buyEndTime;
     }
 
-    public void setBuyEndTime(Timestamp buyEndTime) {
+    public void setBuyEndTime(String buyEndTime) {
         this.buyEndTime = buyEndTime;
     }
 
@@ -704,11 +704,11 @@ public class TrysApply {
         this.showMemberViewOrdersState = showMemberViewOrdersState;
     }
 
-    public Timestamp getReportEndTime() {
+    public String getReportEndTime() {
         return reportEndTime;
     }
 
-    public void setReportEndTime(Timestamp reportEndTime) {
+    public void setReportEndTime(String reportEndTime) {
         this.reportEndTime = reportEndTime;
     }
 
