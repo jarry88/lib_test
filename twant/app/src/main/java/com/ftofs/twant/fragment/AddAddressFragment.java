@@ -40,6 +40,7 @@ import okhttp3.Response;
 
 /**
  * 地址添加Fragment
+ * 注意：地址編輯也是共用這個Fragment
  * @author zwm
  */
 public class AddAddressFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
@@ -47,6 +48,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     List<MobileZone> mobileZoneList = new ArrayList<>();
     List<Area> areaList = new ArrayList<>();
     TextView tvMobileZone;
+    AddrItem addrItem;
 
     EditText etReceiverName;
     EditText etMobile;
@@ -55,10 +57,15 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     ScaledButton mSbDefaultAddr;
     int mIsDefaultAddr;
 
+    int action;  // 標記是編輯還是添加
 
-    public static AddAddressFragment newInstance() {
+    public static AddAddressFragment newInstance(int action, AddrItem addrItem) {
         Bundle args = new Bundle();
 
+        args.putInt("action", action);
+        if (addrItem != null) {
+            args.putParcelable("addrItem", addrItem);
+        }
         AddAddressFragment fragment = new AddAddressFragment();
         fragment.setArguments(args);
 
@@ -76,6 +83,14 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle bundle = getArguments();
+        action = bundle.getInt("action");
+        if (action == Constant.ACTION_EDIT) {
+            addrItem = bundle.getParcelable("addrItem");
+
+            mIsDefaultAddr = addrItem.isDefault;
+        }
+
         tvMobileZone = view.findViewById(R.id.tv_mobile_zone);
         etReceiverName = view.findViewById(R.id.et_receiver_name);
         etMobile = view.findViewById(R.id.et_mobile);
@@ -84,12 +99,34 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         mSbDefaultAddr = view.findViewById(R.id.sb_default_addr);
         mSbDefaultAddr.setOnClickListener(this);
 
+        TextView tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
+        if (action == Constant.ACTION_EDIT) {
+            // 地址編輯
+            tvFragmentTitle.setText(R.string.text_edit_address);
+
+            etReceiverName.setText(addrItem.realName);
+            etMobile.setText(addrItem.mobPhone);
+            tvArea.setText(addrItem.areaInfo);
+            etDetailAddress.setText(addrItem.address);
+            for (int areaId : addrItem.areaIdList) {
+                Area area = new Area();
+                area.setAreaId(areaId);
+                areaList.add(area);
+            }
+
+            if (mIsDefaultAddr == 1) {
+                mSbDefaultAddr.setIconResource(R.drawable.icon_cart_item_checked);
+            }
+        } else {
+            // 地址添加
+            tvFragmentTitle.setText(R.string.text_add_address);
+        }
+
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_select_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_select_area, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
         Util.setOnClickListener(view, R.id.btn_clear_detail_address, this);
-
 
         getMobileZoneList();
     }
@@ -133,80 +170,91 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         } else if (id == R.id.btn_clear_detail_address) {
             etDetailAddress.setText("");
         } else if (id == R.id.btn_ok) {
-            String token = User.getToken();
-            if (StringUtil.isEmpty(token)) {
+            saveAddress();
+        }
+    }
+
+    private void saveAddress() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        // 收集信息
+        try {
+            final String realName = etReceiverName.getText().toString().trim();
+            if (realName.length() < 1) {
+                ToastUtil.show(_mActivity, getResources().getText(R.string.hint_input_receiver_name).toString());
                 return;
             }
 
-            // 收集信息
-            try {
-                final String realName = etReceiverName.getText().toString().trim();
-                if (realName.length() < 1) {
-                    ToastUtil.show(_mActivity, getResources().getText(R.string.hint_input_receiver_name).toString());
-                    return;
+            final String mobile = etMobile.getText().toString().trim();
+            if (mobile.length() < 1) {
+                ToastUtil.show(_mActivity, getResources().getText(R.string.input_mobile_hint).toString());
+                return;
+            }
+
+            if (areaList.size() < 1) {
+                ToastUtil.show(_mActivity, getResources().getText(R.string.hint_select_area).toString());
+                return;
+            }
+
+            final String detailAddress = etDetailAddress.getText().toString().trim();
+            if (detailAddress.length() < 1) {
+                ToastUtil.show(_mActivity, getResources().getText(R.string.hint_input_detail_address).toString());
+                return;
+            }
+
+            String fullMobile = mobileZoneList.get(mobileZoneIndex).areaCode + "" + mobile;
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "realName", realName,
+                    "address", detailAddress,
+                    "mobPhone", fullMobile,
+                    "isDefault", mIsDefaultAddr);
+
+            int areaId = 0;
+            int i = 1;
+            for (Area area : areaList) {
+                areaId = area.getAreaId();
+                params.set("areaId" + i, areaId);
+                i++;
+            }
+
+
+            // 最后一層areaId
+            params.set("areaId", areaId);
+            final int finalAreaId = areaId;
+            final String areaInfo = tvArea.getText().toString();
+            params.set("areaInfo", areaInfo);
+
+            String path;
+            if (action == Constant.ACTION_EDIT) {
+                params.set("addressId", addrItem.addressId);
+                path = Api.PATH_EDIT_ADDRESS;
+            } else {
+                path = Api.PATH_ADD_ADDRESS;
+            }
+
+            SLog.info("params[%s]", params.toString());
+            Api.postUI(path, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
                 }
 
-                final String mobile = etMobile.getText().toString().trim();
-                if (mobile.length() < 1) {
-                    ToastUtil.show(_mActivity, getResources().getText(R.string.input_mobile_hint).toString());
-                    return;
-                }
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    try {
+                        String responseStr = response.body().string();
+                        SLog.info("responseStr[%s]", responseStr);
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                if (areaList.size() < 1) {
-                    ToastUtil.show(_mActivity, getResources().getText(R.string.hint_select_area).toString());
-                    return;
-                }
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
 
-                final String detailAddress = etDetailAddress.getText().toString().trim();
-                if (detailAddress.length() < 1) {
-                    ToastUtil.show(_mActivity, getResources().getText(R.string.hint_input_detail_address).toString());
-                    return;
-                }
-
-                String fullMobile = mobileZoneList.get(mobileZoneIndex).areaCode + "" + mobile;
-                EasyJSONObject params = EasyJSONObject.generate(
-                        "token", token,
-                        "realName", realName,
-                        "address", detailAddress,
-                        "mobPhone", fullMobile,
-                        "isDefault", mIsDefaultAddr);
-
-                int areaId = 0;
-                int i = 1;
-                for (Area area : areaList) {
-                    areaId = area.getAreaId();
-                    params.set("areaId" + i, areaId);
-                    i++;
-                }
-
-
-                // 最后一層areaId
-                params.set("areaId", areaId);
-                final int finalAreaId = areaId;
-                final String areaInfo = tvArea.getText().toString();
-                params.set("areaInfo", areaInfo);
-
-                SLog.info("params[%s]", params.toString());
-
-                Api.postUI(Api.PATH_ADD_ADDRESS, params, new UICallback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        try {
-                            String responseStr = response.body().string();
-                            SLog.info("responseStr[%s]", responseStr);
-                            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-
-                            if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                return;
-                            }
-
-                            ToastUtil.show(_mActivity, "地址添加成功");
-
+                        if (action == Constant.ACTION_ADD) {
                             Bundle bundle = new Bundle();
                             bundle.putString("from", AddAddressFragment.class.getName());
                             int addressId = responseObj.getInt("datas.addressId");
@@ -214,17 +262,21 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                                     detailAddress, "", mobile, 0);
                             SLog.info("addrItem: %s", addrItem);
                             bundle.putParcelable("addrItem", addrItem);
-
                             setFragmentResult(Constant.REQUEST_CODE_ADD_ADDRESS, bundle);
-                            pop();
-                        } catch (Exception e) {
-                            SLog.info("Error!%s", e.getMessage());
+
+                            ToastUtil.show(_mActivity, "地址添加成功");
+                        } else {
+                            ToastUtil.show(_mActivity, "地址編輯成功");
                         }
+
+                        pop();
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
                     }
-                });
-            } catch (EasyJSONException e) {
-                e.printStackTrace();
-            }
+                }
+            });
+        } catch (EasyJSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -259,9 +311,25 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                 }
                 mobileZoneList = result;
                 SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
-                if (mobileZoneList.size() > 0) {
-                    tvMobileZone.setText(mobileZoneList.get(0).areaName);
+                if (action == Constant.ACTION_ADD) {
+                    // 如果是添加地址，默認顯示第1個區號
+                    if (mobileZoneList.size() > 0) {
+                        tvMobileZone.setText(mobileZoneList.get(0).areaName);
+                    }
+                } else {
+                    // 編輯地址，則顯示傳進來的區號
+                    SLog.info("mobileAreaCode[%s]", addrItem.mobileAreaCode);
+                    int index = 0;
+                    for (MobileZone mobileZone : mobileZoneList) {
+                        if (mobileZone.areaCode.equals(addrItem.mobileAreaCode)) {
+                            tvMobileZone.setText(mobileZone.areaName);
+                            mobileZoneIndex = index;
+                            break;
+                        }
+                        ++index;
+                    }
                 }
+
             }
         });
     }

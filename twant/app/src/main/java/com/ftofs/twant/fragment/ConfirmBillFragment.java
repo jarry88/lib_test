@@ -235,7 +235,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 }
             });
         } else if (id == R.id.btn_add_shipping_address) {
-            startForResult(AddAddressFragment.newInstance(), Constant.REQUEST_CODE_ADD_ADDRESS);
+            startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), Constant.REQUEST_CODE_ADD_ADDRESS);
         } else if (id == R.id.btn_change_shipping_address) {
             startForResult(AddrManageFragment.newInstance(), Constant.REQUEST_CODE_CHANGE_ADDRESS);
         }

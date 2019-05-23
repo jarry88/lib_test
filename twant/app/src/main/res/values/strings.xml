@@ -165,6 +165,7 @@
     <string name="text_address_management">地址管理</string>
     <string name="text_add">添加</string>
     <string name="text_add_address">地址添加</string>
+    <string name="text_edit_address">地址編輯</string>
     <string name="text_receiver_name">收貨姓名</string>
     <string name="hint_input_receiver_name">請輸入收貨人姓名</string>
     <string name="text_mobile">手機號碼</string>

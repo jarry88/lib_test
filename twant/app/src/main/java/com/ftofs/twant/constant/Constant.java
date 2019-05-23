@@ -75,6 +75,28 @@ public class Constant {
     public final static Integer ONE = 1;
     public final static Integer TWO = 2;
 
+    /**
+     * 增刪查改 -- 動作定義
+     */
+    public static final int ACTION_ADD = 1;
+    public static final int ACTION_EDIT = 2;
+
+
+    /**
+     * 地區ID定義
+     */
+    public static final int AREA_ID_UNKNOWN = 0;
+    public static final int AREA_ID_HONGKONG = 1;
+    public static final int AREA_ID_MAINLAND = 2;
+    public static final int AREA_ID_MACAO = 3;
+
+
+    /**
+     * AreaCode定義
+     */
+    public static final String AREA_CODE_HONGKONG = "00852";
+    public static final String AREA_CODE_MAINLAND = "0086";
+    public static final String AREA_CODE_MACAO = "00853";
 
     /**
      * 店鋪距離閾值

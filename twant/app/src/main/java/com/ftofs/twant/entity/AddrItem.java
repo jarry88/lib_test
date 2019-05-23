@@ -31,6 +31,7 @@ public class AddrItem implements Parcelable {
     protected AddrItem(Parcel in) {
         addressId = in.readInt();
         realName = in.readString();
+        in.readList(areaIdList, Integer.class.getClassLoader());
         areaId = in.readInt();
         areaInfo = in.readString();
         address = in.readString();
@@ -112,9 +113,9 @@ public class AddrItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
         dest.writeInt(addressId);
         dest.writeString(realName);
+        dest.writeList(areaIdList);
         dest.writeInt(areaId);
         dest.writeString(areaInfo);
         dest.writeString(address);
