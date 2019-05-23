@@ -149,11 +149,20 @@
     <string name="text_mall_discount">商城優惠</string>
     <string name="text_commit_bill">提交訂單</string>
 
+    <!--支付-->
     <string name="text_pay_online">在線支付</string>
     <string name="text_pay_delivery">貨到付款</string>
     <string name="text_pay_fetch">門店自提</string>
     <string name="text_pay_result_success">訂單支付成功</string>
     <string name="text_pay_result_fail">訂單支付失敗</string>
+
+    <!--退換貨-->
+    <string name="text_refund_tab">退款</string>
+    <string name="text_return_tab">退貨</string>
+    <string name="text_complain_tab">投訴</string>
+    <string name="text_refund_list">退款列表</string>
+    <string name="text_return_list">退貨列表</string>
+    <string name="text_complain_list">投訴列表</string>
 
     <string name="text_goods_bill">商品訂單</string>
     <string name="text_bill_all">全部</string>
