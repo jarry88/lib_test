@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.repository.Repository;
 
 public class RefundFragment extends BaseFragment {
     private static final String TAG = ICBCFragment.class.getSimpleName();
@@ -24,6 +25,13 @@ public class RefundFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        try {
+            Repository.getRefundList();
+            Repository.getReturnList();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

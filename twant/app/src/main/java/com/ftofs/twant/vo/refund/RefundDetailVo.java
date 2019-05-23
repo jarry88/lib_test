@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo.refund;
 
-import com.ftofs.twant.domain.refund.RefundDetail;
-
 import java.math.BigDecimal;
 
 /**
@@ -91,21 +89,6 @@ public class RefundDetailVo {
      * 状态文字
      */
     private String refundStateText;
-
-    public RefundDetailVo(RefundDetail refundDetail) {
-        this.refundId = refundDetail.getRefundId();
-        this.ordersId = refundDetail.getOrdersId();
-        this.batchNo = refundDetail.getBatchNo();
-        this.refundAmount = refundDetail.getRefundAmount();
-        this.payAmount = refundDetail.getPayAmount();
-        this.pdAmount = refundDetail.getPdAmount();
-        this.rcbAmount = refundDetail.getRcbAmount();
-        this.refundCode = refundDetail.getRefundCode();
-        this.refundState = refundDetail.getRefundState();
-        this.addTime = refundDetail.getAddTime();
-        this.payTime = refundDetail.getPayTime();
-        this.refundStateText = refundDetail.getRefundState() == 1 ?"處理中":"已完成";
-    }
 
     public int getRefundId() {
         return refundId;

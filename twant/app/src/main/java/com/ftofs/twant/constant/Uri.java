@@ -6,12 +6,12 @@ public class Uri {
     /**
      * API負載域名
      */
-    public final static String API_DOMAIN = Config.API_BASE_URL.concat("/api");
+    public final static String API_DOMAIN = Config.API_BASE_URL;
 
     /**
      * WEB負載域名
      */
-    public final static String WEB_DOMAIN = Config.API_BASE_URL.concat("/web");
+    public final static String WEB_DOMAIN = Config.WEB_BASE_URL;
     /**
      * 購物車
      */
@@ -26,4 +26,14 @@ public class Uri {
      * ICBC支付查詢
      */
     public final static String API_ICBC_PAY_ENQUIRY = API_DOMAIN.concat("/member/icbc/pay/query");
+
+    /**
+     * 退貨列表
+     */
+    public final static String API_RETURN_LIST = API_DOMAIN.concat("/member/return/list");
+
+    /**
+     * 退款列表
+     */
+    public final static String API_REFUND_LIST = API_DOMAIN.concat("/member/refund/list");
 }
