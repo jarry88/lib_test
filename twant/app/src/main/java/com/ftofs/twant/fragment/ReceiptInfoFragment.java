@@ -10,7 +10,10 @@ import android.widget.EditText;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.AddrItem;
+import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 
 
@@ -36,9 +39,22 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
     EditText etReceiptContent;
     EditText etTaxPayerId;
 
-    public static ReceiptInfoFragment newInstance(int position) {
+    int position;
+    Receipt receipt;
+
+    /**
+     * 工廠方法
+     * @param position 訂單項在RecyclerView中的位置
+     * @param receipt
+     * @return
+     */
+    public static ReceiptInfoFragment newInstance(int position, Receipt receipt) {
         Bundle args = new Bundle();
 
+        args.putInt("position", position);
+        if (receipt != null) {
+            args.putParcelable("receipt", receipt);
+        }
         ReceiptInfoFragment fragment = new ReceiptInfoFragment();
         fragment.setArguments(args);
 
@@ -56,9 +72,19 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle args = getArguments();
+        position = args.getInt("position");
+        receipt = args.getParcelable("receipt");
+
         etReceiptHeader = view.findViewById(R.id.et_receipt_header);
         etReceiptContent = view.findViewById(R.id.et_receipt_content);
         etTaxPayerId = view.findViewById(R.id.et_taxpayer_id);
+
+        if (receipt != null) {
+            etReceiptHeader.setText(receipt.header);
+            etReceiptContent.setText(receipt.content);
+            etTaxPayerId.setText(receipt.taxPayerId);
+        }
 
         Util.setOnClickListener(view, R.id.btn_no_receipt, this);
         Util.setOnClickListener(view, R.id.btn_save_and_use, this);
@@ -87,14 +113,34 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
 
         bundle.putString("from", ReceiptInfoFragment.class.getName());
         bundle.putInt("action", action);
+        bundle.putInt("position", position);
 
         if (action == ACTION_SAVE_AND_USE) {
             // 傳遞發票數據信息
-            bundle.putString("receiptHeader", etReceiptHeader.getText().toString());
-            bundle.putString("receiptContent", etReceiptContent.getText().toString());
-            bundle.putString("taxPayerId", etTaxPayerId.getText().toString());
+            if (receipt == null) {
+                receipt = new Receipt();
+            }
+            receipt.header = etReceiptHeader.getText().toString().trim();
+            receipt.content = etReceiptContent.getText().toString().trim();
+            receipt.taxPayerId = etTaxPayerId.getText().toString().trim();
+
+            if (StringUtil.isEmpty(receipt.header)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_receipt_header_hint));
+                return;
+            }
+            if (StringUtil.isEmpty(receipt.content)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_receipt_content_hint));
+                return;
+            }
+            if (StringUtil.isEmpty(receipt.taxPayerId)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_taxpayer_id_hint));
+                return;
+            }
+            bundle.putParcelable("receipt", receipt);
         }
         setFragmentResult(RESULT_OK, bundle);
+
+        pop();
     }
 
     @Override

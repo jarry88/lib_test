@@ -17,6 +17,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.cart.BaseStatus;
 import com.ftofs.twant.entity.cart.SkuStatus;
@@ -245,7 +246,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             }
 
             MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.startForResult(ConfirmBillFragment.newInstance(1, buyData), Constant.REQUEST_CODE_CONFIRM_ORDER);
+            mainFragment.startForResult(ConfirmBillFragment.newInstance(1, buyData), RequestCode.CONFIRM_ORDER.ordinal());
         }
     }
 

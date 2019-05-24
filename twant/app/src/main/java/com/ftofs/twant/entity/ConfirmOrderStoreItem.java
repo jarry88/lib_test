@@ -28,6 +28,7 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
     public Receipt receipt; // 發票信息
     public int shipTimeType; // 配送時間
     public List<ConfirmOrderSkuItem> confirmOrderSkuItemList;
+    // public Object payload; // 仿照RecyclerView的payload，用于局部刷新優化
 
     @Override
     public int getItemType() {

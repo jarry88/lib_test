@@ -20,11 +20,13 @@ import com.ftofs.twant.adapter.ConfirmOrderStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
 import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -45,6 +47,9 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import static com.ftofs.twant.widget.ListPopup.LIST_POPUP_TYPE_PAY_WAY;
+import static com.ftofs.twant.widget.ListPopup.LIST_POPUP_TYPE_SHIPPING_TIME;
+
 
 /**
  * 確認訂單Fragment
@@ -62,18 +67,12 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     List<ListPopupItem> payWayItemList = new ArrayList<>();
     List<ListPopupItem> shippingItemList = new ArrayList<>();
 
-    private static final int LIST_POPUP_TYPE_PAY_WAY = 1;
-    private static final int LIST_POPUP_TYPE_SHIPPING_TIME = 2;
-
     // 當前支付方式
     int payWayIndex = 0;
-    // 當前配送時間索引
-    int shippingTimeIndex = 0;
 
     AddrItem mAddrItem;
     int isExistTrys;
 
-    TextView tvShippingTime;
     TextView tvReceiverName;
     TextView tvMobile;
     TextView tvAddress;
@@ -138,8 +137,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         payWayItemList.add(new ListPopupItem(1, getResources().getString(R.string.text_pay_delivery), null));
         payWayItemList.add(new ListPopupItem(2, getResources().getString(R.string.text_pay_fetch), null));
 
-        tvShippingTime = view.findViewById(R.id.tv_shipping_time);
-
         tvReceiverName = view.findViewById(R.id.tv_receiver_name);
         tvMobile = view.findViewById(R.id.tv_mobile);
         tvAddress = view.findViewById(R.id.tv_address);
@@ -157,18 +154,22 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         RecyclerView rvStoreList = view.findViewById(R.id.rv_store_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvStoreList.setLayoutManager(layoutManager);
-        adapter = new ConfirmOrderStoreAdapter(_mActivity, confirmOrderItemList);
+        adapter = new ConfirmOrderStoreAdapter(_mActivity, shippingItemList, confirmOrderItemList);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
 
                 switch (id) {
-                    case R.id.btn_change_pay_way:
-                        payWayPopup();
+                    case R.id.btn_receipt:
+                        ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
+                        startForResult(ReceiptInfoFragment.newInstance(position, storeItem.receipt), RequestCode.EDIT_RECEIPT.ordinal());
                         break;
                     case R.id.btn_change_shipping_time:
-                        shippingTimePopup();
+                        shippingTimePopup(position);
+                        break;
+                    case R.id.btn_change_pay_way:
+                        payWayPopup();
                         break;
                     default:
                         break;
@@ -196,20 +197,22 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 .show();
     }
 
-    private void shippingTimePopup() {
+    private void shippingTimePopup(int position) {
+        ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
                 .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_shipping_time),
-                        LIST_POPUP_TYPE_SHIPPING_TIME, shippingItemList, shippingTimeIndex, this))
+                        LIST_POPUP_TYPE_SHIPPING_TIME, shippingItemList, storeItem.shipTimeType, this, position))
                 .show();
     }
 
     /**
      * 收集表單參數
+     * @param forCommit 參數是否用于提交訂單
      * @return
      */
-    private EasyJSONObject collectParams() {
+    private EasyJSONObject collectParams(boolean forCommit) {
         try {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
@@ -222,6 +225,64 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     "isCart", isFromCart,
                     "isExistTrys", isExistTrys,
                     "storeList", commitStoreList);
+
+            SLog.info("forCommit[%s]", forCommit);
+            if (forCommit) {
+                // 如果是用于提交訂單，需要從新收集最新的數據
+                EasyJSONArray storeList = EasyJSONArray.generate();
+                for (int i = 0; i < confirmOrderItemList.size() - 1; i++) {
+                    ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(i);
+                    /*
+                    storeId int 店铺Id,必填
+                    receiverMessage string 购买留言，可以为空
+
+                    goodsList 购买商品列表,必填
+                        buyNum int 购买数量，必填
+                        goodsId int 商品sku Id 当cartId=0时必填
+                        cartId int 购物车Id 当cartId=1时必填
+                    invoiceTitle string 发票抬头
+                    invoiceContent string 发票内容
+                    invoiceCode string 纳税人识别号
+                    shipTimeType int 配送时间Id
+                     */
+                    EasyJSONObject store = EasyJSONObject.generate(
+                            "storeId", storeItem.storeId,
+                            "storeName", storeItem.storeId,
+                            "shipTimeType", storeItem.shipTimeType);
+
+                    // 留言
+                    if (!StringUtil.isEmpty(storeItem.leaveMessage)) {
+                        store.set("receiverMessage", storeItem.leaveMessage);
+                    }
+
+
+                    // goodsList 购买商品列表
+                    EasyJSONArray goodsList = EasyJSONArray.generate();
+                    for (ConfirmOrderSkuItem skuItem : storeItem.confirmOrderSkuItemList) {
+                        goodsList.append(EasyJSONObject.generate(
+                             "buyNum", skuItem.buyNum,
+                             "cartId", skuItem.goodsId
+                        ));
+                    }
+                    store.set("goodsList", goodsList);
+
+
+                    // 發票信息
+                    if (storeItem.receipt != null) {
+                        store.set("invoiceTitle", storeItem.receipt.header);
+                        store.set("invoiceContent", storeItem.receipt.content);
+                        store.set("invoiceCode", storeItem.receipt.taxPayerId);
+                    }
+
+                    storeList.append(store);
+                }
+
+                ConfirmOrderSummaryItem summaryItem = getSummaryItem();
+                commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
+                commitBuyData.set("storeList", storeList);
+            }
+
+            // 收貨地址
             if (mAddrItem != null) {
                 commitBuyData.set("addressId", mAddrItem.addressId);
             }
@@ -234,7 +295,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             SLog.info("params[%s]", params.toString());
             return params;
         } catch (Exception e) {
-
+            SLog.info("Error!%s", e.getMessage());
         }
         return null;
     }
@@ -259,11 +320,19 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 return;
             }
 
-            EasyJSONObject params = collectParams();
+            EasyJSONObject params = collectParams(true);
+            SLog.info("params[%s]", params);
             if (params == null) {
                 ToastUtil.show(_mActivity, "數據無效");
                 return;
             }
+
+            /*
+            if (true) {
+                return;
+            }
+            */
+
             Api.postUI(Api.PATH_COMMIT_BILL_DATA, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -283,9 +352,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 }
             });
         } else if (id == R.id.btn_add_shipping_address) {
-            startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), Constant.REQUEST_CODE_ADD_ADDRESS);
+            startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.ADD_ADDRESS.ordinal());
         } else if (id == R.id.btn_change_shipping_address) {
-            startForResult(AddrManageFragment.newInstance(), Constant.REQUEST_CODE_CHANGE_ADDRESS);
+            startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
         }
     }
 
@@ -317,9 +386,21 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             mAddrItem = addrItem;
             updateAddrView();
         } else if (ReceiptInfoFragment.class.getName().equals(from)) {
+            int position = data.getInt("position");
             int action = data.getInt("action");
 
+            if (action == ReceiptInfoFragment.ACTION_NO_CHANGE) {
+                return;
+            }
 
+            ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
+            if (action == ReceiptInfoFragment.ACTION_NO_RECEIPT) { // 不開發票
+                storeItem.receipt = null;
+            } else if (action == ReceiptInfoFragment.ACTION_SAVE_AND_USE) {
+                storeItem.receipt = data.getParcelable("receipt");
+            }
+
+            adapter.notifyItemChanged(position);
         }
     }
 
@@ -457,17 +538,15 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     // 添加上汇总项目
                     confirmOrderItemList.add(new ConfirmOrderSummaryItem());
 
-
-
                     // 第2步
-                    params = collectParams();
+                    params = collectParams(false);
                     // 收集地址信息
                     EasyJSONObject address = responseObj.getObject("datas.address");
                     if (address != null) {
                         mAddrItem = new AddrItem(address);
                         SLog.info("mAddrItem[%s]", mAddrItem);
 
-                        params = collectParams();
+                        params = collectParams(false);
                         SLog.info("params[%s]", params.toString());
                         responseStr = Api.syncPost(Api.PATH_CALC_FREIGHT, params);
 
@@ -518,8 +597,10 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             summaryItem.paymentTypeCode = getPaymentTypeCode(payWayIndex);
             adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
         } else if (type == LIST_POPUP_TYPE_SHIPPING_TIME) {
-            shippingTimeIndex = id;
-            tvShippingTime.setText(shippingItemList.get(shippingTimeIndex).title);
+            int position = (int) extra;
+            ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
+            storeItem.shipTimeType = id;
+            adapter.notifyItemChanged(position);
         }
     }
 

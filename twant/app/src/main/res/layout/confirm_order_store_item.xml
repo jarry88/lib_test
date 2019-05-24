@@ -78,6 +78,7 @@
                 />
 
             <EditText
+                android:id="@+id/et_leave_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -105,6 +106,7 @@
         android:background="#fff"
         android:orientation="vertical">
         <RelativeLayout
+            android:id="@+id/btn_receipt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
@@ -128,12 +130,15 @@
                 android:src="@drawable/expand_button"
                 />
 
+            <!-- paddingLeft 30dp 是為了擴大點擊范圍 -->
             <TextView
+                android:id="@+id/tv_receipt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/img_expand_receipt"
+                android:paddingLeft="30dp"
                 android:text="不開發票"
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"

@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ListPopupAdapter;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.fragment.ConfirmBillFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
@@ -25,12 +27,23 @@ import java.util.List;
 public class ListPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
     Context context;
 
+    public static final int LIST_POPUP_TYPE_PAY_WAY = 1;
+    public static final int LIST_POPUP_TYPE_SHIPPING_TIME = 2;
+
     String title; // 彈出框的標題
     List<ListPopupItem> itemList;
     int index; // 選中的index
     OnSelectedListener onSelectedListener;
 
     int type;
+    Object args; // 傳進來的調用參數
+
+
+    public ListPopup(@NonNull Context context, String title, int type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener, Object args) {
+        this(context, title, type, itemList, index, onSelectedListener);
+        this.args = args;
+    }
+
     public ListPopup(@NonNull Context context, String title, int type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener) {
         super(context);
 
@@ -41,6 +54,8 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
         this.itemList = itemList;
         this.onSelectedListener = onSelectedListener;
     }
+
+
 
     @Override
     protected int getImplLayoutId() {
@@ -89,7 +104,10 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
 
     @Override
     public void onSelected(int type, int id, Object extra) {
-        SLog.info("onSelected, type[%d], id[%d], extra[%s]", type, id, extra);
+        SLog.info("onSelected, type[%d], id[%d], args[%s], extra[%s]", type, id, args, extra);
+        if (type == LIST_POPUP_TYPE_SHIPPING_TIME) {
+            extra = args;
+        }
         onSelectedListener.onSelected(type, id, extra);
         dismiss();
     }

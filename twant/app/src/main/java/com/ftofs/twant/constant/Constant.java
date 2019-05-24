@@ -48,25 +48,6 @@ public class Constant {
     public static final int ORDER_STATUS_TO_BE_COMMENTED = 4;
 
 
-    /**
-     * 添加收貨地址
-     */
-    public static final int REQUEST_CODE_ADD_ADDRESS = 1;
-    /**
-     * 切換收貨地址
-     */
-
-    public static final int REQUEST_CODE_CHANGE_ADDRESS = 2;
-    /**
-     * 確認訂單
-     */
-    public static final int REQUEST_CODE_CONFIRM_ORDER = 3;
-
-    /**
-     * 選擇收貨地址
-     */
-    public static final int REQUEST_CODE_SELECT_ADDR = 4;
-
 
     /**
      * 數字定義

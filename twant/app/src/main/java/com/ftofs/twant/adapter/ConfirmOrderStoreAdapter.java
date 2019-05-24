@@ -2,8 +2,11 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,6 +20,9 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
+import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 
@@ -25,13 +31,15 @@ import java.util.List;
 public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
     Context context;
     String timesSign;
+    List<ListPopupItem> shippingTimeDescList;  // 配送時間描述列表
 
-    public ConfirmOrderStoreAdapter(Context context, @Nullable List<MultiItemEntity> data) {
+    public ConfirmOrderStoreAdapter(Context context, List<ListPopupItem> shippingTimeDescList, @Nullable List<MultiItemEntity> data) {
         super(data);
         addItemType(Constant.ITEM_VIEW_TYPE_COMMON, R.layout.confirm_order_store_item);
         addItemType(Constant.ITEM_VIEW_TYPE_SUMMARY, R.layout.confirm_order_summary_item);
 
         this.context = context;
+        this.shippingTimeDescList = shippingTimeDescList;
         timesSign = context.getResources().getString(R.string.times_sign);
     }
 
@@ -40,11 +48,46 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
         int itemViewType = helper.getItemViewType();
 
         if (itemViewType == Constant.ITEM_VIEW_TYPE_COMMON) {
-            ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) multiItemEntity;
+            final ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) multiItemEntity;
+            helper.addOnClickListener(R.id.btn_receipt);  // 變更發票信息
+            helper.addOnClickListener(R.id.btn_change_shipping_time);  // 修改配送時間
             helper.setText(R.id.tv_store_name, item.storeName);
             helper.setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0));
 
+            // 如果沒設置發票，則顯示【不開發票】，否則顯示發票抬頭
+            if (item.receipt == null) {
+                helper.setText(R.id.tv_receipt, context.getResources().getString(R.string.text_does_not_need_receipt));
+            } else {
+                helper.setText(R.id.tv_receipt, item.receipt.header);
+            }
+
+            if (shippingTimeDescList != null && shippingTimeDescList.size() > 0) {
+                helper.setText(R.id.tv_shipping_time, shippingTimeDescList.get(item.shipTimeType).title);
+            }
+
+            EditText etLeaveMessage = helper.getView(R.id.et_leave_message);
+            etLeaveMessage.setText(item.leaveMessage);
+            EditTextUtil.cursorSeekToEnd(etLeaveMessage);
+            etLeaveMessage.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    item.leaveMessage = s.toString();
+                    // SLog.info("leaveMessage[%s]", item.leaveMessage);
+                }
+            });
+
             LinearLayout llSkuItemContainer = helper.getView(R.id.ll_sku_item_container);
+            llSkuItemContainer.removeAllViews();
             for (ConfirmOrderSkuItem confirmOrderSkuItem : item.confirmOrderSkuItemList) {
                 LinearLayout skuItemView = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.confirm_order_sku_item, null, false);
 

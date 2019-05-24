@@ -16,6 +16,7 @@ import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -179,7 +180,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
             pop(null);
         } else if (id == R.id.btn_add_address) {
             MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), Constant.REQUEST_CODE_ADD_ADDRESS);
+            mainFragment.startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.ADD_ADDRESS.ordinal());
         }
     }
 
