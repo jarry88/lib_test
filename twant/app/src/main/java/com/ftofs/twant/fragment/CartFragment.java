@@ -56,9 +56,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     String textSettlement;
     TotalStatus totalStatus = new TotalStatus();
 
+    TextView btnDelete;
+    LinearLayout llViewModeButtonGroup;
+    TextView btnEdit;
     TextView btnSettlement;
     TextView tvTotalPrice;
 
+    int mode = Constant.MODE_VIEW;
     boolean needReloadData = true;
 
     public static CartFragment newInstance() {
@@ -91,8 +95,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         setCheckButtonOnClickListener(btnSelectAll);
         totalStatus.setRadio(btnSelectAll);
 
+        btnEdit = view.findViewById(R.id.btn_edit);
+        btnEdit.setOnClickListener(this);
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         cartStoreItemContainer = view.findViewById(R.id.ll_cart_store_item_container);
+
+        btnDelete = view.findViewById(R.id.btn_delete);
+        btnDelete.setOnClickListener(this);
+        llViewModeButtonGroup = view.findViewById(R.id.ll_view_mode_button_group);
 
         btnSettlement = view.findViewById(R.id.btn_settlement);
         btnSettlement.setOnClickListener(this);
@@ -105,10 +115,17 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         SLog.info("onSupportVisible");
 
         if (needReloadData) {
-            totalStatus.storeStatusList.clear();
-            loadCartData();
-            updateTotalData();
+            reloadList();
         }
+    }
+
+    /**
+     * 重新加載購物車
+     */
+    private void reloadList() {
+        totalStatus.storeStatusList.clear();
+        loadCartData();
+        updateTotalData();
     }
 
     @Override
@@ -238,15 +255,98 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_settlement) {
-            String buyData = totalStatus.getBuyData();
-            if (buyData == null) {
-                // 如果沒有勾選什么數據，返回
-                return;
-            }
+        switch (id) {
+            case R.id.btn_edit:
+                switchMode();
+                break;
+            case R.id.btn_settlement:
+                EasyJSONArray buyData = totalStatus.getBuyData();
+                if (buyData.length() < 1) {
+                    // 如果沒有勾選什么數據，返回
+                    return;
+                }
 
-            MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.startForResult(ConfirmBillFragment.newInstance(1, buyData), RequestCode.CONFIRM_ORDER.ordinal());
+                MainFragment mainFragment = (MainFragment) getParentFragment();
+                mainFragment.startForResult(ConfirmBillFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
+                break;
+            case R.id.btn_delete:
+                try {
+                    buyData = totalStatus.getBuyData();
+                    if (buyData.length() < 1) {
+                        // 如果沒有勾選什么數據，返回
+                        SLog.info("如果沒有勾選什么數據，返回");
+                        return;
+                    }
+
+
+                    boolean first = true;
+                    StringBuilder cartId = new StringBuilder();
+                    for (Object object : buyData) {
+                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                        if (!first) {
+                            cartId.append(",");
+                        }
+                        cartId.append(easyJSONObject.getInt("cartId"));
+                        first = false;
+                    }
+
+                    String token = User.getToken();
+                    if (StringUtil.isEmpty(token)) {
+                        return;
+                    }
+
+                    EasyJSONObject params = EasyJSONObject.generate("token", token, "cartId", cartId.toString());
+                    SLog.info("params[%s]", params);
+                    Api.postUI(Api.PATH_DELETE_CART, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String responseStr = response.body().string();
+                            if (StringUtil.isEmpty(responseStr)) {
+                                return;
+                            }
+
+                            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                            if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                return;
+                            }
+
+                            ToastUtil.show(_mActivity, "刪除成功");
+                            reloadList();
+                        }
+                    });
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 切換購物車的模式
+     * 查看模式 還是 編輯模式
+     */
+    private void switchMode() {
+        if (mode == Constant.MODE_VIEW) {
+            btnDelete.setVisibility(View.VISIBLE);
+            llViewModeButtonGroup.setVisibility(View.GONE);
+
+            btnEdit.setText(getResources().getString(R.string.text_finish));
+            btnEdit.setTextColor(getResources().getColor(R.color.tw_red, null));
+            mode = Constant.MODE_EDIT;
+        } else {
+            btnDelete.setVisibility(View.GONE);
+            llViewModeButtonGroup.setVisibility(View.VISIBLE);
+
+            btnEdit.setText(getResources().getString(R.string.text_edit));
+            btnEdit.setTextColor(getResources().getColor(R.color.tw_black, null));
+            mode = Constant.MODE_VIEW;
         }
     }
 

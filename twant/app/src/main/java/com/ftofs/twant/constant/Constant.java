@@ -107,4 +107,12 @@ public class Constant {
      */
     public static final int ITEM_VIEW_TYPE_SUMMARY = 2;
 
+    /**
+     * 查看模式
+     */
+    public static final int MODE_VIEW = 1;
+    /**
+     * 編輯模式
+     */
+    public static final int MODE_EDIT = 2;
 }

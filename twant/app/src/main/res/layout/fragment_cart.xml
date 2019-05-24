@@ -44,6 +44,9 @@
             android:layout_marginRight="@dimen/toolbar_margin_right"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:paddingTop="8dp"
+            android:paddingLeft="15dp"
+            android:paddingBottom="8dp"
             android:text="@string/text_edit"
             android:textColor="@color/tw_black"
             android:textSize="14sp"
@@ -100,30 +103,26 @@
                 />
 
             <TextView
-                android:id="@+id/btn_settlement"
+                android:id="@+id/btn_delete"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_height="49dp"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:paddingTop="9dp"
-                android:paddingBottom="9dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text=""
-                android:textColor="#fff"
-                android:textSize="16sp"
+                android:paddingLeft="@dimen/toolbar_margin_left"
+                android:paddingRight="@dimen/toolbar_margin_right"
+                android:text="@string/text_delete"
+                android:textColor="@color/tw_red"
+                android:textSize="14sp"
                 android:gravity="center"
-                android:background="@drawable/narrow_red_button"
+                android:visibility="gone"
                 />
 
             <LinearLayout
+                android:id="@+id/ll_view_mode_button_group"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="11dp"
-                android:layout_toLeftOf="@id/btn_settlement"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
+                android:layout_height="49dp"
+                android:layout_marginRight="@dimen/toolbar_margin_right"
+                android:layout_alignParentRight="true">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,6 +140,22 @@
                     android:text="$0.00"
                     android:textColor="@color/tw_red"
                     android:textSize="19sp"
+                    />
+                <TextView
+                    android:id="@+id/btn_settlement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_gravity="center_vertical"
+                    android:paddingTop="9dp"
+                    android:paddingBottom="9dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text=""
+                    android:textColor="#fff"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:background="@drawable/narrow_red_button"
                     />
             </LinearLayout>
         </RelativeLayout>
