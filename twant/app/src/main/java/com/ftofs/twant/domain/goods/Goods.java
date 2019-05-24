@@ -4,7 +4,7 @@ import com.ftofs.twant.vo.promotion.GiftVo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,12 +125,12 @@ public class Goods implements Serializable,Cloneable {
     /**
      * 促销开始时间
      */
-    private Timestamp promotionStartTime=new Timestamp(0);
+    private String promotionStartTime="";
 
     /**
      * 促销结束时间
      */
-    private Timestamp promotionEndTime=new Timestamp(0);
+    private String promotionEndTime="";
 
     /**
      * 活动状态
@@ -243,11 +243,11 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public String getGoodsSpecString() {
-        if (goodsSpecs == "") {
-            return "";
-        } else {
-            return goodsSpecs.replace(",,,", "；");
-        }
+        return goodsSpecString;
+    }
+
+    public void setGoodsSpecString(String goodsSpecString) {
+        this.goodsSpecString = goodsSpecString;
     }
 
     public String getGoodsFullSpecs() {
@@ -291,11 +291,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getWebPrice0() {
-        if (getWebUsable() == 0) {
-            return goodsPrice0;
-        } else {
-            return webPrice0;
-        }
+        return webPrice0;
     }
 
     public void setWebPrice0(BigDecimal webPrice0) {
@@ -303,11 +299,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getWebPrice1() {
-        if (getWebUsable() == 0) {
-            return goodsPrice1;
-        } else {
-            return webPrice1;
-        }
+        return webPrice1;
     }
 
     public void setWebPrice1(BigDecimal webPrice1) {
@@ -315,11 +307,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getWebPrice2() {
-        if (getWebUsable() == 0) {
-            return goodsPrice2;
-        } else {
-            return webPrice2;
-        }
+        return webPrice2;
     }
 
     public void setWebPrice2(BigDecimal webPrice2) {
@@ -327,7 +315,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public int getWebUsable() {
-        return 1;
+        return webUsable;
     }
 
     public void setWebUsable(int webUsable) {
@@ -335,11 +323,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getAppPrice0() {
-        if (getAppUsable() == 0) {
-            return goodsPrice0;
-        } else {
-            return appPrice0;
-        }
+        return appPrice0;
     }
 
     public void setAppPrice0(BigDecimal appPrice0) {
@@ -347,11 +331,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getAppPrice1() {
-        if (getAppUsable() == 0) {
-            return goodsPrice1;
-        } else {
-            return appPrice1;
-        }
+        return appPrice1;
     }
 
     public void setAppPrice1(BigDecimal appPrice1) {
@@ -359,11 +339,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getAppPrice2() {
-        if (getAppUsable() == 0) {
-            return goodsPrice2;
-        } else {
-            return appPrice2;
-        }
+        return appPrice2;
     }
 
     public void setAppPrice2(BigDecimal appPrice2) {
@@ -371,7 +347,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public int getAppUsable() {
-        return 1;
+        return appUsable;
     }
 
     public void setAppUsable(int appUsable) {
@@ -379,11 +355,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getWechatPrice0() {
-        if (getWechatUsable() == 0) {
-            return goodsPrice0;
-        } else {
-            return wechatPrice0;
-        }
+        return wechatPrice0;
     }
 
     public void setWechatPrice0(BigDecimal wechatPrice0) {
@@ -391,11 +363,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getWechatPrice1() {
-        if (getWechatUsable() == 0) {
-            return goodsPrice1;
-        } else {
-            return wechatPrice1;
-        }
+        return wechatPrice1;
     }
 
     public void setWechatPrice1(BigDecimal wechatPrice1) {
@@ -403,11 +371,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public BigDecimal getWechatPrice2() {
-        if (getWechatUsable() == 0) {
-            return goodsPrice2;
-        } else {
-            return wechatPrice2;
-        }
+        return wechatPrice2;
     }
 
     public void setWechatPrice2(BigDecimal wechatPrice2) {
@@ -415,7 +379,7 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public int getWechatUsable() {
-        return 0;
+        return wechatUsable;
     }
 
     public void setWechatUsable(int wechatUsable) {
@@ -430,19 +394,19 @@ public class Goods implements Serializable,Cloneable {
         this.promotionId = promotionId;
     }
 
-    public Timestamp getPromotionStartTime() {
+    public String getPromotionStartTime() {
         return promotionStartTime;
     }
 
-    public void setPromotionStartTime(Timestamp promotionStartTime) {
+    public void setPromotionStartTime(String promotionStartTime) {
         this.promotionStartTime = promotionStartTime;
     }
 
-    public Timestamp getPromotionEndTime() {
+    public String getPromotionEndTime() {
         return promotionEndTime;
     }
 
-    public void setPromotionEndTime(Timestamp promotionEndTime) {
+    public void setPromotionEndTime(String promotionEndTime) {
         this.promotionEndTime = promotionEndTime;
     }
 
@@ -464,6 +428,10 @@ public class Goods implements Serializable,Cloneable {
 
     public String getPromotionTypeText() {
         return promotionTypeText;
+    }
+
+    public void setPromotionTypeText(String promotionTypeText) {
+        this.promotionTypeText = promotionTypeText;
     }
 
     public String getPromotionTitle() {
@@ -507,7 +475,11 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public String getImageSrc() {
-        return imageName;
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 
     public List<GiftVo> getGiftVoList() {
@@ -519,9 +491,6 @@ public class Goods implements Serializable,Cloneable {
     }
 
     public Integer getIsGift() {
-        if (isGift == null) {
-            return 0;
-        }
         return isGift;
     }
 
@@ -553,18 +522,6 @@ public class Goods implements Serializable,Cloneable {
         this.limitAmount = limitAmount;
     }
 
-    public int getWeb() {
-        return webUsable;
-    }
-
-    public int getApp() {
-        return appUsable;
-    }
-
-    public int getWechat() {
-        return wechatUsable;
-    }
-
     public int getIsSeckill() {
         return isSeckill;
     }
@@ -587,11 +544,6 @@ public class Goods implements Serializable,Cloneable {
 
     public void setBarCode(String barCode) {
         this.barCode = barCode;
-    }
-
-    @Override
-    public Goods clone() throws CloneNotSupportedException {
-        return (Goods) super.clone();
     }
 
     @Override

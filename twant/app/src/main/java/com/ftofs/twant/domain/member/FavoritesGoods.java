@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class FavoritesGoods implements Serializable {
     /**
@@ -33,7 +33,7 @@ public class FavoritesGoods implements Serializable {
     /**
      * 關注时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 商品關注时价格
@@ -85,11 +85,11 @@ public class FavoritesGoods implements Serializable {
         this.categoryId = categoryId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain;
 
-import java.sql.Timestamp;
+
 
 public class FreightTemplate {
     /**
@@ -21,7 +21,7 @@ public class FreightTemplate {
     /**
      * 最后编辑时间
      */
-    private Timestamp editTime;
+    private String editTime;
 
     /**
      * 计价方式 按体积、重量、件数
@@ -62,11 +62,11 @@ public class FreightTemplate {
         this.storeId = storeId;
     }
 
-    public Timestamp getEditTime() {
+    public String getEditTime() {
         return editTime;
     }
 
-    public void setEditTime(Timestamp editTime) {
+    public void setEditTime(String editTime) {
         this.editTime = editTime;
     }
 

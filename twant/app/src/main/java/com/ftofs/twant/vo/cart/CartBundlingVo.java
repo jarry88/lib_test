@@ -4,7 +4,7 @@ import com.ftofs.twant.domain.orders.Cart;
 import com.ftofs.twant.domain.promotion.Bundling;
 import com.ftofs.twant.domain.store.Store;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,12 +79,12 @@ public class CartBundlingVo {
      * 开始时间
      */
 
-    private Timestamp startTime;
+    private String startTime;
     /**
      * 结束时间
      */
 
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 取得商品信息[联查购物车]
@@ -218,19 +218,19 @@ public class CartBundlingVo {
         this.storageStatus = storageStatus;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

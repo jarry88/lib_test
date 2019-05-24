@@ -1,9 +1,5 @@
 package com.ftofs.twant.vo.evaluate;
 
-import com.ftofs.twant.domain.evaluate.EvaluateGoods;
-import com.ftofs.twant.domain.member.Member;
-
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -66,7 +62,7 @@ public class EvaluateGoodsVo {
      * 评价时间
      */
 
-    private Timestamp evaluateTime;
+    private String evaluateTime;
     /**
      * 评价内容
      */
@@ -83,7 +79,7 @@ public class EvaluateGoodsVo {
      * 追评时间
      */
 
-    private Timestamp evaluateTimeAgain;
+    private String evaluateTimeAgain;
     /**
      * 追评内容
      */
@@ -100,32 +96,6 @@ public class EvaluateGoodsVo {
      * 追评天数文字
      */
     private String days;
-
-    public EvaluateGoodsVo() {
-    }
-
-    public EvaluateGoodsVo(EvaluateGoods evaluateGoods, Member member) {
-        this.evaluateId = evaluateGoods.getEvaluateId();
-        this.commonId = evaluateGoods.getCommonId();
-        this.goodsName = evaluateGoods.getGoodsName();
-        this.goodsFullSpecs = evaluateGoods.getGoodsFullSpecs();
-        this.goodsImageUrl = evaluateGoods.getGoodsImageUrl();
-        this.storeId = evaluateGoods.getStoreId();
-        this.storeName = evaluateGoods.getStoreName();
-        this.memberId = evaluateGoods.getMemberId();
-        this.memberNameHidden = evaluateGoods.getMemberName().substring(0,2) + "******";
-        this.scores = evaluateGoods.getScores();
-        this.evaluateTime = evaluateGoods.getEvaluateTime();
-        this.content = evaluateGoods.getContent();
-        this.explainContent = evaluateGoods.getExplainContent();
-        this.imagesUrlList = evaluateGoods.getImagesUrlList();
-        this.evaluateTimeAgain = evaluateGoods.getEvaluateTimeAgain();
-        this.contentAgain = evaluateGoods.getContentAgain();
-        this.explainContentAgain = evaluateGoods.getExplainContentAgain();
-        this.imagesAgainUrlList = evaluateGoods.getImagesAgainUrlList();
-        this.days = evaluateGoods.getDays();
-        this.memberAvatarUrl = member.getAvatarUrl();
-    }
 
     public int getEvaluateId() {
         return evaluateId;
@@ -215,11 +185,11 @@ public class EvaluateGoodsVo {
         this.scores = scores;
     }
 
-    public Timestamp getEvaluateTime() {
+    public String getEvaluateTime() {
         return evaluateTime;
     }
 
-    public void setEvaluateTime(Timestamp evaluateTime) {
+    public void setEvaluateTime(String evaluateTime) {
         this.evaluateTime = evaluateTime;
     }
 
@@ -247,11 +217,11 @@ public class EvaluateGoodsVo {
         this.explainContent = explainContent;
     }
 
-    public Timestamp getEvaluateTimeAgain() {
+    public String getEvaluateTimeAgain() {
         return evaluateTimeAgain;
     }
 
-    public void setEvaluateTimeAgain(Timestamp evaluateTimeAgain) {
+    public void setEvaluateTimeAgain(String evaluateTimeAgain) {
         this.evaluateTimeAgain = evaluateTimeAgain;
     }
 

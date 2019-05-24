@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class Member implements Serializable,Cloneable {
     /**
@@ -44,7 +44,7 @@ public class Member implements Serializable,Cloneable {
     /**
      * 生日
      */
-    private Timestamp birthday;
+    private String birthday;
 
     /**
      * 头像
@@ -80,7 +80,7 @@ public class Member implements Serializable,Cloneable {
     /**
      * 注册时间
      */
-    private Timestamp registerTime;
+    private String registerTime;
 
     /**
      * 登录次数
@@ -90,12 +90,12 @@ public class Member implements Serializable,Cloneable {
     /**
      * 登录时间
      */
-    private Timestamp loginTime;
+    private String loginTime;
 
     /**
      * 上次登录时间
      */
-    private Timestamp lastLoginTime;
+    private String lastLoginTime;
 
     /**
      * 登录IP
@@ -301,11 +301,11 @@ public class Member implements Serializable,Cloneable {
         this.memberSex = memberSex;
     }
 
-    public Timestamp getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Timestamp birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -349,11 +349,11 @@ public class Member implements Serializable,Cloneable {
         this.mobileIsBind = mobileIsBind;
     }
 
-    public Timestamp getRegisterTime() {
+    public String getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(Timestamp registerTime) {
+    public void setRegisterTime(String registerTime) {
         this.registerTime = registerTime;
     }
 
@@ -365,19 +365,19 @@ public class Member implements Serializable,Cloneable {
         this.loginNum = loginNum;
     }
 
-    public Timestamp getLoginTime() {
+    public String getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(Timestamp loginTime) {
+    public void setLoginTime(String loginTime) {
         this.loginTime = loginTime;
     }
 
-    public Timestamp getLastLoginTime() {
+    public String getLastLoginTime() {
         return lastLoginTime;
     }
 
-    public void setLastLoginTime(Timestamp lastLoginTime) {
+    public void setLastLoginTime(String lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 

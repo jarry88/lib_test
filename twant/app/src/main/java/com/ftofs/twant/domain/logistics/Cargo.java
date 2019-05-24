@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.logistics;
 
 import com.ftofs.twant.vo.logistics.CargoVo;
 
-import java.sql.Timestamp;
+
 
 public class Cargo {
     private int cargoId;
@@ -50,7 +50,7 @@ public class Cargo {
     /**
      * 創建時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     public Cargo(){}
 
@@ -140,11 +140,11 @@ public class Cargo {
         this.cargoLong = cargoLong;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

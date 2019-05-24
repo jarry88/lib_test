@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class Consult implements Serializable {
     /**
@@ -62,7 +62,7 @@ public class Consult implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 卖家是否已回复
@@ -78,7 +78,7 @@ public class Consult implements Serializable {
     /**
      * 回复时间
      */
-    private Timestamp replyTime;
+    private String replyTime;
 
     /**
      * 会员已读回复
@@ -179,11 +179,11 @@ public class Consult implements Serializable {
         this.consultContent = consultContent;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -203,11 +203,11 @@ public class Consult implements Serializable {
         this.consultReply = consultReply;
     }
 
-    public Timestamp getReplyTime() {
+    public String getReplyTime() {
         return replyTime;
     }
 
-    public void setReplyTime(Timestamp replyTime) {
+    public void setReplyTime(String replyTime) {
         this.replyTime = replyTime;
     }
 

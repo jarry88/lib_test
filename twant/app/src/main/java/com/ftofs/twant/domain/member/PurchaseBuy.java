@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class PurchaseBuy {
 	/**
@@ -72,7 +72,7 @@ public class PurchaseBuy {
 	/**
 	 * 采购截止日期
 	 */
-	private Timestamp endTime;
+	private String endTime;
 
 	/**
 	 * 采购类型   现货/标准品、紧急采购、二手商品、库存、求租、代理加盟、合作
@@ -97,7 +97,7 @@ public class PurchaseBuy {
 	/**
 	 * 创建时间
 	 */
-	private Timestamp createTime;
+	private String createTime;
 	
 	/**
 	 * 是否需要发票 1:需要 0:不需要
@@ -122,7 +122,7 @@ public class PurchaseBuy {
 	/**
 	 * 期望收货日期
 	 */
-	private Timestamp receiveTime;
+	private String receiveTime;
 
 	/**
 	 * 采购单号
@@ -135,10 +135,10 @@ public class PurchaseBuy {
 	public void setPurchaseId(String purchaseId) {
 		this.purchaseId = purchaseId;
 	}
-	public Timestamp getReceiveTime() {
+	public String getReceiveTime() {
 		return receiveTime;
 	}
-	public void setReceiveTime(Timestamp receiveTime) {
+	public void setReceiveTime(String receiveTime) {
 		this.receiveTime = receiveTime;
 	}
 	public Integer getContactType() {
@@ -267,16 +267,16 @@ public class PurchaseBuy {
 	public void setState(Integer state) {
 		this.state = state;
 	}
-	public Timestamp getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Timestamp endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
-	public Timestamp getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 	

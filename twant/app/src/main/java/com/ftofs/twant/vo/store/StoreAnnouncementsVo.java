@@ -2,7 +2,7 @@ package com.ftofs.twant.vo.store;
 
 import com.ftofs.twant.domain.store.StoreAnnouncements;
 
-import java.sql.Timestamp;
+
 
 /**
  * @Description: 店铺公告视图对象
@@ -45,11 +45,11 @@ public class StoreAnnouncementsVo {
     /**
      * 发布时间
      */
-    private Timestamp createTime;
+    private String createTime;
     /**
      * 修改时间
      */
-    private Timestamp modifyTime;
+    private String modifyTime;
     /**
      * 状态 0下线  1上线中
      */
@@ -141,19 +141,19 @@ public class StoreAnnouncementsVo {
         this.modifyBy = modifyBy;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getModifyTime() {
+    public String getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 

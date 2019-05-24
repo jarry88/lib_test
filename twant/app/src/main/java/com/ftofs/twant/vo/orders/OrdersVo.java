@@ -4,7 +4,7 @@ import com.ftofs.twant.vo.refund.RefundItemVo;
 import com.ftofs.twant.vo.store.StoreServiceStaffVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,7 +127,7 @@ public class OrdersVo {
      * 下单时间
      */
 
-    private Timestamp createTime;
+    private String createTime;
     /**
      * 线上线下支付代码online/offline
      */
@@ -152,17 +152,17 @@ public class OrdersVo {
      * 支付时间
      */
 
-    private Timestamp paymentTime;
+    private String paymentTime;
     /**
      * 发货时间
      */
 
-    private Timestamp sendTime;
+    private String sendTime;
     /**
      * 订单完成时间
      */
 
-    private Timestamp finishTime;
+    private String finishTime;
     /**
      * 订单金额
      */
@@ -187,7 +187,7 @@ public class OrdersVo {
      * 评价时间
      */
 
-    private Timestamp evaluationTime;
+    private String evaluationTime;
     /**
      * 发货单号
      */
@@ -212,7 +212,7 @@ public class OrdersVo {
      * 自动收货时间
      */
 
-    private Timestamp autoReceiveTime;
+    private String autoReceiveTime;
     /**
      * 纳税人识别号或统一社会信用代码
      */
@@ -233,12 +233,12 @@ public class OrdersVo {
      * 关闭时间
      */
 
-    private Timestamp cancelTime;
+    private String cancelTime;
     /**
      * 自动关闭时间
      */
 
-    private Timestamp autoCancelTime;
+    private String autoCancelTime;
     /**
      * 自动取消周期
      */
@@ -466,7 +466,7 @@ public class OrdersVo {
     /**
      * 取貨時間
      */
-    private Timestamp takeTime;
+    private String takeTime;
 
     //Modify By liusf 2018/10/5 14:12 添加提貨碼
     /**
@@ -687,11 +687,11 @@ public class OrdersVo {
         this.receiverMessage = receiverMessage;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -735,27 +735,27 @@ public class OrdersVo {
         this.paymentName = paymentName;
     }
 
-    public Timestamp getPaymentTime() {
+    public String getPaymentTime() {
         return paymentTime;
     }
 
-    public void setPaymentTime(Timestamp paymentTime) {
+    public void setPaymentTime(String paymentTime) {
         this.paymentTime = paymentTime;
     }
 
-    public Timestamp getSendTime() {
+    public String getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Timestamp sendTime) {
+    public void setSendTime(String sendTime) {
         this.sendTime = sendTime;
     }
 
-    public Timestamp getFinishTime() {
+    public String getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(Timestamp finishTime) {
+    public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
     }
 
@@ -799,11 +799,11 @@ public class OrdersVo {
         this.evaluationAppendState = evaluationAppendState;
     }
 
-    public Timestamp getEvaluationTime() {
+    public String getEvaluationTime() {
         return evaluationTime;
     }
 
-    public void setEvaluationTime(Timestamp evaluationTime) {
+    public void setEvaluationTime(String evaluationTime) {
         this.evaluationTime = evaluationTime;
     }
 
@@ -847,11 +847,11 @@ public class OrdersVo {
         this.shipNote = shipNote;
     }
 
-    public Timestamp getAutoReceiveTime() {
+    public String getAutoReceiveTime() {
         return autoReceiveTime;
     }
 
-    public void setAutoReceiveTime(Timestamp autoReceiveTime) {
+    public void setAutoReceiveTime(String autoReceiveTime) {
         this.autoReceiveTime = autoReceiveTime;
     }
 
@@ -887,19 +887,19 @@ public class OrdersVo {
         this.cancelReasonContent = cancelReasonContent;
     }
 
-    public Timestamp getCancelTime() {
+    public String getCancelTime() {
         return cancelTime;
     }
 
-    public void setCancelTime(Timestamp cancelTime) {
+    public void setCancelTime(String cancelTime) {
         this.cancelTime = cancelTime;
     }
 
-    public Timestamp getAutoCancelTime() {
+    public String getAutoCancelTime() {
         return autoCancelTime;
     }
 
-    public void setAutoCancelTime(Timestamp autoCancelTime) {
+    public void setAutoCancelTime(String autoCancelTime) {
         this.autoCancelTime = autoCancelTime;
     }
 
@@ -1391,11 +1391,11 @@ public class OrdersVo {
         this.lockState = lockState;
     }
 
-    public Timestamp getTakeTime() {
+    public String getTakeTime() {
         return takeTime;
     }
 
-    public void setTakeTime(Timestamp takeTime) {
+    public void setTakeTime(String takeTime) {
         this.takeTime = takeTime;
     }
 

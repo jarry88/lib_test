@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.evaluate;
 
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +89,7 @@ public class EvaluateGoods {
     /**
      * 评价时间
      */
-    private Timestamp evaluateTime;
+    private String evaluateTime;
 
     /**
      * 评价内容
@@ -109,7 +109,7 @@ public class EvaluateGoods {
     /**
      * 追评时间
      */
-    private Timestamp evaluateTimeAgain;
+    private String evaluateTimeAgain;
 
     /**
      * 追加评价内容
@@ -182,20 +182,20 @@ public class EvaluateGoods {
         this.goodsName = goodsName;
     }
 
-    public String getGoodsImage() {
-        return goodsImage;
-    }
-
-    public void setGoodsImage(String goodsImage) {
-        this.goodsImage = goodsImage;
-    }
-
     public String getGoodsFullSpecs() {
         return goodsFullSpecs;
     }
 
     public void setGoodsFullSpecs(String goodsFullSpecs) {
         this.goodsFullSpecs = goodsFullSpecs;
+    }
+
+    public String getGoodsImage() {
+        return goodsImage;
+    }
+
+    public void setGoodsImage(String goodsImage) {
+        this.goodsImage = goodsImage;
     }
 
     public int getStoreId() {
@@ -254,11 +254,11 @@ public class EvaluateGoods {
         this.hasImage = hasImage;
     }
 
-    public Timestamp getEvaluateTime() {
+    public String getEvaluateTime() {
         return evaluateTime;
     }
 
-    public void setEvaluateTime(Timestamp evaluateTime) {
+    public void setEvaluateTime(String evaluateTime) {
         this.evaluateTime = evaluateTime;
     }
 
@@ -286,11 +286,11 @@ public class EvaluateGoods {
         this.images = images;
     }
 
-    public Timestamp getEvaluateTimeAgain() {
+    public String getEvaluateTimeAgain() {
         return evaluateTimeAgain;
     }
 
-    public void setEvaluateTimeAgain(Timestamp evaluateTimeAgain) {
+    public void setEvaluateTimeAgain(String evaluateTimeAgain) {
         this.evaluateTimeAgain = evaluateTimeAgain;
     }
 
@@ -316,45 +316,6 @@ public class EvaluateGoods {
 
     public void setImagesAgain(String imagesAgain) {
         this.imagesAgain = imagesAgain;
-    }
-
-    public String getGoodsImageUrl() {
-        return goodsImage;
-    }
-
-    public List<String> getImagesUrlList() {
-        List<String> imageUrlList = new ArrayList<>();
-        if (images != null && !images.isEmpty()) {
-            String[] imagesArr = images.split("_");
-            for(String image : imagesArr) {
-                imageUrlList.add(image);
-            }
-        }
-        return imageUrlList;
-    }
-
-    public List<String> getImagesAgainUrlList() {
-        List<String> imageUrlList = new ArrayList<>();
-        if (imagesAgain != null && !imagesAgain.isEmpty()) {
-            String[] imagesArr = imagesAgain.split("_");
-            for(String image : imagesArr) {
-                imageUrlList.add(image);
-            }
-        }
-        return imageUrlList;
-    }
-
-    public String getDays() {
-        //计算追评和首次评论间隔的天数
-        if(evaluateTimeAgain == null) {
-            return "";
-        }
-        long days = (evaluateTimeAgain.getTime() - evaluateTime.getTime()) / 1000 / 60 / 60 / 24;
-        if (days == 0) {
-            return "当";
-        } else {
-            return String.valueOf(days);
-        }
     }
 
     @Override

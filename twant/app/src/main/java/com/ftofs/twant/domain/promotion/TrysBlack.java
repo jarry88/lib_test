@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.promotion;
 
-import java.sql.Timestamp;
+
 
 public class TrysBlack {
     /**
@@ -46,7 +46,7 @@ public class TrysBlack {
     /**
      * 创建时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 试用类型 1-付邮费试用 2返券试用
@@ -148,11 +148,11 @@ public class TrysBlack {
         this.reason = reason;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

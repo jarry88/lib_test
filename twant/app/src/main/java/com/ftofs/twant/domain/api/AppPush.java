@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.api;
 
-import java.sql.Timestamp;
-
 public class AppPush {
     /**
      * 编号
@@ -36,7 +34,7 @@ public class AppPush {
     /**
      * 创建时间
      */
-    private Timestamp createTime = new Timestamp(0);
+    private String createTime = "";
 
     /**
      * 编号
@@ -91,11 +89,11 @@ public class AppPush {
         this.data = data;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

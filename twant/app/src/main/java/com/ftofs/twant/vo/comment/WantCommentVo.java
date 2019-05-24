@@ -8,7 +8,7 @@ import com.ftofs.twant.vo.store.StoreVo;
 import com.ftofs.twant.vo.wantpost.WantPostVo;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
+
 import java.util.List;
 
 /**
@@ -69,7 +69,7 @@ public class WantCommentVo {
     /**
      * 評論時間
      */
-    private Timestamp createTime;
+    private String createTime;
     /**
      * 格式化評論時間
      */
@@ -276,11 +276,11 @@ public class WantCommentVo {
         this.createBy = createBy;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

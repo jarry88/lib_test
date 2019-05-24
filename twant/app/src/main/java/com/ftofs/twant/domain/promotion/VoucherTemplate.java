@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 
 public class VoucherTemplate implements Serializable {
@@ -24,12 +24,12 @@ public class VoucherTemplate implements Serializable {
     /**
      * 店铺券有效期开始时间
      */
-    private Timestamp useStartTime;
+    private String useStartTime;
 
     /**
      * 店铺券有效期结束时间
      */
-    private Timestamp useEndTime;
+    private String useEndTime;
 
     /**
      * 店铺券有效天数，店铺券分为设置有效开始时间和结束时间或者设置有效天数两种，后者针对满额促销
@@ -94,12 +94,12 @@ public class VoucherTemplate implements Serializable {
     /**
      * 活动创建时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 活动最后更新时间
      */
-    private Timestamp updateTime;
+    private String updateTime;
 
     /**
      * 领取店铺券限制的会员等级
@@ -119,7 +119,7 @@ public class VoucherTemplate implements Serializable {
     /**
      * 活动开始时间（即开始领取券时间，为空表示立即开始）
      */
-    private Timestamp templateStartTime = null;
+    private String templateStartTime = null;
 
     /**
      * PC端是否可用
@@ -225,19 +225,19 @@ public class VoucherTemplate implements Serializable {
         this.templateDescribe = templateDescribe;
     }
 
-    public Timestamp getUseStartTime() {
+    public String getUseStartTime() {
         return useStartTime;
     }
 
-    public void setUseStartTime(Timestamp useStartTime) {
+    public void setUseStartTime(String useStartTime) {
         this.useStartTime = useStartTime;
     }
 
-    public Timestamp getUseEndTime() {
+    public String getUseEndTime() {
         return useEndTime;
     }
 
-    public void setUseEndTime(Timestamp useEndTime) {
+    public void setUseEndTime(String useEndTime) {
         this.useEndTime = useEndTime;
     }
 
@@ -337,19 +337,19 @@ public class VoucherTemplate implements Serializable {
         this.usedNum = usedNum;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -377,11 +377,11 @@ public class VoucherTemplate implements Serializable {
         this.templateType = templateType;
     }
 
-    public Timestamp getTemplateStartTime() {
+    public String getTemplateStartTime() {
         return templateStartTime;
     }
 
-    public void setTemplateStartTime(Timestamp templateStartTime) {
+    public void setTemplateStartTime(String templateStartTime) {
         this.templateStartTime = templateStartTime;
     }
 

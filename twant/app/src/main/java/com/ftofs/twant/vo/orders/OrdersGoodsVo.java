@@ -4,7 +4,7 @@ import com.ftofs.twant.domain.orders.Orders;
 import com.ftofs.twant.domain.orders.OrdersGoods;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +94,7 @@ public class OrdersGoodsVo {
     /**
      * 下单时间
      */
-    private Timestamp createTime;
+    private String createTime;
     /**
      * 一级分类
      */
@@ -394,11 +394,11 @@ public class OrdersGoodsVo {
         this.memberName = memberName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

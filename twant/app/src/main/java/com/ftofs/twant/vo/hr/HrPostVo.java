@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.hr;
 import com.ftofs.twant.domain.hr.HrPost;
 import com.ftofs.twant.vo.store.StoreVo;
 
-import java.sql.Timestamp;
+
 
 /**
  * @Description: 招聘視圖對象
@@ -86,7 +86,7 @@ public class HrPostVo {
     /**
      * 發佈時間
      */
-    private Timestamp createTime;
+    private String createTime;
     /**
      * 店鋪id
      */
@@ -268,11 +268,11 @@ public class HrPostVo {
         this.nickName = nickName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

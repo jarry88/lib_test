@@ -6,7 +6,7 @@ import com.ftofs.twant.domain.goods.GoodsImage;
 import com.ftofs.twant.vo.promotion.GiftVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,11 +112,11 @@ public class GoodsInfoVo {
     /**
      * 促销开始时间
      */
-    private Timestamp promotionStartTime=new Timestamp(0);
+    private String promotionStartTime="";
     /**
      * 促销结束时间
      */
-    private Timestamp promotionEndTime=new Timestamp(0);
+    private String promotionEndTime="";
     /**
      * 活动状态
      */
@@ -215,7 +215,7 @@ public class GoodsInfoVo {
     private String specJson;
     private String goodsSpecValueJson;
     private int categoryId;
-    private Timestamp createTime;
+    private String createTime;
     private int categoryId1;
     private int categoryId2;
     private int categoryId3;
@@ -493,19 +493,19 @@ public class GoodsInfoVo {
         this.promotionId = promotionId;
     }
 
-    public Timestamp getPromotionStartTime() {
+    public String getPromotionStartTime() {
         return promotionStartTime;
     }
 
-    public void setPromotionStartTime(Timestamp promotionStartTime) {
+    public void setPromotionStartTime(String promotionStartTime) {
         this.promotionStartTime = promotionStartTime;
     }
 
-    public Timestamp getPromotionEndTime() {
+    public String getPromotionEndTime() {
         return promotionEndTime;
     }
 
-    public void setPromotionEndTime(Timestamp promotionEndTime) {
+    public void setPromotionEndTime(String promotionEndTime) {
         this.promotionEndTime = promotionEndTime;
     }
 
@@ -805,11 +805,11 @@ public class GoodsInfoVo {
         this.categoryId = categoryId;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

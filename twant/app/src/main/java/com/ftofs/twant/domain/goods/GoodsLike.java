@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.goods;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class GoodsLike implements Serializable {
     /**
@@ -27,17 +27,17 @@ public class GoodsLike implements Serializable {
     /**
      * 創建時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 修改時間
      */
-    private Timestamp modifyTime;
+    private String modifyTime;
 
     public GoodsLike(){
     }
 
-    public GoodsLike(int memberId, int commonId, int state, Timestamp createTime, Timestamp modifyTime) {
+    public GoodsLike(int memberId, int commonId, int state, String createTime, String modifyTime) {
         this.memberId = memberId;
         this.commonId = commonId;
         this.state = state;
@@ -77,19 +77,19 @@ public class GoodsLike implements Serializable {
         this.state = state;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getModifyTime() {
+    public String getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Timestamp modifyTime) {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 

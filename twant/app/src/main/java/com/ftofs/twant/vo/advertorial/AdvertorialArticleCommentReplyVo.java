@@ -4,7 +4,7 @@ import com.ftofs.twant.domain.advertorial.AdvertorialArticleCommentReply;
 import com.ftofs.twant.domain.member.Member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 /**
  * copyright  Copyright: Bizpower多用户商城系统
@@ -66,7 +66,7 @@ public class AdvertorialArticleCommentReplyVo implements Serializable {
      * 添加时间
      */
 
-    private Timestamp addTime;
+    private String addTime;
     /**
      * 状态
      * 1.正常 0.隐藏
@@ -187,11 +187,11 @@ public class AdvertorialArticleCommentReplyVo implements Serializable {
         this.content = content;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

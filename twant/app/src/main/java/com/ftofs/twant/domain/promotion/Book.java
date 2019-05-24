@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class Book implements Serializable {
     /**
@@ -48,12 +48,12 @@ public class Book implements Serializable {
     /**
      * 定金支付结束时间
      */
-    private Timestamp downTime;
+    private String downTime;
 
     /**
      * 自增排序
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 状态
@@ -124,19 +124,19 @@ public class Book implements Serializable {
         this.totalPayment = totalPayment;
     }
 
-    public Timestamp getDownTime() {
+    public String getDownTime() {
         return downTime;
     }
 
-    public void setDownTime(Timestamp downTime) {
+    public void setDownTime(String downTime) {
         this.downTime = downTime;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

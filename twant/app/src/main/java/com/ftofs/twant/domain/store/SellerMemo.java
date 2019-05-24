@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class SellerMemo implements Serializable {
 	//便签id
@@ -13,15 +13,15 @@ public class SellerMemo implements Serializable {
 	//状态
 	private Integer state;
 	//创建时间
-	private Timestamp createTime;
+	private String createTime;
 	//修改时间
-	private Timestamp modifyTime;
+	private String modifyTime;
 
 	public SellerMemo() {
 	}
 
 	public SellerMemo(Integer sellerId, String content, Integer state,
-			Timestamp createTime, Timestamp modifyTime) {
+			String createTime, String modifyTime) {
 		this.sellerId = sellerId;
 		this.content = content;
 		this.state = state;
@@ -65,20 +65,20 @@ public class SellerMemo implements Serializable {
 	}
 
 
-	public Timestamp getCreateTime() {
+	public String getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 
 
-	public Timestamp getModifyTime() {
+	public String getModifyTime() {
 		return this.modifyTime;
 	}
 
-	public void setModifyTime(Timestamp modifyTime) {
+	public void setModifyTime(String modifyTime) {
 		this.modifyTime = modifyTime;
 	}
 

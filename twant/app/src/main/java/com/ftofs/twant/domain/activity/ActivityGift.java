@@ -79,6 +79,10 @@ public class ActivityGift implements Serializable {
         return imageSrc;
     }
 
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
     @Override
     public String toString() {
         return "ActivityGift{" +

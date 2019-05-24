@@ -6,7 +6,7 @@ import com.ftofs.twant.vo.goods.GoodsImVo;
 import com.ftofs.twant.vo.orders.OrdersImVo;
 import com.ftofs.twant.vo.store.StoreVo;
 
-import java.sql.Timestamp;
+
 
 /**
  * @Description: 消息視圖對象
@@ -59,7 +59,7 @@ public class ImMessageLogVo {
      * 發送時間
      */
 
-    private Timestamp sendTime;
+    private String sendTime;
 
     /**
      * 发送人类型
@@ -199,11 +199,11 @@ public class ImMessageLogVo {
         this.messageType = messageType;
     }
 
-    public Timestamp getSendTime() {
+    public String getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Timestamp sendTime) {
+    public void setSendTime(String sendTime) {
         this.sendTime = sendTime;
     }
 

@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 
 public class Voucher implements Serializable {
@@ -34,12 +34,12 @@ public class Voucher implements Serializable {
     /**
      * 店铺券有效期开始时间
      */
-    private Timestamp startTime;
+    private String startTime;
 
     /**
      * 店铺券有效期结束时间
      */
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 面额
@@ -69,7 +69,7 @@ public class Voucher implements Serializable {
     /**
      * 领取时间
      */
-    private Timestamp activeTime;
+    private String activeTime;
 
     /**
      * 店铺券类型 1卡密领取 2免费领取 4活动赠送
@@ -191,19 +191,19 @@ public class Voucher implements Serializable {
         this.voucherDescribe = voucherDescribe;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -247,11 +247,11 @@ public class Voucher implements Serializable {
         this.voucherState = voucherState;
     }
 
-    public Timestamp getActiveTime() {
+    public String getActiveTime() {
         return activeTime;
     }
 
-    public void setActiveTime(Timestamp activeTime) {
+    public void setActiveTime(String activeTime) {
         this.activeTime = activeTime;
     }
 

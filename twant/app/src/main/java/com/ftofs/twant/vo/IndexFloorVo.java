@@ -3,7 +3,7 @@ package com.ftofs.twant.vo;
 import com.ftofs.twant.domain.IndexFloor;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.util.List;
 
 /**
@@ -45,7 +45,7 @@ public class IndexFloorVo implements Serializable {
     /**
      * 更新时间
      */
-    private Timestamp floorUpdateTime;
+    private String floorUpdateTime;
 
     /**
      * 楼层编号
@@ -119,11 +119,11 @@ public class IndexFloorVo implements Serializable {
         this.floorTemplateName = floorTemplateName;
     }
 
-    public Timestamp getFloorUpdateTime() {
+    public String getFloorUpdateTime() {
         return floorUpdateTime;
     }
 
-    public void setFloorUpdateTime(Timestamp floorUpdateTime) {
+    public void setFloorUpdateTime(String floorUpdateTime) {
         this.floorUpdateTime = floorUpdateTime;
     }
 

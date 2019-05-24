@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class VoucherPwd implements Serializable {
     /**
@@ -32,7 +32,7 @@ public class VoucherPwd implements Serializable {
     /**
      * 领取时间
      */
-    private Timestamp activeTime;
+    private String activeTime;
 
     public int getPwdId() {
         return pwdId;
@@ -74,11 +74,11 @@ public class VoucherPwd implements Serializable {
         this.pwdCode = pwdCode;
     }
 
-    public Timestamp getActiveTime() {
+    public String getActiveTime() {
         return activeTime;
     }
 
-    public void setActiveTime(Timestamp activeTime) {
+    public void setActiveTime(String activeTime) {
         this.activeTime = activeTime;
     }
 

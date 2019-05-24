@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class IndexCategoryNav implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class IndexCategoryNav implements Serializable {
     /**
      * 更新时间
      */
-    private Timestamp categoryNavUpdateTime;
+    private String categoryNavUpdateTime;
 
     public int getCategoryId() {
         return categoryId;
@@ -40,11 +40,11 @@ public class IndexCategoryNav implements Serializable {
         this.categoryNavAdvJson = categoryNavAdvJson;
     }
 
-    public Timestamp getCategoryNavUpdateTime() {
+    public String getCategoryNavUpdateTime() {
         return categoryNavUpdateTime;
     }
 
-    public void setCategoryNavUpdateTime(Timestamp categoryNavUpdateTime) {
+    public void setCategoryNavUpdateTime(String categoryNavUpdateTime) {
         this.categoryNavUpdateTime = categoryNavUpdateTime;
     }
 

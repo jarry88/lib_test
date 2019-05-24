@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.hr;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class HrPostFavor implements Serializable {
 
@@ -18,7 +18,7 @@ public class HrPostFavor implements Serializable {
     /**
      * 關注時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     public int getPostId() {
         return postId;
@@ -36,11 +36,11 @@ public class HrPostFavor implements Serializable {
         this.memberName = memberName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

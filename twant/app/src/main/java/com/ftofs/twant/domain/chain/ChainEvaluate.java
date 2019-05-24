@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.chain;
 
-import java.sql.Timestamp;
+
 
 public class ChainEvaluate {
     /**
@@ -76,7 +76,7 @@ public class ChainEvaluate {
     /**
      * 评价时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     public int getEvaluateId() {
         return evaluateId;
@@ -192,11 +192,11 @@ public class ChainEvaluate {
         this.content = content;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

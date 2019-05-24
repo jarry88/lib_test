@@ -11,7 +11,7 @@ import com.ftofs.twant.vo.orders.GoodsContractVo;
 import com.ftofs.twant.vo.promotion.GiftVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -211,12 +211,12 @@ public class BuyGoodsItemVo implements Cloneable {
      * 促销开始时间
      */
 
-    private Timestamp promotionBeginTime;
+    private String promotionBeginTime;
     /**
      * 促销结束时间
      */
 
-    private Timestamp promotionEndTime;
+    private String promotionEndTime;
     /**
      * 销售模式
      */
@@ -926,19 +926,19 @@ public class BuyGoodsItemVo implements Cloneable {
         this.wechatUsable = wechatUsable;
     }
 
-    public Timestamp getPromotionBeginTime() {
+    public String getPromotionBeginTime() {
         return promotionBeginTime;
     }
 
-    public void setPromotionBeginTime(Timestamp promotionBeginTime) {
+    public void setPromotionBeginTime(String promotionBeginTime) {
         this.promotionBeginTime = promotionBeginTime;
     }
 
-    public Timestamp getPromotionEndTime() {
+    public String getPromotionEndTime() {
         return promotionEndTime;
     }
 
-    public void setPromotionEndTime(Timestamp promotionEndTime) {
+    public void setPromotionEndTime(String promotionEndTime) {
         this.promotionEndTime = promotionEndTime;
     }
 

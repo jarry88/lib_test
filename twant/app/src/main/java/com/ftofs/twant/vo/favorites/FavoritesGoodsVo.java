@@ -6,7 +6,7 @@ import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.store.StoreVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -39,7 +39,7 @@ public class FavoritesGoodsVo {
      * 關注时间
      */
 
-    private Timestamp addTime = new Timestamp(0);
+    private String addTime = "";
     /**
      * 商品關注时价格
      */
@@ -142,11 +142,11 @@ public class FavoritesGoodsVo {
         this.storeId = storeId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

@@ -7,7 +7,7 @@ import com.ftofs.twant.domain.goods.GoodsCommon;
 import com.ftofs.twant.domain.goods.GoodsImage;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,11 +66,11 @@ public class GoodsCommonExport {
     /**
      * 商品创建时间
      */
-    private Timestamp createTime;
+    private String createTime;
     /**
      * 商品更新时间
      */
-    private Timestamp updateTime;
+    private String updateTime;
     /**
      * 商品运费
      */
@@ -186,11 +186,11 @@ public class GoodsCommonExport {
     /**
      * 促销开始时间
      */
-    private Timestamp promotionStartTime;
+    private String promotionStartTime;
     /**
      * 促销结束时间
      */
-    private Timestamp promotionEndTime;
+    private String promotionEndTime;
     /**
      * 活动状态
      */
@@ -441,19 +441,19 @@ public class GoodsCommonExport {
         this.brandName = brandName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -681,19 +681,19 @@ public class GoodsCommonExport {
         this.promotionId = promotionId;
     }
 
-    public Timestamp getPromotionStartTime() {
+    public String getPromotionStartTime() {
         return promotionStartTime;
     }
 
-    public void setPromotionStartTime(Timestamp promotionStartTime) {
+    public void setPromotionStartTime(String promotionStartTime) {
         this.promotionStartTime = promotionStartTime;
     }
 
-    public Timestamp getPromotionEndTime() {
+    public String getPromotionEndTime() {
         return promotionEndTime;
     }
 
-    public void setPromotionEndTime(Timestamp promotionEndTime) {
+    public void setPromotionEndTime(String promotionEndTime) {
         this.promotionEndTime = promotionEndTime;
     }
 

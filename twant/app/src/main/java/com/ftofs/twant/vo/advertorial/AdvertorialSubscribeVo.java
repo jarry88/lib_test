@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.advertorial;
 import com.ftofs.twant.domain.advertorial.AdvertorialAuthor;
 import com.ftofs.twant.domain.advertorial.AdvertorialSubscribe;
 
-import java.sql.Timestamp;
+
 
 /**
  * copyright  Copyright: Bizpower多用户商城系统
@@ -36,7 +36,7 @@ public class AdvertorialSubscribeVo {
     /**
      * 添加时间用于排序
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 作者信息
@@ -51,7 +51,7 @@ public class AdvertorialSubscribeVo {
     /**
      * 该作者发布的最后一篇文章 时间
      */
-    private Timestamp lastArticleAddTime ;
+    private String lastArticleAddTime ;
 
     public AdvertorialSubscribeVo(AdvertorialSubscribe advertorialSubscribe , AdvertorialAuthor advertorialAuthor) {
         this.subscribeId = advertorialSubscribe.getSubscribeId();
@@ -94,11 +94,11 @@ public class AdvertorialSubscribeVo {
         this.authorName = authorName;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -118,11 +118,11 @@ public class AdvertorialSubscribeVo {
         this.lastArticleTitle = lastArticleTitle;
     }
 
-    public Timestamp getLastArticleAddTime() {
+    public String getLastArticleAddTime() {
         return lastArticleAddTime;
     }
 
-    public void setLastArticleAddTime(Timestamp lastArticleAddTime) {
+    public void setLastArticleAddTime(String lastArticleAddTime) {
         this.lastArticleAddTime = lastArticleAddTime;
     }
 

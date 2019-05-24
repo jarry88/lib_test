@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.complain;
 
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,12 +98,12 @@ public class Complain {
     /**
      * 投诉时间
      */
-    private Timestamp accuserTime;
+    private String accuserTime;
 
     /**
      * 管理员审核投诉时间
      */
-    private Timestamp adminCheckTime;
+    private String adminCheckTime;
 
     /**
      * 审核管理员名称
@@ -118,7 +118,7 @@ public class Complain {
     /**
      * 申诉时间
      */
-    private Timestamp accusedTime;
+    private String accusedTime;
 
     /**
      * 申诉内容
@@ -133,7 +133,7 @@ public class Complain {
     /**
      * 管理员最终仲裁时间
      */
-    private Timestamp adminConfirmTime;
+    private String adminConfirmTime;
 
     /**
      * 管理员最终仲裁意见
@@ -377,19 +377,19 @@ public class Complain {
         this.accuserImages = accuserImages;
     }
 
-    public Timestamp getAccuserTime() {
+    public String getAccuserTime() {
         return accuserTime;
     }
 
-    public void setAccuserTime(Timestamp accuserTime) {
+    public void setAccuserTime(String accuserTime) {
         this.accuserTime = accuserTime;
     }
 
-    public Timestamp getAdminCheckTime() {
+    public String getAdminCheckTime() {
         return adminCheckTime;
     }
 
-    public void setAdminCheckTime(Timestamp adminCheckTime) {
+    public void setAdminCheckTime(String adminCheckTime) {
         this.adminCheckTime = adminCheckTime;
     }
 
@@ -409,11 +409,11 @@ public class Complain {
         this.adminCheckContent = adminCheckContent;
     }
 
-    public Timestamp getAccusedTime() {
+    public String getAccusedTime() {
         return accusedTime;
     }
 
-    public void setAccusedTime(Timestamp accusedTime) {
+    public void setAccusedTime(String accusedTime) {
         this.accusedTime = accusedTime;
     }
 
@@ -433,11 +433,11 @@ public class Complain {
         this.accusedImages = accusedImages;
     }
 
-    public Timestamp getAdminConfirmTime() {
+    public String getAdminConfirmTime() {
         return adminConfirmTime;
     }
 
-    public void setAdminConfirmTime(Timestamp adminConfirmTime) {
+    public void setAdminConfirmTime(String adminConfirmTime) {
         this.adminConfirmTime = adminConfirmTime;
     }
 

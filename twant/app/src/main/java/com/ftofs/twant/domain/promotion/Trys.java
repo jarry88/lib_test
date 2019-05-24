@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.promotion;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class Trys {
     /**
@@ -27,12 +27,12 @@ public class Trys {
     /**
      * 开始时间
      */
-    private Timestamp startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 店铺编号
@@ -87,7 +87,7 @@ public class Trys {
     /**
      * 活动创建时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 活动内容
@@ -210,19 +210,19 @@ public class Trys {
         this.goodsName = goodsName;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -298,11 +298,11 @@ public class Trys {
         this.trysState = trysState;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.seckill;
 
-import java.sql.Timestamp;
+
 
 public class SeckillBeginNotice {
     /**
@@ -21,7 +21,7 @@ public class SeckillBeginNotice {
     /**
      * 开始时间
      */
-    private Timestamp startTime = new Timestamp(0);
+    private String startTime = "";
 
     public int getArrivalId() {
         return arrivalId;
@@ -47,11 +47,11 @@ public class SeckillBeginNotice {
         this.memberId = memberId;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 

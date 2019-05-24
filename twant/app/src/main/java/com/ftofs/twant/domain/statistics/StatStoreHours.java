@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.statistics;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class StatStoreHours implements Serializable {
     /**
@@ -33,7 +33,7 @@ public class StatStoreHours implements Serializable {
     /**
      * 日期(具体到天)
      */
-    private Timestamp statDate;
+    private String statDate;
 
     /**
      * 小时
@@ -95,11 +95,11 @@ public class StatStoreHours implements Serializable {
         this.storeClassName = storeClassName;
     }
 
-    public Timestamp getStatDate() {
+    public String getStatDate() {
         return statDate;
     }
 
-    public void setStatDate(Timestamp statDate) {
+    public void setStatDate(String statDate) {
         this.statDate = statDate;
     }
 

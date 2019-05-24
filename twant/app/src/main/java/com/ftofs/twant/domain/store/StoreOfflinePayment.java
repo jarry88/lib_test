@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.store;
 
-import java.sql.Timestamp;
+
 
 public class StoreOfflinePayment {
     /**
@@ -21,7 +21,7 @@ public class StoreOfflinePayment {
     /**
      * 創建時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     public int getId() {
         return id;
@@ -47,11 +47,11 @@ public class StoreOfflinePayment {
         this.paymentId = paymentId;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.store;
 
 import com.ftofs.twant.domain.member.Member;
 
-import java.sql.Timestamp;
+
 
 public class Seller {
     /**
@@ -59,12 +59,12 @@ public class Seller {
     /**
      * 注册时间
      */
-    private Timestamp joinDate;
+    private String joinDate;
 
     /**
      * 最后登录时间
      */
-    private Timestamp lastLoginTime;
+    private String lastLoginTime;
 
     /**
      * 是否可以登录 0-禁止登陆 1-可以登录
@@ -187,19 +187,19 @@ public class Seller {
         this.groupName = groupName;
     }
 
-    public Timestamp getJoinDate() {
+    public String getJoinDate() {
         return joinDate;
     }
 
-    public void setJoinDate(Timestamp joinDate) {
+    public void setJoinDate(String joinDate) {
         this.joinDate = joinDate;
     }
 
-    public Timestamp getLastLoginTime() {
+    public String getLastLoginTime() {
         return lastLoginTime;
     }
 
-    public void setLastLoginTime(Timestamp lastLoginTime) {
+    public void setLastLoginTime(String lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 

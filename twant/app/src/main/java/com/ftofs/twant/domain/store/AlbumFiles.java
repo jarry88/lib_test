@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class AlbumFiles implements Serializable {
     /**
@@ -37,7 +37,7 @@ public class AlbumFiles implements Serializable {
     /**
      * 上传时间
      */
-    private Timestamp uploadTime;
+    private String uploadTime;
 
     /**
      * 图片类型
@@ -109,11 +109,11 @@ public class AlbumFiles implements Serializable {
         this.albumId = albumId;
     }
 
-    public Timestamp getUploadTime() {
+    public String getUploadTime() {
         return uploadTime;
     }
 
-    public void setUploadTime(Timestamp uploadTime) {
+    public void setUploadTime(String uploadTime) {
         this.uploadTime = uploadTime;
     }
 

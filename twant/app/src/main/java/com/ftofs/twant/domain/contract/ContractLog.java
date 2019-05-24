@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.contract;
 
-import java.sql.Timestamp;
+
 
 public class ContractLog implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +38,7 @@ public class ContractLog implements java.io.Serializable {
 	/**
 	 * 添加时间
 	 */
-	private Timestamp logAddtime;
+	private String logAddtime;
 	
 	/**
 	 * 操作者角色 管理员为admin 商家为seller
@@ -103,11 +103,11 @@ public class ContractLog implements java.io.Serializable {
 		this.logMsg = logMsg;
 	}
 
-	public Timestamp getLogAddtime() {
+	public String getLogAddtime() {
 		return logAddtime;
 	}
 
-	public void setLogAddtime(Timestamp logAddtime) {
+	public void setLogAddtime(String logAddtime) {
 		this.logAddtime = logAddtime;
 	}
 

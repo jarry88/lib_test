@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.util.Calendar;
 
 public class PromotionQuota implements Serializable {
@@ -18,67 +18,67 @@ public class PromotionQuota implements Serializable {
     /**
      * 店铺券结束时间
      */
-    private Timestamp voucherEndTime;
+    private String voucherEndTime;
 
     /**
      * 显示折扣结束时间
      */
-    private Timestamp discountEndTime;
+    private String discountEndTime;
 
     /**
      * 推荐组合结束时间
      */
-    private Timestamp comboEndTime;
+    private String comboEndTime;
 
     /**
      * 满优惠结束时间
      */
-    private Timestamp conformEndTime;
+    private String conformEndTime;
 
     /**
      * 预售商品结束时间
      */
-    private Timestamp bookEndTime;
+    private String bookEndTime;
 
     /**
      * 优惠套装结束时间
      */
-    private Timestamp bundlingEndTime;
+    private String bundlingEndTime;
 
     /**
      * 商品赠品结束时间
      */
-    private Timestamp giftEndTime;
+    private String giftEndTime;
 
     /**
      * 多人拼团结束时间
      */
-    private Timestamp groupEndTime;
+    private String groupEndTime;
 
     /**
      * 试用结束时间
      */
-    private Timestamp trysEndTime;
+    private String trysEndTime;
 
     /**
      * 积分商品结束时间
      */
-    private Timestamp pointsGoodsEndTime;
+    private String pointsGoodsEndTime;
 
     /**
      * 商城活动结束时间
      */
-    private Timestamp themeEndTime;
+    private String themeEndTime;
 
     /**
      * 秒杀活动结束时间
      */
-    private Timestamp seckillEndTime;
+    private String seckillEndTime;
 
     /**
      * 砍价活动结束时间
      */
-    private Timestamp bargainEndTime;
+    private String bargainEndTime;
 
     /**
      * 店铺券是否允许续期
@@ -226,107 +226,107 @@ public class PromotionQuota implements Serializable {
         this.storeName = storeName;
     }
 
-    public Timestamp getVoucherEndTime() {
+    public String getVoucherEndTime() {
         return voucherEndTime;
     }
 
-    public void setVoucherEndTime(Timestamp voucherEndTime) {
+    public void setVoucherEndTime(String voucherEndTime) {
         this.voucherEndTime = voucherEndTime;
     }
 
-    public Timestamp getDiscountEndTime() {
+    public String getDiscountEndTime() {
         return discountEndTime;
     }
 
-    public void setDiscountEndTime(Timestamp discountEndTime) {
+    public void setDiscountEndTime(String discountEndTime) {
         this.discountEndTime = discountEndTime;
     }
 
-    public Timestamp getComboEndTime() {
+    public String getComboEndTime() {
         return comboEndTime;
     }
 
-    public void setComboEndTime(Timestamp comboEndTime) {
+    public void setComboEndTime(String comboEndTime) {
         this.comboEndTime = comboEndTime;
     }
 
-    public Timestamp getConformEndTime() {
+    public String getConformEndTime() {
         return conformEndTime;
     }
 
-    public void setConformEndTime(Timestamp conformEndTime) {
+    public void setConformEndTime(String conformEndTime) {
         this.conformEndTime = conformEndTime;
     }
 
-    public Timestamp getBookEndTime() {
+    public String getBookEndTime() {
         return bookEndTime;
     }
 
-    public void setBookEndTime(Timestamp bookEndTime) {
+    public void setBookEndTime(String bookEndTime) {
         this.bookEndTime = bookEndTime;
     }
 
-    public Timestamp getBundlingEndTime() {
+    public String getBundlingEndTime() {
         return bundlingEndTime;
     }
 
-    public void setBundlingEndTime(Timestamp bundlingEndTime) {
+    public void setBundlingEndTime(String bundlingEndTime) {
         this.bundlingEndTime = bundlingEndTime;
     }
 
-    public Timestamp getGiftEndTime() {
+    public String getGiftEndTime() {
         return giftEndTime;
     }
 
-    public void setGiftEndTime(Timestamp giftEndTime) {
+    public void setGiftEndTime(String giftEndTime) {
         this.giftEndTime = giftEndTime;
     }
 
-    public Timestamp getGroupEndTime() {
+    public String getGroupEndTime() {
         return groupEndTime;
     }
 
-    public void setGroupEndTime(Timestamp groupEndTime) {
+    public void setGroupEndTime(String groupEndTime) {
         this.groupEndTime = groupEndTime;
     }
 
-    public Timestamp getTrysEndTime() {
+    public String getTrysEndTime() {
         return trysEndTime;
     }
 
-    public void setTrysEndTime(Timestamp trysEndTime) {
+    public void setTrysEndTime(String trysEndTime) {
         this.trysEndTime = trysEndTime;
     }
 
-    public Timestamp getPointsGoodsEndTime() {
+    public String getPointsGoodsEndTime() {
         return pointsGoodsEndTime;
     }
 
-    public void setPointsGoodsEndTime(Timestamp pointsGoodsEndTime) {
+    public void setPointsGoodsEndTime(String pointsGoodsEndTime) {
         this.pointsGoodsEndTime = pointsGoodsEndTime;
     }
 
-    public Timestamp getThemeEndTime() {
+    public String getThemeEndTime() {
         return themeEndTime;
     }
 
-    public void setThemeEndTime(Timestamp themeEndTime) {
+    public void setThemeEndTime(String themeEndTime) {
         this.themeEndTime = themeEndTime;
     }
 
-    public Timestamp getSeckillEndTime() {
+    public String getSeckillEndTime() {
         return seckillEndTime;
     }
 
-    public void setSeckillEndTime(Timestamp seckillEndTime) {
+    public void setSeckillEndTime(String seckillEndTime) {
         this.seckillEndTime = seckillEndTime;
     }
 
-    public Timestamp getBargainEndTime() {
+    public String getBargainEndTime() {
         return bargainEndTime;
     }
 
-    public void setBargainEndTime(Timestamp bargainEndTime) {
+    public void setBargainEndTime(String bargainEndTime) {
         this.bargainEndTime = bargainEndTime;
     }
 
@@ -538,11 +538,11 @@ public class PromotionQuota implements Serializable {
         this.bargainUsable = bargainUsable;
     }
 
-    private int getAllowRenewal(Integer allowRenewal, Timestamp endTime) {
+    private int getAllowRenewal(Integer allowRenewal, String endTime) {
        return 0;
     }
 
-    private int getUsable(Integer usable, Timestamp endTime) {
+    private int getUsable(Integer usable, String endTime) {
        return 1;
     }
 

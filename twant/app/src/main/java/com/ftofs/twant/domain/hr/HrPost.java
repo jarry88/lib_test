@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.hr;
 
-import java.sql.Timestamp;
+
 
 public class HrPost {
     /**
@@ -86,7 +86,7 @@ public class HrPost {
     /**
      * 發佈時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 店鋪id
@@ -246,11 +246,11 @@ public class HrPost {
         this.createBy = createBy;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class StoreMessage implements Serializable {
     /**
@@ -17,7 +17,7 @@ public class StoreMessage implements Serializable {
     /**
      * 创建时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 卖家编号
@@ -67,11 +67,11 @@ public class StoreMessage implements Serializable {
         this.messageContent = messageContent;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

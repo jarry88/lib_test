@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.store;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class Renew {
     /**
@@ -47,7 +47,7 @@ public class Renew {
     /**
      * 申请时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 状态 0-默认待审核，1-审核通过
@@ -57,12 +57,12 @@ public class Renew {
     /**
      * 有效期开始时间
      */
-    private Timestamp startTime;
+    private String startTime;
 
     /**
      * 结束时间
      */
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 付款凭证
@@ -155,19 +155,19 @@ public class Renew {
         this.renewState = renewState;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -187,11 +187,11 @@ public class Renew {
         this.payCertNote = payCertNote;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

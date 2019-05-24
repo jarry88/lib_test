@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -86,7 +86,7 @@ public class ImMessage implements Serializable {
     /**
      * 消息发送时间文本
      */
-    private Timestamp addTimeText;
+    private String addTimeText;
 
     public int getMessageId() {
         return messageId;
@@ -200,10 +200,10 @@ public class ImMessage implements Serializable {
         this.addTime = addTime;
     }
 
-    public Timestamp getAddTimeText() {
+    public String getAddTimeText() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String timestampStr = sdf.format(new Date(Long.valueOf(addTime)));
-        return Timestamp.valueOf(timestampStr);
+        return String.valueOf(timestampStr);
     }
 
     @Override

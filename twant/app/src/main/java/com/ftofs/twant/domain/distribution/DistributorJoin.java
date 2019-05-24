@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class DistributorJoin implements Serializable {
     /**
@@ -72,12 +72,12 @@ public class DistributorJoin implements Serializable {
     /**
      * 申请提交时间
      */
-    private Timestamp joininTime;
+    private String joininTime;
 
     /**
      * 处理时间
      */
-    private Timestamp handleTime;
+    private String handleTime;
 
     /**
      *  身份证正面照 图片地址
@@ -174,19 +174,19 @@ public class DistributorJoin implements Serializable {
         this.state = state;
     }
 
-    public Timestamp getJoininTime() {
+    public String getJoininTime() {
         return joininTime;
     }
 
-    public void setJoininTime(Timestamp joininTime) {
+    public void setJoininTime(String joininTime) {
         this.joininTime = joininTime;
     }
 
-    public Timestamp getHandleTime() {
+    public String getHandleTime() {
         return handleTime;
     }
 
-    public void setHandleTime(Timestamp handleTime) {
+    public void setHandleTime(String handleTime) {
         this.handleTime = handleTime;
     }
 

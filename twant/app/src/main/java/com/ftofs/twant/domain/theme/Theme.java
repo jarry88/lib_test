@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.theme;
 
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 
 public class Theme {
@@ -50,27 +50,27 @@ public class Theme {
     /**
      * 更新时间
      */
-    private Timestamp updateTime;
+    private String updateTime;
 
     /**
      * 活动报名开始时间
      */
-    private Timestamp enrollStartTime;
+    private String enrollStartTime;
 
     /**
      * 活动报名截止时间
      */
-    private Timestamp enrollEndTime;
+    private String enrollEndTime;
 
     /**
      * 活动展示开始时间
      */
-    private Timestamp showStartTime;
+    private String showStartTime;
 
     /**
      * 活动展示结束时间
      */
-    private Timestamp showEndTime;
+    private String showEndTime;
 
     /**
      * 活动规则描述
@@ -207,43 +207,43 @@ public class Theme {
         this.themeState = themeState;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
-    public Timestamp getEnrollStartTime() {
+    public String getEnrollStartTime() {
         return enrollStartTime;
     }
 
-    public void setEnrollStartTime(Timestamp enrollStartTime) {
+    public void setEnrollStartTime(String enrollStartTime) {
         this.enrollStartTime = enrollStartTime;
     }
 
-    public Timestamp getEnrollEndTime() {
+    public String getEnrollEndTime() {
         return enrollEndTime;
     }
 
-    public void setEnrollEndTime(Timestamp enrollEndTime) {
+    public void setEnrollEndTime(String enrollEndTime) {
         this.enrollEndTime = enrollEndTime;
     }
 
-    public Timestamp getShowStartTime() {
+    public String getShowStartTime() {
         return showStartTime;
     }
 
-    public void setShowStartTime(Timestamp showStartTime) {
+    public void setShowStartTime(String showStartTime) {
         this.showStartTime = showStartTime;
     }
 
-    public Timestamp getShowEndTime() {
+    public String getShowEndTime() {
         return showEndTime;
     }
 
-    public void setShowEndTime(Timestamp showEndTime) {
+    public void setShowEndTime(String showEndTime) {
         this.showEndTime = showEndTime;
     }
 

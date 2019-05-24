@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 
 public class Coupon implements Serializable,Cloneable {
@@ -44,12 +44,12 @@ public class Coupon implements Serializable,Cloneable {
     /**
      * 券使用有效期开始时间
      */
-    private Timestamp useStartTime;
+    private String useStartTime;
 
     /**
      * 券使用有效期结束时间
      */
-    private Timestamp useEndTime;
+    private String useEndTime;
 
     /**
      * 券限制适用品类的范围类型 CouponUseGoodsRange
@@ -84,7 +84,7 @@ public class Coupon implements Serializable,Cloneable {
     /**
      * 领取时间
      */
-    private Timestamp activeTime;
+    private String activeTime;
 
     /**
      * 平台券状态 CouponState
@@ -208,19 +208,19 @@ public class Coupon implements Serializable,Cloneable {
         this.limitAmount = limitAmount;
     }
 
-    public Timestamp getUseStartTime() {
+    public String getUseStartTime() {
         return useStartTime;
     }
 
-    public void setUseStartTime(Timestamp useStartTime) {
+    public void setUseStartTime(String useStartTime) {
         this.useStartTime = useStartTime;
     }
 
-    public Timestamp getUseEndTime() {
+    public String getUseEndTime() {
         return useEndTime;
     }
 
-    public void setUseEndTime(Timestamp useEndTime) {
+    public void setUseEndTime(String useEndTime) {
         this.useEndTime = useEndTime;
     }
 
@@ -272,11 +272,11 @@ public class Coupon implements Serializable,Cloneable {
         this.storeCommitmentRate = storeCommitmentRate;
     }
 
-    public Timestamp getActiveTime() {
+    public String getActiveTime() {
         return activeTime;
     }
 
-    public void setActiveTime(Timestamp activeTime) {
+    public void setActiveTime(String activeTime) {
         this.activeTime = activeTime;
     }
 

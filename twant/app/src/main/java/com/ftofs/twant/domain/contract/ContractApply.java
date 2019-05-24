@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.contract;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class ContractApply implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class ContractApply implements java.io.Serializable {
 	/**
 	 * 申请时间
 	 */
-	private Timestamp ctaAddtime;
+	private String ctaAddtime;
 	
 	/**
 	 * 审核状态 0未审核 1审核通过 2审核失败 3保证金待审核 4保证金审核通过 5保证金审核失败
@@ -78,11 +78,11 @@ public class ContractApply implements java.io.Serializable {
 		this.ctaStorename = ctaStorename;
 	}
 
-	public Timestamp getCtaAddtime() {
+	public String getCtaAddtime() {
 		return ctaAddtime;
 	}
 
-	public void setCtaAddtime(Timestamp ctaAddtime) {
+	public void setCtaAddtime(String ctaAddtime) {
 		this.ctaAddtime = ctaAddtime;
 	}
 

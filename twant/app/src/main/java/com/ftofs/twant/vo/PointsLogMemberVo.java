@@ -1,6 +1,6 @@
 package com.ftofs.twant.vo;
 
-import java.sql.Timestamp;
+
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -28,7 +28,7 @@ public class PointsLogMemberVo {
     /**
      * 添加时间
      */
-    private Timestamp addTime = new Timestamp(0);
+    private String addTime = "";
     /**
      * 操作描述
      */
@@ -74,11 +74,11 @@ public class PointsLogMemberVo {
         this.points = points;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

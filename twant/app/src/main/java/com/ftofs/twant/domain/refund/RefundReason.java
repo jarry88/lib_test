@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.refund;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class RefundReason implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class RefundReason implements Serializable {
     /**
      * 记录时间
      */
-    private Timestamp updateTime;
+    private String updateTime;
 
     public int getReasonId() {
         return reasonId;
@@ -48,11 +48,11 @@ public class RefundReason implements Serializable {
         this.reasonSort = reasonSort;
     }
 
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

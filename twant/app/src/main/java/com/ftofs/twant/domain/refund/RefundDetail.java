@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.refund;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class RefundDetail implements Serializable {
     /**
@@ -53,18 +53,18 @@ public class RefundDetail implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 在线退款完成时间,默认为0
      */
-    private Timestamp payTime;
+    private String payTime;
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -84,11 +84,11 @@ public class RefundDetail implements Serializable {
         this.payAmount = payAmount;
     }
 
-    public Timestamp getPayTime() {
+    public String getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Timestamp payTime) {
+    public void setPayTime(String payTime) {
         this.payTime = payTime;
     }
 

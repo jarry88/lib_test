@@ -4,7 +4,6 @@ import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.orders.OrdersGoodsVo;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,19 +160,16 @@ public class RefundItemVo {
     /**
      * 添加时间
      */
-
-    private Timestamp addTime;
+    private String addTime;
     /**
      * 卖家处理时间
      */
-
-    private Timestamp sellerTime;
+    private String sellerTime;
 
     /**
      * 卖家处理时间
      */
-
-    private Timestamp adminTime;
+    private String adminTime;
 
 
     /**
@@ -218,19 +214,16 @@ public class RefundItemVo {
     /**
      * 发货时间
      */
-
-    private Timestamp shipTime;
+    private String shipTime;
 
     /**
      * 收货延时时间
      */
-
-    private Timestamp delayTime;
+    private String delayTime;
     /**
      * 收货时间
      */
-
-    private Timestamp receiveTime;
+    private String receiveTime;
     /**
      * 收货备注
      */
@@ -373,6 +366,43 @@ public class RefundItemVo {
      * bycj#20190316
      */
     private int returnSellerAutoReceive = 0;
+
+    private String sellerStateTextForSelf;
+    private String refundStateTextForSelf;
+
+    private BigDecimal refundCommissionAmount;
+
+    private String refundSnStr;
+
+    private String ordersSnStr;
+
+    public void setSellerStateTextForSelf(String sellerStateTextForSelf) {
+        this.sellerStateTextForSelf = sellerStateTextForSelf;
+    }
+
+    public void setRefundStateTextForSelf(String refundStateTextForSelf) {
+        this.refundStateTextForSelf = refundStateTextForSelf;
+    }
+
+    public void setRefundCommissionAmount(BigDecimal refundCommissionAmount) {
+        this.refundCommissionAmount = refundCommissionAmount;
+    }
+
+    public String getRefundSnStr() {
+        return refundSnStr;
+    }
+
+    public void setRefundSnStr(String refundSnStr) {
+        this.refundSnStr = refundSnStr;
+    }
+
+    public String getOrdersSnStr() {
+        return ordersSnStr;
+    }
+
+    public void setOrdersSnStr(String ordersSnStr) {
+        this.ordersSnStr = ordersSnStr;
+    }
 
     public int getRefundId() {
         return refundId;
@@ -558,27 +588,27 @@ public class RefundItemVo {
         this.goodsState = goodsState;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getSellerTime() {
+    public String getSellerTime() {
         return sellerTime;
     }
 
-    public void setSellerTime(Timestamp sellerTime) {
+    public void setSellerTime(String sellerTime) {
         this.sellerTime = sellerTime;
     }
 
-    public Timestamp getAdminTime() {
+    public String getAdminTime() {
         return adminTime;
     }
 
-    public void setAdminTime(Timestamp adminTime) {
+    public void setAdminTime(String adminTime) {
         this.adminTime = adminTime;
     }
 
@@ -646,27 +676,27 @@ public class RefundItemVo {
         this.shipSn = shipSn;
     }
 
-    public Timestamp getShipTime() {
+    public String getShipTime() {
         return shipTime;
     }
 
-    public void setShipTime(Timestamp shipTime) {
+    public void setShipTime(String shipTime) {
         this.shipTime = shipTime;
     }
 
-    public Timestamp getDelayTime() {
+    public String getDelayTime() {
         return delayTime;
     }
 
-    public void setDelayTime(Timestamp delayTime) {
+    public void setDelayTime(String delayTime) {
         this.delayTime = delayTime;
     }
 
-    public Timestamp getReceiveTime() {
+    public String getReceiveTime() {
         return receiveTime;
     }
 
-    public void setReceiveTime(Timestamp receiveTime) {
+    public void setReceiveTime(String receiveTime) {
         this.receiveTime = receiveTime;
     }
 
@@ -947,10 +977,8 @@ public class RefundItemVo {
                 ", sellerStateText='" + sellerStateText + '\'' +
                 ", refundStateText='" + refundStateText + '\'' +
                 ", maxDayRefundConfirm=" + maxDayRefundConfirm +
-//                ", maxDayReturnConfirm=" + maxDayReturnConfirm +
                 ", maxDayReturnAutoReceive=" + maxDayReturnAutoReceive +
                 ", maxDayReturnAutoCancel=" + maxDayReturnAutoCancel +
-//                ", maxDayReturnDelay=" + maxDayReturnDelay +
                 ", showMemberReturnShip=" + showMemberReturnShip +
                 ", showMemberReturnDelay=" + showMemberReturnDelay +
                 ", showStoreReturnReceive=" + showStoreReturnReceive +

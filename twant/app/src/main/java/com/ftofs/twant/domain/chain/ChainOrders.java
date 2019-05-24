@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.chain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -61,7 +61,7 @@ public class ChainOrders implements Serializable, Cloneable {
     /**
      * 下单时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 支付方式代码
@@ -81,12 +81,12 @@ public class ChainOrders implements Serializable, Cloneable {
     /**
      * 支付时间
      */
-    private Timestamp paymentTime;
+    private String paymentTime;
 
     /**
      * 订单完成时间
      */
-    private Timestamp finishTime;
+    private String finishTime;
 
     /**
      * 订单金额
@@ -107,7 +107,7 @@ public class ChainOrders implements Serializable, Cloneable {
     /**
      * 评价时间
      */
-    private Timestamp evaluationTime;
+    private String evaluationTime;
 
     /**
      * 发票抬头
@@ -132,7 +132,7 @@ public class ChainOrders implements Serializable, Cloneable {
     /**
      * 关闭时间
      */
-    private Timestamp cancelTime;
+    private String cancelTime;
 
     /**
      * 订单关闭操作主体
@@ -162,7 +162,7 @@ public class ChainOrders implements Serializable, Cloneable {
     /**
      * 预计取货时间
      */
-    private Timestamp takeTime;
+    private String takeTime;
 
     /**
      * 店员ID
@@ -273,11 +273,11 @@ public class ChainOrders implements Serializable, Cloneable {
         this.chainName = chainName;
     }
 
-    public Timestamp getTakeTime() {
+    public String getTakeTime() {
         return takeTime;
     }
 
-    public void setTakeTime(Timestamp takeTime) {
+    public void setTakeTime(String takeTime) {
         this.takeTime = takeTime;
     }
 
@@ -297,11 +297,11 @@ public class ChainOrders implements Serializable, Cloneable {
         this.clerkName = clerkName;
     }
 
-    public Timestamp getEvaluationTime() {
+    public String getEvaluationTime() {
         return evaluationTime;
     }
 
-    public void setEvaluationTime(Timestamp evaluationTime) {
+    public void setEvaluationTime(String evaluationTime) {
         this.evaluationTime = evaluationTime;
     }
 
@@ -369,11 +369,11 @@ public class ChainOrders implements Serializable, Cloneable {
         this.receiverName = receiverName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -402,19 +402,19 @@ public class ChainOrders implements Serializable, Cloneable {
         this.outOrdersSn = outOrdersSn;
     }
 
-    public Timestamp getPaymentTime() {
+    public String getPaymentTime() {
         return paymentTime;
     }
 
-    public void setPaymentTime(Timestamp paymentTime) {
+    public void setPaymentTime(String paymentTime) {
         this.paymentTime = paymentTime;
     }
 
-    public Timestamp getFinishTime() {
+    public String getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(Timestamp finishTime) {
+    public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
     }
 
@@ -482,11 +482,11 @@ public class ChainOrders implements Serializable, Cloneable {
 
     }
 
-    public Timestamp getCancelTime() {
+    public String getCancelTime() {
         return cancelTime;
     }
 
-    public void setCancelTime(Timestamp cancelTime) {
+    public void setCancelTime(String cancelTime) {
         this.cancelTime = cancelTime;
     }
 
@@ -494,7 +494,7 @@ public class ChainOrders implements Serializable, Cloneable {
      * 自动取消时间
      * @return
      */
-    public Timestamp getAutoCancelTime() {
+    public String getAutoCancelTime() {
         return null;
     }
 

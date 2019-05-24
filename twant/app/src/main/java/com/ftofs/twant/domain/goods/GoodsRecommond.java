@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.goods;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class GoodsRecommond implements Serializable,Cloneable {
     /**
@@ -22,7 +22,7 @@ public class GoodsRecommond implements Serializable,Cloneable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * spu
@@ -88,11 +88,11 @@ public class GoodsRecommond implements Serializable,Cloneable {
         this.categoryText = categoryText;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

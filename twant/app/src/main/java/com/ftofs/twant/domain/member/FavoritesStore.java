@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class FavoritesStore implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class FavoritesStore implements Serializable {
     /**
      * 關注时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * bycj -- 關注置顶
@@ -53,11 +53,11 @@ public class FavoritesStore implements Serializable {
         this.storeId = storeId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

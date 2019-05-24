@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class DistributionOrders implements Serializable {
     private int distributionOrdersId;
@@ -29,7 +29,7 @@ public class DistributionOrders implements Serializable {
     /**
      * 创建时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 佣金（%）
@@ -44,12 +44,12 @@ public class DistributionOrders implements Serializable {
     /**
      * 订单完成时间
      */
-    private Timestamp ordersFinishTime;
+    private String ordersFinishTime;
 
     /**
      * 结算完成时间
      */
-    private Timestamp finishTime;
+    private String finishTime;
 
     /**
      * 分销订单状态
@@ -67,7 +67,7 @@ public class DistributionOrders implements Serializable {
      */
 
 
-    private Timestamp distributionStorePayTime ;
+    private String distributionStorePayTime ;
 
 
     public int getDistributionStorePay() {
@@ -78,11 +78,11 @@ public class DistributionOrders implements Serializable {
         this.distributionStorePay = distributionStorePay;
     }
 
-    public Timestamp getDistributionStorePayTime() {
+    public String getDistributionStorePayTime() {
         return distributionStorePayTime;
     }
 
-    public void setDistributionStorePayTime(Timestamp distributionStorePayTime) {
+    public void setDistributionStorePayTime(String distributionStorePayTime) {
         this.distributionStorePayTime = distributionStorePayTime;
     }
 
@@ -126,11 +126,11 @@ public class DistributionOrders implements Serializable {
         this.storeId = storeId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -150,19 +150,19 @@ public class DistributionOrders implements Serializable {
         this.ordersGoodsId = ordersGoodsId;
     }
 
-    public Timestamp getOrdersFinishTime() {
+    public String getOrdersFinishTime() {
         return ordersFinishTime;
     }
 
-    public void setOrdersFinishTime(Timestamp ordersFinishTime) {
+    public void setOrdersFinishTime(String ordersFinishTime) {
         this.ordersFinishTime = ordersFinishTime;
     }
 
-    public Timestamp getFinishTime() {
+    public String getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(Timestamp finishTime) {
+    public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
     }
 

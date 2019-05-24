@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class MemberSignin implements Serializable {
     /**
@@ -27,7 +27,7 @@ public class MemberSignin implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp signinAddTime;
+    private String signinAddTime;
 
     /**
      * 添加积分点数
@@ -68,11 +68,19 @@ public class MemberSignin implements Serializable {
         this.signinMemberName = signinMemberName;
     }
 
-    public Timestamp getSigninAddTime() {
+    public String getSigninMemberAvatar() {
+        return signinMemberAvatar;
+    }
+
+    public void setSigninMemberAvatar(String signinMemberAvatar) {
+        this.signinMemberAvatar = signinMemberAvatar;
+    }
+
+    public String getSigninAddTime() {
         return signinAddTime;
     }
 
-    public void setSigninAddTime(Timestamp signinAddTime) {
+    public void setSigninAddTime(String signinAddTime) {
         this.signinAddTime = signinAddTime;
     }
 
@@ -92,18 +100,6 @@ public class MemberSignin implements Serializable {
         this.signinDays = signinDays;
     }
 
-    public long getSigninAddTimeUnix() {
-        return this.signinAddTime.getTime() /1000 ;
-    }
-
-    public String getSigninMemberAvatar() {
-        return signinMemberAvatar;
-    }
-
-    public void setSigninMemberAvatar(String signinMemberAvatar) {
-        this.signinMemberAvatar = signinMemberAvatar;
-    }
-
     public String getSigninMemberAvatarUrl() {
         return signinMemberAvatarUrl;
     }
@@ -111,8 +107,6 @@ public class MemberSignin implements Serializable {
     public void setSigninMemberAvatarUrl(String signinMemberAvatarUrl) {
         this.signinMemberAvatarUrl = signinMemberAvatarUrl;
     }
-
-
 
     @Override
     public String toString() {

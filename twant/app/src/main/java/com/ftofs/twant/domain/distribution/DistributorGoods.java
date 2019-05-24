@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class DistributorGoods implements Serializable {
     /**
@@ -42,7 +42,7 @@ public class DistributorGoods implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 该会员的商品推广数量
@@ -122,11 +122,11 @@ public class DistributorGoods implements Serializable {
         this.memberName = memberName;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

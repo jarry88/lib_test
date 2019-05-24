@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.show;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class ShowOrdersComment implements Serializable {
     /**
@@ -42,7 +42,7 @@ public class ShowOrdersComment implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 状态
@@ -83,11 +83,11 @@ public class ShowOrdersComment implements Serializable {
         this.content = content;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

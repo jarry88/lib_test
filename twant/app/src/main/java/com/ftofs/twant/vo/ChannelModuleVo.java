@@ -3,7 +3,7 @@ package com.ftofs.twant.vo;
 import com.ftofs.twant.domain.ChannelModule;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -42,7 +42,7 @@ public class ChannelModuleVo implements Serializable {
     /**
      * 更新时间
      */
-    private Timestamp moduleUpdateTime;
+    private String moduleUpdateTime;
 
     /**
      * 模块详情数据
@@ -98,11 +98,11 @@ public class ChannelModuleVo implements Serializable {
         this.moduleShow = moduleShow;
     }
 
-    public Timestamp getModuleUpdateTime() {
+    public String getModuleUpdateTime() {
         return moduleUpdateTime;
     }
 
-    public void setModuleUpdateTime(Timestamp moduleUpdateTime) {
+    public void setModuleUpdateTime(String moduleUpdateTime) {
         this.moduleUpdateTime = moduleUpdateTime;
     }
 

@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.orders;
 import com.ftofs.twant.domain.orders.OrdersBook;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 /**
  * Copyright: Bizpower多用户商城系统
@@ -57,12 +57,12 @@ public class OrdersBookVo {
      * 支付时间
      */
 
-    private Timestamp paymentTime;
+    private String paymentTime;
     /**
      * 时段1:订单自动取消时间，时段2:时段结束时间
      */
 
-    private Timestamp endTime;
+    private String endTime;
     /**
      * 买家接收尾款交款通知的手机,只在第2时段有值即可
      */
@@ -83,7 +83,7 @@ public class OrdersBookVo {
      * 订单被取消(定金不退时)，记录的时间,(后台结算列表使用)
      */
 
-    private Timestamp bookCancelTime;
+    private String bookCancelTime;
     /**
      * 订单Id(后台结算列表使用)
      */
@@ -179,19 +179,19 @@ public class OrdersBookVo {
         this.outOrdersSn = outOrdersSn;
     }
 
-    public Timestamp getPaymentTime() {
+    public String getPaymentTime() {
         return paymentTime;
     }
 
-    public void setPaymentTime(Timestamp paymentTime) {
+    public void setPaymentTime(String paymentTime) {
         this.paymentTime = paymentTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -231,11 +231,11 @@ public class OrdersBookVo {
         this.ordersSn = ordersSn;
     }
 
-    public Timestamp getBookCancelTime() {
+    public String getBookCancelTime() {
         return bookCancelTime;
     }
 
-    public void setBookCancelTime(Timestamp bookCancelTime) {
+    public void setBookCancelTime(String bookCancelTime) {
         this.bookCancelTime = bookCancelTime;
     }
 

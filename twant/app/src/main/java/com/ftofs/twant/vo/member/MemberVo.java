@@ -4,7 +4,7 @@ import com.ftofs.twant.domain.member.Member;
 import com.ftofs.twant.domain.member.MemberMessage;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class MemberVo {
      * 生日
      */
 
-    private Timestamp birthday = new Timestamp(0);
+    private String birthday = "";
     /**
      * 头像
      */
@@ -78,7 +78,7 @@ public class MemberVo {
      * 注册时间
      */
 
-    private Timestamp registerTime = new Timestamp(0);
+    private String registerTime = "";
     /**
      * 登录次数
      */
@@ -87,12 +87,12 @@ public class MemberVo {
      * 登录时间
      */
 
-    private Timestamp loginTime = new Timestamp(0);
+    private String loginTime = "";
     /**
      * 上次登录时间
      */
 
-    private Timestamp lastLoginTime = new Timestamp(0);
+    private String lastLoginTime = "";
     /**
      * 登录IP
      */
@@ -382,11 +382,11 @@ public class MemberVo {
         this.memberSex = memberSex;
     }
 
-    public Timestamp getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Timestamp birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -430,11 +430,11 @@ public class MemberVo {
         this.mobileIsBind = mobileIsBind;
     }
 
-    public Timestamp getRegisterTime() {
+    public String getRegisterTime() {
         return registerTime;
     }
 
-    public void setRegisterTime(Timestamp registerTime) {
+    public void setRegisterTime(String registerTime) {
         this.registerTime = registerTime;
     }
 
@@ -446,19 +446,19 @@ public class MemberVo {
         this.loginNum = loginNum;
     }
 
-    public Timestamp getLoginTime() {
+    public String getLoginTime() {
         return loginTime;
     }
 
-    public void setLoginTime(Timestamp loginTime) {
+    public void setLoginTime(String loginTime) {
         this.loginTime = loginTime;
     }
 
-    public Timestamp getLastLoginTime() {
+    public String getLastLoginTime() {
         return lastLoginTime;
     }
 
-    public void setLastLoginTime(Timestamp lastLoginTime) {
+    public void setLastLoginTime(String lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 

@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class ChannelModule implements Serializable {
     private int moduleId;
@@ -30,7 +30,7 @@ public class ChannelModule implements Serializable {
     /**
      * 更新时间
      */
-    private Timestamp moduleUpdateTime;
+    private String moduleUpdateTime;
 
     public int getModuleId() {
         return moduleId;
@@ -64,11 +64,11 @@ public class ChannelModule implements Serializable {
         this.moduleShow = moduleShow;
     }
 
-    public Timestamp getModuleUpdateTime() {
+    public String getModuleUpdateTime() {
         return moduleUpdateTime;
     }
 
-    public void setModuleUpdateTime(Timestamp moduleUpdateTime) {
+    public void setModuleUpdateTime(String moduleUpdateTime) {
         this.moduleUpdateTime = moduleUpdateTime;
     }
 

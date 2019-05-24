@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class Album implements Serializable {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 父级相册编号
@@ -60,11 +60,11 @@ public class Album implements Serializable {
         this.storeId = storeId;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

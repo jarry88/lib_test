@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.suggest;
 
-import java.sql.Timestamp;
+
 
 public class MemberSuggestReply {
     /**
@@ -21,7 +21,7 @@ public class MemberSuggestReply {
     /**
      * 回復時間
      */
-    private Timestamp createTime;
+    private String createTime;
 
     public int getReplyId() {
         return replyId;
@@ -47,11 +47,11 @@ public class MemberSuggestReply {
         this.replyContent = replyContent;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

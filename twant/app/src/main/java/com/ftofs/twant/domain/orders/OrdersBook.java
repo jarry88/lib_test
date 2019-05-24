@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.orders;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class OrdersBook implements Serializable {
     /**
@@ -58,12 +58,12 @@ public class OrdersBook implements Serializable {
     /**
      * 支付时间
      */
-    private Timestamp paymentTime;
+    private String paymentTime;
 
     /**
      * 时段1:订单自动取消时间，时段2:定金结束时间，过此时间系统发送尾款支付提示，超过X小时未付尾款订单取消
      */
-    private Timestamp endTime;
+    private String endTime;
 
     /**
      * 买家接收尾款交款通知的手机,只在第2时段有值即可
@@ -88,7 +88,7 @@ public class OrdersBook implements Serializable {
     /**
      * 订单被取消(定金不退时)，记录的时间,结算用
      */
-    private Timestamp bookCancelTime;
+    private String bookCancelTime;
 
     /**
      * 商家ID,只有book_step是1,0时有值即可
@@ -185,19 +185,19 @@ public class OrdersBook implements Serializable {
         this.outOrdersSn = outOrdersSn;
     }
 
-    public Timestamp getPaymentTime() {
+    public String getPaymentTime() {
         return paymentTime;
     }
 
-    public void setPaymentTime(Timestamp paymentTime) {
+    public void setPaymentTime(String paymentTime) {
         this.paymentTime = paymentTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -233,11 +233,11 @@ public class OrdersBook implements Serializable {
         this.realPayAmount = realPayAmount;
     }
 
-    public Timestamp getBookCancelTime() {
+    public String getBookCancelTime() {
         return bookCancelTime;
     }
 
-    public void setBookCancelTime(Timestamp bookCancelTime) {
+    public void setBookCancelTime(String bookCancelTime) {
         this.bookCancelTime = bookCancelTime;
     }
 

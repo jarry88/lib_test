@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.complain;
 
-import java.sql.Timestamp;
+
 import java.text.SimpleDateFormat;
 
 public class ComplainTalk {
@@ -37,7 +37,7 @@ public class ComplainTalk {
     /**
      * 对话时间
      */
-    private Timestamp talkTime;
+    private String talkTime;
 
     /**
      * 是否被禁止
@@ -99,11 +99,11 @@ public class ComplainTalk {
         this.talkContent = talkContent;
     }
 
-    public Timestamp getTalkTime() {
+    public String getTalkTime() {
         return talkTime;
     }
 
-    public void setTalkTime(Timestamp talkTime) {
+    public void setTalkTime(String talkTime) {
         this.talkTime = talkTime;
     }
 

@@ -7,7 +7,7 @@ import com.ftofs.twant.domain.goods.GoodsImage;
 import com.ftofs.twant.domain.store.Store;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -37,7 +37,7 @@ public class GoodsVo {
      * 创建时间
      */
 
-    private Timestamp createTime=new Timestamp(0);
+    private String createTime="";
     /**
      * 是否推荐
      */
@@ -702,11 +702,11 @@ public class GoodsVo {
         this.categoryName = categoryName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

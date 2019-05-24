@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class Channel implements Serializable {
     private int channelId;
@@ -49,7 +49,7 @@ public class Channel implements Serializable {
     /**
      * 更新时间
      */
-    private Timestamp channelUpdateTime;
+    private String channelUpdateTime;
 
     /**
      * 是否显示
@@ -129,11 +129,11 @@ public class Channel implements Serializable {
         this.channelFloorId = channelFloorId;
     }
 
-    public Timestamp getChannelUpdateTime() {
+    public String getChannelUpdateTime() {
         return channelUpdateTime;
     }
 
-    public void setChannelUpdateTime(Timestamp channelUpdateTime) {
+    public void setChannelUpdateTime(String channelUpdateTime) {
         this.channelUpdateTime = channelUpdateTime;
     }
 

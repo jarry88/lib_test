@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.suggest;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class MemberSuggest implements Serializable {
     /**
      * 反馈时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 反饋圖片
@@ -75,11 +75,11 @@ public class MemberSuggest implements Serializable {
         this.memberName = memberName;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

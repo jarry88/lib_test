@@ -2,7 +2,7 @@ package com.ftofs.twant.vo;
 
 import com.ftofs.twant.domain.goods.Category;
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class IndexCategoryNavVo implements Serializable {
     /**
@@ -30,7 +30,7 @@ public class IndexCategoryNavVo implements Serializable {
     /**
      * 更新时间
      */
-    private Timestamp categoryNavUpdateTime;
+    private String categoryNavUpdateTime;
 
     public IndexCategoryNavVo(Category category) {
         this.setCategoryId(category.getCategoryId());
@@ -62,11 +62,11 @@ public class IndexCategoryNavVo implements Serializable {
         this.categoryNavAdvJson = categoryNavAdvJson;
     }
 
-    public Timestamp getCategoryNavUpdateTime() {
+    public String getCategoryNavUpdateTime() {
         return categoryNavUpdateTime;
     }
 
-    public void setCategoryNavUpdateTime(Timestamp categoryNavUpdateTime) {
+    public void setCategoryNavUpdateTime(String categoryNavUpdateTime) {
         this.categoryNavUpdateTime = categoryNavUpdateTime;
     }
 

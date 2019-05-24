@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.orders;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class Orders implements Serializable, Cloneable {
     /**
@@ -111,7 +111,7 @@ public class Orders implements Serializable, Cloneable {
     /**
      * 下单时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 下单时间 具体到天
@@ -146,17 +146,17 @@ public class Orders implements Serializable, Cloneable {
     /**
      * 支付时间
      */
-    private Timestamp paymentTime;
+    private String paymentTime;
 
     /**
      * 发货时间
      */
-    private Timestamp sendTime;
+    private String sendTime;
 
     /**
      * 订单完成时间
      */
-    private Timestamp finishTime;
+    private String finishTime;
 
     /**
      * 订单金额
@@ -188,7 +188,7 @@ public class Orders implements Serializable, Cloneable {
     /**
      * 评价时间
      */
-    private Timestamp evaluationTime;
+    private String evaluationTime;
 
     /**
      * 发货单号
@@ -213,7 +213,7 @@ public class Orders implements Serializable, Cloneable {
     /**
      * 自动收货时间
      */
-    private Timestamp autoReceiveTime;
+    private String autoReceiveTime;
 
     /**
      * 发票抬头
@@ -243,7 +243,7 @@ public class Orders implements Serializable, Cloneable {
     /**
      * 关闭时间
      */
-    private Timestamp cancelTime;
+    private String cancelTime;
 
     /**
      * 订单关闭操作主体
@@ -377,7 +377,7 @@ public class Orders implements Serializable, Cloneable {
     /**
      * 取貨時間
      */
-    private Timestamp takeTime;
+    private String takeTime;
 
     /**
      * 提貨碼
@@ -577,7 +577,7 @@ public class Orders implements Serializable, Cloneable {
         this.receiverMessage = receiverMessage;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
@@ -597,7 +597,7 @@ public class Orders implements Serializable, Cloneable {
         this.createTimeHour = createTimeHour;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -626,27 +626,27 @@ public class Orders implements Serializable, Cloneable {
         this.outOrdersSn = outOrdersSn;
     }
 
-    public Timestamp getPaymentTime() {
+    public String getPaymentTime() {
         return paymentTime;
     }
 
-    public void setPaymentTime(Timestamp paymentTime) {
+    public void setPaymentTime(String paymentTime) {
         this.paymentTime = paymentTime;
     }
 
-    public Timestamp getSendTime() {
+    public String getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Timestamp sendTime) {
+    public void setSendTime(String sendTime) {
         this.sendTime = sendTime;
     }
 
-    public Timestamp getFinishTime() {
+    public String getFinishTime() {
         return finishTime;
     }
 
-    public void setFinishTime(Timestamp finishTime) {
+    public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
     }
 
@@ -682,11 +682,11 @@ public class Orders implements Serializable, Cloneable {
         this.evaluationAppendState = evaluationAppendState;
     }
 
-    public Timestamp getEvaluationTime() {
+    public String getEvaluationTime() {
         return evaluationTime;
     }
 
-    public void setEvaluationTime(Timestamp evaluationTime) {
+    public void setEvaluationTime(String evaluationTime) {
         this.evaluationTime = evaluationTime;
     }
 
@@ -722,11 +722,11 @@ public class Orders implements Serializable, Cloneable {
         this.shipNote = shipNote;
     }
 
-    public Timestamp getAutoReceiveTime() {
+    public String getAutoReceiveTime() {
         return autoReceiveTime;
     }
 
-    public void setAutoReceiveTime(Timestamp autoReceiveTime) {
+    public void setAutoReceiveTime(String autoReceiveTime) {
         this.autoReceiveTime = autoReceiveTime;
     }
 
@@ -773,11 +773,11 @@ public class Orders implements Serializable, Cloneable {
         return cancelReason.toString();
     }
 
-    public Timestamp getCancelTime() {
+    public String getCancelTime() {
         return cancelTime;
     }
 
-    public void setCancelTime(Timestamp cancelTime) {
+    public void setCancelTime(String cancelTime) {
         this.cancelTime = cancelTime;
     }
 
@@ -801,7 +801,7 @@ public class Orders implements Serializable, Cloneable {
      * 自动取消时间
      * @return
      */
-    public Timestamp getAutoCancelTime() {
+    public String getAutoCancelTime() {
         return null;
     }
 
@@ -999,11 +999,11 @@ public class Orders implements Serializable, Cloneable {
 		this.sellerName = sellerName;
 	}
 
-    public Timestamp getTakeTime() {
+    public String getTakeTime() {
         return takeTime;
     }
 
-    public void setTakeTime(Timestamp takeTime) {
+    public void setTakeTime(String takeTime) {
         this.takeTime = takeTime;
     }
 

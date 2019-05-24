@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.theme;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class ThemeGoods implements Serializable{
     /**
@@ -32,7 +32,7 @@ public class ThemeGoods implements Serializable{
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 审核状态
@@ -48,7 +48,7 @@ public class ThemeGoods implements Serializable{
     /**
      * 审核时间
      */
-    private Timestamp verifyTime;
+    private String verifyTime;
 
     public int getThemeGoodsId() {
         return themeGoodsId;
@@ -90,11 +90,11 @@ public class ThemeGoods implements Serializable{
         this.themeId = themeId;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 
@@ -114,11 +114,11 @@ public class ThemeGoods implements Serializable{
         this.verifyRemark = verifyRemark;
     }
 
-    public Timestamp getVerifyTime() {
+    public String getVerifyTime() {
         return verifyTime;
     }
 
-    public void setVerifyTime(Timestamp verifyTime) {
+    public void setVerifyTime(String verifyTime) {
         this.verifyTime = verifyTime;
     }
 

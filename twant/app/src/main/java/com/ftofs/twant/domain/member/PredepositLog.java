@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class PredepositLog implements Serializable {
     /**
@@ -48,7 +48,7 @@ public class PredepositLog implements Serializable {
     /**
      * 添加时间
      */
-    private Timestamp addTime;
+    private String addTime;
 
     /**
      * 描述
@@ -124,11 +124,11 @@ public class PredepositLog implements Serializable {
         this.freezeAmount = freezeAmount;
     }
 
-    public Timestamp getAddTime() {
+    public String getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(String addTime) {
         this.addTime = addTime;
     }
 

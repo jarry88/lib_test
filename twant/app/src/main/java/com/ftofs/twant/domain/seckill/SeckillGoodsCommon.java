@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.seckill;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 public class SeckillGoodsCommon {
     /**
@@ -37,12 +37,12 @@ public class SeckillGoodsCommon {
     /**
      * 开始时间
      */
-    private Timestamp startTime = new Timestamp(0);
+    private String startTime = "";
 
     /**
      * 结束时间
      */
-    private Timestamp endTime = new Timestamp(0);
+    private String endTime = "";
 
     /**
      * 状态文字
@@ -107,19 +107,19 @@ public class SeckillGoodsCommon {
         this.scheduleId = scheduleId;
     }
 
-    public Timestamp getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

@@ -1,7 +1,7 @@
 package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 public class PointsGoods implements Serializable {
     /**
@@ -37,7 +37,7 @@ public class PointsGoods implements Serializable {
     /**
      * 积分商品创建时间
      */
-    private Timestamp createTime;
+    private String createTime;
 
     /**
      * 被点击数量
@@ -92,11 +92,11 @@ public class PointsGoods implements Serializable {
         this.storeId = storeId;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

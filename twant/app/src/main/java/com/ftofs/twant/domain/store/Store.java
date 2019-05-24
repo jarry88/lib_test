@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.store;
 
 import com.ftofs.twant.domain.chain.Chain;
 
-import java.sql.Timestamp;
+
 
 public class Store {
     /**
@@ -59,12 +59,12 @@ public class Store {
     /**
      * 店铺创建时间
      */
-    private Timestamp storeCreateTime;
+    private String storeCreateTime;
 
     /**
      * 店铺过期时间
      */
-    private Timestamp storeEndTime;
+    private String storeEndTime;
 
     /**
      * 店铺Logo
@@ -453,19 +453,19 @@ public class Store {
         this.storeAddress = storeAddress;
     }
 
-    public Timestamp getStoreCreateTime() {
+    public String getStoreCreateTime() {
         return storeCreateTime;
     }
 
-    public void setStoreCreateTime(Timestamp storeCreateTime) {
+    public void setStoreCreateTime(String storeCreateTime) {
         this.storeCreateTime = storeCreateTime;
     }
 
-    public Timestamp getStoreEndTime() {
+    public String getStoreEndTime() {
         return storeEndTime;
     }
 
-    public void setStoreEndTime(Timestamp storeEndTime) {
+    public void setStoreEndTime(String storeEndTime) {
         this.storeEndTime = storeEndTime;
     }
 

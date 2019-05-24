@@ -1,7 +1,7 @@
 package com.ftofs.twant.vo.store;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+
 
 /**
  * @Description: 點讚視圖對象
@@ -28,7 +28,7 @@ public class StoreLikeVo implements Serializable {
     /**
      * 點想時間
      */
-    private Timestamp createTime;
+    private String createTime;
     /**
      * 會員名
      */
@@ -74,11 +74,11 @@ public class StoreLikeVo implements Serializable {
         this.state = state;
     }
 
-    public Timestamp getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

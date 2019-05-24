@@ -1,6 +1,6 @@
 package com.ftofs.twant.domain.member;
 
-import java.sql.Timestamp;
+
 
 public class MemberRealNameAuth {
     /**
@@ -51,12 +51,12 @@ public class MemberRealNameAuth {
     /**
      * 申请提交时间
      */
-    private Timestamp authAddTime;
+    private String authAddTime;
 
     /**
      * 处理时间
      */
-    private Timestamp authHandleTime;
+    private String authHandleTime;
 
     /**
      *  身份证正面照 图片地址
@@ -160,19 +160,19 @@ public class MemberRealNameAuth {
         this.authMessage = authMessage;
     }
 
-    public Timestamp getAuthAddTime() {
+    public String getAuthAddTime() {
         return authAddTime;
     }
 
-    public void setAuthAddTime(Timestamp authAddTime) {
+    public void setAuthAddTime(String authAddTime) {
         this.authAddTime = authAddTime;
     }
 
-    public Timestamp getAuthHandleTime() {
+    public String getAuthHandleTime() {
         return authHandleTime;
     }
 
-    public void setAuthHandleTime(Timestamp authHandleTime) {
+    public void setAuthHandleTime(String authHandleTime) {
         this.authHandleTime = authHandleTime;
     }
 
