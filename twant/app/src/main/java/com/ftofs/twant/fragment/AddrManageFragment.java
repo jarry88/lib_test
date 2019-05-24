@@ -283,7 +283,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
         bundle.putBoolean("isNoAddress", addrItemList.size() == 0);  // 標記是否已經刪除所有收貨地址
         bundle.putParcelable("addrItem", addrItem);
 
-        setFragmentResult(Constant.REQUEST_CODE_SELECT_ADDR, bundle);
+        setFragmentResult(RESULT_OK, bundle);
         pop();
     }
 

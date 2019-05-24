@@ -173,6 +173,19 @@ public class Api {
      */
     public static final String PATH_DISPLAY_BILL_DATA = "/member/buy/step1";
 
+
+    /**
+     * 购买第一步：计算运费
+     */
+    public static final String PATH_CALC_FREIGHT = "/member/buy/calc/freight";
+
+
+    /**
+     * 總金额计算
+     */
+    public static final String PATH_CALC_TOTAL = "/member/buy/calc";
+
+
     /**
      * 地區列表
      */

@@ -91,7 +91,7 @@
     </LinearLayout>
     <!-- END OF 訂單主要信息 -->
 
-    <!-- 附加信息1 -->
+    <!-- 附加信息 -->
     <LinearLayout
         android:id="@+id/ll_extra_info_1"
         android:layout_width="0dp"
@@ -170,7 +170,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/img_expand_coupon"
-                android:text="可用1張"
+                android:text="可用0張"
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 />
@@ -180,7 +180,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            android:background="@drawable/bottom_separator_box">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -215,22 +216,7 @@
                     />
             </LinearLayout>
         </RelativeLayout>
-    </LinearLayout>
-    <!-- END OF 附加信息1 -->
 
-    <!-- 附加信息2 -->
-    <LinearLayout
-        android:id="@+id/ll_extra_info_2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_extra_info_1"
-        android:paddingLeft="@dimen/toolbar_margin_left"
-        android:paddingRight="@dimen/toolbar_margin_right"
-        android:orientation="vertical"
-        android:background="#fff">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -240,91 +226,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/text_pay_way"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <LinearLayout
-                android:id="@+id/btn_change_pay_way"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_pay_way"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="在線支付"
-                    android:textColor="@color/tw_black"
-                    android:textSize="13sp"
-                    />
-
-                <ImageView
-                    android:id="@+id/img_expand_pay_way"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/expand_button"
-                    />
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-    <!-- END OF 附加信息2 -->
-
-    <!-- 附加信息3 -->
-    <LinearLayout
-        android:id="@+id/ll_extra_info_3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_extra_info_2"
-        android:paddingLeft="@dimen/toolbar_margin_left"
-        android:paddingRight="@dimen/toolbar_margin_right"
-        android:orientation="vertical"
-        android:background="#fff">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="@drawable/bottom_separator_box">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_goods_price"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <TextView
-                android:id="@+id/tv_buy_item_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:text="$129.90"
-                android:textColor="@color/tw_black"
-                android:textSize="13sp"
-                />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="@drawable/bottom_separator_box">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_freight"
+                android:text="@string/text_store_freight"
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
                 />
@@ -340,57 +242,6 @@
                 android:textSize="13sp"
                 />
         </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="@drawable/bottom_separator_box">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_store_discount"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:text="- $0.00"
-                android:textColor="@color/tw_black"
-                android:textSize="13sp"
-                />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_mall_discount"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:text="- $0.00"
-                android:textColor="@color/tw_black"
-                android:textSize="13sp"
-                />
-        </RelativeLayout>
     </LinearLayout>
-    <!-- END OF 附加信息3 -->
+    <!-- END OF 附加信息 -->
 </android.support.constraint.ConstraintLayout>

@@ -20,18 +20,17 @@ public class User {
         String nickname = Hawk.get(SPField.FIELD_NICKNAME, "");
         int lastLoginTime = Hawk.get(SPField.FIELD_LAST_LOGIN_TIME, 0);
 
-        SLog.info("userId[%d], token[%s], nickname[%s], lastLoginTime[%d]",
-                userId, token, nickname, lastLoginTime);
+        // SLog.info("userId[%d], token[%s], nickname[%s], lastLoginTime[%d]", userId, token, nickname, lastLoginTime);
 
         int now = Time.timestamp();
 
         if (userId > 0 && !StringUtil.isEmpty(token) && !StringUtil.isEmpty(nickname) &&
                 now - lastLoginTime < Config.LOGIN_VALID_TIME) {
-            SLog.info("用戶已登錄, token[%s]", token);
+            // SLog.info("用戶已登錄, token[%s]", token);
             return userId;
         }
 
-        SLog.info("用戶【未】登錄");
+        // SLog.info("用戶【未】登錄");
         return 0;
     }
 

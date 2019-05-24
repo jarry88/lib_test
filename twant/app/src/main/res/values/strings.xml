@@ -21,6 +21,16 @@
     <string name="text_birthday">出生日期</string>
     <string name="text_location">所在地</string>
 
+    <string name="receipt_info_fragment_title">發票信息</string>
+    <string name="text_receipt_header">發票抬頭</string>
+    <string name="input_receipt_header_hint">請輸入發票抬頭</string>
+    <string name="text_receipt_content">發票內容</string>
+    <string name="input_receipt_content_hint">請輸入發票內容</string>
+    <string name="text_taxpayer_id">納稅人識別號</string>
+    <string name="input_text_taxpayer_id_hint">請填寫納稅人識別號</string>
+    <string name="text_does_not_need_receipt">不開發票</string>
+    <string name="text_save_and_use">保存使用</string>
+
 
     <string name="mobile_zone_text">地區區號</string>
     <string name="ok">確定</string>
@@ -145,6 +155,7 @@
     <string name="text_pay_way">支付方式</string>
     <string name="text_goods_price">商品金額</string>
     <string name="text_freight">運費</string>
+    <string name="text_store_freight">店鋪運費</string>
     <string name="text_store_discount">店鋪優惠</string>
     <string name="text_mall_discount">商城優惠</string>
     <string name="text_commit_bill">提交訂單</string>

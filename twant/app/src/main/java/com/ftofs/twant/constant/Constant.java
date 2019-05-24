@@ -90,6 +90,13 @@ public class Constant {
     public static final int AREA_ID_MAINLAND = 2;
     public static final int AREA_ID_MACAO = 3;
 
+    /**
+     * 配送方式定義
+     */
+    public static final String PAYMENT_TYPE_CODE_ONLINE = "online";  // 在線支付
+    public static final String PAYMENT_TYPE_CODE_OFFLINE = "offline";  // 貨到付款
+    public static final String PAYMENT_TYPE_CODE_CHAIN = "chain"; // 門店自提
+
 
     /**
      * AreaCode定義
@@ -102,5 +109,15 @@ public class Constant {
      * 店鋪距離閾值
      */
     public static final float STORE_DISTANCE_THRESHOLD = 0.0000001f;
+
+
+    /**
+     * 確認訂單常規項目
+     */
+    public static final int ITEM_VIEW_TYPE_COMMON = 1;
+    /**
+     * 確認訂單匯總項目
+     */
+    public static final int ITEM_VIEW_TYPE_SUMMARY = 2;
 
 }

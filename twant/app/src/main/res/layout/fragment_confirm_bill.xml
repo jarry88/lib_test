@@ -173,7 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:text="共1件, 合計:"
+            android:text=""
             />
         <TextView
             android:id="@+id/tv_total_price"
@@ -181,7 +181,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tv_item_count"
             android:layout_centerVertical="true"
-            android:text="$137.90"
+            android:text=""
             android:textColor="@color/tw_red"
             android:textSize="14sp"
             />

@@ -262,7 +262,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                                     detailAddress, "", mobile, 0);
                             SLog.info("addrItem: %s", addrItem);
                             bundle.putParcelable("addrItem", addrItem);
-                            setFragmentResult(Constant.REQUEST_CODE_ADD_ADDRESS, bundle);
+                            setFragmentResult(RESULT_OK, bundle);
 
                             ToastUtil.show(_mActivity, "地址添加成功");
                         } else {

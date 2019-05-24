@@ -245,7 +245,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             }
 
             MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.startForResult(ConfirmBillFragment.newInstance(buyData), Constant.REQUEST_CODE_CONFIRM_ORDER);
+            mainFragment.startForResult(ConfirmBillFragment.newInstance(1, buyData), Constant.REQUEST_CODE_CONFIRM_ORDER);
         }
     }
 

@@ -13,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ConfirmOrderStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -21,9 +23,12 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
+import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.task.TaskObservable;
+import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -36,7 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -53,7 +57,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
      * 是否來源于購物車
      * todo 暫時寫死
      */
-    boolean isFromCart = true;
+    int isFromCart;
 
     List<ListPopupItem> payWayItemList = new ArrayList<>();
     List<ListPopupItem> shippingItemList = new ArrayList<>();
@@ -69,7 +73,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     AddrItem mAddrItem;
     int isExistTrys;
 
-    TextView tvPayWay;
     TextView tvShippingTime;
     TextView tvReceiverName;
     TextView tvMobile;
@@ -81,19 +84,28 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     LinearLayout btnChangeShippingAddress;
 
     BaseQuickAdapter adapter;
-    List<ConfirmOrderStoreItem> confirmOrderStoreItemList = new ArrayList<>();
+    List<MultiItemEntity> confirmOrderItemList = new ArrayList<>();
 
     String currencyTypeSign;
     String textConfirmOrderTotalItemCount;
+    String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_OFFLINE, Constant.PAYMENT_TYPE_CODE_OFFLINE,
+            Constant.PAYMENT_TYPE_CODE_CHAIN};
 
     /**
      * 提交訂單時上去的店鋪列表
      */
     EasyJSONArray commitStoreList = EasyJSONArray.generate();
 
-    public static ConfirmBillFragment newInstance(String buyData) {
+    /**
+     * 創建確認訂單的實例
+     * @param isFromCart 1 -- 來源于購物車 0 -- 直接購買
+     * @param buyData
+     * @return
+     */
+    public static ConfirmBillFragment newInstance(int isFromCart, String buyData) {
         Bundle args = new Bundle();
 
+        args.putInt("isFromCart", isFromCart);
         args.putString("buyData", buyData);
 
         ConfirmBillFragment fragment = new ConfirmBillFragment();
@@ -114,6 +126,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
 
         Bundle args = getArguments();
+        isFromCart = args.getInt("isFromCart");
         buyData = args.getString("buyData");
         SLog.info("buyData[%s]", buyData);
 
@@ -125,7 +138,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         payWayItemList.add(new ListPopupItem(1, getResources().getString(R.string.text_pay_delivery), null));
         payWayItemList.add(new ListPopupItem(2, getResources().getString(R.string.text_pay_fetch), null));
 
-        tvPayWay = view.findViewById(R.id.tv_pay_way);
         tvShippingTime = view.findViewById(R.id.tv_shipping_time);
 
         tvReceiverName = view.findViewById(R.id.tv_receiver_name);
@@ -138,8 +150,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         btnChangeShippingAddress = view.findViewById(R.id.btn_change_shipping_address);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
-        Util.setOnClickListener(view, R.id.btn_change_pay_way, this);
-        Util.setOnClickListener(view, R.id.btn_change_shipping_time, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
         Util.setOnClickListener(view, R.id.btn_add_shipping_address, this);
         Util.setOnClickListener(view, R.id.btn_change_shipping_address, this);
@@ -147,7 +157,24 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         RecyclerView rvStoreList = view.findViewById(R.id.rv_store_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvStoreList.setLayoutManager(layoutManager);
-        adapter = new ConfirmOrderStoreAdapter(_mActivity, R.layout.confirm_order_store_item, confirmOrderStoreItemList);
+        adapter = new ConfirmOrderStoreAdapter(_mActivity, confirmOrderItemList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+
+                switch (id) {
+                    case R.id.btn_change_pay_way:
+                        payWayPopup();
+                        break;
+                    case R.id.btn_change_shipping_time:
+                        shippingTimePopup();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
         rvStoreList.setAdapter(adapter);
 
         loadBillData();
@@ -159,6 +186,58 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         return true;
     }
 
+
+    private void payWayPopup() {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_pay_fetch),
+                        LIST_POPUP_TYPE_PAY_WAY, payWayItemList, payWayIndex, this))
+                .show();
+    }
+
+    private void shippingTimePopup() {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_shipping_time),
+                        LIST_POPUP_TYPE_SHIPPING_TIME, shippingItemList, shippingTimeIndex, this))
+                .show();
+    }
+
+    /**
+     * 收集表單參數
+     * @return
+     */
+    private EasyJSONObject collectParams() {
+        try {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return null;
+            }
+
+            // 收集表單信息
+            EasyJSONObject commitBuyData = EasyJSONObject.generate(
+                    "paymentTypeCode", "online",
+                    "isCart", isFromCart,
+                    "isExistTrys", isExistTrys,
+                    "storeList", commitStoreList);
+            if (mAddrItem != null) {
+                commitBuyData.set("addressId", mAddrItem.addressId);
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "clientType", Constant.CLIENT_TYPE_ANDROID,
+                    "buyData", commitBuyData.toString());
+
+            SLog.info("params[%s]", params.toString());
+            return params;
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
 
     /**
      * 彈出，并且父Fragment不刷新
@@ -173,20 +252,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         int id = v.getId();
         if (id == R.id.btn_back) {
             popWithOutRefresh();
-        } else if (id == R.id.btn_change_pay_way) {
-            new XPopup.Builder(_mActivity)
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_pay_fetch),
-                            LIST_POPUP_TYPE_PAY_WAY, payWayItemList, payWayIndex, this))
-                    .show();
-        } else if (id == R.id.btn_change_shipping_time) {
-            new XPopup.Builder(_mActivity)
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_shipping_time),
-                            LIST_POPUP_TYPE_SHIPPING_TIME, shippingItemList, shippingTimeIndex, this))
-                    .show();
         } else if (id == R.id.btn_commit) {
             if (mAddrItem == null) {
                 SLog.info("Error!地址信息無效");
@@ -194,28 +259,11 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 return;
             }
 
-            String token = User.getToken();
-            if (StringUtil.isEmpty(token)) {
+            EasyJSONObject params = collectParams();
+            if (params == null) {
+                ToastUtil.show(_mActivity, "數據無效");
                 return;
             }
-
-
-            // 收集表單信息
-            EasyJSONObject commitBuyData = EasyJSONObject.generate(
-                    "addressId", mAddrItem.addressId,
-                    "paymentTypeCode", "online",
-                    "isCart", 1,
-                    "isExistTrys", isExistTrys,
-                    "storeList", commitStoreList
-            );
-
-            EasyJSONObject params = EasyJSONObject.generate(
-                    "token", token,
-                    "clientType", Constant.CLIENT_TYPE_ANDROID,
-                    "buyData", commitBuyData.toString()
-            );
-
-            SLog.info("params[%s]", params.toString());
             Api.postUI(Api.PATH_COMMIT_BILL_DATA, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -268,6 +316,10 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             SLog.info("addrItem: %s", addrItem);
             mAddrItem = addrItem;
             updateAddrView();
+        } else if (ReceiptInfoFragment.class.getName().equals(from)) {
+            int action = data.getInt("action");
+
+
         }
     }
 
@@ -290,44 +342,72 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void loadBillData() {
-        String token = User.getToken();
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "buyData", buyData,
-                "clientType", Constant.CLIENT_TYPE_ANDROID,
-                "isCart", 1);
-        SLog.info("params[%s]", params.toString());
-        Api.postUI(Api.PATH_DISPLAY_BILL_DATA, params, new UICallback() {
+        TaskObserver taskObserver = new TaskObserver() {
             @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseStr = response.body().string();
-                SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                if (ToastUtil.checkError(getContext(), responseObj)) {
-                    // 如果加載訂單數據失敗，退出當前頁面
+            public void onMessage() {
+                List<EasyJSONObject> resultList = (List<EasyJSONObject>) message;
+                if (resultList == null) {
+                    ToastUtil.show(_mActivity, "生成訂單失敗");
                     pop();
                     return;
                 }
 
-                // 獲取配送時間列表
+                // 下面顯示訂單數據
+                updateAddrView();
+
+                ConfirmOrderSummaryItem summaryItem = getSummaryItem();
+                String template = getResources().getString(R.string.text_confirm_order_total_item_count);
+                tvItemCount.setText(String.format(template, summaryItem.totalItemCount));
+                tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,
+                        summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount, 0));
+
+                adapter.setNewData(confirmOrderItemList);
+            }
+        };
+
+        TaskObservable taskObservable = new TaskObservable(taskObserver) {
+            @Override
+            public Object doWork() {
                 try {
+                    List<EasyJSONObject> resultList = new ArrayList<>();
+                /*
+                 同步請求這三個接口
+                    /member/buy/step1
+                    /member/buy/calc/freight
+                    /member/buy/calc
+                  */
+                    String token = User.getToken();
+                    if (StringUtil.isEmpty(token)) {
+                        return null;
+                    }
+
+                    // 總件數
+                    int totalItemCount = 0;
+
+                    // 第1步
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "token", token,
+                            "buyData", buyData,
+                            "clientType", Constant.CLIENT_TYPE_ANDROID,
+                            "isCart", isFromCart);
+                    SLog.info("params[%s]", params.toString());
+                    String responseStr = Api.syncPost(Api.PATH_DISPLAY_BILL_DATA, params);
+
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.isError(responseObj)) {
+                        return null;
+                    }
+                    resultList.add(responseObj);
+
+
+                    // 獲取配送時間列表
+                    shippingItemList.clear();
                     EasyJSONArray easyJSONArray = responseObj.getArray("datas.shipTimeTypeList");
                     for (Object object : easyJSONArray) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                         shippingItemList.add(new ListPopupItem(easyJSONObject.getInt("id"), easyJSONObject.getString("name"), null));
                     }
-
-                    EasyJSONObject address = responseObj.getObject("datas.address");
-                    if (address != null) {
-                        mAddrItem = new AddrItem(address);
-                        SLog.info("mAddrItem[%s]", mAddrItem);
-                    }
-                    updateAddrView();
 
                     isExistTrys = responseObj.getInt("datas.isExistTrys");
 
@@ -360,9 +440,11 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, cartId, goodsName, goodsFullSpecs, buyNum, goodsPrice);
                             confirmOrderSkuItemList.add(confirmOrderSkuItem);
                             goodsList.append(EasyJSONObject.generate("cartId", cartId, "buyNum", buyNum));
+
+                            totalItemCount++;
                         }
 
-                        confirmOrderStoreItemList.add(new ConfirmOrderStoreItem(storeId, storeName, buyItemAmount,
+                        confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, buyItemAmount,
                                 freightAmount, itemCount, confirmOrderSkuItemList));
 
                         commitStoreList.append(EasyJSONObject.generate(
@@ -370,34 +452,71 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                                 "storeName", storeName,
                                 "goodsList", goodsList,
                                 "shipTimeType", shipTimeType));
+                    } // END OF for
+
+                    // 添加上汇总项目
+                    confirmOrderItemList.add(new ConfirmOrderSummaryItem());
+
+
+
+                    // 第2步
+                    params = collectParams();
+                    // 收集地址信息
+                    EasyJSONObject address = responseObj.getObject("datas.address");
+                    if (address != null) {
+                        mAddrItem = new AddrItem(address);
+                        SLog.info("mAddrItem[%s]", mAddrItem);
+
+                        params = collectParams();
+                        SLog.info("params[%s]", params.toString());
+                        responseStr = Api.syncPost(Api.PATH_CALC_FREIGHT, params);
+
+                        SLog.info("responseStr[%s]", responseStr);
+                        responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.isError(responseObj)) {
+                            return null;
+                        }
+                        resultList.add(responseObj);
                     }
 
-                    // 合計件數和價錢
-                    int itemCount = 0;
-                    float totalPrice = 0f;
-                    for (ConfirmOrderStoreItem confirmOrderStoreItem : confirmOrderStoreItemList) {
-                        itemCount += confirmOrderStoreItem.itemCount;
-                        totalPrice += confirmOrderStoreItem.buyItemAmount;
+                    // 第3步(請求參數與第2步相同)
+                    responseStr = Api.syncPost(Api.PATH_CALC_TOTAL, params);
+
+                    SLog.info("responseStr[%s]", responseStr);
+                    responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.isError(responseObj)) {
+                        return null;
                     }
-                    tvItemCount.setText(String.format(textConfirmOrderTotalItemCount, itemCount));
-                    tvTotalPrice.setText(String.valueOf(totalPrice));
+                    resultList.add(responseObj);
 
-                    adapter.setNewData(confirmOrderStoreItemList);
+                    ConfirmOrderSummaryItem summaryItem = getSummaryItem();
+                    summaryItem.totalItemCount = totalItemCount;
+                    summaryItem.totalAmount = (float) responseObj.getDouble("datas.buyGoodsItemAmount");
+                    summaryItem.storeDiscount = (float) responseObj.getDouble("datas.storeTotalDiscountAmount");
 
-                    SLog.info("commitStoreList[%s]", commitStoreList.toString());
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
+                    return resultList;
+                } catch (Exception e) {
+
                 }
+
+                return null;
             }
-        });
+        };
+
+        TwantApplication.getThreadPool().execute(taskObservable);
     }
 
     @Override
     public void onSelected(int type, int id, Object extra) {
         if (type == LIST_POPUP_TYPE_PAY_WAY) {
             payWayIndex = id;
-            tvPayWay.setText(payWayItemList.get(payWayIndex).title);
+
+            ConfirmOrderSummaryItem summaryItem = getSummaryItem();
+            if (summaryItem == null) {
+                return;
+            }
+            summaryItem.paymentTypeCode = getPaymentTypeCode(payWayIndex);
+            adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
         } else if (type == LIST_POPUP_TYPE_SHIPPING_TIME) {
             shippingTimeIndex = id;
             tvShippingTime.setText(shippingItemList.get(shippingTimeIndex).title);
@@ -407,4 +526,16 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     /*
     {"code":200,"datas":{"address":null,
      */
+
+    private ConfirmOrderSummaryItem getSummaryItem() {
+        int size = confirmOrderItemList.size();
+        if (size < 1) {
+            return null;
+        }
+        return (ConfirmOrderSummaryItem) confirmOrderItemList.get(size - 1);
+    }
+
+    private String getPaymentTypeCode(int index) {
+        return paymentTypeCodeArr[index];
+    }
 }
