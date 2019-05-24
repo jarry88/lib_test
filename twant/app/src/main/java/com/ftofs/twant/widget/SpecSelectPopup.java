@@ -13,9 +13,12 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
+import com.ftofs.twant.fragment.ConfirmBillFragment;
+import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -41,6 +44,7 @@ import okhttp3.Response;
  */
 public class SpecSelectPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
+    int action;
     List<Spec> specList;
     int selectedIndex;  // 當前選中的索引
     ImageView skuImage;
@@ -56,10 +60,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     // 調整數量
     AdjustButton abQuantity;
 
-    public SpecSelectPopup(@NonNull Context context, List<Spec> specList, Map<String, Integer> specValueIdMap) {
+    public SpecSelectPopup(@NonNull Context context, int action, List<Spec> specList, Map<String, Integer> specValueIdMap) {
         super(context);
 
         this.context = context;
+        this.action = action;
         this.specList = specList;
         this.specValueIdMap = specValueIdMap;
 
@@ -93,6 +98,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         skuImage = findViewById(R.id.sku_image);
         abQuantity = findViewById(R.id.ab_quantity);
         abQuantity.setValue(1);
+        abQuantity.setMinValue(1);
 
         SLog.info("specList.size[%d]", specList.size());
         if (specList.size() < 1) {
@@ -194,6 +200,67 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         return (int) (XPopupUtils.getWindowHeight(getContext())*.85f);
     }
 
+    /**
+     * 添加到購物車
+     */
+    private void addToCart() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        // 當前選中的goodsId
+        int goodsId = getSelectedGoodsId();
+
+        EasyJSONArray buyData = EasyJSONArray.generate(EasyJSONObject.generate(
+                "buyNum", abQuantity.getValue(),
+                "goodsId", goodsId));
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "buyData", buyData.toString(),
+                "clientType", Constant.CLIENT_TYPE_ANDROID);
+
+        SLog.info("params[%s]", params.toString());
+
+        Api.postUI(Api.PATH_ADD_CART, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseStr = response.body().string();
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(context, responseObj)) {
+                    return;
+                }
+
+                ToastUtil.show(context, "添加購物車成功");
+                dismiss();
+            }
+        });
+    }
+
+    /**
+     * 直接購買
+     */
+    private void buy() {
+        dismiss();
+
+        // 當前選中的goodsId
+        int goodsId = getSelectedGoodsId();
+        // [{"buyNum":21,"goodsId":446},{"buyNum":2,"goodsId":445}]
+        EasyJSONArray easyJSONArray = EasyJSONArray.generate(EasyJSONObject.generate(
+                "buyNum", abQuantity.getValue(),
+                "goodsId", goodsId));
+
+        MainFragment mainFragment = MainFragment.getInstance();
+        mainFragment.start(ConfirmBillFragment.newInstance(0, easyJSONArray.toString()));
+    }
 
     @Override
     public void onClick(View v) {
@@ -201,46 +268,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         if (id == R.id.ll_title_padding || id == R.id.btn_close) {
             dismiss();
         } else if (id == R.id.btn_ok) {
-            // 添加購物車
-            String token = User.getToken();
-            if (StringUtil.isEmpty(token)) {
-                return;
+            if (action == Constant.ACTION_ADD_TO_CART) {
+                addToCart();
+            } else {
+                buy();
             }
-
-            // 當前選中的goodsId
-            int goodsId = getSelectedGoodsId();
-
-            EasyJSONArray buyData = EasyJSONArray.generate(EasyJSONObject.generate(
-                    "buyNum", abQuantity.getValue(),
-                    "goodsId", goodsId));
-
-            EasyJSONObject params = EasyJSONObject.generate(
-                    "token", token,
-                    "buyData", buyData.toString(),
-                    "clientType", Constant.CLIENT_TYPE_ANDROID);
-
-            SLog.info("params[%s]", params.toString());
-
-            Api.postUI(Api.PATH_ADD_CART, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String responseStr = response.body().string();
-                    SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-
-                    if (ToastUtil.checkError(context, responseObj)) {
-                        return;
-                    }
-
-                    ToastUtil.show(context, "添加購物車成功");
-                    dismiss();
-                }
-            });
         }
     }
 

@@ -62,6 +62,12 @@ public class Constant {
     public static final int ACTION_ADD = 1;
     public static final int ACTION_EDIT = 2;
 
+    /**
+     * 直接購買還是添加到購物車
+     */
+    public static final int ACTION_ADD_TO_CART = 1;
+    public static final int ACTION_BUY = 2;
+
 
     /**
      * 地區ID定義

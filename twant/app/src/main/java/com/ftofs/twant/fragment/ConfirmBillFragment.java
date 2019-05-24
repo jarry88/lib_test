@@ -258,11 +258,14 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                     // goodsList 购买商品列表
                     EasyJSONArray goodsList = EasyJSONArray.generate();
+                    String keyName = "cartId";
+                    if (isFromCart == Constant.ZERO) {
+                        keyName = "goodsId";
+                    }
                     for (ConfirmOrderSkuItem skuItem : storeItem.confirmOrderSkuItemList) {
                         goodsList.append(EasyJSONObject.generate(
                              "buyNum", skuItem.buyNum,
-                             "cartId", skuItem.goodsId
-                        ));
+                             keyName, skuItem.goodsId));
                     }
                     store.set("goodsList", goodsList);
 
@@ -509,7 +512,13 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         List<ConfirmOrderSkuItem> confirmOrderSkuItemList = new ArrayList<>();
                         for (Object object2 : buyGoodsItemVoList) {
                             EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
-                            int cartId = buyGoodsItem.getInt("cartId");
+                            int goodsId;
+                            if (isFromCart == 1) {
+                                goodsId = buyGoodsItem.getInt("cartId");
+                            } else {
+                                goodsId = buyGoodsItem.getInt("goodsId");
+                            }
+
                             int buyNum = buyGoodsItem.getInt("buyNum");
 
                             String imageSrc = buyGoodsItem.getString("imageSrc");
@@ -518,9 +527,14 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             float goodsPrice = (float) buyGoodsItem.getDouble("goodsPrice");
 
 
-                            ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, cartId, goodsName, goodsFullSpecs, buyNum, goodsPrice);
+                            ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, goodsId, goodsName, goodsFullSpecs, buyNum, goodsPrice);
                             confirmOrderSkuItemList.add(confirmOrderSkuItem);
-                            goodsList.append(EasyJSONObject.generate("cartId", cartId, "buyNum", buyNum));
+
+                            String keyName = "cartId";
+                            if (isFromCart == Constant.ZERO) {
+                                keyName = "goodsId";
+                            }
+                            goodsList.append(EasyJSONObject.generate(keyName, goodsId, "buyNum", buyNum));
 
                             totalItemCount++;
                         }

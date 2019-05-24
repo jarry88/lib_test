@@ -14,6 +14,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecValue;
 import com.ftofs.twant.log.SLog;
@@ -88,6 +89,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvGoodsCountryName = view.findViewById(R.id.tv_goods_country_name);
 
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
+        Util.setOnClickListener(view, R.id.btn_buy, this);
 
         String token = User.getToken();
         if (!StringUtil.isEmpty(token)) {
@@ -100,12 +102,26 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_add_to_cart) {
-            new XPopup.Builder(_mActivity)
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new SpecSelectPopup(_mActivity, specList, specValueIdMap))
-                    .show();
+
         }
+        switch (id) {
+            case R.id.btn_add_to_cart:
+                showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
+                break;
+            case R.id.btn_buy:
+                showSpecSelectPopup(Constant.ACTION_BUY);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void showSpecSelectPopup(int action) {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SpecSelectPopup(_mActivity, action, specList, specValueIdMap))
+                .show();
     }
 
     private void loadGoodsDetail(int commonId, String token) {

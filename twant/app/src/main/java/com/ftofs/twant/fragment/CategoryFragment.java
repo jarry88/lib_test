@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,8 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Util.setOnClickListener(view, R.id.btn_ok, this);
+
         TabLayout tabLayout = view.findViewById(R.id.category_tab_layout);
         ViewPager viewPager = view.findViewById(R.id.category_viewpager);
 
@@ -68,7 +71,14 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
     
     @Override
     public void onClick(View v) {
-        
+        int id = v.getId();
+        switch (id) {
+            case R.id.btn_back:
+                pop();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
