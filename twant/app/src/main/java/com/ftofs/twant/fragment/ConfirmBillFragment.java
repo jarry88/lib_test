@@ -37,6 +37,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -426,6 +427,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void loadBillData() {
+        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+                .asLoading("正在生成訂單")
+                .show();
         TaskObserver taskObserver = new TaskObserver() {
             @Override
             public void onMessage() {
@@ -446,6 +450,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount, 0));
 
                 adapter.setNewData(confirmOrderItemList);
+
+                loadingPopup.dismiss();
             }
         };
 
