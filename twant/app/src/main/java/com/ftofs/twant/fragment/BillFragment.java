@@ -25,6 +25,9 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwTabButton;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,12 +43,12 @@ import okhttp3.Response;
  * 訂單頁面
  * @author zwm
  */
-public class BillFragment extends BaseFragment implements View.OnClickListener {
+public class BillFragment extends BaseFragment implements View.OnClickListener, TwTabButton.TtbOnSelectListener {
     int billStatus;
 
     List<OrderItem> orderItemList = new ArrayList<>();
     OrderListAdapter adapter;
-    TextView[] tvOrderStatusArr = new TextView[5];
+    TwTabButton[] tvOrderStatusArr = new TwTabButton[5];
     int[] orderStatusIds = new int[] {R.id.btn_bill_all, R.id.btn_bill_to_be_paid, R.id.btn_bill_to_be_shipped,
            R.id.btn_bill_to_be_received, R.id.btn_bill_to_be_commented};
 
@@ -83,9 +86,9 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_back, this);
         int index = 0;
         for (int id : orderStatusIds) {
-            TextView tvOrderStatus = view.findViewById(id);
+            TwTabButton tvOrderStatus = view.findViewById(id);
             tvOrderStatusArr[index] = tvOrderStatus;
-            tvOrderStatus.setOnClickListener(this);
+            tvOrderStatus.setTtbOnSelectListener(this);
             ++index;
         }
 
@@ -108,7 +111,9 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
         });
         rvOrderList.setAdapter(adapter);
 
+        tvOrderStatusArr[billStatus].setStatus(Constant.STATUS_SELECTED);
         handleOrderStatusSwitch(orderStatusIds[billStatus]);
+        loadBillData(billStatus);
     }
 
     @Override
@@ -117,45 +122,23 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.btn_back) {
             pop();
         }
-
-        if (handleOrderStatusSwitch(id)) {
-            loadBillData(billStatus);
-            return;
-        }
     }
 
     /**
      * 處理狀態切換按鈕
      * @param id
-     * @return 事件是否被處理
      */
-    private boolean handleOrderStatusSwitch(int id) {
-        boolean consumed = false;
+    private void handleOrderStatusSwitch(int id) {
         int index = 0;
         for (int i = 0; i < orderStatusIds.length; i++) {
             if (orderStatusIds[i] == id) {
                 index = i;
-                consumed = true;
-                break;
+            } else {
+                tvOrderStatusArr[i].setStatus(Constant.STATUS_UNSELECTED);
             }
-        }
-
-        if (!consumed) {
-            return false;
         }
 
         billStatus = index;
-        for (int i = 0; i < orderStatusIds.length; i++) {
-            int textColor = twBlack;
-            if (index == i) {
-                textColor = twRed;
-            }
-
-            tvOrderStatusArr[i].setTextColor(textColor);
-        }
-
-        loadBillData(billStatus);
-        return true;
     }
 
     private void loadBillData(int billStatus) {
@@ -174,14 +157,19 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
             }
             SLog.info("params[%s]", params);
 
+            final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+                    .asLoading("正在加載")
+                    .show();
+
             Api.postUI(Api.PATH_ORDER_LIST, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    loadingPopup.dismiss();
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
+                    loadingPopup.dismiss();
                     String responseStr = response.body().string();
                     SLog.info("responseStr[%s]", responseStr);
 
@@ -272,5 +260,12 @@ public class BillFragment extends BaseFragment implements View.OnClickListener {
         SLog.info("onBackPressedSupport");
         pop();
         return true;
+    }
+
+    @Override
+    public void onSelect(TwTabButton tabButton) {
+        int id = tabButton.getId();
+        handleOrderStatusSwitch(id);
+        loadBillData(billStatus);
     }
 }

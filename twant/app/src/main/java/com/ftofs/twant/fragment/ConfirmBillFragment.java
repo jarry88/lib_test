@@ -433,6 +433,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         TaskObserver taskObserver = new TaskObserver() {
             @Override
             public void onMessage() {
+                loadingPopup.dismiss();
                 List<EasyJSONObject> resultList = (List<EasyJSONObject>) message;
                 if (resultList == null) {
                     ToastUtil.show(_mActivity, "生成訂單失敗");
@@ -450,8 +451,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount, 0));
 
                 adapter.setNewData(confirmOrderItemList);
-
-                loadingPopup.dismiss();
             }
         };
 

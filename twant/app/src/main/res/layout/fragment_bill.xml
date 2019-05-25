@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@id/tool_bar"
         android:background="@drawable/bottom_separator_box"
         android:orientation="horizontal">
-        <TextView
+        <com.ftofs.twant.widget.TwTabButton
             android:id="@+id/btn_bill_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -75,9 +75,11 @@
             android:gravity="center"
             android:text="@string/text_bill_all"
             android:textSize="16sp"
-            android:textColor="@color/tw_red"
+            android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
             />
-        <TextView
+        <com.ftofs.twant.widget.TwTabButton
             android:id="@+id/btn_bill_to_be_paid"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -88,8 +90,10 @@
             android:text="@string/text_bill_to_be_paid"
             android:textSize="16sp"
             android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
             />
-        <TextView
+        <com.ftofs.twant.widget.TwTabButton
             android:id="@+id/btn_bill_to_be_shipped"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -100,8 +104,10 @@
             android:text="@string/text_bill_to_be_shipped"
             android:textSize="16sp"
             android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
             />
-        <TextView
+        <com.ftofs.twant.widget.TwTabButton
             android:id="@+id/btn_bill_to_be_received"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -112,8 +118,10 @@
             android:text="@string/text_bill_to_be_received"
             android:textSize="16sp"
             android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
             />
-        <TextView
+        <com.ftofs.twant.widget.TwTabButton
             android:id="@+id/btn_bill_to_be_commented"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -124,6 +132,8 @@
             android:text="@string/text_bill_to_be_commented"
             android:textSize="16sp"
             android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
             />
     </LinearLayout>
 

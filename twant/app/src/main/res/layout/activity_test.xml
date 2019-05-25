@@ -4,10 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.TestActivity">
+    tools:context=".activity.TestActivity"
+    android:orientation="vertical">
 
     <com.ftofs.twant.widget.AdjustButton
         android:layout_width="200dp"
         android:layout_height="50dp"
+        />
+
+    <com.ftofs.twant.widget.TwTabButton
+        android:id="@+id/btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="aaaabb"
+        app:ttb_stroke_width="2dp"
+        app:ttb_use_cap="true"
         />
 </LinearLayout>

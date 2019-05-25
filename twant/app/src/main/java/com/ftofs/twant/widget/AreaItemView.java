@@ -5,13 +5,10 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.util.Util;
 
 public class AreaItemView extends android.support.v7.widget.AppCompatTextView {
-    public static final int STATUS_SELECTED = 1;
-    public static final int STATUS_UNSELECTED = 2;
-
-
     int areaId;
     int depth;
 
@@ -31,7 +28,7 @@ public class AreaItemView extends android.support.v7.widget.AppCompatTextView {
         this.depth = depth;
     }
 
-    int status = STATUS_UNSELECTED;
+    int status = Constant.STATUS_UNSELECTED;
     int twRed;
     int twBlack;
 
@@ -56,7 +53,7 @@ public class AreaItemView extends android.support.v7.widget.AppCompatTextView {
     public void setStatus(int status) {
         this.status = status;
 
-        if (status == STATUS_SELECTED) {
+        if (status == Constant.STATUS_SELECTED) {
             setTextColor(twRed);
             setBackgroundResource(R.drawable.red_bottom_separator_box);
         } else {

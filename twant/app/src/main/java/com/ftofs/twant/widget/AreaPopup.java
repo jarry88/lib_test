@@ -15,6 +15,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -98,10 +99,10 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
 
                 // 將之前的AreaItemView取消高亮
                 for (AreaItemView itemView : areaItemViewList) {
-                    itemView.setStatus(AreaItemView.STATUS_UNSELECTED);
+                    itemView.setStatus(Constant.STATUS_UNSELECTED);
                 }
                 areaItemView.setText(area.getAreaName());
-                areaItemView.setStatus(AreaItemView.STATUS_SELECTED);
+                areaItemView.setStatus(Constant.STATUS_SELECTED);
                 areaItemView.setDepth(depth);
                 areaItemView.setAreaId(area.getAreaId());
                 areaItemView.setOnClickListener(new OnClickListener() {
@@ -123,7 +124,7 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                             llAreaContainer.removeViews(depth, childCount - depth);
                         }
 
-                        itemView.setStatus(AreaItemView.STATUS_SELECTED);
+                        itemView.setStatus(Constant.STATUS_SELECTED);
                         loadAreaData(itemView.getAreaId());
                     }
                 });

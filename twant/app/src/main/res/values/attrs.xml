@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- ScaledButton -->
     <attr name="icon_src" format="reference"></attr>
     <attr name="icon_width" format="dimension"></attr>
@@ -9,5 +8,13 @@
         <attr name="icon_src"></attr>
         <attr name="icon_width"></attr>
         <attr name="icon_height"></attr>
+    </declare-styleable>
+
+    <!-- TwTabButton -->
+    <attr name="ttb_stroke_width" format="dimension"></attr> <!-- 下劃線的寬度 -->
+    <attr name="ttb_use_cap" format="boolean"></attr>  <!-- 是否使用圓角 -->
+    <declare-styleable name="TwTabButton">
+        <attr name="ttb_stroke_width"></attr>
+        <attr name="ttb_use_cap"></attr>
     </declare-styleable>
 </resources>

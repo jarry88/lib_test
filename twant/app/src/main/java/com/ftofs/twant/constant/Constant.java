@@ -115,4 +115,15 @@ public class Constant {
      * 編輯模式
      */
     public static final int MODE_EDIT = 2;
+
+
+    /**
+     * 選中狀態
+     */
+    public static final int STATUS_SELECTED = 1;
+
+    /**
+     * 未選中狀態
+     */
+    public static final int STATUS_UNSELECTED = 2;
 }
