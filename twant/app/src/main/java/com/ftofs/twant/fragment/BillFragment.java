@@ -101,8 +101,10 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("onItemClick");
 
+                OrderItem orderItem = orderItemList.get(position);
+
                 MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(OrderDetailFragment.newInstance(1));
+                mainFragment.start(OrderDetailFragment.newInstance(orderItem.orderId));
             }
         });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -200,6 +202,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                             for (Object object2 : ordersVoList) { // OrderVo
                                 EasyJSONObject ordersVo = (EasyJSONObject) object2;
 
+                                int ordersId = ordersVo.getInt("ordersId");
                                 String ordersStateName = ordersVo.getString("ordersStateName");
                                 String storeName = ordersVo.getString("storeName");
                                 float freightAmount = (float) ordersVo.getDouble("freightAmount");
@@ -221,7 +224,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                                     orderSkuItemList.add(new OrderSkuItem(goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
                                 }
 
-                                OrderItem orderItem = new OrderItem(storeName, ordersStateName, freightAmount, ordersAmount, orderSkuItemList);
+                                OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount, orderSkuItemList);
                                 // 最后一個顯示【支付訂單】按鈕
                                 if (index == len -1) {
                                     orderItem.setShowPayButton(true);

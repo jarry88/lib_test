@@ -3,7 +3,9 @@ package com.ftofs.twant.entity;
 import java.util.List;
 
 public class OrderItem {
-    public OrderItem(String storeName, String ordersStateName, float freightAmount, float ordersAmount, List<OrderSkuItem> orderSkuItemList) {
+    public OrderItem(int orderId, String storeName, String ordersStateName, float freightAmount,
+                     float ordersAmount, List<OrderSkuItem> orderSkuItemList) {
+        this.orderId = orderId;
         this.storeName = storeName;
         this.ordersStateName = ordersStateName;
         this.freightAmount = freightAmount;
@@ -11,6 +13,7 @@ public class OrderItem {
         this.orderSkuItemList = orderSkuItemList;
     }
 
+    public int orderId;
     public String storeName;
     public String ordersStateName;
     public float freightAmount;

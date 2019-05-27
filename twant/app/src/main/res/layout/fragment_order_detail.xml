@@ -56,21 +56,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp">
                     <TextView
+                        android:id="@+id/tv_receiver_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="35dp"
                         android:layout_centerVertical="true"
-                        android:text="收貨人:  白小白"
+                        android:text=""
                         android:textSize="16sp"
                         android:textColor="@color/tw_black"
                         />
                     <TextView
+                        android:id="@+id/tv_mobile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="15dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="13417785707"
+                        android:text=""
                         android:textSize="16sp"
                         android:textColor="@color/tw_black"
                         />
@@ -135,11 +137,12 @@
                             />
 
                         <TextView
+                            android:id="@+id/tv_store_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_gravity="center_vertical"
-                            android:text="Yueaeow香薰"
+                            android:text=""
                             android:textColor="@color/tw_black"
                             android:textSize="13sp"
                             />
@@ -153,121 +156,23 @@
                             />
                     </LinearLayout>
                     <TextView
+                        android:id="@+id/tv_orders_state_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/toolbar_margin_right"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="已發貨"
+                        android:text=""
                         android:textSize="13sp"
                         android:textColor="@color/tw_red"
                         />
                 </RelativeLayout>
 
-                <RelativeLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_order_detail_goods_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
-                    <ImageView
-                        android:id="@+id/goods_image"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_marginLeft="15dp"
-                        android:src="@drawable/cs_avatar_160"
-                        />
-                    <LinearLayout
-                        android:id="@+id/ll_amount_container"
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:text="$129.00"
-                            android:textSize="14sp"
-                            android:textColor="@color/tw_black"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:layout_gravity="right"
-                            android:text="X 1"
-                            android:textSize="13sp"
-                            android:textColor="@color/tw_black"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@id/goods_image"
-                        android:layout_toLeftOf="@id/ll_amount_container"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Yueaeow香薰精油香氛淡薰香家用室內臥室空氣清新留香"
-                            android:textColor="@color/tw_black"
-                            android:textSize="14sp"
-                            />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="11dp"
-                            android:text="类型:玫瑰, 规格:10ml, 颜色:黑色"
-                            android:textColor="#929292"
-                            android:textSize="13sp"
-                            />
-
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="19dp"
-                    android:layout_marginRight="@dimen/toolbar_margin_right">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="76dp"
-                            android:layout_height="26dp"
-                            android:gravity="center"
-                            android:text="退款"
-                            android:textColor="@color/tw_black"
-                            android:textSize="13sp"
-                            android:background="@drawable/smaller_outline_button_revert"
-                            />
-                        <TextView
-                            android:layout_width="76dp"
-                            android:layout_height="26dp"
-                            android:gravity="center"
-                            android:text="退貨"
-                            android:textColor="@color/tw_black"
-                            android:textSize="13sp"
-                            android:background="@drawable/smaller_outline_button"
-                            />
-                        <TextView
-                            android:layout_width="76dp"
-                            android:layout_height="26dp"
-                            android:gravity="center"
-                            android:text="查看投訴"
-                            android:textColor="@color/tw_black"
-                            android:textSize="13sp"
-                            android:background="@drawable/smaller_outline_button_revert"
-                            />
-                    </LinearLayout>
-                </RelativeLayout>
+                    />
 
                 <View
                     android:layout_width="match_parent"
@@ -292,12 +197,13 @@
                         android:textSize="14sp"
                         />
                     <TextView
+                        android:id="@+id/tv_freight_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/toolbar_margin_right"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:text="$ 20.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="#666"
                         />
@@ -317,12 +223,13 @@
                         android:textSize="16sp"
                         />
                     <TextView
+                        android:id="@+id/tv_orders_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/toolbar_margin_right"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:text="$ 129.00"
+                        android:text=""
                         android:textSize="16sp"
                         android:textColor="@color/tw_red"
                         />
@@ -352,11 +259,12 @@
                         android:textSize="14sp"
                         />
                     <TextView
+                        android:id="@+id/tv_ship_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:text="僅雙休日送貨"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -478,10 +386,11 @@
                         android:textColor="@color/tw_dark_grey"
                         />
                     <TextView
+                        android:id="@+id/tv_orders_sn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15sp"
-                        android:text="2920000000081501"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_dark_grey"
                         />
@@ -502,10 +411,11 @@
                         android:textColor="@color/tw_dark_grey"
                         />
                     <TextView
+                        android:id="@+id/tv_create_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15sp"
-                        android:text="2019-01-10 12:59:43"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_dark_grey"
                         />
