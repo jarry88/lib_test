@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.logistics;
 
 import java.math.BigInteger;
 
-
 public class CustomerOrderEntity {
     private int logisticsId;
 

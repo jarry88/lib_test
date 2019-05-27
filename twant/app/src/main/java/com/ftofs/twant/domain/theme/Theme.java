@@ -1,6 +1,5 @@
 package com.ftofs.twant.domain.theme;
 
-
 import java.text.SimpleDateFormat;
 
 public class Theme {
@@ -102,46 +101,6 @@ public class Theme {
      * 0不可以，1可以
      */
     private int isInTheme = 0;
-
-    public int getIsInTheme() {
-        return isInTheme;
-    }
-
-    public String getEnrollStartTimeString() {
-        if (enrollStartTimeString!=null) {
-            enrollStartTimeString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(enrollStartTime).toString();
-        }else{
-            enrollStartTimeString = "";
-        }
-        return enrollStartTimeString;
-    }
-
-    public String getEnrollEndTimeString() {
-        if (enrollEndTimeString!=null) {
-            enrollEndTimeString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(enrollEndTime).toString();
-        }else{
-            enrollEndTimeString = "";
-        }
-        return enrollEndTimeString;
-    }
-
-    public String getShowStartTimeString() {
-        if (showStartTimeString!=null) {
-            showStartTimeString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(showStartTime).toString();
-        }else{
-            showStartTimeString = "";
-        }
-        return showStartTimeString;
-    }
-
-    public String getShowEndTimeString() {
-        if (showEndTimeString!=null) {
-            showEndTimeString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(showEndTime).toString();
-        }else{
-            showEndTimeString = "";
-        }
-        return showEndTimeString;
-    }
 
     public int getThemeId() {
         return themeId;
@@ -253,6 +212,46 @@ public class Theme {
 
     public void setThemeDescribe(String themeDescribe) {
         this.themeDescribe = themeDescribe;
+    }
+
+    public String getEnrollStartTimeString() {
+        return enrollStartTimeString;
+    }
+
+    public void setEnrollStartTimeString(String enrollStartTimeString) {
+        this.enrollStartTimeString = enrollStartTimeString;
+    }
+
+    public String getEnrollEndTimeString() {
+        return enrollEndTimeString;
+    }
+
+    public void setEnrollEndTimeString(String enrollEndTimeString) {
+        this.enrollEndTimeString = enrollEndTimeString;
+    }
+
+    public String getShowStartTimeString() {
+        return showStartTimeString;
+    }
+
+    public void setShowStartTimeString(String showStartTimeString) {
+        this.showStartTimeString = showStartTimeString;
+    }
+
+    public String getShowEndTimeString() {
+        return showEndTimeString;
+    }
+
+    public void setShowEndTimeString(String showEndTimeString) {
+        this.showEndTimeString = showEndTimeString;
+    }
+
+    public int getIsInTheme() {
+        return isInTheme;
+    }
+
+    public void setIsInTheme(int isInTheme) {
+        this.isInTheme = isInTheme;
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
 
-
 public class AlbumFiles implements Serializable {
     /**
      * 文件编号
@@ -93,6 +92,10 @@ public class AlbumFiles implements Serializable {
         return filesSrc;
     }
 
+    public void setFilesSrc(String filesSrc) {
+        this.filesSrc = filesSrc;
+    }
+
     public int getStoreId() {
         return storeId;
     }
@@ -150,7 +153,11 @@ public class AlbumFiles implements Serializable {
     }
 
     public long getFilesSizeKB() {
-        return filesSize/1024;
+        return filesSizeKB;
+    }
+
+    public void setFilesSizeKB(long filesSizeKB) {
+        this.filesSizeKB = filesSizeKB;
     }
 
     @Override

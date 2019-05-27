@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.chain;
 
-import com.ftofs.twant.domain.chain.Chain;
-import com.ftofs.twant.domain.chain.ChainClass;
-import com.ftofs.twant.domain.chain.ChainGoods;
 import com.ftofs.twant.domain.chain.ChainPromotion;
 
 import java.math.BigDecimal;
@@ -108,51 +105,6 @@ public class ChainVo {
      * 店内活动
      */
     private List<ChainPromotion> chainPromotionList = new ArrayList<>();
-
-    public ChainVo(Chain chain, ChainGoods chainGoods, ChainClass chainClass) {
-        this.chainId = chain.getChainId();
-        this.chainName = chain.getChainName();
-        this.clerkName = chain.getClerkName();
-        this.storeId = chain.getStoreId();
-        this.areaId1 = chain.getAreaId1();
-        this.areaId2 = chain.getAreaId2();
-        this.areaId3 = chain.getAreaId3();
-        this.areaId4 = chain.getAreaId4();
-        this.areaInfo = chain.getAreaInfo();
-        this.address = chain.getAddress();
-        this.chainPhone = chain.getChainPhone();
-        this.chainOpeningTime = chain.getChainOpeningTime();
-        this.chainTrafficLine = chain.getChainTrafficLine();
-        this.imageSrc1 = chain.getImageSrc1();
-        this.imageSrc2 = chain.getImageSrc2();
-        this.lng = chain.getLng();
-        this.lat = chain.getLat();
-        this.chainGoodsRate = chain.getChainGoodsRate();
-        this.chainCriterion = chain.getChainCriterion();
-        this.goodsPrice = chainGoods.getGoodsPrice();
-        this.className = chainClass.getClassName();
-    }
-    public ChainVo(Chain chain) {
-        this.chainId = chain.getChainId();
-        this.chainName = chain.getChainName();
-        this.clerkName = chain.getClerkName();
-        this.storeId = chain.getStoreId();
-        this.areaId1 = chain.getAreaId1();
-        this.areaId2 = chain.getAreaId2();
-        this.areaId3 = chain.getAreaId3();
-        this.areaId4 = chain.getAreaId4();
-        this.areaInfo = chain.getAreaInfo();
-        this.address = chain.getAddress();
-        this.chainPhone = chain.getChainPhone();
-        this.chainOpeningTime = chain.getChainOpeningTime();
-        this.chainTrafficLine = chain.getChainTrafficLine();
-        this.imageSrc1 = chain.getImageSrc1();
-        this.imageSrc2 = chain.getImageSrc2();
-        this.lng = chain.getLng();
-        this.lat = chain.getLat();
-        this.chainGoodsRate = chain.getChainGoodsRate();
-        this.chainCriterion = chain.getChainCriterion();
-    }
 
     public int getChainId() {
         return chainId;

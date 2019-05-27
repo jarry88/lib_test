@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
 
-
 public class StoreAnnouncements implements Serializable {
     /**
      * 公告id

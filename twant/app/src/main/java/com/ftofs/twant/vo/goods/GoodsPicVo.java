@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo.goods;
 
-import com.ftofs.twant.domain.goods.GoodsImage;
-
 /**
  * Copyright: Bizpower多用户商城系统
  * Copyright: www.bizpower.com
@@ -31,16 +29,6 @@ public class GoodsPicVo {
      * 1是，0否
      */
     private int isDefault;
-
-    public GoodsPicVo() {
-    }
-
-    public GoodsPicVo(GoodsImage goodsImage) {
-        this.colorId = goodsImage.getColorId();
-        this.imageName = goodsImage.getImageName();
-        this.imageSort = goodsImage.getImageSort();
-        this.isDefault = goodsImage.getIsDefault();
-    }
 
     public int getColorId() {
         return colorId;

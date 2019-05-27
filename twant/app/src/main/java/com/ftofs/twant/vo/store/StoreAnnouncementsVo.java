@@ -1,9 +1,5 @@
 package com.ftofs.twant.vo.store;
 
-import com.ftofs.twant.domain.store.StoreAnnouncements;
-
-
-
 /**
  * @Description: 店铺公告视图对象
  * @Auther: yangjian
@@ -54,28 +50,6 @@ public class StoreAnnouncementsVo {
      * 状态 0下线  1上线中
      */
     private int stat;
-
-    public StoreAnnouncementsVo(){};
-
-    public StoreAnnouncementsVo(StoreAnnouncements storeAnnouncements) {
-        this.id = storeAnnouncements.getId();
-        this.storeId = storeAnnouncements.getStoreId();
-        this.announcementsTitle = storeAnnouncements.getAnnouncementsTitle();
-        this.announcementsSort = storeAnnouncements.getAnnouncementsSort();
-        this.announcementsUrl = storeAnnouncements.getAnnouncementsUrl();
-        this.announcementContent = storeAnnouncements.getAnnouncementContent();
-        this.createBy = storeAnnouncements.getCreateBy();
-        this.modifyBy = storeAnnouncements.getModifyBy();
-        this.createTime = storeAnnouncements.getCreateTime();
-        this.modifyTime = storeAnnouncements.getModifyTime();
-        this.stat = storeAnnouncements.getStat();
-    }
-
-    public StoreAnnouncementsVo(int id, String announcementsTitle ,String announcementsUrl){
-        this.id = id;
-        this.announcementsTitle = announcementsTitle;
-        this.announcementsUrl = announcementsUrl;
-    }
 
     public int getId() {
         return id;

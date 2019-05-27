@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.statistics;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class StatOrdersGoods implements Serializable {
     /**
      * 订单商品编号

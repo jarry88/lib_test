@@ -1,9 +1,6 @@
 package com.ftofs.twant.vo.promotion;
 
-import com.ftofs.twant.domain.promotion.Voucher;
-
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -52,16 +49,6 @@ public class VoucherVo {
      * 使用条件描述
      */
     private String limitText = "";
-
-    public VoucherVo(Voucher voucher) {
-        this.voucherId = voucher.getVoucherId();
-        this.voucherTitle = voucher.getVoucherTitle();
-        this.startTime = new SimpleDateFormat("yyyy-MM-dd").format(voucher.getStartTime()).toString();
-        this.endTime = new SimpleDateFormat("yyyy-MM-dd").format(voucher.getEndTime()).toString();
-        this.price = voucher.getPrice();
-        this.limitAmount = voucher.getLimitAmount();
-        this.storeId = voucher.getStoreId();
-    }
 
     public int getVoucherId() {
         return voucherId;

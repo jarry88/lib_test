@@ -20,11 +20,6 @@ public class ExpressVo {
      */
     public String context = "";
 
-    public ExpressVo(String time, String context) {
-        this.time = time;
-        this.context = context;
-    }
-
     public String getTime() {
         return time;
     }

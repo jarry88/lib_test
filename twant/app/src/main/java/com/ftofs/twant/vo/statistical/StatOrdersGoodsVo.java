@@ -41,30 +41,6 @@ public class StatOrdersGoodsVo {
      */
     private GoodsCommon goodsCommon = null;
 
-    public StatOrdersGoodsVo(StatOrdersGoods statOrdersGoods, BigDecimal goodsPayAmountSum) {
-        this.statOrdersGoods = statOrdersGoods;
-        this.goodsPayAmountSum = goodsPayAmountSum;
-    }
-
-    public StatOrdersGoodsVo(StatOrdersGoods statOrdersGoods, long goodsBuyNumSum) {
-        this.statOrdersGoods = statOrdersGoods;
-        this.goodsBuyNumSum = goodsBuyNumSum;
-    }
-
-    public StatOrdersGoodsVo(StatOrdersGoods statOrdersGoods, BigDecimal goodsPayAmountSum, long goodsBuyNumSum, long ordersCount) {
-        this.statOrdersGoods = statOrdersGoods;
-        this.goodsPayAmountSum = goodsPayAmountSum;
-        this.goodsBuyNumSum = goodsBuyNumSum;
-        this.ordersCount = ordersCount;
-    }
-
-    public StatOrdersGoodsVo(int categoryId1, BigDecimal goodsPayAmountSum, long goodsBuyNumSum, long ordersCount) {
-        this.categoryId1 = categoryId1;
-        this.goodsPayAmountSum = goodsPayAmountSum;
-        this.goodsBuyNumSum = goodsBuyNumSum;
-        this.ordersCount = ordersCount;
-    }
-
     public StatOrdersGoods getStatOrdersGoods() {
         return statOrdersGoods;
     }

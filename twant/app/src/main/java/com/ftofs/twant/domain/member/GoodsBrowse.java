@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 
-
 public class GoodsBrowse implements Serializable {
     /**
      * 自增编码

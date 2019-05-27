@@ -1,9 +1,5 @@
 package com.ftofs.twant.vo.promotion;
 
-import com.ftofs.twant.domain.promotion.VoucherTemplate;
-import com.ftofs.twant.domain.promotion.platform.coupon.CouponActivity;
-import com.ftofs.twant.domain.store.Store;
-
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
@@ -257,111 +253,6 @@ public class SearchCouponActivityVo {
     private long activityStartTimeDays = 0L;
 
     public SearchCouponActivityVo() {}
-
-    /**
-     * 平台券
-     * @param couponActivity
-     */
-    public SearchCouponActivityVo(CouponActivity couponActivity, List<Integer> categoryId1List, List<Integer> categoryIdList, List<Integer> commonIdList, String goodsCommonShortJson) {
-        this.activityId = couponActivity.getActivityId();
-        this.activityName = couponActivity.getActivityName();
-        this.activityExplain = couponActivity.getActivityExplain();
-        this.activityType = couponActivity.getActivityType();
-        this.couponPrice = couponActivity.getCouponPrice();
-        this.totalNum = couponActivity.getTotalNum();
-        this.limitMemberGradeLevel = couponActivity.getLimitMemberGradeLevel();
-        this.limitMemberGradeName = couponActivity.getLimitMemberGradeName();
-        this.expendPoints = couponActivity.getExpendPoints();
-        this.activityStartTime = couponActivity.getActivityStartTime();
-        this.limitAmount = couponActivity.getLimitAmount();
-        this.useStartTime = couponActivity.getUseStartTime();
-        this.useEndTime = couponActivity.getUseEndTime();
-        this.validDays = couponActivity.getValidDays();
-        this.useGoodsRange = couponActivity.getUseGoodsRange();
-        this.useGoodsRangeExplain = couponActivity.getUseGoodsRangeExplain();
-        this.webUsable = couponActivity.getWebUsable();
-        this.appUsable = couponActivity.getAppUsable();
-        this.wechatUsable = couponActivity.getWechatUsable();
-        this.storeCommitmentRate = couponActivity.getStoreCommitmentRate();
-        this.haveCreated = couponActivity.getHaveCreated();
-        this.addTime = couponActivity.getAddTime();
-        this.updateTime = couponActivity.getUpdateTime();
-        this.adminId = couponActivity.getAdminId();
-        this.adminName = couponActivity.getAdminName();
-        this.activityState = couponActivity.getActivityState();
-        this.giveoutNum = couponActivity.getGiveoutNum();
-        this.usedNum = couponActivity.getUsedNum();
-        this.activityTypeText = couponActivity.getActivityTypeText();
-        this.usableClientType= couponActivity.getUsableClientType();
-        this.usableClientTypeText= couponActivity.getUsableClientTypeText();
-        this.completeState = couponActivity.getCompleteState();
-        this.useStartTimeText = couponActivity.getUseStartTimeText();
-        this.useEndTimeText = couponActivity.getUseEndTimeText();
-        this.useGoodsRangeText = couponActivity.getUseGoodsRangeText();
-        this.limitAmountText = couponActivity.getLimitAmountText();
-        this.recommendState = couponActivity.getRecommendState();
-        this.storeId = 0;
-        this.storeName = "";
-        this.searchCategoryId1 = categoryId1List;
-        this.searchCategoryId = categoryIdList;
-        this.searchCommonId = commonIdList;
-        this.searchGoodsCommonShort = goodsCommonShortJson;
-        this.searchGiveoutRate = (int)(((float)couponActivity.getGiveoutNum()/(float)couponActivity.getTotalNum())*100);
-        this.searchGiveoutRateText = this.searchGiveoutRate>=100 ? "已抢100%" : "已抢"+this.searchGiveoutRate+"%";
-    }
-
-    /**
-     * 店铺券
-     * @param voucherTemplate
-     */
-    public SearchCouponActivityVo(VoucherTemplate voucherTemplate, List<Integer> categoryId1List, String goodsCommonShortJson, Store store) {
-        this.activityId = voucherTemplate.getTemplateId();
-        this.activityName = voucherTemplate.getTemplateTitle();
-        this.activityExplain = voucherTemplate.getTemplateDescribe();
-        this.activityType = voucherTemplate.getTemplateType();
-        this.couponPrice = voucherTemplate.getTemplatePrice();
-        this.totalNum = voucherTemplate.getTotalNum();
-        this.limitMemberGradeLevel = voucherTemplate.getLimitMemberGradeLevel();
-        this.limitMemberGradeName = voucherTemplate.getLimitMemberGradeName();
-        this.expendPoints = 0;
-        this.activityStartTime = voucherTemplate.getTemplateStartTime();
-        this.limitAmount = voucherTemplate.getLimitAmount();
-        this.useStartTime = voucherTemplate.getUseStartTime();
-        this.useEndTime = voucherTemplate.getUseEndTime();
-        this.validDays = voucherTemplate.getValidDays();
-        this.useGoodsRange = 0;
-        this.useGoodsRangeExplain = "仅"+store.getStoreName()+"適用";
-        this.webUsable = voucherTemplate.getWebUsable();
-        this.appUsable = voucherTemplate.getAppUsable();
-        this.wechatUsable = voucherTemplate.getWechatUsable();
-        this.storeCommitmentRate = 0;
-        this.haveCreated = voucherTemplate.getHaveCreated();
-        this.addTime = voucherTemplate.getAddTime();
-        this.updateTime = voucherTemplate.getUpdateTime();
-        this.adminId = 0;
-        this.adminName = "";
-        this.activityState = voucherTemplate.getTemplateState();
-        this.giveoutNum = voucherTemplate.getGiveoutNum();
-        this.usedNum = voucherTemplate.getUsedNum();
-        this.activityTypeText = voucherTemplate.getTemplateTypeText();
-        this.usableClientType= voucherTemplate.getUsableClientType();
-        this.usableClientTypeText= voucherTemplate.getUsableClientTypeText();
-        this.completeState = voucherTemplate.getCompleteState();
-        this.useStartTimeText = voucherTemplate.getUseStartTimeText();
-        this.useEndTimeText = voucherTemplate.getUseEndTimeText();
-        this.useGoodsRangeText = "";
-        this.limitAmountText = voucherTemplate.getLimitAmountText();
-        this.recommendState = voucherTemplate.getVoucherCenterRecommend();
-        this.storeId = voucherTemplate.getStoreId();
-        this.storeName = voucherTemplate.getStoreName();
-        this.searchCategoryId1 = categoryId1List;
-        this.searchCategoryId = new ArrayList<>();
-        this.searchCommonId = new ArrayList<>();
-        this.searchGoodsCommonShort = goodsCommonShortJson;
-        this.searchGiveoutRate = (int)(((float)voucherTemplate.getGiveoutNum()/(float)voucherTemplate.getTotalNum())*100);
-        this.searchGiveoutRateText = this.searchGiveoutRate>=100 ? "已抢100%" : "已抢"+this.searchGiveoutRate+"%";
-    }
-
 
     public int getActivityId() {
         return activityId;
@@ -720,7 +611,7 @@ public class SearchCouponActivityVo {
     }
 
     public void setSearchCategoryId1(List<Integer> searchCategoryId1) {
-        this.searchCategoryId1= searchCategoryId1;
+        this.searchCategoryId1 = searchCategoryId1;
     }
 
     public List<Integer> getSearchCategoryId() {

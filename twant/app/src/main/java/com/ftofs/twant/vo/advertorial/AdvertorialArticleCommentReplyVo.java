@@ -1,10 +1,6 @@
 package com.ftofs.twant.vo.advertorial;
 
-import com.ftofs.twant.domain.advertorial.AdvertorialArticleCommentReply;
-import com.ftofs.twant.domain.member.Member;
-
 import java.io.Serializable;
-
 
 /**
  * copyright  Copyright: Bizpower多用户商城系统
@@ -81,40 +77,7 @@ public class AdvertorialArticleCommentReplyVo implements Serializable {
      * 头像地址
      */
     private String avatarUrl = "";
-    public AdvertorialArticleCommentReplyVo(AdvertorialArticleCommentReply advertorialArticleCommentReply , Member member) {
 
-        this.replyId = advertorialArticleCommentReply.getReplyId();
-        this.commentId = advertorialArticleCommentReply.getCommentId();
-        this.articleId = advertorialArticleCommentReply.getArticleId();
-        this.articleTitle = advertorialArticleCommentReply.getArticleTitle();
-        this.memberId = advertorialArticleCommentReply.getMemberId();
-        this.memberName = advertorialArticleCommentReply.getMemberName();
-        this.replyMemberId = advertorialArticleCommentReply.getReplyMemberId();
-        this.replyMemberName = advertorialArticleCommentReply.getReplyMemberName();
-        this.content = advertorialArticleCommentReply.getContent();
-        this.addTime = advertorialArticleCommentReply.getAddTime();
-        this.state = advertorialArticleCommentReply.getState();
-        this.avatarUrl = member.getAvatarUrl();
-        this.replySuperId = advertorialArticleCommentReply.getReplySuperId();
-        this.replySuperContent = advertorialArticleCommentReply.getReplySuperContent();
-    }
-
-    public AdvertorialArticleCommentReplyVo(AdvertorialArticleCommentReply advertorialArticleCommentReply) {
-
-        this.replyId = advertorialArticleCommentReply.getReplyId();
-        this.commentId = advertorialArticleCommentReply.getCommentId();
-        this.articleId = advertorialArticleCommentReply.getArticleId();
-        this.articleTitle = advertorialArticleCommentReply.getArticleTitle();
-        this.memberId = advertorialArticleCommentReply.getMemberId();
-        this.memberName = advertorialArticleCommentReply.getMemberName();
-        this.replyMemberId = advertorialArticleCommentReply.getReplyMemberId();
-        this.replyMemberName = advertorialArticleCommentReply.getReplyMemberName();
-        this.content = advertorialArticleCommentReply.getContent();
-        this.addTime = advertorialArticleCommentReply.getAddTime();
-        this.state = advertorialArticleCommentReply.getState();
-        this.replySuperId = advertorialArticleCommentReply.getReplySuperId();
-        this.replySuperContent = advertorialArticleCommentReply.getReplySuperContent();
-    }
     public Integer getReplyId() {
         return replyId;
     }

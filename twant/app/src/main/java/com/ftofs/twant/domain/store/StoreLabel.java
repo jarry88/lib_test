@@ -105,12 +105,16 @@ public class StoreLabel implements Serializable {
         this.image = image;
     }
 
-    public List<StoreLabel> getStoreLabelList() {
-        return storeLabelList;
-    }
-
     public String getImageSrc() {
         return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+    public List<StoreLabel> getStoreLabelList() {
+        return storeLabelList;
     }
 
     public void setStoreLabelList(List<StoreLabel> storeLabelList) {

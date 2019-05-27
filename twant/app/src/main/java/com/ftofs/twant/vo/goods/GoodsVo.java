@@ -1,10 +1,6 @@
 package com.ftofs.twant.vo.goods;
 
-import com.ftofs.twant.domain.goods.Category;
-import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
 import com.ftofs.twant.domain.goods.GoodsImage;
-import com.ftofs.twant.domain.store.Store;
 
 import java.math.BigDecimal;
 
@@ -246,206 +242,6 @@ public class GoodsVo {
      */
     private int isVirtual = 0;
 
-    public GoodsVo() {
-    }
-
-    /**
-     * 商品列表页使用
-     * @param goodsCommon
-     * @param store
-     * @param category
-     */
-    public GoodsVo(GoodsCommon goodsCommon, Store store, Category category) {
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.jingle = goodsCommon.getJingle();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.goodsPrice = goodsCommon.getBatchPrice0();
-        this.batchPrice0 = goodsCommon.getBatchPrice0();
-        this.batchPrice1 = goodsCommon.getBatchPrice1();
-        this.batchPrice2 = goodsCommon.getBatchPrice2();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.evaluateNum = goodsCommon.getEvaluateNum();
-        this.goodsSaleNum = goodsCommon.getGoodsSaleNum();
-        this.goodsRate = goodsCommon.getGoodsRate();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.areaInfo = goodsCommon.getAreaInfo();
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.isOwnShop = store.getIsOwnShop();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.specJson = goodsCommon.getSpecJson();
-        this.goodsSpecValueJson = goodsCommon.getGoodsSpecValueJson();
-        this.categoryId = category.getCategoryId();
-        this.categoryName = category.getCategoryName();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.unitName = goodsCommon.getUnitName();
-        this.groupId = goodsCommon.getGroupId();
-        this.isPointsGoods = goodsCommon.getIsPointsGoods();
-    }
-
-    /**
-     * 查询名称、价格和图片
-     * @param goods
-     * @param goodsCommon
-     */
-    public GoodsVo(Goods goods, GoodsCommon goodsCommon) {
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goods.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.jingle = goodsCommon.getJingle();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.goodsPrice = goodsCommon.getBatchPrice0();
-        this.batchPrice0 = goodsCommon.getBatchPrice0();
-        this.batchPrice1 = goodsCommon.getBatchPrice1();
-        this.batchPrice2 = goodsCommon.getBatchPrice2();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.evaluateNum = goodsCommon.getEvaluateNum();
-        this.goodsRate = goodsCommon.getGoodsRate();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.colorId = goods.getColorId();
-        this.areaInfo = goodsCommon.getAreaInfo();
-        this.storeId = goodsCommon.getStoreId();
-        this.specJson = goodsCommon.getSpecJson();
-        this.goodsSpecValueJson = goodsCommon.getGoodsSpecValueJson();
-        this.categoryId = goodsCommon.getCategoryId();
-        this.createTime = goodsCommon.getCreateTime();
-        this.imageSrc = goods.getImageSrc();
-        this.categoryId1 = goodsCommon.getCategoryId1();
-        this.categoryId2 = goodsCommon.getCategoryId2();
-        this.categoryId3 = goodsCommon.getCategoryId3();
-        this.unitName = goodsCommon.getUnitName();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.groupId = goodsCommon.getGroupId();
-        this.isPointsGoods = goodsCommon.getIsPointsGoods();
-    }
-
-    /**
-     * 查询名称、价格和图片
-     * @param goodsCommon
-     */
-    public GoodsVo(GoodsCommon goodsCommon) {
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.jingle = goodsCommon.getJingle();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.goodsPrice = goodsCommon.getBatchPrice0();
-        this.batchPrice0 = goodsCommon.getBatchPrice0();
-        this.batchPrice1 = goodsCommon.getBatchPrice1();
-        this.batchPrice2 = goodsCommon.getBatchPrice2();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.evaluateNum = goodsCommon.getEvaluateNum();
-        this.goodsRate = goodsCommon.getGoodsRate();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.areaInfo = goodsCommon.getAreaInfo();
-        this.storeId = goodsCommon.getStoreId();
-        this.specJson = goodsCommon.getSpecJson();
-        this.goodsSpecValueJson = goodsCommon.getGoodsSpecValueJson();
-        this.categoryId = goodsCommon.getCategoryId();
-        this.createTime = goodsCommon.getCreateTime();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.categoryId1 = goodsCommon.getCategoryId1();
-        this.categoryId2 = goodsCommon.getCategoryId2();
-        this.categoryId3 = goodsCommon.getCategoryId3();
-        this.unitName = goodsCommon.getUnitName();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.groupId = goodsCommon.getGroupId();
-        this.isPointsGoods = goodsCommon.getIsPointsGoods();
-    }
-
-    public GoodsVo(GoodsCommon goodsCommon, long storage) {
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.createTime = goodsCommon.getCreateTime();
-        this.isCommend = goodsCommon.getIsCommend();
-        this.goodsState = goodsCommon.getGoodsState();
-        this.stateRemark = goodsCommon.getStateRemark();
-        this.goodsVerify  = goodsCommon.getGoodsVerify();
-        this.verifyRemark = goodsCommon.getVerifyRemark();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchPrice0 = goodsCommon.getBatchPrice0();
-        this.batchPrice1 = goodsCommon.getBatchPrice1();
-        this.batchPrice2 = goodsCommon.getBatchPrice2();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.evaluateNum = goodsCommon.getEvaluateNum();
-        this.goodsRate = goodsCommon.getGoodsRate();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.unitName = goodsCommon.getUnitName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.promotionId = goodsCommon.getPromotionId();
-        this.promotionType = goodsCommon.getPromotionType();
-        this.promotionTypeText = goodsCommon.getPromotionTypeText();
-        this.storage = storage;
-        this.specJson = goodsCommon.getSpecJson();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.groupId = goodsCommon.getGroupId();
-        this.isPointsGoods = goodsCommon.getIsPointsGoods();
-        this.goodsSaleNum = goodsCommon.getGoodsSaleNum();
-        this.isVirtual = goodsCommon.getIsVirtual();
-    }
-
-    public GoodsVo(GoodsCommon goodsCommon, Store store, BigDecimal goodsPriceMax, BigDecimal goodsPriceMin, long storage) {
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.createTime = goodsCommon.getCreateTime();
-        this.isCommend = goodsCommon.getIsCommend();
-        this.goodsState = goodsCommon.getGoodsState();
-        this.stateRemark = goodsCommon.getStateRemark();
-        this.goodsVerify  = goodsCommon.getGoodsVerify();
-        this.verifyRemark = goodsCommon.getVerifyRemark();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchPrice0 = goodsCommon.getBatchPrice0();
-        this.batchPrice1 = goodsCommon.getBatchPrice1();
-        this.batchPrice2 = goodsCommon.getBatchPrice2();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.evaluateNum = goodsCommon.getEvaluateNum();
-        this.goodsRate = goodsCommon.getGoodsRate();
-        this.unitName = goodsCommon.getUnitName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.promotionId = goodsCommon.getPromotionId();
-        this.promotionType = goodsCommon.getPromotionType();
-        this.promotionTypeText = goodsCommon.getPromotionTypeText();
-        this.priceRange = ((goodsPriceMin.equals(goodsPriceMax) || goodsPriceMax.equals(0)) ? goodsPriceMin.toString() : goodsPriceMin.toString() + '~' + goodsPriceMax.toString());
-        this.storage = storage;
-        this.specJson = goodsCommon.getSpecJson();
-        this.goodsSpecValueJson = goodsCommon.getGoodsSpecValueJson();
-        this.setStoreId(store.getStoreId());
-        this.setStoreName(store.getStoreName());
-        this.setIsOwnShop(store.getIsOwnShop());
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.groupId = goodsCommon.getGroupId();
-        this.isPointsGoods = goodsCommon.getIsPointsGoods();
-    }
     public int getGoodsId() {
         return goodsId;
     }
@@ -468,6 +264,54 @@ public class GoodsVo {
 
     public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getIsCommend() {
+        return isCommend;
+    }
+
+    public void setIsCommend(int isCommend) {
+        this.isCommend = isCommend;
+    }
+
+    public int getGoodsState() {
+        return goodsState;
+    }
+
+    public void setGoodsState(int goodsState) {
+        this.goodsState = goodsState;
+    }
+
+    public String getStateRemark() {
+        return stateRemark;
+    }
+
+    public void setStateRemark(String stateRemark) {
+        this.stateRemark = stateRemark;
+    }
+
+    public int getGoodsVerify() {
+        return goodsVerify;
+    }
+
+    public void setGoodsVerify(int goodsVerify) {
+        this.goodsVerify = goodsVerify;
+    }
+
+    public String getVerifyRemark() {
+        return verifyRemark;
+    }
+
+    public void setVerifyRemark(String verifyRemark) {
+        this.verifyRemark = verifyRemark;
     }
 
     public String getJingle() {
@@ -556,6 +400,22 @@ public class GoodsVo {
 
     public void setWebPriceMin(BigDecimal webPriceMin) {
         this.webPriceMin = webPriceMin;
+    }
+
+    public BigDecimal getAppPriceMin() {
+        return appPriceMin;
+    }
+
+    public void setAppPriceMin(BigDecimal appPriceMin) {
+        this.appPriceMin = appPriceMin;
+    }
+
+    public BigDecimal getWechatPriceMin() {
+        return wechatPriceMin;
+    }
+
+    public void setWechatPriceMin(BigDecimal wechatPriceMin) {
+        this.wechatPriceMin = wechatPriceMin;
     }
 
     public int getGoodsModal() {
@@ -662,118 +522,6 @@ public class GoodsVo {
         this.goodsImageList = goodsImageList;
     }
 
-    public String getSpecJson() {
-        return specJson;
-    }
-
-    public void setSpecJson(String specJson) {
-        this.specJson = specJson;
-    }
-
-    public List<SpecJsonVo> getSpecJsonVoList() {
-        return specJsonVoList;
-    }
-
-    public void setSpecJsonVoList(List<SpecJsonVo> specJsonVoList) {
-        this.specJsonVoList = specJsonVoList;
-    }
-
-    public String getGoodsSpecValueJson() {
-        return goodsSpecValueJson;
-    }
-
-    public void setGoodsSpecValueJson(String goodsSpecValueJson) {
-        this.goodsSpecValueJson = goodsSpecValueJson;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public int getCategoryId1() {
-        return categoryId1;
-    }
-
-    public void setCategoryId1(int categoryId1) {
-        this.categoryId1 = categoryId1;
-    }
-
-    public int getCategoryId2() {
-        return categoryId2;
-    }
-
-    public void setCategoryId2(int categoryId2) {
-        this.categoryId2 = categoryId2;
-    }
-
-    public int getCategoryId3() {
-        return categoryId3;
-    }
-
-    public void setCategoryId3(int categoryId3) {
-        this.categoryId3 = categoryId3;
-    }
-
-    public int getIsCommend() {
-        return isCommend;
-    }
-
-    public void setIsCommend(int isCommend) {
-        this.isCommend = isCommend;
-    }
-
-    public int getGoodsState() {
-        return goodsState;
-    }
-
-    public void setGoodsState(int goodsState) {
-        this.goodsState = goodsState;
-    }
-
-    public String getStateRemark() {
-        return stateRemark;
-    }
-
-    public void setStateRemark(String stateRemark) {
-        this.stateRemark = stateRemark;
-    }
-
-    public int getGoodsVerify() {
-        return goodsVerify;
-    }
-
-    public void setGoodsVerify(int goodsVerify) {
-        this.goodsVerify = goodsVerify;
-    }
-
-    public String getVerifyRemark() {
-        return verifyRemark;
-    }
-
-    public void setVerifyRemark(String verifyRemark) {
-        this.verifyRemark = verifyRemark;
-    }
-
     public String getUnitName() {
         return unitName;
     }
@@ -822,28 +570,76 @@ public class GoodsVo {
         this.storage = storage;
     }
 
+    public String getSpecJson() {
+        return specJson;
+    }
+
+    public void setSpecJson(String specJson) {
+        this.specJson = specJson;
+    }
+
+    public List<SpecJsonVo> getSpecJsonVoList() {
+        return specJsonVoList;
+    }
+
+    public void setSpecJsonVoList(List<SpecJsonVo> specJsonVoList) {
+        this.specJsonVoList = specJsonVoList;
+    }
+
+    public String getGoodsSpecValueJson() {
+        return goodsSpecValueJson;
+    }
+
+    public void setGoodsSpecValueJson(String goodsSpecValueJson) {
+        this.goodsSpecValueJson = goodsSpecValueJson;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public int getCategoryId1() {
+        return categoryId1;
+    }
+
+    public void setCategoryId1(int categoryId1) {
+        this.categoryId1 = categoryId1;
+    }
+
+    public int getCategoryId2() {
+        return categoryId2;
+    }
+
+    public void setCategoryId2(int categoryId2) {
+        this.categoryId2 = categoryId2;
+    }
+
+    public int getCategoryId3() {
+        return categoryId3;
+    }
+
+    public void setCategoryId3(int categoryId3) {
+        this.categoryId3 = categoryId3;
+    }
+
     public List<BatchNumPriceVo> getBatchNumPriceVoList() {
         return batchNumPriceVoList;
     }
 
     public void setBatchNumPriceVoList(List<BatchNumPriceVo> batchNumPriceVoList) {
         this.batchNumPriceVoList = batchNumPriceVoList;
-    }
-
-    public BigDecimal getAppPriceMin() {
-        return appPriceMin;
-    }
-
-    public void setAppPriceMin(BigDecimal appPriceMin) {
-        this.appPriceMin = appPriceMin;
-    }
-
-    public BigDecimal getWechatPriceMin() {
-        return wechatPriceMin;
-    }
-
-    public void setWechatPriceMin(BigDecimal wechatPriceMin) {
-        this.wechatPriceMin = wechatPriceMin;
     }
 
     public Integer getGroupId() {

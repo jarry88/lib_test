@@ -1,9 +1,5 @@
 package com.ftofs.twant.vo.promotion;
 
-import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.promotion.PointsGoods;
-
 import java.math.BigDecimal;
 
 /**
@@ -81,22 +77,6 @@ public class PointsGoodsBuyItemVo implements Cloneable {
      * 总消耗积分
      */
     private int totalPoints = 0;
-
-    public PointsGoodsBuyItemVo(Goods goods, GoodsCommon goodsCommon, PointsGoods pointsGoods, int buyNum) {
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.goodsPrice = goods.getGoodsPrice0();
-        this.imageName = goodsCommon.getImageName();
-        this.buyNum = buyNum;
-        this.goodsStorage = goods.getGoodsStorage();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.imageSrc = goods.getImageSrc();
-        this.unitName = goodsCommon.getUnitName();
-        this.pointsGoodsId = pointsGoods.getPointsGoodsId();
-        this.expendPoints = pointsGoods.getExpendPoints();
-    }
 
     public int getGoodsId() {
         return goodsId;

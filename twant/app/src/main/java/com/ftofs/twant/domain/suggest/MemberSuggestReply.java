@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.suggest;
 
-
-
 public class MemberSuggestReply {
     /**
      * 回復id

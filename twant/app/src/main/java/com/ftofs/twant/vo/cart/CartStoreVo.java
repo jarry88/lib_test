@@ -101,6 +101,14 @@ public class CartStoreVo implements Cloneable {
         this.voucherTemplateVoList = voucherTemplateVoList;
     }
 
+    public List<Conform> getConformList() {
+        return conformList;
+    }
+
+    public void setConformList(List<Conform> conformList) {
+        this.conformList = conformList;
+    }
+
     public BigDecimal getCartAmount() {
         return cartAmount;
     }
@@ -125,14 +133,6 @@ public class CartStoreVo implements Cloneable {
         this.storeId = storeId;
     }
 
-    public int getBuyNum() {
-        return buyNum;
-    }
-
-    public void setBuyNum(int buyNum) {
-        this.buyNum = buyNum;
-    }
-
     public int getSellerId() {
         return sellerId;
     }
@@ -149,12 +149,12 @@ public class CartStoreVo implements Cloneable {
         this.isOnline = isOnline;
     }
 
-    public List<Conform> getConformList() {
-        return conformList;
+    public int getBuyNum() {
+        return buyNum;
     }
 
-    public void setConformList(List<Conform> conformList) {
-        this.conformList = conformList;
+    public void setBuyNum(int buyNum) {
+        this.buyNum = buyNum;
     }
 
     public List<CartBundlingVo> getCartBundlingVoList() {
@@ -179,11 +179,6 @@ public class CartStoreVo implements Cloneable {
 
     public void setChainName(String chainName) {
         this.chainName = chainName;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     public List<StoreServiceStaffVo> getServiceStaffList() {

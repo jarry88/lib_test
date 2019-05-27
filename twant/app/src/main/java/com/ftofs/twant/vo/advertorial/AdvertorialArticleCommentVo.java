@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.advertorial;
 
-import com.ftofs.twant.domain.advertorial.AdvertorialArticleComment;
-import com.ftofs.twant.domain.member.Member;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -82,40 +79,6 @@ public class AdvertorialArticleCommentVo implements Serializable {
      * 作者回复列表
      */
     private List<AdvertorialArticleCommentReplyVo> replyList = new ArrayList<>();
-
-    /**
-     *
-     * @param advertorialArticleComment
-     */
-    public AdvertorialArticleCommentVo(AdvertorialArticleComment advertorialArticleComment) {
-        this.commentId = advertorialArticleComment.getCommentId();
-        this.articleId = advertorialArticleComment.getArticleId();
-        this.articleTitle = advertorialArticleComment.getArticleTitle();
-        this.memberId = advertorialArticleComment.getMemberId();
-        this.memberName = advertorialArticleComment.getMemberName();
-        this.content = advertorialArticleComment.getContent();
-        this.addTime = advertorialArticleComment.getAddTime();
-        this.state = advertorialArticleComment.getState();
-        this.authorMemberId = advertorialArticleComment.getAuthorMemberId();
-    }
-
-    /**
-     *
-     * @param advertorialArticleComment
-     * @param member
-     */
-    public AdvertorialArticleCommentVo(AdvertorialArticleComment advertorialArticleComment, Member member) {
-        this.commentId = advertorialArticleComment.getCommentId();
-        this.articleId = advertorialArticleComment.getArticleId();
-        this.articleTitle = advertorialArticleComment.getArticleTitle();
-        this.memberId = advertorialArticleComment.getMemberId();
-        this.memberName = advertorialArticleComment.getMemberName();
-        this.content = advertorialArticleComment.getContent();
-        this.addTime = advertorialArticleComment.getAddTime();
-        this.state = advertorialArticleComment.getState();
-        this.authorMemberId = advertorialArticleComment.getAuthorMemberId();
-        this.avatarUrl = member.getAvatarUrl();
-    }
 
     public Integer getCommentId() {
         return commentId;

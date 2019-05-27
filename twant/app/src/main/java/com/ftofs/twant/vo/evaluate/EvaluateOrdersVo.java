@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo.evaluate;
 
-import com.ftofs.twant.domain.orders.Orders;
-
 /**
  * Copyright: Bizpower多用户商城系统
  * Copyright: www.bizpower.com
@@ -41,19 +39,6 @@ public class EvaluateOrdersVo {
      * 会员名称
      */
     private String memberName;
-
-    public EvaluateOrdersVo() {
-    }
-
-    public EvaluateOrdersVo(Orders orders) {
-        this.ordersId = orders.getOrdersId();
-        this.ordersSn = orders.getOrdersSn();
-        this.storeId = orders.getStoreId();
-        this.storeName = orders.getStoreName();
-        this.memberId = orders.getMemberId();
-        this.memberName = orders.getMemberName();
-        this.ordersType = 1;
-    }
 
     public int getOrdersId() {
         return ordersId;

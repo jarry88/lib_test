@@ -1,9 +1,5 @@
 package com.ftofs.twant.vo.store;
 
-import com.ftofs.twant.domain.member.Member;
-import com.ftofs.twant.domain.store.Seller;
-import com.ftofs.twant.domain.store.StoreServiceStaff;
-
 /**
  * @author liusf
  * @create 2019/1/19 12:07
@@ -54,32 +50,6 @@ public class StoreServiceStaffVo {
      * 所在用戶組
      */
     private String groupName;
-
-    public StoreServiceStaffVo(){
-    }
-
-    public StoreServiceStaffVo(StoreServiceStaff serviceStaff, Member member){
-        this.staffId = serviceStaff.getStaffId();
-        this.storeId = serviceStaff.getStoreId();
-        this.staffName = serviceStaff.getStaffName();
-        this.memberName = serviceStaff.getMemberName();
-        this.staffType = serviceStaff.getStaffType();
-        this.nickName = member.getNickName();
-        this.avatar = member.getAvatarUrl();
-        this.welcome = serviceStaff.getWelcome();
-    }
-
-    public StoreServiceStaffVo(StoreServiceStaff serviceStaff, Member member, Seller seller){
-        this.staffId = serviceStaff.getStaffId();
-        this.storeId = serviceStaff.getStoreId();
-        this.staffName = serviceStaff.getStaffName();
-        this.memberName = serviceStaff.getMemberName();
-        this.staffType = serviceStaff.getStaffType();
-        this.nickName = member.getNickName();
-        this.avatar = member.getAvatarUrl();
-        this.welcome = serviceStaff.getWelcome();
-        this.groupName = seller.getGroupName();
-    }
 
     public int getStaffId() {
         return staffId;

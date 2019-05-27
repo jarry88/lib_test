@@ -3,8 +3,6 @@ package com.ftofs.twant.domain.promotion;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
-
 public class VoucherTemplate implements Serializable {
     /**
      * 自增编码
@@ -425,30 +423,6 @@ public class VoucherTemplate implements Serializable {
         this.voucherCenterRecommend = voucherCenterRecommend;
     }
 
-    public void setTemplateTypeText(String templateTypeText) {
-        this.templateTypeText = templateTypeText;
-    }
-
-    public void setUsableClientType(String usableClientType) {
-        this.usableClientType = usableClientType;
-    }
-
-    public void setUsableClientTypeText(String usableClientTypeText) {
-        this.usableClientTypeText = usableClientTypeText;
-    }
-
-    public void setWithoutState(int withoutState) {
-        this.withoutState = withoutState;
-    }
-
-    public void setUseStartTimeText(String useStartTimeText) {
-        this.useStartTimeText = useStartTimeText;
-    }
-
-    public void setUseEndTimeText(String useEndTimeText) {
-        this.useEndTimeText = useEndTimeText;
-    }
-
     public String getTemplateCurrentStateSign() {
         return templateCurrentStateSign;
     }
@@ -469,6 +443,10 @@ public class VoucherTemplate implements Serializable {
         return templateTypeText;
     }
 
+    public void setTemplateTypeText(String templateTypeText) {
+        this.templateTypeText = templateTypeText;
+    }
+
     public int getExpiredState() {
         return expiredState;
     }
@@ -478,12 +456,7 @@ public class VoucherTemplate implements Serializable {
     }
 
     public int getCompleteState() {
-        if (totalNum>0 && totalNum<=giveoutNum) {
-            this.completeState = 1;
-        }else{
-            this.completeState = 0;
-        }
-        return this.completeState;
+        return completeState;
     }
 
     public void setCompleteState(int completeState) {
@@ -491,68 +464,47 @@ public class VoucherTemplate implements Serializable {
     }
 
     public String getUsableClientType() {
-        if (webUsable==1 && appUsable==1 && wechatUsable==1) {
-            //全平台可用
-            usableClientType = "all";
-        }else if(webUsable==1){
-            //PC端可用
-            usableClientType = "web";
-        }else if(appUsable==1){
-            //移动端可用
-            usableClientType = "app";
-        }else if(wechatUsable==1){
-            //微信端可用
-            usableClientType = "wechat";
-        }
         return usableClientType;
     }
 
+    public void setUsableClientType(String usableClientType) {
+        this.usableClientType = usableClientType;
+    }
+
     public String getUsableClientTypeText() {
-        if (webUsable==1 && appUsable==1 && wechatUsable==1) {
-            //全平台可用
-            usableClientTypeText = "全平台";
-        }else if(webUsable==1){
-            //PC端可用
-            usableClientTypeText = "PC專享";
-        }else if(appUsable==1){
-            //移动端可用
-            usableClientTypeText = "移動端專享";
-        }else if(wechatUsable==1){
-            //微信端可用
-            usableClientTypeText = "微信專享";
-        }
         return usableClientTypeText;
     }
 
+    public void setUsableClientTypeText(String usableClientTypeText) {
+        this.usableClientTypeText = usableClientTypeText;
+    }
+
     public int getWithoutState() {
-        if (totalNum > giveoutNum) {
-            withoutState = 0;
-        }else{
-            withoutState = 1;
-        }
         return withoutState;
     }
 
+    public void setWithoutState(int withoutState) {
+        this.withoutState = withoutState;
+    }
+
     public String getUseStartTimeText() {
-        if (useStartTime!=null) {
-            useStartTimeText = new SimpleDateFormat("yyyy-MM-dd").format(useStartTime).toString();
-        }else{
-            useStartTimeText = "";
-        }
         return useStartTimeText;
     }
 
+    public void setUseStartTimeText(String useStartTimeText) {
+        this.useStartTimeText = useStartTimeText;
+    }
+
     public String getUseEndTimeText() {
-        if (useEndTime!=null) {
-            useEndTimeText = new SimpleDateFormat("yyyy-MM-dd").format(useEndTime).toString();
-        }else{
-            useEndTimeText = "";
-        }
         return useEndTimeText;
     }
 
+    public void setUseEndTimeText(String useEndTimeText) {
+        this.useEndTimeText = useEndTimeText;
+    }
+
     public String getLimitAmountText() {
-       return "";
+        return limitAmountText;
     }
 
     public void setLimitAmountText(String limitAmountText) {

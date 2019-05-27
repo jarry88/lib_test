@@ -43,18 +43,6 @@ public class OrdersGiftVo {
      * 计量单位
      */
     private String unitName = "";
-    public OrdersGiftVo(){}
-
-    public OrdersGiftVo(int goodsId, int ordersId, int commonId, String goodsName, String goodsFullSpecs, Long giftNum, String imageSrc, String unitName) {
-        this.goodsId = goodsId;
-        this.ordersId = ordersId;
-        this.commonId = commonId;
-        this.giftNum = giftNum.intValue();
-        this.goodsName = goodsName;
-        this.goodsFullSpecs = goodsFullSpecs;
-        this.imageSrc = imageSrc;
-        this.unitName = unitName;
-    }
 
     public int getGoodsId() {
         return goodsId;

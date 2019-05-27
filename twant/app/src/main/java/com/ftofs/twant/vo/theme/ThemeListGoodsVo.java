@@ -2,7 +2,6 @@ package com.ftofs.twant.vo.theme;
 
 import com.ftofs.twant.domain.goods.GoodsImage;
 import com.ftofs.twant.vo.goods.BatchNumPriceVo;
-import com.ftofs.twant.vo.goods.GoodsVo;
 import com.ftofs.twant.vo.goods.SpecJsonVo;
 
 import java.math.BigDecimal;
@@ -242,59 +241,6 @@ public class ThemeListGoodsVo {
      * 是否为商城活动商品 0不是，1是
      */
     private Integer isThemeGoods = 0;
-    public ThemeListGoodsVo() {
-    }
-
-    /**
-     * 列表使用
-     * @param goodsVo
-     */
-    public ThemeListGoodsVo(GoodsVo goodsVo, int isThemeGoods) {
-        this.commonId = goodsVo.getCommonId();
-        this.goodsName = goodsVo.getGoodsName();
-        this.jingle = goodsVo.getJingle();
-        this.batchNum0 = goodsVo.getBatchNum0();
-        this.batchNum0End = goodsVo.getBatchNum0End();
-        this.batchNum1 = goodsVo.getBatchNum1();
-        this.batchNum1End = goodsVo.getBatchNum1End();
-        this.batchNum2 = goodsVo.getBatchNum2();
-        this.goodsPrice = goodsVo.getBatchPrice0();
-        this.batchPrice0 = goodsVo.getBatchPrice0();
-        this.batchPrice1 = goodsVo.getBatchPrice1();
-        this.batchPrice2 = goodsVo.getBatchPrice2();
-        this.goodsModal = goodsVo.getGoodsModal();
-        this.evaluateNum = goodsVo.getEvaluateNum();
-        this.goodsSaleNum = goodsVo.getGoodsSaleNum();
-        this.goodsRate = goodsVo.getGoodsRate();
-        this.goodsStatus = goodsVo.getGoodsStatus();
-        this.areaInfo = goodsVo.getAreaInfo();
-        this.storeId = goodsVo.getStoreId();
-        this.storeName = goodsVo.getStoreName();
-        this.isOwnShop = goodsVo.getIsOwnShop();
-        this.imageSrc = goodsVo.getImageSrc();
-        this.specJson = goodsVo.getSpecJson();
-        this.goodsSpecValueJson = goodsVo.getGoodsSpecValueJson();
-        this.categoryId = goodsVo.getCategoryId();
-        this.categoryName = goodsVo.getCategoryName();
-        this.specJsonVoList = goodsVo.getSpecJsonVoList();
-        this.webPriceMin = goodsVo.getWebPriceMin();
-        this.appPriceMin = goodsVo.getAppPriceMin();
-        this.webPriceMin = goodsVo.getWebPriceMin();
-        this.priceRange = goodsVo.getPriceRange();
-        this.batchNumPriceVoList = goodsVo.getBatchNumPriceVoList();
-        this.unitName = goodsVo.getUnitName();
-        this.groupId = goodsVo.getGroupId();
-        this.isPointsGoods = goodsVo.getIsPointsGoods();
-        this.isThemeGoods = isThemeGoods;
-    }
-
-    public Integer getIsThemeGoods() {
-        return isThemeGoods;
-    }
-
-    public void setIsThemeGoods(Integer isThemeGoods) {
-        this.isThemeGoods = isThemeGoods;
-    }
 
     public int getGoodsId() {
         return goodsId;
@@ -318,6 +264,54 @@ public class ThemeListGoodsVo {
 
     public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getIsCommend() {
+        return isCommend;
+    }
+
+    public void setIsCommend(int isCommend) {
+        this.isCommend = isCommend;
+    }
+
+    public int getGoodsState() {
+        return goodsState;
+    }
+
+    public void setGoodsState(int goodsState) {
+        this.goodsState = goodsState;
+    }
+
+    public String getStateRemark() {
+        return stateRemark;
+    }
+
+    public void setStateRemark(String stateRemark) {
+        this.stateRemark = stateRemark;
+    }
+
+    public int getGoodsVerify() {
+        return goodsVerify;
+    }
+
+    public void setGoodsVerify(int goodsVerify) {
+        this.goodsVerify = goodsVerify;
+    }
+
+    public String getVerifyRemark() {
+        return verifyRemark;
+    }
+
+    public void setVerifyRemark(String verifyRemark) {
+        this.verifyRemark = verifyRemark;
     }
 
     public String getJingle() {
@@ -406,6 +400,22 @@ public class ThemeListGoodsVo {
 
     public void setWebPriceMin(BigDecimal webPriceMin) {
         this.webPriceMin = webPriceMin;
+    }
+
+    public BigDecimal getAppPriceMin() {
+        return appPriceMin;
+    }
+
+    public void setAppPriceMin(BigDecimal appPriceMin) {
+        this.appPriceMin = appPriceMin;
+    }
+
+    public BigDecimal getWechatPriceMin() {
+        return wechatPriceMin;
+    }
+
+    public void setWechatPriceMin(BigDecimal wechatPriceMin) {
+        this.wechatPriceMin = wechatPriceMin;
     }
 
     public int getGoodsModal() {
@@ -512,118 +522,6 @@ public class ThemeListGoodsVo {
         this.goodsImageList = goodsImageList;
     }
 
-    public String getSpecJson() {
-        return specJson;
-    }
-
-    public void setSpecJson(String specJson) {
-        this.specJson = specJson;
-    }
-
-    public List<SpecJsonVo> getSpecJsonVoList() {
-        return specJsonVoList;
-    }
-
-    public void setSpecJsonVoList(List<SpecJsonVo> specJsonVoList) {
-        this.specJsonVoList = specJsonVoList;
-    }
-
-    public String getGoodsSpecValueJson() {
-        return goodsSpecValueJson;
-    }
-
-    public void setGoodsSpecValueJson(String goodsSpecValueJson) {
-        this.goodsSpecValueJson = goodsSpecValueJson;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public int getCategoryId1() {
-        return categoryId1;
-    }
-
-    public void setCategoryId1(int categoryId1) {
-        this.categoryId1 = categoryId1;
-    }
-
-    public int getCategoryId2() {
-        return categoryId2;
-    }
-
-    public void setCategoryId2(int categoryId2) {
-        this.categoryId2 = categoryId2;
-    }
-
-    public int getCategoryId3() {
-        return categoryId3;
-    }
-
-    public void setCategoryId3(int categoryId3) {
-        this.categoryId3 = categoryId3;
-    }
-
-    public int getIsCommend() {
-        return isCommend;
-    }
-
-    public void setIsCommend(int isCommend) {
-        this.isCommend = isCommend;
-    }
-
-    public int getGoodsState() {
-        return goodsState;
-    }
-
-    public void setGoodsState(int goodsState) {
-        this.goodsState = goodsState;
-    }
-
-    public String getStateRemark() {
-        return stateRemark;
-    }
-
-    public void setStateRemark(String stateRemark) {
-        this.stateRemark = stateRemark;
-    }
-
-    public int getGoodsVerify() {
-        return goodsVerify;
-    }
-
-    public void setGoodsVerify(int goodsVerify) {
-        this.goodsVerify = goodsVerify;
-    }
-
-    public String getVerifyRemark() {
-        return verifyRemark;
-    }
-
-    public void setVerifyRemark(String verifyRemark) {
-        this.verifyRemark = verifyRemark;
-    }
-
     public String getUnitName() {
         return unitName;
     }
@@ -672,28 +570,76 @@ public class ThemeListGoodsVo {
         this.storage = storage;
     }
 
+    public String getSpecJson() {
+        return specJson;
+    }
+
+    public void setSpecJson(String specJson) {
+        this.specJson = specJson;
+    }
+
+    public List<SpecJsonVo> getSpecJsonVoList() {
+        return specJsonVoList;
+    }
+
+    public void setSpecJsonVoList(List<SpecJsonVo> specJsonVoList) {
+        this.specJsonVoList = specJsonVoList;
+    }
+
+    public String getGoodsSpecValueJson() {
+        return goodsSpecValueJson;
+    }
+
+    public void setGoodsSpecValueJson(String goodsSpecValueJson) {
+        this.goodsSpecValueJson = goodsSpecValueJson;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public int getCategoryId1() {
+        return categoryId1;
+    }
+
+    public void setCategoryId1(int categoryId1) {
+        this.categoryId1 = categoryId1;
+    }
+
+    public int getCategoryId2() {
+        return categoryId2;
+    }
+
+    public void setCategoryId2(int categoryId2) {
+        this.categoryId2 = categoryId2;
+    }
+
+    public int getCategoryId3() {
+        return categoryId3;
+    }
+
+    public void setCategoryId3(int categoryId3) {
+        this.categoryId3 = categoryId3;
+    }
+
     public List<BatchNumPriceVo> getBatchNumPriceVoList() {
         return batchNumPriceVoList;
     }
 
     public void setBatchNumPriceVoList(List<BatchNumPriceVo> batchNumPriceVoList) {
         this.batchNumPriceVoList = batchNumPriceVoList;
-    }
-
-    public BigDecimal getAppPriceMin() {
-        return appPriceMin;
-    }
-
-    public void setAppPriceMin(BigDecimal appPriceMin) {
-        this.appPriceMin = appPriceMin;
-    }
-
-    public BigDecimal getWechatPriceMin() {
-        return wechatPriceMin;
-    }
-
-    public void setWechatPriceMin(BigDecimal wechatPriceMin) {
-        this.wechatPriceMin = wechatPriceMin;
     }
 
     public Integer getGroupId() {
@@ -710,6 +656,14 @@ public class ThemeListGoodsVo {
 
     public void setIsPointsGoods(Integer isPointsGoods) {
         this.isPointsGoods = isPointsGoods;
+    }
+
+    public Integer getIsThemeGoods() {
+        return isThemeGoods;
+    }
+
+    public void setIsThemeGoods(Integer isThemeGoods) {
+        this.isThemeGoods = isThemeGoods;
     }
 
     @Override

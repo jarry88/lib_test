@@ -2,7 +2,6 @@ package com.ftofs.twant.vo.store;
 
 import java.io.Serializable;
 
-
 /**
 * 收银台便签视图层实体
 * @author liuguang  
@@ -21,15 +20,6 @@ public class SellerMemoVo implements Serializable {
 	private String createTime;
 	//修改时间
 	private String modifyTime;
-
-	public SellerMemoVo(Integer sellerId, String content, Integer state,
-			String createTime, String modifyTime) {
-		this.sellerId = sellerId;
-		this.content = content;
-		this.state = state;
-		this.createTime = createTime;
-		this.modifyTime = modifyTime;
-	}
 
 	public Integer getId() {
 		return this.id;

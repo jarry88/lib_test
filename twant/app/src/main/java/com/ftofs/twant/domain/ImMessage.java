@@ -2,9 +2,6 @@ package com.ftofs.twant.domain;
 
 import java.io.Serializable;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class ImMessage implements Serializable {
     /**
      * 消息编号
@@ -201,9 +198,11 @@ public class ImMessage implements Serializable {
     }
 
     public String getAddTimeText() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timestampStr = sdf.format(new Date(Long.valueOf(addTime)));
-        return String.valueOf(timestampStr);
+        return addTimeText;
+    }
+
+    public void setAddTimeText(String addTimeText) {
+        this.addTimeText = addTimeText;
     }
 
     @Override

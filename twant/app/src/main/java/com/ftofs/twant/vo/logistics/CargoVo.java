@@ -15,7 +15,6 @@ public class CargoVo {
     private float weight ; //重量
 
     //只保存到數據庫 不屬於3TMS受理單字段
-
     private float height; //高
 
     private float width; //寬

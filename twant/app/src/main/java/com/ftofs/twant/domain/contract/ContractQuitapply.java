@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.contract;
 
-
-
 public class ContractQuitapply implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 

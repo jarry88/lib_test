@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.evaluate;
 
-
-
 public class EvaluateStore {
     /**
      * 自增编码

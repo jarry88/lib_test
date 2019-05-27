@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.member;
 
-
-
 public class PurchaseChat {
 	/**
 	 * 买家商家沟通记录主键ID
@@ -37,48 +35,60 @@ public class PurchaseChat {
 	 * 买家采购计划ID
 	 */
 	private Integer purchaseBuyId;
-	
-	public Integer getPurchaseBuyId() {
-		return purchaseBuyId;
-	}
-	public void setPurchaseBuyId(Integer purchaseBuyId) {
-		this.purchaseBuyId = purchaseBuyId;
-	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public Integer getPurchaseQuotedpriceId() {
 		return purchaseQuotedpriceId;
 	}
+
 	public void setPurchaseQuotedpriceId(Integer purchaseQuotedpriceId) {
 		this.purchaseQuotedpriceId = purchaseQuotedpriceId;
 	}
+
 	public String getContent() {
 		return content;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
+
 	public String getRole() {
 		return role;
 	}
+
 	public void setRole(String role) {
 		this.role = role;
 	}
+
 	public Integer getUserId() {
 		return userId;
 	}
+
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
+
 	public String getCreateTime() {
 		return createTime;
 	}
+
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
-	
+
+	public Integer getPurchaseBuyId() {
+		return purchaseBuyId;
+	}
+
+	public void setPurchaseBuyId(Integer purchaseBuyId) {
+		this.purchaseBuyId = purchaseBuyId;
+	}
 }

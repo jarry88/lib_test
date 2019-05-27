@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.seckill;
 
-import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.seckill.SeckillGoods;
-
 import java.math.BigDecimal;
 
 /**
@@ -49,17 +46,6 @@ public class SeckillGoodsVo {
      * 限购数量
      */
     private int seckillLimitAmount;
-
-    public SeckillGoodsVo(SeckillGoods seckillGoods, Goods goods) {
-        this.seckillGoodsId = seckillGoods.getSeckillGoodsId();
-        this.goodsId = goods.getGoodsId();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.goodsPrice0 = goods.getGoodsPrice0();
-        this.goodsStorage = goods.getGoodsStorage();
-        this.seckillGoodsPrice = seckillGoods.getGoodsPrice();
-        this.seckillGoodsStorage = seckillGoods.getGoodsStorage();
-        this.seckillLimitAmount = seckillGoods.getLimitAmount();
-    }
 
     public int getSeckillGoodsId() {
         return seckillGoodsId;

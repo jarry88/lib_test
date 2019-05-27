@@ -23,13 +23,6 @@ public class CartVo {
      */
     private BigDecimal cartAmount;
 
-    public CartVo() {
-    }
-
-    public CartVo(List<CartStoreVo> cartStoreVoList) {
-
-    }
-
     public int getBuyNum() {
         return buyNum;
     }

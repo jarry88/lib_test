@@ -299,14 +299,6 @@ public class OrdersGoods implements Serializable {
         this.categoryId = categoryId;
     }
 
-    public String getGoodsFullSpecs() {
-        return goodsFullSpecs;
-    }
-
-    public void setGoodsFullSpecs(String goodsFullSpecs) {
-        this.goodsFullSpecs = goodsFullSpecs;
-    }
-
     public int getCategoryId1() {
         return categoryId1;
     }
@@ -331,24 +323,12 @@ public class OrdersGoods implements Serializable {
         this.categoryId3 = categoryId3;
     }
 
-    /**
-     *
-     * @return
-     */
-    public String getImageSrc() {
-        return goodsImage;
+    public String getGoodsFullSpecs() {
+        return goodsFullSpecs;
     }
 
-    /**
-     * 收取佣金
-     * @return
-     */
-    public BigDecimal getCommissionAmount() {
-       return BigDecimal.ZERO;
-    }
-
-    public void setCommissionAmount(BigDecimal commissionAmount) {
-        this.commissionAmount = commissionAmount;
+    public void setGoodsFullSpecs(String goodsFullSpecs) {
+        this.goodsFullSpecs = goodsFullSpecs;
     }
 
     public String getUnitName() {
@@ -413,6 +393,14 @@ public class OrdersGoods implements Serializable {
 
     public void setTrysApplyId(int trysApplyId) {
         this.trysApplyId = trysApplyId;
+    }
+
+    public BigDecimal getCommissionAmount() {
+        return commissionAmount;
+    }
+
+    public void setCommissionAmount(BigDecimal commissionAmount) {
+        this.commissionAmount = commissionAmount;
     }
 
     public int getComplainId() {

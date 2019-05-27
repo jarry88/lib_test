@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.store;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class StoreCurrencyClear implements Serializable {
 	//主键
 	private Integer id;
@@ -23,17 +22,6 @@ public class StoreCurrencyClear implements Serializable {
 	private String updateTime;
 
 	public StoreCurrencyClear() {
-	}
-
-	public StoreCurrencyClear(BigDecimal amount, String description, Integer storeId,
-			 Integer clearStatus, Integer state, String createTime,String updateTime) {
-		this.amount = amount;
-		this.description = description;
-		this.storeId = storeId;
-		this.clearStatus = clearStatus;
-		this.state = state;
-		this.createTime = createTime;
-		this.updateTime = updateTime;
 	}
 
 	public Integer getId() {

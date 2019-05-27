@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.goods;
 
-import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
-
 import java.math.BigDecimal;
 
 /**
@@ -36,32 +33,6 @@ public class GoodsCommendVo {
     private Integer commonId;
     
     private String goodsFullSpecs;
-
-    /**
-     * 查询名称、价格和图片
-     * @param goods
-     * @param goodsCommon
-     */
-    public GoodsCommendVo(Goods goods, GoodsCommon goodsCommon) {
-        this.goodsId = goods.getGoodsId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsPrice = goods.getGoodsPrice0();
-        this.imageSrc = goods.getImageSrc();
-    }
-    
-    public GoodsCommendVo() {
-        super();
-    }
-
-	public GoodsCommendVo(int goodsId, String goodsName, BigDecimal goodsPrice, String imageSrc,Integer commonId,String goodsFullSpecs) {
-        super();
-        this.goodsId = goodsId;
-        this.goodsName = goodsName;
-        this.goodsPrice = goodsPrice;
-        this.imageSrc = imageSrc;
-        this.commonId = commonId;
-        this.goodsFullSpecs = goodsFullSpecs;
-    }
 
 	public int getGoodsId() {
         return goodsId;

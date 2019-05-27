@@ -32,10 +32,6 @@ public class StoreMobileSpecialItemDataVo {
         this.image = image;
     }
 
-    public String getImageUrl() {
-        return "";
-    }
-
     public String getType() {
         return type;
     }

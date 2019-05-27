@@ -90,6 +90,10 @@ public class Category implements Serializable {
         return appImageUrl;
     }
 
+    public void setAppImageUrl(String appImageUrl) {
+        this.appImageUrl = appImageUrl;
+    }
+
     @Override
     public String toString() {
         return "Category{" +

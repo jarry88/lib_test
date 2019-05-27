@@ -443,101 +443,6 @@ public class SearchVo {
      */
     private List<StoreServiceStaffVo> storeServiceStaffVoList;
 
-    public SearchVo() {
-    }
-
-    public SearchVo(SearchGoodsVo s) {
-        this.commonId = s.getCommonId();
-        this.goodsName = s.getGoodsName();
-        this.jingle = s.getJingle();
-        this.categoryId = s.getCategoryId();
-        this.storeId = s.getStoreId();
-        this.brandId = s.getBrandId();
-        this.goodsState = s.getGoodsState();
-        this.goodsVerify = s.getGoodsVerify();
-        this.goodsStatus = s.getGoodsStatus();
-        this.goodsFreight = Double.parseDouble(s.getGoodsFreight().toString());
-        this.freightTemplateId = s.getFreightTemplateId();
-        this.batchNum0 = s.getBatchNum0();
-        this.batchNum0End = s.getBatchNum0End();
-        this.batchNum1 = s.getBatchNum1();
-        this.batchNum1End = s.getBatchNum1End();
-        this.batchNum2 = s.getBatchNum2();
-        this.batchPrice0 = Double.parseDouble(s.getBatchPrice0().toString());
-        this.batchPrice1 = Double.parseDouble(s.getBatchPrice1().toString());
-        this.batchPrice2 = Double.parseDouble(s.getBatchPrice2().toString());
-        this.webPrice0 = Double.parseDouble(s.getWebPrice0().toString());
-        this.webPrice1 = Double.parseDouble(s.getWebPrice2().toString());
-        this.webPrice2 = Double.parseDouble(s.getWebPrice2().toString());
-        this.webPriceMin = Double.parseDouble(s.getWebPriceMin().toString());
-        this.webUsable = s.getWebUsable();
-        this.appPrice0 = Double.parseDouble(s.getAppPrice0().toString());
-        this.appPrice1 = Double.parseDouble(s.getAppPrice1().toString());
-        this.appPrice2 = Double.parseDouble(s.getAppPrice2().toString());
-        this.appPriceMin = Double.parseDouble(s.getAppPriceMin().toString());
-        this.appUsable = s.getAppUsable();
-        this.wechatPrice0 = Double.parseDouble(s.getWechatPrice0().toString());
-        this.wechatPrice1 = Double.parseDouble(s.getWechatPrice1().toString());
-        this.wechatPrice2 = Double.parseDouble(s.getWechatPrice2().toString());
-        this.wechatPriceMin = Double.parseDouble(s.getWechatPriceMin().toString());
-        this.wechatUsable = s.getWebUsable();
-        this.unitName = s.getUnitName();
-        this.promotionId = s.getPromotionId();
-        this.promotionState = s.getPromotionState();
-        this.promotionType = s.getPromotionType();
-        this.goodsModal = s.getGoodsModal();
-        this.goodsFavorite = s.getGoodsFavorite();
-        this.evaluateNum = s.getEvaluateNum();
-        this.goodsRate = s.getGoodsRate();
-        this.goodsSaleNum = s.getGoodsSaleNum();
-        this.imageName = s.getImageName();
-        this.isGift = s.getIsGift();
-        this.categoryName = s.getCategoryName();
-        this.storeName = s.getStoreName();
-        this.isOwnShop = s.getIsOwnShop();
-        this.sellerId = s.getSellerId();
-        this.commissionRate = s.getCommissionRate();
-        this.webCommission = s.getWebCommission();
-        this.appCommission = s.getAppCommission();
-        this.wechatCommission = s.getWechatCommission();
-        this.usableVoucher = s.getUsableVoucher();
-        this.ordersCount = s.getOrdersCount();
-        this.commissionTotal = Double.parseDouble(s.getCommissionTotal().toString());
-        this.extendString0 = s.getExtendString0();
-        this.extendString1 = s.getExtendString1();
-        this.extendString2 = s.getExtendString2();
-        this.extendString3 = s.getExtendString3();
-        this.extendString4 = s.getExtendString4();
-        this.extendString5 = s.getExtendString5();
-        this.extendString6 = s.getExtendString6();
-        this.extendString7 = s.getExtendString7();
-        this.extendString8 = s.getExtendString8();
-        this.extendString9 = s.getExtendString9();
-        this.extendInt0 = s.getExtendInt0();
-        this.extendInt1 = s.getExtendInt1();
-        this.extendInt2 = s.getExtendInt2();
-        this.extendInt3 = s.getExtendInt3();
-        this.extendInt4 = s.getExtendInt4();
-        this.extendInt5 = s.getExtendInt5();
-        this.extendInt6 = s.getExtendInt6();
-        this.extendInt7 = s.getExtendInt7();
-        this.extendInt8 = s.getExtendInt8();
-        this.extendInt9 = s.getExtendInt9();
-        this.extendPrice0 = s.getExtendInt0();
-        this.extendPrice1 = s.getBatchNum1();
-        this.extendPrice2 = s.getBatchNum2();
-        this.extendPrice3 = s.getExtendInt3();
-        this.extendPrice4 = s.getExtendInt4();
-        this.extendPrice5 = s.getExtendInt5();
-        this.extendPrice6 = s.getExtendInt6();
-        this.extendPrice7 = s.getExtendInt7();
-        this.extendPrice8 = s.getExtendInt8();
-        this.extendPrice9 = s.getExtendInt9();
-        this.extendTime0 = s.getExtendTime0().toString();
-        this.goodsImageList = s.getGoodsImageList();
-        this.batchNumPriceVoList = s.getBatchNumPriceVoList();
-    }
-
     public int getCommonId() {
         return commonId;
     }
@@ -552,6 +457,22 @@ public class SearchVo {
 
     public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+    }
+
+    public Integer getGoodsCountry() {
+        return goodsCountry;
+    }
+
+    public void setGoodsCountry(Integer goodsCountry) {
+        this.goodsCountry = goodsCountry;
+    }
+
+    public String getGoodsNameHighlight() {
+        return goodsNameHighlight;
+    }
+
+    public void setGoodsNameHighlight(String goodsNameHighlight) {
+        this.goodsNameHighlight = goodsNameHighlight;
     }
 
     public String getJingle() {
@@ -643,7 +564,11 @@ public class SearchVo {
     }
 
     public int getBatchNum0End() {
-        return (batchNum1 == 0) ? batchNum0End : batchNum1 - 1;
+        return batchNum0End;
+    }
+
+    public void setBatchNum0End(int batchNum0End) {
+        this.batchNum0End = batchNum0End;
     }
 
     public int getBatchNum1() {
@@ -655,7 +580,11 @@ public class SearchVo {
     }
 
     public int getBatchNum1End() {
-        return (batchNum2 == 0) ? batchNum1End : batchNum2 - 1;
+        return batchNum1End;
+    }
+
+    public void setBatchNum1End(int batchNum1End) {
+        this.batchNum1End = batchNum1End;
     }
 
     public int getBatchNum2() {
@@ -690,20 +619,8 @@ public class SearchVo {
         this.batchPrice2 = batchPrice2;
     }
 
-    public void setBatchNum0End(int batchNum0End) {
-        this.batchNum0End = batchNum0End;
-    }
-
-    public void setBatchNum1End(int batchNum1End) {
-        this.batchNum1End = batchNum1End;
-    }
-
     public double getWebPrice0() {
-        if (getWebUsable() == 0 || webPrice0 == 0) {
-            return batchPrice0;
-        } else {
-            return webPrice0;
-        }
+        return webPrice0;
     }
 
     public void setWebPrice0(double webPrice0) {
@@ -711,11 +628,7 @@ public class SearchVo {
     }
 
     public double getWebPrice1() {
-        if (getWebUsable() == 0 || webPrice1 == 0) {
-            return batchPrice1;
-        } else {
-            return webPrice1;
-        }
+        return webPrice1;
     }
 
     public void setWebPrice1(double webPrice1) {
@@ -723,11 +636,7 @@ public class SearchVo {
     }
 
     public double getWebPrice2() {
-        if (getWebUsable() == 0 || webPrice2 == 0) {
-            return batchPrice2;
-        } else {
-            return webPrice2;
-        }
+        return webPrice2;
     }
 
     public void setWebPrice2(double webPrice2) {
@@ -735,11 +644,7 @@ public class SearchVo {
     }
 
     public double getWebPriceMin() {
-        if (getWebUsable() == 0 || webPriceMin == 0) {
-            return batchPrice2;
-        } else {
-            return webPriceMin;
-        }
+        return webPriceMin;
     }
 
     public void setWebPriceMin(double webPriceMin) {
@@ -747,7 +652,7 @@ public class SearchVo {
     }
 
     public int getWebUsable() {
-        return 1;
+        return webUsable;
     }
 
     public void setWebUsable(int webUsable) {
@@ -755,11 +660,7 @@ public class SearchVo {
     }
 
     public double getAppPrice0() {
-        if (getAppUsable() == 0 || appPrice0 == 0) {
-            return batchPrice0;
-        } else {
-            return appPrice0;
-        }
+        return appPrice0;
     }
 
     public void setAppPrice0(double appPrice0) {
@@ -767,11 +668,7 @@ public class SearchVo {
     }
 
     public double getAppPrice1() {
-        if (getAppUsable() == 0 || appPrice1 == 0) {
-            return batchPrice1;
-        } else {
-            return appPrice1;
-        }
+        return appPrice1;
     }
 
     public void setAppPrice1(double appPrice1) {
@@ -779,11 +676,7 @@ public class SearchVo {
     }
 
     public double getAppPrice2() {
-        if (getAppUsable() == 0 || appPrice2 == 0) {
-            return batchPrice2;
-        } else {
-            return appPrice2;
-        }
+        return appPrice2;
     }
 
     public void setAppPrice2(double appPrice2) {
@@ -791,11 +684,7 @@ public class SearchVo {
     }
 
     public double getAppPriceMin() {
-        if (getAppUsable() == 0 || appPriceMin == 0) {
-            return batchPrice2;
-        } else {
-            return appPriceMin;
-        }
+        return appPriceMin;
     }
 
     public void setAppPriceMin(double appPriceMin) {
@@ -803,7 +692,7 @@ public class SearchVo {
     }
 
     public int getAppUsable() {
-        return 1;
+        return appUsable;
     }
 
     public void setAppUsable(int appUsable) {
@@ -811,11 +700,7 @@ public class SearchVo {
     }
 
     public double getWechatPrice0() {
-        if (getWechatUsable() == 0 || wechatPrice0 == 0) {
-            return batchPrice0;
-        } else {
-            return wechatPrice0;
-        }
+        return wechatPrice0;
     }
 
     public void setWechatPrice0(double wechatPrice0) {
@@ -823,11 +708,7 @@ public class SearchVo {
     }
 
     public double getWechatPrice1() {
-        if (getWechatUsable() == 0 || wechatPrice1 == 0) {
-            return batchPrice1;
-        } else {
-            return wechatPrice1;
-        }
+        return wechatPrice1;
     }
 
     public void setWechatPrice1(double wechatPrice1) {
@@ -835,11 +716,7 @@ public class SearchVo {
     }
 
     public double getWechatPrice2() {
-        if (getWechatUsable() == 0 || wechatPrice2 == 0) {
-            return batchPrice2;
-        } else {
-            return wechatPrice2;
-        }
+        return wechatPrice2;
     }
 
     public void setWechatPrice2(double wechatPrice2) {
@@ -847,11 +724,7 @@ public class SearchVo {
     }
 
     public double getWechatPriceMin() {
-        if (getWechatUsable() == 0 || wechatPriceMin == 0) {
-            return batchPrice2;
-        } else {
-            return wechatPriceMin;
-        }
+        return wechatPriceMin;
     }
 
     public void setWechatPriceMin(double wechatPriceMin) {
@@ -859,7 +732,7 @@ public class SearchVo {
     }
 
     public int getWechatUsable() {
-        return 0;
+        return wechatUsable;
     }
 
     public void setWechatUsable(int wechatUsable) {
@@ -1002,12 +875,44 @@ public class SearchVo {
         this.storeName = storeName;
     }
 
+    public String getStoreAvatarUrl() {
+        return storeAvatarUrl;
+    }
+
+    public void setStoreAvatarUrl(String storeAvatarUrl) {
+        this.storeAvatarUrl = storeAvatarUrl;
+    }
+
+    public List<ServiceVo> getStorePresalesList() {
+        return storePresalesList;
+    }
+
+    public void setStorePresalesList(List<ServiceVo> storePresalesList) {
+        this.storePresalesList = storePresalesList;
+    }
+
+    public AdminCountry getAdminCountry() {
+        return adminCountry;
+    }
+
+    public void setAdminCountry(AdminCountry adminCountry) {
+        this.adminCountry = adminCountry;
+    }
+
     public int getIsOwnShop() {
         return isOwnShop;
     }
 
     public void setIsOwnShop(int isOwnShop) {
         this.isOwnShop = isOwnShop;
+    }
+
+    public int getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
     }
 
     public int getCommissionRate() {
@@ -1018,36 +923,36 @@ public class SearchVo {
         this.commissionRate = commissionRate;
     }
 
-    public List<GoodsImage> getGoodsImageList() {
-        return goodsImageList;
+    public BigDecimal getWebCommission() {
+        return webCommission;
     }
 
-    public void setGoodsImageList(List<GoodsImage> goodsImageList) {
-        this.goodsImageList = goodsImageList;
+    public void setWebCommission(BigDecimal webCommission) {
+        this.webCommission = webCommission;
     }
 
-    public List<Goods> getGoodsList() {
-        return goodsList;
+    public BigDecimal getAppCommission() {
+        return appCommission;
     }
 
-    public void setGoodsList(List<Goods> goodsList) {
-        this.goodsList = goodsList;
+    public void setAppCommission(BigDecimal appCommission) {
+        this.appCommission = appCommission;
     }
 
-    public List<BatchNumPriceVo> getBatchNumPriceVoList() {
-        return batchNumPriceVoList;
+    public BigDecimal getWechatCommission() {
+        return wechatCommission;
     }
 
-    public void setBatchNumPriceVoList(List<BatchNumPriceVo> batchNumPriceVoList) {
-        this.batchNumPriceVoList = batchNumPriceVoList;
+    public void setWechatCommission(BigDecimal wechatCommission) {
+        this.wechatCommission = wechatCommission;
     }
 
-    public int getIsOnline() {
-        return isOnline;
+    public int getUsableVoucher() {
+        return usableVoucher;
     }
 
-    public void setIsOnline(int isOnline) {
-        this.isOnline = isOnline;
+    public void setUsableVoucher(int usableVoucher) {
+        this.usableVoucher = usableVoucher;
     }
 
     public long getOrdersCount() {
@@ -1066,52 +971,12 @@ public class SearchVo {
         this.commissionTotal = commissionTotal;
     }
 
-    public int getSellerId() {
-        return sellerId;
+    public int getIsOnline() {
+        return isOnline;
     }
 
-    public void setSellerId(int sellerId) {
-        this.sellerId = sellerId;
-    }
-
-    public BigDecimal getWebCommission() {
-        return BigDecimal.ZERO;
-    }
-
-    public void setWebCommission(BigDecimal webCommission) {
-        this.webCommission = webCommission;
-    }
-
-    public BigDecimal getAppCommission() {
-        return BigDecimal.ZERO;
-    }
-
-    public void setAppCommission(BigDecimal appCommission) {
-        this.appCommission = appCommission;
-    }
-
-    public BigDecimal getWechatCommission() {
-        return BigDecimal.ZERO;
-    }
-
-    public void setWechatCommission(BigDecimal wechatCommission) {
-        this.wechatCommission = wechatCommission;
-    }
-
-    public int getUsableVoucher() {
-        return usableVoucher;
-    }
-
-    public void setUsableVoucher(int usableVoucher) {
-        this.usableVoucher = usableVoucher;
-    }
-
-    public String getGoodsNameHighlight() {
-        return goodsNameHighlight;
-    }
-
-    public void setGoodsNameHighlight(String goodsNameHighlight) {
-        this.goodsNameHighlight = goodsNameHighlight;
+    public void setIsOnline(int isOnline) {
+        this.isOnline = isOnline;
     }
 
     public int getGoodsId() {
@@ -1128,6 +993,14 @@ public class SearchVo {
 
     public void setGoodsSpec(String goodsSpec) {
         this.goodsSpec = goodsSpec;
+    }
+
+    public String getChainAreaInfo() {
+        return chainAreaInfo;
+    }
+
+    public void setChainAreaInfo(String chainAreaInfo) {
+        this.chainAreaInfo = chainAreaInfo;
     }
 
     public String getExtendString0() {
@@ -1450,38 +1323,29 @@ public class SearchVo {
         this.extendTime9 = extendTime9;
     }
 
-    public String getStoreAvatarUrl() {
-        return storeAvatarUrl;
+    public List<GoodsImage> getGoodsImageList() {
+        return goodsImageList;
     }
 
-    public void setStoreAvatarUrl(String storeAvatarUrl) {
-        this.storeAvatarUrl = storeAvatarUrl;
+    public void setGoodsImageList(List<GoodsImage> goodsImageList) {
+        this.goodsImageList = goodsImageList;
     }
 
-    public List<ServiceVo> getStorePresalesList() {
-        return storePresalesList;
+    public List<Goods> getGoodsList() {
+        return goodsList;
     }
 
-    public void setStorePresalesList(List<ServiceVo> storePresalesList) {
-        this.storePresalesList = storePresalesList;
+    public void setGoodsList(List<Goods> goodsList) {
+        this.goodsList = goodsList;
     }
 
-    public Integer getGoodsCountry() {
-        return goodsCountry;
+    public List<BatchNumPriceVo> getBatchNumPriceVoList() {
+        return batchNumPriceVoList;
     }
 
-    public void setGoodsCountry(Integer goodsCountry) {
-        this.goodsCountry = goodsCountry;
+    public void setBatchNumPriceVoList(List<BatchNumPriceVo> batchNumPriceVoList) {
+        this.batchNumPriceVoList = batchNumPriceVoList;
     }
-
-    public AdminCountry getAdminCountry() {
-        return adminCountry;
-    }
-
-    public void setAdminCountry(AdminCountry adminCountry) {
-        this.adminCountry = adminCountry;
-    }
-
 
     public List<StoreServiceStaffVo> getStoreServiceStaffVoList() {
         return storeServiceStaffVoList;
@@ -1489,14 +1353,6 @@ public class SearchVo {
 
     public void setStoreServiceStaffVoList(List<StoreServiceStaffVo> storeServiceStaffVoList) {
         this.storeServiceStaffVoList = storeServiceStaffVoList;
-    }
-
-    public String getChainAreaInfo() {
-        return chainAreaInfo;
-    }
-
-    public void setChainAreaInfo(String chainAreaInfo) {
-        this.chainAreaInfo = chainAreaInfo;
     }
 
     @Override

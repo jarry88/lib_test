@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.im;
 
 import java.io.Serializable;
 
-
 public class ImMessageLog implements Serializable {
     /**
      * 自增编码

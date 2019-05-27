@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.refund;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class Refund implements Serializable {
     /**
      * 退款id

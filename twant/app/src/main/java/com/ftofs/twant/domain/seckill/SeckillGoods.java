@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.seckill;
 
 import java.math.BigDecimal;
 
-
 public class SeckillGoods {
     /**
      * 主键

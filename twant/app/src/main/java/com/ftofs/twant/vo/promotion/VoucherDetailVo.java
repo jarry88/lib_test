@@ -1,10 +1,8 @@
 package com.ftofs.twant.vo.promotion;
 
-import com.ftofs.twant.domain.promotion.Voucher;
 import com.ftofs.twant.domain.store.Store;
 
 import java.math.BigDecimal;
-
 
 /**
  * Copyright: Bizpower多用户商城系统
@@ -140,39 +138,6 @@ public class VoucherDetailVo {
      * 店铺
      */
     private Store store;
-
-    public VoucherDetailVo(Voucher voucher, Store store) {
-        this.voucherId = voucher.getVoucherId();
-        this.voucherCode = voucher.getVoucherCode();
-        this.templateId = voucher.getTemplateId();
-        this.voucherTitle = voucher.getVoucherTitle();
-        this.voucherDescribe = voucher.getVoucherDescribe();
-        this.startTime = voucher.getStartTime();
-        this.endTime = voucher.getEndTime();
-        this.price = voucher.getPrice();
-        this.limitAmount = voucher.getLimitAmount();
-        this.storeId = voucher.getStoreId();
-        this.storeName = voucher.getStoreName();
-        this.voucherState = voucher.getVoucherState();
-        this.activeTime = voucher.getActiveTime();
-        this.type = voucher.getType();
-        this.webUsable = voucher.getWebUsable();
-        this.appUsable = voucher.getAppUsable();
-        this.wechatUsable = voucher.getWechatUsable();
-        this.memberId = voucher.getMemberId();
-        this.memberName = voucher.getMemberName();
-        this.ordersId = voucher.getOrdersId();
-        this.ordersSn = voucher.getOrdersSn();
-        this.voucherCurrentStateSign = voucher.getVoucherCurrentStateSign();
-        this.voucherCurrentStateText = voucher.getVoucherCurrentStateText();
-        this.startTimeText = voucher.getStartTimeText();
-        this.endTimeText = voucher.getEndTimeText();
-        this.voucherExpiredState = voucher.getVoucherExpiredState();
-        this.voucherUsableClientType = voucher.getVoucherUsableClientType();
-        this.voucherUsableClientTypeText = voucher.getVoucherUsableClientTypeText();
-        this.limitAmountText = voucher.getLimitAmountText();
-        this.store = store;
-    }
 
     public int getVoucherId() {
         return voucherId;

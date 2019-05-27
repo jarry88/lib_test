@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.goods;
 
 import java.io.Serializable;
 
-
 public class GoodsRecommond implements Serializable,Cloneable {
     /**
      * 自增编码
@@ -153,16 +152,11 @@ public class GoodsRecommond implements Serializable,Cloneable {
     }
 
     public String getGoodsImageSrc() {
-        return goodsImageName;
+        return goodsImageSrc;
     }
 
-    public void setImageSrc(String goodsImageSrc) {
+    public void setGoodsImageSrc(String goodsImageSrc) {
         this.goodsImageSrc = goodsImageSrc;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     @Override

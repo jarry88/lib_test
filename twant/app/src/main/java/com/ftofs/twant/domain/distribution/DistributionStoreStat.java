@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.distribution;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class DistributionStoreStat implements Serializable {
     /**
      * 自增ID

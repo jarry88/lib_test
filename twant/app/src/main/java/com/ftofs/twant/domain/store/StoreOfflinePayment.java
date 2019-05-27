@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.store;
 
-
-
 public class StoreOfflinePayment {
     /**
      * 主鍵ID

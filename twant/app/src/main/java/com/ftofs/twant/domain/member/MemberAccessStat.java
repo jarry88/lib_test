@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 
-
 public class MemberAccessStat implements Serializable{
     /**
      * 記錄id
@@ -35,15 +34,6 @@ public class MemberAccessStat implements Serializable{
     private String accessTime;
 
     public MemberAccessStat(){}
-
-    public MemberAccessStat(int id, String memberName, String ip,int storeId, String activeTime, String accessTime) {
-        this.id = id;
-        this.memberName = memberName;
-        this.ip = ip;
-        this.storeId = storeId;
-        this.activeTime = activeTime;
-        this.accessTime = accessTime;
-    }
 
     public int getId() {
         return id;

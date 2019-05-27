@@ -932,6 +932,18 @@ public class RefundItemVo {
         this.returnSellerAutoReceive = returnSellerAutoReceive;
     }
 
+    public String getSellerStateTextForSelf() {
+        return sellerStateTextForSelf;
+    }
+
+    public String getRefundStateTextForSelf() {
+        return refundStateTextForSelf;
+    }
+
+    public BigDecimal getRefundCommissionAmount() {
+        return refundCommissionAmount;
+    }
+
     @Override
     public String toString() {
         return "RefundItemVo{" +

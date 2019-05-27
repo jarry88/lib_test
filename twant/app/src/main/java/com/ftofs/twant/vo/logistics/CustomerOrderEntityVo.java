@@ -23,7 +23,6 @@ public class CustomerOrderEntityVo {
     private List<CargoVo> cargoList; // 货物信息
 
     //只保存到數據庫 不屬於3TMS受理單字段
-
     private String consignerCompanyName; //寄件人公司名稱
 
     private String consigneeCompanyName; //收件人公司名稱

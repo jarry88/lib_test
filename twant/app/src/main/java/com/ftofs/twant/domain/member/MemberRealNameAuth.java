@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.member;
 
-
-
 public class MemberRealNameAuth {
     /**
      * 会员编号
@@ -176,53 +174,48 @@ public class MemberRealNameAuth {
         this.authHandleTime = authHandleTime;
     }
 
-    public void setIdCartFrontImageUrl(String idCartFrontImageUrl) {
-        this.idCartFrontImageUrl = idCartFrontImageUrl;
-    }
-
-    public void setIdCartBackImageUrl(String idCartBackImageUrl) {
-        this.idCartBackImageUrl = idCartBackImageUrl;
-    }
-
-    public void setIdCartHandImageUrl(String idCartHandImageUrl) {
-        this.idCartHandImageUrl = idCartHandImageUrl;
-    }
-
     public String getIdCartFrontImageUrl() {
         return idCartFrontImageUrl;
+    }
+
+    public void setIdCartFrontImageUrl(String idCartFrontImageUrl) {
+        this.idCartFrontImageUrl = idCartFrontImageUrl;
     }
 
     public String getIdCartBackImageUrl() {
         return idCartBackImageUrl;
     }
 
+    public void setIdCartBackImageUrl(String idCartBackImageUrl) {
+        this.idCartBackImageUrl = idCartBackImageUrl;
+    }
+
     public String getIdCartHandImageUrl() {
         return idCartHandImageUrl;
+    }
+
+    public void setIdCartHandImageUrl(String idCartHandImageUrl) {
+        this.idCartHandImageUrl = idCartHandImageUrl;
+    }
+
+    public String getAuthRealNameEncrypt() {
+        return authRealNameEncrypt;
+    }
+
+    public void setAuthRealNameEncrypt(String authRealNameEncrypt) {
+        this.authRealNameEncrypt = authRealNameEncrypt;
+    }
+
+    public String getIdCartNumberEncrypt() {
+        return idCartNumberEncrypt;
     }
 
     public void setIdCartNumberEncrypt(String idCartNumberEncrypt) {
         this.idCartNumberEncrypt = idCartNumberEncrypt;
     }
 
-    public void setAuthRealNameEncrypt(String realNameEncrypt) {
-        this.authRealNameEncrypt = realNameEncrypt;
-    }
-
-    public String getAuthRealNameEncrypt() {
-        if(authRealName == null || authRealName == "")
-        {
-            return "" ;
-        }
-        return "*" + authRealName.substring(authRealName.length() - 1);
-
-    }
-
-    public String getIdCartNumberEncrypt() {
-        return idCartNumber.replaceAll("([0-9]{2})(.*)([0-9]{4})", "$1************$3");
-    }
-
     public String getAuthStateText() {
-       return authStateText;
+        return authStateText;
     }
 
     public void setAuthStateText(String authStateText) {

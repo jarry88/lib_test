@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
 
-
 public class StoreLike implements Serializable {
     private int id;
 
@@ -22,13 +21,6 @@ public class StoreLike implements Serializable {
     private String createTime;
 
     public  StoreLike(){}
-
-    public StoreLike(int id, int memberId, int storeId, String createTime) {
-        this.id = id;
-        this.memberId = memberId;
-        this.storeId = storeId;
-        this.createTime = createTime;
-    }
 
     public int getId() {
         return id;

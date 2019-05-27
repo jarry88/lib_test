@@ -139,13 +139,7 @@ public class StoreBindCategory {
     }
 
     public int getCategoryId() {
-        if (categoryId3 > 0) {
-            return categoryId3;
-        } else if (categoryId2 > 0) {
-            return categoryId2;
-        } else {
-            return categoryId1;
-        }
+        return categoryId;
     }
 
     public void setCategoryId(int categoryId) {

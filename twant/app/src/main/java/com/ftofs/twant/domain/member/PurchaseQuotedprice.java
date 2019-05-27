@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.math.BigDecimal;
 
-
 public class PurchaseQuotedprice {
 	/**
 	 * 报价单主键ID
@@ -89,107 +88,140 @@ public class PurchaseQuotedprice {
 	 * 冗余字段 用于查询
 	 */
 	private String purchaseBuyTitle;
-	
-	public String getPurchaseBuyTitle() {
-		return purchaseBuyTitle;
-	}
-	public void setPurchaseBuyTitle(String purchaseBuyTitle) {
-		this.purchaseBuyTitle = purchaseBuyTitle;
-	}
-	public String getUnit() {
-		return unit;
-	}
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-	public BigDecimal getNum() {
-		return num;
-	}
-	public void setNum(BigDecimal num) {
-		this.num = num;
-	}
-	public Integer getState() {
-		return state;
-	}
-	public void setState(Integer state) {
-		this.state = state;
-	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public Integer getSellerId() {
 		return sellerId;
 	}
+
 	public void setSellerId(Integer sellerId) {
 		this.sellerId = sellerId;
 	}
+
 	public Integer getPurchaseBuyId() {
 		return purchaseBuyId;
 	}
+
 	public void setPurchaseBuyId(Integer purchaseBuyId) {
 		this.purchaseBuyId = purchaseBuyId;
 	}
+
 	public BigDecimal getPrice() {
 		return price;
 	}
+
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+
 	public String getPriceMemo() {
 		return priceMemo;
 	}
+
 	public void setPriceMemo(String priceMemo) {
 		this.priceMemo = priceMemo;
 	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	public String getContent() {
 		return content;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
+
 	public String getAnnex() {
 		return annex;
 	}
+
 	public void setAnnex(String annex) {
 		this.annex = annex;
 	}
-	public String getCompanyName() {
-		return companyName;
-	}
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-	public String getContacts() {
-		return contacts;
-	}
-	public void setContacts(String contacts) {
-		this.contacts = contacts;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+
 	public String getReplyTime() {
 		return replyTime;
 	}
+
 	public void setReplyTime(String replyTime) {
 		this.replyTime = replyTime;
 	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public String getCreateTime() {
 		return createTime;
 	}
+
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	public BigDecimal getNum() {
+		return num;
+	}
+
+	public void setNum(BigDecimal num) {
+		this.num = num;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getPurchaseBuyTitle() {
+		return purchaseBuyTitle;
+	}
+
+	public void setPurchaseBuyTitle(String purchaseBuyTitle) {
+		this.purchaseBuyTitle = purchaseBuyTitle;
 	}
 }

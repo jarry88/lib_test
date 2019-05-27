@@ -53,205 +53,268 @@ public class PurchaseBuyVo {
 	
 	private List<PurchaseBuy> purchaseBuyList=new ArrayList<PurchaseBuy>();
 	private List<PurchaseBuy> categoryPurchaseBuyList=new ArrayList<PurchaseBuy>();
-	
-	public String getPurchaseId() {
-		return purchaseId;
-	}
-	public void setPurchaseId(String purchaseId) {
-		this.purchaseId = purchaseId;
-	}
-	public String getReceiveTime() {
-		return receiveTime;
-	}
-	public void setReceiveTime(String receiveTime) {
-		this.receiveTime = receiveTime;
-	}
-	public List<PurchaseBuy> getCategoryPurchaseBuyList() {
-		return categoryPurchaseBuyList;
-	}
-	public void setCategoryPurchaseBuyList(List<PurchaseBuy> categoryPurchaseBuyList) {
-		this.categoryPurchaseBuyList = categoryPurchaseBuyList;
-	}
-	public List<PurchaseBuy> getPurchaseBuyList() {
-		return purchaseBuyList;
-	}
-	public void setPurchaseBuyList(List<PurchaseBuy> purchaseBuyList) {
-		this.purchaseBuyList = purchaseBuyList;
-	}
-	public String getPurchaseBuyCount() {
-		return purchaseBuyCount;
-	}
-	public void setPurchaseBuyCount(String purchaseBuyCount) {
-		this.purchaseBuyCount = purchaseBuyCount;
-	}
-	public int getContactType() {
-		return contactType;
-	}
-	public void setContactType(int contactType) {
-		this.contactType = contactType;
-	}
-	public String getShowQuotedprice() {
-		return showQuotedprice;
-	}
-	public void setShowQuotedprice(String showQuotedprice) {
-		this.showQuotedprice = showQuotedprice;
-	}
-	public int getCategoryId() {
-		return categoryId;
-	}
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
-	}
-	public String getRemainDays() {
-		return remainDays;
-	}
-	public void setRemainDays(String remainDays) {
-		this.remainDays = remainDays;
-	}
-	public String getNeedInvoiceStr() {
-		return needInvoiceStr;
-	}
-	public void setNeedInvoiceStr(String needInvoiceStr) {
-		this.needInvoiceStr = needInvoiceStr;
-	}
-	public int getNeedInvoice() {
-		return needInvoice;
-	}
-	public void setNeedInvoice(int needInvoice) {
-		this.needInvoice = needInvoice;
-	}
-	public String getQuotedpriceCount() {
-		return quotedpriceCount;
-	}
-	public void setQuotedpriceCount(String quotedpriceCount) {
-		this.quotedpriceCount = quotedpriceCount;
-	}
-	public String getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-	public String getMemberName() {
-		return memberName;
-	}
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
-	}
-	public String getMemberArea() {
-		return memberArea;
-	}
-	public void setMemberArea(String memberArea) {
-		this.memberArea = memberArea;
-	}
-	public String getPurchaseBuyId() {
-		return purchaseBuyId;
-	}
-	public void setPurchaseBuyId(String purchaseBuyId) {
-		this.purchaseBuyId = purchaseBuyId;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public String getStatusStr() {
-		return statusStr;
-	}
-	public void setStatusStr(String statusStr) {
-		this.statusStr = statusStr;
-	}
-	public String getCreateTime() {
-		return createTime;
-	}
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	public String getProName() {
 		return proName;
 	}
+
 	public void setProName(String proName) {
 		this.proName = proName;
 	}
+
 	public String getNorm() {
 		return norm;
 	}
+
 	public void setNorm(String norm) {
 		this.norm = norm;
 	}
+
 	public BigDecimal getNum() {
 		return num;
 	}
+
 	public void setNum(BigDecimal num) {
 		this.num = num;
 	}
+
 	public String getUnit() {
 		return unit;
 	}
+
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+
 	public BigDecimal getPrice() {
 		return price;
 	}
+
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+
 	public String getPriceMemo() {
 		return priceMemo;
 	}
+
 	public void setPriceMemo(String priceMemo) {
 		this.priceMemo = priceMemo;
 	}
+
 	public String getPicUrl() {
 		return picUrl;
 	}
+
 	public void setPicUrl(String picUrl) {
 		this.picUrl = picUrl;
 	}
+
 	public String getContent() {
 		return content;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
+
 	public String getContacts() {
 		return contacts;
 	}
+
 	public void setContacts(String contacts) {
 		this.contacts = contacts;
 	}
+
 	public String getPhone() {
 		return phone;
 	}
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
 	public String getPurType() {
 		return purType;
 	}
+
 	public void setPurType(String purType) {
 		this.purType = purType;
 	}
+
 	public String getSupplierArea() {
 		return supplierArea;
 	}
+
 	public void setSupplierArea(String supplierArea) {
 		this.supplierArea = supplierArea;
 	}
+
 	public String getReceiveArea() {
 		return receiveArea;
 	}
+
 	public void setReceiveArea(String receiveArea) {
 		this.receiveArea = receiveArea;
 	}
-	
-	
+
+	public String getPurchaseId() {
+		return purchaseId;
+	}
+
+	public void setPurchaseId(String purchaseId) {
+		this.purchaseId = purchaseId;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getStatusStr() {
+		return statusStr;
+	}
+
+	public void setStatusStr(String statusStr) {
+		this.statusStr = statusStr;
+	}
+
+	public String getPurchaseBuyId() {
+		return purchaseBuyId;
+	}
+
+	public void setPurchaseBuyId(String purchaseBuyId) {
+		this.purchaseBuyId = purchaseBuyId;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
+	public String getMemberArea() {
+		return memberArea;
+	}
+
+	public void setMemberArea(String memberArea) {
+		this.memberArea = memberArea;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getQuotedpriceCount() {
+		return quotedpriceCount;
+	}
+
+	public void setQuotedpriceCount(String quotedpriceCount) {
+		this.quotedpriceCount = quotedpriceCount;
+	}
+
+	public int getNeedInvoice() {
+		return needInvoice;
+	}
+
+	public void setNeedInvoice(int needInvoice) {
+		this.needInvoice = needInvoice;
+	}
+
+	public String getNeedInvoiceStr() {
+		return needInvoiceStr;
+	}
+
+	public void setNeedInvoiceStr(String needInvoiceStr) {
+		this.needInvoiceStr = needInvoiceStr;
+	}
+
+	public String getRemainDays() {
+		return remainDays;
+	}
+
+	public void setRemainDays(String remainDays) {
+		this.remainDays = remainDays;
+	}
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public int getContactType() {
+		return contactType;
+	}
+
+	public void setContactType(int contactType) {
+		this.contactType = contactType;
+	}
+
+	public String getShowQuotedprice() {
+		return showQuotedprice;
+	}
+
+	public void setShowQuotedprice(String showQuotedprice) {
+		this.showQuotedprice = showQuotedprice;
+	}
+
+	public String getPurchaseBuyCount() {
+		return purchaseBuyCount;
+	}
+
+	public void setPurchaseBuyCount(String purchaseBuyCount) {
+		this.purchaseBuyCount = purchaseBuyCount;
+	}
+
+	public String getReceiveTime() {
+		return receiveTime;
+	}
+
+	public void setReceiveTime(String receiveTime) {
+		this.receiveTime = receiveTime;
+	}
+
+	public List<PurchaseBuy> getPurchaseBuyList() {
+		return purchaseBuyList;
+	}
+
+	public void setPurchaseBuyList(List<PurchaseBuy> purchaseBuyList) {
+		this.purchaseBuyList = purchaseBuyList;
+	}
+
+	public List<PurchaseBuy> getCategoryPurchaseBuyList() {
+		return categoryPurchaseBuyList;
+	}
+
+	public void setCategoryPurchaseBuyList(List<PurchaseBuy> categoryPurchaseBuyList) {
+		this.categoryPurchaseBuyList = categoryPurchaseBuyList;
+	}
 }

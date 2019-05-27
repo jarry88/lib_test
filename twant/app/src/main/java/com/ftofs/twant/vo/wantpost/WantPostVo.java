@@ -1,6 +1,5 @@
 package com.ftofs.twant.vo.wantpost;
 
-import com.ftofs.twant.domain.wantpost.WantPost;
 import com.ftofs.twant.vo.comment.SearchCommentVo;
 import com.ftofs.twant.vo.comment.WantCommentVo;
 import com.ftofs.twant.vo.member.MemberVo;
@@ -133,57 +132,6 @@ public class WantPostVo {
      * 評論列表
      */
     private List<SearchCommentVo> searchCommentVoList;
-
-    public WantPostVo(){}
-
-    public WantPostVo(WantPost w) {
-        this.postId = w.getPostId();
-        this.title = w.getTitle();
-        this.content = w.getContent();
-        this.postCategory = w.getPostCategory();
-        this.coverImage = w.getCoverImage();
-        this.postType = w.getPostType();
-        this.postTag = w.getPostTag();
-        this.keyWord = w.getKeyWord();
-        this.createBy = w.getCreateBy();
-        this.isPublish = w.getIsPublish();
-        this.isDelete = w.getIsDelete();
-        this.budgetPrice = w.getBudgetPrice();
-        this.postView = w.getPostView();
-        this.postLike = w.getPostLike();
-        this.postUnlike = w.getPostUnlike();
-        this.postFavor = w.getPostFavor();
-        this.postReply = w.getPostReply();
-        this.postShare = w.getPostShare();
-        this.approveReason= w.getApproveReason();
-    }
-
-    public WantPostVo(SearchWantPostVo w) {
-        this.postId = w.getPostId();
-        this.title = w.getTitle();
-        this.content = w.getContent();
-        this.postCategory = w.getPostCategory();
-        this.coverImage = w.getCoverImage();
-        this.postType = w.getPostType();
-        this.postTag = w.getPostTag();
-        this.keyWord = w.getKeyWord();
-        this.createBy = w.getCreateBy();
-        this.isPublish = w.getIsPublish();
-        this.isDelete = w.getIsDelete();
-        this.expiresDate = w.getExpiresDate();
-        this.budgetPrice = w.getBudgetPrice();
-        this.postView = w.getPostView();
-        this.postLike = w.getPostLike();
-        this.postUnlike = w.getPostUnlike();
-        this.postFavor = w.getPostFavor();
-        this.postReply = w.getPostReply();
-        this.postShare = w.getPostShare();
-        this.approveReason = w.getApproveReason();
-        this.wantPostImages = w.getImages();
-        this.wantCommentVoList = w.getComments();
-        this.createTime = w.getCreateTime();
-
-    }
 
     public BigInteger getPostId() {
         return postId;

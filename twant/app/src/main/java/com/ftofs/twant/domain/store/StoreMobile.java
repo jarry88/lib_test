@@ -33,10 +33,6 @@ public class StoreMobile {
         return storeBanner;
     }
 
-    public String getStoreBannerUrl() {
-        return storeBanner;
-    }
-
     public void setStoreBanner(String storeBanner) {
         this.storeBanner = storeBanner;
     }

@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
 
-
 public class Discount implements Serializable {
 	/**
 	 * 折扣促销编号

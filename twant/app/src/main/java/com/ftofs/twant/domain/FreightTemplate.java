@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain;
 
-
-
 public class FreightTemplate {
     /**
      * 主键、自增

@@ -37,18 +37,6 @@ public class MemberAccessStatVo {
      */
     private int visitorCount;
 
-    public MemberAccessStatVo(){}
-
-    public MemberAccessStatVo(List<MemberVo> members, List<MemberVo> friends, int storeId, int onlineCount, int purchasedCount, int allVisitCount, int visitorCount) {
-        this.members = members;
-        this.friends = friends;
-        this.storeId = storeId;
-        this.onlineCount = onlineCount;
-        this.purchasedCount = purchasedCount;
-        this.allVisitCount = allVisitCount;
-        this.visitorCount = visitorCount;
-    }
-
     public List<MemberVo> getMembers() {
         return members;
     }

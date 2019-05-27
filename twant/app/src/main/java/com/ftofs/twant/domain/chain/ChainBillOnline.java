@@ -3,8 +3,6 @@ package com.ftofs.twant.domain.chain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
-
 public class ChainBillOnline implements Serializable, Cloneable {
     /**
      * 主键、自增
@@ -66,27 +64,6 @@ public class ChainBillOnline implements Serializable, Cloneable {
      */
     private String billNote;
 
-    public String getStartDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(startTime);
-    }
-
-    public String getEndDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(endTime);
-    }
-
-    public String getCreateDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(createTime);
-    }
-
-    public String getBillStateName() {
-        if (billState == 0) {
-            return "未结算";
-        } else if (billState == 1) {
-            return "已结算";
-        }
-        return "";
-    }
-
     public int getBillId() {
         return billId;
     }
@@ -119,12 +96,28 @@ public class ChainBillOnline implements Serializable, Cloneable {
         this.endTime = endTime;
     }
 
+    public BigDecimal getBillAmount() {
+        return billAmount;
+    }
+
+    public void setBillAmount(BigDecimal billAmount) {
+        this.billAmount = billAmount;
+    }
+
     public BigDecimal getOrdersAmount() {
         return ordersAmount;
     }
 
     public void setOrdersAmount(BigDecimal ordersAmount) {
         this.ordersAmount = ordersAmount;
+    }
+
+    public BigDecimal getCouponAmount() {
+        return couponAmount;
+    }
+
+    public void setCouponAmount(BigDecimal couponAmount) {
+        this.couponAmount = couponAmount;
     }
 
     public String getCreateTime() {
@@ -165,27 +158,6 @@ public class ChainBillOnline implements Serializable, Cloneable {
 
     public void setBillNote(String billNote) {
         this.billNote = billNote;
-    }
-
-    public BigDecimal getBillAmount() {
-        return billAmount;
-    }
-
-    public void setBillAmount(BigDecimal billAmount) {
-        this.billAmount = billAmount;
-    }
-
-    public BigDecimal getCouponAmount() {
-        return couponAmount;
-    }
-
-    public void setCouponAmount(BigDecimal couponAmount) {
-        this.couponAmount = couponAmount;
-    }
-
-    @Override
-    public ChainBillOnline clone() throws CloneNotSupportedException {
-        return (ChainBillOnline) super.clone();
     }
 
     @Override

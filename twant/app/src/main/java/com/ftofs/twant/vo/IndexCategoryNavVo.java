@@ -1,8 +1,6 @@
 package com.ftofs.twant.vo;
 
-import com.ftofs.twant.domain.goods.Category;
 import java.io.Serializable;
-
 
 public class IndexCategoryNavVo implements Serializable {
     /**
@@ -31,12 +29,6 @@ public class IndexCategoryNavVo implements Serializable {
      * 更新时间
      */
     private String categoryNavUpdateTime;
-
-    public IndexCategoryNavVo(Category category) {
-        this.setCategoryId(category.getCategoryId());
-        this.setCategoryName(category.getCategoryName());
-        this.setCategorySort(category.getCategorySort());
-    }
 
     public int getCategoryId() {
         return categoryId;

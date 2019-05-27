@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.chain;
 
-
-
 public class ChainPromotion {
     /**
      * 店内活动编号

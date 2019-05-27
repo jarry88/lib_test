@@ -1,9 +1,6 @@
 package com.ftofs.twant.vo.hr;
 
-import com.ftofs.twant.domain.hr.HrPost;
 import com.ftofs.twant.vo.store.StoreVo;
-
-
 
 /**
  * @Description: 招聘視圖對象
@@ -112,25 +109,6 @@ public class HrPostVo {
      * 店鋪信息
      */
     private StoreVo storeVo;
-
-    public HrPostVo(HrPost hr) {
-        this.postId = hr.getPostId();
-        this.postTitle = hr.getPostTitle();
-        this.workLocation = hr.getWorkLocation();
-        this.customizeLow = hr.getCustomizeLow();
-        this.customizeHigh = hr.getCustomizeHigh();
-        this.postDescription = hr.getPostDescription();
-        this.mailbox = hr.getMailbox();
-        this.isPublish = hr.getIsPublish();
-        this.isOnline = hr.getIsOnline();
-        this.isDelete = hr.getIsDelete();
-        this.createBy = hr.getCreateBy();
-        this.nickName = hr.getNickName();
-        this.createTime = hr.getCreateTime();
-        this.postFavor = hr.getPostFavor();
-        this.storeId = hr.getStoreId();
-        this.approveReason = hr.getApproveReason();
-    }
 
     public int getPostId() {
         return postId;

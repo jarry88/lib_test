@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo.activity;
 
-import com.ftofs.twant.domain.activity.Activity;
-
 /**
  * Created by cj on 2017-5-18.
  */
@@ -24,22 +22,6 @@ public class ActivityVo {
      * 活动数据
      */
     private  Object activityJson;
-
-
-    public ActivityVo(Activity activity) {
-        this.activityId = activity.getActivityId();
-        this.activityType = activity.getActivityType();
-        this.activityState = activity.getActivityState();
-    }
-
-    public <T> ActivityVo(Activity activity , T activityJson) {
-        this.activityId = activity.getActivityId();
-        this.activityType = activity.getActivityType();
-        this.activityJson = activityJson ;
-        this.activityState = activity.getActivityState();
-    }
-
-
 
     public int getActivityId() {
         return activityId;

@@ -21,7 +21,6 @@ public class WantPostShare {
         this.postId = postId;
     }
 
-
     public String getMemberName() {
         return memberName;
     }

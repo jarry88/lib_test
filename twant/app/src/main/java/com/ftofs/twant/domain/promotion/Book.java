@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.promotion;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class Book implements Serializable {
     /**
      * 商品SKU

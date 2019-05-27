@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.theme;
 
 import java.io.Serializable;
 
-
 public class ThemeGoods implements Serializable{
     /**
      * 商城活动商品编号

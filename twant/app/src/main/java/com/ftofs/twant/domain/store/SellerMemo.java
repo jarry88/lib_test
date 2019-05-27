@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
 
-
 public class SellerMemo implements Serializable {
 	//便签id
 	private Integer id;
@@ -17,69 +16,51 @@ public class SellerMemo implements Serializable {
 	//修改时间
 	private String modifyTime;
 
-	public SellerMemo() {
-	}
-
-	public SellerMemo(Integer sellerId, String content, Integer state,
-			String createTime, String modifyTime) {
-		this.sellerId = sellerId;
-		this.content = content;
-		this.state = state;
-		this.createTime = createTime;
-		this.modifyTime = modifyTime;
-	}
-
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
 	public Integer getSellerId() {
-		return this.sellerId;
+		return sellerId;
 	}
 
 	public void setSellerId(Integer sellerId) {
 		this.sellerId = sellerId;
 	}
 
-
 	public String getContent() {
-		return this.content;
+		return content;
 	}
 
 	public void setContent(String content) {
 		this.content = content;
 	}
 
-
 	public Integer getState() {
-		return this.state;
+		return state;
 	}
 
 	public void setState(Integer state) {
 		this.state = state;
 	}
 
-
 	public String getCreateTime() {
-		return this.createTime;
+		return createTime;
 	}
 
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 
-
 	public String getModifyTime() {
-		return this.modifyTime;
+		return modifyTime;
 	}
 
 	public void setModifyTime(String modifyTime) {
 		this.modifyTime = modifyTime;
 	}
-
 }

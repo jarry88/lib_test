@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.theme;
 
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.store.Store;
-import com.ftofs.twant.domain.theme.ThemeGoods;
 import com.ftofs.twant.vo.goods.BatchNumPriceVo;
 
 import java.math.BigDecimal;
@@ -204,14 +201,11 @@ public class ThemeGoodsVo {
     /**
      * 审核失败原因
      */
-
     private String verifyRemark;
 
     /**
      * 审核时间
      */
-
-
     private String verifyTime;
 
     /**
@@ -219,34 +213,12 @@ public class ThemeGoodsVo {
      */
     private String themeVerifyString;
 
-    public String getThemeVerifyString() {
-        String themeVerifyString = "";
-        switch (themeVerify) {
-            case 0:
-                themeVerifyString = "未通过";
-                break;
-            case 1:
-                themeVerifyString = "已通过";
-                break;
-            case 10:
-                themeVerifyString = "审核中";
-                break;
-            default:
-                break;
-        }
-        return themeVerifyString;
-    }
-
     public int getThemeGoodsId() {
         return themeGoodsId;
     }
 
     public void setThemeGoodsId(int themeGoodsId) {
         this.themeGoodsId = themeGoodsId;
-    }
-
-    public void setThemeVerifyString(String themeVerifyString) {
-        this.themeVerifyString = themeVerifyString;
     }
 
     public int getCommonId() {
@@ -465,6 +437,14 @@ public class ThemeGoodsVo {
         this.imageSrc = imageSrc;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
     public String getUnitName() {
         return unitName;
     }
@@ -479,14 +459,6 @@ public class ThemeGoodsVo {
 
     public void setPriceRange(String priceRange) {
         this.priceRange = priceRange;
-    }
-
-    public long getStorage() {
-        return storage;
-    }
-
-    public void setStorage(long storage) {
-        this.storage = storage;
     }
 
     public int getIsGift() {
@@ -511,6 +483,14 @@ public class ThemeGoodsVo {
 
     public void setEvaluateNum(int evaluateNum) {
         this.evaluateNum = evaluateNum;
+    }
+
+    public long getStorage() {
+        return storage;
+    }
+
+    public void setStorage(long storage) {
+        this.storage = storage;
     }
 
     public List<BatchNumPriceVo> getBatchNumPriceVoList() {
@@ -553,14 +533,6 @@ public class ThemeGoodsVo {
         this.storeName = storeName;
     }
 
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
-
     public int getThemeId() {
         return themeId;
     }
@@ -591,6 +563,14 @@ public class ThemeGoodsVo {
 
     public void setVerifyTime(String verifyTime) {
         this.verifyTime = verifyTime;
+    }
+
+    public String getThemeVerifyString() {
+        return themeVerifyString;
+    }
+
+    public void setThemeVerifyString(String themeVerifyString) {
+        this.themeVerifyString = themeVerifyString;
     }
 
     @Override

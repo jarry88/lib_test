@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 
-
 public class FavoritesStore implements Serializable {
     /**
      * 自增编码

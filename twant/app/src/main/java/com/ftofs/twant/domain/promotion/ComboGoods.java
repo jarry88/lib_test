@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.promotion;
 
-
-
 public class ComboGoods {
 	/**
 	 * 主键ID

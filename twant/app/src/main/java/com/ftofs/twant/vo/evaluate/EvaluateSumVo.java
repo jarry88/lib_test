@@ -44,39 +44,6 @@ public class EvaluateSumVo {
      */
     private long hasImageCount;
 
-    public EvaluateSumVo() {
-    }
-
-    public EvaluateSumVo(long evalCount1, long evalCount2, long evalCount3, long hasImageCount) {
-        this.evalCount1 = evalCount1;
-        this.evalCount2 = evalCount2;
-        this.evalCount3 = evalCount3;
-        this.hasImageCount = hasImageCount;
-
-        this.evalCount = evalCount1 + evalCount2 + evalCount3;
-
-        if (this.evalCount == 0) {
-            this.evalRate1 = 100;
-            this.evalRate2 = 0;
-            this.evalRate3 = 0;
-        } else {
-            //好评率
-            if (evalCount1 > 0) {
-                evalRate1 = (int) (evalCount1 * 100 / this.evalCount);
-            } else {
-                evalRate1 = 0;
-            }
-            //中评率
-            if (evalCount2 > 0) {
-                evalRate2 = (int) (evalCount2 * 100 / this.evalCount);
-            } else {
-                evalRate2 = 0;
-            }
-            //差评率
-            evalRate3 = 100 - evalRate1 - evalRate2;
-        }
-    }
-
     public long getEvalCount() {
         return evalCount;
     }

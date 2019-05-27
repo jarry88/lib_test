@@ -1,9 +1,7 @@
 package com.ftofs.twant.vo.advertorial;
 
-import com.ftofs.twant.domain.advertorial.AdvertorialArticle;
 import com.ftofs.twant.domain.advertorial.AdvertorialAuthor;
 import com.ftofs.twant.vo.goods.ArticleGoodsCommonVo;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -230,70 +228,6 @@ public class AdvertorialArticleVo {
      * Modify By yangjian 2018/12/22 14:26
      */
     private int articleFrom;
-
-    public AdvertorialArticleVo(AdvertorialArticle advertorialArticle) {
-        this.commonIdList = advertorialArticle.getCommonIdList();
-        this.articleId = advertorialArticle.getArticleId();
-        this.memberId = advertorialArticle.getMemberId();
-        this.title = advertorialArticle.getTitle();
-        this.subTitle = advertorialArticle.getSubTitle();
-        this.type = advertorialArticle.getType();
-        this.bannerImage = advertorialArticle.getBannerImage();
-        this.categoryId = advertorialArticle.getCategoryId();
-        this.state = advertorialArticle.getState();
-        this.content = advertorialArticle.getContent();
-        this.remark = advertorialArticle.getRemark();
-        this.addTime = advertorialArticle.getAddTime();
-        this.handleTime = advertorialArticle.getHandleTime();
-        this.bannerImageUrl = advertorialArticle.getBannerImageUrl();
-        this.stateText = advertorialArticle.getStateText();
-        this.typeText = advertorialArticle.getTypeText();
-        this.pageView = advertorialArticle.getPageView();
-        this.commentNum = advertorialArticle.getCommentNum();
-        this.enterDetailPageView = advertorialArticle.getEnterDetailPageView();
-        this.shareNum = advertorialArticle.getShareNum();
-        this.likeNum = advertorialArticle.getLikeNum();
-        this.goodsCount = advertorialArticle.getGoodsCount();
-        this.authorName = advertorialArticle.getAuthorName();
-        this.authorAvatarUrl = advertorialArticle.getAuthorAvatarUrl();
-        this.summary = advertorialArticle.getSummary() ;
-        this.recommend = advertorialArticle.getRecommend() ;
-        this.followNum = advertorialArticle.getFollowNum() ;
-        this.articleFrom = advertorialArticle.getArticleFrom();
-    }
-    public AdvertorialArticleVo(AdvertorialArticle advertorialArticle, String categoryName) {
-        this.commonIdList = advertorialArticle.getCommonIdList();
-        this.articleId = advertorialArticle.getArticleId();
-        this.memberId = advertorialArticle.getMemberId();
-        this.title = advertorialArticle.getTitle();
-        this.subTitle = advertorialArticle.getSubTitle();
-        this.type = advertorialArticle.getType();
-        this.bannerImage = advertorialArticle.getBannerImage();
-        this.categoryId = advertorialArticle.getCategoryId();
-        this.categoryName = categoryName;
-        this.state = advertorialArticle.getState();
-        this.content = advertorialArticle.getContent();
-        this.remark = advertorialArticle.getRemark();
-        this.addTime = advertorialArticle.getAddTime();
-        this.handleTime = advertorialArticle.getHandleTime();
-        this.bannerImageUrl = advertorialArticle.getBannerImageUrl();
-        this.stateText = advertorialArticle.getStateText();
-        this.typeText = advertorialArticle.getTypeText();
-        this.pageView = advertorialArticle.getPageView();
-        this.commentNum = advertorialArticle.getCommentNum();
-        this.enterDetailPageView = advertorialArticle.getEnterDetailPageView();
-        this.shareNum = advertorialArticle.getShareNum();
-        this.likeNum = advertorialArticle.getLikeNum();
-        this.goodsCount = advertorialArticle.getGoodsCount();
-        this.authorName = advertorialArticle.getAuthorName();
-        this.authorAvatarUrl = advertorialArticle.getAuthorAvatarUrl();
-        this.summary = advertorialArticle.getSummary() ;
-        this.recommend = advertorialArticle.getRecommend() ;
-        this.followNum = advertorialArticle.getFollowNum() ;
-        this.articleFrom = advertorialArticle.getArticleFrom();
-
-    }
-
 
     public String getAuthorName() {
         return authorName;

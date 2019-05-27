@@ -2,13 +2,7 @@ package com.ftofs.twant.vo.goodsbrowse;
 
 import com.ftofs.twant.domain.AdminCountry;
 import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.member.GoodsBrowse;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.store.StoreVo;
-
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -74,39 +68,6 @@ public class GoodsBrowseVo {
      * 当前商品的店铺信息
      */
     private StoreVo storeVo = null;
-
-    public GoodsBrowseVo() {}
-
-    public GoodsBrowseVo(GoodsCommon gc) {
-        this.goodsCommon = gc;
-    }
-
-    public GoodsBrowseVo(GoodsBrowse gBrowse, GoodsCommon gc) {
-        this.browseId = gBrowse.getBrowseId();
-        this.commonId = gBrowse.getCommonId();
-        this.memberId = gBrowse.getMemberId();
-        this.addTime = gBrowse.getAddTime();
-        this.goodsCategoryId = gBrowse.getGoodsCategoryId();
-        this.goodsCategoryId1 = gBrowse.getGoodsCategoryId1();
-        this.goodsCategoryId2 = gBrowse.getGoodsCategoryId2();
-        this.goodsCategoryId3 = gBrowse.getGoodsCategoryId3();
-        this.goodsCommon = gc;
-    }
-
-    public GoodsBrowseVo(GoodsBrowse gb, GoodsCommon gc, Store store){
-        this.browseId = gb.getBrowseId();
-        this.commonId = gb.getCommonId();
-        this.memberId = gb.getMemberId();
-        this.addTime = gb.getAddTime();
-        this.goodsCategoryId = gb.getGoodsCategoryId();
-        this.goodsCategoryId1 = gb.getGoodsCategoryId1();
-        this.goodsCategoryId2 = gb.getGoodsCategoryId2();
-        this.goodsCategoryId3 = gb.getGoodsCategoryId3();
-        this.goodsCommon = gc;
-        this.storeVo = new StoreVo(store);
-    }
-
-
 
     public int getBrowseId() {
         return browseId;

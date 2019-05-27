@@ -1,10 +1,5 @@
 package com.ftofs.twant.vo.cart;
 
-import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.orders.Cart;
-import com.ftofs.twant.domain.orders.CartBundling;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.orders.GoodsContractVo;
 import com.ftofs.twant.vo.promotion.GiftVo;
 
@@ -155,49 +150,6 @@ public class BuyBundlingItemVo {
      * 消保
      */
     private List<GoodsContractVo> goodsContractVoList = new ArrayList<>();
-
-    public BuyBundlingItemVo() {
-    }
-
-    /**
-     * 取得商品信息
-     * @param cartBundling
-     * @param goods
-     * @param goodsCommon
-     * @param store
-     */
-    public BuyBundlingItemVo(CartBundling cartBundling, Goods goods, GoodsCommon goodsCommon, Store store, Cart cart) {
-        this.cartId = cartBundling.getCartId();
-        this.buyNum = cart.getBuyNum();
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.imageName = goods.getImageName();
-        this.imageSrc = goods.getImageSrc();
-        this.goodsStorage = goods.getGoodsStorage();
-        this.goodsStatus = 1;
-        this.memberId = cartBundling.getMemberId();
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.unitName = goodsCommon.getUnitName();
-        this.webPrice0 = goods.getWebPrice0();
-        this.appPrice0 = goods.getAppPrice0();
-        this.wechatPrice0 = goods.getWechatPrice0();
-        this.spuImageSrc = goodsCommon.getImageSrc();
-        this.isGift = goodsCommon.getIsGift();
-        this.contractItem1 = goodsCommon.getContractItem1();
-        this.contractItem2 = goodsCommon.getContractItem2();
-        this.contractItem3 = goodsCommon.getContractItem3();
-        this.contractItem4 = goodsCommon.getContractItem4();
-        this.contractItem5 = goodsCommon.getContractItem5();
-        this.contractItem6 = goodsCommon.getContractItem6();
-        this.contractItem7 = goodsCommon.getContractItem7();
-        this.contractItem8 = goodsCommon.getContractItem8();
-        this.contractItem9 = goodsCommon.getContractItem9();
-        this.contractItem10 = goodsCommon.getContractItem10();
-    }
-
 
     public int getCartId() {
         return cartId;

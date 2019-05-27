@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
 
-
 public class DistributionOrders implements Serializable {
     private int distributionOrdersId;
 
@@ -65,7 +64,6 @@ public class DistributionOrders implements Serializable {
     /**
      * 店铺结算标识,店铺结算时根据此标识扣除店铺结算时间
      */
-
 
     private String distributionStorePayTime ;
 

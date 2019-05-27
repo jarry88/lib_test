@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.orders;
 
-import com.ftofs.twant.domain.orders.Orders;
-import com.ftofs.twant.domain.orders.OrdersGoods;
-
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
@@ -186,76 +183,20 @@ public class OrdersGoodsVo {
      */
     private int showViewReturn = 0;
 
-    public OrdersGoodsVo() {}
-    public OrdersGoodsVo(OrdersGoods ordersGoods) {
-        this.ordersGoodsId = ordersGoods.getOrdersGoodsId();
-        this.ordersId = ordersGoods.getOrdersId();
-        this.goodsId = ordersGoods.getGoodsId();
-        this.commonId = ordersGoods.getCommonId();
-        this.goodsName = ordersGoods.getGoodsName();
-        this.goodsPrice = ordersGoods.getGoodsPrice();
-        this.goodsPayAmount = ordersGoods.getGoodsPayAmount();
-        this.buyNum = ordersGoods.getBuyNum();
-        this.goodsImage = ordersGoods.getGoodsImage();
-        this.imageSrc = ordersGoods.getImageSrc();
-        this.goodsType = ordersGoods.getGoodsType();
-        this.storeId = ordersGoods.getStoreId();
-        this.memberId = ordersGoods.getMemberId();
-        this.commissionRate = ordersGoods.getCommissionRate();
-        this.categoryId = ordersGoods.getCategoryId();
-        this.goodsFullSpecs = ordersGoods.getGoodsFullSpecs();
-        this.commissionAmount = ordersGoods.getCommissionAmount();
-        this.categoryId1 = ordersGoods.getCategoryId1();
-        this.categoryId2 = ordersGoods.getCategoryId2();
-        this.categoryId3 = ordersGoods.getCategoryId3();
-        this.basePrice = ordersGoods.getBasePrice();
-        this.unitName = ordersGoods.getUnitName();
-        this.promotionTitle = ordersGoods.getPromotionTitle();
-        this.goodsSerial = ordersGoods.getGoodsSerial();
-        this.complainId = ordersGoods.getComplainId();
-        this.taxAmount = ordersGoods.getTaxAmount();
-        this.taxRate = ordersGoods.getTaxTate();
-        this.joinBigSale = ordersGoods.getJoinBigSale();
-    }
-
-    public OrdersGoodsVo(OrdersGoods ordersGoods, Orders orders) {
-        this.ordersGoodsId = ordersGoods.getOrdersGoodsId();
-        this.ordersId = ordersGoods.getOrdersId();
-        this.goodsId = ordersGoods.getGoodsId();
-        this.commonId = ordersGoods.getCommonId();
-        this.goodsName = ordersGoods.getGoodsName();
-        this.goodsPrice = ordersGoods.getGoodsPrice();
-        this.goodsPayAmount = ordersGoods.getGoodsPayAmount();
-        this.buyNum = ordersGoods.getBuyNum();
-        this.goodsImage = ordersGoods.getGoodsImage();
-        this.imageSrc = ordersGoods.getImageSrc();
-        this.goodsType = ordersGoods.getGoodsType();
-        this.storeId = ordersGoods.getStoreId();
-        this.memberId = ordersGoods.getMemberId();
-        this.commissionRate = ordersGoods.getCommissionRate();
-        this.categoryId = ordersGoods.getCategoryId();
-        this.goodsFullSpecs = ordersGoods.getGoodsFullSpecs();
-        this.commissionAmount = ordersGoods.getCommissionAmount();
-        this.memberName = orders.getMemberName();
-        this.createTime = orders.getCreateTime();
-        this.categoryId1 = ordersGoods.getCategoryId1();
-        this.categoryId2 = ordersGoods.getCategoryId2();
-        this.categoryId3 = ordersGoods.getCategoryId3();
-        this.basePrice = ordersGoods.getBasePrice();
-        this.unitName = ordersGoods.getUnitName();
-        this.promotionTitle = ordersGoods.getPromotionTitle();
-        this.goodsSerial = ordersGoods.getGoodsSerial();
-        this.taxAmount = ordersGoods.getTaxAmount();
-        this.taxRate = ordersGoods.getTaxTate();
-        this.joinBigSale = ordersGoods.getJoinBigSale();
-    }
-
     public int getOrdersGoodsId() {
         return ordersGoodsId;
     }
 
     public void setOrdersGoodsId(int ordersGoodsId) {
         this.ordersGoodsId = ordersGoodsId;
+    }
+
+    public int getOrdersId() {
+        return ordersId;
+    }
+
+    public void setOrdersId(int ordersId) {
+        this.ordersId = ordersId;
     }
 
     public int getGoodsId() {
@@ -272,14 +213,6 @@ public class OrdersGoodsVo {
 
     public void setCommonId(int commonId) {
         this.commonId = commonId;
-    }
-
-    public int getOrdersId() {
-        return ordersId;
-    }
-
-    public void setOrdersId(int ordersId) {
-        this.ordersId = ordersId;
     }
 
     public String getGoodsName() {

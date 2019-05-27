@@ -1,10 +1,5 @@
 package com.ftofs.twant.vo.goods.goodsdetail;
 
-import com.ftofs.twant.domain.goods.Attribute;
-import com.ftofs.twant.domain.goods.AttributeValue;
-import com.ftofs.twant.domain.goods.Custom;
-import com.ftofs.twant.domain.goods.GoodsCustom;
-
 /**
  * Copyright: Bizpower多用户商城系统
  * Copyright: www.bizpower.com
@@ -18,19 +13,6 @@ import com.ftofs.twant.domain.goods.GoodsCustom;
 public class GoodsAttrVo {
     private String name;
     private String value;
-
-    public GoodsAttrVo() {
-    }
-
-    public GoodsAttrVo(Attribute attribute, AttributeValue attributeValue) {
-        this.name = attribute.getAttributeName();
-        this.value = attributeValue.getAttributeValueName();
-    }
-
-    public GoodsAttrVo(Custom custom, GoodsCustom goodsCustom) {
-        this.name = custom.getCustomName();
-        this.value = goodsCustom.getCustomValue();
-    }
 
     public String getName() {
         return name;

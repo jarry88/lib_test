@@ -1,6 +1,5 @@
 package com.ftofs.twant.vo.comment;
 
-import com.ftofs.twant.domain.comment.WantComment;
 import com.ftofs.twant.domain.comment.WantCommentImage;
 import com.ftofs.twant.vo.goods.goodsdetail.GoodsDetailVo;
 import com.ftofs.twant.vo.member.MemberVo;
@@ -17,7 +16,6 @@ import java.util.List;
  * @Date: 2019/2/13 16:22
  */
 public class WantCommentVo {
-
     /**
      * 評論id
      */
@@ -153,48 +151,6 @@ public class WantCommentVo {
      * 主體評論數
      */
     private long commentCount = 0;
-
-    public WantCommentVo(){}
-
-    public WantCommentVo(WantComment wc) {
-        this.commentId = wc.getCommentId();
-        this.commentType = wc.getCommentType();
-        this.commentChannel = wc.getCommentChannel();
-        this.content = wc.getContent();
-        this.deep = wc.getDeep();
-        this.relateStoreId = wc.getRelateStoreId();
-        this.relateCommonId = wc.getRelateCommonId();
-        this.relatePostId = wc.getRelatePostId();
-        this.replyCommentId = wc.getReplyCommentId();
-        this.createBy = wc.getCreateBy();
-        this.createTime = wc.getCreateTime();
-        this.commentState = wc.getCommentState();
-        this.commentLike = wc.getCommentLike();
-        this.commentUnlike = wc.getCommentUnlike();
-        this.commentFavor = wc.getCommentFavor();
-        this.commentReply = wc.getCommentReply();
-        this.commentShare = wc.getCommentShare();
-    }
-
-    public WantCommentVo(SearchCommentVo wc) {
-        this.commentId = wc.getCommentId();
-        this.commentType = wc.getCommentType();
-        this.commentChannel = wc.getCommentChannel();
-        this.content = wc.getContent();
-        this.deep = wc.getDeep();
-        this.relateStoreId = wc.getRelateStoreId();
-        this.relateCommonId = wc.getRelateCommonId();
-        this.relatePostId = wc.getRelatePostId();
-        this.replyCommentId = wc.getReplyCommentId();
-        this.createBy = wc.getCreateBy();
-        this.createTime = wc.getCreateTime();
-        this.commentState = wc.getCommentState();
-        this.commentLike = wc.getCommentLike();
-        this.commentUnlike = wc.getCommentUnlike();
-        this.commentFavor = wc.getCommentFavor();
-        this.commentReply = wc.getCommentReply();
-        this.commentShare = wc.getCommentShare();
-    }
 
     public BigInteger getCommentId() {
         return commentId;

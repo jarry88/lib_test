@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo;
 
-import com.ftofs.twant.domain.IndexFloor;
-
 import java.io.Serializable;
 
 import java.util.List;
@@ -72,20 +70,6 @@ public class IndexFloorVo implements Serializable {
      * flooritem
      */
     private List<IndexFloorItemVo> indexFloorItemList;
-
-    public IndexFloorVo(IndexFloor indexFloor) {
-        this.setFloorId(indexFloor.getFloorId());
-        this.setFloorName(indexFloor.getFloorName());
-        this.setFloorColorName(indexFloor.getFloorColorName());
-        this.setFloorTemplateName(indexFloor.getFloorTemplateName());
-        this.setFloorType(indexFloor.getFloorType());
-        this.setFloorUpdateTime(indexFloor.getFloorUpdateTime());
-        this.setFloorSort(indexFloor.getFloorSort());
-        this.setFloorShow(indexFloor.getFloorShow());
-        this.setFloorNavText(indexFloor.getFloorNavText());
-        this.setFloorNavImage(indexFloor.getFloorNavImage());
-
-    }
 
     public int getFloorId() {
         return floorId;

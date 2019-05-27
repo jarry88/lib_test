@@ -1,9 +1,5 @@
 package com.ftofs.twant.vo.promotion;
 
-import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.promotion.Gift;
-
 /**
  * Copyright: Bizpower多用户商城系统
  * Copyright: www.bizpower.com
@@ -63,38 +59,6 @@ public class GiftVo {
 
     public GiftVo() {
     }
-
-    public GiftVo(Gift gift, Goods goods, GoodsCommon goodsCommon) {
-        this.giftId = gift.getGiftId();
-        this.goodsId = gift.getGoodsId();
-        this.commonId = gift.getCommonId();
-        this.giftNum = gift.getGiftNum();
-        this.giftType = gift.getGiftType();
-        this.itemId = gift.getItemId();
-        this.itemCommonId = gift.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.unitName = goodsCommon.getUnitName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.imageSrc = goods.getImageSrc();
-    }
-    
-    
-
-    public GiftVo(int giftId, int goodsId, int commonId, int giftNum, int giftType, int itemId, Integer itemCommonId,
-			String goodsName, String unitName, String goodsFullSpecs, String imageSrc) {
-		super();
-		this.giftId = giftId;
-		this.goodsId = goodsId;
-		this.commonId = commonId;
-		this.giftNum = giftNum;
-		this.giftType = giftType;
-		this.itemId = itemId;
-		this.itemCommonId = itemCommonId;
-		this.goodsName = goodsName;
-		this.unitName = unitName;
-		this.goodsFullSpecs = goodsFullSpecs;
-		this.imageSrc = imageSrc;
-	}
 
 	public int getGiftId() {
         return giftId;

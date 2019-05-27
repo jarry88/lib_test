@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo;
 
-import com.ftofs.twant.domain.Address;
-import com.ftofs.twant.domain.AdminMobileArea;
-
 /**
  * @author liusf
  * @create 2019/2/2 14:32
@@ -74,41 +71,6 @@ public class AddressVo {
      * 区号信息
      */
     private int mobileAreaId;
-
-    public AddressVo(Address address) {
-        this.addressId = address.getAddressId();
-        this.memberId = address.getMemberId();
-        this.realName = address.getRealName();
-        this.areaId1 = address.getAreaId1();
-        this.areaId2 = address.getAreaId2();
-        this.areaId3 = address.getAreaId3();
-        this.areaId4 = address.getAreaId4();
-        this.areaId = address.getAreaId();
-        this.areaInfo = address.getAreaInfo();
-        this.address = address.getAddress();
-        this.mobPhone = address.getMobPhone();
-        this.mobileAreaCode = address.getMobileAreaCode();
-        this.telPhone = address.getTelPhone();
-        this.isDefault = address.getIsDefault();
-    }
-
-    public AddressVo(Address address, AdminMobileArea adminMobileArea) {
-        this.addressId = address.getAddressId();
-        this.memberId = address.getMemberId();
-        this.realName = address.getRealName();
-        this.areaId1 = address.getAreaId1();
-        this.areaId2 = address.getAreaId2();
-        this.areaId3 = address.getAreaId3();
-        this.areaId4 = address.getAreaId4();
-        this.areaId = address.getAreaId();
-        this.areaInfo = address.getAreaInfo();
-        this.address = address.getAddress();
-        this.mobPhone = address.getMobPhone();
-        this.mobileAreaCode = address.getMobileAreaCode();
-        this.telPhone = address.getTelPhone();
-        this.isDefault = address.getIsDefault();
-        this.mobileAreaId = adminMobileArea.getAreaId();
-    }
 
     public Integer getAddressId() {
         return addressId;

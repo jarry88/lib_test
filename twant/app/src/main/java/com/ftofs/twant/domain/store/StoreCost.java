@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.store;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class StoreCost implements Serializable {
     /**
      * 自增编码

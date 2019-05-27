@@ -15,17 +15,6 @@ public class MemberHomeStatVo extends MemberHomeStat {
      */
     private long cartList = 0;
 
-    public MemberHomeStatVo(){
-    }
-
-    public MemberHomeStatVo(MemberHomeStat memberHomeStat){
-        this.setMemberName(memberHomeStat.getMemberName());
-        this.setPopularity(memberHomeStat.getPopularity());
-        this.setFollow(memberHomeStat.getFollow());
-        this.setPost(memberHomeStat.getPost());
-        this.setBgImage(memberHomeStat.getBgImage());
-    }
-
     public long getCartList() {
         return cartList;
     }

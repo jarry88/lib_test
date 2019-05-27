@@ -1,12 +1,8 @@
 package com.ftofs.twant.vo.im;
 
-import com.ftofs.twant.domain.im.ImMessageLog;
-import com.ftofs.twant.domain.member.Member;
 import com.ftofs.twant.vo.goods.GoodsImVo;
 import com.ftofs.twant.vo.orders.OrdersImVo;
 import com.ftofs.twant.vo.store.StoreVo;
-
-
 
 /**
  * @Description: 消息視圖對象
@@ -108,33 +104,6 @@ public class ImMessageLogVo {
      */
     private OrdersImVo ordersImVo;
 
-    public ImMessageLogVo(){}
-
-    public ImMessageLogVo(ImMessageLog im) {
-        this.id = im.getId();
-        this.sendFrom = im.getSendFrom();
-        this.target = im.getTarget();
-        this.targetType = im.getTargetType();
-        this.groupName = im.getGroupName();
-        this.messageContent = im.getMessageContent();
-        this.messageType = im.getMessageType();
-        this.sendTime = im.getSendTime();
-        this.groupName = im.getGroupName();
-    }
-
-    public ImMessageLogVo(ImMessageLog im, Member member) {
-        this.id = im.getId();
-        this.sendFrom = im.getSendFrom();
-        this.target = im.getTarget();
-        this.targetType = im.getTargetType();
-        this.groupName = im.getGroupName();
-        this.messageContent = im.getMessageContent();
-        this.messageType = im.getMessageType();
-        this.sendTime = im.getSendTime();
-        this.groupName = im.getGroupName();
-        this.sendFromAcatar = member.getAvatar();
-    }
-
     public int getId() {
         return id;
     }
@@ -157,6 +126,14 @@ public class ImMessageLogVo {
 
     public void setSendFromAcatar(String sendFromAcatar) {
         this.sendFromAcatar = sendFromAcatar;
+    }
+
+    public String getSendFromNickName() {
+        return sendFromNickName;
+    }
+
+    public void setSendFromNickName(String sendFromNickName) {
+        this.sendFromNickName = sendFromNickName;
     }
 
     public String getTarget() {
@@ -207,20 +184,20 @@ public class ImMessageLogVo {
         this.sendTime = sendTime;
     }
 
-    public String getSendFromNickName() {
-        return sendFromNickName;
-    }
-
-    public void setSendFromNickName(String sendFromNickName) {
-        this.sendFromNickName = sendFromNickName;
-    }
-
     public int getFromUserType() {
         return fromUserType;
     }
 
     public void setFromUserType(int fromUserType) {
         this.fromUserType = fromUserType;
+    }
+
+    public int getToUserType() {
+        return toUserType;
+    }
+
+    public void setToUserType(int toUserType) {
+        this.toUserType = toUserType;
     }
 
     public int getFromUserStoreId() {
@@ -253,14 +230,6 @@ public class ImMessageLogVo {
 
     public void setToUserStoreName(String toUserStoreName) {
         this.toUserStoreName = toUserStoreName;
-    }
-
-    public int getToUserType() {
-        return toUserType;
-    }
-
-    public void setToUserType(int toUserType) {
-        this.toUserType = toUserType;
     }
 
     public StoreVo getStoreInfo() {

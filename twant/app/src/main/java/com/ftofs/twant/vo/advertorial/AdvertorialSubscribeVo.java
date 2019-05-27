@@ -1,9 +1,6 @@
 package com.ftofs.twant.vo.advertorial;
 
 import com.ftofs.twant.domain.advertorial.AdvertorialAuthor;
-import com.ftofs.twant.domain.advertorial.AdvertorialSubscribe;
-
-
 
 /**
  * copyright  Copyright: Bizpower多用户商城系统
@@ -52,15 +49,6 @@ public class AdvertorialSubscribeVo {
      * 该作者发布的最后一篇文章 时间
      */
     private String lastArticleAddTime ;
-
-    public AdvertorialSubscribeVo(AdvertorialSubscribe advertorialSubscribe , AdvertorialAuthor advertorialAuthor) {
-        this.subscribeId = advertorialSubscribe.getSubscribeId();
-        this.memberId = advertorialSubscribe.getMemberId();
-        this.authorId = advertorialSubscribe.getAuthorId();
-        this.authorName = advertorialSubscribe.getAuthorName();
-        this.addTime = advertorialSubscribe.getAddTime();
-        this.authorInfo = advertorialAuthor ;
-    }
 
     public int getSubscribeId() {
         return subscribeId;

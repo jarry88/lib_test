@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.statistics;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class StatHours implements Serializable {
     /**
      * 自增ID

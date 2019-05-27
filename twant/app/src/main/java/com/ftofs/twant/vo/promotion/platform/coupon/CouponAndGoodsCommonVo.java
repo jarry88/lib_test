@@ -35,15 +35,6 @@ public class CouponAndGoodsCommonVo {
      */
     private BigDecimal diffAmount = BigDecimal.ZERO;
 
-    public CouponAndGoodsCommonVo() {
-    }
-
-    public CouponAndGoodsCommonVo(Coupon coupon, List<BuyGoodsItemVo> buyGoodsItemVoList, boolean couponIsAble) {
-        this.coupon = coupon;
-        this.buyGoodsItemVoList = buyGoodsItemVoList;
-        this.couponIsAble = couponIsAble;
-    }
-
     public Coupon getCoupon() {
         return coupon;
     }

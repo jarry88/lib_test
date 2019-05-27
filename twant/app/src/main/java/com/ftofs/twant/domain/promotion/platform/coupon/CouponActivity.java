@@ -3,8 +3,6 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
-
 public class CouponActivity implements Serializable,Cloneable {
     //以下为平台券活动基本设置
     /**
@@ -455,19 +453,6 @@ public class CouponActivity implements Serializable,Cloneable {
     }
 
     public String getUsableClientType() {
-        if (webUsable== 1 && appUsable==1 && wechatUsable==1) {
-            //全平台可用
-            usableClientType = "all";
-        }else if(webUsable==1){
-            //PC端可用
-            usableClientType = "web";
-        }else if(appUsable==1){
-            //移动端可用
-            usableClientType = "app";
-        }else if(wechatUsable==1){
-            //微信端可用
-            usableClientType = "wechat";
-        }
         return usableClientType;
     }
 
@@ -476,19 +461,6 @@ public class CouponActivity implements Serializable,Cloneable {
     }
 
     public String getUsableClientTypeText() {
-        if (webUsable==1 && appUsable==1 && wechatUsable==1) {
-            //全平台可用
-            usableClientTypeText = "全平台";
-        }else if(webUsable==1){
-            //PC端可用
-            usableClientTypeText = "PC專享";
-        }else if(appUsable==1){
-            //移动端可用
-            usableClientTypeText = "移動端專享";
-        }else if(wechatUsable==1){
-            //微信端可用
-            usableClientTypeText = "微信專享";
-        }
         return usableClientTypeText;
     }
 
@@ -521,12 +493,7 @@ public class CouponActivity implements Serializable,Cloneable {
     }
 
     public int getCompleteState() {
-        if (totalNum>0 && totalNum<=giveoutNum) {
-            this.completeState = 1;
-        }else{
-            this.completeState = 0;
-        }
-        return this.completeState;
+        return completeState;
     }
 
     public void setCompleteState(int completeState) {
@@ -534,11 +501,6 @@ public class CouponActivity implements Serializable,Cloneable {
     }
 
     public String getUseStartTimeText() {
-        if (useStartTime!=null) {
-            useStartTimeText = new SimpleDateFormat("yyyy-MM-dd").format(useStartTime).toString();
-        }else {
-            useStartTimeText = "";
-        }
         return useStartTimeText;
     }
 
@@ -547,11 +509,6 @@ public class CouponActivity implements Serializable,Cloneable {
     }
 
     public String getUseEndTimeText() {
-        if (useEndTime!=null) {
-            useEndTimeText = new SimpleDateFormat("yyyy-MM-dd").format(useEndTime).toString();
-        }else{
-            useEndTimeText = "";
-        }
         return useEndTimeText;
     }
 
@@ -568,16 +525,11 @@ public class CouponActivity implements Serializable,Cloneable {
     }
 
     public String getLimitAmountText() {
-        return "";
+        return limitAmountText;
     }
 
     public void setLimitAmountText(String limitAmountText) {
         this.limitAmountText = limitAmountText;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ftofs.twant.vo.contract;
 
 import java.math.BigDecimal;
+import java.io.Serializable;
 
 /**
  * Copyright: Bizpower多用户商城系统
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
  * @author sjz
  * Created 2017/4/17 11:49
  */
-public class ContractItemBean implements java.io.Serializable {
+public class ContractItemBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer ctiId;

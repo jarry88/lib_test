@@ -1,9 +1,5 @@
 package com.ftofs.twant.domain.logistics;
 
-import com.ftofs.twant.vo.logistics.CargoVo;
-
-
-
 public class Cargo {
     private int cargoId;
 
@@ -53,16 +49,6 @@ public class Cargo {
     private String createTime;
 
     public Cargo(){}
-
-    public Cargo(CargoVo cargoVo){
-        this.cargoName = cargoVo.getName();
-        this.productModel = cargoVo.getProductModel();
-        this.quantity = cargoVo.getQuantity();
-        this.weight = cargoVo.getWeight();
-        this.cargoLong = cargoVo.getCargoLong();
-        this.width = cargoVo.getWidth();
-        this.height = cargoVo.getHeight();
-    }
 
     public int getCargoId() {
         return cargoId;

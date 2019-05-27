@@ -1,6 +1,5 @@
 package com.ftofs.twant.vo;
 
-import com.ftofs.twant.domain.IndexFloorItem;
 import com.ftofs.twant.domain.goods.Brand;
 import com.ftofs.twant.domain.goods.GoodsCommon;
 
@@ -63,16 +62,6 @@ public class IndexFloorItemVo implements Serializable {
      * 携带的品牌数据
      */
     private List<Brand> brands = new ArrayList<Brand>();
-
-    public IndexFloorItemVo(IndexFloorItem indexFloorItem) {
-        this.setFloorId(indexFloorItem.getFloorId());
-        this.setFloorItemId(indexFloorItem.getFloorItemId());
-        this.setFloorItemJson(indexFloorItem.getFloorItemJson());
-        this.setFloorItemKey(indexFloorItem.getFloorItemKey());
-        this.setFloorItemName(indexFloorItem.getFloorItemName());
-        this.setFloorItemSort(indexFloorItem.getFloorItemSort());
-        this.setFloorItemType(indexFloorItem.getFloorItemType());
-    }
 
     public int getFloorItemId() {
         return floorItemId;

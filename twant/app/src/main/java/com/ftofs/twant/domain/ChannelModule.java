@@ -2,7 +2,6 @@ package com.ftofs.twant.domain;
 
 import java.io.Serializable;
 
-
 public class ChannelModule implements Serializable {
     private int moduleId;
 

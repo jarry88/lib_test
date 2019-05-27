@@ -3,8 +3,6 @@ package com.ftofs.twant.domain.orders;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
-
 public class Bill implements Serializable {
     /**
      * 主键、自增

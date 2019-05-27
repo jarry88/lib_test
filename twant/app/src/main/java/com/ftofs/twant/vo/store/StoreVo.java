@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.store;
 
-import com.ftofs.twant.domain.chain.Chain;
-import com.ftofs.twant.domain.store.Store;
-
 import java.util.List;
 
 /**
@@ -232,80 +229,6 @@ public class StoreVo {
      */
     private long goodsCommonCount = 0;
 
-    public StoreVo(){}
-
-    public StoreVo(Store store) {
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.className = store.getClassName();
-        this.storeAddress = store.getStoreAddress();
-        this.storeLogo = store.getStoreLogo();
-        this.storeLogoUrl = store.getStoreLogoUrl();
-        this.storeAvatar = store.getStoreAvatarUrl();
-        this.storeZy = store.getStoreZy();
-        this.isOwnShop = store.getIsOwnShop();
-        this.storeWorkingtime = store.getStoreWorkingtime();
-        this.companyName = store.getCompanyName();
-        this.companyArea = store.getCompanyArea();
-        this.companyAreaId = store.getCompanyAreaId();
-        this.storeFigureImage = store.getStoreFigureImage();
-        this.storePresales = store.getStorePresales();
-        this.storeAftersales = store.getStoreAftersales();
-        this.state = store.getState();
-        this.videoUrl = store.getVideoUrl();
-        this.collectCount = store.getStoreCollect();
-        this.storeSignature = store.getStoreSignature();
-        this.storeIntroduce = store.getStoreIntroduce();
-        this.storeFigureImageInner = store.getStoreFigureImageInner();
-        this.storeFigureImageOuter = store.getStoreFigureImageOuter();
-        this.isOpen = store.getIsOpen();
-        this.weekDayStart = store.getWeekDayStart();
-        this.weekDayEnd = store.getWeekDayEnd();
-        this.restDayStart = store.getRestDayStart();
-        this.restDayEnd = store.getRestDayEnd();
-    }
-
-    public StoreVo(Store store, Chain chain) {
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.className = store.getClassName();
-        this.storeAddress = store.getStoreAddress();
-        this.storeLogo = store.getStoreLogo();
-        this.storeLogoUrl = store.getStoreLogoUrl();
-        this.storeAvatar = store.getStoreAvatarUrl();
-        this.storeZy = store.getStoreZy();
-        this.isOwnShop = store.getIsOwnShop();
-        this.storeWorkingtime = store.getStoreWorkingtime();
-        this.companyName = store.getCompanyName();
-        this.companyArea = store.getCompanyArea();
-        this.companyAreaId = store.getCompanyAreaId();
-        this.storeFigureImage = store.getStoreFigureImage();
-        this.chainAreaInfo = chain.getAreaInfo();
-        this.chainAddress = chain.getAddress();
-        this.chainPhone = chain.getChainPhone();
-        this.chainOpeningTime = chain.getChainOpeningTime();
-        this.storePresales = store.getStorePresales();
-        this.storeAftersales = store.getStoreAftersales();
-        this.state = store.getState();
-        this.videoUrl = store.getVideoUrl();
-        this.collectCount = store.getStoreCollect();
-        this.storeSignature = store.getStoreSignature();
-        this.storeIntroduce = store.getStoreIntroduce();
-        this.lng = chain.getLng();
-        this.lngString = chain.getLngString();
-        this.lat = chain.getLat();
-        this.latString = chain.getLatString();
-        this.storeFigureImageInner = store.getStoreFigureImageInner();
-        this.storeFigureImageOuter = store.getStoreFigureImageOuter();
-        this.sellerName = store.getSellerName();
-        this.isOpen = store.getIsOpen();
-        this.contactsPhone = chain.getContactsPhone();
-        this.weekDayStart = store.getWeekDayStart();
-        this.weekDayEnd = store.getWeekDayEnd();
-        this.restDayStart = store.getRestDayStart();
-        this.restDayEnd = store.getRestDayEnd();
-    }
-
     public int getStoreId() {
         return storeId;
     }
@@ -370,6 +293,14 @@ public class StoreVo {
         this.isOwnShop = isOwnShop;
     }
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
     public String getStoreWorkingtime() {
         return storeWorkingtime;
     }
@@ -408,6 +339,22 @@ public class StoreVo {
 
     public void setStoreFigureImage(String storeFigureImage) {
         this.storeFigureImage = storeFigureImage;
+    }
+
+    public String getStorePresales() {
+        return storePresales;
+    }
+
+    public void setStorePresales(String storePresales) {
+        this.storePresales = storePresales;
+    }
+
+    public String getStoreAftersales() {
+        return storeAftersales;
+    }
+
+    public void setStoreAftersales(String storeAftersales) {
+        this.storeAftersales = storeAftersales;
     }
 
     public String getChainAreaInfo() {
@@ -466,28 +413,12 @@ public class StoreVo {
         this.likeCount = likeCount;
     }
 
-    public String getStorePresales() {
-        return storePresales;
+    public int getIsOpen() {
+        return isOpen;
     }
 
-    public void setStorePresales(String storePresales) {
-        this.storePresales = storePresales;
-    }
-
-    public String getStoreAftersales() {
-        return storeAftersales;
-    }
-
-    public void setStoreAftersales(String storeAftersales) {
-        this.storeAftersales = storeAftersales;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
+    public void setIsOpen(int isOpen) {
+        this.isOpen = isOpen;
     }
 
     public String getVideoUrl() {
@@ -498,12 +429,10 @@ public class StoreVo {
         this.videoUrl = videoUrl;
     }
 
-    @Deprecated
     public List<ServiceVo> getStorePresalesList() {
         return storePresalesList;
     }
 
-    @Deprecated
     public void setStorePresalesList(List<ServiceVo> storePresalesList) {
         this.storePresalesList = storePresalesList;
     }
@@ -556,20 +485,20 @@ public class StoreVo {
         this.lng = lng;
     }
 
-    public Double getLat() {
-        return lat;
-    }
-
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
     public String getLngString() {
         return lngString;
     }
 
     public void setLngString(String lngString) {
         this.lngString = lngString;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
     }
 
     public String getLatString() {
@@ -626,14 +555,6 @@ public class StoreVo {
 
     public void setSellerName(String sellerName) {
         this.sellerName = sellerName;
-    }
-
-    public int getIsOpen() {
-        return isOpen;
-    }
-
-    public void setIsOpen(int isOpen) {
-        this.isOpen = isOpen;
     }
 
     public String getContactsPhone() {

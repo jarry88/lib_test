@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
 
-
 public class StoreReceipt implements Serializable{
     /**
      * 主鍵
@@ -109,6 +108,14 @@ public class StoreReceipt implements Serializable{
         this.companyLogoDisplay = companyLogoDisplay;
     }
 
+    public int getGoodsNoDisplay() {
+        return goodsNoDisplay;
+    }
+
+    public void setGoodsNoDisplay(int goodsNoDisplay) {
+        this.goodsNoDisplay = goodsNoDisplay;
+    }
+
     public String getQrCode() {
         return qrCode;
     }
@@ -163,14 +170,6 @@ public class StoreReceipt implements Serializable{
 
     public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
-    }
-
-    public int getGoodsNoDisplay() {
-        return goodsNoDisplay;
-    }
-
-    public void setGoodsNoDisplay(int goodsNoDisplay) {
-        this.goodsNoDisplay = goodsNoDisplay;
     }
 
     @Override

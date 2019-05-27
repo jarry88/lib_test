@@ -1,14 +1,11 @@
 package com.ftofs.twant.vo.goods;
 
 import com.ftofs.twant.domain.AdminCountry;
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.store.StoreVo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 
 public class GoodsCommonVo implements Serializable{
 	private Integer commonId;
@@ -76,46 +73,6 @@ public class GoodsCommonVo implements Serializable{
      * 店铺信息
      */
 	private StoreVo storeVo;
-
-	public GoodsCommonVo() {
-		super();
-	}
-
-	public GoodsCommonVo(Integer commonId, String goodsName, String goodsImage, BigDecimal goodsPrice0,
-			BigDecimal goodsPrice2, Integer goodsCountry) {
-		super();
-		this.commonId = commonId;
-		this.goodsName = goodsName;
-		this.goodsImage = goodsImage;
-		this.goodsPrice0 = goodsPrice0;
-		this.goodsPrice2 = goodsPrice2;
-		this.goodsCountry = goodsCountry;
-	}
-
-	public GoodsCommonVo(GoodsCommon goodsCommon){
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsImage = goodsCommon.getImageName();
-        this.storeId = goodsCommon.getStoreId();
-        this.goodsVideo = goodsCommon.getGoodsVideo();
-        this.updateTime = goodsCommon.getUpdateTime();
-        this.categoryId1 = goodsCommon.getCategoryId1();
-        this.goodsPrice0 = goodsCommon.getBatchPrice0();
-        this.goodsLike = goodsCommon.getGoodsLike();
-    }
-
-    public GoodsCommonVo(GoodsCommon goodsCommon, Store store){
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsImage = goodsCommon.getImageName();
-        this.storeId = goodsCommon.getStoreId();
-        this.goodsVideo = goodsCommon.getGoodsVideo();
-        this.updateTime = goodsCommon.getUpdateTime();
-        this.categoryId1 = goodsCommon.getCategoryId1();
-        this.goodsPrice0 = goodsCommon.getBatchPrice0();
-        this.goodsLike = goodsCommon.getGoodsLike();
-        this.storeVo = new StoreVo(store);
-    }
 
     public Integer getCommonId() {
         return commonId;

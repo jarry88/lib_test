@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
 
-
 public class PointsGoods implements Serializable {
     /**
      * 积分商品编号

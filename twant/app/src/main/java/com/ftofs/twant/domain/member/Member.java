@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.member;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class Member implements Serializable,Cloneable {
     /**
      * 会员自增编码
@@ -277,6 +276,14 @@ public class Member implements Serializable,Cloneable {
         this.trueName = trueName;
     }
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     public String getMemberPwd() {
         return memberPwd;
     }
@@ -339,6 +346,14 @@ public class Member implements Serializable,Cloneable {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getMobileAreaCode() {
+        return mobileAreaCode;
+    }
+
+    public void setMobileAreaCode(String mobileAreaCode) {
+        this.mobileAreaCode = mobileAreaCode;
     }
 
     public int getMobileIsBind() {
@@ -533,65 +548,44 @@ public class Member implements Serializable,Cloneable {
         this.qqUserInfo = qqUserInfo;
     }
 
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
     public String getAvatarUrl() {
         return avatarUrl;
     }
 
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
     public String getEmailEncrypt() {
-        if (email != null && email.trim().length() > 0) {
-            String[] emailArr = email.split("@");
-            if (emailArr[0].trim().length() > 4) {
-                emailEncrypt = emailArr[0].replaceAll("(.{0,4})(.{4})(.*)", "$1****$3")+"@"+emailArr[1];
-            }else{
-                emailEncrypt = emailArr[0].replaceAll("(.{1})(.{0,4})(.*)", "$1****$3")+"@"+emailArr[1];
-            }
-        }else{
-            emailEncrypt = "";
-        }
         return emailEncrypt;
     }
 
+    public void setEmailEncrypt(String emailEncrypt) {
+        this.emailEncrypt = emailEncrypt;
+    }
+
     public String getMobileEncrypt() {
-        if (mobile != null) {
-            if (mobile.trim().length() > 0 && mobile.trim().length() < 9){
-                //香港澳門手機號隱私文本
-                mobileEncrypt = mobile.substring(0, 2) + "***" + mobile.substring(5, 8);
-            } else {
-                //mobileEncrypt = mobile.replaceAll("([0-9]{3})([0-9]{4})([0-9]{4})","$1****$3");
-                //大陸手機號隱私文本
-                mobileEncrypt = mobile.substring(0, 3) + "*****" + mobile.substring(8, 11);
-            }
-        }else{
-            mobileEncrypt = "";
-        }
         return mobileEncrypt;
     }
 
+    public void setMobileEncrypt(String mobileEncrypt) {
+        this.mobileEncrypt = mobileEncrypt;
+    }
+
     public int getSecurityLevel() {
-        securityLevel = 0;
-        if (mobileIsBind == 1) {
-            securityLevel += 1;
-        }
-        if (payPwd!=null && payPwd.trim().length() >0) {
-            securityLevel += 1;
-        }
         return securityLevel;
     }
 
+    public void setSecurityLevel(int securityLevel) {
+        this.securityLevel = securityLevel;
+    }
+
     public int getPayPwdIsExist() {
-        if (payPwd!=null && payPwd.trim().length()>0) {
-            return 1;
-        }else{
-            return 0;
-        }
+        return payPwdIsExist;
+    }
+
+    public void setPayPwdIsExist(int payPwdIsExist) {
+        this.payPwdIsExist = payPwdIsExist;
     }
 
     public int getIsDistributor() {
@@ -603,22 +597,27 @@ public class Member implements Serializable,Cloneable {
     }
 
     public int getQqIsBind() {
-        return 0;
+        return qqIsBind;
+    }
+
+    public void setQqIsBind(int qqIsBind) {
+        this.qqIsBind = qqIsBind;
     }
 
     public int getWeixinIsBind() {
-        return 0;
+        return weixinIsBind;
+    }
+
+    public void setWeixinIsBind(int weixinIsBind) {
+        this.weixinIsBind = weixinIsBind;
     }
 
     public String getMemberSexText() {
-        if (memberSex==1) {
-            memberSexText = "男";
-        }else if (memberSex==2) {
-            memberSexText = "女";
-        }else{
-            memberSexText = "保密";
-        }
         return memberSexText;
+    }
+
+    public void setMemberSexText(String memberSexText) {
+        this.memberSexText = memberSexText;
     }
 
     public String getIdCard() {
@@ -627,19 +626,6 @@ public class Member implements Serializable,Cloneable {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-
-    public String getMobileAreaCode() {
-        return mobileAreaCode;
-    }
-
-    public void setMobileAreaCode(String mobileAreaCode) {
-        this.mobileAreaCode = mobileAreaCode;
     }
 
     public String getMemberSignature() {

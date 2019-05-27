@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.promotion;
 
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.promotion.PointsGoods;
-
 import java.math.BigDecimal;
 
 /**
@@ -56,19 +53,6 @@ public class PointsGoodsVo {
      * 商品最低价
      */
     private BigDecimal wechatPriceMin;
-
-    public PointsGoodsVo(PointsGoods pointsGoods, GoodsCommon goodsCommon) {
-        this.pointsGoodsId = pointsGoods.getPointsGoodsId();
-        this.expendPoints = pointsGoods.getExpendPoints();
-        this.limitMemberGradeLevel = pointsGoods.getLimitMemberGradeLevel();
-        this.limitMemberGradeName = pointsGoods.getLimitMemberGradeName();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.wechatPriceMin = goodsCommon.getWechatPriceMin();
-    }
 
     public int getPointsGoodsId() {
         return pointsGoodsId;

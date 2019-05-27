@@ -1,9 +1,7 @@
 package com.ftofs.twant.vo.member;
 
-import com.ftofs.twant.domain.complain.Complain;
 import com.ftofs.twant.vo.store.ServiceVo;
 import com.ftofs.twant.vo.store.StoreServiceStaffVo;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -198,55 +196,6 @@ public class ComplainVo {
      */
     private List<ServiceVo> storePresalesList;
     private List<StoreServiceStaffVo> storeServiceStaffVoList;
-
-    public ComplainVo(){}
-
-    public ComplainVo(Complain complain) {
-        this.complainId = complain.getComplainId();
-        this.ordersId = complain.getOrdersId();
-        this.ordersSn = complain.getOrdersSn();
-        this.ordersGoodsId = complain.getOrdersGoodsId();
-        this.goodsId = complain.getGoodsId();
-        this.commonId = complain.getCommonId();
-        this.goodsName = complain.getGoodsName();
-        this.goodsImage = complain.getGoodsImage();
-        this.goodsFullSpecs = complain.getGoodsFullSpecs();
-        this.accuserId = complain.getAccuserId();
-        this.accuserName = complain.getAccuserName();
-        this.accusedSellerId = complain.getAccusedSellerId();
-        this.accusedId = complain.getAccusedId();
-        this.accusedName = complain.getAccusedName();
-        this.subjectId = complain.getSubjectId();
-        this.subjectTitle = complain.getSubjectTitle();
-        this.accuserContent = complain.getAccuserContent();
-        this.accuserImages = complain.getAccuserImages();
-        this.accuserTime = complain.getAccuserTime();
-        this.adminCheckTime = complain.getAdminCheckTime();
-        this.adminCheckName = complain.getAdminCheckName();
-        this.adminCheckContent = complain.getAdminCheckContent();
-        this.accusedTime = complain.getAccusedTime();
-        this.accusedContent = complain.getAccusedContent();
-        this.accusedImages = complain.getAccusedImages();
-        this.adminConfirmTime = complain.getAdminConfirmTime();
-        this.adminConfirmContent = complain.getAdminConfirmContent();
-        this.adminConfirmName = complain.getAdminConfirmName();
-        this.complainState = complain.getComplainState();
-        this.complainStateName = complain.getComplainStateName();
-        this.accuserImagesList = complain.getAccuserImagesList();
-        this.accusedImagesList = complain.getAccusedImagesList();
-        this.showMemberClose = complain.getShowMemberClose();
-        this.showAccuserUploadImages = complain.getShowAccuserUploadImages();
-        this.showAdminHandle = complain.getShowAdminHandle();
-        this.showStoreHandle = complain.getShowStoreHandle();
-        this.isComplainStateCancel = complain.getIsComplainStateCancel();
-        this.isComplainStateNew = complain.getIsComplainStateNew();
-        this.isComplainStateAccess = complain.getIsComplainStateAccess();
-        this.isComplainStateTalk = complain.getIsComplainStateTalk();
-        this.isComplainStateStopTalk = complain.getIsComplainStateStopTalk();
-        this.isComplainStateFinish = complain.getIsComplainStateFinish();
-        this.showTalkAdd = complain.getShowTalkAdd();
-        this.showTalkList = complain.getShowTalkList();
-    }
 
     public int getComplainId() {
         return complainId;
@@ -606,10 +555,6 @@ public class ComplainVo {
 
     public void setStorePresalesList(List<ServiceVo> storePresalesList) {
         this.storePresalesList = storePresalesList;
-    }
-
-    public String getImageSrc() {
-        return goodsImage;
     }
 
     public List<StoreServiceStaffVo> getStoreServiceStaffVoList() {

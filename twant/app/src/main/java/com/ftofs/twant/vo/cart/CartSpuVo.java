@@ -86,8 +86,6 @@ public class CartSpuVo {
      */
     private int goodsType;
 
-    public CartSpuVo(){}
-
     public List<CartItemVo> getCartItemVoList() {
         return cartItemVoList;
     }
@@ -176,6 +174,14 @@ public class CartSpuVo {
         this.goodsStatus = goodsStatus;
     }
 
+    public int getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(int isValid) {
+        this.isValid = isValid;
+    }
+
     public int getBuyNum() {
         return buyNum;
     }
@@ -192,14 +198,6 @@ public class CartSpuVo {
         this.bundlingId = bundlingId;
     }
 
-    public int getRealCommonId() {
-        return realCommonId;
-    }
-
-    public void setRealCommonId(int realCommonId) {
-        this.realCommonId = realCommonId;
-    }
-
     public int getChainId() {
         return chainId;
     }
@@ -208,15 +206,12 @@ public class CartSpuVo {
         this.chainId = chainId;
     }
 
-    /**
-     * @return
-     */
-    public int getIsValid() {
-        return this.isValid;
+    public int getRealCommonId() {
+        return realCommonId;
     }
 
-    public void setIsValid(int isValid) {
-        this.isValid = isValid;
+    public void setRealCommonId(int realCommonId) {
+        this.realCommonId = realCommonId;
     }
 
     public int getGoodsType() {

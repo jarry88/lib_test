@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import java.io.Serializable;
 
-
 public class StoreMessage implements Serializable {
     /**
      * 消息编号
@@ -116,7 +115,11 @@ public class StoreMessage implements Serializable {
     }
 
     public String getMessageUrl() {
-       return messageUrl;
+        return messageUrl;
+    }
+
+    public void setMessageUrl(String messageUrl) {
+        this.messageUrl = messageUrl;
     }
 
     @Override

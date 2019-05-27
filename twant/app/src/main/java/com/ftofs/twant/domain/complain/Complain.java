@@ -1,6 +1,5 @@
 package com.ftofs.twant.domain.complain;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

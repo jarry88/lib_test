@@ -24,12 +24,6 @@ public class BuyGoodsItemLiteVo {
      */
     private String imageSrc;
 
-    public BuyGoodsItemLiteVo(String goodsName, String goodsFullSpecs, String imageSrc) {
-        this.goodsName = goodsName;
-        this.goodsFullSpecs = goodsFullSpecs;
-        this.imageSrc = imageSrc;
-    }
-
     public String getGoodsName() {
         return goodsName;
     }

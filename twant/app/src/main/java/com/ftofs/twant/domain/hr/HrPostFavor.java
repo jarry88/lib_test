@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.hr;
 
 import java.io.Serializable;
 
-
 public class HrPostFavor implements Serializable {
 
     /**

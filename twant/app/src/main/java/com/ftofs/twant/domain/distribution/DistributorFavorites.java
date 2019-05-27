@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
 
-
 public class DistributorFavorites implements Serializable {
     /**
      * 编号
