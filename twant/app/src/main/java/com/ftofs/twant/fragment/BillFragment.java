@@ -96,6 +96,15 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
         adapter = new OrderListAdapter(_mActivity, R.layout.order_item, orderItemList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("onItemClick");
+
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(OrderDetailFragment.newInstance(1));
+            }
+        });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {

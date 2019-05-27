@@ -228,6 +228,11 @@ public class Api {
      */
     public static final String PATH_ORDER_LIST = "/member/orders/list";
 
+    /**
+     * 訂單詳情
+     */
+    public static final String PATH_ORDER_DETAIL = "/member/orders/info";
+
 
 
     /**
