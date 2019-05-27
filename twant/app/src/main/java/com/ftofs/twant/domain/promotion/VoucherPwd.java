@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
 
-
 public class VoucherPwd implements Serializable {
     /**
      * 自增编码

@@ -3,8 +3,6 @@ package com.ftofs.twant.domain.promotion;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
-
 public class Voucher implements Serializable {
     /**
      * 自增编码
@@ -295,20 +293,20 @@ public class Voucher implements Serializable {
         this.memberId = memberId;
     }
 
-    public int getOrdersId() {
-        return ordersId;
-    }
-
-    public void setOrdersId(int ordersId) {
-        this.ordersId = ordersId;
-    }
-
     public String getMemberName() {
         return memberName;
     }
 
     public void setMemberName(String memberName) {
         this.memberName = memberName;
+    }
+
+    public int getOrdersId() {
+        return ordersId;
+    }
+
+    public void setOrdersId(int ordersId) {
+        this.ordersId = ordersId;
     }
 
     public long getOrdersSn() {
@@ -336,7 +334,6 @@ public class Voucher implements Serializable {
     }
 
     public String getStartTimeText() {
-        startTimeText = new SimpleDateFormat("yyyy-MM-dd").format(startTime).toString();
         return startTimeText;
     }
 
@@ -345,7 +342,6 @@ public class Voucher implements Serializable {
     }
 
     public String getEndTimeText() {
-        endTimeText = new SimpleDateFormat("yyyy-MM-dd").format(endTime).toString();
         return endTimeText;
     }
 
@@ -362,19 +358,6 @@ public class Voucher implements Serializable {
     }
 
     public String getVoucherUsableClientType() {
-        if (webUsable==1 && appUsable==1 && wechatUsable==1) {
-            //全平台可用
-            voucherUsableClientType = "all";
-        }else if(webUsable==1){
-            //PC端可用
-            voucherUsableClientType = "web";
-        }else if(appUsable==1){
-            //移动端可用
-            voucherUsableClientType = "app";
-        }else if(wechatUsable==1){
-            //微信端可用
-            voucherUsableClientType = "wechat";
-        }
         return voucherUsableClientType;
     }
 
@@ -383,19 +366,6 @@ public class Voucher implements Serializable {
     }
 
     public String getVoucherUsableClientTypeText() {
-        if (webUsable==1 && appUsable==1 && wechatUsable==1) {
-            //全平台可用
-            voucherUsableClientTypeText = "全平台適用";
-        }else if(webUsable==1){
-            //PC端可用
-            voucherUsableClientTypeText = "PC專享";
-        }else if(appUsable==1){
-            //移动端可用
-            voucherUsableClientTypeText = "移動端專享";
-        }else if(wechatUsable==1){
-            //微信端可用
-            voucherUsableClientTypeText = "微信專享";
-        }
         return voucherUsableClientTypeText;
     }
 
@@ -404,7 +374,7 @@ public class Voucher implements Serializable {
     }
 
     public String getLimitAmountText() {
-        return "";
+        return limitAmountText;
     }
 
     public void setLimitAmountText(String limitAmountText) {

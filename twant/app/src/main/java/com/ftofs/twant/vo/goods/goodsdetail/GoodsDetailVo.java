@@ -2,13 +2,11 @@ package com.ftofs.twant.vo.goods.goodsdetail;
 
 import com.ftofs.twant.domain.AdminCountry;
 import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
 import com.ftofs.twant.domain.goods.GoodsImage;
 import com.ftofs.twant.vo.goods.GoodsInfoVo;
 import com.ftofs.twant.domain.promotion.Book;
 import com.ftofs.twant.domain.promotion.Conform;
 import com.ftofs.twant.domain.promotion.Discount;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.contract.ContractVo;
 import com.ftofs.twant.vo.goods.SpecJsonVo;
 import com.ftofs.twant.vo.promotion.GiftVo;
@@ -17,7 +15,6 @@ import com.ftofs.twant.vo.store.StoreVo;
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -422,178 +419,116 @@ public class GoodsDetailVo {
      */
     private StoreVo storeVo;
 
-    public GoodsDetailVo(GoodsCommon goodsCommon) {
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsCountry = goodsCommon.getGoodsCountry();
-        this.jingle = goodsCommon.getJingle();
-        this.categoryId = goodsCommon.getCategoryId();
-        this.storeId = goodsCommon.getStoreId();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.areaId1 = goodsCommon.getAreaId1();
-        this.areaId2 = goodsCommon.getAreaId2();
-        this.goodsFavorite = goodsCommon.getGoodsFavorite();
-        this.evaluateNum = goodsCommon.getEvaluateNum();
-        this.goodsRate = goodsCommon.getGoodsRate();
-        this.goodsSaleNum = goodsCommon.getGoodsSaleNum();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        if (goodsCommon.getGoodsSpecNames() != null  && !goodsCommon.getGoodsSpecNames().isEmpty()) {
-            this.goodsSpecNameList = Arrays.asList(goodsCommon.getGoodsSpecNames().split(","));
-        }
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchPrice0 = goodsCommon.getBatchPrice0();
-        this.batchPrice1 = goodsCommon.getBatchPrice1();
-        this.batchPrice2 = goodsCommon.getBatchPrice2();
-        this.webPrice0 = goodsCommon.getWebPrice0();
-        this.webPrice1 = goodsCommon.getWebPrice1();
-        this.webPrice2 = goodsCommon.getWebPrice2();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.webUsable = goodsCommon.getWebUsable();
-        this.appPrice0 = goodsCommon.getAppPrice0();
-        this.appPrice1 = goodsCommon.getAppPrice1();
-        this.appPrice2 = goodsCommon.getAppPrice2();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.appUsable = goodsCommon.getAppUsable();
-        this.wechatPrice0 = goodsCommon.getWechatPrice0();
-        this.wechatPrice1 = goodsCommon.getWechatPrice1();
-        this.wechatPrice2 = goodsCommon.getWechatPrice2();
-        this.wechatPriceMin = goodsCommon.getWechatPriceMin();
-        this.wechatUsable = goodsCommon.getWechatUsable();
-        this.promotionId = goodsCommon.getPromotionId();
-        this.promotionStartTime = goodsCommon.getPromotionStartTime();
-        this.promotionEndTime = goodsCommon.getPromotionEndTime();
-        this.promotionType = goodsCommon.getPromotionType();
-        this.promotionTypeText = goodsCommon.getPromotionTypeText();
-        this.promotionState = goodsCommon.getPromotionState();
-        this.unitName = goodsCommon.getUnitName();
-        this.isGift = goodsCommon.getIsGift();
-        this.groupId = goodsCommon.getGroupId();
-        this.web = goodsCommon.getWeb();
-        this.app = goodsCommon.getApp();
-        this.wechat = goodsCommon.getWechat();
-        this.virtualOverdueRefund = goodsCommon.getVirtualOverdueRefund();
-        this.foreignTaxRate = goodsCommon.getForeignTaxRate();
-        this.isVirtual = goodsCommon.getIsVirtual();
-        this.goodsVideo = goodsCommon.getGoodsVideo();
-        this.detailVideo = goodsCommon.getDetailVideo();
-        this.isWaterMark = goodsCommon.getIsWaterMark();
-        this.waterMarkImage = goodsCommon.getWaterMarkImage();
-        this.waterMarkPosition = goodsCommon.getWaterMarkPosition();
-        this.goodsLike = goodsCommon.getGoodsLike();
-        this.goodsImageList = goodsCommon.getGoodsImageList();
-        this.commentCount = goodsCommon.getCommentCount() == null ? 0 : goodsCommon.getCommentCount() ;
+    public int getGoodsId() {
+        return goodsId;
     }
 
-    public GoodsDetailVo(GoodsCommon goodsCommon, Store store) {
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsCountry = goodsCommon.getGoodsCountry();
-        this.jingle = goodsCommon.getJingle();
-        this.categoryId = goodsCommon.getCategoryId();
-        this.storeId = goodsCommon.getStoreId();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.areaId1 = goodsCommon.getAreaId1();
-        this.areaId2 = goodsCommon.getAreaId2();
-        this.goodsFavorite = goodsCommon.getGoodsFavorite();
-        this.evaluateNum = goodsCommon.getEvaluateNum();
-        this.goodsRate = goodsCommon.getGoodsRate();
-        this.goodsSaleNum = goodsCommon.getGoodsSaleNum();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchPrice0 = goodsCommon.getBatchPrice0();
-        this.batchPrice1 = goodsCommon.getBatchPrice1();
-        this.batchPrice2 = goodsCommon.getBatchPrice2();
-        this.webPrice0 = goodsCommon.getWebPrice0();
-        this.webPrice1 = goodsCommon.getWebPrice1();
-        this.webPrice2 = goodsCommon.getWebPrice2();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.webUsable = goodsCommon.getWebUsable();
-        this.appPrice0 = goodsCommon.getAppPrice0();
-        this.appPrice1 = goodsCommon.getAppPrice1();
-        this.appPrice2 = goodsCommon.getAppPrice2();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.appUsable = goodsCommon.getAppUsable();
-        this.wechatPrice0 = goodsCommon.getWechatPrice0();
-        this.wechatPrice1 = goodsCommon.getWechatPrice1();
-        this.wechatPrice2 = goodsCommon.getWechatPrice2();
-        this.wechatPriceMin = goodsCommon.getWechatPriceMin();
-        this.wechatUsable = goodsCommon.getWechatUsable();
-        this.promotionId = goodsCommon.getPromotionId();
-        this.promotionStartTime = goodsCommon.getPromotionStartTime();
-        this.promotionEndTime = goodsCommon.getPromotionEndTime();
-        this.promotionType = goodsCommon.getPromotionType();
-        this.promotionTypeText = goodsCommon.getPromotionTypeText();
-        this.promotionState = goodsCommon.getPromotionState();
-        this.unitName = goodsCommon.getUnitName();
-        this.isGift = goodsCommon.getIsGift();
-        this.groupId = goodsCommon.getGroupId();
-        this.web = goodsCommon.getWeb();
-        this.app = goodsCommon.getApp();
-        this.wechat = goodsCommon.getWechat();
-        this.virtualOverdueRefund = goodsCommon.getVirtualOverdueRefund();
-        this.foreignTaxRate = goodsCommon.getForeignTaxRate();
-        this.isVirtual = goodsCommon.getIsVirtual();
-        this.goodsVideo = goodsCommon.getGoodsVideo();
-        this.detailVideo = goodsCommon.getDetailVideo();
-        this.isWaterMark = goodsCommon.getIsWaterMark();
-        this.waterMarkImage = goodsCommon.getWaterMarkImage();
-        this.waterMarkPosition = goodsCommon.getWaterMarkPosition();
-        this.goodsLike = goodsCommon.getGoodsLike();
-        this.goodsImageList = goodsCommon.getGoodsImageList();
-        this.commentCount = goodsCommon.getCommentCount() == null ? 0 : goodsCommon.getCommentCount() ;
-        this.storeVo = new StoreVo(store);
+    public void setGoodsId(int goodsId) {
+        this.goodsId = goodsId;
     }
 
-    public BigDecimal getAppPriceMin() {
-        return appPriceMin;
+    public int getCommonId() {
+        return commonId;
     }
 
-    public void setAppPriceMin(BigDecimal appPriceMin) {
-        this.appPriceMin = appPriceMin;
+    public void setCommonId(int commonId) {
+        this.commonId = commonId;
     }
 
-    public BigDecimal getAppPrice0() {
-        return appPrice0;
+    public String getGoodsName() {
+        return goodsName;
     }
 
-    public void setAppPrice0(BigDecimal appPrice0) {
-        this.appPrice0 = appPrice0;
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
-    public BigDecimal getAppPrice1() {
-        return appPrice1;
+    public Integer getGoodsCountry() {
+        return goodsCountry;
     }
 
-    public void setAppPrice1(BigDecimal appPrice1) {
-        this.appPrice1 = appPrice1;
+    public void setGoodsCountry(Integer goodsCountry) {
+        this.goodsCountry = goodsCountry;
     }
 
-    public BigDecimal getAppPrice2() {
-        return appPrice2;
+    public String getJingle() {
+        return jingle;
     }
 
-    public void setAppPrice2(BigDecimal appPrice2) {
-        this.appPrice2 = appPrice2;
+    public void setJingle(String jingle) {
+        this.jingle = jingle;
     }
 
-    public int getAppUsable() {
-        return appUsable;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setAppUsable(int appUsable) {
-        this.appUsable = appUsable;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getGoodsQRCode() {
+        return goodsQRCode;
+    }
+
+    public void setGoodsQRCode(String goodsQRCode) {
+        this.goodsQRCode = goodsQRCode;
+    }
+
+    public int getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
+    }
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
+    public String getGoodsBody() {
+        return goodsBody;
+    }
+
+    public void setGoodsBody(String goodsBody) {
+        this.goodsBody = goodsBody;
+    }
+
+    public String getMobileBody() {
+        return mobileBody;
+    }
+
+    public void setMobileBody(String mobileBody) {
+        this.mobileBody = mobileBody;
+    }
+
+    public String getGoodsSerial() {
+        return goodsSerial;
+    }
+
+    public void setGoodsSerial(String goodsSerial) {
+        this.goodsSerial = goodsSerial;
+    }
+
+    public int getGoodsStatus() {
+        return goodsStatus;
+    }
+
+    public void setGoodsStatus(int goodsStatus) {
+        this.goodsStatus = goodsStatus;
+    }
+
+    public int getColorId() {
+        return colorId;
+    }
+
+    public void setColorId(int colorId) {
+        this.colorId = colorId;
     }
 
     public int getAreaId1() {
@@ -610,6 +545,126 @@ public class GoodsDetailVo {
 
     public void setAreaId2(int areaId2) {
         this.areaId2 = areaId2;
+    }
+
+    public int getGoodsFavorite() {
+        return goodsFavorite;
+    }
+
+    public void setGoodsFavorite(int goodsFavorite) {
+        this.goodsFavorite = goodsFavorite;
+    }
+
+    public int getGoodsClick() {
+        return goodsClick;
+    }
+
+    public void setGoodsClick(int goodsClick) {
+        this.goodsClick = goodsClick;
+    }
+
+    public Integer getEvaluateNum() {
+        return evaluateNum;
+    }
+
+    public void setEvaluateNum(Integer evaluateNum) {
+        this.evaluateNum = evaluateNum;
+    }
+
+    public Integer getGoodsRate() {
+        return goodsRate;
+    }
+
+    public void setGoodsRate(Integer goodsRate) {
+        this.goodsRate = goodsRate;
+    }
+
+    public int getGoodsSaleNum() {
+        return goodsSaleNum;
+    }
+
+    public void setGoodsSaleNum(int goodsSaleNum) {
+        this.goodsSaleNum = goodsSaleNum;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+    public int getJoinBigSale() {
+        return joinBigSale;
+    }
+
+    public void setJoinBigSale(int joinBigSale) {
+        this.joinBigSale = joinBigSale;
+    }
+
+    public List<SpecJsonVo> getSpecJson() {
+        return specJson;
+    }
+
+    public void setSpecJson(List<SpecJsonVo> specJson) {
+        this.specJson = specJson;
+    }
+
+    public List<String> getGoodsSpecNameList() {
+        return goodsSpecNameList;
+    }
+
+    public void setGoodsSpecNameList(List<String> goodsSpecNameList) {
+        this.goodsSpecNameList = goodsSpecNameList;
+    }
+
+    public String getGoodsSpecValues() {
+        return goodsSpecValues;
+    }
+
+    public void setGoodsSpecValues(String goodsSpecValues) {
+        this.goodsSpecValues = goodsSpecValues;
+    }
+
+    public List<GoodsSpecValueJsonVo> getGoodsSpecValueJson() {
+        return goodsSpecValueJson;
+    }
+
+    public void setGoodsSpecValueJson(List<GoodsSpecValueJsonVo> goodsSpecValueJson) {
+        this.goodsSpecValueJson = goodsSpecValueJson;
+    }
+
+    public List<GoodsImage> getGoodsImageList() {
+        return goodsImageList;
+    }
+
+    public void setGoodsImageList(List<GoodsImage> goodsImageList) {
+        this.goodsImageList = goodsImageList;
+    }
+
+    public List<GoodsAttrVo> getGoodsAttrList() {
+        return goodsAttrList;
+    }
+
+    public void setGoodsAttrList(List<GoodsAttrVo> goodsAttrList) {
+        this.goodsAttrList = goodsAttrList;
+    }
+
+    public List<Goods> getGoodsList() {
+        return goodsList;
+    }
+
+    public void setGoodsList(List<Goods> goodsList) {
+        this.goodsList = goodsList;
+    }
+
+    public int getGoodsModal() {
+        return goodsModal;
+    }
+
+    public void setGoodsModal(int goodsModal) {
+        this.goodsModal = goodsModal;
     }
 
     public int getBatchNum0() {
@@ -676,318 +731,6 @@ public class GoodsDetailVo {
         this.batchPrice2 = batchPrice2;
     }
 
-    public int getBrandId() {
-        return brandId;
-    }
-
-    public void setBrandId(int brandId) {
-        this.brandId = brandId;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public int getColorId() {
-        return colorId;
-    }
-
-    public void setColorId(int colorId) {
-        this.colorId = colorId;
-    }
-
-    public int getCommonId() {
-        return commonId;
-    }
-
-    public void setCommonId(int commonId) {
-        this.commonId = commonId;
-    }
-
-    public List<Conform> getConformList() {
-        return conformList;
-    }
-
-    public void setConformList(List<Conform> conformList) {
-        this.conformList = conformList;
-    }
-
-    public Discount getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Discount discount) {
-        this.discount = discount;
-    }
-
-    public Integer getEvaluateNum() {
-        return evaluateNum;
-    }
-
-    public void setEvaluateNum(Integer evaluateNum) {
-        this.evaluateNum = evaluateNum;
-    }
-
-    public List<GoodsAttrVo> getGoodsAttrList() {
-        return goodsAttrList;
-    }
-
-    public void setGoodsAttrList(List<GoodsAttrVo> goodsAttrList) {
-        this.goodsAttrList = goodsAttrList;
-    }
-
-    public String getGoodsBody() {
-        return goodsBody;
-    }
-
-    public void setGoodsBody(String goodsBody) {
-        this.goodsBody = goodsBody;
-    }
-
-    public String getMobileBody() {
-        return mobileBody;
-    }
-
-    public void setMobileBody(String mobileBody) {
-        this.mobileBody = mobileBody;
-    }
-
-    public int getGoodsClick() {
-        return goodsClick;
-    }
-
-    public void setGoodsClick(int goodsClick) {
-        this.goodsClick = goodsClick;
-    }
-
-    public int getGoodsFavorite() {
-        return goodsFavorite;
-    }
-
-    public void setGoodsFavorite(int goodsFavorite) {
-        this.goodsFavorite = goodsFavorite;
-    }
-
-    public int getGoodsId() {
-        return goodsId;
-    }
-
-    public void setGoodsId(int goodsId) {
-        this.goodsId = goodsId;
-    }
-
-    public List<GoodsImage> getGoodsImageList() {
-        return goodsImageList;
-    }
-
-    public void setGoodsImageList(List<GoodsImage> goodsImageList) {
-        this.goodsImageList = goodsImageList;
-    }
-
-    public List<Goods> getGoodsList() {
-        return goodsList;
-    }
-
-    public void setGoodsList(List<Goods> goodsList) {
-        this.goodsList = goodsList;
-    }
-
-    public int getGoodsModal() {
-        return goodsModal;
-    }
-
-    public void setGoodsModal(int goodsModal) {
-        this.goodsModal = goodsModal;
-    }
-
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public String getGoodsQRCode() {
-        return "";
-    }
-
-    public void setGoodsQRCode(String goodsQRCode) {
-        this.goodsQRCode = goodsQRCode;
-    }
-
-    public Integer getGoodsRate() {
-        return goodsRate;
-    }
-
-    public void setGoodsRate(Integer goodsRate) {
-        this.goodsRate = goodsRate;
-    }
-
-    public int getGoodsSaleNum() {
-        return goodsSaleNum;
-    }
-
-    public void setGoodsSaleNum(int goodsSaleNum) {
-        this.goodsSaleNum = goodsSaleNum;
-    }
-
-    public String getGoodsSerial() {
-        return goodsSerial;
-    }
-
-    public void setGoodsSerial(String goodsSerial) {
-        this.goodsSerial = goodsSerial;
-    }
-
-    public List<String> getGoodsSpecNameList() {
-        return goodsSpecNameList;
-    }
-
-    public void setGoodsSpecNameList(List<String> goodsSpecNameList) {
-        this.goodsSpecNameList = goodsSpecNameList;
-    }
-
-    public List<GoodsSpecValueJsonVo> getGoodsSpecValueJson() {
-        return goodsSpecValueJson;
-    }
-
-    public void setGoodsSpecValueJson(List<GoodsSpecValueJsonVo> goodsSpecValueJson) {
-        this.goodsSpecValueJson = goodsSpecValueJson;
-    }
-
-    public String getGoodsSpecValues() {
-        return goodsSpecValues;
-    }
-
-    public void setGoodsSpecValues(String goodsSpecValues) {
-        this.goodsSpecValues = goodsSpecValues;
-    }
-
-    public int getGoodsStatus() {
-        return goodsStatus;
-    }
-
-    public void setGoodsStatus(int goodsStatus) {
-        this.goodsStatus = goodsStatus;
-    }
-
-    public String getImageSrc() {
-        return imageSrc;
-    }
-
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
-    }
-
-    public int getJoinBigSale() {
-        return joinBigSale;
-    }
-
-    public void setJoinBigSale(int joinBigSale) {
-        this.joinBigSale = joinBigSale;
-    }
-
-    public String getJingle() {
-        return jingle;
-    }
-
-    public void setJingle(String jingle) {
-        this.jingle = jingle;
-    }
-
-    public long getPromotionCountDownTime() {
-        return promotionCountDownTime;
-    }
-
-    public void setPromotionCountDownTime(long promotionCountDownTime) {
-        this.promotionCountDownTime = promotionCountDownTime;
-    }
-
-    public String getPromotionCountDownTimeType() {
-        return promotionCountDownTimeType;
-    }
-
-    public void setPromotionCountDownTimeType(String promotionCountDownTimeType) {
-        this.promotionCountDownTimeType = promotionCountDownTimeType;
-    }
-
-    public int getPromotionId() {
-        return promotionId;
-    }
-
-    public void setPromotionId(int promotionId) {
-        this.promotionId = promotionId;
-    }
-
-    public String getPromotionStartTime() {
-        return promotionStartTime;
-    }
-
-    public void setPromotionStartTime(String promotionStartTime) {
-        this.promotionStartTime = promotionStartTime;
-    }
-
-    public String getPromotionEndTime() {
-        return promotionEndTime;
-    }
-
-    public void setPromotionEndTime(String promotionEndTime) {
-        this.promotionEndTime = promotionEndTime;
-    }
-
-    public int getPromotionState() {
-        return promotionState;
-    }
-
-    public void setPromotionState(int promotionState) {
-        this.promotionState = promotionState;
-    }
-
-    public int getPromotionType() {
-        return promotionType;
-    }
-
-    public void setPromotionType(int promotionType) {
-        this.promotionType = promotionType;
-    }
-
-    public String getPromotionTypeText() {
-        return promotionTypeText;
-    }
-
-    public void setPromotionTypeText(String promotionTypeText) {
-        this.promotionTypeText = promotionTypeText;
-    }
-
-    public List<SpecJsonVo> getSpecJson() {
-        return specJson;
-    }
-
-    public void setSpecJson(List<SpecJsonVo> specJson) {
-        this.specJson = specJson;
-    }
-
-    public int getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(int storeId) {
-        this.storeId = storeId;
-    }
-
-    public String getUnitName() {
-        return unitName;
-    }
-
-    public void setUnitName(String unitName) {
-        this.unitName = unitName;
-    }
-
     public BigDecimal getWebPrice0() {
         return webPrice0;
     }
@@ -1026,6 +769,46 @@ public class GoodsDetailVo {
 
     public void setWebUsable(int webUsable) {
         this.webUsable = webUsable;
+    }
+
+    public BigDecimal getAppPrice0() {
+        return appPrice0;
+    }
+
+    public void setAppPrice0(BigDecimal appPrice0) {
+        this.appPrice0 = appPrice0;
+    }
+
+    public BigDecimal getAppPrice1() {
+        return appPrice1;
+    }
+
+    public void setAppPrice1(BigDecimal appPrice1) {
+        this.appPrice1 = appPrice1;
+    }
+
+    public BigDecimal getAppPrice2() {
+        return appPrice2;
+    }
+
+    public void setAppPrice2(BigDecimal appPrice2) {
+        this.appPrice2 = appPrice2;
+    }
+
+    public BigDecimal getAppPriceMin() {
+        return appPriceMin;
+    }
+
+    public void setAppPriceMin(BigDecimal appPriceMin) {
+        this.appPriceMin = appPriceMin;
+    }
+
+    public int getAppUsable() {
+        return appUsable;
+    }
+
+    public void setAppUsable(int appUsable) {
+        this.appUsable = appUsable;
     }
 
     public BigDecimal getWechatPrice0() {
@@ -1068,8 +851,92 @@ public class GoodsDetailVo {
         this.wechatUsable = wechatUsable;
     }
 
-    public List<Book> getBookList() {
-        return bookList;
+    public int getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(int promotionId) {
+        this.promotionId = promotionId;
+    }
+
+    public String getPromotionStartTime() {
+        return promotionStartTime;
+    }
+
+    public void setPromotionStartTime(String promotionStartTime) {
+        this.promotionStartTime = promotionStartTime;
+    }
+
+    public String getPromotionEndTime() {
+        return promotionEndTime;
+    }
+
+    public void setPromotionEndTime(String promotionEndTime) {
+        this.promotionEndTime = promotionEndTime;
+    }
+
+    public int getPromotionType() {
+        return promotionType;
+    }
+
+    public void setPromotionType(int promotionType) {
+        this.promotionType = promotionType;
+    }
+
+    public String getPromotionTypeText() {
+        return promotionTypeText;
+    }
+
+    public void setPromotionTypeText(String promotionTypeText) {
+        this.promotionTypeText = promotionTypeText;
+    }
+
+    public long getPromotionCountDownTime() {
+        return promotionCountDownTime;
+    }
+
+    public void setPromotionCountDownTime(long promotionCountDownTime) {
+        this.promotionCountDownTime = promotionCountDownTime;
+    }
+
+    public String getPromotionCountDownTimeType() {
+        return promotionCountDownTimeType;
+    }
+
+    public void setPromotionCountDownTimeType(String promotionCountDownTimeType) {
+        this.promotionCountDownTimeType = promotionCountDownTimeType;
+    }
+
+    public int getPromotionState() {
+        return promotionState;
+    }
+
+    public void setPromotionState(int promotionState) {
+        this.promotionState = promotionState;
+    }
+
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+
+    public Discount getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Discount discount) {
+        this.discount = discount;
+    }
+
+    public List<Conform> getConformList() {
+        return conformList;
+    }
+
+    public void setConformList(List<Conform> conformList) {
+        this.conformList = conformList;
     }
 
     public Book getBook() {
@@ -1078,6 +945,10 @@ public class GoodsDetailVo {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public List<Book> getBookList() {
+        return bookList;
     }
 
     public void setBookList(List<Book> bookList) {
@@ -1236,14 +1107,6 @@ public class GoodsDetailVo {
         this.waterMarkPosition = waterMarkPosition;
     }
 
-    public Integer getGoodsCountry() {
-        return goodsCountry;
-    }
-
-    public void setGoodsCountry(Integer goodsCountry) {
-        this.goodsCountry = goodsCountry;
-    }
-
     public AdminCountry getAdminCountry() {
         return adminCountry;
     }
@@ -1268,14 +1131,6 @@ public class GoodsDetailVo {
         this.isLike = isLike;
     }
 
-    public List<GoodsInfoVo> getGoodsInfoVoList() {
-        return goodsInfoVoList;
-    }
-
-    public void setGoodsInfoVoList(List<GoodsInfoVo> goodsInfoVoList) {
-        this.goodsInfoVoList = goodsInfoVoList;
-    }
-
     public int getGoodsLike() {
         return goodsLike;
     }
@@ -1284,20 +1139,28 @@ public class GoodsDetailVo {
         this.goodsLike = goodsLike;
     }
 
-    public StoreVo getStoreVo() {
-        return storeVo;
-    }
-
-    public void setStoreVo(StoreVo storeVo) {
-        this.storeVo = storeVo;
-    }
-
     public int getCommentCount() {
         return commentCount;
     }
 
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public List<GoodsInfoVo> getGoodsInfoVoList() {
+        return goodsInfoVoList;
+    }
+
+    public void setGoodsInfoVoList(List<GoodsInfoVo> goodsInfoVoList) {
+        this.goodsInfoVoList = goodsInfoVoList;
+    }
+
+    public StoreVo getStoreVo() {
+        return storeVo;
+    }
+
+    public void setStoreVo(StoreVo storeVo) {
+        this.storeVo = storeVo;
     }
 
     @Override

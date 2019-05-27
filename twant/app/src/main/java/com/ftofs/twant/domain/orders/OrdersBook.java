@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.orders;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class OrdersBook implements Serializable {
     /**
      * 主键，自增

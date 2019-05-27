@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.store;
 
-
-
 public class StoreJoinin {
     /**
      * 商家编号

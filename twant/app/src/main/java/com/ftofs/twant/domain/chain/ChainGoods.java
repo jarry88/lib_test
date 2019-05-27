@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.chain;
 
 import java.math.BigDecimal;
 
-
 public class ChainGoods {
     /**
      * 门店商品Id

@@ -1,7 +1,6 @@
 package com.ftofs.twant.vo.promotion.platform.coupon;
 
 import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.promotion.platform.coupon.CouponUseGoods;
 
 /**
  * Copyright: Bizpower多用户商城系统
@@ -62,20 +61,6 @@ public class CouponUseGoodsVo {
      * 商品Spu详情
      */
     private GoodsCommon goodsCommon = null;
-
-    public CouponUseGoodsVo(CouponUseGoods couponUseGoods, GoodsCommon goodsCommon) {
-        this.id = couponUseGoods.getId();
-        this.activityId = couponUseGoods.getActivityId();
-        this.categoryId = couponUseGoods.getCategoryId();
-        this.categoryId1 = couponUseGoods.getCategoryId1();
-        this.categoryId2 = couponUseGoods.getCategoryId2();
-        this.categoryId3 = couponUseGoods.getCategoryId3();
-        this.categoryName1 = couponUseGoods.getCategoryName1();
-        this.categoryName2 = couponUseGoods.getCategoryName2();
-        this.categoryName3 = couponUseGoods.getCategoryName3();
-        this.commonId = couponUseGoods.getCommonId();
-        this.goodsCommon = goodsCommon;
-    }
 
     public int getId() {
         return id;

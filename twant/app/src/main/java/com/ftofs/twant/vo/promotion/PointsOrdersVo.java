@@ -1,10 +1,5 @@
 package com.ftofs.twant.vo.promotion;
 
-import com.ftofs.twant.domain.member.Member;
-import com.ftofs.twant.domain.promotion.PointsOrders;
-
-
-
 /**
  * Copyright: Bizpower多用户商城系统
  * Copyright: www.bizpower.com
@@ -41,15 +36,6 @@ public class PointsOrdersVo {
      * 购买数量
      */
     private int buyNum = 0;
-
-    public PointsOrdersVo(PointsOrders pointsOrders, Member member) {
-        this.memberId = member.getMemberId();
-        this.memberName = member.getMemberName();
-        this.avatar = member.getAvatar();
-        this.avatarUrl = member.getAvatarUrl();
-        this.createTime = pointsOrders.getCreateTime();
-        this.buyNum = pointsOrders.getBuyNum();
-    }
 
     public int getMemberId() {
         return memberId;

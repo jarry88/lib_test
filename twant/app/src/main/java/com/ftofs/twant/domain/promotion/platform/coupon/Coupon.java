@@ -3,8 +3,6 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
-
 public class Coupon implements Serializable,Cloneable {
     /**
      * 自增ID
@@ -305,19 +303,6 @@ public class Coupon implements Serializable,Cloneable {
     }
 
     public String getUsableClientType() {
-        if (webUsable== 1 && appUsable==1 && wechatUsable==1) {
-            //全平台可用
-            usableClientType = "all";
-        }else if(webUsable==1){
-            //PC端可用
-            usableClientType = "web";
-        }else if(appUsable==1){
-            //移动端可用
-            usableClientType = "app";
-        }else if(wechatUsable==1){
-            //微信端可用
-            usableClientType = "wechat";
-        }
         return usableClientType;
     }
 
@@ -326,19 +311,6 @@ public class Coupon implements Serializable,Cloneable {
     }
 
     public String getUsableClientTypeText() {
-        if (webUsable==1 && appUsable==1 && wechatUsable==1) {
-            //全平台可用
-            usableClientTypeText = "全平台";
-        }else if(webUsable==1){
-            //PC端可用
-            usableClientTypeText = "PC專享";
-        }else if(appUsable==1){
-            //移动端可用
-            usableClientTypeText = "移动端專享";
-        }else if(wechatUsable==1){
-            //微信端可用
-            usableClientTypeText = "微信專享";
-        }
         return usableClientTypeText;
     }
 
@@ -371,11 +343,6 @@ public class Coupon implements Serializable,Cloneable {
     }
 
     public String getUseStartTimeText() {
-        if (useStartTime!=null) {
-            useStartTimeText = new SimpleDateFormat("yyyy-MM-dd").format(useStartTime).toString();
-        }else{
-            useStartTimeText = "";
-        }
         return useStartTimeText;
     }
 
@@ -384,11 +351,6 @@ public class Coupon implements Serializable,Cloneable {
     }
 
     public String getUseEndTimeText() {
-        if (useEndTime!=null) {
-            useEndTimeText = new SimpleDateFormat("yyyy-MM-dd").format(useEndTime).toString();
-        }else{
-            useEndTimeText = "";
-        }
         return useEndTimeText;
     }
 
@@ -405,7 +367,7 @@ public class Coupon implements Serializable,Cloneable {
     }
 
     public String getLimitAmountText() {
-        return "";
+        return limitAmountText;
     }
 
     public void setLimitAmountText(String limitAmountText) {
@@ -413,16 +375,11 @@ public class Coupon implements Serializable,Cloneable {
     }
 
     public String getLimitText() {
-        return "";
+        return limitText;
     }
 
     public void setLimitText(String limitText) {
         this.limitText = limitText;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     @Override

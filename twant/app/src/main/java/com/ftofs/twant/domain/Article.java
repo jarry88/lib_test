@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain;
 
-
-
 public class Article {
     /**
      * 文章主键、自增

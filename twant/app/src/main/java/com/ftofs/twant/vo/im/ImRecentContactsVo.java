@@ -4,7 +4,6 @@ import com.ftofs.twant.domain.im.ImGroupDetail;
 import com.ftofs.twant.domain.im.ImMemberStatus;
 import com.ftofs.twant.vo.store.StoreVo;
 
-
 import java.util.List;
 
 /**

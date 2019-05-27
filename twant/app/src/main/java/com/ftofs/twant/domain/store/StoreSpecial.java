@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.store;
 
-
-
 public class StoreSpecial {
     /**
      * 编号

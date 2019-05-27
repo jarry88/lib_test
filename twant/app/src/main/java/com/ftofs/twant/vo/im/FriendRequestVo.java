@@ -15,19 +15,6 @@ public class FriendRequestVo extends FriendRequest {
      */
     private MemberVo memberInfo;
 
-    public FriendRequestVo(){
-    }
-
-    public FriendRequestVo(FriendRequest friendRequest){
-        this.setId(friendRequest.getId());
-        this.setFromMember(friendRequest.getFromMember());
-        this.setToMember(friendRequest.getToMember());
-        this.setNotes(friendRequest.getNotes());
-        this.setCreateTime(friendRequest.getCreateTime());
-        this.setUpdateTime(friendRequest.getUpdateTime());
-        this.setState(friendRequest.getState());
-    }
-
     public MemberVo getMemberInfo() {
         return memberInfo;
     }

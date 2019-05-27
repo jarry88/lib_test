@@ -503,6 +503,14 @@ public class GoodsCommon implements Serializable,Cloneable {
         this.goodsName = goodsName;
     }
 
+    public Integer getGoodsCountry() {
+        return goodsCountry;
+    }
+
+    public void setGoodsCountry(Integer goodsCountry) {
+        this.goodsCountry = goodsCountry;
+    }
+
     public String getJingle() {
         return jingle;
     }
@@ -664,9 +672,6 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public BigDecimal getFreightWeight() {
-        if (freightWeight == null) {
-            return BigDecimal.ZERO;
-        }
         return freightWeight;
     }
 
@@ -675,9 +680,6 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public BigDecimal getFreightVolume() {
-        if (freightVolume == null) {
-            return BigDecimal.ZERO;
-        }
         return freightVolume;
     }
 
@@ -702,7 +704,11 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public int getBatchNum0End() {
-        return (batchNum1 == 0) ? batchNum0End : batchNum1 - 1;
+        return batchNum0End;
+    }
+
+    public void setBatchNum0End(int batchNum0End) {
+        this.batchNum0End = batchNum0End;
     }
 
     public int getBatchNum1() {
@@ -714,7 +720,11 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public int getBatchNum1End() {
-        return (batchNum2 == 0) ? batchNum1End : batchNum2 - 1;
+        return batchNum1End;
+    }
+
+    public void setBatchNum1End(int batchNum1End) {
+        this.batchNum1End = batchNum1End;
     }
 
     public int getBatchNum2() {
@@ -749,16 +759,8 @@ public class GoodsCommon implements Serializable,Cloneable {
         this.batchPrice2 = batchPrice2;
     }
 
-    public void setBatchNum0End(int batchNum0End) {
-        this.batchNum0End = batchNum0End;
-    }
-
-    public void setBatchNum1End(int batchNum1End) {
-        this.batchNum1End = batchNum1End;
-    }
-
     public BigDecimal getWebPrice0() {
-            return webPrice0;
+        return webPrice0;
     }
 
     public void setWebPrice0(BigDecimal webPrice0) {
@@ -766,7 +768,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public BigDecimal getWebPrice1() {
-            return webPrice1;
+        return webPrice1;
     }
 
     public void setWebPrice1(BigDecimal webPrice1) {
@@ -782,7 +784,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public BigDecimal getWebPriceMin() {
-        return getWebPrice0();
+        return webPriceMin;
     }
 
     public void setWebPriceMin(BigDecimal webPriceMin) {
@@ -790,7 +792,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public int getWebUsable() {
-        return 1;
+        return webUsable;
     }
 
     public void setWebUsable(int webUsable) {
@@ -822,7 +824,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public BigDecimal getAppPriceMin() {
-        return getAppPrice0();
+        return appPriceMin;
     }
 
     public void setAppPriceMin(BigDecimal appPriceMin) {
@@ -830,7 +832,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public int getAppUsable() {
-        return 1;
+        return appUsable;
     }
 
     public void setAppUsable(int appUsable) {
@@ -862,7 +864,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public BigDecimal getWechatPriceMin() {
-        return getWechatPrice0();
+        return wechatPriceMin;
     }
 
     public void setWechatPriceMin(BigDecimal wechatPriceMin) {
@@ -870,7 +872,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public int getWechatUsable() {
-        return 0;
+        return wechatUsable;
     }
 
     public void setWechatUsable(int wechatUsable) {
@@ -1006,7 +1008,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public String getImageSrc() {
-        return imageName;
+        return imageSrc;
     }
 
     public void setImageSrc(String imageSrc) {
@@ -1037,22 +1039,7 @@ public class GoodsCommon implements Serializable,Cloneable {
         this.goodsList = goodsList;
     }
 
-    public int getWeb() {
-        return webUsable;
-    }
-
-    public int getApp() {
-        return appUsable;
-    }
-
-    public int getWechat() {
-        return wechatUsable;
-    }
-
     public Integer getIsGift() {
-        if (isGift == null) {
-            return 0;
-        }
         return isGift;
     }
 
@@ -1061,9 +1048,6 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public Integer getGroupId() {
-        if (groupId == null) {
-            return 0;
-        }
         return groupId;
     }
 
@@ -1080,11 +1064,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public Integer getIsDistribution() {
-        if (isDistribution == null) {
-            return 0;
-        }
         return isDistribution;
-
     }
 
     public void setIsDistribution(Integer isDistribution) {
@@ -1092,9 +1072,6 @@ public class GoodsCommon implements Serializable,Cloneable {
     }
 
     public Integer getIsPointsGoods() {
-        if (isPointsGoods == null) {
-            return 0;
-        }
         return isPointsGoods;
     }
 
@@ -1214,11 +1191,6 @@ public class GoodsCommon implements Serializable,Cloneable {
         this.isVirtual = isVirtual;
     }
 
-    @Override
-    public GoodsCommon clone() throws CloneNotSupportedException {
-        return (GoodsCommon) super.clone();
-    }
-
     public String getGoodsVideo() {
         return goodsVideo;
     }
@@ -1257,14 +1229,6 @@ public class GoodsCommon implements Serializable,Cloneable {
 
     public void setWaterMarkPosition(String waterMarkPosition) {
         this.waterMarkPosition = waterMarkPosition;
-    }
-
-    public Integer getGoodsCountry() {
-        return goodsCountry;
-    }
-
-    public void setGoodsCountry(Integer goodsCountry) {
-        this.goodsCountry = goodsCountry;
     }
 
     public int getGoodsLike() {

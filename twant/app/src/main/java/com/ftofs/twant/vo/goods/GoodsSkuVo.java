@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo.goods;
 
-import com.ftofs.twant.domain.goods.Goods;
-
 import java.math.BigDecimal;
 
 /**
@@ -61,19 +59,6 @@ public class GoodsSkuVo {
      * 库存
      */
     private int goodsStorage;
-
-    public GoodsSkuVo(Goods goods) {
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goods.getCommonId();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.goodsPrice0 = goods.getGoodsPrice0();
-        this.goodsPrice1 = goods.getGoodsPrice1();
-        this.goodsPrice2 = goods.getGoodsPrice2();
-        this.goodsSerial = goods.getGoodsSerial();
-        this.colorId = goods.getColorId();
-        this.imageSrc = goods.getImageSrc();
-        this.goodsStorage = goods.getGoodsStorage();
-    }
 
     public int getGoodsId() {
         return goodsId;

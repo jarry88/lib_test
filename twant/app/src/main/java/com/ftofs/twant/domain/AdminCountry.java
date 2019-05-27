@@ -31,17 +31,6 @@ public class AdminCountry {
      */
     private int countrySort = 0;
 
-    public AdminCountry(){
-    }
-
-    public AdminCountry(String countryCn, String countryEn, String nationalFlag, String countryContinents, int countrySort) {
-        this.countryCn = countryCn;
-        this.countryEn = countryEn;
-        this.nationalFlag = nationalFlag;
-        this.countryContinents = countryContinents;
-        this.countrySort = countrySort;
-    }
-
     public int getCountryId() {
         return countryId;
     }

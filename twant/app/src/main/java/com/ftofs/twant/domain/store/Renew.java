@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import java.math.BigDecimal;
 
-
 public class Renew {
     /**
      * 主键

@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
 
-
 public class DistributorGoods implements Serializable {
     /**
      * 分销商商品编号
@@ -145,7 +144,6 @@ public class DistributorGoods implements Serializable {
     public void setDistributorFavoritesId(int distributorFavoritesId) {
         this.distributorFavoritesId = distributorFavoritesId;
     }
-
 
     public String getGoodsImageSrc() {
         return goodsImageSrc;

@@ -40,12 +40,6 @@ public class OrdersPayVo {
      */
     private int isVirtual = 0;
 
-    public OrdersPayVo() {
-    }
-
-    public OrdersPayVo(List<SearchOrdersVo> ordersVoList) {
-
-    }
 
     public List<SearchOrdersVo> getOrdersVoList() {
         return ordersVoList;

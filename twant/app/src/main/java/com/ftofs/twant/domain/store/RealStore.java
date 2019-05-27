@@ -106,8 +106,6 @@ public class RealStore {
         this.areaId2 = areaId2;
     }
 
-
-
     public String getAreaInfo() {
         return areaInfo;
     }

@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.member;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class PredepositRecharge implements Serializable {
     /**
      * 自增编码

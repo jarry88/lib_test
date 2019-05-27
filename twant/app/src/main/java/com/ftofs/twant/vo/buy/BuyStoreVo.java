@@ -86,22 +86,20 @@ public class BuyStoreVo {
      */
     private List<StoreServiceStaffVo> storeServiceStaffVoList;
 
-    public BuyStoreVo() {
-    }
-
-    public BuyStoreVo(List<BuyGoodsItemVo> buyGoodsItemVoList) {
-        this.storeId = buyGoodsItemVoList.get(0).getStoreId();
-        this.buyGoodsItemVoList = buyGoodsItemVoList;
-        this.storeName = buyGoodsItemVoList.get(0).getStoreName();
-        this.isOwnShop = buyGoodsItemVoList.get(0).getIsOwnShop();
-    }
-
     public List<BuyGoodsItemVo> getBuyGoodsItemVoList() {
         return buyGoodsItemVoList;
     }
 
     public void setBuyGoodsItemVoList(List<BuyGoodsItemVo> buyGoodsItemVoList) {
         this.buyGoodsItemVoList = buyGoodsItemVoList;
+    }
+
+    public List<BuyGoodsSpuVo> getBuyGoodsSpuVoList() {
+        return buyGoodsSpuVoList;
+    }
+
+    public void setBuyGoodsSpuVoList(List<BuyGoodsSpuVo> buyGoodsSpuVoList) {
+        this.buyGoodsSpuVoList = buyGoodsSpuVoList;
     }
 
     public String getStoreName() {
@@ -120,6 +118,38 @@ public class BuyStoreVo {
         this.storeId = storeId;
     }
 
+    public int getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public int getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(int isOnline) {
+        this.isOnline = isOnline;
+    }
+
+    public Conform getConform() {
+        return conform;
+    }
+
+    public void setConform(Conform conform) {
+        this.conform = conform;
+    }
+
+    public List<VoucherVo> getVoucherVoList() {
+        return voucherVoList;
+    }
+
+    public void setVoucherVoList(List<VoucherVo> voucherVoList) {
+        this.voucherVoList = voucherVoList;
+    }
+
     public BigDecimal getBuyItemAmount() {
         return buyItemAmount;
     }
@@ -134,6 +164,14 @@ public class BuyStoreVo {
 
     public void setBuyItemExcludejoinBigSaleAmount(BigDecimal buyItemExcludejoinBigSaleAmount) {
         this.buyItemExcludejoinBigSaleAmount = buyItemExcludejoinBigSaleAmount;
+    }
+
+    public BigDecimal getBuyStoreExcludejoinBigSaleAmount() {
+        return buyStoreExcludejoinBigSaleAmount;
+    }
+
+    public void setBuyStoreExcludejoinBigSaleAmount(BigDecimal buyStoreExcludejoinBigSaleAmount) {
+        this.buyStoreExcludejoinBigSaleAmount = buyStoreExcludejoinBigSaleAmount;
     }
 
     public BigDecimal getFreightAmount() {
@@ -152,72 +190,12 @@ public class BuyStoreVo {
         this.isOwnShop = isOwnShop;
     }
 
-    public List<VoucherVo> getVoucherVoList() {
-        return voucherVoList;
-    }
-
-    public void setVoucherVoList(List<VoucherVo> voucherVoList) {
-        this.voucherVoList = voucherVoList;
-    }
-
-    public List<BuyGoodsSpuVo> getBuyGoodsSpuVoList() {
-        return buyGoodsSpuVoList;
-    }
-
-    public void setBuyGoodsSpuVoList(List<BuyGoodsSpuVo> buyGoodsSpuVoList) {
-        this.buyGoodsSpuVoList = buyGoodsSpuVoList;
-    }
-
-    public int getSellerId() {
-        return sellerId;
-    }
-
-    public void setSellerId(int sellerId) {
-        this.sellerId = sellerId;
-    }
-
-    public int getIsOnline() {
-        return isOnline;
-    }
-
-    public void setIsOnline(int isOnline) {
-        this.isOnline = isOnline;
-    }
-
     public List<CartBundlingVo> getCartBundlingVoList() {
         return cartBundlingVoList;
     }
 
     public void setCartBundlingVoList(List<CartBundlingVo> cartBundlingVoList) {
         this.cartBundlingVoList = cartBundlingVoList;
-    }
-
-    /**
-     * 取得web端下单第二步时页面全并表格数量
-     * @return
-     */
-    public int getItemCount() {
-        int count = buyGoodsItemVoList.size() + cartBundlingVoList.size();
-        for (CartBundlingVo cartBundlingVo : cartBundlingVoList) {
-            count += cartBundlingVo.getBuyBundlingItemVoList().size();
-        }
-        return count;
-    }
-
-    public Conform getConform() {
-        return conform;
-    }
-
-    public void setConform(Conform conform) {
-        this.conform = conform;
-    }
-
-    public BigDecimal getBuyStoreExcludejoinBigSaleAmount() {
-        return getBuyItemExcludejoinBigSaleAmount();
-    }
-
-    public void setBuyStoreExcludejoinBigSaleAmount(BigDecimal buyStoreExcludejoinBigSaleAmount) {
-        this.buyStoreExcludejoinBigSaleAmount = buyStoreExcludejoinBigSaleAmount;
     }
 
     public BigDecimal getForeignTaxAmount() {

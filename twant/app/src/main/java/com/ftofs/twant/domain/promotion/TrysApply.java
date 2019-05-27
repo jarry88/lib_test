@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.promotion;
 
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -299,6 +298,30 @@ public class TrysApply {
         this.memberName = memberName;
     }
 
+    public int getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
+    }
+
+    public int getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
     public int getApplyState() {
         return applyState;
     }
@@ -355,6 +378,14 @@ public class TrysApply {
         this.suggest = suggest;
     }
 
+    public String getMainImage() {
+        return mainImage;
+    }
+
+    public void setMainImage(String mainImage) {
+        this.mainImage = mainImage;
+    }
+
     public String getContent() {
         return content;
     }
@@ -363,20 +394,20 @@ public class TrysApply {
         this.content = content;
     }
 
-    public Integer getOrdersId() {
-        return ordersId;
-    }
-
-    public void setOrdersId(Integer ordersId) {
-        this.ordersId = ordersId;
-    }
-
     public String getContentImage() {
         return contentImage;
     }
 
     public void setContentImage(String contentImage) {
         this.contentImage = contentImage;
+    }
+
+    public Integer getOrdersId() {
+        return ordersId;
+    }
+
+    public void setOrdersId(Integer ordersId) {
+        this.ordersId = ordersId;
     }
 
     public String getReportTime() {
@@ -401,55 +432,6 @@ public class TrysApply {
 
     public void setReportFailReason(String reportFailReason) {
         this.reportFailReason = reportFailReason;
-    }
-
-
-    public int getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(int storeId) {
-        this.storeId = storeId;
-    }
-
-    public int getSellerId() {
-        return sellerId;
-    }
-
-    public void setSellerId(int sellerId) {
-        this.sellerId = sellerId;
-    }
-
-    public String getStoreName() {
-        return storeName;
-    }
-
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
-    }
-
-    public String getMainImage() {
-        return mainImage;
-    }
-
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage;
-    }
-
-    public String getApplyStateText() {
-        return "";
-    }
-
-    public void setApplyStateText(String applyStateText) {
-        this.applyStateText = applyStateText;
-    }
-
-    public String getReportStateText() {
-        return "";
-    }
-
-    public void setReportStateText(String reportStateText) {
-        this.reportStateText = reportStateText;
     }
 
     public int getCommonId() {
@@ -492,20 +474,28 @@ public class TrysApply {
         this.trysType = trysType;
     }
 
-    public String getTrysTypeText() {
-        return trysTypeText;
-    }
-
-    public void setTrysTypeText(String trysTypeText) {
-        this.trysTypeText = trysTypeText;
-    }
-
     public int getBuyState() {
         return buyState;
     }
 
     public void setBuyState(int buyState) {
         this.buyState = buyState;
+    }
+
+    public String getBuyEndTime() {
+        return buyEndTime;
+    }
+
+    public void setBuyEndTime(String buyEndTime) {
+        this.buyEndTime = buyEndTime;
+    }
+
+    public String getReportEndTime() {
+        return reportEndTime;
+    }
+
+    public void setReportEndTime(String reportEndTime) {
+        this.reportEndTime = reportEndTime;
     }
 
     public int getSendVoucherState() {
@@ -516,14 +506,6 @@ public class TrysApply {
         this.sendVoucherState = sendVoucherState;
     }
 
-    public String getMemberNameEncrypt() {
-        return String.format("%s***%s", memberName.substring(0, 1), memberName.substring(memberName.length() - 1, memberName.length()));
-    }
-
-    public void setMemberNameEncrypt(String memberNameEncrypt) {
-        memberNameEncrypt = memberNameEncrypt;
-    }
-
     public String getImageName() {
         return imageName;
     }
@@ -532,44 +514,12 @@ public class TrysApply {
         this.imageName = imageName;
     }
 
-    public String getImageSrc() {
-        return imageSrc;
-    }
-
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
-    }
-
-    public String getMainImageSrc() {
-        return mainImageSrc;
-    }
-
-    public void setMainImageSrc(String mainImageSrc) {
-        this.mainImageSrc = mainImageSrc;
-    }
-
     public String getAvatar() {
         return avatar;
     }
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
-    }
-
-    public List<String> getImageList() {
-        return imageList;
-    }
-
-    public void setImageList(List<String> imageList) {
-        this.imageList = imageList;
     }
 
     public int getCategoryId() {
@@ -588,130 +538,6 @@ public class TrysApply {
         this.goodsFullSpecs = goodsFullSpecs;
     }
 
-    public String getBuyEndTime() {
-        return buyEndTime;
-    }
-
-    public void setBuyEndTime(String buyEndTime) {
-        this.buyEndTime = buyEndTime;
-    }
-
-    public String getSexText() {
-        String str = "女";
-        if (sex == null) {
-            return "";
-        }
-        switch (sex) {
-            case 0:
-                str = "女";
-                break;
-            case 1:
-                str = "男";
-                break;
-        }
-        return str;
-    }
-
-    public void setSexText(String sexText) {
-        this.sexText = sexText;
-    }
-
-    public String getAgeText() {
-        String str = "";
-        if (age == null) {
-            return "";
-        }
-        switch (age) {
-            case 0:
-                str = "20岁以下";
-                break;
-            case 1:
-                str = "20-25岁";
-                break;
-            case 2:
-                str = "26-30岁";
-                break;
-            case 3:
-                str = "31-35岁";
-                break;
-            case 4:
-                str = "36-40岁";
-                break;
-            case 5:
-                str = "40岁以上";
-                break;
-        }
-        return str;
-    }
-
-    public void setAgeText(String ageText) {
-        this.ageText = ageText;
-    }
-
-    public String getGoodsFullName() {
-        return goodsName + " " + (goodsFullSpecs == null ? "" : goodsFullSpecs);
-    }
-
-    public void setGoodsFullName(String goodsFullName) {
-        this.goodsFullName = goodsFullName;
-    }
-
-    public String getShowMemberStateText() {
-        return "";
-    }
-
-    public void setShowMemberStateText(String showMemberStateText) {
-        this.showMemberStateText = showMemberStateText;
-    }
-
-    public int getShowMemberAddReportState() {
-        return (applyState == 1 && ordersId != null && reportState == null) ? 1 : 0;
-    }
-
-    public void setShowMemberAddReportState(int showMemberAddReportState) {
-        this.showMemberAddReportState = showMemberAddReportState;
-    }
-
-    public int getShowMemberEditReportState() {
-        return 1;
-    }
-
-    public void setShowMemberEditReportState(int showMemberEditReportState) {
-        this.showMemberEditReportState = showMemberEditReportState;
-    }
-
-    public int getShowMemberViewReportState() {
-        return 1;
-    }
-
-    public void setShowMemberViewReportState(int showMemberViewReportState) {
-        this.showMemberViewReportState = showMemberViewReportState;
-    }
-
-    public int getShowMemberBuyState() {
-        return 1;
-    }
-
-    public void setShowMemberBuyState(int showMemberBuyState) {
-        this.showMemberBuyState = showMemberBuyState;
-    }
-
-    public int getShowMemberViewOrdersState() {
-        return (applyState == 1 && ordersId != null) ? 1 : 0;
-    }
-
-    public void setShowMemberViewOrdersState(int showMemberViewOrdersState) {
-        this.showMemberViewOrdersState = showMemberViewOrdersState;
-    }
-
-    public String getReportEndTime() {
-        return reportEndTime;
-    }
-
-    public void setReportEndTime(String reportEndTime) {
-        this.reportEndTime = reportEndTime;
-    }
-
     public int getAutoAddBlackState() {
         return autoAddBlackState;
     }
@@ -720,12 +546,148 @@ public class TrysApply {
         this.autoAddBlackState = autoAddBlackState;
     }
 
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getApplyStateText() {
+        return applyStateText;
+    }
+
+    public void setApplyStateText(String applyStateText) {
+        this.applyStateText = applyStateText;
+    }
+
+    public String getReportStateText() {
+        return reportStateText;
+    }
+
+    public void setReportStateText(String reportStateText) {
+        this.reportStateText = reportStateText;
+    }
+
+    public String getTrysTypeText() {
+        return trysTypeText;
+    }
+
+    public void setTrysTypeText(String trysTypeText) {
+        this.trysTypeText = trysTypeText;
+    }
+
+    public String getMemberNameEncrypt() {
+        return memberNameEncrypt;
+    }
+
+    public void setMemberNameEncrypt(String memberNameEncrypt) {
+        this.memberNameEncrypt = memberNameEncrypt;
+    }
+
+    public String getSexText() {
+        return sexText;
+    }
+
+    public void setSexText(String sexText) {
+        this.sexText = sexText;
+    }
+
+    public String getAgeText() {
+        return ageText;
+    }
+
+    public void setAgeText(String ageText) {
+        this.ageText = ageText;
+    }
+
+    public String getGoodsFullName() {
+        return goodsFullName;
+    }
+
+    public void setGoodsFullName(String goodsFullName) {
+        this.goodsFullName = goodsFullName;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+    public String getMainImageSrc() {
+        return mainImageSrc;
+    }
+
+    public void setMainImageSrc(String mainImageSrc) {
+        this.mainImageSrc = mainImageSrc;
+    }
+
     public List<String> getContentList() {
         return contentList;
     }
 
     public void setContentList(List<String> contentList) {
         this.contentList = contentList;
+    }
+
+    public List<String> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
+    }
+
+    public String getShowMemberStateText() {
+        return showMemberStateText;
+    }
+
+    public void setShowMemberStateText(String showMemberStateText) {
+        this.showMemberStateText = showMemberStateText;
+    }
+
+    public int getShowMemberAddReportState() {
+        return showMemberAddReportState;
+    }
+
+    public void setShowMemberAddReportState(int showMemberAddReportState) {
+        this.showMemberAddReportState = showMemberAddReportState;
+    }
+
+    public int getShowMemberEditReportState() {
+        return showMemberEditReportState;
+    }
+
+    public void setShowMemberEditReportState(int showMemberEditReportState) {
+        this.showMemberEditReportState = showMemberEditReportState;
+    }
+
+    public int getShowMemberViewReportState() {
+        return showMemberViewReportState;
+    }
+
+    public void setShowMemberViewReportState(int showMemberViewReportState) {
+        this.showMemberViewReportState = showMemberViewReportState;
+    }
+
+    public int getShowMemberBuyState() {
+        return showMemberBuyState;
+    }
+
+    public void setShowMemberBuyState(int showMemberBuyState) {
+        this.showMemberBuyState = showMemberBuyState;
+    }
+
+    public int getShowMemberViewOrdersState() {
+        return showMemberViewOrdersState;
+    }
+
+    public void setShowMemberViewOrdersState(int showMemberViewOrdersState) {
+        this.showMemberViewOrdersState = showMemberViewOrdersState;
     }
 
     @Override

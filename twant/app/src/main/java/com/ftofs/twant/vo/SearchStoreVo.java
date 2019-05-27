@@ -3,7 +3,6 @@ package com.ftofs.twant.vo;
 import com.ftofs.twant.domain.goods.GoodsCommon;
 import com.ftofs.twant.domain.promotion.Conform;
 import com.ftofs.twant.domain.promotion.VoucherTemplate;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.contract.ContractVo;
 import com.ftofs.twant.vo.evaluate.EvaluateStoreVo;
 import com.ftofs.twant.vo.store.ServiceVo;
@@ -160,29 +159,6 @@ public class SearchStoreVo {
      */
     private String chainAreaInfo ;
 
-    public SearchStoreVo() {
-    }
-
-    public SearchStoreVo(Store store) {
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.sellerId = store.getSellerId();
-        this.sellerName = store.getSellerName();
-        this.storeZy = store.getStoreZy();
-        this.storeDesccredit = store.getStoreDesccredit();
-        this.storeServicecredit = store.getStoreServicecredit();
-        this.storeDeliverycredit = store.getStoreDeliverycredit();
-        this.storeCollect = store.getStoreCollect();
-        this.storeSales = store.getStoreSales();
-        this.isOwnShop = store.getIsOwnShop();
-        this.companyArea = store.getCompanyArea();
-        this.storeAvatar = store.getStoreAvatar();
-        this.storeAvatarUrl = store.getStoreAvatarUrl();
-        this.companyName = store.getCompanyName();
-        this.companyAreaId = store.getCompanyAreaId();
-        this.storeFigureImage = store.getStoreFigureImage();
-    }
-
     public int getStoreId() {
         return storeId;
     }
@@ -269,6 +245,14 @@ public class SearchStoreVo {
 
     public void setIsOwnShop(int isOwnShop) {
         this.isOwnShop = isOwnShop;
+    }
+
+    public String getStoreAvatar() {
+        return storeAvatar;
+    }
+
+    public void setStoreAvatar(String storeAvatar) {
+        this.storeAvatar = storeAvatar;
     }
 
     public String getStoreAvatarUrl() {
@@ -367,12 +351,10 @@ public class SearchStoreVo {
         this.storeFigureImage = storeFigureImage;
     }
 
-    @Deprecated
     public List<ServiceVo> getStorePresalesList() {
         return storePresalesList;
     }
 
-    @Deprecated
     public void setStorePresalesList(List<ServiceVo> storePresalesList) {
         this.storePresalesList = storePresalesList;
     }
@@ -407,14 +389,6 @@ public class SearchStoreVo {
 
     public void setStoreServiceStaffVoList(List<StoreServiceStaffVo> storeServiceStaffVoList) {
         this.storeServiceStaffVoList = storeServiceStaffVoList;
-    }
-
-    public String getStoreAvatar() {
-        return storeAvatar;
-    }
-
-    public void setStoreAvatar(String storeAvatar) {
-        this.storeAvatar = storeAvatar;
     }
 
     public String getChainArea() {

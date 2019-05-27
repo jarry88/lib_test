@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 
 import java.io.Serializable;
 
-
 public class CouponPwd implements Serializable,Cloneable {
     /**
      * 自增编码

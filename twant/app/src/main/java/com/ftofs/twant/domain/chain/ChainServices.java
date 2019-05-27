@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.chain;
 
 import java.io.Serializable;
 
-
 public class ChainServices implements Serializable,Cloneable {
     /**
      * 自增编码
@@ -101,12 +100,11 @@ public class ChainServices implements Serializable,Cloneable {
     }
 
     public String getAbleStateText() {
-        if (ableState == 1) {
-            ableStateText = "可使用";
-        } else {
-            ableStateText = "已禁用";
-        }
         return ableStateText;
+    }
+
+    public void setAbleStateText(String ableStateText) {
+        this.ableStateText = ableStateText;
     }
 
     @Override

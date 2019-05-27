@@ -376,14 +376,7 @@ public class Chain {
     }
 
     public int getChainGoodsRate() {
-        int goodsStarNum = fourStatNum + fiveStarNum;
-        if (evaluateNum == 0) {
-            return 100;
-        }
-        if (goodsStarNum == 0) {
-            return 0;
-        }
-        return (int) Math.ceil((double) goodsStarNum/evaluateNum*100);
+        return chainGoodsRate;
     }
 
     public void setChainGoodsRate(int chainGoodsRate) {
@@ -391,10 +384,7 @@ public class Chain {
     }
 
     public int getChainCriterion() {
-        if (allStarSum == 0) {
-            return 5;
-        }
-        return (int) Math.round((double) allStarSum/evaluateNum);
+        return chainCriterion;
     }
 
     public void setChainCriterion(int chainCriterion) {

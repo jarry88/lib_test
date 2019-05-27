@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.promotion;
 import com.ftofs.twant.domain.goods.GoodsCommon;
 
 import java.io.Serializable;
-
 import java.util.List;
 
 public class Bundling implements Serializable {

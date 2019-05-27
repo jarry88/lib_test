@@ -63,7 +63,6 @@ public class ChainCouponActivity implements Serializable,Cloneable {
      */
     private int withoutState = 0;
 
-
     public int getId() {
         return id;
     }
@@ -137,11 +136,6 @@ public class ChainCouponActivity implements Serializable,Cloneable {
     }
 
     public String getChainAbleStateText() {
-        if (chainAbleState == 1) {
-            chainAbleStateText = "可使用";
-        } else {
-            chainAbleStateText = "已禁用";
-        }
         return chainAbleStateText;
     }
 
@@ -150,7 +144,7 @@ public class ChainCouponActivity implements Serializable,Cloneable {
     }
 
     public int getChainRemainNum() {
-        return chainAvailableNum - chainGiveoutNum;
+        return chainRemainNum;
     }
 
     public void setChainRemainNum(int chainRemainNum) {
@@ -158,21 +152,11 @@ public class ChainCouponActivity implements Serializable,Cloneable {
     }
 
     public int getWithoutState() {
-        if (chainAvailableNum > chainGiveoutNum) {
-            withoutState = 0;
-        }else{
-            withoutState = 1;
-        }
         return withoutState;
     }
 
     public void setWithoutState(int withoutState) {
         this.withoutState = withoutState;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     @Override

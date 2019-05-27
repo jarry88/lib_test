@@ -1,11 +1,8 @@
 package com.ftofs.twant.vo.favorites;
 
-import com.ftofs.twant.domain.chain.Chain;
 import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.member.FavoritesStore;
 import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.store.StoreServiceStaffVo;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,34 +111,6 @@ public class FavoritesStoreVo {
      */
     private String avatarUrl = "";
 
-    public FavoritesStoreVo() {}
-
-    public FavoritesStoreVo(FavoritesStore favStore, Store store) {
-        this.favoritesId = favStore.getFavoritesId();
-        this.memberId = favStore.getMemberId();
-        this.storeId = favStore.getStoreId();
-        this.addTime = favStore.getAddTime();
-        this.store = store;
-        this.setTop = favStore.getSetTop() ;
-        this.avgStoreEvalRate = countAvgStoreEvalRate(store) ;
-        this.storeCollect = store.getStoreCollect() ;
-        this.isOwnShop = store.getIsOwnShop() ;
-    }
-
-    public FavoritesStoreVo(FavoritesStore favStore, Store store, Chain chain) {
-        this.favoritesId = favStore.getFavoritesId();
-        this.memberId = favStore.getMemberId();
-        this.storeId = favStore.getStoreId();
-        this.addTime = favStore.getAddTime();
-        this.store = store;
-        this.setTop = favStore.getSetTop() ;
-        this.avgStoreEvalRate = countAvgStoreEvalRate(store) ;
-        this.storeCollect = store.getStoreCollect() ;
-        this.isOwnShop = store.getIsOwnShop() ;
-        this.lng = chain.getLng() == null ? 0 : chain.getLng();
-        this.lat = chain.getLat() == null ? 0 : chain.getLat();
-    }
-
     public int getFavoritesId() {
         return favoritesId;
     }
@@ -156,6 +125,30 @@ public class FavoritesStoreVo {
 
     public void setMemberId(int memberId) {
         this.memberId = memberId;
+    }
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public int getStoreId() {
@@ -238,38 +231,6 @@ public class FavoritesStoreVo {
         this.isOwnShop = isOwnShop;
     }
 
-    public String getMemberName() {
-        return memberName;
-    }
-
-    public void setMemberName(String memberName) {
-        this.memberName = memberName;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getDistance() {
-        return distance;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
-
     public double getLng() {
         return lng;
     }
@@ -284,6 +245,14 @@ public class FavoritesStoreVo {
 
     public void setLat(double lat) {
         this.lat = lat;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
     }
 
     public List<StoreServiceStaffVo> getStoreServiceStaffVoList() {
@@ -323,14 +292,4 @@ public class FavoritesStoreVo {
                 '}';
     }
 
-    /**
-     * bycj -- 计算店铺分数
-     */
-    private int countAvgStoreEvalRate(Store store){
-        double storeDesEval = store.getStoreDesccredit();
-        double storeServiceEval = store.getStoreServicecredit();
-        double storeDeliveryEval = store.getStoreDeliverycredit();
-        double avgStoreEval = (storeDesEval + storeServiceEval + storeDeliveryEval) / 3;
-        return  (int) (avgStoreEval / 5 * 100);
-    }
 }

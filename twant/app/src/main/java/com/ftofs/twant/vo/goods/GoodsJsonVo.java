@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo.goods;
 
-import com.ftofs.twant.domain.goods.Goods;
-
 import java.math.BigDecimal;
 
 /**
@@ -28,24 +26,6 @@ public class GoodsJsonVo {
     private String imageSrc;
     //Modify By liusf 2018/10/15 11:50 添加預留庫存
     private int reserveStorage;
-
-    public GoodsJsonVo() {
-    }
-
-    public GoodsJsonVo(Goods goods) {
-        this.goodsId = goods.getGoodsId();
-        this.goodsSpecs = goods.getGoodsSpecs();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.specValueIds = goods.getSpecValueIds();
-        this.goodsPrice0 = goods.getGoodsPrice0();
-        this.goodsPrice1 = goods.getGoodsPrice1();
-        this.goodsPrice2 = goods.getGoodsPrice2();
-        this.goodsSerial = goods.getGoodsSerial();
-        this.goodsStorage = goods.getGoodsStorage();
-        this.colorId = goods.getColorId();
-        this.imageSrc = goods.getImageSrc();
-        this.reserveStorage = goods.getReserveStorage();
-    }
 
     public int getGoodsId() {
         return goodsId;

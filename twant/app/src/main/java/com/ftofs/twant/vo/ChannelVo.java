@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo;
 
-import com.ftofs.twant.domain.Channel;
-
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -82,21 +80,6 @@ public class ChannelVo implements Serializable {
      * 携带的顶部module 信息
      */
     private List<ChannelModuleVo> topModuleVoArrayList = new ArrayList<ChannelModuleVo>() ;
-
-    public ChannelVo(Channel channel) {
-        this.setChannelId(channel.getChannelId());
-        this.setChannelName(channel.getChannelName());
-        this.setChannelStyle(channel.getChannelStyle());
-        this.setCategoryId(channel.getCategoryId());
-        this.setCategoryName(channel.getCategoryName());
-        this.setChannelKeywords(channel.getChannelKeywords());
-        this.setChannelDescription(channel.getChannelDescription());
-        this.setChannelTopId(channel.getChannelTopId());
-        this.setChannelFloorId(channel.getChannelFloorId());
-        this.setChannelUpdateTime(channel.getChannelUpdateTime());
-        this.setChannelShow(channel.getChannelShow());
-    }
-
 
     public int getChannelId() {
         return channelId;

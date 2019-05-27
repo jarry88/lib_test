@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class CouponGifts implements Serializable,Cloneable {
     /**
      * 礼包自增ID
@@ -152,7 +151,6 @@ public class CouponGifts implements Serializable,Cloneable {
      * 页面主题颜色显示值，默认显示为#ffffff
      */
     private String themeColorText = "";
-
 
     public int getGiftsId() {
         return giftsId;
@@ -307,11 +305,7 @@ public class CouponGifts implements Serializable,Cloneable {
     }
 
     public String getTotalNumText() {
-        if (totalNum > 0) {
-            return String.valueOf(totalNum);
-        }else{
-            return "不限";
-        }
+        return totalNumText;
     }
 
     public void setTotalNumText(String totalNumText) {
@@ -343,7 +337,7 @@ public class CouponGifts implements Serializable,Cloneable {
     }
 
     public String getGiftsStartTimeText() {
-        return "";
+        return giftsStartTimeText;
     }
 
     public void setGiftsStartTimeText(String giftsStartTimeText) {
@@ -351,7 +345,7 @@ public class CouponGifts implements Serializable,Cloneable {
     }
 
     public String getGiftsEndTimeText() {
-        return "";
+        return giftsEndTimeText;
     }
 
     public void setGiftsEndTimeText(String giftsEndTimeText) {
@@ -359,7 +353,7 @@ public class CouponGifts implements Serializable,Cloneable {
     }
 
     public String getBannerImgPcUrl() {
-        return bannerImgPc;
+        return bannerImgPcUrl;
     }
 
     public void setBannerImgPcUrl(String bannerImgPcUrl) {
@@ -367,7 +361,7 @@ public class CouponGifts implements Serializable,Cloneable {
     }
 
     public String getBannerImgAppUrl() {
-        return bannerImgApp;
+        return bannerImgAppUrl;
     }
 
     public void setBannerImgAppUrl(String bannerImgAppUrl) {
@@ -380,11 +374,6 @@ public class CouponGifts implements Serializable,Cloneable {
 
     public void setThemeColorText(String themeColorText) {
         this.themeColorText = themeColorText;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 
     @Override

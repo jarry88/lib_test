@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo.im;
 
-
-
 /**
  * @author liusf
  * @create 2019/3/21 12:06

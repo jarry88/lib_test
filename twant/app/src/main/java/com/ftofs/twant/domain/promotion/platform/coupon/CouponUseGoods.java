@@ -53,7 +53,6 @@ public class CouponUseGoods implements Serializable,Cloneable {
      */
     private int commonId = 0;
 
-
     public int getId() {
         return id;
     }

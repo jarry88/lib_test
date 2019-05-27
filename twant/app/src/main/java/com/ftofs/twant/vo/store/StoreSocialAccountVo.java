@@ -39,19 +39,6 @@ public class StoreSocialAccountVo {
      */
     private int socialForm;
 
-    public StoreSocialAccountVo(){}
-
-    public StoreSocialAccountVo(int id, String account, String accountAddress, String accountImageAddress, String socialName, String socialLogo, int socialForm, String socialLogoChecked) {
-        this.id = id;
-        this.account = account;
-        this.accountAddress = accountAddress;
-        this.accountImageAddress = accountImageAddress;
-        this.socialName = socialName;
-        this.socialLogo = socialLogo;
-        this.socialForm = socialForm;
-        this.socialLogoChecked = socialLogoChecked;
-    }
-
     public int getId() {
         return id;
     }

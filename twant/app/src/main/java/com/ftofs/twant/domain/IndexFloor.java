@@ -2,7 +2,6 @@ package com.ftofs.twant.domain;
 
 import java.io.Serializable;
 
-
 public class IndexFloor implements Serializable {
     private int floorId;
 

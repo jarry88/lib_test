@@ -1,9 +1,5 @@
 package com.ftofs.twant.domain.evaluate;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class EvaluateGoods {
     /**
      * 评价编号

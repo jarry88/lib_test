@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 
-
 public class MemberToken implements Serializable {
     /**
      * 令牌自增编码

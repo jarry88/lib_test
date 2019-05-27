@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.seckill;
 
-
-
 public class SeckillBeginNotice {
     /**
      * 通知编号

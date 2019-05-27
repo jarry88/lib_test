@@ -53,7 +53,6 @@ public class ArticleCategoryVo {
         this.title = title;
     }
 
-
     public int getSort() {
         return sort;
     }

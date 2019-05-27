@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 
-
 public class MemberMessage implements Serializable {
     /**
      * 消息编号

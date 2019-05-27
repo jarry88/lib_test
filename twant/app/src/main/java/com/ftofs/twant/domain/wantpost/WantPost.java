@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.wantpost;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-
 public class WantPost {
     /**
      * 貼文id

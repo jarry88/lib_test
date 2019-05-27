@@ -3,9 +3,6 @@ package com.ftofs.twant.domain.chain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class ChainOrders implements Serializable, Cloneable {
     /**
      * 订单主键ID、自增

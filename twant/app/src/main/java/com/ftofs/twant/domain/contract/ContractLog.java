@@ -1,8 +1,7 @@
 package com.ftofs.twant.domain.contract;
+import java.io.Serializable;
 
-
-
-public class ContractLog implements java.io.Serializable {
+public class ContractLog implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**

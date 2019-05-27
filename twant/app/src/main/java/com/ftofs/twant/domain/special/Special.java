@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.special;
 
-
-
 public class Special {
     /**
      * 编号

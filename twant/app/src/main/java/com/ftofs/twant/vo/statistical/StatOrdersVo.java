@@ -52,41 +52,6 @@ public class StatOrdersVo {
      */
     private int receiverAreaId1 = 0;
 
-    public StatOrdersVo() {}
-
-    public StatOrdersVo(StatOrders statOrders, long ordersCount, int memberId) {
-        this.statOrders = statOrders;
-        this.ordersCount = ordersCount;
-        this.memberId = memberId;
-    }
-
-    public StatOrdersVo(StatOrders statOrders, BigDecimal ordersAmountSum, int memberId) {
-        this.statOrders = statOrders;
-        this.ordersAmountSum = ordersAmountSum;
-        this.memberId = memberId;
-    }
-
-    public StatOrdersVo(int receiverAreaId1, long ordersCount, BigDecimal ordersAmountSum, long ordersMemberCount) {
-        this.receiverAreaId1 = receiverAreaId1;
-        this.ordersCount = ordersCount;
-        this.ordersAmountSum = ordersAmountSum;
-        this.ordersMemberCount = ordersMemberCount;
-    }
-
-    public StatOrdersVo(StatOrders statOrders, long ordersCount, BigDecimal ordersAmountSum, long ordersMemberCount, Double ordersAmountAverage) {
-        this.statOrders = statOrders;
-        this.ordersCount = ordersCount;
-        this.ordersAmountSum = ordersAmountSum;
-        this.ordersMemberCount = ordersMemberCount;
-    }
-
-    public StatOrdersVo( long ordersCount,BigDecimal ordersAmountSum, String statDate) {
-        this.ordersCount = ordersCount;
-        this.ordersAmountSum = ordersAmountSum;
-        String statDateStr = statDate + " 00:00:00";
-        this.statDate = statDateStr;
-    }
-
     public StatOrders getStatOrders() {
         return statOrders;
     }

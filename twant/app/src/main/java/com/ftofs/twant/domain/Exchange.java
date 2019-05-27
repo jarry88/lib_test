@@ -2,7 +2,6 @@ package com.ftofs.twant.domain;
 
 import java.math.BigDecimal;
 
-
 public class Exchange {
     /**
      * 匯率主鍵、自增
@@ -38,18 +37,6 @@ public class Exchange {
      * 更新時間
      */
     private String modifyTime;
-
-    public Exchange() {
-    }
-
-    public Exchange(String currencyOrigin, String currencyOriginDesc, String currencyTarget, String currencyTargetDesc, BigDecimal exchangeRate, String modifyTime) {
-        this.currencyOrigin = currencyOrigin;
-        this.currencyOriginDesc = currencyOriginDesc;
-        this.currencyTarget = currencyTarget;
-        this.currencyTargetDesc = currencyTargetDesc;
-        this.exchangeRate = exchangeRate;
-        this.modifyTime = modifyTime;
-    }
 
     public String getModifyTime() {
         return modifyTime;

@@ -17,41 +17,52 @@ public class PurchaseChatVo {
 	private String createTime;
 	private Integer purchaseBuyId;
 	private String roleName;
-	
-	public String getRoleName() {
-		return roleName;
-	}
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
-	public Integer getPurchaseBuyId() {
-		return purchaseBuyId;
-	}
-	public void setPurchaseBuyId(Integer purchaseBuyId) {
-		this.purchaseBuyId = purchaseBuyId;
-	}
-	public String getCreateTime() {
-		return createTime;
-	}
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
+
 	public Integer getPurchaseQuotedpriceId() {
 		return purchaseQuotedpriceId;
 	}
+
 	public void setPurchaseQuotedpriceId(Integer purchaseQuotedpriceId) {
 		this.purchaseQuotedpriceId = purchaseQuotedpriceId;
 	}
+
 	public String getContent() {
 		return content;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
+
 	public String getRole() {
 		return role;
 	}
+
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public Integer getPurchaseBuyId() {
+		return purchaseBuyId;
+	}
+
+	public void setPurchaseBuyId(Integer purchaseBuyId) {
+		this.purchaseBuyId = purchaseBuyId;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 }

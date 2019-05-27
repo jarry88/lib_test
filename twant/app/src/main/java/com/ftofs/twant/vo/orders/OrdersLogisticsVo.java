@@ -1,6 +1,5 @@
 package com.ftofs.twant.vo.orders;
 
-
 import com.ftofs.twant.vo.logistics.CargoVo;
 
 /**

@@ -4,7 +4,6 @@ import com.ftofs.twant.domain.orders.OrdersBook;
 
 import java.math.BigDecimal;
 
-
 /**
  * Copyright: Bizpower多用户商城系统
  * Copyright: www.bizpower.com
@@ -92,20 +91,6 @@ public class OrdersBookVo {
      * 预定阶段
      */
     private int bookStep;
-
-    public OrdersBookVo() {
-    }
-
-    /**
-     * 仅后台列表使用
-     * @param ordersBook
-     */
-    public OrdersBookVo(OrdersBook ordersBook) {
-        ordersSn = Long.toString(ordersBook.getOrdersSn());
-        bookCancelTime = ordersBook.getBookCancelTime();
-        realPayAmount = ordersBook.getRealPayAmount();
-        ordersId = ordersBook.getOrdersId();
-    }
 
     public String getBookStepName() {
         return bookStepName;
@@ -209,10 +194,6 @@ public class OrdersBookVo {
 
     public void setDepositAmount(BigDecimal depositAmount) {
         this.depositAmount = depositAmount;
-    }
-
-    public String getPaymentName() {
-       return paymentCode;
     }
 
     public BigDecimal getRealPayAmount() {

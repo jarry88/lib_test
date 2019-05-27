@@ -1,13 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:/twant_app/android/twant/twant.keystore')
+            storePassword 'twant.key@ftofs.com'
+            keyAlias = 'twant.keystore'
+            keyPassword 'twant.key@ftofs.com'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.ftofs.twant"
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
-        versionName "1.2.1.8"
+        versionName "1.2.1.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -20,6 +28,7 @@ android {
                 }
             }
             zipAlignEnabled true
+            signingConfig signingConfigs.release
         }
     }
 }

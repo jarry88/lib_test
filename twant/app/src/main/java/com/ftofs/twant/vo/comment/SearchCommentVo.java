@@ -93,7 +93,6 @@ public class SearchCommentVo {
      */
     private List<WantCommentImage> images;
 
-
     //以下字段不存在于搜索引擎
     /**
      * 點贊狀態

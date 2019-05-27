@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.chain;
 
-
-
 public class ChainEvaluate {
     /**
      * 评价编号
@@ -103,9 +101,7 @@ public class ChainEvaluate {
     }
 
     public String getMemberNameFinal() {
-        StringBuilder builder = new StringBuilder(memberName);
-        builder.replace(2,memberName.length()-2,"*****");
-        return builder.toString();
+        return memberNameFinal;
     }
 
     public void setMemberNameFinal(String memberNameFinal) {
@@ -153,7 +149,7 @@ public class ChainEvaluate {
     }
 
     public String getChainAvatarSrc() {
-        return  chainAvatarSrc;
+        return chainAvatarSrc;
     }
 
     public void setChainAvatarSrc(String chainAvatarSrc) {

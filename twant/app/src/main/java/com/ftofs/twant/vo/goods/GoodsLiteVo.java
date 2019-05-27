@@ -32,7 +32,6 @@ public class GoodsLiteVo {
      */
     private String imageUrl;
 
-
     public int getCommonId() {
         return commonId;
     }

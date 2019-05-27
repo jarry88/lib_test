@@ -11,7 +11,6 @@ package com.ftofs.twant.vo.advertorial;
  * Created 2017-9-19 上午 10:47
  */
 public class AdvertorialArticleItemVo {
-
     /**
      * 类型
      */
@@ -21,10 +20,10 @@ public class AdvertorialArticleItemVo {
      * 内容
      */
     private String content  = "" ;
+
     /**
      * 商品id
      */
-
     private int commonId ;
 
     private String imageUrl = "" ;

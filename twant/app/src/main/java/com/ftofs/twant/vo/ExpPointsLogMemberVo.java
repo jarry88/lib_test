@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo;
 
-
-
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
  * @license    http://www.shopnc.net

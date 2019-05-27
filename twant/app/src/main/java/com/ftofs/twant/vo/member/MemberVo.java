@@ -1,6 +1,5 @@
 package com.ftofs.twant.vo.member;
 
-import com.ftofs.twant.domain.member.Member;
 import com.ftofs.twant.domain.member.MemberMessage;
 
 import java.math.BigDecimal;
@@ -273,67 +272,6 @@ public class MemberVo {
      */
     private String mobileAreaName;
 
-    public MemberVo(){}
-
-    public MemberVo(Member m) {
-        this.setMemberAttribute(m);
-    }
-
-    public MemberVo(Member m, HashMap<String, Object> currGrade) {
-        this.setMemberAttribute(m);
-        this.currGrade = currGrade;
-    }
-    /**
-     * 赋值Member属性
-     */
-    private void setMemberAttribute(Member m){
-        this.memberId = m.getMemberId();
-        this.memberName = m.getMemberName();
-        this.trueName = m.getTrueName();
-        this.nickName = m.getNickName();
-        this.memberPwd = m.getMemberPwd();
-        this.payPwd = m.getPayPwd();
-        this.memberSex = m.getMemberSex();
-        this.birthday = m.getBirthday();
-        this.avatar = m.getAvatar();
-        this.email = m.getEmail();
-        this.emailIsBind = m.getEmailIsBind();
-        this.mobile = m.getMobile();
-        this.mobileIsBind = m.getMobileIsBind();
-        this.registerTime = m.getRegisterTime();
-        this.loginNum = m.getLoginNum();
-        this.loginTime = m.getLoginTime();
-        this.lastLoginTime = m.getLastLoginTime();
-        this.loginIp = m.getLoginIp();
-        this.lastLoginIp = m.getLastLoginIp();
-        this.memberPoints = m.getMemberPoints();
-        this.predepositAvailable = m.getPredepositAvailable();
-        this.predepositFreeze  = m.getPredepositFreeze();
-        this.addressProvinceId = m.getAddressProvinceId();
-        this.addressCityId = m.getAddressCityId();
-        this.addressAreaId = m.getAddressAreaId();
-        this.addressAreaInfo = m.getAddressAreaInfo();
-        this.experiencePoints = m.getExperiencePoints();
-        this.allowBuy = m.getAllowBuy();
-        this.allowTalk = m.getAllowTalk();
-        this.state = m.getState();
-        this.modifyNum = m.getModifyNum();
-        this.weixinUnionid = m.getWeixinUnionid();
-        this.weixinUserInfo = m.getWeixinUserInfo();
-        this.qqOpenid = m.getQqOpenid();
-        this.qqUserInfo = m.getQqUserInfo();
-        this.avatarUrl = m.getAvatarUrl();
-        this.emailEncrypt = m.getEmailEncrypt();
-        this.mobileEncrypt = m.getMobileEncrypt();
-        this.securityLevel = m.getSecurityLevel();
-        this.payPwdIsExist = m.getPayPwdIsExist();
-        this.isDistributor = m.getIsDistributor();
-        this.mobileAreaCode = m.getMobileAreaCode();
-        this.memberSignature = m.getMemberSignature();
-        this.memberBio = m.getMemberBio();
-    }
-
-
     public int getMemberId() {
         return memberId;
     }
@@ -356,6 +294,14 @@ public class MemberVo {
 
     public void setTrueName(String trueName) {
         this.trueName = trueName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getMemberPwd() {
@@ -646,14 +592,6 @@ public class MemberVo {
         this.payPwdIsExist = payPwdIsExist;
     }
 
-    public HashMap<String, Object> getCurrGrade() {
-        return currGrade;
-    }
-
-    public void setCurrGrade(HashMap<String, Object> currGrade) {
-        this.currGrade = currGrade;
-    }
-
     public long getVoucherNum() {
         return voucherNum;
     }
@@ -678,20 +616,20 @@ public class MemberVo {
         this.isDistributor = isDistributor;
     }
 
+    public HashMap<String, Object> getCurrGrade() {
+        return currGrade;
+    }
+
+    public void setCurrGrade(HashMap<String, Object> currGrade) {
+        this.currGrade = currGrade;
+    }
+
     public int getIsStoreSuccess() {
         return isStoreSuccess;
     }
 
     public void setIsStoreSuccess(int isStoreSuccess) {
         this.isStoreSuccess = isStoreSuccess;
-    }
-
-    public String getNickName() {
-        return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
     }
 
     public Boolean getShoppingHideStatus() {

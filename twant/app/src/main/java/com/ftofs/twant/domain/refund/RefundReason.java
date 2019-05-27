@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.refund;
 
 import java.io.Serializable;
 
-
 public class RefundReason implements Serializable {
     /**
      * 退款原因id

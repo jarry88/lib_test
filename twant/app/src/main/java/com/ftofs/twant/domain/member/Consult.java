@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 
-
 public class Consult implements Serializable {
     /**
      * 自增编码
@@ -220,9 +219,7 @@ public class Consult implements Serializable {
     }
 
     public String getMemberNameFinal() {
-        StringBuilder builder = new StringBuilder(memberName);
-        builder.replace(2,memberName.length()-2,"*****");
-        return builder.toString();
+        return memberNameFinal;
     }
 
     public void setMemberNameFinal(String memberNameFinal) {

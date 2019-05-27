@@ -2,8 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import com.ftofs.twant.domain.member.Member;
 
-
-
 public class Seller {
     /**
      * 卖家编号

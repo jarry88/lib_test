@@ -2,8 +2,6 @@ package com.ftofs.twant.domain.promotion;
 
 import java.io.Serializable;
 
-import java.util.Calendar;
-
 public class PromotionQuota implements Serializable {
     /**
      * 店铺编号

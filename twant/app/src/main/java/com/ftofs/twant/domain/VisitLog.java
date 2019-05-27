@@ -2,7 +2,6 @@ package com.ftofs.twant.domain;
 
 import java.math.BigInteger;
 
-
 public class VisitLog {
     /**
      * 訪問id

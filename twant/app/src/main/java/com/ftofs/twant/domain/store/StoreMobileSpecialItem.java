@@ -79,10 +79,6 @@ public class StoreMobileSpecialItem {
         this.itemSort = itemSort;
     }
 
-    public String getItemTypeText() {
-        return itemType;
-    }
-
     @Override
     public String toString() {
         return "StoreMobileSpecialItem{" +

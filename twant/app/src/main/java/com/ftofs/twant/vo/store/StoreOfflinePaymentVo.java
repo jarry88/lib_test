@@ -1,7 +1,6 @@
 package com.ftofs.twant.vo.store;
 
 import com.ftofs.twant.domain.OfflinePayment;
-import com.ftofs.twant.domain.store.StoreOfflinePayment;
 
 /**
  * @author liusf
@@ -15,19 +14,6 @@ public class StoreOfflinePaymentVo {
     private String paymentName;
     private String paymentLogo;
     private OfflinePayment offlinePayment;
-
-
-    public StoreOfflinePaymentVo(){
-    }
-
-    public StoreOfflinePaymentVo(StoreOfflinePayment storeOfflinePayment, OfflinePayment offlinePayment){
-        this.storePaymentId = storeOfflinePayment.getId();
-        this.storeId = storeOfflinePayment.getStoreId();
-        this.paymentId = storeOfflinePayment.getPaymentId();
-        this.paymentName = offlinePayment.getPaymentName();
-        this.paymentLogo = offlinePayment.getPaymentLogo();
-        this.offlinePayment = offlinePayment;
-    }
 
     public int getStorePaymentId() {
         return storePaymentId;

@@ -49,18 +49,6 @@ public class ApiSpecialItem {
     public ApiSpecialItem() {
     }
 
-    public ApiSpecialItem(ApiSpecialItem apiSpecialItem) {
-        this.itemId = apiSpecialItem.itemId;
-        this.specialId = apiSpecialItem.specialId;
-        this.itemType = apiSpecialItem.itemType;
-        this.itemData = apiSpecialItem.itemData;
-        this.itemSort = apiSpecialItem.itemSort;
-        this.wap = apiSpecialItem.wap;
-        this.wechat = apiSpecialItem.wechat;
-        this.android = apiSpecialItem.android;
-        this.ios = apiSpecialItem.ios;
-    }
-
     public int getItemId() {
         return itemId;
     }

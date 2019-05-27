@@ -90,11 +90,19 @@ public class BrandApply {
     }
 
     public String getImage1Src() {
-       return image1;
+        return image1Src;
+    }
+
+    public void setImage1Src(String image1Src) {
+        this.image1Src = image1Src;
     }
 
     public String getImage2Src() {
-        return image2;
+        return image2Src;
+    }
+
+    public void setImage2Src(String image2Src) {
+        this.image2Src = image2Src;
     }
 
     @Override

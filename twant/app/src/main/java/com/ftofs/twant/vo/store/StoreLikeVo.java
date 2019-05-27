@@ -2,7 +2,6 @@ package com.ftofs.twant.vo.store;
 
 import java.io.Serializable;
 
-
 /**
  * @Description: 點讚視圖對象
  * @Auther: yangjian

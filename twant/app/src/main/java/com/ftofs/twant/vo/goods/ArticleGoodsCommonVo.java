@@ -1,8 +1,5 @@
 package com.ftofs.twant.vo.goods;
 
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.store.Store;
-
 import java.math.BigDecimal;
 
 /**
@@ -55,18 +52,6 @@ public class ArticleGoodsCommonVo {
      * 图片路径
      */
     private String imageSrc;
-
-    public ArticleGoodsCommonVo(GoodsCommon goodsCommon, Store store) {
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.jingle = goodsCommon.getJingle();
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.wechatPriceMin = goodsCommon.getWechatPriceMin();
-    }
 
     public int getCommonId() {
         return commonId;

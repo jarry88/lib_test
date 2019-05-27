@@ -1,6 +1,5 @@
 package com.ftofs.twant.vo;
-
-import com.ftofs.twant.domain.ChannelModuleItem;
+;
 import com.ftofs.twant.domain.goods.Brand;
 import com.ftofs.twant.domain.goods.GoodsCommon;
 
@@ -68,16 +67,6 @@ public class ChannelModuleItemVo implements Serializable {
      * 携带的品牌数据
      */
     private List<Brand> brands = new ArrayList<Brand>();
-
-    public ChannelModuleItemVo(ChannelModuleItem indexModuleItem) {
-        this.setModuleId(indexModuleItem.getModuleId());
-        this.setModuleItemId(indexModuleItem.getModuleItemId());
-        this.setModuleItemJson(indexModuleItem.getModuleItemJson());
-        this.setModuleItemKey(indexModuleItem.getModuleItemKey());
-        this.setModuleItemName(indexModuleItem.getModuleItemName());
-        this.setModuleItemSort(indexModuleItem.getModuleItemSort());
-        this.setModuleItemType(indexModuleItem.getModuleItemType());
-    }
 
     public int getModuleItemId() {
         return moduleItemId;

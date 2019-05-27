@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 
-
 public class ExpPointsLog implements Serializable {
     /**
      * 自增编码
@@ -88,15 +87,6 @@ public class ExpPointsLog implements Serializable {
     }
 
     public String getOperationStageText() {
-        if (operationStage.equals("login")) {
-            operationStageText = "會員登錄";
-        }else if(operationStage.equals("comments")){
-            operationStageText = "商品評論";
-        }else if(operationStage.equals("orders")){
-            operationStageText = "訂單消費";
-        }else if(operationStage.equals("register")){
-            operationStageText = "會員注冊";
-        }
         return operationStageText;
     }
 

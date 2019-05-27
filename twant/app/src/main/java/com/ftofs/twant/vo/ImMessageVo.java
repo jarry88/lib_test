@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo;
 
-import com.ftofs.twant.domain.ImMessage;
-
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
  * @license    http://www.shopnc.net
@@ -88,20 +86,6 @@ public class ImMessageVo {
      * 收信人店铺名称
      */
     private String toUserStoreName = "";
-
-    public ImMessageVo(ImMessage imMessage) {
-        this.messageId = imMessage.getMessageId();
-        this.fromUserId = imMessage.getFromUserId();
-        this.fromUserName = imMessage.getFromUserName();
-        this.fromUserType = imMessage.getFromUserType();
-        this.toUserId = imMessage.getToUserId();
-        this.toUserName = imMessage.getToUserName();
-        this.toUserType = imMessage.getToUserType();
-        this.messageContent = imMessage.getMessageContent();
-        this.messageState = imMessage.getMessageState();
-        this.messageType = imMessage.getMessageType();
-        this.addTime = imMessage.getAddTime();
-    }
 
     public int getMessageId() {
         return messageId;

@@ -1,9 +1,6 @@
 package com.ftofs.twant.vo.consult;
 
 import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.member.Consult;
-
-
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -84,25 +81,6 @@ public class ConsultVo {
      * 商品SPU
      */
     private GoodsCommon goodsCommon = null;
-
-    public ConsultVo() {}
-    public ConsultVo(Consult consult, GoodsCommon gc) {
-        this.consultId = consult.getConsultId();
-        this.commonId = consult.getCommonId();
-        this.memberId = consult.getMemberId();
-        this.memberName = consult.getMemberName();
-        this.storeId = consult.getStoreId();
-        this.storeName = consult.getStoreName();
-        this.classId = consult.getClassId();
-        this.className = consult.getClassName();
-        this.consultContent = consult.getConsultContent();
-        this.addTime = consult.getAddTime();
-        this.consultReplyState = consult.getConsultReplyState();
-        this.consultReply = consult.getConsultReply();
-        this.replyTime = consult.getReplyTime();
-        this.readState = consult.getReadState();
-        this.goodsCommon = gc;
-    }
 
     public int getConsultId() {
         return consultId;

@@ -23,86 +23,81 @@ public class CartBundlingVo {
      * 购物车Id
      */
     private int cartId;
+
     /**
      * 优惠套装id
      */
     private int bundlingId = 0;
+
     /**
      * 优惠套装名称
      */
     private String bundlingName;
+
     /**
      * 优惠套装单价(各商品单价之和)
      */
     private BigDecimal goodsPrice;
+
     /**
      * 商品图
      */
     private String imageName;
+
     /**
      * 购买数量
      */
     private int buyNum;
+
     /**
      * 商品小计[单价 * 数量]
      */
     private BigDecimal itemAmount;
+
     /**
      * 商品库存
      */
     private int goodsStorage;
+
     /**
      * 商品状态
      */
     private int goodsStatus;
+
     /**
      * 店铺ID
      */
     private int storeId;
+
     /**
      * 店铺名
      */
     private String storeName;
+
     /**
      * 商品库存是否足够
      */
     private int storageStatus;
+
     /**
      * 会员ID
      */
     private int memberId;
+
     /**
      * 优惠套装商品列表
      */
     private List<BuyBundlingItemVo> buyBundlingItemVoList = new ArrayList<>();
+
     /**
      * 开始时间
      */
-
     private String startTime;
+
     /**
      * 结束时间
      */
-
     private String endTime;
-
-    /**
-     * 取得商品信息[联查购物车]
-     * @param cart
-     * @param bundling
-     * @param store
-     */
-    public CartBundlingVo(Cart cart, Bundling bundling, Store store) {
-        this.cartId = cart.getCartId();
-        this.buyNum = cart.getBuyNum();
-        this.bundlingName = bundling.getBundlingTileFinal();
-        this.memberId = cart.getMemberId();
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.bundlingId = cart.getBundlingId();
-        this.startTime = bundling.getStartTime();
-        this.endTime = bundling.getEndTime();
-    }
 
     public int getCartId() {
         return cartId;
@@ -137,7 +132,7 @@ public class CartBundlingVo {
     }
 
     public String getImageName() {
-        return buyBundlingItemVoList.get(0).getSpuImageSrc();
+        return imageName;
     }
 
     public void setImageName(String imageName) {
@@ -158,6 +153,14 @@ public class CartBundlingVo {
 
     public void setItemAmount(BigDecimal itemAmount) {
         this.itemAmount = itemAmount;
+    }
+
+    public int getGoodsStorage() {
+        return goodsStorage;
+    }
+
+    public void setGoodsStorage(int goodsStorage) {
+        this.goodsStorage = goodsStorage;
     }
 
     public int getGoodsStatus() {
@@ -184,6 +187,13 @@ public class CartBundlingVo {
         this.storeName = storeName;
     }
 
+    public int getStorageStatus() {
+        return storageStatus;
+    }
+
+    public void setStorageStatus(int storageStatus) {
+        this.storageStatus = storageStatus;
+    }
 
     public int getMemberId() {
         return memberId;
@@ -193,29 +203,12 @@ public class CartBundlingVo {
         this.memberId = memberId;
     }
 
-
     public List<BuyBundlingItemVo> getBuyBundlingItemVoList() {
         return buyBundlingItemVoList;
     }
 
     public void setBuyBundlingItemVoList(List<BuyBundlingItemVo> buyBundlingItemVoList) {
         this.buyBundlingItemVoList = buyBundlingItemVoList;
-    }
-
-    public int getGoodsStorage() {
-        return goodsStorage;
-    }
-
-    public void setGoodsStorage(int goodsStorage) {
-        this.goodsStorage = goodsStorage;
-    }
-
-    public int getStorageStatus() {
-        return getGoodsStorage() >= buyNum ? 1 : 0;
-    }
-
-    public void setStorageStatus(int storageStatus) {
-        this.storageStatus = storageStatus;
     }
 
     public String getStartTime() {

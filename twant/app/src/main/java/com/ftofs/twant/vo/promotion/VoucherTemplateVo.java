@@ -1,9 +1,6 @@
 package com.ftofs.twant.vo.promotion;
 
-import com.ftofs.twant.domain.promotion.VoucherTemplate;
-
 import java.math.BigDecimal;
-
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -174,85 +171,6 @@ public class VoucherTemplateVo {
      */
     private int memberIsReceive = 0;
 
-    public VoucherTemplateVo(VoucherTemplate voucherTemplate, int memberIsReceive) {
-        this.templateId = voucherTemplate.getTemplateId();
-        this.templateTitle = voucherTemplate.getTemplateTitle();
-        this.templateDescribe = voucherTemplate.getTemplateDescribe();
-        this.useStartTime = voucherTemplate.getUseStartTime();
-        this.useEndTime = voucherTemplate.getUseEndTime();
-        this.validDays = voucherTemplate.getValidDays();
-        this.templatePrice = voucherTemplate.getTemplatePrice();
-        this.limitAmount = voucherTemplate.getLimitAmount();
-        this.storeId = voucherTemplate.getStoreId();
-        this.storeName = voucherTemplate.getStoreName();
-        this.sellerId = voucherTemplate.getSellerId();
-        this.sellerName = voucherTemplate.getSellerName();
-        this.templateState = voucherTemplate.getTemplateState();
-        this.totalNum = voucherTemplate.getTotalNum();
-        this.giveoutNum = voucherTemplate.getGiveoutNum();
-        this.usedNum = voucherTemplate.getUsedNum();
-        this.addTime = voucherTemplate.getAddTime();
-        this.updateTime = voucherTemplate.getUpdateTime();
-        this.limitMemberGradeLevel = voucherTemplate.getLimitMemberGradeLevel();
-        this.limitMemberGradeName = voucherTemplate.getLimitMemberGradeName();
-        this.templateType = voucherTemplate.getTemplateType();
-        this.templateStartTime = voucherTemplate.getTemplateStartTime();
-        this.webUsable = voucherTemplate.getWebUsable();
-        this.appUsable = voucherTemplate.getAppUsable();
-        this.wechatUsable = voucherTemplate.getWechatUsable();
-        this.haveCreated = voucherTemplate.getHaveCreated();
-        this.voucherCenterRecommend = voucherTemplate.getVoucherCenterRecommend();
-        this.templateCurrentStateSign = voucherTemplate.getTemplateCurrentStateSign();
-        this.templateCurrentStateText = voucherTemplate.getTemplateCurrentStateText();
-        this.templateTypeText = voucherTemplate.getTemplateTypeText();
-        this.expiredState = voucherTemplate.getExpiredState();
-        this.usableClientType= voucherTemplate.getUsableClientType();
-        this.usableClientTypeText= voucherTemplate.getUsableClientTypeText();
-        this.withoutState = voucherTemplate.getWithoutState();
-        this.useStartTimeText = voucherTemplate.getUseStartTimeText();
-        this.useEndTimeText = voucherTemplate.getUseEndTimeText();
-        this.limitAmountText = voucherTemplate.getLimitAmountText();
-        this.memberIsReceive = memberIsReceive;
-    }
-    public VoucherTemplateVo(VoucherTemplate voucherTemplate) {
-        this.templateId = voucherTemplate.getTemplateId();
-        this.templateTitle = voucherTemplate.getTemplateTitle();
-        this.templateDescribe = voucherTemplate.getTemplateDescribe();
-        this.useStartTime = voucherTemplate.getUseStartTime();
-        this.useEndTime = voucherTemplate.getUseEndTime();
-        this.validDays = voucherTemplate.getValidDays();
-        this.templatePrice = voucherTemplate.getTemplatePrice();
-        this.limitAmount = voucherTemplate.getLimitAmount();
-        this.storeId = voucherTemplate.getStoreId();
-        this.storeName = voucherTemplate.getStoreName();
-        this.sellerId = voucherTemplate.getSellerId();
-        this.sellerName = voucherTemplate.getSellerName();
-        this.templateState = voucherTemplate.getTemplateState();
-        this.totalNum = voucherTemplate.getTotalNum();
-        this.giveoutNum = voucherTemplate.getGiveoutNum();
-        this.usedNum = voucherTemplate.getUsedNum();
-        this.addTime = voucherTemplate.getAddTime();
-        this.updateTime = voucherTemplate.getUpdateTime();
-        this.limitMemberGradeLevel = voucherTemplate.getLimitMemberGradeLevel();
-        this.limitMemberGradeName = voucherTemplate.getLimitMemberGradeName();
-        this.templateType = voucherTemplate.getTemplateType();
-        this.templateStartTime = voucherTemplate.getTemplateStartTime();
-        this.webUsable = voucherTemplate.getWebUsable();
-        this.appUsable = voucherTemplate.getAppUsable();
-        this.wechatUsable = voucherTemplate.getWechatUsable();
-        this.haveCreated = voucherTemplate.getHaveCreated();
-        this.voucherCenterRecommend = voucherTemplate.getVoucherCenterRecommend();
-        this.templateCurrentStateSign = voucherTemplate.getTemplateCurrentStateSign();
-        this.templateCurrentStateText = voucherTemplate.getTemplateCurrentStateText();
-        this.templateTypeText = voucherTemplate.getTemplateTypeText();
-        this.expiredState = voucherTemplate.getExpiredState();
-        this.usableClientType= voucherTemplate.getUsableClientType();
-        this.usableClientTypeText= voucherTemplate.getUsableClientTypeText();
-        this.withoutState = voucherTemplate.getWithoutState();
-        this.useStartTimeText = voucherTemplate.getUseStartTimeText();
-        this.useEndTimeText = voucherTemplate.getUseEndTimeText();
-        this.limitAmountText = voucherTemplate.getLimitAmountText();
-    }
     public int getTemplateId() {
         return templateId;
     }

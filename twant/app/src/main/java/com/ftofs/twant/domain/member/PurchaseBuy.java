@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.math.BigDecimal;
 
-
 public class PurchaseBuy {
 	/**
 	 * 采购计划 主键ID
@@ -128,156 +127,204 @@ public class PurchaseBuy {
 	 * 采购单号
 	 */
 	private String purchaseId;
-	
-	public String getPurchaseId() {
-		return purchaseId;
-	}
-	public void setPurchaseId(String purchaseId) {
-		this.purchaseId = purchaseId;
-	}
-	public String getReceiveTime() {
-		return receiveTime;
-	}
-	public void setReceiveTime(String receiveTime) {
-		this.receiveTime = receiveTime;
-	}
-	public Integer getContactType() {
-		return contactType;
-	}
-	public void setContactType(Integer contactType) {
-		this.contactType = contactType;
-	}
-	public Integer getShowQuotedprice() {
-		return showQuotedprice;
-	}
-	public void setShowQuotedprice(Integer showQuotedprice) {
-		this.showQuotedprice = showQuotedprice;
-	}
-	public Integer getNeedInvoice() {
-		return needInvoice;
-	}
-	public void setNeedInvoice(Integer needInvoice) {
-		this.needInvoice = needInvoice;
-	}
-	public Integer getCategoryId() {
-		return categoryId;
-	}
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
-	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public Integer getMemberId() {
 		return memberId;
 	}
+
 	public void setMemberId(Integer memberId) {
 		this.memberId = memberId;
 	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	public String getProName() {
 		return proName;
 	}
+
 	public void setProName(String proName) {
 		this.proName = proName;
 	}
+
 	public String getNorm() {
 		return norm;
 	}
+
 	public void setNorm(String norm) {
 		this.norm = norm;
 	}
+
 	public BigDecimal getNum() {
 		return num;
 	}
+
 	public void setNum(BigDecimal num) {
 		this.num = num;
 	}
+
 	public String getUnit() {
 		return unit;
 	}
+
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
+
 	public BigDecimal getPrice() {
 		return price;
 	}
+
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
+
 	public String getPriceMemo() {
 		return priceMemo;
 	}
+
 	public void setPriceMemo(String priceMemo) {
 		this.priceMemo = priceMemo;
 	}
+
 	public String getPicUrl() {
 		return picUrl;
 	}
+
 	public void setPicUrl(String picUrl) {
 		this.picUrl = picUrl;
 	}
+
 	public String getContent() {
 		return content;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
+
 	public String getContacts() {
 		return contacts;
 	}
+
 	public void setContacts(String contacts) {
 		this.contacts = contacts;
 	}
+
 	public String getPhone() {
 		return phone;
 	}
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public String getPurType() {
-		return purType;
-	}
-	public void setPurType(String purType) {
-		this.purType = purType;
-	}
-	public String getSupplierArea() {
-		return supplierArea;
-	}
-	public void setSupplierArea(String supplierArea) {
-		this.supplierArea = supplierArea;
-	}
-	public String getReceiveArea() {
-		return receiveArea;
-	}
-	public void setReceiveArea(String receiveArea) {
-		this.receiveArea = receiveArea;
-	}
-	public Integer getState() {
-		return state;
-	}
-	public void setState(Integer state) {
-		this.state = state;
-	}
+
 	public String getEndTime() {
 		return endTime;
 	}
+
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
+
+	public String getPurType() {
+		return purType;
+	}
+
+	public void setPurType(String purType) {
+		this.purType = purType;
+	}
+
+	public String getSupplierArea() {
+		return supplierArea;
+	}
+
+	public void setSupplierArea(String supplierArea) {
+		this.supplierArea = supplierArea;
+	}
+
+	public String getReceiveArea() {
+		return receiveArea;
+	}
+
+	public void setReceiveArea(String receiveArea) {
+		this.receiveArea = receiveArea;
+	}
+
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
 	public String getCreateTime() {
 		return createTime;
 	}
+
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
-	
+
+	public Integer getNeedInvoice() {
+		return needInvoice;
+	}
+
+	public void setNeedInvoice(Integer needInvoice) {
+		this.needInvoice = needInvoice;
+	}
+
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public Integer getContactType() {
+		return contactType;
+	}
+
+	public void setContactType(Integer contactType) {
+		this.contactType = contactType;
+	}
+
+	public Integer getShowQuotedprice() {
+		return showQuotedprice;
+	}
+
+	public void setShowQuotedprice(Integer showQuotedprice) {
+		this.showQuotedprice = showQuotedprice;
+	}
+
+	public String getReceiveTime() {
+		return receiveTime;
+	}
+
+	public void setReceiveTime(String receiveTime) {
+		this.receiveTime = receiveTime;
+	}
+
+	public String getPurchaseId() {
+		return purchaseId;
+	}
+
+	public void setPurchaseId(String purchaseId) {
+		this.purchaseId = purchaseId;
+	}
 }

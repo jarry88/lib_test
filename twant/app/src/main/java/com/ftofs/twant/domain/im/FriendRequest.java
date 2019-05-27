@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.im;
 
-
-
 public class FriendRequest {
     /**
      * 主鍵

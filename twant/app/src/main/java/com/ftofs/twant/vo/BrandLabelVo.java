@@ -1,7 +1,6 @@
 package com.ftofs.twant.vo;
 
 import com.ftofs.twant.domain.goods.Brand;
-import com.ftofs.twant.domain.goods.BrandLabel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +30,6 @@ public class BrandLabelVo {
      * 品牌列表
      */
     private List<Brand> brandList = new ArrayList<>();
-
-    public BrandLabelVo(){
-    }
-
-    public BrandLabelVo(BrandLabel brandLabel){
-        this.brandLabelId = brandLabel.getBrandLabelId();
-        this.brandLabelName = brandLabel.getBrandLabelName();
-        this.brandLabelSort = brandLabel.getBrandLabelSort();
-    }
 
     public int getBrandLabelId() {
         return brandLabelId;

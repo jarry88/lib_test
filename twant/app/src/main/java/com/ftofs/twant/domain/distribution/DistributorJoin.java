@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.distribution;
 
 import java.io.Serializable;
 
-
 public class DistributorJoin implements Serializable {
     /**
      * 会员编号
@@ -213,7 +212,6 @@ public class DistributorJoin implements Serializable {
     public void setPayPerson(String payPerson) {
         this.payPerson = payPerson;
     }
-
 
     public String getIdCartFrontImageUrl() {
         return idCartFrontImage;

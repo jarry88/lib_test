@@ -3,8 +3,6 @@ package com.ftofs.twant.domain.chain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import java.text.SimpleDateFormat;
-
 public class ChainBillOffline implements Serializable {
     /**
      * 主键、自增
@@ -55,18 +53,6 @@ public class ChainBillOffline implements Serializable {
      * 门店名称
      */
     private String chainName;
-
-    public String getStartDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(startTime);
-    }
-
-    public String getEndDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(endTime);
-    }
-
-    public String getCreateDate() {
-        return new SimpleDateFormat("yyyy-MM-dd").format(createTime);
-    }
 
     public int getBillId() {
         return billId;

@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.member;
 
 import java.io.Serializable;
 
-
 public class MemberFollow implements Serializable{
     /**
      * 会员名称

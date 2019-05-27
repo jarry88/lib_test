@@ -1,11 +1,7 @@
 package com.ftofs.twant.vo.buy;
 
 import com.ftofs.twant.domain.distribution.DistributionOrders;
-import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.orders.Cart;
 import com.ftofs.twant.domain.promotion.Book;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.cart.BuyBundlingItemVo;
 import com.ftofs.twant.vo.orders.GoodsContractVo;
 import com.ftofs.twant.vo.promotion.GiftVo;
@@ -423,157 +419,6 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private int reserveStorage;
 
-    public BuyGoodsItemVo() {
-    }
-
-    /**
-     * 来源购物车
-     * @param cart
-     * @param goods
-     * @param goodsCommon
-     * @param store
-     */
-    public BuyGoodsItemVo(Cart cart, Goods goods, GoodsCommon goodsCommon, Store store) {
-        this.cartId = cart.getCartId();
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.buyNum = cart.getBuyNum();
-        this.imageName = goods.getImageName();
-        this.imageSrc = goods.getImageSrc();
-        this.goodsFreight = goodsCommon.getGoodsFreight();
-        this.goodsStorage = goods.getGoodsStorage();
-        this.categoryId = goodsCommon.getCategoryId();
-        this.goodsStatus = 1;
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.freightTemplateId = goodsCommon.getFreightTemplateId();
-        this.freightWeight = goodsCommon.getFreightWeight();
-        this.freightVolume = goodsCommon.getFreightVolume();
-        this.categoryId1 = goodsCommon.getCategoryId1();
-        this.categoryId2 = goodsCommon.getCategoryId2();
-        this.categoryId3 = goodsCommon.getCategoryId3();
-        this.isOwnShop = store.getIsOwnShop();
-        this.unitName = goodsCommon.getUnitName();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.webPrice0 = goods.getWebPrice0();
-        this.webPrice1 = goods.getWebPrice1();
-        this.webPrice2 = goods.getWebPrice2();
-        this.webUsable = goods.getWebUsable();
-        this.appPrice0 = goods.getAppPrice0();
-        this.appPrice1 = goods.getAppPrice1();
-        this.appPrice2 = goods.getAppPrice2();
-        this.appUsable = goods.getAppUsable();
-        this.wechatPrice0 = goods.getWechatPrice0();
-        this.wechatPrice1 = goods.getWechatPrice1();
-        this.wechatPrice2 = goods.getWechatPrice2();
-        this.wechatUsable = goods.getWechatUsable();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.spuImageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        this.goodsPrice0 = goods.getGoodsPrice0();
-        this.goodsPrice1 = goods.getGoodsPrice1();
-        this.goodsPrice2 = goods.getGoodsPrice2();
-        this.promotionTitle = goods.getPromotionTitle();
-        //promotionTypeText赋值无效，后台会被重写
-        this.promotionType = goods.getPromotionType();
-        this.isGift = goodsCommon.getIsGift();
-        this.distributionOrders.setDistributionOrdersId(cart.getDistributionOrdersId());
-        this.goodsSerial = goods.getGoodsSerial();
-        this.contractItem1 = goodsCommon.getContractItem1();
-        this.contractItem2 = goodsCommon.getContractItem2();
-        this.contractItem3 = goodsCommon.getContractItem3();
-        this.contractItem4 = goodsCommon.getContractItem4();
-        this.contractItem5 = goodsCommon.getContractItem5();
-        this.contractItem6 = goodsCommon.getContractItem6();
-        this.contractItem7 = goodsCommon.getContractItem7();
-        this.contractItem8 = goodsCommon.getContractItem8();
-        this.contractItem9 = goodsCommon.getContractItem9();
-        this.contractItem10 = goodsCommon.getContractItem10();
-        this.limitAmount = goods.getLimitAmount();
-        this.virtualOverdueRefund = goodsCommon.getVirtualOverdueRefund();
-        this.foreignTaxRate = goodsCommon.getForeignTaxRate() != null ? goodsCommon.getForeignTaxRate() : BigDecimal.ZERO;
-        this.isForeign = 0;
-        this.reserveStorage = goods.getReserveStorage();
-    }
-
-    /**
-     * 直接购买
-     * @param goods
-     * @param goodsCommon
-     * @param store
-     */
-    public BuyGoodsItemVo(Goods goods, GoodsCommon goodsCommon, Store store) {
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.imageName = goods.getImageName();
-        this.imageSrc = goods.getImageSrc();
-        this.goodsFreight = goodsCommon.getGoodsFreight();
-        this.goodsStorage = goods.getGoodsStorage();
-        this.categoryId = goodsCommon.getCategoryId();
-        this.goodsStatus = 1;
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.freightTemplateId = goodsCommon.getFreightTemplateId();
-        this.freightWeight = goodsCommon.getFreightWeight();
-        this.freightVolume = goodsCommon.getFreightVolume();
-        this.categoryId1 = goodsCommon.getCategoryId1();
-        this.categoryId2 = goodsCommon.getCategoryId2();
-        this.categoryId3 = goodsCommon.getCategoryId3();
-        this.isOwnShop = store.getIsOwnShop();
-        this.unitName = goodsCommon.getUnitName();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.webPrice0 = goods.getWebPrice0();
-        this.webPrice1 = goods.getWebPrice1();
-        this.webPrice2 = goods.getWebPrice2();
-        this.webUsable = goods.getWebUsable();
-        this.appPrice0 = goods.getAppPrice0();
-        this.appPrice1 = goods.getAppPrice1();
-        this.appPrice2 = goods.getAppPrice2();
-        this.appUsable = goods.getAppUsable();
-        this.wechatPrice0 = goods.getWechatPrice0();
-        this.wechatPrice1 = goods.getWechatPrice1();
-        this.wechatPrice2 = goods.getWechatPrice2();
-        this.wechatUsable = goods.getWechatUsable();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.spuImageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        this.goodsPrice0 = goods.getGoodsPrice0();
-        this.goodsPrice1 = goods.getGoodsPrice1();
-        this.goodsPrice2 = goods.getGoodsPrice2();
-        this.promotionTitle = goods.getPromotionTitle();
-        //promotionTypeText赋值无效，后面会被重写
-        this.promotionType = goods.getPromotionType();
-        this.isGift = goodsCommon.getIsGift();
-        this.groupPrice = goods.getGroupPrice();
-        this.goodsSerial = goods.getGoodsSerial();
-        this.contractItem1 = goodsCommon.getContractItem1();
-        this.contractItem2 = goodsCommon.getContractItem2();
-        this.contractItem3 = goodsCommon.getContractItem3();
-        this.contractItem4 = goodsCommon.getContractItem4();
-        this.contractItem5 = goodsCommon.getContractItem5();
-        this.contractItem6 = goodsCommon.getContractItem6();
-        this.contractItem7 = goodsCommon.getContractItem7();
-        this.contractItem8 = goodsCommon.getContractItem8();
-        this.contractItem9 = goodsCommon.getContractItem9();
-        this.contractItem10 = goodsCommon.getContractItem10();
-        this.limitAmount = goods.getLimitAmount();
-        this.virtualOverdueRefund = goodsCommon.getVirtualOverdueRefund();
-        this.foreignTaxRate = goodsCommon.getForeignTaxRate() != null ? goodsCommon.getForeignTaxRate() : BigDecimal.ZERO;
-        this.isForeign = 0;
-    }
-
     public int getCartId() {
         return cartId;
     }
@@ -646,6 +491,14 @@ public class BuyGoodsItemVo implements Cloneable {
         this.itemAmount = itemAmount;
     }
 
+    public BigDecimal getVariableItemAmount() {
+        return variableItemAmount;
+    }
+
+    public void setVariableItemAmount(BigDecimal variableItemAmount) {
+        this.variableItemAmount = variableItemAmount;
+    }
+
     public BigDecimal getGoodsFreight() {
         return goodsFreight;
     }
@@ -695,7 +548,7 @@ public class BuyGoodsItemVo implements Cloneable {
     }
 
     public int getStorageStatus() {
-        return goodsStorage >= buyNum ? 1 : 0;
+        return storageStatus;
     }
 
     public void setStorageStatus(int storageStatus) {
@@ -783,7 +636,7 @@ public class BuyGoodsItemVo implements Cloneable {
     }
 
     public int getBatchNumState() {
-        return 1;
+        return batchNumState;
     }
 
     public void setBatchNumState(int batchNumState) {
@@ -974,6 +827,14 @@ public class BuyGoodsItemVo implements Cloneable {
         this.joinBigSale = joinBigSale;
     }
 
+    public int getPromotionType() {
+        return promotionType;
+    }
+
+    public void setPromotionType(int promotionType) {
+        this.promotionType = promotionType;
+    }
+
     public String getPromotionTypeText() {
         return promotionTypeText;
     }
@@ -1038,14 +899,6 @@ public class BuyGoodsItemVo implements Cloneable {
         this.payAmount = payAmount;
     }
 
-    public int getPromotionType() {
-        return promotionType;
-    }
-
-    public void setPromotionType(int promotionType) {
-        this.promotionType = promotionType;
-    }
-
     public Book getBook() {
         return book;
     }
@@ -1102,15 +955,6 @@ public class BuyGoodsItemVo implements Cloneable {
         this.distributionOrders = distributionOrders;
     }
 
-    public int getTrysSendUseState() {
-        return trysSendUseState;
-    }
-
-    public void setTrysSendUseState(int trysSendUseState) {
-        this.trysSendUseState = trysSendUseState;
-    }
-
-
     public int getTrysPostUseState() {
         return trysPostUseState;
     }
@@ -1119,12 +963,12 @@ public class BuyGoodsItemVo implements Cloneable {
         this.trysPostUseState = trysPostUseState;
     }
 
-    public BigDecimal getVariableItemAmount() {
-        return variableItemAmount;
+    public int getTrysSendUseState() {
+        return trysSendUseState;
     }
 
-    public void setVariableItemAmount(BigDecimal variableItemAmount) {
-        this.variableItemAmount = variableItemAmount;
+    public void setTrysSendUseState(int trysSendUseState) {
+        this.trysSendUseState = trysSendUseState;
     }
 
     public String getGoodsSerial() {
@@ -1335,14 +1179,6 @@ public class BuyGoodsItemVo implements Cloneable {
         this.foreignTaxRate = foreignTaxRate;
     }
 
-    public BigDecimal getForeignTaxAmount() {
-        return BigDecimal.ZERO;
-    }
-
-    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
-        this.foreignTaxAmount = foreignTaxAmount;
-    }
-
     public int getIsForeign() {
         return isForeign;
     }
@@ -1351,11 +1187,13 @@ public class BuyGoodsItemVo implements Cloneable {
         this.isForeign = isForeign;
     }
 
-    @Override
-    public BuyGoodsItemVo clone() throws CloneNotSupportedException {
-        return (BuyGoodsItemVo) super.clone();
+    public BigDecimal getForeignTaxAmount() {
+        return foreignTaxAmount;
     }
 
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
 
     public int getReserveStorage() {
         return reserveStorage;

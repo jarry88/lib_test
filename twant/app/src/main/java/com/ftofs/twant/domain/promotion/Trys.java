@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.promotion;
 
 import java.math.BigDecimal;
 
-
 public class Trys {
     /**
      * 主键

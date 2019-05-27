@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.wantpost;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-
 public class WantPostLike implements Serializable {
     /**
      * 貼文id

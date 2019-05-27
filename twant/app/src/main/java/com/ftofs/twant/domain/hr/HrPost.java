@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.hr;
 
-
-
 public class HrPost {
     /**
      * 招聘文章id

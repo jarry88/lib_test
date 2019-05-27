@@ -2,8 +2,6 @@ package com.ftofs.twant.domain.store;
 
 import com.ftofs.twant.domain.chain.Chain;
 
-
-
 public class Store {
     /**
      * 店铺编号
@@ -333,46 +331,6 @@ public class Store {
      */
     private Integer districtId;
 
-    public int getIsOpen() {
-        return isOpen;
-    }
-
-    public void setIsOpen(int isOpen) {
-        this.isOpen = isOpen;
-    }
-
-    public String getWeekDayStart() {
-        return weekDayStart;
-    }
-
-    public void setWeekDayStart(String weekDayStart) {
-        this.weekDayStart = weekDayStart;
-    }
-
-    public String getWeekDayEnd() {
-        return weekDayEnd;
-    }
-
-    public void setWeekDayEnd(String weekDayEnd) {
-        this.weekDayEnd = weekDayEnd;
-    }
-
-    public String getRestDayStart() {
-        return restDayStart;
-    }
-
-    public void setRestDayStart(String restDayStart) {
-        this.restDayStart = restDayStart;
-    }
-
-    public String getRestDayEnd() {
-        return restDayEnd;
-    }
-
-    public void setRestDayEnd(String restDayEnd) {
-        this.restDayEnd = restDayEnd;
-    }
-
     public int getStoreId() {
         return storeId;
     }
@@ -685,15 +643,6 @@ public class Store {
         this.billCycleType = billCycleType;
     }
 
-    /**
-     * 返回结算周期与结算周期计算单位的整体描述
-     * by hbj 2016/02/16
-     * @return
-     */
-    public String getBillCyleDescription() {
-        return billCycle + "";
-    }
-
     public int getDecorationState() {
         return decorationState;
     }
@@ -751,7 +700,7 @@ public class Store {
     }
 
     public int getHasBusinessLicence() {
-       return 1;
+        return hasBusinessLicence;
     }
 
     public void setHasBusinessLicence(int hasBusinessLicence) {
@@ -775,7 +724,7 @@ public class Store {
     }
 
     public int getHasFoodCirculationPermit() {
-        return 1;
+        return hasFoodCirculationPermit;
     }
 
     public void setHasFoodCirculationPermit(int hasFoodCirculationPermit) {
@@ -798,20 +747,20 @@ public class Store {
         this.storeFigureImage = storeFigureImage;
     }
 
-    public Chain getChain() {
-        return chain;
-    }
-
-    public void setChain(Chain chain) {
-        this.chain = chain;
-    }
-
     public String getVideoUrl() {
         return videoUrl;
     }
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public Chain getChain() {
+        return chain;
+    }
+
+    public void setChain(Chain chain) {
+        this.chain = chain;
     }
 
     public String getStoreSignature() {
@@ -852,6 +801,46 @@ public class Store {
 
     public void setStartBusiness(String startBusiness) {
         this.startBusiness = startBusiness;
+    }
+
+    public String getWeekDayStart() {
+        return weekDayStart;
+    }
+
+    public void setWeekDayStart(String weekDayStart) {
+        this.weekDayStart = weekDayStart;
+    }
+
+    public String getWeekDayEnd() {
+        return weekDayEnd;
+    }
+
+    public void setWeekDayEnd(String weekDayEnd) {
+        this.weekDayEnd = weekDayEnd;
+    }
+
+    public String getRestDayStart() {
+        return restDayStart;
+    }
+
+    public void setRestDayStart(String restDayStart) {
+        this.restDayStart = restDayStart;
+    }
+
+    public String getRestDayEnd() {
+        return restDayEnd;
+    }
+
+    public void setRestDayEnd(String restDayEnd) {
+        this.restDayEnd = restDayEnd;
+    }
+
+    public int getIsOpen() {
+        return isOpen;
+    }
+
+    public void setIsOpen(int isOpen) {
+        this.isOpen = isOpen;
     }
 
     public Integer getDistrictId() {

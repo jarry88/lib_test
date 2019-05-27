@@ -3,7 +3,6 @@ package com.ftofs.twant.domain.promotion.platform.coupon;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-
 public class CouponGiftsReceiveLog implements Serializable,Cloneable {
     /**
      * 自增ID

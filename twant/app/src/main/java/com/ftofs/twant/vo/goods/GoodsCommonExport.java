@@ -1,9 +1,6 @@
 package com.ftofs.twant.vo.goods;
 
-import com.ftofs.twant.domain.AdminCountry;
-import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
 import com.ftofs.twant.domain.goods.GoodsImage;
 
 import java.math.BigDecimal;
@@ -290,68 +287,6 @@ public class GoodsCommonExport {
      * 點贊數量
      */
     private int goodsLike = 0;
-
-    public GoodsCommonExport(){
-    }
-
-    public GoodsCommonExport(GoodsCommon goodsCommon, Category category, AdminCountry adminCountry){
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsCountry = adminCountry.getCountryCn();
-        this.jingle = goodsCommon.getJingle();
-        this.categoryId1 = category.getCategoryName();
-        this.specJson = goodsCommon.getSpecJson();
-        this.goodsSpecValueJson = goodsCommon.getGoodsSpecValueJson();
-        this.storeId = goodsCommon.getStoreId();
-        this.createTime = goodsCommon.getCreateTime();
-        this.updateTime = goodsCommon.getUpdateTime();
-        this.goodsFreight = goodsCommon.getGoodsFreight();
-        this.freightWeight = goodsCommon.getFreightWeight();
-        this.freightVolume = goodsCommon.getFreightVolume();
-        this.isCommend = goodsCommon.getIsCommend();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchPrice0 = goodsCommon.getBatchPrice0();
-        this.batchPrice1 = goodsCommon.getBatchPrice1();
-        this.batchPrice2 = goodsCommon.getBatchPrice2();
-        this.webPrice0 = goodsCommon.getWebPrice0();
-        this.webPrice1 = goodsCommon.getWebPrice1();
-        this.webPrice2 = goodsCommon.getWebPrice2();
-        this.webPriceMin = goodsCommon.getWebPriceMin();
-        this.webUsable = goodsCommon.getWebUsable();
-        this.appPrice0 = goodsCommon.getAppPrice0();
-        this.appPrice1 = goodsCommon.getAppPrice1();
-        this.appPrice2 = goodsCommon.getAppPrice2();
-        this.appPriceMin = goodsCommon.getAppPriceMin();
-        this.appUsable = goodsCommon.getAppUsable();
-        this.promotionState = goodsCommon.getPromotionState();
-        this.promotionDiscountRate = goodsCommon.getPromotionDiscountRate();
-        this.promotionType = goodsCommon.getPromotionType();
-        this.promotionTypeText = goodsCommon.getPromotionTypeText();
-        this.unitName = goodsCommon.getUnitName();
-        this.goodsFavorite = goodsCommon.getGoodsFavorite();
-        this.goodsClick = goodsCommon.getGoodsClick();
-        this.evaluateNum = goodsCommon.getEvaluateNum();
-        this.goodsRate = goodsCommon.getGoodsRate();
-        this.goodsSaleNum = goodsCommon.getGoodsSaleNum();
-        this.imageName = goodsCommon.getImageName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        this.goodsImageList = goodsCommon.getGoodsImageList();
-        this.goodsList = goodsCommon.getGoodsList();
-        this.isGift = goodsCommon.getIsGift();
-        this.searchBoost = goodsCommon.getSearchBoost();
-        this.isVirtual = goodsCommon.getIsVirtual();
-        this.goodsVideo = goodsCommon.getGoodsVideo();
-        this.detailVideo = goodsCommon.getDetailVideo();
-        this.isWaterMark = goodsCommon.getIsWaterMark();
-        this.waterMarkImage = goodsCommon.getWaterMarkImage();
-        this.waterMarkPosition = goodsCommon.getWaterMarkPosition();
-        this.goodsLike = goodsCommon.getGoodsLike();
-    }
 
     public int getCommonId() {
         return commonId;

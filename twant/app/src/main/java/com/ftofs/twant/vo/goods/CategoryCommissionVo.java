@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo.goods;
 
-import com.ftofs.twant.domain.goods.Category;
-
 /**
  * Copyright: Bizpower多用户商城系统
  * Copyright: www.bizpower.com
@@ -39,14 +37,6 @@ public class CategoryCommissionVo {
      * 佣金
      */
     private int commissionRate;
-
-    public CategoryCommissionVo(Category category) {
-        this.categoryId = category.getCategoryId();
-        this.categoryName = category.getCategoryName();
-        this.categorySort = category.getCategorySort();
-        this.parentId = category.getParentId();
-        this.deep = category.getDeep();
-    }
 
     public int getCategoryId() {
         return categoryId;

@@ -1,12 +1,6 @@
 package com.ftofs.twant.vo.seckill;
 
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.seckill.SeckillGoodsCommon;
-import com.ftofs.twant.domain.seckill.SeckillSchedule;
-import com.ftofs.twant.domain.store.Store;
-
 import java.math.BigDecimal;
-
 
 /**
  * Copyright: Bizpower多用户商城系统
@@ -105,83 +99,6 @@ public class SeckillGoodsCommonVo {
      * 是否设置提醒
      */
     private int isNotice = 0;
-
-    public SeckillGoodsCommonVo( SeckillGoodsCommon seckillGoodsCommon, GoodsCommon goodsCommon, SeckillSchedule seckillSchedule) {
-        this.goodsName = goodsCommon.getGoodsName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.commonId = seckillGoodsCommon.getCommonId();
-        this.seckillGoodsPrice = seckillGoodsCommon.getGoodsPrice();
-        this.goodsStorage = seckillGoodsCommon.getGoodsStorage();
-        this.scheduleId = seckillGoodsCommon.getScheduleId();
-        this.startTime = seckillGoodsCommon.getStartTime();
-        this.endTime = seckillGoodsCommon.getEndTime();
-        this.scheduleState = seckillGoodsCommon.getScheduleState();
-        this.verifyRemark = seckillGoodsCommon.getVerifyRemark();
-        this.scheduleStateText = seckillGoodsCommon.getScheduleStateText();
-        this.scheduleName = seckillSchedule.getScheduleName();
-    }
-
-    /**
-     * 后台秒杀商品列表使用
-     * @param goodsCommon
-     * @param seckillGoodsCommon
-     * @param store
-     */
-    public SeckillGoodsCommonVo(SeckillGoodsCommon seckillGoodsCommon, GoodsCommon goodsCommon, Store store) {
-        this.seckillCommonId = seckillGoodsCommon.getSeckillCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.commonId = seckillGoodsCommon.getCommonId();
-        this.seckillGoodsPrice = seckillGoodsCommon.getGoodsPrice();
-        this.goodsStorage = seckillGoodsCommon.getGoodsStorage();
-        this.scheduleId = seckillGoodsCommon.getScheduleId();
-        this.startTime = seckillGoodsCommon.getStartTime();
-        this.endTime = seckillGoodsCommon.getEndTime();
-        this.scheduleState = seckillGoodsCommon.getScheduleState();
-        this.verifyRemark = seckillGoodsCommon.getVerifyRemark();
-        this.scheduleStateText = seckillGoodsCommon.getScheduleStateText();
-        this.storeName = store.getStoreName();
-    }
-    /**
-     * 后台秒杀审核商品列表使用
-     * @param goodsCommon
-     * @param seckillGoodsCommon
-     * @param store
-     */
-    public SeckillGoodsCommonVo(SeckillGoodsCommon seckillGoodsCommon, GoodsCommon goodsCommon, Store store, SeckillSchedule seckillSchedule) {
-        this.seckillCommonId = seckillGoodsCommon.getSeckillCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.commonId = seckillGoodsCommon.getCommonId();
-        this.seckillGoodsPrice = seckillGoodsCommon.getGoodsPrice();
-        this.goodsStorage = seckillGoodsCommon.getGoodsStorage();
-        this.scheduleId = seckillGoodsCommon.getScheduleId();
-        this.startTime = seckillGoodsCommon.getStartTime();
-        this.endTime = seckillGoodsCommon.getEndTime();
-        this.scheduleState = seckillGoodsCommon.getScheduleState();
-        this.verifyRemark = seckillGoodsCommon.getVerifyRemark();
-        this.scheduleStateText = seckillGoodsCommon.getScheduleStateText();
-        this.storeName = store.getStoreName();
-        this.scheduleName = seckillSchedule.getScheduleName();
-    }
-
-    public SeckillGoodsCommonVo( SeckillGoodsCommon seckillGoodsCommon, GoodsCommon goodsCommon) {
-        this.seckillCommonId = seckillGoodsCommon.getSeckillCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.imageSrc = goodsCommon.getImageSrc();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsPrice = goodsCommon.getBatchPrice2();
-        this.seckillGoodsPrice = seckillGoodsCommon.getGoodsPrice();
-        this.goodsStorage = seckillGoodsCommon.getGoodsStorage();
-        this.scheduleId = seckillGoodsCommon.getScheduleId();
-        this.startTime = seckillGoodsCommon.getStartTime();
-        this.endTime = seckillGoodsCommon.getEndTime();
-        this.scheduleState = seckillGoodsCommon.getScheduleState();
-        this.verifyRemark = seckillGoodsCommon.getVerifyRemark();
-        this.scheduleStateText = seckillGoodsCommon.getScheduleStateText();
-        this.goodsSaleNum = seckillGoodsCommon.getGoodsSaleNum();
-        this.salesPercentage = seckillGoodsCommon.getGoodsSaleNum()*100/(seckillGoodsCommon.getGoodsSaleNum() + seckillGoodsCommon.getGoodsStorage());
-    }
 
     public int getSeckillCommonId() {
         return seckillCommonId;

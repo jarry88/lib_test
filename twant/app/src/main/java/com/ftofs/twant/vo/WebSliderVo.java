@@ -1,7 +1,5 @@
 package com.ftofs.twant.vo;
 
-import com.ftofs.twant.domain.WebSlider;
-
 import java.util.HashMap;
 
 /**
@@ -33,20 +31,7 @@ public class WebSliderVo {
      */
     private String webSliderJson;
 
-
     private HashMap<String,Object> webSliderJsonMap = new HashMap<>();
-
-    public WebSliderVo(){
-    }
-
-    public WebSliderVo(WebSlider webSlider){
-        this.webSliderId = webSlider.getWebSliderId();
-        this.webSliderType = webSlider.getWebSliderType();
-        this.webSliderSort = webSlider.getWebSliderSort();
-        this.webSliderKey = webSlider.getWebSliderKey();
-        this.webSliderJson = webSlider.getWebSliderJson();
-        this.webSliderJsonMap = webSlider.getWebSliderJsonMap();
-    }
 
     public int getWebSliderId() {
         return webSliderId;

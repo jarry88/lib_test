@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.contract;
 
 import java.math.BigDecimal;
 
-
 public class ContractCostlog implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	

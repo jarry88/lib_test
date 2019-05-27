@@ -19,13 +19,6 @@ public class StoreGoodsVo {
      */
     private List<GoodsVo> goodsList;
 
-    public StoreGoodsVo(){}
-
-    public StoreGoodsVo(StoreVo storeVo, List<GoodsVo> goodsList) {
-        this.storeVo = storeVo;
-        this.goodsList = goodsList;
-    }
-
     public StoreVo getStoreVo() {
         return storeVo;
     }

@@ -139,7 +139,7 @@ public class Conform implements Serializable {
     }
 
     public String getConformTileFinal() {
-        return conformTitle;
+        return conformTileFinal;
     }
 
     public void setConformTileFinal(String conformTileFinal) {
@@ -227,11 +227,7 @@ public class Conform implements Serializable {
     }
 
     public Integer getIsGift() {
-        if (isGift == null) {
-            return 0;
-        } else {
-            return isGift;
-        }
+        return isGift;
     }
 
     public void setIsGift(Integer isGift) {
@@ -270,9 +266,10 @@ public class Conform implements Serializable {
         this.conformStateText = conformStateText;
     }
 
-    public String getContentCartRule() {
+    public String getContentRule() {
         return contentRule;
     }
+
     public void setContentRule(String contentRule) {
         this.contentRule = contentRule;
     }

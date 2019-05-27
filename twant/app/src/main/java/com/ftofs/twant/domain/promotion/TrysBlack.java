@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.promotion;
 
-
-
 public class TrysBlack {
     /**
      * 主键
@@ -84,6 +82,7 @@ public class TrysBlack {
     private String avatarUrl = "";
 
     private String trysTypeText;
+
     public int getMemberId() {
         return memberId;
     }
@@ -172,30 +171,6 @@ public class TrysBlack {
         this.imageName = imageName;
     }
 
-    public String getImageSrc() {
-        return imageSrc;
-    }
-
-    public void setImageSrc(String imageSrc) {
-        this.imageSrc = imageSrc;
-    }
-
-    public String getReasonText() {
-        switch (reason) {
-            case 0:
-                reasonText = "未提交试用报告";
-                break;
-            case 1:
-                reasonText = "提交劣质的试用报告";
-
-        }
-        return reasonText;
-    }
-
-    public void setReasonText(String reasonText) {
-        this.reasonText = reasonText;
-    }
-
     public String getMemberName() {
         return memberName;
     }
@@ -212,6 +187,22 @@ public class TrysBlack {
         this.avatar = avatar;
     }
 
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
+    }
+
+    public String getReasonText() {
+        return reasonText;
+    }
+
+    public void setReasonText(String reasonText) {
+        this.reasonText = reasonText;
+    }
+
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -219,8 +210,9 @@ public class TrysBlack {
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
+
     public String getTrysTypeText() {
-       return "";
+        return trysTypeText;
     }
 
     public void setTrysTypeText(String trysTypeText) {

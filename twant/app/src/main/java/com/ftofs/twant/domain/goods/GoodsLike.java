@@ -37,14 +37,6 @@ public class GoodsLike implements Serializable {
     public GoodsLike(){
     }
 
-    public GoodsLike(int memberId, int commonId, int state, String createTime, String modifyTime) {
-        this.memberId = memberId;
-        this.commonId = commonId;
-        this.state = state;
-        this.createTime = createTime;
-        this.modifyTime = modifyTime;
-    }
-
     public int getGoodsLikeId() {
         return goodsLikeId;
     }

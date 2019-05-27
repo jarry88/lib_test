@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.search;
 
 import java.io.Serializable;
 
-
 public class SearchHistory implements Serializable {
     /**
      * 编号

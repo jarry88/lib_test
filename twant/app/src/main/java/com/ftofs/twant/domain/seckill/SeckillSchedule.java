@@ -1,7 +1,5 @@
 package com.ftofs.twant.domain.seckill;
 
-
-
 public class SeckillSchedule {
     /**
      * 秒杀排期编号
@@ -78,23 +76,20 @@ public class SeckillSchedule {
         this.scheduleState = scheduleState;
     }
 
-    public String getScheduleStateText() {
-       return scheduleStateText;
-    }
-
-    public void setScheduleStateText(String scheduleStateText) {
-        this.scheduleStateText = scheduleStateText;
-    }
-
     public String getCountDownTime() {
-        if (countDownTime != null) {
-            return countDownTime;
-        }
-        return startTime;
+        return countDownTime;
     }
 
     public void setCountDownTime(String countDownTime) {
         this.countDownTime = countDownTime;
+    }
+
+    public String getScheduleStateText() {
+        return scheduleStateText;
+    }
+
+    public void setScheduleStateText(String scheduleStateText) {
+        this.scheduleStateText = scheduleStateText;
     }
 
     @Override

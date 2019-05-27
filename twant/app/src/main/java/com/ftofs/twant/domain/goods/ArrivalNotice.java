@@ -2,7 +2,6 @@ package com.ftofs.twant.domain.goods;
 
 import java.io.Serializable;
 
-
 public class ArrivalNotice implements Serializable {
     /**
      * 到货通知编号

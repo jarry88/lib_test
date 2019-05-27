@@ -1,7 +1,6 @@
 package com.ftofs.twant.vo;
 
 import com.ftofs.twant.domain.IndexCategoryNav;
-import com.ftofs.twant.domain.goods.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,19 +66,6 @@ public class CategoryNavVo {
      */
     private Object category;
 
-    public CategoryNavVo(Category category) {
-        this.categoryId = category.getCategoryId();
-        this.categoryName = category.getCategoryName();
-        this.parentId = category.getParentId();
-        this.categorySort = category.getCategorySort();
-        this.deep = category.getDeep();
-        this.appImage = category.getAppImage();
-        this.appImageUrl = category.getAppImageUrl();
-    }
-
-    public CategoryNavVo() {
-    }
-
     public int getCategoryId() {
         return categoryId;
     }
@@ -120,22 +106,6 @@ public class CategoryNavVo {
         this.deep = deep;
     }
 
-    public List<CategoryNavVo> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(List<CategoryNavVo> categoryList) {
-        this.categoryList = categoryList;
-    }
-
-    public Object getCategory() {
-        return category;
-    }
-
-    public void setCategory(Object category) {
-        this.category = category;
-    }
-
     public String getAppImage() {
         return appImage;
     }
@@ -152,11 +122,19 @@ public class CategoryNavVo {
         this.appImageUrl = appImageUrl;
     }
 
-    public com.ftofs.twant.domain.IndexCategoryNav getIndexCategoryNav() {
+    public List<CategoryNavVo> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<CategoryNavVo> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+    public IndexCategoryNav getIndexCategoryNav() {
         return IndexCategoryNav;
     }
 
-    public void setIndexCategoryNav(com.ftofs.twant.domain.IndexCategoryNav indexCategoryNav) {
+    public void setIndexCategoryNav(IndexCategoryNav indexCategoryNav) {
         IndexCategoryNav = indexCategoryNav;
     }
 
@@ -166,6 +144,14 @@ public class CategoryNavVo {
 
     public void setChannelId(int channelId) {
         this.channelId = channelId;
+    }
+
+    public Object getCategory() {
+        return category;
+    }
+
+    public void setCategory(Object category) {
+        this.category = category;
     }
 
     @Override

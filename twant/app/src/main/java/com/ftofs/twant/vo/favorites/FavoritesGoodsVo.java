@@ -1,12 +1,9 @@
 package com.ftofs.twant.vo.favorites;
 
 import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.member.FavoritesGoods;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.store.StoreVo;
 
 import java.math.BigDecimal;
-
 
 /**
  * @copyright  Copyright (c) 2007-2017 ShopNC Inc. All rights reserved.
@@ -43,7 +40,7 @@ public class FavoritesGoodsVo {
     /**
      * 商品關注时价格
      */
-    private BigDecimal favGoodsPrice = new BigDecimal(0);
+    private BigDecimal favGoodsPrice = BigDecimal.ZERO;
     /**
      * 商品名称
      */
@@ -71,44 +68,6 @@ public class FavoritesGoodsVo {
      * 1是0否點贊
      */
     private int isLike;
-
-    public FavoritesGoodsVo(FavoritesGoods fg, GoodsCommon gc) {
-        this.favoritesId = fg.getFavoritesId();
-        this.memberId = fg.getMemberId();
-        this.commonId = fg.getCommonId();
-        this.storeId = fg.getStoreId();
-        this.addTime = fg.getAddTime();
-        this.favGoodsPrice = fg.getFavGoodsPrice();
-        this.goodsName = gc.getGoodsName();
-        this.goodsCommon = gc;
-        this.setTop = fg.getSetTop() ;
-    }
-
-    public FavoritesGoodsVo(FavoritesGoods fg, GoodsCommon gc, int haveCouponActivity) {
-        this.favoritesId = fg.getFavoritesId();
-        this.memberId = fg.getMemberId();
-        this.commonId = fg.getCommonId();
-        this.storeId = fg.getStoreId();
-        this.addTime = fg.getAddTime();
-        this.favGoodsPrice = fg.getFavGoodsPrice();
-        this.goodsName = gc.getGoodsName();
-        this.goodsCommon = gc;
-        this.haveCouponActivity = haveCouponActivity;
-        this.setTop = fg.getSetTop();
-    }
-
-    public FavoritesGoodsVo(FavoritesGoods fg, GoodsCommon gc, Store store){
-        this.favoritesId = fg.getFavoritesId();
-        this.memberId = fg.getMemberId();
-        this.commonId = fg.getCommonId();
-        this.storeId = fg.getStoreId();
-        this.addTime = fg.getAddTime();
-        this.favGoodsPrice = fg.getFavGoodsPrice();
-        this.goodsName = gc.getGoodsName();
-        this.setTop = fg.getSetTop() ;
-        this.goodsCommon = gc;
-        this.storeVo = new StoreVo(store);
-    }
 
     public int getFavoritesId() {
         return favoritesId;

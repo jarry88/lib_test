@@ -23,14 +23,6 @@ public class AlbumVo {
      */
     private AlbumFiles albumFiles;
 
-    public AlbumVo(Album album) {
-        this.album = album;
-    }
-
-    public AlbumVo(AlbumFiles albumFiles) {
-        this.albumFiles = albumFiles;
-    }
-
     public Album getAlbum() {
         return album;
     }

@@ -1,11 +1,5 @@
 package com.ftofs.twant.vo.cart;
 
-import com.ftofs.twant.domain.chain.ChainCart;
-import com.ftofs.twant.domain.chain.ChainGoods;
-import com.ftofs.twant.domain.goods.Goods;
-import com.ftofs.twant.domain.goods.GoodsCommon;
-import com.ftofs.twant.domain.orders.Cart;
-import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.vo.orders.GoodsContractVo;
 import com.ftofs.twant.vo.promotion.GiftVo;
 
@@ -328,225 +322,6 @@ public class CartItemVo {
      */
     private int goodsType;
 
-    public CartItemVo() {
-    }
-
-    /**
-     * 取得商品信息[联查购物车]
-     * @param cart
-     * @param goods
-     * @param goodsCommon
-     * @param store
-     */
-    public CartItemVo(Cart cart, Goods goods, GoodsCommon goodsCommon, Store store) {
-        this.cartId = cart.getCartId();
-        this.buyNum = cart.getBuyNum();
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.imageName = goods.getImageName();
-        this.imageSrc = goods.getImageSrc();
-        this.goodsStorage = goods.getGoodsStorage();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.memberId = cart.getMemberId();
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.unitName = goodsCommon.getUnitName();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.webPrice0 = goods.getWebPrice0();
-        this.webPrice1 = goods.getWebPrice1();
-        this.webPrice2 = goods.getWebPrice2();
-        this.webUsable = goods.getWebUsable();
-        this.appPrice0 = goods.getAppPrice0();
-        this.appPrice1 = goods.getAppPrice1();
-        this.appPrice2 = goods.getAppPrice2();
-        this.appUsable = goods.getAppUsable();
-        this.wechatPrice0 = goods.getWechatPrice0();
-        this.wechatPrice1 = goods.getWechatPrice1();
-        this.wechatPrice2 = goods.getWechatPrice2();
-        this.wechatUsable = goods.getWechatUsable();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.spuImageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        this.promotionTitle = goods.getPromotionTitle();
-        this.promotionTypeText = goods.getPromotionTypeText();
-        this.goodsPrice0 = goods.getGoodsPrice0();
-        this.goodsPrice1 = goods.getGoodsPrice1();
-        this.goodsPrice2 = goods.getGoodsPrice2();
-        this.promotionType = goods.getPromotionType();
-        this.isBook = 0;
-        this.isGift = goodsCommon.getIsGift();
-        this.bundlingId = cart.getBundlingId();
-        this.contractItem1 = goodsCommon.getContractItem1();
-        this.contractItem2 = goodsCommon.getContractItem2();
-        this.contractItem3 = goodsCommon.getContractItem3();
-        this.contractItem4 = goodsCommon.getContractItem4();
-        this.contractItem5 = goodsCommon.getContractItem5();
-        this.contractItem6 = goodsCommon.getContractItem6();
-        this.contractItem7 = goodsCommon.getContractItem7();
-        this.contractItem8 = goodsCommon.getContractItem8();
-        this.contractItem9 = goodsCommon.getContractItem9();
-        this.contractItem10 = goodsCommon.getContractItem10();
-        this.limitAmount = goods.getLimitAmount();
-        this.isVirtual = 0;
-        this.isForeign = 0;
-    }
-
-    /**
-     * 到得商品信息[不联查购物车]
-     * @param goods
-     * @param goodsCommon
-     * @param store
-     */
-    public CartItemVo(Goods goods, GoodsCommon goodsCommon, Store store) {
-        this.cartId = goods.getGoodsId();
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.imageName = goods.getImageName();
-        this.imageSrc = goods.getImageSrc();
-        this.goodsStorage = goods.getGoodsStorage();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.storeId = store.getStoreId();
-        this.storeName = store.getStoreName();
-        this.unitName = goodsCommon.getUnitName();
-        this.batchNum0 = goodsCommon.getBatchNum0();
-        this.batchNum1 = goodsCommon.getBatchNum1();
-        this.batchNum2 = goodsCommon.getBatchNum2();
-        this.batchNum0End = goodsCommon.getBatchNum0End();
-        this.batchNum1End = goodsCommon.getBatchNum1End();
-        this.webPrice0 = goods.getWebPrice0();
-        this.webPrice1 = goods.getWebPrice1();
-        this.webPrice2 = goods.getWebPrice2();
-        this.webUsable = goods.getWebUsable();
-        this.appPrice0 = goods.getAppPrice0();
-        this.appPrice1 = goods.getAppPrice1();
-        this.appPrice2 = goods.getAppPrice2();
-        this.appUsable = goods.getAppUsable();
-        this.wechatPrice0 = goods.getWechatPrice0();
-        this.wechatPrice1 = goods.getWechatPrice1();
-        this.wechatPrice2 = goods.getWechatPrice2();
-        this.wechatUsable = goods.getWechatUsable();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.spuImageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        this.promotionTitle = goods.getPromotionTitle();
-        this.promotionTypeText = goods.getPromotionTypeText();
-        this.goodsPrice0 = goods.getGoodsPrice0();
-        this.goodsPrice1 = goods.getGoodsPrice1();
-        this.goodsPrice2 = goods.getGoodsPrice2();
-        this.promotionType = goodsCommon.getPromotionType();
-        this.isBook = 0;
-        this.isGift = 0;
-        this.contractItem1 = goodsCommon.getContractItem1();
-        this.contractItem2 = goodsCommon.getContractItem2();
-        this.contractItem3 = goodsCommon.getContractItem3();
-        this.contractItem4 = goodsCommon.getContractItem4();
-        this.contractItem5 = goodsCommon.getContractItem5();
-        this.contractItem6 = goodsCommon.getContractItem6();
-        this.contractItem7 = goodsCommon.getContractItem7();
-        this.contractItem8 = goodsCommon.getContractItem8();
-        this.contractItem9 = goodsCommon.getContractItem9();
-        this.contractItem10 = goodsCommon.getContractItem10();
-        this.limitAmount = goods.getLimitAmount();
-        this.isVirtual = 0;
-        this.isForeign = 0;
-    }
-
-    /**
-     * 取得商品信息[联查购物车][门店]
-     * @param chainCart
-     * @param goods
-     * @param goodsCommon
-     * @param chainGoods
-     */
-    public CartItemVo(ChainCart chainCart, ChainGoods chainGoods, Goods goods, GoodsCommon goodsCommon) {
-        this.cartId = -chainCart.getCartId();
-        this.buyNum = chainCart.getBuyNum();
-        this.goodsId = -(chainGoods.getChainId()%100*1000000 + goods.getGoodsId()%1000000);
-        this.commonId = -(chainGoods.getChainId()%100*1000000 + goodsCommon.getCommonId()%1000000);
-        this.realGoodsId = goods.getGoodsId();
-        this.realCommonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.imageName = goods.getImageName();
-        this.imageSrc = goods.getImageSrc();
-        this.goodsStorage = chainGoods.getGoodsStorage();
-        this.webPrice0 = chainGoods.getGoodsPrice();
-        this.appPrice0 = chainGoods.getGoodsPrice();
-        this.wechatPrice0 = chainGoods.getGoodsPrice();
-        this.goodsPrice0 = chainGoods.getGoodsPrice();
-        this.goodsPrice = chainGoods.getGoodsPrice();
-        this.goodsStatus = goodsCommon.getGoodsState();
-        this.memberId = chainCart.getMemberId();
-        this.storeId = -chainGoods.getChainId();
-        this.storeName = chainGoods.getChainName();
-        this.unitName = goodsCommon.getUnitName();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.spuImageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        this.chainId = chainGoods.getChainId();
-        this.chainName = chainGoods.getChainName();
-        this.isChain = 1;
-    }
-
-    /**
-     * 取得商品信息[不联查购物车][门店]
-     * @param goods
-     * @param goodsCommon
-     * @param chainGoods
-     */
-    public CartItemVo(ChainGoods chainGoods, Goods goods, GoodsCommon goodsCommon) {
-        this.cartId = chainGoods.getGoodsId();
-        this.goodsId = goods.getGoodsId();
-        this.commonId = goodsCommon.getCommonId();
-        this.goodsName = goodsCommon.getGoodsName();
-        this.goodsFullSpecs = goods.getGoodsFullSpecs();
-        this.imageName = goods.getImageName();
-        this.imageSrc = goods.getImageSrc();
-        this.goodsStorage = chainGoods.getGoodsStorage();
-        this.goodsPrice = chainGoods.getGoodsPrice();
-        this.goodsStatus = goodsCommon.getGoodsState() ;
-        this.storeId = goodsCommon.getStoreId();
-        this.unitName = goodsCommon.getUnitName();
-        this.goodsModal = goodsCommon.getGoodsModal();
-        this.spuImageSrc = goodsCommon.getImageSrc();
-        this.joinBigSale = goodsCommon.getJoinBigSale();
-        this.chainId = chainGoods.getChainId();
-        this.chainName = chainGoods.getChainName();
-        this.chainGoodsId = chainGoods.getChainGoodsId();
-    }
-
-    public CartItemVo(CartBundlingVo cartBundlingVo) {
-        this.cartId = cartBundlingVo.getCartId();
-        this.commonId = cartBundlingVo.getBuyBundlingItemVoList().get(0).getCommonId();
-        this.goodsPrice = cartBundlingVo.getGoodsPrice();
-        this.goodsName = cartBundlingVo.getBundlingName();
-        this.buyNum = cartBundlingVo.getBuyNum();
-        this.imageName = cartBundlingVo.getImageName();
-        this.imageSrc = cartBundlingVo.getBuyBundlingItemVoList().get(0).getSpuImageSrc();
-        this.unitName = "件";
-    }
-
-    public CartItemVo(BuyBundlingItemVo buyBundlingItemVo, CartBundlingVo cartBundlingVo) {
-        this.commonId = buyBundlingItemVo.getCommonId();
-        this.goodsPrice = buyBundlingItemVo.getGoodsPrice();
-        this.goodsName = buyBundlingItemVo.getGoodsName();
-        this.goodsFullSpecs = buyBundlingItemVo.getGoodsFullSpecs();
-        this.imageName = buyBundlingItemVo.getImageName();
-        this.imageSrc = buyBundlingItemVo.getSpuImageSrc();
-        this.unitName = buyBundlingItemVo.getUnitName();
-        this.buyNum = cartBundlingVo.getBuyNum();
-        this.goodsStorage = cartBundlingVo.getGoodsStorage();
-        this.cartId = cartBundlingVo.getCartId();
-    }
-
     public int getCartId() {
         return cartId;
     }
@@ -652,7 +427,7 @@ public class CartItemVo {
     }
 
     public int getStorageStatus() {
-        return goodsStorage >= buyNum ? 1 : 0;
+        return storageStatus;
     }
 
     public void setStorageStatus(int storageStatus) {
@@ -684,7 +459,7 @@ public class CartItemVo {
     }
 
     public int getBatchNumState() {
-        return buyNum >= batchNum0 ? 1 : 0;
+        return batchNumState;
     }
 
     public void setBatchNumState(int batchNumState) {
@@ -699,12 +474,28 @@ public class CartItemVo {
         this.batchNum0 = batchNum0;
     }
 
+    public int getBatchNum0End() {
+        return batchNum0End;
+    }
+
+    public void setBatchNum0End(int batchNum0End) {
+        this.batchNum0End = batchNum0End;
+    }
+
     public int getBatchNum1() {
         return batchNum1;
     }
 
     public void setBatchNum1(int batchNum1) {
         this.batchNum1 = batchNum1;
+    }
+
+    public int getBatchNum1End() {
+        return batchNum1End;
+    }
+
+    public void setBatchNum1End(int batchNum1End) {
+        this.batchNum1End = batchNum1End;
     }
 
     public int getBatchNum2() {
@@ -843,22 +634,6 @@ public class CartItemVo {
         this.spuImageSrc = spuImageSrc;
     }
 
-    public int getBatchNum0End() {
-        return batchNum0End;
-    }
-
-    public void setBatchNum0End(int batchNum0End) {
-        this.batchNum0End = batchNum0End;
-    }
-
-    public int getBatchNum1End() {
-        return batchNum1End;
-    }
-
-    public void setBatchNum1End(int batchNum1End) {
-        this.batchNum1End = batchNum1End;
-    }
-
     public int getSpuBuyNum() {
         return spuBuyNum;
     }
@@ -931,20 +706,20 @@ public class CartItemVo {
         this.isBook = isBook;
     }
 
-    public List<GiftVo> getGiftVoList() {
-        return giftVoList;
-    }
-
-    public void setGiftVoList(List<GiftVo> giftVoList) {
-        this.giftVoList = giftVoList;
-    }
-
     public int getIsGift() {
         return isGift;
     }
 
     public void setIsGift(int isGift) {
         this.isGift = isGift;
+    }
+
+    public List<GiftVo> getGiftVoList() {
+        return giftVoList;
+    }
+
+    public void setGiftVoList(List<GiftVo> giftVoList) {
+        this.giftVoList = giftVoList;
     }
 
     public int getBundlingId() {
@@ -954,7 +729,6 @@ public class CartItemVo {
     public void setBundlingId(int bundlingId) {
         this.bundlingId = bundlingId;
     }
-
 
     public List<BuyBundlingItemVo> getBuyBundlingItemVoList() {
         return buyBundlingItemVoList;
@@ -1108,20 +882,28 @@ public class CartItemVo {
         this.isVirtual = isVirtual;
     }
 
-    public int getIsForeign() {
-        return isForeign;
-    }
-
-    public void setIsForeign(int isForeign) {
-        this.isForeign = isForeign;
-    }
-
     public int getIsSecKill() {
         return isSecKill;
     }
 
     public void setIsSecKill(int isSecKill) {
         this.isSecKill = isSecKill;
+    }
+
+    public int getSeckillGoodsId() {
+        return seckillGoodsId;
+    }
+
+    public void setSeckillGoodsId(int seckillGoodsId) {
+        this.seckillGoodsId = seckillGoodsId;
+    }
+
+    public int getIsForeign() {
+        return isForeign;
+    }
+
+    public void setIsForeign(int isForeign) {
+        this.isForeign = isForeign;
     }
 
     public int getIsChain() {
@@ -1132,33 +914,12 @@ public class CartItemVo {
         this.isChain = isChain;
     }
 
-    /**
-     * 商品类型
-     * @return
-     */
     public int getGoodsType() {
-        if (isForeign == 1) {
-            goodsType = 3;
-        } else if (isVirtual == 1) {
-            goodsType = 2;
-        } else if (isChain == 1) {
-            goodsType = 1;
-        } else {
-            goodsType = 0;
-        }
         return goodsType;
     }
 
     public void setGoodsType(int goodsType) {
         this.goodsType = goodsType;
-    }
-
-    public int getSeckillGoodsId() {
-        return seckillGoodsId;
-    }
-
-    public void setSeckillGoodsId(int seckillGoodsId) {
-        this.seckillGoodsId = seckillGoodsId;
     }
 
     @Override
