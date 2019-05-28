@@ -14,6 +14,8 @@ import com.ftofs.twant.fragment.MainFragment;
 import java.util.List;
 import java.util.Set;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+
 
 /**
  * 常用工具類
@@ -164,5 +166,20 @@ public class Util {
             first = false;
         }
         return sb.toString();
+    }
+
+    public static float getGoodsPrice(EasyJSONObject goods) {
+        float price = 0;
+        try {
+            int appUsable = goods.getInt("appUsable");
+            if (appUsable > 0) {
+                price = (float) goods.getDouble("appPrice0");
+            } else {
+                price = (float) goods.getDouble("batchPrice2");
+            }
+        } catch (Exception e) {
+
+        }
+        return price;
     }
 }
