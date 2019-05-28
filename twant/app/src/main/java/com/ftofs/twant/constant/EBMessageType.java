@@ -16,5 +16,9 @@ public enum EBMessageType {
     /**
      * 登出成功
      */
-    MESSAGE_TYPE_LOGOUT_SUCCESS
+    MESSAGE_TYPE_LOGOUT_SUCCESS,
+    /**
+     * 選擇規格消息
+     */
+    MESSAGE_TYPE_SELECT_SPECS,
 }

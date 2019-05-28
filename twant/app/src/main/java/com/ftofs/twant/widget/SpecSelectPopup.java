@@ -13,7 +13,9 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
@@ -48,6 +50,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     List<Spec> specList;
     int selectedIndex;  // 當前選中的索引
     ImageView skuImage;
+    String skuImageSrc = "";  // 當前正在顯示的圖片
     Map<String, Integer> specValueIdMap;
 
     // 規格的數量
@@ -109,7 +112,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         Spec firstSpec = specList.get(0);
         String firstImageSrc = firstSpec.specValueList.get(0).imageSrc;
         SLog.info("firstImageSrc[%s]", firstImageSrc);
-        Glide.with(this).load(firstImageSrc).centerCrop().into(skuImage);
+        if (!StringUtil.isEmpty(firstImageSrc)) {
+            skuImageSrc = firstImageSrc;
+            Glide.with(this).load(firstImageSrc).centerCrop().into(skuImage);
+        }
+
 
         int position = 0;
         LinearLayout llSpecContainer = findViewById(R.id.ll_spec_container);
@@ -168,7 +175,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                         // 將前一個選中的按鈕的邊框變灰，當前選中的變為高亮色
                         prevButton.setBackgroundResource(R.drawable.spec_item_unselected_bg);
                         currButton.setBackgroundResource(R.drawable.spec_item_selected_bg);
-                        Glide.with(SpecSelectPopup.this).load(currData.imageSrc).centerCrop().into(skuImage);
+                        if (!StringUtil.isEmpty(currData.imageSrc)) {
+                            Glide.with(SpecSelectPopup.this).load(currData.imageSrc).centerCrop().into(skuImage);
+                            skuImageSrc = currData.imageSrc;
+                        }
 
                         selSpecValueIdList.set(currData.position, currData.specValueId);
                         selSpecButtonList.set(currData.position, currButton);
@@ -182,6 +192,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             ++position;
         }
 
+        // 如果是選擇規格，則隱藏數量調整按鈕
+        if (action == Constant.ACTION_SELECT_SPEC) {
+            findViewById(R.id.ll_quantity_adjust_container).setVisibility(View.GONE);
+        }
     }
 
     //完全可见执行
@@ -267,8 +281,13 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
         // 當前選中的goodsId
         int goodsId = getSelectedGoodsId();
+        EasyJSONObject easyJSONObject = EasyJSONObject.generate(
+                "goodsId", goodsId,
+                "imageSrc", skuImageSrc,
+                "selSpecValueIdArr", EasyJSONArray.from(getSelectedSpecValueIdList())
+        );
 
-
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SELECT_SPECS, easyJSONObject.toString());
     }
 
     @Override
@@ -307,5 +326,14 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         int goodsId = specValueIdMap.get(specValueIds.toString());
         SLog.info("goodsId[%d]", goodsId);
         return goodsId;
+    }
+
+    private List<Integer> getSelectedSpecValueIdList() {
+        List<Integer> idList = new ArrayList<>();
+        for (Integer specValueId : selSpecValueIdList) {
+            idList.add(specValueId);
+        }
+
+        return idList;
     }
 }

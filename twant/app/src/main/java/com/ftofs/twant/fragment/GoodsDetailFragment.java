@@ -16,6 +16,8 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.entity.SpecValue;
@@ -27,6 +29,10 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.lxj.xpopup.XPopup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,6 +69,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     LinearLayout llGoodsDetailImageContainer;
 
     TextView tvCurrentSpecs;
+    // 當前選中的SpecValueId列表
+    List<Integer> selSpecValueIdList = new ArrayList<>();
 
     public static GoodsDetailFragment newInstance(int commonId) {
         Bundle args = new Bundle();
@@ -84,6 +92,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        EventBus.getDefault().register(this);
 
         Bundle args = getArguments();
         commonId = args.getInt("commonId");
@@ -123,7 +133,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 showSpecSelectPopup(Constant.ACTION_BUY);
                 break;
             case R.id.btn_select_spec:
-                showSpecSelectPopup(Constant.ACTION_SELECT);
+                showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
                 break;
             default:
                 break;
@@ -243,9 +253,64 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
         pop();
         return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_SELECT_SPECS) {
+            // 選擇規則完成
+            SLog.info("data[%s]", message.data);
+            try {
+                EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(message.data);
+                int goodsId = easyJSONObject.getInt("goodsId");
+                String imageSrc = easyJSONObject.getString("imageSrc");
+
+                selSpecValueIdList.clear();
+                for (Object object : easyJSONObject.getArray("selSpecValueIdArr")) {
+                    selSpecValueIdList.add((Integer) object);
+                }
+
+                String fullSpecs = getFullSpecs();
+                tvCurrentSpecs.setText(fullSpecs);
+                if (!StringUtil.isEmpty(imageSrc)) {
+                    Glide.with(_mActivity).load(imageSrc).into(goodsImage);
+                }
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    /**
+     * 根據當前選中的specValueId列表，生成規格字符串
+     * @return
+     */
+    public String getFullSpecs() {
+        int index = 0;
+        List<SpecPair> specPairList = new ArrayList<>();
+        for (Integer specValueId : selSpecValueIdList) {
+            Spec spec = specList.get(index);
+
+            String specValueName = "";
+            for (SpecValue specValue : spec.specValueList) {
+                if (specValueId == specValue.specValueId) {
+                    specValueName = specValue.specValueName;
+                    break;
+                }
+            }
+            specPairList.add(new SpecPair(spec.specName, specValueName));
+            ++index;
+        }
+        return Util.formatSpecString(specPairList);
     }
 }
