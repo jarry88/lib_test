@@ -294,7 +294,7 @@ public class Api {
                     SLog.info("statusCode[%d]", statusCode);
 
                     Handler handler = new Handler(Looper.getMainLooper());
-                    uiCallback.setOnResponse(call, response);
+                    uiCallback.setOnResponse(call, response.body().string());
                     handler.post(uiCallback);
                 }
             });
@@ -538,9 +538,8 @@ public class Api {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, String responseStr) throws IOException {
                 try {
-                    String responseStr = response.body().string();
                     if (StringUtil.isEmpty(responseStr)) {
                         return;
                     }

@@ -179,9 +179,8 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(Call call, String responseStr) throws IOException {
                     loadingPopup.dismiss();
-                    String responseStr = response.body().string();
                     SLog.info("responseStr[%s]", responseStr);
 
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);

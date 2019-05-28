@@ -230,8 +230,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseStr = response.body().string();
+            public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 

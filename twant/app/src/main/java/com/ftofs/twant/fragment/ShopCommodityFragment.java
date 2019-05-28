@@ -79,9 +79,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, String responseStr) throws IOException {
                 try {
-                    String responseStr = response.body().string();
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;

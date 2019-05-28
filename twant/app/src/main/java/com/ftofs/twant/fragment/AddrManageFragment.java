@@ -103,8 +103,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                             }
 
                             @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String responseStr = response.body().string();
+                            public void onResponse(Call call, String responseStr) throws IOException {
                                 SLog.info("responseStr[%s]", responseStr);
                                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
@@ -198,9 +197,8 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, String responseStr) throws IOException {
                 try {
-                    String responseStr = response.body().string();
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
@@ -256,8 +254,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseStr = response.body().string();
+            public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 

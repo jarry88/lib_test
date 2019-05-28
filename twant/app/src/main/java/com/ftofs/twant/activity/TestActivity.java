@@ -8,6 +8,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.widget.TwTabButton;
+import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * 測試用
@@ -20,18 +21,10 @@ public class TestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        TwTabButton twTabButton = findViewById(R.id.btn_test);
-        twTabButton.setTtbOnClickListener(new TwTabButton.TtbOnClickListener() {
+        findViewById(R.id.btn_test).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(TwTabButton tabButton) {
-                SLog.info("ON CLICK");
-            }
-        });
-
-        twTabButton.setTtbOnSelectListener(new TwTabButton.TtbOnSelectListener() {
-            @Override
-            public void onSelect(TwTabButton tabButton) {
-                SLog.info("ON SELECT");
+            public void onClick(View v) {
+                CrashReport.testJavaCrash();
             }
         });
     }

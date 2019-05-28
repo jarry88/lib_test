@@ -138,8 +138,7 @@ public class RegisterFragment extends BaseFragment implements
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String responseStr = response.body().string();
+                public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("responseStr[%s]", responseStr);
                     final EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     try {

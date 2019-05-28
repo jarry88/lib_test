@@ -21,10 +21,10 @@ public abstract class UICallback implements Runnable {
     /**
      * 需要實現的成功處理方法
      * @param call
-     * @param response
+     * @param responseStr
      * @throws IOException
      */
-    public abstract void onResponse(Call call, Response response) throws IOException;
+    public abstract void onResponse(Call call, String responseStr) throws IOException;
 
 
     /**
@@ -41,7 +41,7 @@ public abstract class UICallback implements Runnable {
 
     private Call call;
     private IOException ioException;
-    private Response response;
+    private String responseStr;
 
     /**
      * OkHttp失敗時調用
@@ -57,12 +57,12 @@ public abstract class UICallback implements Runnable {
     /**
      * OkHttp成功時調用
      * @param call
-     * @param response
+     * @param responseStr
      */
-    public void setOnResponse(Call call, Response response) {
+    public void setOnResponse(Call call, String responseStr) {
         result = RESULT_RESPONSE;
         this.call = call;
-        this.response = response;
+        this.responseStr = responseStr;
     }
 
     @Override
@@ -73,7 +73,7 @@ public abstract class UICallback implements Runnable {
         } else if (result == RESULT_RESPONSE) {
             try {
                 // 成功時回調onResponse
-                onResponse(call, response);
+                onResponse(call, responseStr);
             } catch (IOException e) {
                 e.printStackTrace();
             }

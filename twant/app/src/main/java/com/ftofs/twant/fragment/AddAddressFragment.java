@@ -244,9 +244,8 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(Call call, String responseStr) throws IOException {
                     try {
-                        String responseStr = response.body().string();
                         SLog.info("responseStr[%s]", responseStr);
                         EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 

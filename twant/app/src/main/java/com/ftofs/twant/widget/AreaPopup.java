@@ -193,8 +193,7 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseStr = response.body().string();
+            public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 

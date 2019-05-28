@@ -10,6 +10,7 @@ import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.User;
 import com.orhanobut.hawk.Hawk;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
@@ -36,6 +37,9 @@ public class TwantApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //Bugly异常处理
+        CrashReport.initCrashReport(getApplicationContext(), "222fdc9738", Config.DEVELOPER_MODE);
 
         // 添加全局異常處理
         CrashHandler crashHandler = CrashHandler.getInstance();

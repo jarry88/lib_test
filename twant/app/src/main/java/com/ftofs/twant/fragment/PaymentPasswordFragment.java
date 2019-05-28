@@ -101,8 +101,7 @@ public class PaymentPasswordFragment extends BaseFragment implements View.OnClic
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String responseStr = response.body().string();
+                public void onResponse(Call call, String responseStr) throws IOException {
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
