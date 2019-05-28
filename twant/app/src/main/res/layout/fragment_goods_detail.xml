@@ -164,22 +164,35 @@
                     android:textColor="@color/tw_dark_grey"
                     android:textSize="16sp" />
 
-                <TextView
+                <RelativeLayout
+                    android:id="@+id/btn_select_spec"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="30dp"
                     android:layout_toRightOf="@id/text_spec"
-                    android:text="@string/text_select_spec_hint"
-                    android:textColor="@color/tw_black"
-                    android:textSize="16sp" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/expand_button" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_current_specs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/text_select_spec_hint"
+                        android:textColor="@color/tw_black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/expand_button"
+                        />
+                </RelativeLayout>
+
             </RelativeLayout>
 
             <!-- 送至 -->
@@ -313,7 +326,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/vw_separator_1">
+                app:layout_constraintTop_toBottomOf="@id/vw_separator_1"
+                android:orientation="vertical">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -344,6 +358,12 @@
                         android:background="@color/tw_black"
                         />
                 </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/ll_goods_detail_image_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

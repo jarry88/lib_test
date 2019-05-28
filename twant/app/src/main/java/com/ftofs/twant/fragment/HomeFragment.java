@@ -265,26 +265,22 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             public Object doWork() {
                 String token = User.getToken();
                 SLog.info("token[%s]", token);
-                // 必須是登錄用戶才可以
-                if (StringUtil.isEmpty(token)) {
-                    return null;
-                }
-
-                EasyJSONObject params = EasyJSONObject.generate(
-                        "token", token
-                );
-
-
-                String responseStr = Api.syncPost(Api.PATH_NEW_ARRIVALS, params);
-                SLog.info("PATH_NEW_ARRIVALS, responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-
-                if (ToastUtil.isError(responseObj)) {
-                    SLog.info("Error!responseObj is invalid");
-                    return null;
-                }
 
                 try {
+                    EasyJSONObject params = EasyJSONObject.generate();
+                    if (!StringUtil.isEmpty(token)) {
+                        params.set("token", token);
+                    }
+
+                    String responseStr = Api.syncPost(Api.PATH_NEW_ARRIVALS, params);
+                    SLog.info("PATH_NEW_ARRIVALS, responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.isError(responseObj)) {
+                        SLog.info("Error!responseObj is invalid");
+                        return null;
+                    }
+
                     EasyJSONArray storeList = responseObj.getArray("datas.storeList");
                     SLog.info("storeList size[%d]", storeList.length());
                     List<EasyJSONObject> storeObjectList = new ArrayList<>();
@@ -353,14 +349,5 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS) {
-            SLog.info("登錄成功消息");
-            llNewArrivalsContainer.removeAllViews();
-            loadNewArrivals();
-
-        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) {
-            SLog.info("登出成功消息");
-            llNewArrivalsContainer.removeAllViews();
-        }
     }
 }

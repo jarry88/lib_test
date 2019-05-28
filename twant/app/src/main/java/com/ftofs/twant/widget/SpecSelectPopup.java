@@ -109,7 +109,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         Spec firstSpec = specList.get(0);
         String firstImageSrc = firstSpec.specValueList.get(0).imageSrc;
         SLog.info("firstImageSrc[%s]", firstImageSrc);
-        Glide.with(this).load(firstImageSrc).into(skuImage);
+        Glide.with(this).load(firstImageSrc).centerCrop().into(skuImage);
 
         int position = 0;
         LinearLayout llSpecContainer = findViewById(R.id.ll_spec_container);
@@ -145,7 +145,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                     selSpecValueIdList.set(position, specValue.specValueId);
                 }
 
-                SpecButtonData specButtonData = new SpecButtonData(position, spec.specId, specValue.specValueId, isSelected);
+                SpecButtonData specButtonData = new SpecButtonData(position, spec.specId, specValue.specValueId, specValue.imageSrc, isSelected);
                 button.setTag(specButtonData);
                 button.setOnClickListener(new OnClickListener() {
                     @Override
@@ -168,6 +168,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                         // 將前一個選中的按鈕的邊框變灰，當前選中的變為高亮色
                         prevButton.setBackgroundResource(R.drawable.spec_item_unselected_bg);
                         currButton.setBackgroundResource(R.drawable.spec_item_selected_bg);
+                        Glide.with(SpecSelectPopup.this).load(currData.imageSrc).centerCrop().into(skuImage);
 
                         selSpecValueIdList.set(currData.position, currData.specValueId);
                         selSpecButtonList.set(currData.position, currButton);
@@ -261,6 +262,15 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         mainFragment.start(ConfirmBillFragment.newInstance(0, easyJSONArray.toString()));
     }
 
+    private void selectSpecs() {
+        dismiss();
+
+        // 當前選中的goodsId
+        int goodsId = getSelectedGoodsId();
+
+
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -269,8 +279,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         } else if (id == R.id.btn_ok) {
             if (action == Constant.ACTION_ADD_TO_CART) {
                 addToCart();
-            } else {
+            } if (action == Constant.ACTION_BUY) {
                 buy();
+            } else {
+                // 選擇規格
+                selectSpecs();
             }
         }
     }

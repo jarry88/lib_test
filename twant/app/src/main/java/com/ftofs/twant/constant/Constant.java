@@ -67,6 +67,7 @@ public class Constant {
      */
     public static final int ACTION_ADD_TO_CART = 1;
     public static final int ACTION_BUY = 2;
+    public static final int ACTION_SELECT = 3; // 選擇規格
 
 
     /**

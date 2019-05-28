@@ -7,6 +7,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.ftofs.twant.entity.SpecPair;
+import com.ftofs.twant.fragment.LoginFragment;
+import com.ftofs.twant.fragment.MainFragment;
+
+import java.util.List;
 import java.util.Set;
 
 
@@ -140,5 +145,24 @@ public class Util {
         return (int) ((pxValue / scale) + 0.5f);
     }
 
+    public static void showLoginFragment() {
+        MainFragment mainFragment = MainFragment.getInstance();
+        mainFragment.start(LoginFragment.newInstance());
+    }
 
+    public static String formatSpecString(List<SpecPair> specPairList) {
+        StringBuilder sb = new StringBuilder();
+
+        boolean first = true;
+        for (SpecPair specPair : specPairList) {
+            if (!first) {
+                sb.append(";");
+            }
+            sb.append(specPair.specName);
+            sb.append(": ");
+            sb.append(specPair.specValueName);
+            first = false;
+        }
+        return sb.toString();
+    }
 }

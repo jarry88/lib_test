@@ -8,8 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.enums.PopupAnimation;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -67,6 +76,8 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
         }
@@ -121,14 +132,40 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
                 // 已經是當前Fragment，返回
                 return;
             }
-            showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
-            selectedFragmentIndex = index;
+
+            if (index == CART_FRAGMENT || index == MY_FRAGMENT) {
+                // 如果是查看【購物車】或【我的】，先檢查是否已經登錄
+                if (User.getUserId() < 1) {
+                    Util.showLoginFragment();
+                    return;
+                }
+            }
+
+            showHideFragment(index);
         }
+    }
+
+    public void showHideFragment(int index) {
+        showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
+        selectedFragmentIndex = index;
     }
 
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         SLog.info("onFragmentResult");
         super.onFragmentResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) {
+            showHideFragment(HOME_FRAGMENT);
+        }
     }
 }
