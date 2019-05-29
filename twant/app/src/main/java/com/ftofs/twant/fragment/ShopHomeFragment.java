@@ -20,6 +20,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 
@@ -99,6 +101,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
 
+        loadStoreData();
+    }
+
+
+    private void loadStoreData() {
+        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+                .asLoading("正在加載")
+                .show();
+
         try {
             // 獲取店鋪首頁信息
             String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getShopId();
@@ -111,11 +122,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    loadingPopup.dismiss();
                 }
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
+                    loadingPopup.dismiss();
+                    
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 

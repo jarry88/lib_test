@@ -27,6 +27,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
 
 import java.io.IOException;
@@ -146,6 +147,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private void doSearch(SearchType searchType, String keyword) {
         SLog.info("searchType[%s], keyword[%s]", searchType, keyword);
 
+        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+                .asLoading("正在加載")
+                .show();
+
         int searchTypeInt = searchType.ordinal();
         SearchHistoryUtil.saveSearchHistory(searchTypeInt, keyword);
 
@@ -155,11 +160,12 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             Api.getUI(Api.PATH_SEARCH_GOODS, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    loadingPopup.dismiss();
                 }
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
+                    loadingPopup.dismiss();
                     try {
                         SLog.info("responseStr[%s]", responseStr);
                         EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);

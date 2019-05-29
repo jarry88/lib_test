@@ -239,6 +239,11 @@ public class Api {
     public static final String PATH_GOODS_FAVORITE = "/app/goods/favorite";
 
 
+    /**
+     * 商品點贊/取消點贊
+     */
+    public static final String PATH_GOODS_LIKE = "/app/goods/like";
+
 
     /**
      * 發送Http請求

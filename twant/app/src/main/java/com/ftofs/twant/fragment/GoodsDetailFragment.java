@@ -53,6 +53,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     // 商品Id
     int commonId;
 
+    // 店鋪Id
+    int storeId;
+
     ImageView goodsImage;
     TextView tvGoodsPrice;
     TextView tvGoodsName;
@@ -67,8 +70,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     ImageView iconFollow;
     TextView tvFollow;
-    int isFavorite;
+    int isFavorite;  // 是否關注
 
+    ImageView btnGoodsThumb;
+    int isLike; // 是否點贊
 
     List<Spec> specList = new ArrayList<>();
     // 從逗號連接的specValueId定位出goodsId的Map
@@ -128,11 +133,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvGoodsSale = view.findViewById(R.id.tv_goods_sale);
 
         llGoodsDetailImageContainer = view.findViewById(R.id.ll_goods_detail_image_container);
+        btnGoodsThumb = view.findViewById(R.id.btn_goods_thumb);
+        btnGoodsThumb.setOnClickListener(this);
 
+        Util.setOnClickListener(view, R.id.btn_back_round, this);
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
         Util.setOnClickListener(view, R.id.btn_buy, this);
         Util.setOnClickListener(view, R.id.btn_select_spec, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
+        Util.setOnClickListener(view, R.id.btn_bottom_bar_shop, this);
 
         String token = User.getToken();
         if (!StringUtil.isEmpty(token)) {
@@ -146,6 +155,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         int id = v.getId();
 
         switch (id) {
+            case R.id.btn_back_round:
+                pop();
+                break;
             case R.id.btn_add_to_cart:
                 showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
                 break;
@@ -157,6 +169,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_bottom_bar_follow:
                 switchFavState();
+                break;
+            case R.id.btn_goods_thumb:
+                switchThumbState();
+                break;
+            case R.id.btn_bottom_bar_shop:
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(ShopMainFragment.newInstance(storeId));
                 break;
             default:
                 break;
@@ -206,6 +225,48 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     /**
+     * 商品點贊/取消點贊
+     */
+    private void switchThumbState() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "commonId", commonId,
+                "state", 1 - isLike,
+                "clientType", Constant.CLIENT_TYPE_ANDROID,
+                "token", token);
+
+
+        Api.postUI(Api.PATH_GOODS_LIKE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    isLike = 1 - isLike;
+                    updateThumbView();
+
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    /**
      * 更新是否關注的顯示
      */
     private void updateFavView() {
@@ -215,6 +276,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         } else {
             iconFollow.setImageResource(R.drawable.icon_follow);
             tvFollow.setText(R.string.text_follow);
+        }
+    }
+
+    private void updateThumbView() {
+        if (isLike == Constant.ONE) {
+            btnGoodsThumb.setImageResource(R.drawable.icon_goods_thumb_red);
+        } else {
+            btnGoodsThumb.setImageResource(R.drawable.icon_goods_thumb_grey);
         }
     }
 
@@ -271,7 +340,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tvGoodsPrice.setText(String.format("%.2f", goodsPrice));
 
                     // 是否点赞
-                    int isLike = goodsDetail.getInt("isLike");
+                    isLike = goodsDetail.getInt("isLike");
+                    updateThumbView();
+
                     // 是否關注
                     isFavorite = goodsDetail.getInt("isFavorite");
                     updateFavView();
@@ -280,6 +351,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     int goodsSaleNum = goodsDetail.getInt("goodsSaleNum");
                     // 粉絲數
                     int goodsFavorite = goodsDetail.getInt("goodsFavorite");
+                    storeId = responseObj.getInt("datas.storeInfo.storeId");
 
                     tvFansCount.setText(getString(R.string.text_fans) + goodsFavorite);
                     tvGoodsSale.setText(getString(R.string.text_monthly_sale) + goodsSaleNum + getString(R.string.text_monthly_sale_unit));
