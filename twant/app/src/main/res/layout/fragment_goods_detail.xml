@@ -50,9 +50,10 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_goods_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="149.80"
+                        android:text=""
                         android:textColor="#fff"
                         android:textSize="34sp"
                         />
@@ -98,7 +99,7 @@
                         app:layout_constraintRight_toLeftOf="@+id/tv_goods_sale"
                         android:textColor="@color/tw_dark_grey"
                         android:textSize="13sp"
-                        android:text="粉絲235"
+                        android:text=""
                         app:layout_constraintHorizontal_chainStyle="spread_inside"
                         />
                     <TextView
@@ -111,7 +112,7 @@
                         app:layout_constraintRight_toLeftOf="@+id/ll_goods_made_in_container"
                         android:textColor="@color/tw_dark_grey"
                         android:textSize="13sp"
-                        android:text="月銷量19筆"
+                        android:text=""
                         />
                     <LinearLayout
                         android:id="@+id/ll_goods_made_in_container"
@@ -217,12 +218,13 @@
                     android:textColor="@color/tw_dark_grey"
                     />
                 <TextView
+                    android:id="@+id/tv_ship_to"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:layout_toRightOf="@id/text_send_to"
                     android:layout_centerVertical="true"
-                    android:text="澳門 路環"
+                    android:text=""
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
                     />
@@ -235,6 +237,7 @@
                     android:src="@drawable/expand_button"
                     />
                 <TextView
+                    android:id="@+id/tv_freight_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
@@ -449,7 +452,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/btn_bottom_bar_shop"
-                app:layout_constraintRight_toLeftOf="@+id/btn_bottom_bar_like"
+                app:layout_constraintRight_toLeftOf="@+id/btn_bottom_bar_follow"
                 android:orientation="vertical">
                 <ImageView
                     android:layout_width="wrap_content"
@@ -469,7 +472,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/btn_bottom_bar_like"
+                android:id="@+id/btn_bottom_bar_follow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -478,19 +481,21 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:orientation="vertical">
                 <ImageView
+                    android:id="@+id/icon_follow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/icon_like_outline"
                     />
                 <TextView
+                    android:id="@+id/tv_follow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/tw_black"
                     android:textSize="11sp"
-                    android:text="@string/text_customer_service"
+                    android:text=""
                     />
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>

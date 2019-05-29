@@ -54,11 +54,21 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int commonId;
 
     ImageView goodsImage;
+    TextView tvGoodsPrice;
     TextView tvGoodsName;
     TextView tvGoodsJingle;
 
     ImageView imgGoodsNationalFlag;
     TextView tvGoodsCountryName;
+    TextView tvShipTo;
+    TextView tvFreightAmount;
+    TextView tvFansCount;
+    TextView tvGoodsSale;
+
+    ImageView iconFollow;
+    TextView tvFollow;
+    int isFavorite;
+
 
     List<Spec> specList = new ArrayList<>();
     // 從逗號連接的specValueId定位出goodsId的Map
@@ -100,19 +110,29 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         SLog.info("commonId[%d]", commonId);
 
         goodsImage = view.findViewById(R.id.goods_image);
+        tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
         tvGoodsName = view.findViewById(R.id.tv_goods_name);
         tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
+
+        tvFreightAmount = view.findViewById(R.id.tv_freight_amount);
 
         tvCurrentSpecs = view.findViewById(R.id.tv_current_specs);
 
         imgGoodsNationalFlag = view.findViewById(R.id.img_goods_national_flag);
         tvGoodsCountryName = view.findViewById(R.id.tv_goods_country_name);
+        tvShipTo = view.findViewById(R.id.tv_ship_to);
+
+        iconFollow = view.findViewById(R.id.icon_follow);
+        tvFollow = view.findViewById(R.id.tv_follow);
+        tvFansCount = view.findViewById(R.id.tv_fans_count);
+        tvGoodsSale = view.findViewById(R.id.tv_goods_sale);
 
         llGoodsDetailImageContainer = view.findViewById(R.id.ll_goods_detail_image_container);
 
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
         Util.setOnClickListener(view, R.id.btn_buy, this);
         Util.setOnClickListener(view, R.id.btn_select_spec, this);
+        Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
 
         String token = User.getToken();
         if (!StringUtil.isEmpty(token)) {
@@ -135,8 +155,66 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_select_spec:
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
                 break;
+            case R.id.btn_bottom_bar_follow:
+                switchFavState();
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 商品關注/取消關注
+     */
+    private void switchFavState() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "commonId", commonId,
+                "state", 1 - isFavorite,
+                "clientType", Constant.CLIENT_TYPE_ANDROID,
+                "token", token);
+
+
+        Api.postUI(Api.PATH_GOODS_FAVORITE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    isFavorite = 1 - isFavorite;
+                    updateFavView();
+
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 更新是否關注的顯示
+     */
+    private void updateFavView() {
+        if (isFavorite == Constant.ONE) {
+            iconFollow.setImageResource(R.drawable.icon_follow_red);
+            tvFollow.setText(R.string.text_followed);
+        } else {
+            iconFollow.setImageResource(R.drawable.icon_follow);
+            tvFollow.setText(R.string.text_follow);
         }
     }
 
@@ -182,6 +260,29 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
 
                     tvGoodsCountryName.setText(responseObj.getString("datas.goodsCountry.countryCn"));
+
+                    String areaInfo = responseObj.getString("datas.address.areaInfo");
+                    float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
+                    tvShipTo.setText(areaInfo);
+
+                    tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
+
+                    float goodsPrice = Util.getGoodsPrice(goodsDetail);
+                    tvGoodsPrice.setText(String.format("%.2f", goodsPrice));
+
+                    // 是否点赞
+                    int isLike = goodsDetail.getInt("isLike");
+                    // 是否關注
+                    isFavorite = goodsDetail.getInt("isFavorite");
+                    updateFavView();
+
+                    // 月銷量
+                    int goodsSaleNum = goodsDetail.getInt("goodsSaleNum");
+                    // 粉絲數
+                    int goodsFavorite = goodsDetail.getInt("goodsFavorite");
+
+                    tvFansCount.setText(getString(R.string.text_fans) + goodsFavorite);
+                    tvGoodsSale.setText(getString(R.string.text_monthly_sale) + goodsSaleNum + getString(R.string.text_monthly_sale_unit));
 
                     // 下面開始組裝規格數據列表
                     EasyJSONArray specJson = goodsDetail.getArray("specJson");
@@ -247,6 +348,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });
@@ -283,7 +385,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 String fullSpecs = getFullSpecs();
                 tvCurrentSpecs.setText(fullSpecs);
                 if (!StringUtil.isEmpty(imageSrc)) {
-                    Glide.with(_mActivity).load(imageSrc).into(goodsImage);
+                    Glide.with(_mActivity).load(imageSrc).centerCrop().into(goodsImage);
                 }
             } catch (Exception e) {
 

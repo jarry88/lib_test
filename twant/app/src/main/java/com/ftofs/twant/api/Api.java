@@ -233,6 +233,11 @@ public class Api {
      */
     public static final String PATH_ORDER_DETAIL = "/member/orders/info";
 
+    /**
+     * 商品關注/取消關注
+     */
+    public static final String PATH_GOODS_FAVORITE = "/app/goods/favorite";
+
 
 
     /**
