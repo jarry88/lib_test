@@ -1,116 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f3f3f3"
-    >
+    android:background="#f3f3f3">
+
+    <!-- 兩個大按鈕 -->
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <!-- 兩個大按鈕 -->
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/cl_big_button_container"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp">
-
-            <LinearLayout
-                android:id="@+id/btn_search_goods"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/btn_all_goods"
-                android:background="@drawable/big_button_red_bg"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="14dp"
-                    android:layout_marginLeft="19dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/icon_shop_goods_search"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginBottom="18dp"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="#fff"
-                    android:textSize="16sp"
-                    android:text="@string/text_search_goods"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_all_goods"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintLeft_toRightOf="@id/btn_search_goods"
-                app:layout_constraintRight_toRightOf="parent"
-                android:background="@drawable/big_button_blue_bg"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="14dp"
-                    android:layout_marginLeft="19dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/icon_shop_all_goods"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginBottom="18dp"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="#fff"
-                    android:textSize="16sp"
-                    android:text="@string/text_all_goods"
-                    />
-            </LinearLayout>
-
-
-        </android.support.constraint.ConstraintLayout>
-        <!-- END OF 兩個大按鈕 -->
-
-
+        android:id="@+id/cl_big_button_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/btn_search_goods"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/btn_all_goods"
+            android:background="@drawable/big_button_red_bg"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/icon_shop_goods_search"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginBottom="18dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:text="@string/text_search_goods"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_all_goods"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/btn_search_goods"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_big_button_container"
+            android:background="@drawable/big_button_blue_bg"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/icon_shop_all_goods"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginBottom="18dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:text="@string/text_all_goods"
+                />
+        </LinearLayout>
+
+
+    </android.support.constraint.ConstraintLayout>
+    <!-- END OF 兩個大按鈕 -->
+
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_sample_ui"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_big_button_container"
+        android:orientation="vertical">
+        <!-- 收合狀態的 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_marginRight="@dimen/toolbar_margin_left"
+            android:background="@drawable/shop_category_goods_item_collapsed_bg">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_centerVertical="true"
+                android:text="出行用品(54)"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="13dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button"
+                />
+        </RelativeLayout>
+
+        <!-- 展開狀態的 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_marginRight="@dimen/toolbar_margin_left"
+            android:paddingBottom="15dp"
+            android:background="@drawable/shop_category_goods_item_expanded_bg"
             android:orientation="vertical">
-            <!-- 收合狀態的 -->
+
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_left"
-                android:background="@drawable/shop_category_goods_item_collapsed_bg">
-
+                android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -118,7 +154,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
                     android:layout_centerVertical="true"
-                    android:text="出行用品(54)"
+                    android:text="家居用品(96)"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
                     />
@@ -131,189 +167,91 @@
                     android:layout_marginTop="13dp"
                     android:layout_marginBottom="13dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/expand_button"
+                    android:src="@drawable/btn_expanded"
                     />
             </RelativeLayout>
 
-            <!-- 展開狀態的 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_left"
-                android:paddingBottom="15dp"
-                android:background="@drawable/shop_category_goods_item_expanded_bg"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="12dp"
-                        android:layout_centerVertical="true"
-                        android:text="家居用品(96)"
-                        android:textSize="16sp"
-                        android:textColor="@color/tw_black"
-                        />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="13dp"
-                        android:layout_marginBottom="13dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/btn_expanded"
-                        />
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                android:layout_marginRight="@dimen/toolbar_margin_right"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/toolbar_margin_left"
-                    android:layout_marginRight="@dimen/toolbar_margin_right"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginRight="7.5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="15dp"
-                        android:text="保濕套裝"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
-                        android:background="@drawable/shop_category_goods_item_bg"
-                        />
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="7.5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="15dp"
-                        android:text="洗面奶"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
-                        android:background="@drawable/shop_category_goods_item_bg"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginRight="7.5dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:text="保濕套裝"
+                    android:textColor="@color/tw_black"
+                    android:textSize="14sp"
+                    android:background="@drawable/shop_category_goods_item_bg"
+                    />
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/toolbar_margin_left"
-                    android:layout_marginRight="@dimen/toolbar_margin_right"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginRight="7.5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="15dp"
-                        android:text="洗髮水"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
-                        android:background="@drawable/shop_category_goods_item_bg"
-                        />
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="7.5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="15dp"
-                        android:text="沐浴露"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
-                        android:background="@drawable/shop_category_goods_item_bg"
-                        />
-                </LinearLayout>
+                    android:layout_weight="1"
+                    android:layout_marginLeft="7.5dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:text="洗面奶"
+                    android:textColor="@color/tw_black"
+                    android:textSize="14sp"
+                    android:background="@drawable/shop_category_goods_item_bg"
+                    />
+            </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/toolbar_margin_left"
+                android:layout_marginRight="@dimen/toolbar_margin_right"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/toolbar_margin_left"
-                    android:layout_marginRight="@dimen/toolbar_margin_right"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginRight="7.5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="15dp"
-                        android:text="保濕套裝"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
-                        android:background="@drawable/shop_category_goods_item_bg"
-                        />
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="7.5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="15dp"
-                        android:text="洗面奶"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
-                        android:background="@drawable/shop_category_goods_item_bg"
-                        />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginRight="7.5dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:text="洗髮水"
+                    android:textColor="@color/tw_black"
+                    android:textSize="14sp"
+                    android:background="@drawable/shop_category_goods_item_bg"
+                    />
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/toolbar_margin_left"
-                    android:layout_marginRight="@dimen/toolbar_margin_right"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginRight="7.5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="15dp"
-                        android:text="洗髮水"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
-                        android:background="@drawable/shop_category_goods_item_bg"
-                        />
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="7.5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="15dp"
-                        android:text="沐浴露"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
-                        android:background="@drawable/shop_category_goods_item_bg"
-                        />
-                </LinearLayout>
+                    android:layout_weight="1"
+                    android:layout_marginLeft="7.5dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="15dp"
+                    android:text="沐浴露"
+                    android:textColor="@color/tw_black"
+                    android:textSize="14sp"
+                    android:background="@drawable/shop_category_goods_item_bg"
+                    />
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_outer_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_sample_ui"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+</android.support.constraint.ConstraintLayout>
