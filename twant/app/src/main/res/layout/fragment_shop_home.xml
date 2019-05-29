@@ -155,19 +155,21 @@
                 android:orientation="horizontal"
                 app:layout_constraintHorizontal_chainStyle="spread_inside">
                 <ImageView
+                    android:id="@+id/btn_store_thumb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/icon_thumb_up"
+                    android:src="@drawable/icon_store_thumb_grey"
                     />
                 <TextView
+                    android:id="@+id/tv_like_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
-                    android:text="1154"
+                    android:text=""
                     />
             </LinearLayout>
 
@@ -181,19 +183,21 @@
                 app:layout_constraintRight_toLeftOf="@+id/ll_uo_share_container"
                 android:orientation="horizontal">
                 <ImageView
+                    android:id="@+id/btn_store_favorite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/icon_like_outline"
+                    android:src="@drawable/icon_store_favorite_grey"
                     />
                 <TextView
+                    android:id="@+id/tv_favorite_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
-                    android:text="1154"
+                    android:text=""
                     />
             </LinearLayout>
 
@@ -379,7 +383,7 @@
                 android:src="@drawable/icon_pay_with"
                 />
 
-            <ScrollView
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/icon_pay_with"
@@ -391,7 +395,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                 </LinearLayout>
-            </ScrollView>
+            </HorizontalScrollView>
         </RelativeLayout>
 
         <!-- 分隔條 -->

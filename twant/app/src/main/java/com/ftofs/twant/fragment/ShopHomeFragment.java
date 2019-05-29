@@ -15,6 +15,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -58,8 +59,18 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     TextView tvAuthorNickname;
     TextView tvCommentContent;
 
+    TextView tvLikeCount;
+    TextView tvFavoriteCount;
+
     LinearLayout llFirstCommentContainer;
 
+    int storeId;
+
+    int isFavorite;
+    ImageView btnStoreFavorite;
+
+    int isLike;
+    ImageView btnStoreThumb;
 
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -99,6 +110,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvAuthorNickname = view.findViewById(R.id.tv_author_nickname);
         tvCommentContent = view.findViewById(R.id.tv_comment_content);
 
+        tvLikeCount = view.findViewById(R.id.tv_like_count);
+        btnStoreThumb = view.findViewById(R.id.btn_store_thumb);
+        btnStoreThumb.setOnClickListener(this);
+
+        tvFavoriteCount = view.findViewById(R.id.tv_favorite_count);
+        btnStoreFavorite = view.findViewById(R.id.btn_store_favorite);
+        btnStoreFavorite.setOnClickListener(this);
+
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
 
         loadStoreData();
@@ -115,7 +134,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getShopId();
             String token = User.getToken();
             EasyJSONObject params = EasyJSONObject.generate();
-            if (StringUtil.isEmpty(token)) {
+            if (!StringUtil.isEmpty(token)) {
                 params.set("token", token);
             }
 
@@ -128,7 +147,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
                     loadingPopup.dismiss();
-                    
+
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
@@ -137,42 +156,53 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             return;
                         }
 
-                        String shopName = responseObj.getString("datas.storeInfo.storeName");
+                        EasyJSONObject storeInfo = responseObj.getObject("datas.storeInfo");
+
+                        storeId = storeInfo.getInt("storeId");
+                        String shopName = storeInfo.getString("storeName");
                         parentFragment.setShopName(shopName);
 
-                        String shopAvatarUrl = responseObj.getString("datas.storeInfo.storeAvatar");
+                        String shopAvatarUrl = storeInfo.getString("storeAvatar");
                         // 店鋪頭像
                         Glide.with(ShopHomeFragment.this).load(shopAvatarUrl).into(imgShopAvatar);
                         // 將店鋪頭像設置到工具欄按鈕
                         parentFragment.setImgBottomBarShopAvatar(shopAvatarUrl);
 
                         // 店鋪簽名
-                        tvShopSignature.setText(responseObj.getString("datas.storeInfo.storeSignature"));
+                        tvShopSignature.setText(storeInfo.getString("storeSignature"));
 
                         // 開店天數
-                        tvShopOpenDay.setText(getResources().getText(R.string.text_shop_open_day_prefix) +
-                                responseObj.getString("datas.storeInfo.shopDay"));
+                        tvShopOpenDay.setText(getString(R.string.text_shop_open_day_prefix) + storeInfo.getString("shopDay"));
 
                         // 店鋪形象圖
-                        String shopFigureUrl = Config.OSS_BASE_URL + "/" + responseObj.getString("datas.storeInfo.storeFigureImage");
+                        String shopFigureUrl = Config.OSS_BASE_URL + "/" + storeInfo.getString("storeFigureImage");
                         Glide.with(ShopHomeFragment.this).load(shopFigureUrl).into(imgShopFigure);
 
+                        tvLikeCount.setText(String.valueOf(storeInfo.getInt("likeCount")));
+                        tvFavoriteCount.setText(String.valueOf(storeInfo.getInt("collectCount")));
+                        isLike = storeInfo.getInt("isLike");
+                        isFavorite = storeInfo.getInt("isFavorite");
+                        SLog.info("isLike[%d], isFavorite[%d]", isLike, isFavorite);
+
+                        updateThumbView();
+                        updateFavoriteView();
+
                         // 店鋪電話
-                        tvPhoneNumber.setText(responseObj.getString("datas.storeInfo.chainPhone"));
+                        tvPhoneNumber.setText(storeInfo.getString("chainPhone"));
                         // 營業時間
                         String businessTimeTemplate = getResources().getString(R.string.business_time_template);
 
-                        String weekDayStart = getStoreBusinessTime(responseObj, "datas.storeInfo.weekDayStart");
-                        String weekDayEnd = getStoreBusinessTime(responseObj, "datas.storeInfo.weekDayEnd");
-                        String restDayStart = getStoreBusinessTime(responseObj, "datas.storeInfo.restDayStart");
-                        String restDayEnd = getStoreBusinessTime(responseObj, "datas.storeInfo.restDayEnd");
+                        String weekDayStart = getStoreBusinessTime(storeInfo, "weekDayStart");
+                        String weekDayEnd = getStoreBusinessTime(storeInfo, "weekDayEnd");
+                        String restDayStart = getStoreBusinessTime(storeInfo, "restDayStart");
+                        String restDayEnd = getStoreBusinessTime(storeInfo, "restDayEnd");
 
                         String businessTime = String.format(businessTimeTemplate,
                                 weekDayStart, weekDayEnd, restDayStart, restDayEnd);
                         tvBusinessTime.setText(businessTime);
 
                         // 店鋪地址
-                        String shopAddress = responseObj.getString("datas.storeInfo.chainAreaInfo") + responseObj.getString("datas.storeInfo.chainAddress");
+                        String shopAddress = storeInfo.getString("chainAreaInfo") + storeInfo.getString("chainAddress");
                         tvShopAddress.setText(shopAddress);
 
                         // 社交分享
@@ -246,7 +276,122 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
 
+        switch (id) {
+            case R.id.btn_store_thumb:
+                switchThumbState();
+                break;
+            case R.id.btn_store_favorite:
+                switchFavoriteState();
+                break;
+            default:
+                break;
+        }
     }
+
+    private void switchThumbState() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "storeId", storeId,
+                "isLike", 1 - isLike,
+                "clientType", Constant.CLIENT_TYPE_ANDROID,
+                "token", token);
+
+
+        Api.postUI(Api.PATH_STORE_LIKE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    isLike = 1 - isLike;
+                    updateThumbView();
+
+                    int likeCount = responseObj.getInt("datas.likeCount");
+                    tvLikeCount.setText(String.valueOf(likeCount));
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+
+
+    private void switchFavoriteState() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "storeId", storeId,
+                "clientType", Constant.CLIENT_TYPE_ANDROID,
+                "token", token);
+
+        String path;
+        if (isFavorite == Constant.ONE) {
+            path = Api.PATH_STORE_FAVORITE_DELETE;
+        } else {
+            path = Api.PATH_STORE_FAVORITE_ADD;
+        }
+
+        SLog.info("path[%s], params[%s]", path, params);
+        Api.postUI(path, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    isFavorite = 1 - isFavorite;
+                    updateFavoriteView();
+
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    private void updateThumbView() {
+        if (isLike == Constant.ONE) {
+            btnStoreThumb.setImageResource(R.drawable.icon_store_thumb_red);
+        } else {
+            btnStoreThumb.setImageResource(R.drawable.icon_store_thumb_grey);
+        }
+    }
+
+    private void updateFavoriteView() {
+        if (isFavorite == Constant.ONE) {
+            btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_red);
+        } else {
+            btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_grey);
+        }
+    }
+
 
     /**
      * 獲取店鋪的營業時間

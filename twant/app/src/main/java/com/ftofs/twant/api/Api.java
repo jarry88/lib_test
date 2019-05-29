@@ -244,6 +244,22 @@ public class Api {
      */
     public static final String PATH_GOODS_LIKE = "/app/goods/like";
 
+    /**
+     * 收藏店铺
+     */
+    public static final String PATH_STORE_FAVORITE_ADD = "/member/store/favorite/add";
+
+
+    /**
+     * 取消收藏店铺
+     */
+    public static final String PATH_STORE_FAVORITE_DELETE = "/member/store/favorite/delete";
+
+
+    /**
+     * 店鋪：會員點贊/取消點贊
+     */
+    public static final String PATH_STORE_LIKE = "/app/store/like";
 
     /**
      * 發送Http請求

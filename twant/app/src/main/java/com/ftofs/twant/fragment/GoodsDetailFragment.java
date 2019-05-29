@@ -29,6 +29,7 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -168,7 +169,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
                 break;
             case R.id.btn_bottom_bar_follow:
-                switchFavState();
+                switchFavoriteState();
                 break;
             case R.id.btn_goods_thumb:
                 switchThumbState();
@@ -185,7 +186,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     /**
      * 商品關注/取消關注
      */
-    private void switchFavState() {
+    private void switchFavoriteState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             return;
@@ -215,7 +216,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     isFavorite = 1 - isFavorite;
-                    updateFavView();
+                    updateFavoriteView();
 
                 } catch (Exception e) {
 
@@ -269,12 +270,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     /**
      * 更新是否關注的顯示
      */
-    private void updateFavView() {
+    private void updateFavoriteView() {
         if (isFavorite == Constant.ONE) {
             iconFollow.setImageResource(R.drawable.icon_follow_red);
             tvFollow.setText(R.string.text_followed);
         } else {
-            iconFollow.setImageResource(R.drawable.icon_follow);
+            iconFollow.setImageResource(R.drawable.icon_goods_follow_grey);
             tvFollow.setText(R.string.text_follow);
         }
     }
@@ -296,6 +297,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void loadGoodsDetail(int commonId, String token) {
+        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+                .asLoading("正在加載")
+                .show();
         String path = Api.PATH_GOODS_DETAIL + "/" + commonId;
         SLog.info("path[%s]", path);
         EasyJSONObject params = EasyJSONObject.generate("token", token);
@@ -303,11 +307,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                loadingPopup.dismiss();
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
+
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
@@ -345,7 +351,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     // 是否關注
                     isFavorite = goodsDetail.getInt("isFavorite");
-                    updateFavView();
+                    updateFavoriteView();
 
                     // 月銷量
                     int goodsSaleNum = goodsDetail.getInt("goodsSaleNum");
