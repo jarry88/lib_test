@@ -42,6 +42,8 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
 
     List<StoreLabel> shopStoreLabelList = new ArrayList<>();
     BaseQuickAdapter adapter;
+
+    String responseStr;
     public static ShopCategoryFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -97,10 +99,11 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
         int id = v.getId();
         switch (id) {
             case R.id.btn_search_goods:
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(ShopSearchFragment.newInstance(parentFragment.getShopId(), responseStr));
                 break;
             case R.id.btn_all_goods:
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(ShopS)
+
                 break;
             default:
                 break;
@@ -132,6 +135,8 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
+
+                ShopCategoryFragment.this.responseStr = responseStr;
 
                 try {
                     EasyJSONArray storeCategoryList = responseObj.getArray("datas.storeCategoryList");

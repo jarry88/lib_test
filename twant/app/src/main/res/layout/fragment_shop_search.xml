@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_marginRight="@dimen/toolbar_margin_right">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginLeft="44dp"
+            android:layout_marginRight="57dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/search_container_bg">
+            <ImageView
+                android:id="@+id/icon_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/icon_search"
+                />
+
+            <ImageView
+                android:id="@+id/btn_clear_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_clear_all_circle"
+                />
+            <EditText
+                android:id="@+id/et_keyword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/icon_search"
+                android:layout_toLeftOf="@id/btn_clear_all"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                android:background="@null"
+                android:hint="@string/search_keyword_hint"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:textColorHint="#FFA8A8A8"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/text_search"
+            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            />
+    </RelativeLayout>
+    <!-- END OF 工具欄 -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/tw_black"
+        android:textSize="16sp"
+        android:text="@string/text_new_in_chinese"
+        />
+    <com.nex3z.flowlayout.FlowLayout
+        android:id="@+id/fl_new_goods_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="25dp"
+        app:flChildSpacing="15dp"
+        app:flRowSpacing="15dp">
+
+    </com.nex3z.flowlayout.FlowLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/tw_black"
+        android:textSize="16sp"
+        android:text="@string/text_store_hot_item"
+        />
+    <com.nex3z.flowlayout.FlowLayout
+        android:id="@+id/fl_hot_goods_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="25dp"
+        app:flChildSpacing="15dp"
+        app:flRowSpacing="15dp">
+    </com.nex3z.flowlayout.FlowLayout>
+</LinearLayout>
