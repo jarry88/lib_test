@@ -267,6 +267,11 @@ public class Api {
     public static final String PATH_STORE_CATEGORY = "/app/store/category";
 
     /**
+     * 店铺券/活动列表
+     */
+    public static final String PATH_STORE_ACTIVITY = "/app/store/active";
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

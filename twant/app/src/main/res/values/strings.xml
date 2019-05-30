@@ -119,6 +119,13 @@
     <string name="text_new_in_english">NEW IN</string>
     <string name="text_store_hot_item">店舖熱賣</string>
 
+    <string name="text_voucher">優惠券</string>
+    <string name="text_conform">滿減優惠</string>
+    <string name="text_discount">限時折扣</string>
+
+    <string name="text_receive_now">立即領取</string>
+    <string name="text_been_received">已領取</string>
+
     <string name="text_like">點贊</string>
     <string name="text_follow">關注</string>
 
