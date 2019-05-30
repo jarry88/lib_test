@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -15,9 +16,11 @@ import com.ftofs.twant.adapter.AddrListAdapter;
 import com.ftofs.twant.adapter.StoreLabelListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,17 +63,48 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
 
+        Util.setOnClickListener(view, R.id.btn_search_goods, this);
+
         RecyclerView rvOuterList = view.findViewById(R.id.rv_outer_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOuterList.setLayoutManager(layoutManager);
-        adapter = new StoreLabelListAdapter(R.layout.store_label_outer_item, shopStoreLabelList);
+        adapter = new StoreLabelListAdapter(_mActivity, R.layout.store_label_outer_item, shopStoreLabelList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                StoreLabel storeLabel = shopStoreLabelList.get(position);
+                SLog.info("storeLabel.getIsFold[%d]", storeLabel.getIsFold());
+                View parentView = (View) view.getParent();
+
+                if (storeLabel.getIsFold() == Constant.ONE) {
+                    parentView.findViewById(R.id.ll_inner_item_container).setVisibility(View.VISIBLE);
+                    ((ImageView) view.findViewById(R.id.img_folding_status)).setImageResource(R.drawable.btn_expanded);
+                } else {
+                    parentView.findViewById(R.id.ll_inner_item_container).setVisibility(View.GONE);
+                    ((ImageView) view.findViewById(R.id.img_folding_status)).setImageResource(R.drawable.expand_button);
+                }
+                storeLabel.setIsFold(1 - storeLabel.getIsFold());
+            }
+        });
         rvOuterList.setAdapter(adapter);
+
+        loadShopCategoryData();
     }
 
 
     @Override
     public void onClick(View v) {
-
+        int id = v.getId();
+        switch (id) {
+            case R.id.btn_search_goods:
+                break;
+            case R.id.btn_all_goods:
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(ShopS)
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -92,6 +126,8 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
@@ -106,6 +142,7 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
                         storeLabel.setStoreLabelName(easyJSONObject.getString("storeLabelName"));
                         storeLabel.setParentId(easyJSONObject.getInt("parentId"));
                         storeLabel.setStoreId(easyJSONObject.getInt("storeId"));
+                        storeLabel.setIsFold(Constant.ONE);
 
                         EasyJSONArray storeLabelList = easyJSONObject.getArray("storeLabelList");
                         if (storeLabelList != null && storeLabelList.length() > 0) {
@@ -127,6 +164,7 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
                         shopStoreLabelList.add(storeLabel);
                     }
 
+                    adapter.setNewData(shopStoreLabelList);
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
                 }
