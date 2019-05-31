@@ -62,7 +62,7 @@ public class ShopGoodsAdapter extends RecyclerView.Adapter<ShopGoodsAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        SLog.info("position[%d]", position);
+        // SLog.info("position[%d]", position);
         final Goods goods = goodsList.get(position);
         Glide.with(context).load(goods.imageUrl).into(holder.goodsImage);
         holder.tvGoodsName.setText(goods.name);

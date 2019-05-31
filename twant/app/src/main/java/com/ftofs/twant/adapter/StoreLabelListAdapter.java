@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.domain.store.StoreLabel;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.util.Util;
 
 import java.util.List;
@@ -23,10 +24,12 @@ import java.util.List;
 public class StoreLabelListAdapter extends BaseQuickAdapter<StoreLabel, BaseViewHolder> {
     Context context;
     int twBlack;
+    OnSelectedListener onSelectedListener;
 
-    public StoreLabelListAdapter(Context context, int layoutResId, @Nullable List<StoreLabel> data) {
+    public StoreLabelListAdapter(Context context, int layoutResId, @Nullable List<StoreLabel> data, OnSelectedListener onSelectedListener) {
         super(layoutResId, data);
         this.context = context;
+        this.onSelectedListener = onSelectedListener;
 
         twBlack = context.getColor(R.color.tw_black);
     }
@@ -67,6 +70,13 @@ public class StoreLabelListAdapter extends BaseQuickAdapter<StoreLabel, BaseView
             textView.setTextColor(twBlack);
             textView.setTextSize(14);
             textView.setBackgroundResource(R.drawable.shop_category_goods_item_bg);
+            final int storeLabelId = storeLabel.getStoreLabelId();
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onSelectedListener.onSelected(0, storeLabelId, null);
+                }
+            });
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.weight = 1;

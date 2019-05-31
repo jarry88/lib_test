@@ -18,6 +18,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.domain.store.StoreLabel;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -37,7 +38,7 @@ import okhttp3.Call;
  * 店鋪分類Fragment
  * @author zwm
  */
-public class ShopCategoryFragment extends BaseFragment implements View.OnClickListener {
+public class ShopCategoryFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     ShopMainFragment parentFragment;
 
     List<StoreLabel> shopStoreLabelList = new ArrayList<>();
@@ -66,11 +67,12 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
         parentFragment = (ShopMainFragment) getParentFragment();
 
         Util.setOnClickListener(view, R.id.btn_search_goods, this);
+        Util.setOnClickListener(view, R.id.btn_all_goods, this);
 
         RecyclerView rvOuterList = view.findViewById(R.id.rv_outer_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOuterList.setLayoutManager(layoutManager);
-        adapter = new StoreLabelListAdapter(_mActivity, R.layout.store_label_outer_item, shopStoreLabelList);
+        adapter = new StoreLabelListAdapter(_mActivity, R.layout.store_label_outer_item, shopStoreLabelList, this);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -103,7 +105,8 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
                 mainFragment.start(ShopSearchFragment.newInstance(parentFragment.getShopId(), responseStr));
                 break;
             case R.id.btn_all_goods:
-
+                mainFragment = MainFragment.getInstance();
+                mainFragment.start(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", parentFragment.getShopId()).toString()));
                 break;
             default:
                 break;
@@ -175,5 +178,16 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
                 }
             }
         });
+    }
+
+    @Override
+    public void onSelected(int type, int id, Object extra) {
+        SLog.info("storeLabelId[%d]", id);
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "storeId", parentFragment.getShopId(),
+                "labelId", id);
+        MainFragment mainFragment = MainFragment.getInstance();
+        mainFragment.start(ShopCommodityFragment.newInstance(params.toString()));
     }
 }

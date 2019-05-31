@@ -18,6 +18,7 @@ import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,8 +43,19 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
     List<Goods> goodsList = new ArrayList<>();
 
-    public static ShopCommodityFragment newInstance() {
+    int storeId;
+    EasyJSONObject params;
+
+    /**
+     * 新建一個實例
+     * @param paramsStr JSON字符串格式參數  必傳，最少要傳一個storeId
+     * @return
+     */
+    public static ShopCommodityFragment newInstance(String paramsStr) {
         Bundle args = new Bundle();
+
+        args.putString("paramsStr", paramsStr);
+        SLog.info("paramsStr[%s]", paramsStr);
 
         ShopCommodityFragment fragment = new ShopCommodityFragment();
         fragment.setArguments(args);
@@ -63,6 +75,15 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
 
+        Bundle args = getArguments();
+        String paramsStr = args.getString("paramsStr");
+        params = (EasyJSONObject) EasyJSONObject.parse(paramsStr);
+        try {
+            storeId = params.getInt("storeId");
+        } catch (EasyJSONException e) {
+            e.printStackTrace();
+        }
+
         TabLayout tabLayout = view.findViewById(R.id.goods_tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.goods_tab_title_general)));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.goods_tab_title_sale)));
@@ -71,7 +92,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
 
-        EasyJSONObject params = EasyJSONObject.generate("storeId", parentFragment.getShopId());
+        SLog.info("店鋪內商品搜索,params[%s]", params.toString());
         Api.getUI(Api.PATH_SEARCH_GOODS_IN_STORE, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -97,14 +118,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         String goodsName = goodsObject.getString("goodsName");
                         // 賣點
                         String jingle = goodsObject.getString("jingle");
-                        double price;
                         // 獲取價格
-                        int appUsable = goodsObject.getInt("appUsable");
-                        if (appUsable > 0) {
-                            price = goodsObject.getDouble("appPrice0");
-                        } else {
-                            price = goodsObject.getDouble("batchPrice2");
-                        }
+                        double price = Util.getGoodsPrice(goodsObject);
 
                         Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
                         goodsList.add(goods);
@@ -134,13 +149,20 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
      */
     @Override
     public void onSelected(int type, int id, Object extra) {
-        parentFragment.start(GoodsDetailFragment.newInstance(id));
+        MainFragment mainFragment = MainFragment.getInstance();
+        mainFragment.start(GoodsDetailFragment.newInstance(id));
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        ((SupportFragment) getParentFragment()).pop();
+        if (parentFragment != null) {
+            // 如果父Fragment不為空，表明是依附在父Fragment中的，pop出父Fragment
+            parentFragment.pop();
+        } else {
+            pop();
+        }
+
         return true;
     }
 }

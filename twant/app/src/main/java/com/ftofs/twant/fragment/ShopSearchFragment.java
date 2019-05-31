@@ -38,6 +38,12 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
     FlowLayout flNewGoodsContainer;
     FlowLayout flHotGoodsContainer;
 
+    /**
+     * 新建新實例
+     * @param storeId
+     * @param extraData 如果extraData為空，會從網絡從重新加載extraData
+     * @return
+     */
     public static ShopSearchFragment newInstance(int storeId, String extraData) {
         Bundle args = new Bundle();
 
@@ -90,8 +96,12 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
             case R.id.btn_search:
                 // 顯示搜索結果頁面
                 String keyword = etKeyword.getText().toString().trim();
+                if (keyword.length() < 1) {
+                    ToastUtil.show(_mActivity, "請輸入搜索關鍵字");
+                    return;
+                }
                 MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(ShopCommodityFragment.newInstance());
+                mainFragment.start(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", storeId, "keyword", keyword).toString()));
                 break;
             case R.id.btn_clear_all:
                 etKeyword.setText("");

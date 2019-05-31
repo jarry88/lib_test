@@ -16,6 +16,7 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.lxj.xpopup.XPopup;
 
+import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -97,7 +98,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         if (homeFragment == null) {
             mFragments[HOME_FRAGMENT] = ShopHomeFragment.newInstance();
-            mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance();
+            mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", shopId).toString());
             mFragments[CATEGORY_FRAGMENT] = ShopCategoryFragment.newInstance();
             mFragments[ACTIVITY_FRAGMENT] = ShopActivityFragment.newInstance();
             mFragments[CUSTOMER_SERVICE_FRAGMENT] = ShopCustomerServiceFragment.newInstance();

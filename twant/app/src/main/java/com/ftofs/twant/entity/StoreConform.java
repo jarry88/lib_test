@@ -5,7 +5,8 @@ package com.ftofs.twant.entity;
  * @author zwm
  */
 public class StoreConform {
-    public StoreConform(int conformId, int limitAmount, int conformPrice, String startTime, String endTime) {
+    public StoreConform(int storeId, int conformId, int limitAmount, int conformPrice, String startTime, String endTime) {
+        this.storeId = storeId;
         this.conformId = conformId;
         this.limitAmount = limitAmount;
         this.conformPrice = conformPrice;
@@ -13,6 +14,7 @@ public class StoreConform {
         this.endTime = endTime;
     }
 
+    public int storeId;
     public int conformId;
     public int limitAmount;
     public int conformPrice;

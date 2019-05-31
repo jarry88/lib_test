@@ -12,6 +12,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreConformListAdapter;
 import com.ftofs.twant.adapter.StoreDiscountListAdapter;
 import com.ftofs.twant.adapter.StoreVoucherListAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.StoreConform;
@@ -82,6 +83,22 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
 
         llVoucherContainer = view.findViewById(R.id.ll_voucher_container);
         voucherListAdapter = new StoreVoucherListAdapter(_mActivity, llVoucherContainer, R.layout.store_voucher_item);
+        voucherListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_receive_voucher_now) {
+                    SLog.info("HERE");
+
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "storeId", parentFragment.getShopId(),
+                            "templateId", storeVoucherList.get(position).templateId);
+
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(ShopCommodityFragment.newInstance(params.toString()));
+                }
+            }
+        });
 
         llConformContainer = view.findViewById(R.id.ll_conform_container);
         conformListAdapter = new StoreConformListAdapter(_mActivity, llConformContainer, R.layout.store_conform_item);
@@ -149,8 +166,9 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
 
                             StoreVoucher storeVoucher = new StoreVoucher(
                                     voucher.getInt("storeId"),
+                                    voucher.getInt("templateId"),
                                     voucher.getString("storeName"),
-                                    (int) voucher.getDouble("templatePrice"),
+                                    voucher.getInt("templatePrice"),
                                     voucher.getString("limitAmountText"),
                                     voucher.getString("usableClientTypeText"),
                                     voucher.getString("useStartTime"),
@@ -165,9 +183,10 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             EasyJSONObject conform = (EasyJSONObject) object;
 
                             StoreConform storeConform = new StoreConform(
-                                    (int) conform.getDouble("conformId"),
-                                    (int) conform.getDouble("limitAmount"),
-                                    (int) conform.getDouble("conformPrice"),
+                                    conform.getInt("storeId"),
+                                    conform.getInt("conformId"),
+                                    conform.getInt("limitAmount"),
+                                    conform.getInt("conformPrice"),
                                     conform.getString("startTime"),
                                     conform.getString("endTime"));
                             storeConformList.add(storeConform);
@@ -179,6 +198,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             EasyJSONObject discount = (EasyJSONObject) object;
 
                             StoreDiscount storeDiscount = new StoreDiscount(
+                                    discount.getInt("storeId"),
                                     discount.getInt("discountId"),
                                     (float) discount.getDouble("discountRate"),
                                     discount.getInt("goodsCount"));

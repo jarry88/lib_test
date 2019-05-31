@@ -26,6 +26,7 @@ public class StoreVoucherListAdapter extends ViewGroupAdapter<StoreVoucher> {
         super(context, container, itemLayoutId);
 
         currencyTypeSign = context.getString(R.string.currency_type_sign);
+        addClickableChildrenId(R.id.btn_receive_voucher_now);
     }
 
     @Override

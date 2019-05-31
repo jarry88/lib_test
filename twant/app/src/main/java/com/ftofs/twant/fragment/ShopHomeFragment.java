@@ -29,10 +29,8 @@ import java.io.IOException;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-import cn.snailpad.easyjson.json.JSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
-import okhttp3.Response;
 
 
 /**
