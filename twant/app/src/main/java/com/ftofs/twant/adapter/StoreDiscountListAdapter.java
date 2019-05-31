@@ -19,6 +19,7 @@ public class StoreDiscountListAdapter extends ViewGroupAdapter<StoreDiscount> {
      */
     public StoreDiscountListAdapter(Context context, ViewGroup container, int itemLayoutId) {
         super(context, container, itemLayoutId);
+        addClickableChildrenId(R.id.btn_participate_activity);
     }
 
     @Override

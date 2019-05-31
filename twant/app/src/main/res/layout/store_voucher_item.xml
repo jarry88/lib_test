@@ -64,6 +64,7 @@
                     android:layout_marginRight="11dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:gravity="center"
                     android:paddingTop="6dp"
                     android:paddingBottom="6dp"
                     android:paddingLeft="9dp"

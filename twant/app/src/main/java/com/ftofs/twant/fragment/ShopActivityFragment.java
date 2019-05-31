@@ -15,6 +15,7 @@ import com.ftofs.twant.adapter.StoreVoucherListAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreConform;
 import com.ftofs.twant.entity.StoreDiscount;
 import com.ftofs.twant.entity.StoreVoucher;
@@ -88,11 +89,25 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             public void onClick(ViewGroupAdapter adapter, View view, int position) {
                 int id = view.getId();
                 if (id == R.id.btn_receive_voucher_now) {
-                    SLog.info("HERE");
+                    StoreVoucher storeVoucher = storeVoucherList.get(position);
+                    // 檢查未領取才調用領取接口
+                    if (storeVoucher.memberIsReceive == Constant.ZERO) {
+                        receiveVoucher(position, storeVoucher.templateId);
+                    }
+                }
+            }
+        });
 
+        llConformContainer = view.findViewById(R.id.ll_conform_container);
+        conformListAdapter = new StoreConformListAdapter(_mActivity, llConformContainer, R.layout.store_conform_item);
+        conformListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_participate_activity) {
                     EasyJSONObject params = EasyJSONObject.generate(
                             "storeId", parentFragment.getShopId(),
-                            "templateId", storeVoucherList.get(position).templateId);
+                            "conformId", storeConformList.get(position).conformId);
 
                     MainFragment mainFragment = MainFragment.getInstance();
                     mainFragment.start(ShopCommodityFragment.newInstance(params.toString()));
@@ -100,11 +115,22 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
-        llConformContainer = view.findViewById(R.id.ll_conform_container);
-        conformListAdapter = new StoreConformListAdapter(_mActivity, llConformContainer, R.layout.store_conform_item);
-
         llDiscountContainer = view.findViewById(R.id.ll_discount_container);
         discountListAdapter = new StoreDiscountListAdapter(_mActivity, llDiscountContainer, R.layout.store_discount_item);
+        discountListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_participate_activity) {
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "storeId", parentFragment.getShopId(),
+                            "discountId", storeDiscountList.get(position).discountId);
+
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(ShopCommodityFragment.newInstance(params.toString()));
+                }
+            }
+        });
 
         loadStoreActivityData();
     }
@@ -215,5 +241,40 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
         } catch (Exception e) {
 
         }
+    }
+
+    private void receiveVoucher(final int position, int templateId) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            SLog.info("Error!token 為空");
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "templateId", templateId);
+
+        SLog.info("params[%s]", params);
+        Api.postUI(Api.PATH_RECEIVE_VOUCHER, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                ToastUtil.show(_mActivity, "領取成功");
+                StoreVoucher storeVoucher = storeVoucherList.get(position);
+                storeVoucher.memberIsReceive = 1;
+                voucherListAdapter.setData(storeVoucherList);
+            }
+        });
     }
 }
