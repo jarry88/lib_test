@@ -6,6 +6,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.Mobile;
+import com.ftofs.twant.log.SLog;
 
 /**
  * 字符串工具類
@@ -107,5 +108,35 @@ public class StringUtil {
         }
 
         return mobile;
+    }
+
+    /**
+     * 將float轉換為字符串，如果val是整數，則去除后面的小數部分
+     * 比如，如果val是 9.03， 則顯示9.03
+     *      如果val是 9, 則顯示9，而不是9.0
+     * @param val
+     * @return
+     */
+    public static String formatFloat(float val) {
+        String strVal = String.valueOf(val);
+        int len = strVal.length();
+        int index = len - 1;
+
+        // 看看最后面是否有【零】
+        while (index >= 0) {
+            char ch = strVal.charAt(index);
+            // 如果遇到小數點，結束處理
+            if (ch == '.') {
+                break;
+            }
+            if (ch != '0') {
+                // 如果index指向的不是0，還要往后挪一位，并且退出
+                ++index;
+                break;
+            }
+            --index;
+        }
+
+        return strVal.substring(0, index);
     }
 }

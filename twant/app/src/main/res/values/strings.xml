@@ -125,6 +125,11 @@
 
     <string name="text_receive_now">立即領取</string>
     <string name="text_been_received">已領取</string>
+    <string name="text_valid_time">有效期</string>
+    <string name="text_participate_activity">參與活動</string>
+    <string name="text_conform_title_template">訂單滿%d減%d</string>
+    <string name="text_conform_content_template">當您在本店單筆訂單消費滿%d可享受立減$%d現金</string>
+    <string name="text_discount_title_template">優品%s折,共%d件商品</string>
 
     <string name="text_like">點贊</string>
     <string name="text_follow">關注</string>

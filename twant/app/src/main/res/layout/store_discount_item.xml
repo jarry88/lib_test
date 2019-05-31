@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/toolbar_margin_left"
+    android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:background="@drawable/store_discount_item_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_discount_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="17dp"
+        android:gravity="center"
+        android:text="優品八折,共25件商品"
+        android:textColor="#fff"
+        android:textSize="22sp"
+        />
+
+    <TextView
+        android:id="@+id/btn_participate_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="114dp"
+        android:paddingRight="114dp"
+        android:text="@string/text_participate_activity"
+        android:textColor="#FFFECD52"
+        android:textSize="16sp"
+        android:background="@drawable/white_button"
+        />
+</LinearLayout>

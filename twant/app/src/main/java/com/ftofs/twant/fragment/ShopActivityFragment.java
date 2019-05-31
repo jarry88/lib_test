@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.StoreConformListAdapter;
+import com.ftofs.twant.adapter.StoreDiscountListAdapter;
 import com.ftofs.twant.adapter.StoreVoucherListAdapter;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.entity.StoreConform;
+import com.ftofs.twant.entity.StoreDiscount;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -43,10 +46,18 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
     discountList[] 限时折扣
      */
     ShopMainFragment parentFragment;
-    List<StoreVoucher> storeVoucherList = new ArrayList<>();
 
+    List<StoreVoucher> storeVoucherList = new ArrayList<>();
     LinearLayout llVoucherContainer;
-    StoreVoucherListAdapter adapter;
+    StoreVoucherListAdapter voucherListAdapter;
+
+    List<StoreConform> storeConformList = new ArrayList<>();
+    LinearLayout llConformContainer;
+    StoreConformListAdapter conformListAdapter;
+
+    List<StoreDiscount> storeDiscountList = new ArrayList<>();
+    LinearLayout llDiscountContainer;
+    StoreDiscountListAdapter discountListAdapter;
 
     public static ShopActivityFragment newInstance() {
         Bundle args = new Bundle();
@@ -70,7 +81,13 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
         parentFragment = (ShopMainFragment) getParentFragment();
 
         llVoucherContainer = view.findViewById(R.id.ll_voucher_container);
-        adapter = new StoreVoucherListAdapter(_mActivity, llVoucherContainer, R.layout.store_voucher_item);
+        voucherListAdapter = new StoreVoucherListAdapter(_mActivity, llVoucherContainer, R.layout.store_voucher_item);
+
+        llConformContainer = view.findViewById(R.id.ll_conform_container);
+        conformListAdapter = new StoreConformListAdapter(_mActivity, llConformContainer, R.layout.store_conform_item);
+
+        llDiscountContainer = view.findViewById(R.id.ll_discount_container);
+        discountListAdapter = new StoreDiscountListAdapter(_mActivity, llDiscountContainer, R.layout.store_discount_item);
 
         loadStoreActivityData();
     }
@@ -141,7 +158,34 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                                     voucher.getInt("memberIsReceive"));
                             storeVoucherList.add(storeVoucher);
                         }
-                        adapter.setData(storeVoucherList);
+                        voucherListAdapter.setData(storeVoucherList);
+
+                        EasyJSONArray conformList = responseObj.getArray("datas.conformList");
+                        for (Object object : conformList) {
+                            EasyJSONObject conform = (EasyJSONObject) object;
+
+                            StoreConform storeConform = new StoreConform(
+                                    (int) conform.getDouble("conformId"),
+                                    (int) conform.getDouble("limitAmount"),
+                                    (int) conform.getDouble("conformPrice"),
+                                    conform.getString("startTime"),
+                                    conform.getString("endTime"));
+                            storeConformList.add(storeConform);
+                        }
+                        conformListAdapter.setData(storeConformList);
+
+                        EasyJSONArray discountList = responseObj.getArray("datas.discountList");
+                        for (Object object : discountList) {
+                            EasyJSONObject discount = (EasyJSONObject) object;
+
+                            StoreDiscount storeDiscount = new StoreDiscount(
+                                    discount.getInt("discountId"),
+                                    (float) discount.getDouble("discountRate"),
+                                    discount.getInt("goodsCount"));
+                            storeDiscountList.add(storeDiscount);
+                        }
+                        discountListAdapter.setData(storeDiscountList);
+
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                         SLog.info("Error!loadStoreActivityData failed");
