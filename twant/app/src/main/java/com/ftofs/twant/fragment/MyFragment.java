@@ -60,6 +60,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
         Util.setOnClickListener(view, R.id.icon_return_or_exchange, this);
 
+        Util.setOnClickListener(view, R.id.btn_my_bonus, this);
         Util.setOnClickListener(view, R.id.btn_my_trust_value, this);
     }
 
@@ -118,8 +119,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 mainFragment.start(RefundFragment.newInstance());
                 break;
 
+            case R.id.btn_my_bonus:
+                mainFragment.start(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_BONUS));
+                break;
+
             case R.id.btn_my_trust_value:
-                mainFragment.start(TrustValueFragment.newInstance());
+                mainFragment.start(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_TRUST_VALUE));
                 break;
 
             default:

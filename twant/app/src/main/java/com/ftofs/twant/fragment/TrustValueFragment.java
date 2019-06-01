@@ -35,14 +35,24 @@ import okhttp3.Call;
  * @author zwm
  */
 public class TrustValueFragment extends BaseFragment implements View.OnClickListener {
+    /*
+    【我的積分】列表與【我的信賴值】列表共用一個Fragment，所以通過dataType字段來區分
+     */
+
+    public static final int DATA_TYPE_BONUS = 1;
+    public static final int DATA_TYPE_TRUST_VALUE = 2;
+
+    int dataType;
+
     TextView tvFragmentTitle;
     List<TrustValueItem> trustValueItemList = new ArrayList<>();
 
     BaseQuickAdapter adapter;
 
-    public static TrustValueFragment newInstance() {
+    public static TrustValueFragment newInstance(int dataType) {
         Bundle args = new Bundle();
 
+        args.putInt("dataType", dataType);
         TrustValueFragment fragment = new TrustValueFragment();
         fragment.setArguments(args);
 
@@ -59,6 +69,9 @@ public class TrustValueFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle args = getArguments();
+        dataType = args.getInt("dataType");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
 
@@ -97,7 +110,15 @@ public class TrustValueFragment extends BaseFragment implements View.OnClickList
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token
         );
-        Api.postUI(Api.PATH_TRUST_VALUE_LOG, params, new UICallback() {
+
+        String path;
+        if (dataType == DATA_TYPE_BONUS) {
+            path = Api.PATH_BONUS_LOG;
+        } else {
+            path = Api.PATH_TRUST_VALUE_LOG;
+        }
+
+        Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -113,8 +134,20 @@ public class TrustValueFragment extends BaseFragment implements View.OnClickList
                         return;
                     }
 
-                    int totalExpPoints = responseObj.getInt("datas.totalExpPoints");
-                    String fragmentTitle = String.format(getString(R.string.trust_value_fragment_title), totalExpPoints);
+                    int total = 0;
+                    if (dataType == DATA_TYPE_BONUS) {
+                        total = responseObj.getInt("datas.totalPoints");
+                    } else {
+                        total = responseObj.getInt("datas.totalExpPoints");
+                    }
+
+                    String fragmentTitle;
+                    if (dataType == DATA_TYPE_BONUS) {
+                        fragmentTitle = String.format(getString(R.string.bonus_fragment_title), total);
+                    } else {
+                        fragmentTitle = String.format(getString(R.string.trust_value_fragment_title), total);
+                    }
+
                     tvFragmentTitle.setText(fragmentTitle);
 
                     EasyJSONArray logList = responseObj.getArray("datas.logList");

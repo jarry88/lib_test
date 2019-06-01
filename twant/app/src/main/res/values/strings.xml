@@ -24,6 +24,7 @@
     <string name="text_dial">撥打電話</string>
 
     <string name="trust_value_fragment_title">信賴值明細(%d)</string>
+    <string name="bonus_fragment_title">積分明細(%d)</string>
 
     <string name="text_order_no">訂單編號:</string>
     <string name="text_time_create_order">生成訂單:</string>

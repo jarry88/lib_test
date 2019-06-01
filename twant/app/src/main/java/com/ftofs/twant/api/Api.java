@@ -283,6 +283,12 @@ public class Api {
 
 
     /**
+     * 個人中心：会员积分日志
+     */
+    public static final String PATH_BONUS_LOG = "/member/app/points/log";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST
