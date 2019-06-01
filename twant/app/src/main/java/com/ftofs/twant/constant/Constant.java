@@ -111,11 +111,11 @@ public class Constant {
     /**
      * 查看模式
      */
-    public static final int MODE_VIEW = 1;
+    public static final int MODE_VIEW = 0;
     /**
      * 編輯模式
      */
-    public static final int MODE_EDIT = 2;
+    public static final int MODE_EDIT = 1;
 
 
     /**

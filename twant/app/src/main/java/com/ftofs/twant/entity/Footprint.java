@@ -5,8 +5,23 @@ package com.ftofs.twant.entity;
  * @author zwm
  */
 public class Footprint {
-    public Footprint(String date, int storeId, String storeName, int commonId, String imageSrc,
+    /**
+     * 我的足跡選中狀態的常量定義
+     */
+    // 沒選中任何東西
+    public static final int SELECT_STATUS_NONE = 0;
+    // 選中了商品項
+    public static final int SELECT_STATUS_GOODS = 1;
+    // 選中了店鋪項
+    public static final int SELECT_STATUS_STORE = 2;
+    // 選中了日期項
+    public static final int SELECT_STATUS_DATE = 4;
+
+
+    public Footprint(int footprintId, String date, int storeId, String storeName, int commonId, String imageSrc,
                      String goodsName, String jingle, float price) {
+        this.footprintId = footprintId;
+        this.selectStatus = 0;
         this.date = date;
         this.storeId = storeId;
         this.storeName = storeName;
@@ -17,7 +32,16 @@ public class Footprint {
         this.price = price;
     }
 
-    // 日期， ，2019-05-31 這種格式
+    public int footprintId;
+
+    /**
+     * 在編輯模式下，被選中的狀態
+     */
+    public int selectStatus;
+
+    /**
+     * 日期， ，2019-05-31 這種格式
+     */
     public String date;
     public int storeId;
     public String storeName;

@@ -1,37 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <!-- 日期 -->
-    <TextView
-        android:id="@+id/tv_date"
+    <LinearLayout
+        android:id="@+id/ll_date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="15dp"
-        android:text="2019-01-07"
-        android:textSize="14sp"
-        android:textColor="@color/tw_black"
+        android:paddingLeft="7dp"
         android:background="@drawable/footprint_date_bg"
-        />
+        android:orientation="horizontal">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_select_date"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_gravity="center_vertical"
+            app:icon_src="@drawable/icon_cart_item_unchecked"
+            android:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="7dp"
+            android:gravity="center_vertical"
+            android:text="2019-01-07"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
+    </LinearLayout>
+
 
     <!-- 店名 -->
     <LinearLayout
         android:id="@+id/ll_store_name_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginLeft="7dp"
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:layout_marginTop="15dp"
         android:orientation="horizontal">
 
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_select_store"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_gravity="center_vertical"
+            app:icon_src="@drawable/icon_cart_item_unchecked"
+            android:visibility="gone"
+            />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/icon_shop"
             />
@@ -60,14 +87,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginLeft="7dp"
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:layout_marginBottom="15dp"
         android:orientation="horizontal">
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_select_goods"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_gravity="center_vertical"
+            app:icon_src="@drawable/icon_cart_item_unchecked"
+            android:visibility="gone"
+            />
+
         <ImageView
             android:id="@+id/goods_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:layout_marginLeft="7dp"
             android:src="@drawable/cs_avatar_160"
             />
         <LinearLayout
