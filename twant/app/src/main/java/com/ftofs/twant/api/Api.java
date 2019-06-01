@@ -276,6 +276,11 @@ public class Api {
      */
     public static final String PATH_RECEIVE_VOUCHER = "/member/voucher/receive/free";
 
+    /**
+     * 個人中心：会员信赖值日志
+     */
+    public static final String PATH_TRUST_VALUE_LOG = "/member/app/exppoints/log";
+
 
     /**
      * 發送Http請求

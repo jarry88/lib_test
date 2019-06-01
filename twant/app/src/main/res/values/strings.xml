@@ -23,6 +23,8 @@
     <string name="text_advisory_service">咨詢客服</string>
     <string name="text_dial">撥打電話</string>
 
+    <string name="trust_value_fragment_title">信賴值明細(%d)</string>
+
     <string name="text_order_no">訂單編號:</string>
     <string name="text_time_create_order">生成訂單:</string>
     <string name="text_time_pay_order">完成付款:</string>
