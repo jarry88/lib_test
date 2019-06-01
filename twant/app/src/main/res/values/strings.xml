@@ -25,6 +25,7 @@
 
     <string name="trust_value_fragment_title">信賴值明細(%d)</string>
     <string name="bonus_fragment_title">積分明細(%d)</string>
+    <string name="footprint_fragment_title">我的足跡</string>
 
     <string name="text_order_no">訂單編號:</string>
     <string name="text_time_create_order">生成訂單:</string>
