@@ -72,8 +72,6 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
             helper.setGone(R.id.ll_store_name_container, true);
         }
 
-
-
         if (mode == Constant.MODE_EDIT) {
             // 檢查三層級別是否需要顯示
             String key = position + "|" + Footprint.SELECT_STATUS_DATE;
@@ -139,7 +137,8 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(context).load(item.imageSrc).centerCrop().into(goodsImage);
 
-        helper.addOnClickListener(R.id.btn_select_date, R.id.btn_select_store, R.id.btn_select_goods);
+        helper.addOnClickListener(R.id.btn_select_date, R.id.btn_select_store, R.id.btn_select_goods,
+                R.id.ll_store_name_container, R.id.ll_goods_container);
     }
 
     public int getMode() {

@@ -16,14 +16,11 @@ public class Footprint {
     public static final int SELECT_STATUS_STORE = 2;
     // 選中了日期項
     public static final int SELECT_STATUS_DATE = 4;
-    // 三項全部選中
-    public static final int SELECT_STATUS_ALL = SELECT_STATUS_GOODS | SELECT_STATUS_STORE | SELECT_STATUS_DATE;
 
 
     public Footprint(int footprintId, String date, int storeId, String storeName, int commonId, String imageSrc,
                      String goodsName, String jingle, float price) {
         this.footprintId = footprintId;
-        this.selectStatus = 0;
         this.date = date;
         this.storeId = storeId;
         this.storeName = storeName;
@@ -35,12 +32,6 @@ public class Footprint {
     }
 
     public int footprintId;
-
-    /**
-     * 在編輯模式下，被選中的狀態
-     */
-    public int selectStatus;
-
     /**
      * 日期， ，2019-05-31 這種格式
      */

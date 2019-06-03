@@ -110,6 +110,16 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                     positionTypeStatusMap.get(key).switchCheckStatus(BaseStatus.PHRASE_TARGET);
 
                     adapter.notifyDataSetChanged();
+                } else if (id == R.id.ll_store_name_container) {
+                    Footprint footprint = footprintList.get(position);
+                    int storeId = footprint.storeId;
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(ShopMainFragment.newInstance(storeId));
+                } else if (id == R.id.ll_goods_container) {
+                    Footprint footprint = footprintList.get(position);
+                    int commonId = footprint.commonId;
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(GoodsDetailFragment.newInstance(commonId));
                 }
             }
         });
