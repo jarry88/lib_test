@@ -17,9 +17,10 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
-import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.ResponseCode;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -56,6 +57,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     LinearLayout llNewArrivalsContainer;
     MZBannerView bannerView;
 
+    List<WebSliderItem> webSliderItemList = new ArrayList<>();
+
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -84,6 +87,59 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         llNewArrivalsContainer = view.findViewById(R.id.ll_new_arrivals_container);
         bannerView = view.findViewById(R.id.banner_view);
+        bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
+            @Override
+            public void onPageClick(View view, int i) {
+                SLog.info("i = %d", i);
+                WebSliderItem webSliderItem = webSliderItemList.get(i);
+                String linkType = webSliderItem.linkType;
+
+                MainFragment mainFragment = MainFragment.getInstance();
+
+                switch (linkType) {
+                    case "none":
+                        // 无操作
+                        break;
+                    case "url":
+                        // 外部鏈接
+                        // String url = "https://www.jianshu.com/p/596a168c33d7";
+                        String url = webSliderItem.linkValue;
+                        mainFragment.start(ExplorerFragment.newInstance(url));
+                        break;
+                    case "keyword":
+                        // 关键字
+                        // String keyword = "233";
+                        String keyword = webSliderItem.linkValue;
+                        mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                                EasyJSONObject.generate("keyword", keyword).toString()));
+                        break;
+                    case "goods":
+                        // 商品
+                        int commonId = Integer.valueOf(webSliderItem.linkValue);
+                        mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                        break;
+                    case "store":
+                        // 店铺
+                        int storeId = Integer.valueOf(webSliderItem.linkValue);
+                        mainFragment.start(ShopMainFragment.newInstance(storeId));
+                        break;
+                    case "category":
+                        // 商品搜索结果页(分类)
+                        String cat = webSliderItem.linkValue;
+                        mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                                EasyJSONObject.generate("cat", cat).toString()));
+                        break;
+                    case "brandList":
+                        // 品牌列表
+                        break;
+                    case "voucherCenter":
+                        // 领券中心
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
         // 加載輪播圖片
         loadCarouselImage();
@@ -179,7 +235,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     EasyJSONArray itemList = responseObj.getArray("datas.webSliderItem");
                     for (Object object : itemList) {
                         EasyJSONObject itemObj = (EasyJSONObject) object;
-                        String imageUrl = Config.OSS_BASE_URL + "/" + itemObj.getString("image");
+
+                        WebSliderItem webSliderItem = new WebSliderItem(
+                                itemObj.getString("image"),
+                                itemObj.getString("linkType"),
+                                itemObj.getString("linkValue"),
+                                itemObj.getString("goodsIds"),
+                                itemObj.getString("goodsCommons"));
+                        webSliderItemList.add(webSliderItem);
+
+                        String imageUrl = Config.OSS_BASE_URL + "/" + webSliderItem.image;
                         SLog.info("imageUrl[%s]", imageUrl);
                         File imageFile = downloadIfNotExists(imageUrl);
 

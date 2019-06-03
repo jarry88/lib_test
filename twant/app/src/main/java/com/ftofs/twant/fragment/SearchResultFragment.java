@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -50,12 +51,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     List<GoodsSearchItem> goodsItemList = new ArrayList<>();
     List<StoreSearchItem> storeItemList = new ArrayList<>();
     EditText etKeyword;
+    EasyJSONObject paramsObj;
+    String keyword;
 
-    public static SearchResultFragment newInstance(String searchTypeStr, String keyword) {
+    public static SearchResultFragment newInstance(String searchTypeStr, String paramsStr) {
         Bundle args = new Bundle();
 
         args.putString("searchTypeStr", searchTypeStr);
-        args.putString("keyword", keyword);
+        args.putString("paramsStr", paramsStr);
         SearchResultFragment fragment = new SearchResultFragment();
         fragment.setArguments(args);
 
@@ -76,12 +79,21 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         Bundle args = getArguments();
         String searchTypeStr = args.getString("searchTypeStr");
         SearchType searchType = SearchType.valueOf(searchTypeStr);
-        String keyword = args.getString("keyword");
+        String paramsStr = args.getString("paramsStr");
+        paramsObj = (EasyJSONObject) EasyJSONObject.parse(paramsStr);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_goods_filter, this);
         etKeyword = view.findViewById(R.id.et_keyword);
-        etKeyword.setText(keyword);
+        if (paramsObj.exists("keyword")) {
+            try {
+                keyword = paramsObj.getString("keyword");
+            } catch (EasyJSONException e) {
+                e.printStackTrace();
+            }
+            etKeyword.setText(keyword);
+        }
+
         EditTextUtil.cursorSeekToEnd(etKeyword);
 
         if (searchType == SearchType.GOODS) {
@@ -154,10 +166,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         int searchTypeInt = searchType.ordinal();
         SearchHistoryUtil.saveSearchHistory(searchTypeInt, keyword);
 
-        EasyJSONObject params;
         if (searchType == SearchType.GOODS) {
-            params = EasyJSONObject.generate("keyword", keyword);
-            Api.getUI(Api.PATH_SEARCH_GOODS, params, new UICallback() {
+            Api.getUI(Api.PATH_SEARCH_GOODS, paramsObj, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     loadingPopup.dismiss();
@@ -203,9 +213,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 }
             });
         } else if (searchType == SearchType.STORE) {
-            params = EasyJSONObject.generate(
-                    "keyword", keyword);
-            Api.getUI(Api.PATH_SEARCH_STORE, params, new UICallback() {
+            Api.getUI(Api.PATH_SEARCH_STORE, paramsObj, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 

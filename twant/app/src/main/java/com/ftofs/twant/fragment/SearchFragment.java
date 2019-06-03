@@ -20,6 +20,8 @@ import com.nex3z.flowlayout.FlowLayout;
 
 import java.util.Set;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+
 
 /**
  * 搜索Fragment
@@ -102,7 +104,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             case R.id.btn_search:
                 String keyword = etKeyword.getText().toString().trim();
                 MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(SearchResultFragment.newInstance(searchType.name(), keyword));
+                mainFragment.start(SearchResultFragment.newInstance(searchType.name(),
+                        EasyJSONObject.generate("keyword", keyword).toString()));
                 break;
             default:
                 break;
@@ -137,7 +140,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 // 將keyword填充到搜索欄中，并跳轉到搜索結果頁面
                 etKeyword.setText(keyword);
                 EditTextUtil.cursorSeekToEnd(etKeyword);
-                mainFragment.start(SearchResultFragment.newInstance(searchType.name(), keyword));
+                mainFragment.start(SearchResultFragment.newInstance(searchType.name(), EasyJSONObject.generate("keyword", keyword).toString()));
             }
         });
 
