@@ -16,6 +16,8 @@ public class Footprint {
     public static final int SELECT_STATUS_STORE = 2;
     // 選中了日期項
     public static final int SELECT_STATUS_DATE = 4;
+    // 三項全部選中
+    public static final int SELECT_STATUS_ALL = SELECT_STATUS_GOODS | SELECT_STATUS_STORE | SELECT_STATUS_DATE;
 
 
     public Footprint(int footprintId, String date, int storeId, String storeName, int commonId, String imageSrc,

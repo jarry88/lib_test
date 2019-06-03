@@ -53,6 +53,54 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_footprint_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
     </android.support.v7.widget.RecyclerView>
+
+    <!-- 底部操作欄 -->
+    <RelativeLayout
+        android:id="@+id/rl_bottom_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="@drawable/top_separator_box"
+        android:visibility="gone">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_select_all"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_cart_item_unchecked"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/btn_select_all"
+            android:layout_centerVertical="true"
+            android:text="@string/text_select_all"
+            android:textColor="#929292"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/btn_delete_footprint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_centerVertical="true"
+            android:background="@drawable/narrow_red_button"
+            android:paddingTop="9dp"
+            android:paddingBottom="9dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:text="@string/text_delete"
+            />
+    </RelativeLayout>
 </LinearLayout>
