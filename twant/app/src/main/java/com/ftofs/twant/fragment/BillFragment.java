@@ -196,7 +196,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
                             int payId = ordersPayVo.getInt("payId");
                             EasyJSONArray ordersVoList = ordersPayVo.getArray("ordersVoList");
-                            int len = ordersPayVoList.length();
+                            int len = ordersVoList.length();
                             int index = 0;
                             for (Object object2 : ordersVoList) { // OrderVo
                                 EasyJSONObject ordersVo = (EasyJSONObject) object2;
@@ -221,19 +221,20 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                                     int buyNum = ordersGoodsVo.getInt("buyNum");
 
                                     orderSkuItemList.add(new OrderSkuItem(goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
-                                }
+                                }  // END OF Sku
 
                                 OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount, orderSkuItemList);
                                 // 最后一個顯示【支付訂單】按鈕
                                 if (index == len -1) {
+                                    SLog.info("DDFFAA");
                                     orderItem.setShowPayButton(true);
                                     orderItem.setPayId(payId);
                                 }
 
                                 orderItemList.add(orderItem);
                                 ++index;
-                            }
-                        }
+                            } // END OF Order Object
+                        } // END OF Pay Object
                         SLog.info("orderItemList:count[%d]", orderItemList.size());
                         adapter.setNewData(orderItemList);
                     } catch (EasyJSONException e) {

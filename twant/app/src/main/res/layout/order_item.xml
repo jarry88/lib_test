@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_gravity="center_vertical"
-                android:text="Yueaeow香薰"
+                android:text=""
                 android:textSize="13sp"
                 android:textColor="@color/tw_black"
                 />
@@ -67,14 +67,16 @@
         android:layout_gravity="right"
         android:orientation="horizontal">
         <TextView
+            android:id="@+id/tv_sku_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textSize="13sp"
             android:textColor="@color/tw_black"
-            android:text="共 2 件商品"
+            android:text=""
             />
         <TextView
+            android:id="@+id/tv_orders_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="9dp"

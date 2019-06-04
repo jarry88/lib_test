@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.OrderSkuItem;
+import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
@@ -55,8 +56,22 @@ public class OrderListAdapter extends BaseQuickAdapter<OrderItem, BaseViewHolder
             llSkuItemContainer.addView(itemView);
         }
 
-        // 子View點擊事件
-        helper.addOnClickListener(R.id.btn_pay_order);
+        helper.setText(R.id.tv_store_name, item.storeName);
+        helper.setText(R.id.tv_order_status, item.ordersStateName);
+        String skuCountText = context.getString(R.string.text_order_list_sku_count_template);
+        skuCountText = String.format(skuCountText, item.orderSkuItemList.size());
+        helper.setText(R.id.tv_sku_count, skuCountText);
+
+        helper.setText(R.id.tv_orders_amount, StringUtil.formatPrice(context, item.ordersAmount, 1));
+
+
+        if (item.showPayButton) {
+            // 子View點擊事件
+            helper.addOnClickListener(R.id.btn_pay_order);
+        } else {
+            helper.setGone(R.id.btn_pay_order, false);
+        }
+
 
         // 將payId附加到View
         helper.getView(R.id.btn_pay_order).setTag(item.payId);

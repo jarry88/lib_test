@@ -1,13 +1,16 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
@@ -25,7 +28,9 @@ import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -51,7 +56,21 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvOrdersAmount;
     TextView tvShipTime;
     TextView tvOrdersSn;
+
+    LinearLayout llOrderCreateTimeContainer;
     TextView tvCreateTime;
+    LinearLayout llOrderPaymentTimeContainer;
+    TextView tvPaymentTime;
+    LinearLayout llOrderSendTimeContainer;
+    TextView tvSendTime;
+
+    LinearLayout llOrderButtonContainer;
+
+    String[] buttonNameList = new String[] {
+            "showMemberBuyAgain", "showMemberReceive", "showRefundWaiting", "showMemberRefundAll",
+            "showEvaluation", "showShipSearch", "showMemberCancel", "showMemberDelete"};
+
+    Map<String, String> orderButtonNameMap = new HashMap<>();
 
     public static OrderDetailFragment newInstance(int ordersId) {
         Bundle args = new Bundle();
@@ -79,6 +98,15 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         ordersId = args.getInt("ordersId");
         SLog.info("ordersId[%d]", ordersId);
 
+        orderButtonNameMap.put(buttonNameList[0], getString(R.string.text_buy_again));
+        orderButtonNameMap.put(buttonNameList[1], getString(R.string.text_have_received));
+        orderButtonNameMap.put(buttonNameList[2], getString(R.string.text_refund_in_progress));
+        orderButtonNameMap.put(buttonNameList[3], getString(R.string.text_refund_all));
+        orderButtonNameMap.put(buttonNameList[4], getString(R.string.text_order_comment));
+        orderButtonNameMap.put(buttonNameList[5], getString(R.string.text_view_logistics));
+        orderButtonNameMap.put(buttonNameList[6], getString(R.string.text_cancel_order));
+        orderButtonNameMap.put(buttonNameList[7], getString(R.string.text_delete_order));
+
         tvReceiverName = view.findViewById(R.id.tv_receiver_name);
         tvMobile = view.findViewById(R.id.tv_mobile);
         tvAddress = view.findViewById(R.id.tv_address);
@@ -88,7 +116,15 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         tvOrdersAmount = view.findViewById(R.id.tv_orders_amount);
         tvShipTime = view.findViewById(R.id.tv_ship_time);
         tvOrdersSn = view.findViewById(R.id.tv_orders_sn);
+
+        llOrderCreateTimeContainer = view.findViewById(R.id.ll_order_create_time_container);
         tvCreateTime = view.findViewById(R.id.tv_create_time);
+        llOrderPaymentTimeContainer = view.findViewById(R.id.ll_order_payment_time_container);
+        tvPaymentTime = view.findViewById(R.id.tv_payment_time);
+        llOrderSendTimeContainer = view.findViewById(R.id.ll_order_send_time_container);
+        tvSendTime = view.findViewById(R.id.tv_send_time);
+
+        llOrderButtonContainer = view.findViewById(R.id.ll_order_button_container);
 
         RecyclerView rvOrderDetailGoodsList = view.findViewById(R.id.rv_order_detail_goods_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -101,9 +137,34 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         loadOrderDetail();
     }
 
+    private boolean handleOrderButtonClick(String tag) {
+        boolean consumed = false;
+        for (String buttonName : buttonNameList) {
+            if (buttonName.equals(tag)) {
+                consumed = true;
+                break;
+            }
+        }
 
-        @Override
+        if (!consumed) {
+            return false;
+        }
+
+        SLog.info("tag[%s]", tag);
+
+        return true;
+    }
+
+
+    @Override
     public void onClick(View v) {
+        Object tag = v.getTag();
+        if (tag != null && tag instanceof String) {
+            if (handleOrderButtonClick((String) tag)) {
+                return;
+            }
+        }
+
         int id = v.getId();
         switch (id) {
             case R.id.btn_back:
@@ -141,7 +202,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
-
                     EasyJSONObject ordersVo = responseObj.getObject("datas.ordersVo");
                     String receiverName = ordersVo.getString("receiverName");
                     String mobile = ordersVo.getString("receiverPhone");
@@ -166,6 +226,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
                     long ordersSn = ordersVo.getLong("ordersSn");
                     String createTime = ordersVo.getString("createTime");
+                    String paymentTime = ordersVo.getString("paymentTime");
+                    String sendTime = ordersVo.getString("sendTime");
 
                     tvReceiverName.setText(getString(R.string.text_receiver) + ":  " + receiverName);
                     tvMobile.setText(mobile);
@@ -176,7 +238,61 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     tvOrdersAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1));
                     tvShipTime.setText(shipTime);
                     tvOrdersSn.setText(String.valueOf(ordersSn));
-                    tvCreateTime.setText(createTime);
+                    if (StringUtil.isEmpty(createTime)) {
+                        llOrderCreateTimeContainer.setVisibility(View.GONE);
+                    } else {
+                        tvCreateTime.setText(createTime);
+                    }
+
+                    if (StringUtil.isEmpty(paymentTime)) {
+                        llOrderPaymentTimeContainer.setVisibility(View.GONE);
+                    } else {
+                        tvPaymentTime.setText(paymentTime);
+                    }
+
+                    if (StringUtil.isEmpty(sendTime)) {
+                        llOrderSendTimeContainer.setVisibility(View.GONE);
+                    } else {
+                        tvSendTime.setText(sendTime);
+                    }
+
+                    List<String> showButtonNameList = new ArrayList<>();
+
+                    for (String buttonName : buttonNameList) {
+                        if (ordersVo.getInt(buttonName) == 1) {
+                            showButtonNameList.add(buttonName);
+                        }
+                    }
+
+
+                    llOrderButtonContainer.removeAllViews();
+                    int size = showButtonNameList.size();
+                    for (int i = 0; i < size; ++i) {
+                        String buttonName = showButtonNameList.get(i);
+                        TextView button = new TextView(_mActivity);
+                        button.setTag(buttonName);
+
+                        String buttonNameChinese = orderButtonNameMap.get(buttonName);
+                        button.setGravity(Gravity.CENTER);
+                        button.setTextSize(14);
+                        button.setText(buttonNameChinese);
+
+                        // 最后一個與其它樣式不同
+                        if (i == size - 1) {
+                            button.setTextColor(Color.parseColor("#FFFFFF"));
+                            button.setBackgroundResource(R.drawable.smaller_red_button);
+                        } else {
+                            button.setTextColor(getResources().getColor(R.color.tw_black, null));
+                            button.setBackgroundResource(R.drawable.smaller_outline_button);
+                        }
+
+                        button.setOnClickListener(OrderDetailFragment.this);
+
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 105),
+                                Util.dip2px(_mActivity, 39));
+                        llOrderButtonContainer.addView(button, layoutParams);
+                    }
+
 
                     EasyJSONArray ordersGoodsVoList = ordersVo.getArray("ordersGoodsVoList");
                     for (Object object : ordersGoodsVoList) {

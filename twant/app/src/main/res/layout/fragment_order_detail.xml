@@ -96,7 +96,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="9dp"
-                        android:text="澳門藍花前地246號信和廣場96舖澳門藍花前地號信和廣場"
+                        android:text=""
                         android:textColor="@color/tw_dark_grey"
                         android:textSize="14sp"
                         />
@@ -397,6 +397,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_order_create_time_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -422,6 +423,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_order_payment_time_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -436,16 +438,18 @@
                         android:textColor="@color/tw_dark_grey"
                         />
                     <TextView
+                        android:id="@+id/tv_payment_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15sp"
-                        android:text="2019-01-10 12:59:43"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_dark_grey"
                         />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_order_send_time_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -460,10 +464,11 @@
                         android:textColor="@color/tw_dark_grey"
                         />
                     <TextView
+                        android:id="@+id/tv_send_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15sp"
-                        android:text="2019-01-10 12:59:43"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_dark_grey"
                         />
@@ -483,11 +488,13 @@
         android:paddingBottom="10dp"
         android:background="@drawable/bottom_separator_box_white">
         <LinearLayout
+            android:id="@+id/ll_order_button_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
             android:orientation="horizontal"
             android:layout_alignParentRight="true">
+            <!--
             <TextView
                 android:layout_width="105dp"
                 android:layout_height="39dp"
@@ -506,6 +513,7 @@
                 android:textColor="#fff"
                 android:textSize="14sp"
                 />
+                -->
         </LinearLayout>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
