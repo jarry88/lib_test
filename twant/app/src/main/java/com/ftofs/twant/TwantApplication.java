@@ -39,7 +39,7 @@ public class TwantApplication extends Application {
         super.onCreate();
 
         //Bugly异常处理
-        CrashReport.initCrashReport(getApplicationContext(), "222fdc9738", Config.DEVELOPER_MODE);
+        CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
 
         // 添加全局異常處理
         CrashHandler crashHandler = CrashHandler.getInstance();

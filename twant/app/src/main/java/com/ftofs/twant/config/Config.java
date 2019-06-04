@@ -33,4 +33,9 @@ public class Config {
             "http://192.168.5.29/web"
             : "http://www.twant.com/web";
 
+    /**
+     * Bugly
+     */
+    public static String BUGLY_KEY = "222fdc9738";
+
 }
