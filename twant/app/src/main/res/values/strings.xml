@@ -213,6 +213,10 @@
     <string name="text_return_list">退貨列表</string>
     <string name="text_complain_list">投訴列表</string>
 
+    <!--社交-->
+    <string name="facebook_app_id">339526026920454</string>
+    <string name="umeng_app_key">5cee21bd4ca357016b00068d</string>
+
     <string name="text_goods_bill">商品訂單</string>
     <string name="text_bill_all">全部</string>
     <string name="text_bill_to_be_paid">待付款</string>

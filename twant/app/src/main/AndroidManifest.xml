@@ -30,6 +30,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity"></activity>
+
+        <activity
+            android:name="com.umeng.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
+        <provider
+            android:name="com.umeng.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider339526026920454"
+            android:exported="true" />
+
+        <meta-data android:name="UMENG_APPKEY" android:value="@string/umeng_app_key" />
+        <meta-data android:name="UMENG_CHANNEL" android:value="umengshare" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
+
     </application>
 
 </manifest>
