@@ -331,12 +331,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 return;
             }
 
-            /*
-            if (true) {
-                return;
-            }
-            */
-
             Api.postUI(Api.PATH_COMMIT_BILL_DATA, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -352,6 +346,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     }
                     ToastUtil.show(_mActivity, "提交訂單成功");
                     pop();
+
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(PaySuccessFragment.newInstance(EasyJSONObject.generate().toString()));
                 }
             });
         } else if (id == R.id.btn_add_shipping_address) {

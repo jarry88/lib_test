@@ -29,8 +29,35 @@ public class ToastUtil {
      * @return 如果有錯，返回true; 否則，返回false
      */
     public static boolean checkError(Context context, EasyJSONObject responseObj) {
+        return checkError(context, responseObj, null);
+    }
+
+
+    /**
+     * 檢查是否有錯并顯示
+     * @param context
+     * @param responseObj
+     * @param defaultErrorMessage 如果有指定錯誤消息，則顯示錯誤消息；否則，顯示服務器應答的錯誤消息
+     * @return
+     */
+    public static boolean checkError(Context context, EasyJSONObject responseObj, String defaultErrorMessage) {
         if (isError(responseObj)) {
-            show(context, COMMON_ERROR_MESSAGE);
+            String errorMessage = defaultErrorMessage;
+            if (StringUtil.isEmpty(errorMessage)) {
+                if (responseObj.exists("datas.error")) {
+                    try {
+                        errorMessage = responseObj.getString("datas.error");
+                    } catch (EasyJSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (StringUtil.isEmpty(errorMessage)) {
+                        return true;
+                    }
+                }
+            }
+
+            show(context, errorMessage);
             return true;
         }
         return false;

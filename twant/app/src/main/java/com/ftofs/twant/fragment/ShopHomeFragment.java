@@ -447,8 +447,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-
-
     private void switchFavoriteState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {

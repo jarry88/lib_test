@@ -128,6 +128,10 @@
     <string name="text_conform">滿減優惠</string>
     <string name="text_discount">限時折扣</string>
 
+    <string name="text_pay_success">訂單支付成功</string>
+    <string name="text_view_order">查看訂單</string>
+    <string name="text_continue_shopping">繼續逛逛</string>
+
     <string name="text_receive_now">立即領取</string>
     <string name="text_been_received">已領取</string>
     <string name="text_valid_time">有效期</string>
