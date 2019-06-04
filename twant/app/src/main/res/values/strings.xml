@@ -121,7 +121,8 @@
 
     <string name="text_new_in_chinese">最新商品</string>
     <string name="text_new_in_english">NEW IN</string>
-    <string name="text_store_hot_item">店舖熱賣</string>
+    <string name="text_store_hot_item_chinese">店舖熱賣</string>
+    <string name="text_store_hot_item_english">RECOMMEND</string>
 
     <string name="text_voucher">優惠券</string>
     <string name="text_conform">滿減優惠</string>

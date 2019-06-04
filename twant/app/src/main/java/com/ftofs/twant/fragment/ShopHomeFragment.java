@@ -12,10 +12,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.StoreGoodsListAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.StoreGoodsItem;
+import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -25,6 +29,8 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -62,6 +68,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     LinearLayout llFirstCommentContainer;
 
+
     int storeId;
 
     int isFavorite;
@@ -69,6 +76,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     int isLike;
     ImageView btnStoreThumb;
+
+    List<StoreGoodsPair> storeHotItemList = new ArrayList<>();
+    List<StoreGoodsPair> storeNewInItemList = new ArrayList<>();
+    LinearLayout llHotItemList;
+    LinearLayout llNewInItemList;
 
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -117,6 +129,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         btnStoreFavorite.setOnClickListener(this);
 
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
+        llHotItemList = view.findViewById(R.id.ll_hot_item_list);
+        llNewInItemList = view.findViewById(R.id.ll_new_in_item_list);
 
         loadStoreData();
     }
@@ -257,6 +271,112 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         } else { // 如果沒有評論，則隱藏相應的控件
                             llFirstCommentContainer.setVisibility(View.GONE);
                         }
+
+                        // 最新商品
+                        EasyJSONArray newGoodsVoList = responseObj.getArray("datas.newGoodsVoList");
+                        int index = 0;
+                        StoreGoodsPair storeGoodsPair = null;
+                        for (Object object : newGoodsVoList) {
+                            EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+
+                            StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
+                            storeGoodsItem.commonId = easyJSONObject.getInt("commonId");
+                            storeGoodsItem.imageSrc = easyJSONObject.getString("imageSrc");
+                            storeGoodsItem.goodsName = easyJSONObject.getString("goodsName");
+                            storeGoodsItem.jingle = easyJSONObject.getString("jingle");
+                            storeGoodsItem.price = Util.getGoodsPrice(easyJSONObject);
+
+                            if (index % 2 == 0) {
+                                storeGoodsPair = new StoreGoodsPair();
+                                storeNewInItemList.add(storeGoodsPair);
+
+                                storeGoodsPair.leftItem = storeGoodsItem;
+                            } else {
+                                storeGoodsPair.rightItem = storeGoodsItem;
+                            }
+
+                            ++index;
+                        }
+
+                        StoreGoodsListAdapter newInGoodsAdapter = new StoreGoodsListAdapter(_mActivity, llNewInItemList, R.layout.store_goods_list_item);
+                        newInGoodsAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+                            @Override
+                            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                                SLog.info("onClick");
+                                StoreGoodsPair pair = storeNewInItemList.get(position);
+                                int commonId;
+                                int id = view.getId();
+                                if (id == R.id.ll_left_item_container) {
+                                    if (pair.leftItem == null) {
+                                        return;
+                                    }
+                                    commonId = pair.leftItem.commonId;
+                                } else {
+                                    if (pair.rightItem == null) {
+                                        return;
+                                    }
+                                    commonId = pair.rightItem.commonId;
+                                }
+
+                                MainFragment mainFragment = MainFragment.getInstance();
+                                mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                            }
+                        });
+                        newInGoodsAdapter.setData(storeNewInItemList);
+
+
+                        // 店鋪熱賣
+                        EasyJSONArray hotGoodsVoList = responseObj.getArray("datas.commendGoodsVoList");
+                        index = 0;
+                        storeGoodsPair = null;
+                        for (Object object : hotGoodsVoList) {
+                            EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+
+                            StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
+                            storeGoodsItem.commonId = easyJSONObject.getInt("commonId");
+                            storeGoodsItem.imageSrc = easyJSONObject.getString("imageSrc");
+                            storeGoodsItem.goodsName = easyJSONObject.getString("goodsName");
+                            storeGoodsItem.jingle = easyJSONObject.getString("jingle");
+                            storeGoodsItem.price = Util.getGoodsPrice(easyJSONObject);
+
+                            if (index % 2 == 0) {
+                                storeGoodsPair = new StoreGoodsPair();
+                                storeHotItemList.add(storeGoodsPair);
+
+                                storeGoodsPair.leftItem = storeGoodsItem;
+                            } else {
+                                storeGoodsPair.rightItem = storeGoodsItem;
+                            }
+
+                            ++index;
+                        }
+
+
+                        StoreGoodsListAdapter hotGoodsAdapter = new StoreGoodsListAdapter(_mActivity, llHotItemList, R.layout.store_goods_list_item);
+                        hotGoodsAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+                            @Override
+                            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                                SLog.info("onClick");
+                                StoreGoodsPair pair = storeHotItemList.get(position);
+                                int commonId;
+                                int id = view.getId();
+                                if (id == R.id.ll_left_item_container) {
+                                    if (pair.leftItem == null) {
+                                        return;
+                                    }
+                                    commonId = pair.leftItem.commonId;
+                                } else {
+                                    if (pair.rightItem == null) {
+                                        return;
+                                    }
+                                    commonId = pair.rightItem.commonId;
+                                }
+
+                                MainFragment mainFragment = MainFragment.getInstance();
+                                mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                            }
+                        });
+                        hotGoodsAdapter.setData(storeHotItemList);
 
                     } catch (EasyJSONException e) {
                         SLog.info("Error!%s", e.getMessage());

@@ -59,7 +59,7 @@ public abstract class ViewGroupAdapter<T> {
     }
 
     /**
-     * 添加要監聽點擊事件的childView
+     * 添加要監聽點擊事件的childView(!!!!!!注意：必須在Adapter的構造函數中調用)
      * @param ids
      */
     protected void addClickableChildrenId(int... ids) {
