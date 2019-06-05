@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CategoryBrandAdapter;
 import com.ftofs.twant.adapter.CategoryMenuAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CategoryBrand;
 import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -40,7 +42,9 @@ import okhttp3.Response;
  */
 public class CategoryBrandFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     RecyclerView rvCategoryMenu;
-    RecyclerView rvCommodityList;
+    RecyclerView rvBrandList;
+    List<CategoryBrand> categoryBrandList = new ArrayList<>();
+    CategoryBrandAdapter categoryBrandAdapter;
     HashMap<Integer, List<CategoryBrand>> categoryBrandListMap = new HashMap<>();
 
     public static CategoryBrandFragment newInstance() {
@@ -64,17 +68,28 @@ public class CategoryBrandFragment extends BaseFragment implements View.OnClickL
         super.onViewCreated(view, savedInstanceState);
 
         rvCategoryMenu = view.findViewById(R.id.rv_category_menu);
-        rvCommodityList = view.findViewById(R.id.rv_commodity_list);
+        rvBrandList = view.findViewById(R.id.rv_commodity_list);
 
         rvCategoryMenu = view.findViewById(R.id.rv_category_menu);
         LinearLayoutManager layoutManagerCategory = new LinearLayoutManager(_mActivity);
         layoutManagerCategory.setOrientation(LinearLayoutManager.VERTICAL);
         rvCategoryMenu.setLayoutManager(layoutManagerCategory);
 
-        rvCommodityList = view.findViewById(R.id.rv_brand_list);
-        LinearLayoutManager layoutManagerBrand = new LinearLayoutManager(_mActivity);
-        layoutManagerBrand.setOrientation(LinearLayoutManager.VERTICAL);
-        rvCommodityList.setLayoutManager(layoutManagerBrand);
+        rvBrandList = view.findViewById(R.id.rv_brand_list);
+        LinearLayoutManager layoutManagerBrand = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        rvBrandList.setLayoutManager(layoutManagerBrand);
+        categoryBrandAdapter = new CategoryBrandAdapter(_mActivity, R.layout.category_brand_item, categoryBrandList);
+        categoryBrandAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CategoryBrand categoryBrand = categoryBrandList.get(position);
+                SLog.info("brandId[%d]", categoryBrand.brandId);
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(), EasyJSONObject.generate(
+                        "brand", categoryBrand.brandId).toString()));
+            }
+        });
+        rvBrandList.setAdapter(categoryBrandAdapter);
 
         loadCategoryMenuData();
     }
@@ -145,18 +160,15 @@ public class CategoryBrandFragment extends BaseFragment implements View.OnClickL
     private void loadCategoryBrandData(int categoryId) {
         // TODO: 2019/5/6 優化
         SLog.info("categoryId[%d]", categoryId);
-        List<CategoryBrand> categoryBrandList = categoryBrandListMap.get(categoryId);
-        if (categoryBrandList == null) {
-            return;
+        List<CategoryBrand> list = categoryBrandListMap.get(categoryId);
+        if (list == null) {
+            categoryBrandList = new ArrayList<>();
+        } else {
+            categoryBrandList = list;
         }
 
-
-        CategoryBrandAdapter adapter = new CategoryBrandAdapter(_mActivity, categoryBrandList);
-        rvCommodityList.setAdapter(adapter);
+        categoryBrandAdapter.setNewData(categoryBrandList);
     }
-
-
-
 
     @Override
     public void onClick(View v) {

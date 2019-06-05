@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CategoryMenuAdapter;
 import com.ftofs.twant.adapter.CategoryShopAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -39,6 +41,9 @@ import okhttp3.Response;
 public class CategoryShopFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     RecyclerView rvCategoryMenu;
     RecyclerView rvShopList;
+
+    List<CategoryShop> categoryShopList = new ArrayList<>();
+    CategoryShopAdapter categoryShopAdapter;
 
     HashMap<Integer, List<CategoryShop>> categoryShopListMap = new HashMap<>();
 
@@ -68,9 +73,20 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
         rvCategoryMenu.setLayoutManager(layoutManagerCategory);
 
         rvShopList = view.findViewById(R.id.rv_shop_list);
-        LinearLayoutManager layoutManagerShop = new LinearLayoutManager(_mActivity);
-        layoutManagerShop.setOrientation(LinearLayoutManager.VERTICAL);
+        LinearLayoutManager layoutManagerShop = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvShopList.setLayoutManager(layoutManagerShop);
+        categoryShopAdapter = new CategoryShopAdapter(_mActivity, R.layout.category_shop_item, categoryShopList);
+        categoryShopAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CategoryShop categoryShop = categoryShopList.get(position);
+
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(SearchResultFragment.newInstance(SearchType.STORE.name(),
+                        EasyJSONObject.generate("keyword", String.valueOf(categoryShop.shopId)).toString()));
+            }
+        });
+        rvShopList.setAdapter(categoryShopAdapter);
 
         loadCategoryMenuData();
     }
@@ -149,9 +165,9 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
     private void loadCategoryShopData(int categoryId) {
         // TODO: 2019/5/6 優化
         SLog.info("categoryId[%d]", categoryId);
-        List<CategoryShop> categoryShopList = categoryShopListMap.get(categoryId);
-        CategoryShopAdapter adapter = new CategoryShopAdapter(_mActivity, categoryShopList);
-        rvShopList.setAdapter(adapter);
+        categoryShopList = categoryShopListMap.get(categoryId);
+        SLog.info("count[%d]", categoryShopList.size());
+        categoryShopAdapter.setNewData(categoryShopList);
     }
 
     /**

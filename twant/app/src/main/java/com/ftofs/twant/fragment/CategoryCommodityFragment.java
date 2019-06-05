@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CategoryCommodityAdapter;
 import com.ftofs.twant.adapter.CategoryMenuAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.CategoryCommodityList;
 import com.ftofs.twant.entity.CategoryMenu;
@@ -40,7 +42,11 @@ import okhttp3.Response;
  */
 public class CategoryCommodityFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     RecyclerView rvCategoryMenu;
+
     RecyclerView rvCommodityList;
+    List<CategoryCommodity> categoryCommodityList = new ArrayList<>();
+    CategoryCommodityAdapter categoryCommodityAdapter;
+
     HashMap<Integer, CategoryCommodityList> categoryCommodityListMap = new HashMap<>();
 
     public static CategoryCommodityFragment newInstance() {
@@ -75,6 +81,21 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
         GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 3);
         layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
         rvCommodityList.setLayoutManager(layoutManagerCommodity);
+        categoryCommodityAdapter = new CategoryCommodityAdapter(_mActivity, R.layout.category_commodity_item, categoryCommodityList);
+        categoryCommodityAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("position[%d]", position);
+                CategoryCommodity categoryCommodity = categoryCommodityList.get(position);
+
+                SLog.info("categoryId[%d], categoryName[%s]", categoryCommodity.categoryId, categoryCommodity.categoryName);
+
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        EasyJSONObject.generate("cat", String.valueOf(categoryCommodity.categoryId)).toString()));
+            }
+        });
+        rvCommodityList.setAdapter(categoryCommodityAdapter);
 
         loadCategoryMenuData();
     }
@@ -147,14 +168,14 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     private void loadCategoryCommodityData(int categoryId) {
         // TODO: 2019/5/6 優化
         SLog.info("categoryId[%d]", categoryId);
-        CategoryCommodityList categoryCommodityList = categoryCommodityListMap.get(categoryId);
-        if (categoryCommodityList == null) {
-            return;
+        CategoryCommodityList item = categoryCommodityListMap.get(categoryId);
+        if (item == null) {
+            categoryCommodityList = new ArrayList<>();
+        } else {
+            categoryCommodityList = item.list;
         }
 
-
-        CategoryCommodityAdapter adapter = new CategoryCommodityAdapter(_mActivity, categoryCommodityList.list);
-        rvCommodityList.setAdapter(adapter);
+        categoryCommodityAdapter.setNewData(categoryCommodityList);
     }
 
 

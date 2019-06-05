@@ -25,7 +25,7 @@
                 android:layout_centerVertical="true"
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
-                android:text="白小白"
+                android:text=""
                 />
             <TextView
                 android:id="@+id/tv_mobile"
@@ -35,7 +35,7 @@
                 android:layout_centerVertical="true"
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
-                android:text="13417785707"
+                android:text=""
                 />
         </RelativeLayout>
         <TextView
@@ -46,7 +46,7 @@
             android:paddingBottom="15dp"
             android:textSize="14sp"
             android:textColor="@color/tw_black"
-            android:text="澳門藍花前地246號信和廣場96舖澳門藍花前地號信和廣場"
+            android:text=""
             android:background="@drawable/bottom_separator_box"
             />
     </LinearLayout>

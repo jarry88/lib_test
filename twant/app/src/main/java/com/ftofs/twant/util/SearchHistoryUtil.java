@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.log.SLog;
 import com.orhanobut.hawk.Hawk;
 
 import java.util.HashSet;
@@ -24,6 +25,7 @@ public class SearchHistoryUtil {
 
         String key = SPField.FIELD_SEARCH_TYPE + searchTypeInt;
         String historyJSONStr = Hawk.get(key, "[]");
+        SLog.info("historyJSONStr[%s]", historyJSONStr);
         EasyJSONArray historyArr = (EasyJSONArray) EasyJSONArray.parse(historyJSONStr);
         for (Object object: historyArr) {
             String keyword = (String) object;
@@ -39,6 +41,9 @@ public class SearchHistoryUtil {
      * @param keyword
      */
     public static void saveSearchHistory(int searchTypeInt, String keyword) {
+        if (StringUtil.isEmpty(keyword)) {
+            return;
+        }
         Set<String> keywordSet = loadSearchHistory(searchTypeInt);
         keywordSet.add(keyword);
 

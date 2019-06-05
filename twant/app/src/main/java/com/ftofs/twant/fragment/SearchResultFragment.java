@@ -216,11 +216,12 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             Api.getUI(Api.PATH_SEARCH_STORE, paramsObj, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    loadingPopup.dismiss();
                 }
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
+                    loadingPopup.dismiss();
                     try {
                         SLog.info("responseStr[%s]", responseStr);
                         EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);

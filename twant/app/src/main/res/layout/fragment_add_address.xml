@@ -100,7 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="13417785707"
+                    android:text=""
                     android:textSize="17sp"
                     android:textColor="@color/tw_black"
                     android:hint="@string/input_mobile_hint"

@@ -76,7 +76,7 @@
             android:inputType="number"
             android:imeOptions="actionNext"
             android:singleLine="true"
-            android:text="13417785707"
+            android:text=""
             android:textSize="17sp"
             />
     </RelativeLayout>

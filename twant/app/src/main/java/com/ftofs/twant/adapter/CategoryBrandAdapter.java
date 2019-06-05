@@ -1,6 +1,7 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CategoryBrand;
@@ -23,6 +26,53 @@ import java.util.List;
  * 品類分類adapter
  * @author zwm
  */
+
+public class CategoryBrandAdapter extends BaseQuickAdapter<CategoryBrand, BaseViewHolder> {
+    Context context;
+    public CategoryBrandAdapter(Context context, int layoutResId, @Nullable List<CategoryBrand> data) {
+        super(layoutResId, data);
+        this.context = context;
+    }
+
+    @Override
+    protected void convert(BaseViewHolder helper, CategoryBrand categoryBrand) {
+        int position = helper.getAdapterPosition();
+        int remainder = position % 8;
+
+        // 品牌LOGO显示在左右还是右边的规则
+        boolean showLeft = true;
+        if (remainder == 1 || remainder == 4 || remainder >= 6) {
+            showLeft = false;
+        }
+
+        String imageUrl = Config.OSS_BASE_URL + "/" + categoryBrand.imageUrl;
+        SLog.info("imageUrl[%s]", imageUrl);
+
+        if (showLeft) {
+            // 显示左边，隐藏右边的控件
+            helper.setGone(R.id.ll_left_container, true);
+            helper.setGone(R.id.ll_right_container, false);
+
+            ImageView brandImageLeft = helper.getView(R.id.brand_image_left);
+            Glide.with(context).load(imageUrl).into(brandImageLeft);
+
+            helper.setText(R.id.tv_brand_name_chinese_left, categoryBrand.brandNameChinese);
+            helper.setText(R.id.tv_brand_name_english_left, categoryBrand.brandNameEnglish);
+        } else {
+            // 显示左边，隐藏右边的控件
+            helper.setGone(R.id.ll_right_container, true);
+            helper.setGone(R.id.ll_left_container, false);
+
+            ImageView brandImageRight = helper.getView(R.id.brand_image_right);
+            Glide.with(context).load(imageUrl).into(brandImageRight);
+
+            helper.setText(R.id.tv_brand_name_chinese_right, categoryBrand.brandNameChinese);
+            helper.setText(R.id.tv_brand_name_english_right, categoryBrand.brandNameEnglish);
+        }
+    }
+}
+
+/*
 public class CategoryBrandAdapter extends RecyclerView.Adapter<CategoryBrandAdapter.ViewHolder> {
     private Context context;
     private List<CategoryBrand> categoryBrandList;
@@ -85,7 +135,7 @@ public class CategoryBrandAdapter extends RecyclerView.Adapter<CategoryBrandAdap
             holder.llContainerLeft.setVisibility(View.VISIBLE);
             holder.llContainerRight.setVisibility(View.GONE);
 
-            Glide.with(context).load(imageUrl).placeholder(R.drawable.icon__bottom_bar_want).into(holder.brandImageLeft);
+            Glide.with(context).load(imageUrl).into(holder.brandImageLeft);
 
             holder.tvBrandNameChineseLeft.setText(categoryBrand.brandNameChinese);
             holder.tvBrandNameEnglishLeft.setText(categoryBrand.brandNameEnglish);
@@ -94,7 +144,7 @@ public class CategoryBrandAdapter extends RecyclerView.Adapter<CategoryBrandAdap
             holder.llContainerRight.setVisibility(View.VISIBLE);
             holder.llContainerLeft.setVisibility(View.GONE);
 
-            Glide.with(context).load(imageUrl).placeholder(R.drawable.icon__bottom_bar_want).into(holder.brandImageRight);
+            Glide.with(context).load(imageUrl).into(holder.brandImageRight);
 
             holder.tvBrandNameChineseRight.setText(categoryBrand.brandNameChinese);
             holder.tvBrandNameEnglishRight.setText(categoryBrand.brandNameEnglish);
@@ -118,3 +168,5 @@ public class CategoryBrandAdapter extends RecyclerView.Adapter<CategoryBrandAdap
         return count;
     }
 }
+*/
+
