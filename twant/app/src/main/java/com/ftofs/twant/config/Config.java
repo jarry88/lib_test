@@ -27,7 +27,7 @@ public class Config {
 
     public static String API_BASE_URL = DEVELOPER_MODE ?
             "http://192.168.5.29/api"
-            : "http://f2.twant.com/api";
+            : "https://f2.twant.com/api";
 
     public static String WEB_BASE_URL = DEVELOPER_MODE ?
             "http://192.168.5.29/web"
