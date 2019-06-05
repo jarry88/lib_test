@@ -1,6 +1,9 @@
 package com.ftofs.twant.log;
 
 import android.util.Log;
+
+import com.ftofs.twant.config.Config;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +17,10 @@ import java.util.Date;
  */
 public class SLog {
     public static void info(String format, Object... args) {
+        if (!Config.DEVELOPER_MODE) {
+            return;
+        }
+
         StackTraceElement[] traceArray = Thread.currentThread().getStackTrace();
 
         // 在Android中固定为3

@@ -174,7 +174,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         String shopName = storeInfo.getString("storeName");
                         parentFragment.setShopName(shopName);
 
-                        String shopAvatarUrl = storeInfo.getString("storeAvatar");
+                        String shopAvatarUrl = Config.OSS_BASE_URL + "/" + storeInfo.getString("storeAvatar");
+                        SLog.info("storeAvatar__[%s]", shopAvatarUrl);
                         // 店鋪頭像
                         Glide.with(ShopHomeFragment.this).load(shopAvatarUrl).into(imgShopAvatar);
                         // 將店鋪頭像設置到工具欄按鈕

@@ -125,29 +125,34 @@
             android:layout_centerVertical="true"
             android:textColor="@color/tw_black"
             android:textSize="16sp"
-            android:text="@string/text_real_name"
+            android:text="@string/text_nickname"
             />
 
-        <ImageView
-            android:id="@+id/img_set_real_name"
+        <LinearLayout
+            android:id="@+id/btn_modify_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/expand_button"
-            />
-
-        <TextView
-            android:id="@+id/tv_real_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/img_set_real_name"
-            android:textColor="#676666"
-            android:textSize="16sp"
-            android:text=""
-            />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="30dp"
+                android:textColor="#676666"
+                android:textSize="16sp"
+                android:text=""
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/expand_button"
+                />
+        </LinearLayout>
     </RelativeLayout>
 
     <!-- 真實姓名 -->

@@ -309,6 +309,11 @@ public class Api {
      */
     public static final String PATH_MEMBER_DETAIL = "/member/detail";
 
+    /**
+     * 個人中心：修改昵稱
+     */
+    public static final String PATH_MODIFY_NICKNAME = "/member/modify/nick_name";
+
 
     /**
      * 發送Http請求

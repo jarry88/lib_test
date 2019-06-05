@@ -29,6 +29,9 @@ import okhttp3.Call;
 public class PersonalInfoFragment extends BaseFragment implements View.OnClickListener {
     String[] genderTextMap;
 
+
+    View contentView;
+    String nickname;
     public static PersonalInfoFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -53,15 +56,32 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                 getString(R.string.text_confidentiality), getString(R.string.text_male), getString(R.string.text_female)};
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_modify_nickname, this);
 
-        loadPersonalInfo(view);
+        contentView = view;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        loadPersonalInfo(contentView);
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_back) {
-            pop();
+
+        switch (id) {
+            case R.id.btn_back:
+                pop();
+                break;
+            case R.id.btn_modify_nickname:
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(ModifyNicknameFragment.newInstance(nickname));
+                break;
+            default:
+                break;
         }
     }
 
@@ -103,8 +123,9 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     TextView tvUserName = view.findViewById(R.id.tv_user_name);
                     tvUserName.setText(memberInfo.getString("memberName"));
 
-                    TextView tvRealName = view.findViewById(R.id.tv_real_name);
-                    tvRealName.setText(memberInfo.getString("nickName"));
+                    TextView tvNickname = view.findViewById(R.id.tv_nickname);
+                    nickname = memberInfo.getString("nickName");
+                    tvNickname.setText(nickname);
 
                     int gender = memberInfo.getInt("memberSex");
                     TextView tvGender = view.findViewById(R.id.tv_gender);

@@ -17,12 +17,15 @@
     <string name="text_avatar">頭像</string>
     <string name="text_user_name">用戶名</string>
     <string name="text_real_name">真實姓名</string>
+    <string name="text_nickname">暱稱</string>
     <string name="text_gender">性別</string>
     <string name="text_birthday">出生日期</string>
     <string name="text_location">所在地</string>
     <string name="text_advisory_service">咨詢客服</string>
     <string name="text_dial">撥打電話</string>
     <string name="text_not_set">未設置</string>
+
+    <string name="modify_nickname_fragment_title">修改暱稱</string>
 
     <string name="text_confidentiality">保密</string>
     <string name="text_male">男</string>
@@ -57,6 +60,8 @@
     <string name="text_does_not_need_receipt">不開發票</string>
     <string name="text_save_and_use">保存使用</string>
     <string name="order_detail_fragment_title">訂單詳情</string>
+
+    <string name="input_nickname_hint_simple">請輸入暱稱</string>
 
 
     <string name="mobile_zone_text">地區區號</string>
