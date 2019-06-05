@@ -75,6 +75,7 @@ public class ResetPasswordFragment extends BaseFragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_next, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
@@ -91,7 +92,9 @@ public class ResetPasswordFragment extends BaseFragment implements
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_next) {
+        if (id == R.id.btn_back) {
+            pop();
+        } else if (id == R.id.btn_next) {
             if (mobileZoneList.size() <= selectedMobileZoneIndex) {
                 return;
             }

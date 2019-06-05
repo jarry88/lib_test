@@ -116,6 +116,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
         if (needReloadData) {
             reloadList();
+            totalStatus.changeCheckStatus(false, BaseStatus.PHRASE_TARGET);
         }
     }
 
@@ -368,7 +369,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
         float totalPrice = totalData.first;  // 總價錢
         int totalCount = totalData.second;  // 總件數
-        tvTotalPrice.setText(currencyTypeSign + totalPrice);
+        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
         String btnSettlementText = textSettlement;
 
         if (totalCount > 0) {

@@ -304,6 +304,11 @@ public class Api {
      */
     public static final String PATH_CANCEL_ORDER = "/member/orders/cancel";
 
+    /**
+     * 會員詳情
+     */
+    public static final String PATH_MEMBER_DETAIL = "/member/detail";
+
 
     /**
      * 發送Http請求

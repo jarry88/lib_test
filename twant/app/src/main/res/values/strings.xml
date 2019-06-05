@@ -22,6 +22,11 @@
     <string name="text_location">所在地</string>
     <string name="text_advisory_service">咨詢客服</string>
     <string name="text_dial">撥打電話</string>
+    <string name="text_not_set">未設置</string>
+
+    <string name="text_confidentiality">保密</string>
+    <string name="text_male">男</string>
+    <string name="text_female">女</string>
 
     <string name="trust_value_fragment_title">信賴值明細(%d)</string>
     <string name="bonus_fragment_title">積分明細(%d)</string>

@@ -46,11 +46,8 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
-        Util.setOnClickListener(view, R.id.btn_personal_info, this);
         Util.setOnClickListener(view, R.id.btn_login_password, this);
         Util.setOnClickListener(view, R.id.btn_change_mobile, this);
-        Util.setOnClickListener(view, R.id.btn_payment_password, this);
-        Util.setOnClickListener(view, R.id.btn_realname_authentication, this);
 
         Util.setOnClickListener(view, R.id.btn_logout, this);
 
@@ -69,11 +66,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             User.logout();
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS, null);
             pop();
-        } else if (id == R.id.btn_payment_password) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            if (mainFragment != null) {
-                mainFragment.start(PaymentPasswordFragment.newInstance());
-            }
         } else if (id == R.id.btn_login_password) {
             MainFragment mainFragment = MainFragment.getInstance();
             if (mainFragment != null) {

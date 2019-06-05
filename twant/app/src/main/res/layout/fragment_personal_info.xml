@@ -64,7 +64,7 @@
             android:layout_marginRight="20dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/img_set_avatar"
-            android:src="@drawable/avatar"
+            android:src="@mipmap/ic_launcher"
             android:scaleType="fitXY"
             />
     </RelativeLayout>
@@ -106,7 +106,7 @@
             android:layout_toLeftOf="@id/img_set_user_name"
             android:textColor="#676666"
             android:textSize="16sp"
-            android:text="Twant"
+            android:text=""
             />
     </RelativeLayout>
 
@@ -146,7 +146,7 @@
             android:layout_toLeftOf="@id/img_set_real_name"
             android:textColor="#676666"
             android:textSize="16sp"
-            android:text="白小白"
+            android:text=""
             />
     </RelativeLayout>
 
@@ -186,7 +186,7 @@
             android:layout_toLeftOf="@id/img_set_gender"
             android:textColor="#676666"
             android:textSize="16sp"
-            android:text="女"
+            android:text=""
             />
     </RelativeLayout>
 
@@ -226,11 +226,11 @@
             android:layout_toLeftOf="@id/img_set_birthday"
             android:textColor="#676666"
             android:textSize="16sp"
-            android:text="1999-12-25"
+            android:text="@string/text_not_set"
             />
     </RelativeLayout>
 
-    <!-- 出生日期 -->
+    <!-- 所在地 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -266,7 +266,7 @@
             android:layout_toLeftOf="@id/img_set_location"
             android:textColor="#676666"
             android:textSize="16sp"
-            android:text="澳門行政區 澳門 大三巴牌坊"
+            android:text="@string/text_not_set"
             />
     </RelativeLayout>
 </LinearLayout>
