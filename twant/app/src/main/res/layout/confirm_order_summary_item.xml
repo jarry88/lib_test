@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center_vertical"
-                android:text="在線支付"
+                android:text="貨到付款"
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 />
@@ -48,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/expand_button"
+                android:visibility="gone"
                 />
         </LinearLayout>
     </RelativeLayout>

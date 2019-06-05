@@ -170,7 +170,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         shippingTimePopup(position);
                         break;
                     case R.id.btn_change_pay_way:
-                        payWayPopup();
+                        // 暫時屏蔽支付方式切換 payWayPopup();
                         break;
                     default:
                         break;
@@ -222,7 +222,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
             // 收集表單信息
             EasyJSONObject commitBuyData = EasyJSONObject.generate(
-                    "paymentTypeCode", "online",
+                    // "paymentTypeCode", "online",
+                    "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_OFFLINE,
                     "isCart", isFromCart,
                     "isExistTrys", isExistTrys,
                     "storeList", commitStoreList);
@@ -282,7 +283,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 }
 
                 ConfirmOrderSummaryItem summaryItem = getSummaryItem();
-                commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
+                // 暫時寫死為【貨到付款】 commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
+                commitBuyData.set("paymentTypeCode", Constant.PAYMENT_TYPE_CODE_OFFLINE);
                 commitBuyData.set("storeList", storeList);
             }
 

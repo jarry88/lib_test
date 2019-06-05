@@ -25,6 +25,9 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,9 +69,18 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     LinearLayout llOrderButtonContainer;
 
+    public static final String TEXT_MEMBER_BUY_AGAIN = "showMemberBuyAgain";
+    public static final String TEXT_MEMBER_RECEIVE = "showMemberReceive";
+    public static final String TEXT_REFUND_WAITING = "showRefundWaiting";
+    public static final String TEXT_MEMBER_REFUND_ALL = "showMemberRefundAll";
+    public static final String TEXT_EVALUATION = "showEvaluation";
+    public static final String TEXT_SHIP_SEARCH = "showShipSearch";
+    public static final String TEXT_MEMBER_CANCEL = "showMemberCancel";
+    public static final String TEXT_MEMBER_DELETE = "showMemberDelete";
+
     String[] buttonNameList = new String[] {
-            "showMemberBuyAgain", "showMemberReceive", "showRefundWaiting", "showMemberRefundAll",
-            "showEvaluation", "showShipSearch", "showMemberCancel", "showMemberDelete"};
+            TEXT_MEMBER_BUY_AGAIN, TEXT_MEMBER_RECEIVE, TEXT_REFUND_WAITING, TEXT_MEMBER_REFUND_ALL,
+            TEXT_EVALUATION, TEXT_SHIP_SEARCH, TEXT_MEMBER_CANCEL, TEXT_MEMBER_DELETE};
 
     Map<String, String> orderButtonNameMap = new HashMap<>();
 
@@ -138,20 +150,45 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private boolean handleOrderButtonClick(String tag) {
-        boolean consumed = false;
-        for (String buttonName : buttonNameList) {
-            if (buttonName.equals(tag)) {
-                consumed = true;
-                break;
+        try {
+            boolean consumed = false;
+            for (String buttonName : buttonNameList) {
+                if (buttonName.equals(tag)) {
+                    consumed = true;
+                    break;
+                }
             }
+
+            if (!consumed) {
+                return false;
+            }
+
+            SLog.info("tag[%s]", tag);
+            // 取消訂單
+            if (tag.equals(TEXT_MEMBER_CANCEL)) {
+                new XPopup.Builder(getContext())
+//                         .dismissOnTouchOutside(false)
+                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                        .setPopupCallback(new XPopupCallback() {
+                            @Override
+                            public void onShow() {
+                            }
+                            @Override
+                            public void onDismiss() {
+                            }
+                        }).asConfirm("確定要取消訂單嗎?", "",
+                        new OnConfirmListener() {
+                            @Override
+                            public void onConfirm() {
+                                cancelOrder();
+                            }
+                        }, null, false)
+                        .show();
+            }
+        } catch (Exception e) {
+            return true;
         }
-
-        if (!consumed) {
-            return false;
-        }
-
-        SLog.info("tag[%s]", tag);
-
         return true;
     }
 
@@ -173,6 +210,44 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             default:
                 break;
         }
+    }
+
+    private void cancelOrder() {
+        // 取消訂單
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "ordersId", ordersId);
+
+        SLog.info("params[%s]", params);
+
+        Api.postUI(Api.PATH_CANCEL_ORDER, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.show(_mActivity, "取消訂單成功");
+                    pop();
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 
     private void loadOrderDetail() {

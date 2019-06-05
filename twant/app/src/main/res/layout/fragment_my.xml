@@ -35,6 +35,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:src="@drawable/icon_message_bubble"
+            android:visibility="gone"
             />
 
         <ImageView

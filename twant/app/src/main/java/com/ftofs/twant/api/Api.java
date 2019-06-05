@@ -299,6 +299,11 @@ public class Api {
      */
     public static final String PATH_DELETE_FOOTPRINT = "/member/app/browse/delete";
 
+    /**
+     * 订单取消（未付款）
+     */
+    public static final String PATH_CANCEL_ORDER = "/member/orders/cancel";
+
 
     /**
      * 發送Http請求

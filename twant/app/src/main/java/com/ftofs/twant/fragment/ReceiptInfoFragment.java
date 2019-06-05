@@ -86,6 +86,7 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
             etTaxPayerId.setText(receipt.taxPayerId);
         }
 
+        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_no_receipt, this);
         Util.setOnClickListener(view, R.id.btn_save_and_use, this);
     }

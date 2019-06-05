@@ -40,7 +40,7 @@ public class OrderListAdapter extends BaseQuickAdapter<OrderItem, BaseViewHolder
         llSkuItemContainer.removeAllViews();
 
         for (OrderSkuItem orderSkuItem : item.orderSkuItemList) {
-            View itemView = LayoutInflater.from(context).inflate(R.layout.common_sku_item, null, false);
+            View itemView = LayoutInflater.from(context).inflate(R.layout.common_sku_item, llSkuItemContainer, false);
 
             ImageView goodsImage = itemView.findViewById(R.id.goods_image);
             Glide.with(itemView).load(orderSkuItem.imageSrc).into(goodsImage);
@@ -65,6 +65,8 @@ public class OrderListAdapter extends BaseQuickAdapter<OrderItem, BaseViewHolder
         helper.setText(R.id.tv_orders_amount, StringUtil.formatPrice(context, item.ordersAmount, 1));
 
 
+        // 暫時屏蔽支付按鈕
+        item.showPayButton = false;
         if (item.showPayButton) {
             // 子View點擊事件
             helper.addOnClickListener(R.id.btn_pay_order);
