@@ -20,11 +20,14 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.entity.StoreGoodsPair;
+import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AmapPopup;
+import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -70,6 +73,12 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
 
     int storeId;
+    double storeDistance;  // 我與店鋪的距離
+    String storeName;
+    String storePhone;
+    String storeAddress;
+    Double storeLongitude;
+    Double storeLatitude;
 
     int isFavorite;
     ImageView btnStoreFavorite;
@@ -81,6 +90,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     List<StoreGoodsPair> storeNewInItemList = new ArrayList<>();
     LinearLayout llHotItemList;
     LinearLayout llNewInItemList;
+
+    Bundle savedInstanceState;
 
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -132,6 +143,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         llHotItemList = view.findViewById(R.id.ll_hot_item_list);
         llNewInItemList = view.findViewById(R.id.ll_new_in_item_list);
 
+        Util.setOnClickListener(view, R.id.btn_shop_map, this);
+
+        this.savedInstanceState = savedInstanceState;
+
         loadStoreData();
     }
 
@@ -171,8 +186,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         EasyJSONObject storeInfo = responseObj.getObject("datas.storeInfo");
 
                         storeId = storeInfo.getInt("storeId");
-                        String shopName = storeInfo.getString("storeName");
-                        parentFragment.setShopName(shopName);
+                        storeName = storeInfo.getString("storeName");
+                        parentFragment.setShopName(storeName);
 
                         String shopAvatarUrl = Config.OSS_BASE_URL + "/" + storeInfo.getString("storeAvatar");
                         SLog.info("storeAvatar__[%s]", shopAvatarUrl);
@@ -201,7 +216,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         updateFavoriteView();
 
                         // 店鋪電話
-                        tvPhoneNumber.setText(storeInfo.getString("chainPhone"));
+                        storePhone = storeInfo.getString("chainPhone");
+                        tvPhoneNumber.setText(storePhone);
                         // 營業時間
                         String businessTimeTemplate = getResources().getString(R.string.business_time_template);
 
@@ -215,8 +231,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         tvBusinessTime.setText(businessTime);
 
                         // 店鋪地址
-                        String shopAddress = storeInfo.getString("chainAreaInfo") + storeInfo.getString("chainAddress");
-                        tvShopAddress.setText(shopAddress);
+                        storeAddress = storeInfo.getString("chainAreaInfo") + storeInfo.getString("chainAddress");
+                        tvShopAddress.setText(storeAddress);
+
+                        storeLongitude = storeInfo.getDouble("lng");
+                        storeLatitude = storeInfo.getDouble("lat");
+
+                        String storeDistanceStr = storeInfo.getString("distance");
+                        storeDistance = Double.valueOf(storeDistanceStr);
+
 
                         // 社交分享
                         EasyJSONArray snsArray = responseObj.getArray("datas.socialList");
@@ -401,6 +424,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_store_favorite:
                 switchFavoriteState();
+                break;
+            case R.id.btn_shop_map:
+                StoreMapInfo storeMapInfo = new StoreMapInfo(storeLongitude, storeLatitude, storeDistance, 0, 0,
+                        storeName, storeAddress, storePhone);
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new AmapPopup(_mActivity, storeMapInfo, savedInstanceState))
+                        .show();
                 break;
             default:
                 break;

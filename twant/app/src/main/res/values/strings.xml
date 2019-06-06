@@ -26,6 +26,9 @@
     <string name="text_not_set">未設置</string>
     <string name="text_not_login">您未登錄</string>
 
+    <string name="text_phone">電話</string>
+    <string name="text_distance">距離</string>
+
     <string name="modify_nickname_fragment_title">修改暱稱</string>
 
     <string name="text_confidentiality">保密</string>

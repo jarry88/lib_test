@@ -81,6 +81,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         EventBus.getDefault().register(this);
 
+        Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_category, this);
         Util.setOnClickListener(view, R.id.ll_search_box, this);
         Util.setOnClickListener(view, R.id.btn_message, this);
@@ -169,7 +170,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         } else if (id == R.id.ll_search_box) {
             MainFragment mainFragment = (MainFragment) getParentFragment();
             mainFragment.start(SearchFragment.newInstance());
-        } else if (id == R.id.btn_message) {
+        } else if (id == R.id.btn_test) {
+            if (Config.DEVELOPER_MODE) {
+                MainFragment mainFragment = (MainFragment) getParentFragment();
+                mainFragment.start(TestFragment.newInstance());
+            }
         }
     }
 
