@@ -57,5 +57,8 @@
         android:hint="@string/input_nickname_hint_simple"
         android:textSize="16sp"
         android:textColor="@color/tw_black"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
         />
 </LinearLayout>

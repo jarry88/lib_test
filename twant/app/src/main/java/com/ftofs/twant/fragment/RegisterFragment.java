@@ -23,6 +23,7 @@ import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
@@ -89,7 +90,6 @@ public class RegisterFragment extends BaseFragment implements
         etCaptcha = view.findViewById(R.id.et_captcha);
         tvAreaName = view.findViewById(R.id.tv_area_name);
 
-
         refreshCaptcha();
         getMobileZoneList();
     }
@@ -106,6 +106,8 @@ public class RegisterFragment extends BaseFragment implements
                 ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);
                 itemList.add(item);
             }
+
+            hideSoftInput();
 
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -124,9 +126,17 @@ public class RegisterFragment extends BaseFragment implements
 
             // 注账号为 区号,手机号
             final String mobile = etMobile.getText().toString().trim();
+            if (StringUtil.isEmpty(mobile)) {
+                ToastUtil.show(_mActivity, "手機號不能為空");
+                return;
+            }
             final String fullMobile = String.format("%s,%s", mobileZone.areaCode, mobile);
 
             String captchaText = etCaptcha.getText().toString().trim();
+            if (StringUtil.isEmpty(captchaText)) {
+                ToastUtil.show(_mActivity, "驗證碼不能為空");
+                return;
+            }
 
             Api.getUI(Api.PATH_SEND_SMS_CODE, EasyJSONObject.generate(
                     "mobile", fullMobile,

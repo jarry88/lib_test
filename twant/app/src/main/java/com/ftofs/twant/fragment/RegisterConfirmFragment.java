@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ftofs.twant.R;
@@ -19,6 +20,7 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.SharedPreferenceUtil;
 import com.ftofs.twant.util.SqliteUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.orhanobut.hawk.Hawk;
@@ -79,12 +81,18 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
         mobile = args.getString("mobile");
         smsCodeValidTime = args.getInt("smsCodeValidTime");
 
+        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_register, this);
 
         SLog.info("areaCode[%s], mobile[%s], smsCodeValidTime[%d]", areaCode, mobile, smsCodeValidTime);
 
+        TextView tvSmsCodeHint = view.findViewById(R.id.tv_sms_code_hint);
+        tvSmsCodeHint.setText(String.format(getString(R.string.text_sms_code_validate_hint), mobile, smsCodeValidTime));
+
         etSmsCode = view.findViewById(R.id.et_sms_code);
         etPassword = view.findViewById(R.id.et_password);
+        etPassword.setHint(String.format(getString(R.string.input_password_hint), "-"));
+
         etConfirmPassword = view.findViewById(R.id.et_confirm_password);
         etNickname = view.findViewById(R.id.et_nickname);
     }
@@ -92,15 +100,32 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_register) {
+        if (id == R.id.btn_back) {
+            pop();
+        } else if (id == R.id.btn_register) {
             String fullMobile = areaCode + "," + mobile;
-            String smsCode =etSmsCode.getText().toString();
+            String smsCode =etSmsCode.getText().toString().trim();
             String password = etPassword.getText().toString();
             String confirmPassword = etConfirmPassword.getText().toString();
-            String nickname = etNickname.getText().toString();
+            String nickname = etNickname.getText().toString().trim();
+
+            if (StringUtil.isEmpty(smsCode)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_sms_code_hint));
+                return;
+            }
+
+            if (StringUtil.isEmpty(password)) {
+                ToastUtil.show(_mActivity, "請輸入密碼");
+                return;
+            }
 
             if (!password.equals(confirmPassword)) {
                 ToastUtil.show(_mActivity, "密碼不一致");
+                return;
+            }
+
+            if (StringUtil.isEmpty(nickname)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_nickname_hint));
                 return;
             }
 
@@ -137,6 +162,9 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                         SqliteUtil.switchUserDB(userId);
 
                         ToastUtil.show(_mActivity, "注冊成功");
+
+                        // 注冊成功，跳到主頁面
+                        popTo(MainFragment.class, false);
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }
