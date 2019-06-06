@@ -1,7 +1,10 @@
 package com.ftofs.twant.widget;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +22,8 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -27,17 +32,17 @@ import com.lxj.xpopup.util.XPopupUtils;
  * @author zwm
  */
 public class AmapPopup extends BottomPopupView implements View.OnClickListener {
-    Context context;
+    Activity activity;
     MapView mapView;
     AMap aMap;
 
     StoreMapInfo storeMapInfo;
     Bundle savedInstanceState;
 
-    public AmapPopup(@NonNull Context context, StoreMapInfo storeMapInfo, @Nullable Bundle savedInstanceState) {
-        super(context);
+    public AmapPopup(@NonNull Activity activity, StoreMapInfo storeMapInfo, @Nullable Bundle savedInstanceState) {
+        super(activity);
 
-        this.context = context;
+        this.activity = activity;
         this.storeMapInfo = storeMapInfo;
         this.savedInstanceState = savedInstanceState;
     }
@@ -51,7 +56,10 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
     protected void onCreate() {
         super.onCreate();
 
+        findViewById(R.id.btn_dial_store_phone).setOnClickListener(this);
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
+        findViewById(R.id.btn_map_navigation).setOnClickListener(this);
+
         TextView tvStoreAddress = findViewById(R.id.tv_store_address);
         tvStoreAddress.setText(storeMapInfo.storeAddress);
 
@@ -60,7 +68,7 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
             // 如果沒有距離，則隱藏距離信息
             tvStoreDistance.setVisibility(GONE);
         } else {
-            String distanceText = context.getString(R.string.text_distance) + String.format("%.1f") + "距km";
+            String distanceText = activity.getString(R.string.text_distance) + String.format("%.1f") + "距km";
             tvStoreDistance.setText(distanceText);
         }
 
@@ -105,6 +113,30 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
 
         if (id == R.id.btn_dismiss) {
             dismiss();
+        } else if (id == R.id.btn_dial_store_phone) {
+            Util.dialPhone(activity, storeMapInfo.storePhone);
+        } else if (id == R.id.btn_map_navigation) {
+            Intent intent;
+            try {
+                // 判斷是否已經安裝高德地圖
+                if (Util.isPackageInstalled(activity, "com.autonavi.minimap")) {
+                    SLog.info("已經安裝高德地圖");
+                    String uri = "androidamap://navi?sourceApplication=" + activity.getString(R.string.app_name) + "&poiname=我的目的地&lat="+storeMapInfo.storeLatitude+"&lon="+storeMapInfo.storeLongitude+"&dev=0";
+                    SLog.info("uri[%s]", uri);
+                    intent = Intent.parseUri(uri, 0);
+                    activity.startActivity(intent);
+                } else {
+                    SLog.info("未安裝高德地圖");
+                    // 如果未安裝高德地圖，則跳轉到應用市場
+                    ToastUtil.show(activity, "您尚未安裝高德地圖");
+                    Uri uri = Uri.parse("market://details?id=com.autonavi.minimap");
+                    intent = new Intent(Intent.ACTION_VIEW, uri);
+                    activity.startActivity(intent);
+                }
+            } catch (Exception e) {
+                SLog.info("Error!%s", e.getMessage());
+            }
+
         }
     }
 }

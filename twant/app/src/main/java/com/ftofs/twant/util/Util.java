@@ -2,6 +2,10 @@ package com.ftofs.twant.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.view.View;
 import android.view.Window;
@@ -11,6 +15,7 @@ import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -181,5 +186,57 @@ public class Util {
 
         }
         return price;
+    }
+
+    /**
+     * 拨打电话（直接拨打电话）
+     * 這種方法需要在AndroidMenifest文件里加上这个权限：<uses-permission android:name="android.permission.CALL_PHONE" />，
+     * 在Android6.0中，还要在代码中动态申请权限。
+     * @param phoneNum 电话号码
+     */
+    public static void callPhone(Activity activity, String phoneNum){
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        activity.startActivity(intent);
+    }
+
+
+
+    /**
+     * 拨打电话（跳转到拨号界面，用户手动点击拨打）
+     * 這種方法不需要申請權限
+     * @param phoneNum 电话号码
+     */
+    public static void dialPhone(Activity activity, String phoneNum) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + phoneNum);
+        intent.setData(data);
+        activity.startActivity(intent);
+    }
+
+
+    /**
+     * 判斷是否已經安裝了某個應用
+     * @param context
+     * @param packageName
+     * @return
+     */
+    public static boolean isPackageInstalled(Context context, String packageName){
+        //获取packagemanager
+        final PackageManager packageManager = context.getPackageManager();
+        //获取所有已安装程序的包信息
+        List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
+        //用于存储所有已安装程序的包名
+        List<String> packageNames = new ArrayList<>();
+        //从pinfo中将包名字逐一取出，压入pName list中
+        if(packageInfos != null){
+            for(int i = 0; i < packageInfos.size(); i++){
+                String packName = packageInfos.get(i).packageName;
+                packageNames.add(packName);
+            }
+        }
+        //判断packageNames中是否有目标程序的包名，有TRUE，没有FALSE
+        return packageNames.contains(packageName);
     }
 }
