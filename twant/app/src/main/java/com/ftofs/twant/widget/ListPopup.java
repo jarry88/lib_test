@@ -44,6 +44,15 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
         this.args = args;
     }
 
+    /**
+     * 列表彈框的構造方法
+     * @param context
+     * @param title
+     * @param type
+     * @param itemList
+     * @param index 初始選中的索引
+     * @param onSelectedListener
+     */
     public ListPopup(@NonNull Context context, String title, int type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener) {
         super(context);
 

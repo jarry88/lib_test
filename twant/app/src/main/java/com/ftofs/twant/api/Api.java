@@ -314,6 +314,16 @@ public class Api {
      */
     public static final String PATH_MODIFY_NICKNAME = "/member/modify/nick_name";
 
+    /**
+     * 修改会员 性别
+     */
+    public static final String PATH_SET_GENDER = "/member/sex/edit";
+
+    /**
+     * 修改会员生日
+     */
+    public static final String PATH_SET_BIRTHDAY = "/member/birthday/edit";
+
 
     /**
      * 發送Http請求

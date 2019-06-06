@@ -71,6 +71,7 @@ public class ModifyNicknameFragment extends BaseFragment implements View.OnClick
             String nickname = etNickname.getText().toString().trim();
             if (nickname.length() < 1) {
                 ToastUtil.show(_mActivity, "暱稱不能為空");
+                return;
             }
 
             String token = User.getToken();
