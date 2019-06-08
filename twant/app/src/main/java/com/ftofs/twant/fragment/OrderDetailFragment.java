@@ -185,6 +185,26 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             }
                         }, null, false)
                         .show();
+            } else if (tag.equals(TEXT_MEMBER_RECEIVE)) { // 確認收貨
+                new XPopup.Builder(getContext())
+//                         .dismissOnTouchOutside(false)
+                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                        .setPopupCallback(new XPopupCallback() {
+                            @Override
+                            public void onShow() {
+                            }
+                            @Override
+                            public void onDismiss() {
+                            }
+                        }).asConfirm("確認收貨嗎?", "",
+                        new OnConfirmListener() {
+                            @Override
+                            public void onConfirm() {
+                                cancelOrder();
+                            }
+                        }, null, false)
+                        .show();
             }
         } catch (Exception e) {
             return true;
@@ -242,6 +262,46 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     ToastUtil.show(_mActivity, "取消訂單成功");
+                    pop();
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 確認收貨
+     */
+    private void confirmReceive() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "ordersId", ordersId);
+
+        SLog.info("params[%s]", params);
+
+        Api.postUI(Api.PATH_CONFIRM_RECEIVE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.show(_mActivity, "確認收貨成功");
                     pop();
                 } catch (Exception e) {
 

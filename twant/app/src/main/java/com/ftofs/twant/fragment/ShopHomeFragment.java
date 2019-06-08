@@ -30,6 +30,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AmapPopup;
 import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -103,6 +104,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     AutoVerticalScrollTextView tvVerticalScroll;
 
     Bundle savedInstanceState;
+    String merchantIntroduction;
 
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -126,6 +128,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         parentFragment = (ShopMainFragment) getParentFragment();
 
         imgShopAvatar = view.findViewById(R.id.img_shop_avatar);
+        imgShopAvatar.setOnClickListener(this);
         tvShopSignature = view.findViewById(R.id.tv_shop_signature);
         tvShopOpenDay = view.findViewById(R.id.tv_shop_open_day);
         imgShopFigure = view.findViewById(R.id.img_shop_figure);
@@ -212,6 +215,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                         // 店鋪簽名
                         tvShopSignature.setText(storeInfo.getString("storeSignature"));
+
+                        // 商家介紹
+                        merchantIntroduction = storeInfo.getString("storeIntroduce");
 
                         // 開店天數
                         tvShopOpenDay.setText(getString(R.string.text_shop_open_day_prefix) + storeInfo.getString("shopDay"));
@@ -425,14 +431,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     announcement.getInt("id"), title);
                             storeAnnouncementList.add(storeAnnouncement);
                             announcementTextList.add(Html.fromHtml("<font color='#FFFFFF'>" + title + "</font>"));
-
-                            // 初始化
-                            verticalScrollUtil = new AutoVerticalScrollTextViewUtil(tvVerticalScroll, announcementTextList);
-                            verticalScrollUtil.setDuration(3000)// 设置上下滚动時間间隔
-                                    .start();   // 如果只有一條，是否可以不調用start ?
-                            // 点击事件监听
-                            verticalScrollUtil.setOnMyClickListener(ShopHomeFragment.this);
                         }
+
+                        // 初始化
+                        verticalScrollUtil = new AutoVerticalScrollTextViewUtil(tvVerticalScroll, announcementTextList);
+                        verticalScrollUtil.setDuration(3000)// 设置上下滚动時間间隔
+                                .start();   // 如果只有一條，是否可以不調用start ?
+                        // 点击事件监听
+                        verticalScrollUtil.setOnMyClickListener(ShopHomeFragment.this);
 
                         // 如果沒有公告，則隱藏
                         if (storeAnnouncementList.size() < 1) {
@@ -468,6 +474,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
                         .asCustom(new AmapPopup(_mActivity, storeMapInfo, savedInstanceState))
+                        .show();
+                break;
+            case R.id.img_shop_avatar:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new MerchantIntroductionPopup(_mActivity, merchantIntroduction))
                         .show();
                 break;
             default:
