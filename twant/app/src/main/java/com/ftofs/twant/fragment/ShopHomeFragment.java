@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.entity.StoreMapInfo;
@@ -28,6 +30,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AmapPopup;
 import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -35,6 +38,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
+import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -46,7 +51,7 @@ import okhttp3.Call;
  * 店鋪首頁Fragment
  * @author zwm
  */
-public class ShopHomeFragment extends BaseFragment implements View.OnClickListener {
+public class ShopHomeFragment extends BaseFragment implements View.OnClickListener, AutoVerticalScrollTextViewUtil.OnMyClickListener {
     ShopMainFragment parentFragment;
 
     ImageView imgShopAvatar;
@@ -70,6 +75,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     TextView tvFavoriteCount;
 
     LinearLayout llFirstCommentContainer;
+    LinearLayout llShopAnnouncementContainer;
 
 
     int storeId;
@@ -90,6 +96,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     List<StoreGoodsPair> storeNewInItemList = new ArrayList<>();
     LinearLayout llHotItemList;
     LinearLayout llNewInItemList;
+
+    List<StoreAnnouncement> storeAnnouncementList = new ArrayList<>();
+    private ArrayList<CharSequence> announcementTextList = new ArrayList<>();
+    private AutoVerticalScrollTextViewUtil verticalScrollUtil;
+    AutoVerticalScrollTextView tvVerticalScroll;
 
     Bundle savedInstanceState;
 
@@ -142,6 +153,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
         llHotItemList = view.findViewById(R.id.ll_hot_item_list);
         llNewInItemList = view.findViewById(R.id.ll_new_in_item_list);
+        llShopAnnouncementContainer = view.findViewById(R.id.ll_shop_announcement_container);
+
+        tvVerticalScroll = view.findViewById(R.id.tv_vertical_scroll);
 
         Util.setOnClickListener(view, R.id.btn_shop_map, this);
 
@@ -402,6 +416,28 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         });
                         hotGoodsAdapter.setData(storeHotItemList);
 
+                        // 店鋪公告
+                        EasyJSONArray announcements = responseObj.getArray("datas.announcements");
+                        for (Object object : announcements) {
+                            EasyJSONObject announcement = (EasyJSONObject) object;
+                            String title = announcement.getString("announcementsTitle");
+                            StoreAnnouncement storeAnnouncement = new StoreAnnouncement(
+                                    announcement.getInt("id"), title);
+                            storeAnnouncementList.add(storeAnnouncement);
+                            announcementTextList.add(Html.fromHtml("<font color='#FFFFFF'>" + title + "</font>"));
+
+                            // 初始化
+                            verticalScrollUtil = new AutoVerticalScrollTextViewUtil(tvVerticalScroll, announcementTextList);
+                            verticalScrollUtil.setDuration(3000)// 设置上下滚动時間间隔
+                                    .start();   // 如果只有一條，是否可以不調用start ?
+                            // 点击事件监听
+                            verticalScrollUtil.setOnMyClickListener(ShopHomeFragment.this);
+                        }
+
+                        // 如果沒有公告，則隱藏
+                        if (storeAnnouncementList.size() < 1) {
+                            llShopAnnouncementContainer.setVisibility(View.GONE);
+                        }
                     } catch (EasyJSONException e) {
                         SLog.info("Error!%s", e.getMessage());
                         e.printStackTrace();
@@ -562,5 +598,20 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         SLog.info("onBackPressedSupport");
         ((SupportFragment) getParentFragment()).pop();
         return true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        verticalScrollUtil.stop();
+    }
+
+    @Override
+    public void onMyClickListener(int i, CharSequence charSequence) {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new StoreAnnouncementPopup(_mActivity, storeAnnouncementList))
+                .show();
     }
 }

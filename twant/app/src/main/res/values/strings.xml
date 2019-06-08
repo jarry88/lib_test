@@ -92,6 +92,7 @@
     <string name="category_shop">店鋪</string>
     <string name="category_commodity">商品</string>
     <string name="category_brand">品牌</string>
+    <string name="text_store_announcement">店鋪公告</string>
 
     <string name="text_register">註冊</string>
     <string name="text_next_step">下一步</string>

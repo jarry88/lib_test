@@ -86,7 +86,9 @@
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/icon_broadcast"
                 />
+            <!--
             <TextView
+                android:id="@+id/tv_store_announcement"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -94,6 +96,14 @@
                 android:text="本店產品最新商家，優惠力度達到50%快快搶購吧！"
                 android:textColor="#fff"
                 android:textSize="13sp"
+                />
+            -->
+            <cc.ibooker.ztextviewlib.AutoVerticalScrollTextView
+                android:id="@+id/tv_vertical_scroll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 />
             <ImageView
                 android:layout_width="wrap_content"

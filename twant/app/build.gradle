@@ -82,6 +82,9 @@ dependencies {
     implementation 'com.amap.api:map2d:latest.integration'
     implementation 'com.amap.api:location:latest.integration'
 
+    // 店鋪首頁公告垂直跑馬燈
+    implementation 'com.github.zrunker:ZTextView:v1.0.2'
+
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
