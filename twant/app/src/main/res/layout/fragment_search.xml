@@ -292,4 +292,33 @@
             android:textColor="@color/tw_black"
             />
     </com.nex3z.flowlayout.FlowLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_search_suggestion_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/ll_suggestion_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="vertical">
+        </LinearLayout>
+        <!-- 蒙板 -->
+        <LinearLayout
+            android:id="@+id/ll_mask"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#7f000000"
+            android:orientation="vertical">
+        </LinearLayout>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

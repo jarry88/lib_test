@@ -13,7 +13,12 @@ import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.ftofs.twant.R;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AmapPopup;
+import com.ftofs.twant.widget.TwConfirmPopup;
+import com.lxj.xpopup.XPopup;
 
 /**
  * 測試用Fragment
@@ -40,23 +45,29 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        MapView mapView = view.findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);// 此方法必须重写
-        AMap aMap = mapView.getMap();
-
-        LatLng latLng = new LatLng(23.02,113.76);
-        // 设置显示比例
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-
-        aMap.addMarker(new MarkerOptions().position(latLng)
-                .title("hello world")  // 设置 Marker覆盖物的 標題
-                .snippet("DefaultMarker")); // 设置 Marker覆盖物的 文字描述
-        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));//这个是关键  如果不设置的话中心点是北京，汇出现目标点在地图上显示不了
+        Util.setOnClickListener(view, R.id.btn_test, this);
     }
 
     @Override
     public void onClick(View v) {
-        
+        int id = v.getId();
+        if (id == R.id.btn_test) {
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new TwConfirmPopup(_mActivity, "確定要刪除這個地址嗎？", "廣東省珠海市香洲區人民東路", new OnConfirmCallback() {
+                        @Override
+                        public void onYes() {
+                            SLog.info("onYes");
+                        }
+
+                        @Override
+                        public void onNo() {
+                            SLog.info("onNo");
+                        }
+                    }))
+                    .show();
+        }
     }
 
     @Override

@@ -23,12 +23,14 @@ import com.ftofs.twant.entity.footprint.DateStatus;
 import com.ftofs.twant.entity.footprint.GoodsStatus;
 import com.ftofs.twant.entity.footprint.StoreStatus;
 import com.ftofs.twant.entity.footprint.TotalStatus;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -173,13 +175,18 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                         @Override
                         public void onDismiss() {
                         }
-                    }).asConfirm("確定要刪除選中的足跡嗎?", "",
-                    new OnConfirmListener() {
-                        @Override
-                        public void onConfirm() {
-                            deleteFootprint();
-                        }
-                    }, null, false)
+                    }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除選中的足跡嗎?", null, new OnConfirmCallback() {
+                            @Override
+                            public void onYes() {
+                                SLog.info("onYes");
+                                deleteFootprint();
+                            }
+
+                            @Override
+                            public void onNo() {
+                                SLog.info("onNo");
+                            }
+                        }))
                     .show();
         }
     }

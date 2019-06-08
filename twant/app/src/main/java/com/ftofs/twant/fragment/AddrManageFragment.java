@@ -18,11 +18,13 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.AddrItem;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -146,13 +148,18 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                                 @Override
                                 public void onDismiss() {
                                 }
-                            }).asConfirm("確定要刪除地址嗎?", item.areaInfo + " " + item.address,
-                            new OnConfirmListener() {
-                                @Override
-                                public void onConfirm() {
-                                    deleteAddress(position);
-                                }
-                            }, null, false)
+                            }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除地址嗎?", item.areaInfo + " " + item.address, new OnConfirmCallback() {
+                                    @Override
+                                    public void onYes() {
+                                        SLog.info("onYes");
+                                        deleteAddress(position);
+                                    }
+
+                                    @Override
+                                    public void onNo() {
+                                        SLog.info("onNo");
+                                    }
+                                }))
                             .show();
                 }
             }

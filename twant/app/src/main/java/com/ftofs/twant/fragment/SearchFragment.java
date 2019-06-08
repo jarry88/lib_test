@@ -4,23 +4,37 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SearchSuggestionPopup;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.nex3z.flowlayout.FlowLayout;
 
+import java.io.IOException;
 import java.util.Set;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 
 /**
@@ -29,9 +43,15 @@ import cn.snailpad.easyjson.EasyJSONObject;
  */
 public class SearchFragment extends BaseFragment implements View.OnClickListener {
     EditText etKeyword;
+    String currentKeyword; // 當前搜索的關鍵詞
+    String defaultKeyword; // 默認搜索詞
     SearchType searchType = SearchType.GOODS;
 
     FlowLayout flSearchHistoryContainer;
+    FlowLayout flHotSearchContainer;
+
+    LinearLayout llSearchSuggestionContainer;
+    LinearLayout llSuggestionList;
 
     public static SearchFragment newInstance() {
         Bundle args = new Bundle();
@@ -57,9 +77,32 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_search, this);
         Util.setOnClickListener(view, R.id.btn_clear_search_history, this);
+        Util.setOnClickListener(view, R.id.ll_mask, this);
+
+        llSearchSuggestionContainer = view.findViewById(R.id.ll_search_suggestion_container);
+        llSuggestionList = view.findViewById(R.id.ll_suggestion_list);
 
         etKeyword = view.findViewById(R.id.et_keyword);
+        etKeyword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // SLog.info("beforeTextChanged");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // SLog.info("onTextChanged");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String term = s.toString();
+                SLog.info("afterTextChanged, term[%s]", term);
+                loadSearchSuggestionData(term);
+            }
+        });
         flSearchHistoryContainer = view.findViewById(R.id.fl_search_history_container);
+        flHotSearchContainer = view.findViewById(R.id.fl_hot_search_container);
 
         TabLayout tabLayout = view.findViewById(R.id.search_tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_goods)).setTag(SearchType.GOODS));
@@ -84,7 +127,58 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
             }
         });
+
+        loadHotKeyword();
+        loadDefaultKeyword();
     }
+
+    private void loadSearchSuggestionData(String term) {
+        term = term.trim();
+        if (StringUtil.isEmpty(term)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate("term", term);
+        Api.getUI(Api.PATH_SEARCH_SUGGESTION, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                if (ToastUtil.isError(responseObj)) {
+                    return;
+                }
+
+                try {
+                    llSearchSuggestionContainer.setVisibility(View.VISIBLE);
+                    llSuggestionList.removeAllViews();
+                    EasyJSONArray suggestList = responseObj.getArray("datas.suggestList");
+                    for (Object object : suggestList) {
+                        final String item = (String) object;
+                        View itemView = LayoutInflater.from(_mActivity).inflate(R.layout.search_suggestion_item,
+                                llSuggestionList, false);
+
+                        TextView tvSuggestionKeyword = itemView.findViewById(R.id.tv_suggestion_keyword);
+                        tvSuggestionKeyword.setText(item);
+                        itemView.findViewById(R.id.btn_fill).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                etKeyword.setText(item);
+                                EditTextUtil.cursorSeekToEnd(etKeyword);
+                            }
+                        });
+                        llSuggestionList.addView(itemView);
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -102,16 +196,35 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 flSearchHistoryContainer.removeAllViews();
                 break;
             case R.id.btn_search:
-                String keyword = etKeyword.getText().toString().trim();
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(SearchResultFragment.newInstance(searchType.name(),
-                        EasyJSONObject.generate("keyword", keyword).toString()));
+                currentKeyword = etKeyword.getText().toString().trim();
+                doSearch();
+                break;
+            case R.id.ll_mask:
+                llSearchSuggestionContainer.setVisibility(View.GONE);
                 break;
             default:
                 break;
         }
     }
 
+    private void doSearch() {
+        // 將keyword填充到搜索欄中，并跳轉到搜索結果頁面
+        etKeyword.setText(currentKeyword);
+        EditTextUtil.cursorSeekToEnd(etKeyword);
+
+        // 如果為空，用默認關鍵詞搜索
+        if (StringUtil.isEmpty(currentKeyword)) {
+            currentKeyword = defaultKeyword;
+        }
+
+        MainFragment mainFragment = MainFragment.getInstance();
+        mainFragment.start(SearchResultFragment.newInstance(searchType.name(),
+                EasyJSONObject.generate("keyword", currentKeyword).toString()));
+    }
+
+    /**
+     * 加載【歷史搜索】
+     */
     private void loadSearchHistory() {
         flSearchHistoryContainer.removeAllViews();
 
@@ -120,6 +233,90 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         for (String keyword : keywordSet) {
             addSearchHistoryItemView(keyword);
         }
+    }
+
+    /**
+     * 加載【熱門搜索】
+     */
+    private void loadHotKeyword() {
+        flHotSearchContainer.removeAllViews();
+
+        Api.getUI(Api.PATH_HOT_KEYWORD, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONArray keywordList = responseObj.getArray("datas.keywordList");
+                    int count = 0;
+                    for (Object object : keywordList) {
+                        final String hotKeyword = (String) object;
+
+                        TextView hotKeywordButton = new TextView(_mActivity);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        hotKeywordButton.setBackgroundResource(R.drawable.search_item_bg);
+                        hotKeywordButton.setPadding(Util.dip2px(_mActivity, 16), Util.dip2px(_mActivity, 6),
+                                Util.dip2px(_mActivity, 16), Util.dip2px(_mActivity, 6));
+                        hotKeywordButton.setText(hotKeyword);
+                        hotKeywordButton.setTextSize(14);
+                        if (count == 0) { // 第1個關鍵詞顯示紅色
+                            hotKeywordButton.setTextColor(getResources().getColor(R.color.tw_red, null));
+                        } else {
+                            hotKeywordButton.setTextColor(getResources().getColor(R.color.tw_black, null));
+                        }
+
+                        hotKeywordButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                currentKeyword = hotKeyword;
+                                doSearch();
+                            }
+                        });
+                        flHotSearchContainer.addView(hotKeywordButton, layoutParams);
+                        ++count;
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 加載【搜索框默认显示词】
+     */
+    private void loadDefaultKeyword() {
+        Api.getUI(Api.PATH_DEFAULT_KEYWORD, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    String defaultDisplayKeyword = responseObj.getString("datas.keywordName");
+                    defaultKeyword = responseObj.getString("datas.keywordValue");
+
+                    etKeyword.setHint(defaultDisplayKeyword);
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 
     private void addSearchHistoryItemView(String keyword) {
@@ -135,12 +332,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView) v;
-                String keyword = tv.getText().toString();
-                MainFragment mainFragment = MainFragment.getInstance();
-                // 將keyword填充到搜索欄中，并跳轉到搜索結果頁面
-                etKeyword.setText(keyword);
-                EditTextUtil.cursorSeekToEnd(etKeyword);
-                mainFragment.start(SearchResultFragment.newInstance(searchType.name(), EasyJSONObject.generate("keyword", keyword).toString()));
+                currentKeyword = tv.getText().toString();
+                doSearch();
             }
         });
 

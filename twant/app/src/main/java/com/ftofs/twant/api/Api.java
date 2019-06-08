@@ -331,6 +331,21 @@ public class Api {
      */
     public static final String PATH_SET_BIRTHDAY = "/member/birthday/edit";
 
+    /**
+     * 热门关键词
+     */
+    public static final String PATH_HOT_KEYWORD = "/search/default/keyword";
+
+    /**
+     * 默認搜索詞
+     */
+    public static final String PATH_DEFAULT_KEYWORD = "/search/hot/keyword";
+
+    /**
+     * 搜索时下拉联想提示词
+     */
+    public static final String PATH_SEARCH_SUGGESTION = "/search/suggest.json";
+
 
     /**
      * 發送Http請求

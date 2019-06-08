@@ -20,11 +20,13 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -177,13 +179,18 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             @Override
                             public void onDismiss() {
                             }
-                        }).asConfirm("確定要取消訂單嗎?", "",
-                        new OnConfirmListener() {
-                            @Override
-                            public void onConfirm() {
-                                cancelOrder();
-                            }
-                        }, null, false)
+                        }).asCustom(new TwConfirmPopup(_mActivity, "確定要取消訂單嗎?", null, new OnConfirmCallback() {
+                                @Override
+                                public void onYes() {
+                                    SLog.info("onYes");
+                                    cancelOrder();
+                                }
+
+                                @Override
+                                public void onNo() {
+                                    SLog.info("onNo");
+                                }
+                            }))
                         .show();
             } else if (tag.equals(TEXT_MEMBER_RECEIVE)) { // 確認收貨
                 new XPopup.Builder(getContext())
@@ -197,13 +204,18 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             @Override
                             public void onDismiss() {
                             }
-                        }).asConfirm("確認收貨嗎?", "",
-                        new OnConfirmListener() {
-                            @Override
-                            public void onConfirm() {
-                                cancelOrder();
-                            }
-                        }, null, false)
+                        }).asCustom(new TwConfirmPopup(_mActivity, "確認收貨嗎?", null, new OnConfirmCallback() {
+                                @Override
+                                public void onYes() {
+                                    SLog.info("onYes");
+                                    confirmReceive();
+                                }
+
+                                @Override
+                                public void onNo() {
+                                    SLog.info("onNo");
+                                }
+                            }))
                         .show();
             }
         } catch (Exception e) {
