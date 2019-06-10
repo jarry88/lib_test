@@ -249,6 +249,9 @@
     <string name="facebook_app_id">339526026920454</string>
     <string name="umeng_app_key">5cee21bd4ca357016b00068d</string>
 
+    <!--高德-->
+    <string name="amap_key">1486f43a90e9fc41b0d555a355aeaaa6</string>
+
     <string name="text_goods_bill">商品訂單</string>
     <string name="text_bill_all">全部</string>
     <string name="text_bill_to_be_paid">待付款</string>
