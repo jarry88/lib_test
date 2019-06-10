@@ -346,6 +346,15 @@ public class Api {
      */
     public static final String PATH_SEARCH_SUGGESTION = "/search/suggest.json";
 
+    /**
+     * 分类消息列表
+     */
+    public static final String PATH_MESSAGE_CATEGORY = "/member/message/class";
+
+    /**
+     * 消息列表
+     */
+    public static final String PATH_MESSAGE_LIST = "/member/message/list";
 
     /**
      * 發送Http請求

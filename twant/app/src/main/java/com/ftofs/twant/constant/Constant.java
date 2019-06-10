@@ -88,6 +88,13 @@ public class Constant {
 
 
     /**
+     * 消息分類定義
+     */
+    public static final int MESSAGE_CATEGORY_LOGISTICS = 1001;
+    public static final int MESSAGE_CATEGORY_REFUND = 1002;
+
+
+    /**
      * AreaCode定義
      */
     public static final String AREA_CODE_HONGKONG = "00852";

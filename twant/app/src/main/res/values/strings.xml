@@ -29,6 +29,10 @@
     <string name="text_phone">電話</string>
     <string name="text_distance">距離</string>
 
+    <string name="text_message">消息</string>
+    <string name="text_logistics_message">交易物流消息</string>
+    <string name="text_refund_message">退換貨消息</string>
+
     <string name="modify_nickname_fragment_title">修改暱稱</string>
 
     <string name="text_confidentiality">保密</string>
