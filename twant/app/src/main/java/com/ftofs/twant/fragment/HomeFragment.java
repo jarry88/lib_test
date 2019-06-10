@@ -311,13 +311,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
                             String uri = Config.OSS_BASE_URL + "/" + imageSrc;
                             if (index == 0) {
-                                ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
-                                Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageMiddle);
-                                storeView.findViewById(R.id.goods_image_middle_container).setVisibility(View.VISIBLE);
-                            } else if (index == 1) {
                                 ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
                                 Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageLeft);
                                 storeView.findViewById(R.id.goods_image_left_container).setVisibility(View.VISIBLE);
+                            } else if (index == 1) {
+                                ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
+                                Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageMiddle);
+                                storeView.findViewById(R.id.goods_image_middle_container).setVisibility(View.VISIBLE);
                             } else if (index == 2) {
                                 ImageView goodsImageRight = storeView.findViewById(R.id.goods_image_right);
                                 Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageRight);

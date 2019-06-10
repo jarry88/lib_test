@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ShopGoodsAdapter;
 import com.ftofs.twant.api.Api;
@@ -36,10 +37,11 @@ import okhttp3.Response;
  * 店鋪商品Fragment
  * @author zwm
  */
-public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener {
     ShopMainFragment parentFragment;
 
     RecyclerView rvGoodsList;
+    ShopGoodsAdapter adapter;
 
     List<Goods> goodsList = new ArrayList<>();
 
@@ -91,6 +93,19 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.goods_tab_title_price)));
 
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
+        GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);
+        layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
+        rvGoodsList.setLayoutManager(layoutManagerCommodity);
+        adapter = new ShopGoodsAdapter(_mActivity, R.layout.shop_goods_item, goodsList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Goods goods = goodsList.get(position);
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(GoodsDetailFragment.newInstance(goods.id));
+            }
+        });
+        rvGoodsList.setAdapter(adapter);
 
         SLog.info("店鋪內商品搜索,params[%s]", params.toString());
         Api.getUI(Api.PATH_SEARCH_GOODS_IN_STORE, params, new UICallback() {
@@ -124,12 +139,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
                         goodsList.add(goods);
                     }
-
-                    GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);
-                    layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
-                    rvGoodsList.setLayoutManager(layoutManagerCommodity);
-                    ShopGoodsAdapter adapter = new ShopGoodsAdapter(_mActivity, goodsList, ShopCommodityFragment.this);
-                    rvGoodsList.setAdapter(adapter);
+                    adapter.setNewData(goodsList);
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
                 }
@@ -141,16 +151,6 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onClick(View v) {
 
-    }
-
-    /**
-     * 打開商品詳情頁
-     * @param id 商品Id
-     */
-    @Override
-    public void onSelected(int type, int id, Object extra) {
-        MainFragment mainFragment = MainFragment.getInstance();
-        mainFragment.start(GoodsDetailFragment.newInstance(id));
     }
 
     @Override
