@@ -1,45 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/img_store_figure"
-        android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginRight="33dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:scaleType="fitXY"
-        />
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/tv_store_class"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/img_store_figure_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="33dp"
+        android:layout_marginRight="33dp">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/img_store_figure"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintDimensionRatio="16:9"
+            app:riv_corner_radius="3dp"
+            />
+        <TextView
+            android:id="@+id/tv_store_class"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:background="@drawable/store_class_bg"
+            android:textSize="12sp"
+            android:textColor="#fff"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+    <!-- 桌面 -->
+    <FrameLayout
+        android:id="@+id/fl_desktop"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="19dp"
+        android:layout_below="@id/img_store_figure_container"
+        android:background="#f3f3f3">
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/goods_image_middle_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/img_store_figure"
-        android:layout_alignTop="@id/img_store_figure"
-        android:gravity="center"
-        android:background="@drawable/store_class_bg"
-        android:textSize="12sp"
-        android:textColor="#fff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        />
+        android:layout_alignBottom="@id/fl_desktop"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/goods_image_middle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/cs_avatar_160"
+            app:riv_corner_radius="5dp"
+            />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/shadow_middle"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/goods_image_left_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/fl_desktop"
+        android:layout_alignLeft="@id/img_store_figure_container"
+        android:layout_marginLeft="18dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/goods_image_left"
+            android:layout_width="79dp"
+            android:layout_height="79dp"
+            android:layout_marginBottom="3dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/cs_avatar_160"
+            app:riv_corner_radius="5dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/shadow_left"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/goods_image_right_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/fl_desktop"
+        android:layout_alignRight="@id/img_store_figure_container"
+        android:layout_marginRight="18dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/goods_image_right"
+            android:layout_width="79dp"
+            android:layout_height="79dp"
+            android:layout_marginBottom="3dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/cs_avatar_160"
+            app:riv_corner_radius="5dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/shadow_right"
+            />
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/ll_store_title_container"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:layout_marginTop="22dp"
         android:layout_marginLeft="@dimen/toolbar_margin_left"
         android:layout_marginRight="@dimen/toolbar_margin_left"
-        android:layout_below="@id/img_store_figure"
-        android:paddingLeft="17dp"
-        android:paddingRight="17dp">
+        android:layout_below="@id/fl_desktop"
+        android:paddingLeft="19dp"
+        android:paddingRight="19dp"
+        android:background="@drawable/new_arrivals_pane_bg">
         <TextView
             android:id="@+id/tv_store_name"
             android:layout_width="wrap_content"

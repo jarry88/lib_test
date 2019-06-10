@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
@@ -279,10 +280,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
                     SLog.info("store count[%d]", result.size());
                     for (EasyJSONObject storeObject : result) {
-                        View storeView = LayoutInflater.from(_mActivity).inflate(R.layout.store_view, null, false);
+                        View storeView = LayoutInflater.from(_mActivity).inflate(R.layout.store_view, llNewArrivalsContainer, false);
                         ImageView imgStoreFigure = storeView.findViewById(R.id.img_store_figure);
-                        Bitmap bitmap = BitmapFactory.decodeFile(storeObject.getString("figureImagePath"));
-                        imgStoreFigure.setImageBitmap(bitmap);
+                        Glide.with(_mActivity).load(storeObject.getString("figureImagePath")).centerCrop().into(imgStoreFigure);
 
                         // 獲取店鋪Id
                         final int shopId = storeObject.getInt("storeId");
@@ -304,6 +304,28 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         TextView tvFollowData = storeView.findViewById(R.id.tv_follow_data);
                         String followDataStr = getResources().getString(R.string.text_follow) + " " + storeObject.getInt("followCount");
                         tvFollowData.setText(followDataStr);
+
+                        int index = 0;
+                        for (Object object : storeObject.getArray("goodsList")) {
+                            String imageSrc = (String) object;
+
+                            String uri = Config.OSS_BASE_URL + "/" + imageSrc;
+                            if (index == 0) {
+                                ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
+                                Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageMiddle);
+                                storeView.findViewById(R.id.goods_image_middle_container).setVisibility(View.VISIBLE);
+                            } else if (index == 1) {
+                                ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
+                                Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageLeft);
+                                storeView.findViewById(R.id.goods_image_left_container).setVisibility(View.VISIBLE);
+                            } else if (index == 2) {
+                                ImageView goodsImageRight = storeView.findViewById(R.id.goods_image_right);
+                                Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageRight);
+                                storeView.findViewById(R.id.goods_image_right_container).setVisibility(View.VISIBLE);
+                            }
+
+                            ++index;
+                        }
 
                         // 添加控件到容器中
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -364,6 +386,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             continue;
                         }
 
+                        // 店鋪的3個商品展示
+                        EasyJSONArray goodsImageArray = EasyJSONArray.generate();
+                        for (Object object2 : store.getArray("goodsList")) {
+                            EasyJSONObject goodsObject = (EasyJSONObject) object2;
+                            goodsImageArray.append(goodsObject.getString("imageSrc"));
+                        }
+
                         // 打包店鋪數據
                         EasyJSONObject storeObject = EasyJSONObject.generate(
                                 "storeId", store.getInt("storeVo.storeId"),
@@ -371,7 +400,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 "className", store.getString("storeVo.className"),
                                 "figureImagePath", imageFile.getAbsolutePath(),
                                 "likeCount", store.getInt("storeVo.likeCount"),
-                                "followCount", store.getInt("storeVo.collectCount"));
+                                "followCount", store.getInt("storeVo.collectCount"),
+                                "goodsList", goodsImageArray);
 
                         storeObjectList.add(storeObject);
                     }

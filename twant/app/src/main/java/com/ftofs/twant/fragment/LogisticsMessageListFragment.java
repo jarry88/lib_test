@@ -61,7 +61,7 @@ public class LogisticsMessageListFragment  extends BaseFragment implements View.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         Bundle args = getArguments();
         tplClass = args.getInt("tplClass");
 
