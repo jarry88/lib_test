@@ -86,21 +86,32 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             e.printStackTrace();
         }
 
-        TabLayout tabLayout = view.findViewById(R.id.goods_tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.goods_tab_title_general)));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.goods_tab_title_sale)));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.goods_tab_title_new)));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.goods_tab_title_price)));
 
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
         GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);
         layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
         rvGoodsList.setLayoutManager(layoutManagerCommodity);
-        adapter = new ShopGoodsAdapter(_mActivity, R.layout.shop_goods_item, goodsList);
+        adapter = new ShopGoodsAdapter(_mActivity, goodsList);
+        adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
+                Goods goods = goodsList.get(position);
+                if (goods.getItemType() == Goods.ITEM_TYPE_PADDING) {
+                    // padding占滿整個列的寬度
+                    return 2;
+                } else {
+                    return 1;
+                }
+            }
+        });
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Goods goods = goodsList.get(position);
+                // padding忽略點擊
+                if (goods.getItemType() == Goods.ITEM_TYPE_PADDING) {
+                    return;
+                }
                 MainFragment mainFragment = MainFragment.getInstance();
                 mainFragment.start(GoodsDetailFragment.newInstance(goods.id));
             }
@@ -139,6 +150,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
                         goodsList.add(goods);
                     }
+                    // 添加一個防止底部工具欄擋住的Item
+                    goodsList.add(new Goods());
                     adapter.setNewData(goodsList);
                 } catch (EasyJSONException e) {
                     e.printStackTrace();

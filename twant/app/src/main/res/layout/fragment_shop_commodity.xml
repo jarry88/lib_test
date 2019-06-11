@@ -5,19 +5,73 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
     <!-- 綜合、銷量、上新、價格Tab -->
-    <android.support.design.widget.TabLayout
+    <LinearLayout
         android:id="@+id/goods_tab_layout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/tw_red"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/tw_red"
-        app:tabTextColor="@color/tw_black"
-        />
+        android:orientation="horizontal">
+        <com.ftofs.twant.widget.TwTabButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:gravity="center"
+            android:text="@string/goods_tab_title_general"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
+            />
+
+        <com.ftofs.twant.widget.TwTabButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:gravity="center"
+            android:text="@string/goods_tab_title_sale"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
+            />
+
+        <com.ftofs.twant.widget.TwTabButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:gravity="center"
+            android:text="@string/goods_tab_title_new"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
+            />
+
+        <com.ftofs.twant.widget.TwTabButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:gravity="center"
+            android:text="@string/goods_tab_title_price"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            app:ttb_stroke_width="2dp"
+            app:ttb_use_cap="true"
+            />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_goods_list"
