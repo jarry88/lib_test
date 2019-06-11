@@ -37,7 +37,7 @@ public class CategoryShopAdapter extends BaseQuickAdapter<CategoryShop, BaseView
         String coverUrl = Config.OSS_BASE_URL + "/" + categoryShop.coverUrl;
         SLog.info("coverUrl[%s]", coverUrl);
         ImageView coverImage = helper.getView(R.id.img_cover);
-        Glide.with(context).load(coverUrl).into(coverImage);
+        Glide.with(context).load(coverUrl).centerCrop().into(coverImage);
 
         String shopText = context.getString(R.string.text_shop);
         String commodityText = context.getString(R.string.text_commodity);

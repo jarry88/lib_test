@@ -23,7 +23,6 @@ import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.CategoryCommodityList;
 import com.ftofs.twant.entity.CategoryCommodityRow;
 import com.ftofs.twant.entity.CategoryMenu;
-import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
