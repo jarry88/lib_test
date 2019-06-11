@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="25dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:orientation="vertical">
+
+
+    <com.ftofs.twant.widget.StoreDesktop
+        android:id="@+id/sd_desktop"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/ll_goods_image_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/sd_desktop"
+        android:layout_marginBottom="8dp"
+        android:layout_alignLeft="@id/sd_desktop"
+        android:layout_marginLeft="17dp"
+        android:layout_alignRight="@id/sd_desktop"
+        android:layout_marginRight="17dp">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/category_image1"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentLeft="true"
+            app:riv_corner_radius="5dp"
+            />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/category_image2"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerHorizontal="true"
+            app:riv_corner_radius="5dp"
+            />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/category_image3"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignParentRight="true"
+            app:riv_corner_radius="5dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_below="@id/sd_desktop"
+        android:background="@drawable/new_arrivals_pane_bg">
+        <TextView
+            android:id="@+id/tv_category_name1"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="21dp"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/tw_black"
+            android:textSize="13sp"
+            />
+        <TextView
+            android:id="@+id/tv_category_name2"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/tw_black"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_category_name3"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="21dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/tw_black"
+            android:textSize="13sp"
+            />
+    </RelativeLayout>
+</RelativeLayout>

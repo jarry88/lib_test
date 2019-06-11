@@ -9,5 +9,5 @@ import java.util.List;
  */
 public class CategoryCommodityList {
     public CategoryCommodity head;
-    public List<CategoryCommodity> list = new ArrayList<>();
+    public List<CategoryCommodityRow> list = new ArrayList<>();
 }
