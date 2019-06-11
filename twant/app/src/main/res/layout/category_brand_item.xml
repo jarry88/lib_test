@@ -2,82 +2,137 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="11dp"
-    android:layout_marginBottom="11dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="15dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:orientation="vertical">
-    <LinearLayout
-        android:id="@+id/ll_left_container"
+    <RelativeLayout
+        android:id="@+id/rl_left_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/brand_image_left"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_alignParentTop="true"
-            android:layout_weight="1"
+        android:layout_height="wrap_content">
+        <com.ftofs.twant.widget.StoreDesktop
+            android:id="@+id/sd_left_desktop"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="55dp"
             />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/ll_left_brand_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_brand_name_chinese_left"
-                android:layout_width="match_parent"
+            android:layout_alignBottom="@id/sd_left_desktop"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
-            <TextView
-                android:id="@+id/tv_brand_name_english_left"
-                android:layout_width="match_parent"
+                android:layout_weight="1">
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/brand_image_left"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/cs_avatar_160"
+                    app:riv_corner_radius="5dp"
+                    />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="#FF676666"
-                android:textSize="11sp"
-                />
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_brand_name_chinese_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_brand_name_english_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="#FF676666"
+                    android:textSize="11sp"
+                    />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_right_container"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="17dp"
+            android:layout_below="@id/sd_left_desktop"
+            android:background="@drawable/new_arrivals_pane_bg"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_right_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
+        <com.ftofs.twant.widget.StoreDesktop
+            android:id="@+id/sd_right_desktop"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="55dp"
+            />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/ll_right_brand_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_brand_name_chinese_right"
-                android:layout_width="match_parent"
+            android:layout_alignBottom="@id/sd_right_desktop"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
-            <TextView
-                android:id="@+id/tv_brand_name_english_right"
-                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_brand_name_chinese_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_brand_name_english_right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="#FF676666"
+                    android:textSize="11sp"
+                    />
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="#FF676666"
-                android:textSize="11sp"
-                />
+                android:layout_weight="1">
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/brand_image_right"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/cs_avatar_160"
+                    app:riv_corner_radius="5dp"
+                    />
+            </RelativeLayout>
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/brand_image_right"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_alignParentTop="true"
-            android:layout_weight="1"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="17dp"
+            android:layout_below="@id/sd_right_desktop"
+            android:background="@drawable/new_arrivals_pane_bg"
             />
-    </LinearLayout>
-
+    </RelativeLayout>
 </LinearLayout>

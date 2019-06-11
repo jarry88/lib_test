@@ -10,6 +10,7 @@
         android:layout_width="100dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
+        android:background="@drawable/right_separator_box_white"
         />
 
     <android.support.v7.widget.RecyclerView
@@ -18,5 +19,6 @@
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/rv_category_menu"
         android:layout_alignParentRight="true"
+        android:background="@android:color/white"
         />
 </RelativeLayout>
