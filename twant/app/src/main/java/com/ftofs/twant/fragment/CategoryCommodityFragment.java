@@ -3,23 +3,22 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CategoryCommodityAdapter;
-import com.ftofs.twant.adapter.CategoryMenuAdapter;
+import com.ftofs.twant.adapter.CategoryCommodityMenuAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SearchType;
-import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.CategoryCommodityList;
 import com.ftofs.twant.entity.CategoryCommodityRow;
@@ -27,6 +26,7 @@ import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,14 +37,18 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 商品分類Fragment
  * @author zwm
  */
-public class CategoryCommodityFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class CategoryCommodityFragment extends BaseFragment implements View.OnClickListener {
+    LinearLayout llMenuContainer;
+    FrameLayout flMask;
+
     RecyclerView rvCategoryMenu;
+    List<CategoryMenu> categoryMenuList = new ArrayList<>();
+    CategoryCommodityMenuAdapter categoryCommodityMenuAdapter;
 
     RecyclerView rvCommodityList;
     List<CategoryCommodityRow> categoryCommodityRowList = new ArrayList<>();
@@ -72,13 +76,48 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        llMenuContainer = view.findViewById(R.id.ll_menu_container);
+        flMask = view.findViewById(R.id.fl_mask);
+        flMask.setOnClickListener(this);
+
+
         rvCategoryMenu = view.findViewById(R.id.rv_category_menu);
         rvCommodityList = view.findViewById(R.id.rv_commodity_list);
 
-        rvCategoryMenu = view.findViewById(R.id.rv_category_menu);
-        LinearLayoutManager layoutManagerCategory = new LinearLayoutManager(_mActivity);
-        layoutManagerCategory.setOrientation(LinearLayoutManager.VERTICAL);
+        LinearLayoutManager layoutManagerCategory = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvCategoryMenu.setLayoutManager(layoutManagerCategory);
+        categoryCommodityMenuAdapter = new CategoryCommodityMenuAdapter(_mActivity, R.layout.category_commodity_brand_menu_item, categoryMenuList);
+        categoryCommodityMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("here");
+                if (!categoryCommodityMenuAdapter.isExpanded()) {
+                    SLog.info("here");
+                    RelativeLayout.LayoutParams rlLayoutParams = (RelativeLayout.LayoutParams) llMenuContainer.getLayoutParams();
+                    rlLayoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                    llMenuContainer.setLayoutParams(rlLayoutParams);
+
+                    categoryCommodityMenuAdapter.setExpanded(true);
+                    // setNewData刷新一下布局
+                    categoryCommodityMenuAdapter.setNewData(categoryMenuList);
+                    return;
+                }
+
+                for (CategoryMenu categoryMenu : categoryMenuList) {
+                    categoryMenu.selected = false;
+                }
+
+                shrinkMenu();
+
+                // 更新菜單的高亮顯示
+                CategoryMenu categoryMenu = categoryMenuList.get(position);
+                categoryMenu.selected = true;
+                categoryCommodityMenuAdapter.setNewData(categoryMenuList);
+
+                loadCategoryCommodityData(categoryMenu.categoryId);
+            }
+        });
+        rvCategoryMenu.setAdapter(categoryCommodityMenuAdapter);
 
         rvCommodityList = view.findViewById(R.id.rv_commodity_list);
         LinearLayoutManager layoutManagerCommodity = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -120,6 +159,17 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
         loadCategoryMenuData();
     }
 
+    /**
+     * 收縮菜單
+     */
+    private void shrinkMenu() {
+        RelativeLayout.LayoutParams rlLayoutParams = (RelativeLayout.LayoutParams) llMenuContainer.getLayoutParams();
+        rlLayoutParams.width = Util.dip2px(_mActivity, 100);
+        llMenuContainer.setLayoutParams(rlLayoutParams);
+
+        categoryCommodityMenuAdapter.setExpanded(false);
+    }
+
 
     /**
      * 加載分類菜單數據
@@ -143,7 +193,6 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
 
                     int defaultCategoryId = -1;
                     boolean first = true;
-                    List<CategoryMenu> categoryMenuList = new ArrayList<>();
                     EasyJSONArray easyJSONArray = responseObj.getArray("datas.CategoryNavVo");
                     for (Object object : easyJSONArray) { // 每個菜單項
                         EasyJSONObject item = (EasyJSONObject) object;
@@ -155,6 +204,10 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                         String imageUrl = item.getString("appImageUrl");
 
                         CategoryMenu categoryMenu = new CategoryMenu(categoryId, categoryName, null);
+                        if (first) {
+                            // 默認選中第一個
+                            categoryMenu.selected = true;
+                        }
                         categoryMenuList.add(categoryMenu);
 
                         CategoryCommodityList categoryCommodityList = new CategoryCommodityList();
@@ -188,8 +241,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                         first = false;
                     }
 
-                    CategoryMenuAdapter adapter = new CategoryMenuAdapter(_mActivity, Constant.CATEGORY_TYPE_COMMODITY, categoryMenuList, CategoryCommodityFragment.this);
-                    rvCategoryMenu.setAdapter(adapter);
+                    categoryCommodityMenuAdapter.setNewData(categoryMenuList);
 
                     loadCategoryCommodityData(defaultCategoryId);
                 } catch (EasyJSONException e) {
@@ -216,11 +268,9 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
 
     @Override
     public void onClick(View v) {
-
-    }
-
-    @Override
-    public void onSelected(int type, int id, Object extra) {
-        loadCategoryCommodityData(id);
+        int id = v.getId();
+        if (id == R.id.fl_mask) {
+            shrinkMenu();
+        }
     }
 }
