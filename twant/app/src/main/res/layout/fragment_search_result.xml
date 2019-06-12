@@ -130,9 +130,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="gone">
-
+            android:background="@drawable/bottom_separator_box"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/btn_store_search_order_general"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/tw_red"
+                android:textSize="16sp"
+                android:text="@string/store_tab_title_general"
+                />
+            <TextView
+                android:id="@+id/btn_store_search_order_sale"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                android:text="@string/store_tab_title_sale"
+                />
+            <TextView
+                android:id="@+id/btn_store_search_order_follow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                android:text="@string/store_tab_title_follow"
+                />
         </LinearLayout>
     </LinearLayout>
 

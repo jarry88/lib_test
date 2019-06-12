@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -35,6 +36,7 @@ import com.lxj.xpopup.enums.PopupPosition;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -47,6 +49,11 @@ import okhttp3.Response;
  * @author zwm
  */
 public class SearchResultFragment extends BaseFragment implements View.OnClickListener {
+    SearchType searchType;
+
+    int twBlack;
+    int twRed;
+
     GoodsSearchResultAdapter mGoodsAdapter;
     StoreSearchResultAdapter mStoreAdapter;
 
@@ -59,6 +66,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     RecyclerView rvSearchResultList;
     ImageView btnGotoTop;
     ImageView btnGotoCart;
+
+    public static final int STORE_SEARCH_SORT_GENERAL = 0;
+    public static final int STORE_SEARCH_SORT_SALE = 1;
+    public static final int STORE_SEARCH_SORT_FOLLOW = 2;
+
+    int storeSortButtonIndex = STORE_SEARCH_SORT_GENERAL; // 店鋪搜索當前用哪種排序標準 0,1,2
+    TextView[] storeSortButtons = new TextView[3];
 
     public static SearchResultFragment newInstance(String searchTypeStr, String paramsStr) {
         Bundle args = new Bundle();
@@ -84,9 +98,27 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         Bundle args = getArguments();
         String searchTypeStr = args.getString("searchTypeStr");
-        SearchType searchType = SearchType.valueOf(searchTypeStr);
+        searchType = SearchType.valueOf(searchTypeStr);
         String paramsStr = args.getString("paramsStr");
         paramsObj = (EasyJSONObject) EasyJSONObject.parse(paramsStr);
+
+        twBlack = getResources().getColor(R.color.tw_black, null);
+        twRed = getResources().getColor(R.color.tw_red, null);
+
+        if (searchTypeStr.equals(SearchType.GOODS.name())) {
+            view.findViewById(R.id.ll_store_filter).setVisibility(View.GONE);
+            view.findViewById(R.id.ll_goods_filter).setVisibility(View.VISIBLE);
+        } else if (searchTypeStr.equals(SearchType.STORE.name())) {
+            view.findViewById(R.id.ll_goods_filter).setVisibility(View.GONE);
+            view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
+        }
+
+        storeSortButtons[0] = view.findViewById(R.id.btn_store_search_order_general);
+        storeSortButtons[0].setOnClickListener(this);
+        storeSortButtons[1] = view.findViewById(R.id.btn_store_search_order_sale);
+        storeSortButtons[1].setOnClickListener(this);
+        storeSortButtons[2] = view.findViewById(R.id.btn_store_search_order_follow);
+        storeSortButtons[2].setOnClickListener(this);
 
         btnGotoTop = view.findViewById(R.id.btn_goto_top);
         btnGotoTop.setOnClickListener(this);
@@ -177,11 +209,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         }
 
-        doSearch(searchType, keyword);
+        doSearch(searchType, keyword, null);
     }
 
 
-    private void doSearch(SearchType searchType, String keyword) {
+    private void doSearch(SearchType searchType, String keyword, EasyJSONObject filter) {
         SLog.info("searchType[%s], keyword[%s]", searchType, keyword);
 
         final BasePopupView loadingPopup = new XPopup.Builder(getContext())
@@ -209,6 +241,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             return;
                         }
 
+                        goodsItemList.clear();
                         EasyJSONArray easyJSONArray = responseObj.getArray("datas.goodsList");
                         for (Object object : easyJSONArray) {
                             EasyJSONObject goods = (EasyJSONObject) object;
@@ -241,57 +274,73 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 }
             });
         } else if (searchType == SearchType.STORE) {
-            Api.getUI(Api.PATH_SEARCH_STORE, paramsObj, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    loadingPopup.dismiss();
+            try {
+                EasyJSONObject params = EasyJSONObject.generate();
+                for (Map.Entry<String, Object> param : paramsObj.entrySet()) {
+                    params.set(param.getKey(), param.getValue().toString());
                 }
 
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    loadingPopup.dismiss();
-                    try {
-                        SLog.info("responseStr[%s]", responseStr);
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                // 添加排序參數
+                if (filter != null) {
+                    params.set("sort", filter.get("sort"));
+                }
 
-                        if (ToastUtil.checkError(_mActivity, responseObj)) {
-                            return;
-                        }
+                SLog.info("params[%s]", params);
+                Api.getUI(Api.PATH_SEARCH_STORE, params, new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        loadingPopup.dismiss();
+                    }
 
-                        EasyJSONArray easyJSONArray = responseObj.getArray("datas.storeList");
-                        for (Object object : easyJSONArray) {
-                            EasyJSONObject store = (EasyJSONObject) object;
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        loadingPopup.dismiss();
+                        try {
+                            SLog.info("responseStr[%s]", responseStr);
+                            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                            int storeId = store.getInt("storeId");
-                            String storeAvatarUrl = store.getString("storeAvatarUrl");
-                            String storeName = store.getString("storeName");
-                            String mainBusiness = store.getString("storeZy");
-                            String storeFigureImage = store.getString("storeFigureImage");
-                            float distance = Float.valueOf(store.getString("distance"));
-                            String shopDay = store.getString("shopDay");
-                            int likeCount = store.getInt("likeCount");
-                            int goodsCommonCount = store.getInt("goodsCommonCount");
-
-                            // 獲取店鋪的前3個商品的圖片
-                            List<String> goodsImageList = new ArrayList<>();
-                            EasyJSONArray goodsCommonList = store.getArray("goodsCommonList");
-                            for (Object object2 : goodsCommonList) {
-                                EasyJSONObject goodsCommon = (EasyJSONObject) object2;
-                                goodsImageList.add(goodsCommon.getString("imageSrc"));
+                            if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                return;
                             }
 
-                            storeItemList.add(new StoreSearchItem(storeId, storeAvatarUrl, storeName, mainBusiness,
-                                    storeFigureImage, distance, shopDay, likeCount, goodsCommonCount, goodsImageList));
-                        }
+                            storeItemList.clear();
+                            EasyJSONArray easyJSONArray = responseObj.getArray("datas.storeList");
+                            for (Object object : easyJSONArray) {
+                                EasyJSONObject store = (EasyJSONObject) object;
 
-                        SLog.info("storeItemList.size[%d]", storeItemList.size());
-                        mStoreAdapter.setNewData(storeItemList);
-                    } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
-                        e.printStackTrace();
+                                int storeId = store.getInt("storeId");
+                                String storeAvatarUrl = store.getString("storeAvatarUrl");
+                                String storeName = store.getString("storeName");
+                                String mainBusiness = store.getString("storeZy");
+                                String storeFigureImage = store.getString("storeFigureImage");
+                                float distance = Float.valueOf(store.getString("distance"));
+                                String shopDay = store.getString("shopDay");
+                                int likeCount = store.getInt("likeCount");
+                                int goodsCommonCount = store.getInt("goodsCommonCount");
+
+                                // 獲取店鋪的前3個商品的圖片
+                                List<String> goodsImageList = new ArrayList<>();
+                                EasyJSONArray goodsCommonList = store.getArray("goodsCommonList");
+                                for (Object object2 : goodsCommonList) {
+                                    EasyJSONObject goodsCommon = (EasyJSONObject) object2;
+                                    goodsImageList.add(goodsCommon.getString("imageSrc"));
+                                }
+
+                                storeItemList.add(new StoreSearchItem(storeId, storeAvatarUrl, storeName, mainBusiness,
+                                        storeFigureImage, distance, shopDay, likeCount, goodsCommonCount, goodsImageList));
+                            }
+
+                            SLog.info("storeItemList.size[%d]", storeItemList.size());
+                            mStoreAdapter.setNewData(storeItemList);
+                        } catch (Exception e) {
+                            SLog.info("Error!%s", e.getMessage());
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            } catch (EasyJSONException e) {
+                e.printStackTrace();
+            }
         } else {
 
         }
@@ -310,6 +359,33 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.btn_goto_top:
                 rvSearchResultList.scrollToPosition(0);
+                break;
+            case R.id.btn_store_search_order_general:
+                if (storeSortButtonIndex == STORE_SEARCH_SORT_GENERAL) {
+                    return;
+                }
+                doSearch(searchType, keyword, null);
+                storeSortButtons[storeSortButtonIndex].setTextColor(twBlack);
+                storeSortButtonIndex = STORE_SEARCH_SORT_GENERAL;
+                storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
+                break;
+            case R.id.btn_store_search_order_sale:
+                if (storeSortButtonIndex == STORE_SEARCH_SORT_SALE) {
+                    return;
+                }
+                doSearch(searchType, keyword, EasyJSONObject.generate("sort", "sale_desc"));
+                storeSortButtons[storeSortButtonIndex].setTextColor(twBlack);
+                storeSortButtonIndex = STORE_SEARCH_SORT_SALE;
+                storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
+                break;
+            case R.id.btn_store_search_order_follow:
+                if (storeSortButtonIndex == STORE_SEARCH_SORT_FOLLOW) {
+                    return;
+                }
+                doSearch(searchType, keyword, EasyJSONObject.generate("sort", "collect_desc"));
+                storeSortButtons[storeSortButtonIndex].setTextColor(twBlack);
+                storeSortButtonIndex = STORE_SEARCH_SORT_FOLLOW;
+                storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
                 break;
             default:
                 break;
