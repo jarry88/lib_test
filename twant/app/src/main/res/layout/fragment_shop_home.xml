@@ -531,6 +531,7 @@
             app:layout_constraintTop_toBottomOf="@id/vw_separator_2"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:background="@android:color/white"
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
@@ -566,6 +567,7 @@
             app:layout_constraintTop_toBottomOf="@id/ll_store_hot_container"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:background="@android:color/white"
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"

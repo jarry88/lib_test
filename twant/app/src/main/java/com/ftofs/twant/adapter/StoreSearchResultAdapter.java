@@ -17,8 +17,6 @@ import com.ftofs.twant.util.StringUtil;
 import java.util.List;
 
 public class StoreSearchResultAdapter extends BaseQuickAdapter<StoreSearchItem, BaseViewHolder> {
-
-
     public StoreSearchResultAdapter(int layoutResId, @Nullable List<StoreSearchItem> data) {
         super(layoutResId, data);
     }

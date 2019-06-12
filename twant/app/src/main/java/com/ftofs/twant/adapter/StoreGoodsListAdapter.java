@@ -34,7 +34,10 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
 
             ImageView leftGoodsImage = itemView.findViewById(R.id.left_goods_image);
             Glide.with(context).load(itemData.leftItem.imageSrc).centerCrop().into(leftGoodsImage);
+        } else {
+            ((ViewGroup) itemView.findViewById(R.id.ll_left_item_container)).removeAllViews();
         }
+
         if (itemData.rightItem != null) {
             setText(itemView, R.id.tv_right_goods_name, itemData.rightItem.goodsName);
             setText(itemView, R.id.tv_right_goods_jingle, itemData.rightItem.jingle);
@@ -42,6 +45,8 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
 
             ImageView rightGoodsImage = itemView.findViewById(R.id.right_goods_image);
             Glide.with(context).load(itemData.rightItem.imageSrc).centerCrop().into(rightGoodsImage);
+        } else {
+            ((ViewGroup) itemView.findViewById(R.id.ll_right_item_container)).removeAllViews();
         }
     }
 }
