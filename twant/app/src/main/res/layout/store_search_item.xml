@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,6 +10,7 @@
     android:layout_marginRight="@dimen/toolbar_margin_right"
     android:orientation="vertical">
     <LinearLayout
+        android:id="@+id/ll_store_introduction_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -51,34 +52,137 @@
                     />
             </RelativeLayout>
             <TextView
+                android:id="@+id/tv_main_business"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="主營: 外套、毛衣、褲子、西裝、外套、毛..."
+                android:singleLine="true"
+                android:ellipsize="end"
                 />
 
         </LinearLayout>
     </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_store_figure_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp">
-        <ImageView
+        android:layout_below="@id/ll_store_introduction_container"
+        android:layout_marginTop="10dp">
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@id/img_store_figure"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="310:175"
+            app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:riv_corner_radius="3dp"
             />
     </android.support.constraint.ConstraintLayout>
 
+    <com.ftofs.twant.widget.StoreDesktop
+        android:id="@+id/sd_desktop"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_below="@id/cl_store_figure_container"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/goods_image_middle_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/sd_desktop"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/goods_image_middle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="4dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/cs_avatar_160"
+            app:riv_corner_radius="5dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/shadow_middle"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/goods_image_left_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/sd_desktop"
+        android:layout_alignLeft="@id/sd_desktop"
+        android:layout_marginLeft="31dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/goods_image_left"
+            android:layout_width="79dp"
+            android:layout_height="79dp"
+            android:layout_marginBottom="3dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/cs_avatar_160"
+            app:riv_corner_radius="5dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/shadow_left"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/goods_image_right_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/sd_desktop"
+        android:layout_alignRight="@id/sd_desktop"
+        android:layout_marginRight="31dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/goods_image_right"
+            android:layout_width="79dp"
+            android:layout_height="79dp"
+            android:layout_marginBottom="3dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/cs_avatar_160"
+            app:riv_corner_radius="5dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/shadow_right"
+            />
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp">
+        android:layout_height="44dp"
+        android:layout_below="@id/sd_desktop"
+        android:paddingLeft="18dp"
+        android:paddingRight="18dp"
+        android:background="@drawable/new_arrivals_pane_bg">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -145,5 +249,5 @@
                 />
         </LinearLayout>
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
 

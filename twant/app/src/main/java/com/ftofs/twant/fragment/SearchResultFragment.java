@@ -265,14 +265,23 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             int storeId = store.getInt("storeId");
                             String storeAvatarUrl = store.getString("storeAvatarUrl");
                             String storeName = store.getString("storeName");
+                            String mainBusiness = store.getString("storeZy");
                             String storeFigureImage = store.getString("storeFigureImage");
                             float distance = Float.valueOf(store.getString("distance"));
                             String shopDay = store.getString("shopDay");
                             int likeCount = store.getInt("likeCount");
                             int goodsCommonCount = store.getInt("goodsCommonCount");
 
-                            storeItemList.add(new StoreSearchItem(storeId, storeAvatarUrl, storeName, storeFigureImage,
-                                    distance, shopDay, likeCount, goodsCommonCount));
+                            // 獲取店鋪的前3個商品的圖片
+                            List<String> goodsImageList = new ArrayList<>();
+                            EasyJSONArray goodsCommonList = store.getArray("goodsCommonList");
+                            for (Object object2 : goodsCommonList) {
+                                EasyJSONObject goodsCommon = (EasyJSONObject) object2;
+                                goodsImageList.add(goodsCommon.getString("imageSrc"));
+                            }
+
+                            storeItemList.add(new StoreSearchItem(storeId, storeAvatarUrl, storeName, mainBusiness,
+                                    storeFigureImage, distance, shopDay, likeCount, goodsCommonCount, goodsImageList));
                         }
 
                         SLog.info("storeItemList.size[%d]", storeItemList.size());

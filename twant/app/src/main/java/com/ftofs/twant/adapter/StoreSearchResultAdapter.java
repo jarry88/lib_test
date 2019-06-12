@@ -12,6 +12,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreSearchItem;
+import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
@@ -28,6 +29,10 @@ public class StoreSearchResultAdapter extends BaseQuickAdapter<StoreSearchItem, 
         Glide.with(mContext).load(item.storeAvatarUrl).into(imgStoreAvatar);
 
         helper.setText(R.id.tv_store_name, item.storeName);
+        if (!StringUtil.isEmpty(item.mainBusiness)) {
+            helper.setText(R.id.tv_main_business, mContext.getString(R.string.text_main_business) + ": " + item.mainBusiness);
+        }
+
 
         ImageView imgStoreFigure = helper.getView(R.id.img_store_figure);
         // SLog.info("uuuurl[%s]", Config.OSS_BASE_URL + item.storeFigureImage);
@@ -45,5 +50,22 @@ public class StoreSearchResultAdapter extends BaseQuickAdapter<StoreSearchItem, 
         helper.setText(R.id.tv_shop_open_day, String.valueOf(item.shopDay));
         helper.setText(R.id.tv_goods_common_count, String.valueOf(item.goodsCommonCount));
         helper.setText(R.id.tv_like_count, String.valueOf(item.likeCount));
+
+        for (int i = 0; i < item.goodsImageList.size(); i++) {
+            String url = item.goodsImageList.get(i);
+            if (i == 0) {
+                ImageView goodsImageLeft = helper.getView(R.id.goods_image_left);
+                Glide.with(mContext).load(url).centerCrop().into(goodsImageLeft);
+                helper.setGone(R.id.goods_image_left_container, true);
+            } else if (i == 1) {
+                ImageView goodsImageMiddle = helper.getView(R.id.goods_image_middle);
+                Glide.with(mContext).load(url).centerCrop().into(goodsImageMiddle);
+                helper.setGone(R.id.goods_image_middle_container, true);
+            } else {
+                ImageView goodsImageRight = helper.getView(R.id.goods_image_right);
+                Glide.with(mContext).load(url).centerCrop().into(goodsImageRight);
+                helper.setGone(R.id.goods_image_right_container, true);
+            }
+        }
     }
 }
