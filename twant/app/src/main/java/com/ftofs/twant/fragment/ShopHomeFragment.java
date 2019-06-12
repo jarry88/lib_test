@@ -67,6 +67,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     LinearLayout llSnsContainer;
     LinearLayout llPayWayContainer;
 
+
     TextView tvCommentSummary;
     ImageView imgAuthorAvatar;
     TextView tvAuthorNickname;
@@ -616,7 +617,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        verticalScrollUtil.stop();
+        if(verticalScrollUtil != null) {
+            verticalScrollUtil.stop();
+        }
     }
 
     @Override

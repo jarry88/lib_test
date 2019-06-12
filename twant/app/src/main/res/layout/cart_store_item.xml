@@ -25,32 +25,38 @@
                 android:layout_gravity="center_vertical"
                 app:icon_src="@drawable/icon_cart_item_unchecked"
                 />
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+            <LinearLayout
+                android:id="@+id/btn_goto_store"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="7dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/icon_shop"
-                />
+                android:layout_gravity="center_vertical">
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/icon_shop"
+                    />
 
-            <TextView
-                android:id="@+id/tv_store_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_gravity="center_vertical"
-                android:text=""
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
+                <TextView
+                    android:id="@+id/tv_store_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_gravity="center_vertical"
+                    android:text=""
+                    android:textSize="14sp"
+                    android:textColor="@color/tw_black"
+                    />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/expand_button"
-                />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/expand_button"
+                    />
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ll_cart_spu_item_container"

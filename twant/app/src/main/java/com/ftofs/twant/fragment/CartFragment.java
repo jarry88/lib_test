@@ -52,7 +52,6 @@ import okhttp3.Response;
 public class CartFragment extends BaseFragment implements View.OnClickListener {
     TextView tvFragmentTitle;
     LinearLayout cartStoreItemContainer;
-    String currencyTypeSign;
     String textSettlement;
     TotalStatus totalStatus = new TotalStatus();
 
@@ -87,7 +86,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
         EventBus.getDefault().register(this);
 
-        currencyTypeSign = getResources().getString(R.string.currency_type_sign);
         textSettlement = getResources().getString(R.string.text_settlement);
 
         ScaledButton btnSelectAll = view.findViewById(R.id.btn_select_all);
@@ -179,11 +177,21 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                         setCheckButtonOnClickListener(btnCheckStore);
                         storeStatus.setRadio(btnCheckStore);
 
+                        // 點擊店鋪標題，跳轉到具體的店鋪
+                        final int storeId = cartStoreVo.getInt("storeId");
+                        cartStoreItem.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                MainFragment mainFragment = MainFragment.getInstance();
+                                mainFragment.start(ShopMainFragment.newInstance(storeId));
+                            }
+                        });
                         tvStoreName.setText(cartStoreVo.getString("storeName"));
 
                         EasyJSONArray cartSpuVoList = cartStoreVo.getArray("cartSpuVoList");
                         LinearLayout cartSpuItemContainer = cartStoreItem.findViewById(R.id.ll_cart_spu_item_container);
                         for (Object object2 : cartSpuVoList) { // spu LOOP
+                            EasyJSONObject cartSpuVo = (EasyJSONObject) object2;
                             SpuStatus spuStatus = new SpuStatus();
                             spuStatus.parent = storeStatus;
                             View cartSpuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_spu_item, null, false);
@@ -195,16 +203,26 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                             setCheckButtonOnClickListener(btnCheckSpu);
                             spuStatus.setRadio(btnCheckSpu);
 
-                            EasyJSONObject cartSpuVo = (EasyJSONObject) object2;
+                            // 點擊Spu，跳轉到對應的商品詳情頁面
+                            final int commonId = cartSpuVo.getInt("commonId");
+                            cartSpuItem.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    MainFragment mainFragment = MainFragment.getInstance();
+                                    mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                                }
+                            });
+
+
                             tvGoodsName.setText(cartSpuVo.getString("goodsName"));
-                            Glide.with(CartFragment.this).load(cartSpuVo.getString("imageSrc")).into(goodsImage);
+                            Glide.with(CartFragment.this).load(cartSpuVo.getString("imageSrc")).centerCrop().into(goodsImage);
 
                             EasyJSONArray cartItemVoList = cartSpuVo.getArray("cartItemVoList");
                             LinearLayout cartSkuItemContainer = cartSpuItem.findViewById(R.id.ll_cart_sku_item_container);
                             for (Object object3 : cartItemVoList) { // sku LOOP
                                 SkuStatus skuStatus = new SkuStatus();
                                 skuStatus.parent = spuStatus;
-                                View cartSkuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_sku_item, null, false);
+                                View cartSkuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_sku_item, cartSkuItemContainer, false);
                                 TextView tvGoodsFullSpecs = cartSkuItem.findViewById(R.id.tv_goods_full_specs);
                                 TextView tvPriceSum = cartSkuItem.findViewById(R.id.tv_price_sum);
                                 ScaledButton btnCheckSku = cartSkuItem.findViewById(R.id.btn_check_sku);
@@ -224,17 +242,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 tvGoodsFullSpecs.setText(cartSkuVo.getString("goodsFullSpecs"));
                                 float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
                                 int buyNum = cartSkuVo.getInt("buyNum");
-                                tvPriceSum.setText(currencyTypeSign + goodsPrice);
+                                tvPriceSum.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
                                 abQuantity.setValue(buyNum);
 
                                 skuStatus.setPrice(goodsPrice);
                                 skuStatus.setCount(buyNum);
 
-                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                layoutParams.setMargins(0, Util.dip2px(_mActivity, 15), 0, 0);
-
                                 spuStatus.skuStatusList.add(skuStatus);
-                                cartSkuItemContainer.addView(cartSkuItem, layoutParams);
+                                cartSkuItemContainer.addView(cartSkuItem);
                             } // END OF sku LOOP
 
                             storeStatus.spuStatusList.add(spuStatus);

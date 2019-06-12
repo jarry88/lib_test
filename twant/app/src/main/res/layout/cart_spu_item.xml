@@ -17,23 +17,29 @@
             android:layout_gravity="center_vertical"
             app:icon_src="@drawable/icon_cart_item_unchecked"
             />
-        <ImageView
-            android:id="@+id/goods_image"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginLeft="7dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/cs_avatar_160"
-            />
-        <TextView
-            android:id="@+id/tv_goods_name"
+
+        <LinearLayout
+            android:id="@+id/btn_goto_goods"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="11dp"
-            android:layout_marginLeft="16dp"
-            android:textSize="14sp"
-            android:textColor="@color/tw_black"
-            />
+            android:layout_marginLeft="7dp">
+            <ImageView
+                android:id="@+id/goods_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/cs_avatar_160"
+                />
+            <TextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:layout_marginLeft="16dp"
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
