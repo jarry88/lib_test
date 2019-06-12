@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -55,6 +56,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     EasyJSONObject paramsObj;
     String keyword;
 
+    RecyclerView rvSearchResultList;
+    ImageView btnGotoTop;
+    ImageView btnGotoCart;
+
     public static SearchResultFragment newInstance(String searchTypeStr, String paramsStr) {
         Bundle args = new Bundle();
 
@@ -83,6 +88,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         String paramsStr = args.getString("paramsStr");
         paramsObj = (EasyJSONObject) EasyJSONObject.parse(paramsStr);
 
+        btnGotoTop = view.findViewById(R.id.btn_goto_top);
+        btnGotoTop.setOnClickListener(this);
+        btnGotoCart = view.findViewById(R.id.btn_goto_cart);
+
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_goods_filter, this);
         etKeyword = view.findViewById(R.id.et_keyword);
@@ -101,9 +110,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             view.findViewById(R.id.ll_goods_filter).setVisibility(View.VISIBLE);
         } else if (searchType == SearchType.STORE) {
             view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
+
+            // 如果是搜索店鋪，隱藏【返回頂部】和【轉到購物車】按鈕
+            btnGotoTop.setVisibility(View.GONE);
+            btnGotoCart.setVisibility(View.GONE);
         }
 
-        RecyclerView rvSearchResultList = view.findViewById(R.id.rv_search_result_list);
+        rvSearchResultList = view.findViewById(R.id.rv_search_result_list);
 
         if (searchType == SearchType.GOODS) {
             GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, GridLayoutManager.VERTICAL, false);
@@ -285,6 +298,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.btn_goods_filter:
                 showGoodsFilterPopup();
+                break;
+            case R.id.btn_goto_top:
+                rvSearchResultList.scrollToPosition(0);
                 break;
             default:
                 break;
