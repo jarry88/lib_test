@@ -17,6 +17,7 @@ import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.StoreSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.StoreSearchItem;
@@ -126,6 +127,17 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     mainFragment.start(GoodsDetailFragment.newInstance(commonId));
                 }
             });
+            mGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+                @Override
+                public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                    int id = view.getId();
+                    if (id == R.id.btn_goto_store) {
+                        GoodsSearchItem item = goodsItemList.get(position);
+                        MainFragment mainFragment = MainFragment.getInstance();
+                        mainFragment.start(ShopMainFragment.newInstance(item.storeId));
+                    }
+                }
+            });
         } else if (searchType == SearchType.STORE) {
             LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity);
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -190,6 +202,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                             String imageSrc = goods.getString("imageSrc");
                             String storeAvatarUrl = goods.getString("storeAvatarUrl");
+                            int storeId = goods.getInt("storeId");
                             String storeName = goods.getString("storeName");
                             int commonId = goods.getInt("commonId");
                             String goodsName = goods.getString("goodsName");
@@ -201,8 +214,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             } else {
                                 price = (float) goods.getDouble("batchPrice2");
                             }
-
-                            goodsItemList.add(new GoodsSearchItem(imageSrc, storeAvatarUrl, storeName, commonId, goodsName, jingle, price));
+                            String nationalFlag = Config.OSS_BASE_URL + "/" + goods.getString("adminCountry.nationalFlag");
+                            SLog.info("adminCountry.nationalFlag[%s]", nationalFlag);
+                            goodsItemList.add(new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
+                                    storeName, commonId, goodsName, jingle, price, nationalFlag));
                         }
 
                         SLog.info("goodsItemList.size[%d]", goodsItemList.size());

@@ -2,6 +2,7 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -31,14 +32,22 @@ public class GoodsSearchResultAdapter extends BaseQuickAdapter<GoodsSearchItem, 
     @Override
     protected void convert(BaseViewHolder helper, GoodsSearchItem item) {
         ImageView goodsImage = helper.getView(R.id.goods_image);
-        Glide.with(context).load(item.imageSrc).into(goodsImage);
+        Glide.with(context).load(item.imageSrc).centerCrop().into(goodsImage);
 
         ImageView imgStoreAvatar = helper.getView(R.id.img_store_avatar);
-        Glide.with(context).load(item.storeAvatarUrl).into(imgStoreAvatar);
+        Glide.with(context).load(item.storeAvatarUrl).centerCrop().into(imgStoreAvatar);
+
+        if (!StringUtil.isEmpty(item.nationalFlag)) {
+            ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag);
+            Glide.with(context).load(item.nationalFlag).centerCrop().into(imgGoodsNationalFlag);
+            imgGoodsNationalFlag.setVisibility(View.VISIBLE);
+        }
 
         helper.setText(R.id.tv_store_name, item.storeName);
         helper.setText(R.id.tv_goods_name, item.goodsName);
         helper.setText(R.id.tv_goods_jingle, item.jingle);
         helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context, item.price, 1));
+
+        helper.addOnClickListener(R.id.btn_goto_store);
     }
 }
