@@ -67,12 +67,20 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     ImageView btnGotoTop;
     ImageView btnGotoCart;
 
+    ImageView iconPriceOrder;
+    boolean sortPriceAsc = true;  // 是否用升序來進行價格排序
+
     public static final int STORE_SEARCH_SORT_GENERAL = 0;
     public static final int STORE_SEARCH_SORT_SALE = 1;
     public static final int STORE_SEARCH_SORT_FOLLOW = 2;
-
     int storeSortButtonIndex = STORE_SEARCH_SORT_GENERAL; // 店鋪搜索當前用哪種排序標準 0,1,2
     TextView[] storeSortButtons = new TextView[3];
+
+    public static final int GOODS_SEARCH_SORT_GENERAL = 0;
+    public static final int GOODS_SEARCH_SORT_SALE = 1;
+    public static final int GOODS_SEARCH_SORT_PRICE = 2;
+    int goodsSortButtonIndex = GOODS_SEARCH_SORT_GENERAL; // 商品搜索當前用哪種排序標準 0,1,2
+    TextView[] goodsSortButtons = new TextView[3];
 
     public static SearchResultFragment newInstance(String searchTypeStr, String paramsStr) {
         Bundle args = new Bundle();
@@ -113,12 +121,21 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
         }
 
-        storeSortButtons[0] = view.findViewById(R.id.btn_store_search_order_general);
-        storeSortButtons[0].setOnClickListener(this);
-        storeSortButtons[1] = view.findViewById(R.id.btn_store_search_order_sale);
-        storeSortButtons[1].setOnClickListener(this);
-        storeSortButtons[2] = view.findViewById(R.id.btn_store_search_order_follow);
-        storeSortButtons[2].setOnClickListener(this);
+        iconPriceOrder = view.findViewById(R.id.icon_price_order);
+
+        storeSortButtons[STORE_SEARCH_SORT_GENERAL] = view.findViewById(R.id.btn_store_search_order_general);
+        storeSortButtons[STORE_SEARCH_SORT_GENERAL].setOnClickListener(this);
+        storeSortButtons[STORE_SEARCH_SORT_SALE] = view.findViewById(R.id.btn_store_search_order_sale);
+        storeSortButtons[STORE_SEARCH_SORT_SALE].setOnClickListener(this);
+        storeSortButtons[STORE_SEARCH_SORT_FOLLOW] = view.findViewById(R.id.btn_store_search_order_follow);
+        storeSortButtons[STORE_SEARCH_SORT_FOLLOW].setOnClickListener(this);
+
+        goodsSortButtons[GOODS_SEARCH_SORT_GENERAL] = view.findViewById(R.id.tv_text_general);
+        goodsSortButtons[GOODS_SEARCH_SORT_SALE] = view.findViewById(R.id.tv_text_sale);
+        goodsSortButtons[GOODS_SEARCH_SORT_PRICE] = view.findViewById(R.id.tv_text_price);
+        Util.setOnClickListener(view, R.id.btn_sort_goods_general, this);
+        Util.setOnClickListener(view, R.id.btn_sort_goods_sale, this);
+        Util.setOnClickListener(view, R.id.btn_sort_goods_price, this);
 
         btnGotoTop = view.findViewById(R.id.btn_goto_top);
         btnGotoTop.setOnClickListener(this);
@@ -223,69 +240,70 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         int searchTypeInt = searchType.ordinal();
         SearchHistoryUtil.saveSearchHistory(searchTypeInt, keyword);
 
-        if (searchType == SearchType.GOODS) {
-            Api.getUI(Api.PATH_SEARCH_GOODS, paramsObj, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    loadingPopup.dismiss();
-                }
+        try {
+            EasyJSONObject params = EasyJSONObject.generate();
+            for (Map.Entry<String, Object> param : paramsObj.entrySet()) {
+                params.set(param.getKey(), param.getValue().toString());
+            }
 
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    loadingPopup.dismiss();
-                    try {
-                        SLog.info("responseStr[%s]", responseStr);
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+            // 添加排序參數
+            if (filter != null) {
+                params.set("sort", filter.get("sort"));
+            }
 
-                        if (ToastUtil.checkError(_mActivity, responseObj)) {
-                            return;
-                        }
+            SLog.info("params[%s]", params);
 
-                        goodsItemList.clear();
-                        EasyJSONArray easyJSONArray = responseObj.getArray("datas.goodsList");
-                        for (Object object : easyJSONArray) {
-                            EasyJSONObject goods = (EasyJSONObject) object;
-
-                            String imageSrc = goods.getString("imageSrc");
-                            String storeAvatarUrl = goods.getString("storeAvatarUrl");
-                            int storeId = goods.getInt("storeId");
-                            String storeName = goods.getString("storeName");
-                            int commonId = goods.getInt("commonId");
-                            String goodsName = goods.getString("goodsName");
-                            String jingle  = goods.getString("jingle");
-                            float price;
-                            int appUsable = goods.getInt("appUsable");
-                            if (appUsable > 0) {
-                                price = (float) goods.getDouble("appPrice0");
-                            } else {
-                                price = (float) goods.getDouble("batchPrice2");
-                            }
-                            String nationalFlag = Config.OSS_BASE_URL + "/" + goods.getString("adminCountry.nationalFlag");
-                            SLog.info("adminCountry.nationalFlag[%s]", nationalFlag);
-                            goodsItemList.add(new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
-                                    storeName, commonId, goodsName, jingle, price, nationalFlag));
-                        }
-
-                        SLog.info("goodsItemList.size[%d]", goodsItemList.size());
-                        mGoodsAdapter.setNewData(goodsItemList);
-                    } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+            if (searchType == SearchType.GOODS) {
+                Api.getUI(Api.PATH_SEARCH_GOODS, paramsObj, new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        loadingPopup.dismiss();
                     }
-                }
-            });
-        } else if (searchType == SearchType.STORE) {
-            try {
-                EasyJSONObject params = EasyJSONObject.generate();
-                for (Map.Entry<String, Object> param : paramsObj.entrySet()) {
-                    params.set(param.getKey(), param.getValue().toString());
-                }
 
-                // 添加排序參數
-                if (filter != null) {
-                    params.set("sort", filter.get("sort"));
-                }
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        loadingPopup.dismiss();
+                        try {
+                            SLog.info("responseStr[%s]", responseStr);
+                            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                SLog.info("params[%s]", params);
+                            if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                return;
+                            }
+
+                            goodsItemList.clear();
+                            EasyJSONArray easyJSONArray = responseObj.getArray("datas.goodsList");
+                            for (Object object : easyJSONArray) {
+                                EasyJSONObject goods = (EasyJSONObject) object;
+
+                                String imageSrc = goods.getString("imageSrc");
+                                String storeAvatarUrl = goods.getString("storeAvatarUrl");
+                                int storeId = goods.getInt("storeId");
+                                String storeName = goods.getString("storeName");
+                                int commonId = goods.getInt("commonId");
+                                String goodsName = goods.getString("goodsName");
+                                String jingle  = goods.getString("jingle");
+                                float price;
+                                int appUsable = goods.getInt("appUsable");
+                                if (appUsable > 0) {
+                                    price = (float) goods.getDouble("appPrice0");
+                                } else {
+                                    price = (float) goods.getDouble("batchPrice2");
+                                }
+                                String nationalFlag = Config.OSS_BASE_URL + "/" + goods.getString("adminCountry.nationalFlag");
+                                SLog.info("adminCountry.nationalFlag[%s]", nationalFlag);
+                                goodsItemList.add(new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
+                                        storeName, commonId, goodsName, jingle, price, nationalFlag));
+                            }
+
+                            SLog.info("goodsItemList.size[%d]", goodsItemList.size());
+                            mGoodsAdapter.setNewData(goodsItemList);
+                        } catch (Exception e) {
+                            SLog.info("Error!%s", e.getMessage());
+                        }
+                    }
+                });
+            } else if (searchType == SearchType.STORE) {
                 Api.getUI(Api.PATH_SEARCH_STORE, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -338,11 +356,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                         }
                     }
                 });
-            } catch (EasyJSONException e) {
-                e.printStackTrace();
-            }
-        } else {
+            } else {
 
+            }
+        } catch (Exception e) {
+            SLog.info("Error!%s", e.getMessage());
         }
     }
 
@@ -387,8 +405,62 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 storeSortButtonIndex = STORE_SEARCH_SORT_FOLLOW;
                 storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
                 break;
+            case R.id.btn_sort_goods_general:
+                if (goodsSortButtonIndex == GOODS_SEARCH_SORT_GENERAL) {
+                    return;
+                }
+                doSearch(searchType, keyword, null);
+                switchGoodsSortIndicator(id);
+                break;
+            case R.id.btn_sort_goods_sale:
+                if (goodsSortButtonIndex == GOODS_SEARCH_SORT_SALE) {
+                    return;
+                }
+                doSearch(searchType, keyword, EasyJSONObject.generate("sort", "sale_desc"));
+                switchGoodsSortIndicator(id);
+                break;
+            case R.id.btn_sort_goods_price:
+                if (goodsSortButtonIndex == GOODS_SEARCH_SORT_PRICE) { // 再次點擊價格排序的話，切換升降序
+                    sortPriceAsc = !sortPriceAsc;
+                } else {
+                    sortPriceAsc = true;
+                }
+                String priceSortStr = "price_desc";
+                if (sortPriceAsc) {
+                    priceSortStr = "price_asc";
+                }
+                doSearch(searchType, keyword, EasyJSONObject.generate("sort", priceSortStr));
+                switchGoodsSortIndicator(id);
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 切換當前商品排序的指示
+     * @param id 點擊到哪個按鈕
+     */
+    private void switchGoodsSortIndicator(int id) {
+        goodsSortButtons[goodsSortButtonIndex].setTextColor(twBlack);
+        if (goodsSortButtonIndex == GOODS_SEARCH_SORT_PRICE) { // 如果原來是用價格排序，則隱藏價格升序、降序圖標
+            iconPriceOrder.setVisibility(View.GONE);
+        }
+        if (id == R.id.btn_sort_goods_general) {
+            goodsSortButtonIndex = GOODS_SEARCH_SORT_GENERAL;
+        } else if (id == R.id.btn_sort_goods_sale) {
+            goodsSortButtonIndex = GOODS_SEARCH_SORT_SALE;
+        } else {
+            goodsSortButtonIndex = GOODS_SEARCH_SORT_PRICE;
+        }
+        goodsSortButtons[goodsSortButtonIndex].setTextColor(twRed);
+        if (goodsSortButtonIndex == GOODS_SEARCH_SORT_PRICE) { // 如果現在是用價格排序，則顯示價格升序、降序圖標
+            if (sortPriceAsc) {
+                iconPriceOrder.setImageResource(R.drawable.icon_price_sort_asc);
+            } else {
+                iconPriceOrder.setImageResource(R.drawable.icon_price_sort_desc);
+            }
+            iconPriceOrder.setVisibility(View.VISIBLE);
         }
     }
 

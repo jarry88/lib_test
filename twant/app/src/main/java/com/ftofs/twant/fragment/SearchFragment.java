@@ -77,7 +77,6 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_search, this);
         Util.setOnClickListener(view, R.id.btn_clear_search_history, this);
-        Util.setOnClickListener(view, R.id.ll_mask, this);
 
         llSearchSuggestionContainer = view.findViewById(R.id.ll_search_suggestion_container);
         llSuggestionList = view.findViewById(R.id.ll_suggestion_list);
@@ -345,6 +344,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     public void onSupportVisible() {
         super.onSupportVisible();
 
+        // 從其它Fragment返回時隱藏搜索建議
+        llSearchSuggestionContainer.setVisibility(View.GONE);
         loadSearchHistory();
     }
 

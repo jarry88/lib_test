@@ -87,43 +87,87 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp">
-            <TextView
+            <RelativeLayout
+                android:id="@+id/btn_sort_goods_general"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                android:text="@string/goods_tab_title_general"
-                />
-            <TextView
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_text_general"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/tw_red"
+                    android:textSize="16sp"
+                    android:text="@string/goods_tab_title_general"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/btn_sort_goods_sale"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                android:text="@string/goods_tab_title_sale"
-                />
-            <TextView
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_text_sale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    android:text="@string/goods_tab_title_sale"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/btn_sort_goods_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                android:text="@string/goods_tab_title_price"
-                />
-            <TextView
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_text_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    android:text="@string/goods_tab_title_price"
+                    />
+                <ImageView
+                    android:id="@+id/icon_price_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/tv_text_price"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_price_sort_asc"
+                    android:visibility="gone"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/btn_goods_filter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                android:text="@string/text_filter"
-                />
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_text_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    android:text="@string/text_filter"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/tv_text_filter"
+                    android:layout_marginLeft="3dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_filter"
+                    />
+            </RelativeLayout>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ll_store_filter"
