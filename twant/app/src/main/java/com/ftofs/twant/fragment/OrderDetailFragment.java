@@ -244,6 +244,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    private void deleteOrder() {
+
+    }
+
     private void cancelOrder() {
         // 取消訂單
         String token = User.getToken();

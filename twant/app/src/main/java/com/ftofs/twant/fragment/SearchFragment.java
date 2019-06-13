@@ -169,6 +169,13 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                                 EditTextUtil.cursorSeekToEnd(etKeyword);
                             }
                         });
+                        itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                currentKeyword = item;
+                                doSearch();
+                            }
+                        });
                         llSuggestionList.addView(itemView);
                     }
                 } catch (Exception e) {

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/ll_popup_content_view"
     android:layout_width="300dp"
     android:layout_height="match_parent"
-    android:background="#fff">
-
-
+    android:background="#fff"
+    android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,4 +16,151 @@
         android:textSize="18sp"
         android:background="@drawable/bottom_separator_box"
         />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="@string/text_price_room"
+        android:textColor="@color/tw_dark_grey"
+        android:textSize="13sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/et_lowest_price"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:background="@drawable/price_room_edit_text_bg"
+            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:hint="@string/text_lowest_price"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#DFDFDF"
+            android:layout_gravity="center_vertical"
+            />
+
+        <EditText
+            android:id="@+id/et_highest_price"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:background="@drawable/price_room_edit_text_bg"
+            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:hint="@string/text_highest_price"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="@string/text_promotion_activity"
+        android:textColor="@color/tw_dark_grey"
+        android:textSize="13sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/btn_filter_gift"
+            android:layout_width="88dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="@string/text_gift"
+            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            android:background="@drawable/price_room_edit_text_bg"
+            />
+
+        <TextView
+            android:id="@+id/btn_filter_discount"
+            android:layout_width="88dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="@string/text_discount"
+            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            android:background="@drawable/price_room_edit_text_bg"
+            />
+    </LinearLayout>
+
+    <!-- 分隔條 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="15dp"
+        android:background="#f7f7f7"
+        />
+
+    <!-- 分類容器 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:id="@+id/ll_category_group_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+    </ScrollView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp">
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="106dp"
+            android:layout_height="39dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/btn_buy_bg"
+            />
+        <TextView
+            android:id="@+id/btn_reset"
+            android:layout_width="106dp"
+            android:layout_height="39dp"
+            android:layout_toLeftOf="@id/btn_ok"
+            android:gravity="center"
+            android:text="@string/text_reset"
+            android:textColor="@color/tw_black"
+            android:textSize="16sp"
+            android:background="@drawable/smaller_outline_button"
+            />
+    </RelativeLayout>
 </LinearLayout>

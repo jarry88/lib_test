@@ -21,8 +21,11 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.entity.FilterCategoryGroup;
+import com.ftofs.twant.entity.FilterCategoryItem;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.entity.StoreSearchItem;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
@@ -48,7 +51,7 @@ import okhttp3.Response;
  * 搜索结果Fragment
  * @author zwm
  */
-public class SearchResultFragment extends BaseFragment implements View.OnClickListener {
+public class SearchResultFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     SearchType searchType;
 
     int twBlack;
@@ -66,6 +69,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     RecyclerView rvSearchResultList;
     ImageView btnGotoTop;
     ImageView btnGotoCart;
+
+    List<FilterCategoryGroup> filterCategoryGroupList = new ArrayList<>();
 
     ImageView iconPriceOrder;
     boolean sortPriceAsc = true;  // 是否用升序來進行價格排序
@@ -246,9 +251,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 params.set(param.getKey(), param.getValue().toString());
             }
 
-            // 添加排序參數
+            // 合并參數
             if (filter != null) {
-                params.set("sort", filter.get("sort"));
+                for (Map.Entry<String, Object> param : filter.entrySet()) {
+                    params.set(param.getKey(), param.getValue().toString());
+                }
             }
 
             SLog.info("params[%s]", params);
@@ -272,6 +279,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             }
 
                             goodsItemList.clear();
+                            filterCategoryGroupList.clear();
+
                             EasyJSONArray easyJSONArray = responseObj.getArray("datas.goodsList");
                             for (Object object : easyJSONArray) {
                                 EasyJSONObject goods = (EasyJSONObject) object;
@@ -291,13 +300,35 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                     price = (float) goods.getDouble("batchPrice2");
                                 }
                                 String nationalFlag = Config.OSS_BASE_URL + "/" + goods.getString("adminCountry.nationalFlag");
-                                SLog.info("adminCountry.nationalFlag[%s]", nationalFlag);
                                 goodsItemList.add(new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
                                         storeName, commonId, goodsName, jingle, price, nationalFlag));
                             }
 
                             SLog.info("goodsItemList.size[%d]", goodsItemList.size());
                             mGoodsAdapter.setNewData(goodsItemList);
+
+                            // 讀取過濾條件數據
+                            EasyJSONArray categoryNavVoList = responseObj.getArray("datas.filter.categoryNavVoList");
+                            for (Object object : categoryNavVoList) {
+                                EasyJSONObject categoryNavVo = (EasyJSONObject) object;
+                                int headId = categoryNavVo.getInt("categoryId");
+                                String headName = categoryNavVo.getString("categoryName");
+                                FilterCategoryItem head = new FilterCategoryItem(headId, headName);
+
+                                FilterCategoryGroup group = new FilterCategoryGroup();
+                                group.head = head;
+                                EasyJSONArray categoryList = categoryNavVo.getArray("categoryList");
+                                for (Object object2 : categoryList) {
+                                    EasyJSONObject category = (EasyJSONObject) object2;
+
+                                    int categoryId = category.getInt("categoryId");
+                                    String categoryName = category.getString("categoryName");
+
+                                    FilterCategoryItem item = new FilterCategoryItem(categoryId, categoryName);
+                                    group.list.add(item);
+                                }
+                                filterCategoryGroupList.add(group);
+                            }
                         } catch (Exception e) {
                             SLog.info("Error!%s", e.getMessage());
                         }
@@ -469,7 +500,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         new XPopup.Builder(getContext())
                 .popupPosition(PopupPosition.Right)//右边
                 .hasStatusBarShadow(true) //启用状态栏阴影
-                .asCustom(new GoodsFilterDrawerPopupView(_mActivity))
+                .asCustom(new GoodsFilterDrawerPopupView(_mActivity, filterCategoryGroupList, this))
                 .show();
     }
 
@@ -478,5 +509,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         SLog.info("onBackPressedSupport");
         pop();
         return true;
+    }
+
+    @Override
+    public void onSelected(int type, int id, Object extra) {
+        EasyJSONObject params = (EasyJSONObject) extra;
+        SLog.info("params[%s]", params.toString());
+
+        doSearch(searchType, keyword, params);
     }
 }

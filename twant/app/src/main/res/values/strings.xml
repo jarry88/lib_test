@@ -156,7 +156,7 @@
 
     <string name="text_voucher">優惠券</string>
     <string name="text_conform">滿減優惠</string>
-    <string name="text_discount">限時折扣</string>
+    <string name="text_time_limited_discount">限時折扣</string>
 
     <string name="text_pay_success">訂單支付成功</string>
     <string name="text_view_order">查看訂單</string>
@@ -278,6 +278,13 @@
 
     <string name="text_filter">篩選</string>
     <string name="text_goods_filter">商品篩選</string>
+    <string name="text_price_room">價格區間</string>
+    <string name="text_lowest_price">最低價</string>
+    <string name="text_highest_price">最高價</string>
+    <string name="text_promotion_activity">促銷活動</string>
+    <string name="text_gift">贈品</string>
+    <string name="text_discount">折扣</string>
+    <string name="text_reset">重置</string>
 
     <string name="search_tab_title_goods">商品</string>
     <string name="search_tab_title_store">店鋪</string>
