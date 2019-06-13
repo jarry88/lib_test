@@ -71,6 +71,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     LinearLayout llOrderButtonContainer;
 
+    public static final int ORDER_OPERATION_TYPE_CANCEL = 1;
+    public static final int ORDER_OPERATION_TYPE_DELETE = 2;
+
     public static final String TEXT_MEMBER_BUY_AGAIN = "showMemberBuyAgain";
     public static final String TEXT_MEMBER_RECEIVE = "showMemberReceive";
     public static final String TEXT_REFUND_WAITING = "showRefundWaiting";
@@ -166,8 +169,18 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             }
 
             SLog.info("tag[%s]", tag);
-            // 取消訂單
-            if (tag.equals(TEXT_MEMBER_CANCEL)) {
+            // 取消訂單 或 刪除訂單
+            if (tag.equals(TEXT_MEMBER_CANCEL) || tag.equals(TEXT_MEMBER_DELETE)) {
+                int operationType = ORDER_OPERATION_TYPE_CANCEL;
+                if (tag.equals(TEXT_MEMBER_DELETE)) {
+                    operationType = ORDER_OPERATION_TYPE_DELETE;
+                }
+                final int finalOperationType = operationType;
+
+                String confirmText = "確定要取消訂單嗎?";
+                if (operationType == ORDER_OPERATION_TYPE_DELETE) {
+                    confirmText = "確定要刪除訂單嗎?";
+                }
                 new XPopup.Builder(getContext())
 //                         .dismissOnTouchOutside(false)
                         // 设置弹窗显示和隐藏的回调监听
@@ -179,11 +192,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             @Override
                             public void onDismiss() {
                             }
-                        }).asCustom(new TwConfirmPopup(_mActivity, "確定要取消訂單嗎?", null, new OnConfirmCallback() {
+                        }).asCustom(new TwConfirmPopup(_mActivity, confirmText, null, new OnConfirmCallback() {
                                 @Override
                                 public void onYes() {
                                     SLog.info("onYes");
-                                    cancelOrder();
+                                    orderOperation(finalOperationType);
                                 }
 
                                 @Override
@@ -244,11 +257,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-    private void deleteOrder() {
 
-    }
 
-    private void cancelOrder() {
+    private void orderOperation(final int operationType) {
         // 取消訂單
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
@@ -260,8 +271,17 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 "ordersId", ordersId);
 
         SLog.info("params[%s]", params);
+        String path;
 
-        Api.postUI(Api.PATH_CANCEL_ORDER, params, new UICallback() {
+        if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
+            path = Api.PATH_CANCEL_ORDER;
+        } else if (operationType == ORDER_OPERATION_TYPE_DELETE) {
+            path = Api.PATH_DELETE_ORDER;
+        } else {
+            return;
+        }
+
+        Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -277,7 +297,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, "取消訂單成功");
+                    if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
+                        ToastUtil.show(_mActivity, "取消訂單成功");
+                    } else if(operationType == ORDER_OPERATION_TYPE_DELETE) {
+                        ToastUtil.show(_mActivity, "刪除訂單成功");
+                    }
+
                     pop();
                 } catch (Exception e) {
 

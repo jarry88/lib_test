@@ -306,6 +306,12 @@ public class Api {
 
 
     /**
+     * 刪除訂單
+     */
+    public static final String PATH_DELETE_ORDER = "/member/orders/delete";
+
+
+    /**
      * 確認收貨
      */
     public static final String PATH_CONFIRM_RECEIVE= "/member/orders/receive";
