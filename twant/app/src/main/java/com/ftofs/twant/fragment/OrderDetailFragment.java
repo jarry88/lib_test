@@ -18,6 +18,7 @@ import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -73,6 +74,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     public static final int ORDER_OPERATION_TYPE_CANCEL = 1;
     public static final int ORDER_OPERATION_TYPE_DELETE = 2;
+    public static final int ORDER_OPERATION_TYPE_BUY_AGAIN = 3;
 
     public static final String TEXT_MEMBER_BUY_AGAIN = "showMemberBuyAgain";
     public static final String TEXT_MEMBER_RECEIVE = "showMemberReceive";
@@ -230,6 +232,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 }
                             }))
                         .show();
+            } else if (tag.equals(TEXT_MEMBER_BUY_AGAIN)) {
+                orderOperation(ORDER_OPERATION_TYPE_BUY_AGAIN);
             }
         } catch (Exception e) {
             return true;
@@ -260,55 +264,61 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
 
     private void orderOperation(final int operationType) {
-        // 取消訂單
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
-
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "ordersId", ordersId);
-
-        SLog.info("params[%s]", params);
-        String path;
-
-        if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
-            path = Api.PATH_CANCEL_ORDER;
-        } else if (operationType == ORDER_OPERATION_TYPE_DELETE) {
-            path = Api.PATH_DELETE_ORDER;
-        } else {
-            return;
-        }
-
-        Api.postUI(path, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
+        try {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
             }
 
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "ordersId", ordersId);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        return;
-                    }
-
-                    if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
-                        ToastUtil.show(_mActivity, "取消訂單成功");
-                    } else if(operationType == ORDER_OPERATION_TYPE_DELETE) {
-                        ToastUtil.show(_mActivity, "刪除訂單成功");
-                    }
-
-                    pop();
-                } catch (Exception e) {
+            String path;
+            if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
+                path = Api.PATH_CANCEL_ORDER;
+            } else if (operationType == ORDER_OPERATION_TYPE_DELETE) {
+                path = Api.PATH_DELETE_ORDER;
+            } else if (operationType == ORDER_OPERATION_TYPE_BUY_AGAIN) {
+                path = Api.PATH_BUY_AGAIN;
+                params.set("clientType", Constant.CLIENT_TYPE_ANDROID);
+            } else {
+                return;
+            }
+            SLog.info("params[%s]", params);
+            Api.postUI(path, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
+                            ToastUtil.show(_mActivity, "取消訂單成功");
+                        } else if(operationType == ORDER_OPERATION_TYPE_DELETE) {
+                            ToastUtil.show(_mActivity, "刪除訂單成功");
+                        } else if (operationType == ORDER_OPERATION_TYPE_BUY_AGAIN) {
+                            ToastUtil.show(_mActivity, "訂單已添加到購物車");
+                        }
+
+                        pop();
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
 
     /**

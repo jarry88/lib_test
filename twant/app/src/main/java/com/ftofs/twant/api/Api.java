@@ -318,6 +318,12 @@ public class Api {
 
 
     /**
+     * 訂單再次購買
+     */
+    public static final String PATH_BUY_AGAIN = "/member/orders/buy/again";
+
+
+    /**
      * 會員詳情
      */
     public static final String PATH_MEMBER_DETAIL = "/member/detail";
