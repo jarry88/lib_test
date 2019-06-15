@@ -31,6 +31,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.ftofs.twant.widget.StoreGiftPopup;
 import com.ftofs.twant.widget.StoreVoucherPopup;
@@ -164,6 +165,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         btnGoodsThumb = view.findViewById(R.id.btn_goods_thumb);
         btnGoodsThumb.setOnClickListener(this);
 
+        Util.setOnClickListener(view, R.id.btn_goods_share, this);
+
         btnShowVoucher = view.findViewById(R.id.btn_show_voucher);
         btnShowVoucher.setOnClickListener(this);
         tvVoucherText = view.findViewById(R.id.tv_voucher_text);
@@ -233,6 +236,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
                         .asCustom(new StoreGiftPopup(_mActivity, tabId, giftItemList, goodsConformItemList))
+                        .show();
+                break;
+            case R.id.btn_goods_share:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new SharePopup(_mActivity))
                         .show();
                 break;
             default:

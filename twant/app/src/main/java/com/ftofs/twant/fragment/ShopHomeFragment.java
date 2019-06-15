@@ -31,6 +31,7 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AmapPopup;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.MerchantIntroductionPopup;
+import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -153,6 +154,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvFavoriteCount = view.findViewById(R.id.tv_favorite_count);
         btnStoreFavorite = view.findViewById(R.id.btn_store_favorite);
         btnStoreFavorite.setOnClickListener(this);
+
+        Util.setOnClickListener(view, R.id.ll_uo_share_container, this);
 
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
         llHotItemList = view.findViewById(R.id.ll_hot_item_list);
@@ -482,6 +485,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
                         .asCustom(new MerchantIntroductionPopup(_mActivity, merchantIntroduction))
+                        .show();
+                break;
+            case R.id.ll_uo_share_container:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new SharePopup(_mActivity))
                         .show();
                 break;
             default:
