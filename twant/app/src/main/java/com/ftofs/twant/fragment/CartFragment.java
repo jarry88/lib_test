@@ -372,6 +372,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        if (mode == Constant.MODE_EDIT) {
+            switchMode();
+            return true;
+        }
+        return false;
+    }
+
     private void setCheckButtonOnClickListener(View checkButton) {
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
