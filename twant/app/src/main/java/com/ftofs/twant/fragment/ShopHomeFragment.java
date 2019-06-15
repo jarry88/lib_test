@@ -171,7 +171,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     private void loadStoreData() {
         final BasePopupView loadingPopup = new XPopup.Builder(getContext())
-                .asLoading("正在加載")
+                .asLoading(getString(R.string.text_loading))
                 .show();
 
         try {

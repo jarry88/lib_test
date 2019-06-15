@@ -166,7 +166,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             SLog.info("params[%s]", params);
 
             final BasePopupView loadingPopup = new XPopup.Builder(getContext())
-                    .asLoading("正在加載")
+                    .asLoading(getString(R.string.text_loading))
                     .show();
 
             Api.postUI(Api.PATH_STORE_ACTIVITY, params, new UICallback() {

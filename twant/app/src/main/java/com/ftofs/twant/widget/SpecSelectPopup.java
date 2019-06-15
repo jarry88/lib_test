@@ -48,7 +48,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     Context context;
     int action;
     List<Spec> specList;
-    int selectedIndex;  // 當前選中的索引
     ImageView skuImage;
     String skuImageSrc = "";  // 當前正在顯示的圖片
     Map<String, Integer> specValueIdMap;
@@ -63,7 +62,15 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     // 調整數量
     AdjustButton abQuantity;
 
-    public SpecSelectPopup(@NonNull Context context, int action, List<Spec> specList, Map<String, Integer> specValueIdMap) {
+    /**
+     *
+     * @param context
+     * @param action
+     * @param specList
+     * @param specValueIdMap 根據逗號拼接的specValueId字符串，定位出商品的goodsId的映射
+     * @param specValueIdList 傳進來的當前選中的specValueId列表，如果為null，則默認都選中第一項
+     */
+    public SpecSelectPopup(@NonNull Context context, int action, List<Spec> specList, Map<String, Integer> specValueIdMap, List<Integer> specValueIdList) {
         super(context);
 
         this.context = context;
@@ -77,7 +84,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         selSpecValueIdList = new ArrayList<>(specCount);
         selSpecButtonList = new ArrayList<>(specCount);
         for (int i = 0; i < specCount; i++) {
-            selSpecValueIdList.add(0);
+            if (specValueIdList != null && specValueIdList.size() > 0) {
+                selSpecValueIdList.add(specValueIdList.get(i));
+            } else {
+                selSpecValueIdList.add(0);
+            }
+
             selSpecButtonList.add(null);
         }
     }
@@ -127,11 +139,14 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             tvSpecName.setText(spec.specName);
 
             int index = 0;
+            int currSpecValueId = selSpecValueIdList.get(position);  // 當前選中的specValueId
             FlowLayout flSpecButtonContainer = llSpec.findViewById(R.id.fl_spec_button_container);
             for (SpecValue specValue : spec.specValueList) {
                 TextView button = new TextView(context);
                 boolean isSelected = false;
-                if (index == selectedIndex) {
+                if ((currSpecValueId != 0 && specValue.specValueId == currSpecValueId) || // 如果有傳specValueIdList的話，選中相等的
+                        (currSpecValueId == 0 && index == 0) // 如果沒有傳specValueIdList的話，默認選中第1個
+                ) {
                     button.setBackgroundResource(R.drawable.spec_item_selected_bg);
                     isSelected = true;
                 } else {
@@ -149,7 +164,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 if (isSelected) {
                     // 如果是開始的選中狀態，記錄一下
                     selSpecButtonList.set(position, button);
-                    selSpecValueIdList.set(position, specValue.specValueId);
+                    selSpecValueIdList.set(position, specValue.specValueId); // 這個也必須再次記錄一下，如果外面沒傳進來specValueIdList的話
                 }
 
                 SpecButtonData specButtonData = new SpecButtonData(position, spec.specId, specValue.specValueId, specValue.imageSrc, isSelected);

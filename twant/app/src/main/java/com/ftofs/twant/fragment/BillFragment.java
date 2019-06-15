@@ -169,7 +169,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
             SLog.info("params[%s]", params);
 
             final BasePopupView loadingPopup = new XPopup.Builder(getContext())
-                    .asLoading("正在加載")
+                    .asLoading(getString(R.string.text_loading))
                     .show();
 
             Api.postUI(Api.PATH_ORDER_LIST, params, new UICallback() {

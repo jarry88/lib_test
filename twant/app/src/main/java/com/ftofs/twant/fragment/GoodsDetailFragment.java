@@ -349,13 +349,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, specList, specValueIdMap))
+                .asCustom(new SpecSelectPopup(_mActivity, action, specList, specValueIdMap, selSpecValueIdList))
                 .show();
     }
 
     private void loadGoodsDetail(int commonId, String token) {
         final BasePopupView loadingPopup = new XPopup.Builder(getContext())
-                .asLoading("正在加載")
+                .asLoading(getString(R.string.text_loading))
                 .show();
         String path = Api.PATH_GOODS_DETAIL + "/" + commonId;
         SLog.info("path[%s]", path);

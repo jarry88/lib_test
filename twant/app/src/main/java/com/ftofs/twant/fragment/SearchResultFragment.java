@@ -239,7 +239,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         SLog.info("searchType[%s], keyword[%s]", searchType, keyword);
 
         final BasePopupView loadingPopup = new XPopup.Builder(getContext())
-                .asLoading("正在加載")
+                .asLoading(getString(R.string.text_loading))
                 .show();
 
         int searchTypeInt = searchType.ordinal();

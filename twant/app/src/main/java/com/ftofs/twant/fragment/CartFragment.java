@@ -31,6 +31,8 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CartAdjustButton;
 import com.ftofs.twant.widget.ScaledButton;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -138,6 +140,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             return;
         }
 
+        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+                .asLoading(getString(R.string.text_loading))
+                .show();
+
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "clientType", Constant.CLIENT_TYPE_ANDROID);
@@ -145,11 +151,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         Api.postUI(Api.PATH_CART_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                loadingPopup.dismiss();
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
+
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
