@@ -72,6 +72,9 @@
     <string name="input_nickname_hint_simple">請輸入暱稱</string>
     <string name="text_select_gender">性別選擇</string>
 
+    <string name="text_receive_voucher">領券</string>
+    <string name="text_promotion">促銷</string>
+
 
     <string name="mobile_zone_text">地區區號</string>
     <string name="ok">確定</string>
@@ -156,7 +159,16 @@
 
     <string name="text_voucher">優惠券</string>
     <string name="text_conform">滿減優惠</string>
+    <string name="text_conform_short">滿優惠</string>
     <string name="text_time_limited_discount">限時折扣</string>
+
+    <string name="text_conform_desc_template">單筆訂單滿$%d可享受以下優惠</string>
+    <string name="text_free_freight">包郵</string>
+    <string name="text_free_freight_desc">訂單免郵費</string>
+    <string name="text_instant_discount">立減</string>
+    <string name="text_instant_discount_desc">下單時立減%d</string>
+    <string name="text_present_voucher">送券</string>
+    <string name="text_present_voucher_desc">贈送$%d店舖券一張</string>
 
     <string name="text_pay_success">訂單支付成功</string>
     <string name="text_view_order">查看訂單</string>
@@ -285,6 +297,8 @@
     <string name="text_gift">贈品</string>
     <string name="text_discount">折扣</string>
     <string name="text_reset">重置</string>
+
+    <string name="text_conform_simplify">滿減</string>
 
     <string name="search_tab_title_goods">商品</string>
     <string name="search_tab_title_store">店鋪</string>

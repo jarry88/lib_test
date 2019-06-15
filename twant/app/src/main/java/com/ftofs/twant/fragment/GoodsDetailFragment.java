@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,8 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.GiftItem;
+import com.ftofs.twant.entity.GoodsConformItem;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.entity.SpecValue;
@@ -27,7 +30,10 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
+import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.SpecSelectPopup;
+import com.ftofs.twant.widget.StoreGiftPopup;
+import com.ftofs.twant.widget.StoreVoucherPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -36,15 +42,19 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
+
+import static android.view.View.GONE;
 
 /**
  * 商品詳情頁面
@@ -53,6 +63,8 @@ import okhttp3.Call;
 public class GoodsDetailFragment extends BaseFragment implements View.OnClickListener {
     // 商品Id
     int commonId;
+    // 當前選中的goodsId
+    int currGoodsId;
 
     // 店鋪Id
     int storeId;
@@ -87,6 +99,21 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvCurrentSpecs;
     // 當前選中的SpecValueId列表
     List<Integer> selSpecValueIdList = new ArrayList<>();
+
+    RelativeLayout btnShowVoucher;
+    TextView tvVoucherText;
+
+    RelativeLayout btnShowConform;
+    TextView tvConformText;
+
+    RelativeLayout btnShowGift;
+    TextView tvGiftText;
+
+    /**
+     * goodsId與贈品列表的映射表
+     */
+    Map<Integer, List<GiftItem>> giftMap = new HashMap<>();
+    List<GoodsConformItem> goodsConformItemList = new ArrayList<>();
 
     public static GoodsDetailFragment newInstance(int commonId) {
         Bundle args = new Bundle();
@@ -137,6 +164,18 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         btnGoodsThumb = view.findViewById(R.id.btn_goods_thumb);
         btnGoodsThumb.setOnClickListener(this);
 
+        btnShowVoucher = view.findViewById(R.id.btn_show_voucher);
+        btnShowVoucher.setOnClickListener(this);
+        tvVoucherText = view.findViewById(R.id.tv_voucher_text);
+
+        btnShowConform = view.findViewById(R.id.btn_show_conform);
+        btnShowConform.setOnClickListener(this);
+        tvConformText = view.findViewById(R.id.tv_conform_text);
+
+        btnShowGift = view.findViewById(R.id.btn_show_gift);
+        btnShowGift.setOnClickListener(this);
+        tvGiftText = view.findViewById(R.id.tv_gift_text);
+
         Util.setOnClickListener(view, R.id.btn_back_round, this);
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
         Util.setOnClickListener(view, R.id.btn_buy, this);
@@ -145,9 +184,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_bottom_bar_shop, this);
 
         String token = User.getToken();
-        if (!StringUtil.isEmpty(token)) {
-            loadGoodsDetail(commonId, token);
-        }
+        loadGoodsDetail(commonId, token);
     }
 
 
@@ -177,6 +214,26 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_bottom_bar_shop:
                 MainFragment mainFragment = MainFragment.getInstance();
                 mainFragment.start(ShopMainFragment.newInstance(storeId));
+                break;
+            case R.id.btn_show_voucher:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new StoreVoucherPopup(_mActivity, storeId))
+                        .show();
+                break;
+            case R.id.btn_show_conform:
+            case R.id.btn_show_gift:
+                int tabId = StoreGiftPopup.TAB_ID_CONFORM;
+                if (id == R.id.btn_show_gift) {
+                    tabId = StoreGiftPopup.TAB_ID_GIFT;
+                }
+                List<GiftItem> giftItemList = giftMap.get(currGoodsId);
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new StoreGiftPopup(_mActivity, tabId, giftItemList, goodsConformItemList))
+                        .show();
                 break;
             default:
                 break;
@@ -424,7 +481,100 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         Glide.with(llGoodsDetailImageContainer).load(easyJSONObject.getString("value")).into(imageView);
                         llGoodsDetailImageContainer.addView(imageView);
                     }
-                } catch (EasyJSONException e) {
+
+
+                    boolean first;
+                    // 【領券】優惠
+                    EasyJSONArray voucherList = responseObj.getArray("datas.goodsDetail.goodsDetailCouponVoList");
+                    if (voucherList.length() < 1) {
+                        btnShowVoucher.setVisibility(GONE);
+                    } else {
+                        first = true;
+                        StringBuilder voucherText = new StringBuilder();
+                        for (Object object : voucherList) {
+                            if (!first) {
+                                voucherText.append(" / ");
+                            }
+                            EasyJSONObject voucher = (EasyJSONObject) object;
+
+                            voucherText.append(String.format("滿%d減%d", voucher.getInt("limitAmount"), voucher.getInt("couponPrice")));
+                            first = false;
+                        }
+
+                        tvVoucherText.setText(voucherText);
+                    }
+
+
+                    // 【贈品】優惠
+                    first = true;
+                    EasyJSONArray goodsInfoVoList = responseObj.getArray("datas.goodsDetail.goodsInfoVoList");
+                    for (Object object : goodsInfoVoList) {
+                        EasyJSONObject goodsInfoVo = (EasyJSONObject) object;
+                        int goodsId = goodsInfoVo.getInt("goodsId");
+                        EasyJSONArray giftVoList = goodsInfoVo.getArray("giftVoList");
+
+                        List<GiftItem> giftItemList = new ArrayList<>();
+                        for (Object object2 : giftVoList) {
+                            EasyJSONObject giftVo = (EasyJSONObject) object2;
+
+                            GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, giftVo.toString());
+                            giftItemList.add(giftItem);
+                        }
+                        giftMap.put(goodsId, giftItemList);
+                        SLog.info("HERE");
+                        // 默認選中第一項sku
+                        if (first) {
+                            SLog.info("HERE");
+                            currGoodsId = goodsId;
+                            if (giftItemList.size() > 0) {
+                                SLog.info("HERE");
+                                StringBuilder giftText = new StringBuilder("買就送");
+                                for (GiftItem giftItem : giftItemList) {
+                                    giftText.append(giftItem.goodsName);
+                                    giftText.append(" ");
+                                }
+                                tvGiftText.setText(giftText);
+                            } else {
+                                btnShowGift.setVisibility(GONE);
+                            }
+                        }
+                        first = false;
+                    }
+
+
+                    // 【滿減】優惠
+                    EasyJSONArray conformList = responseObj.getArray("datas.goodsDetail.conformList");
+                    int len = conformList.length();
+                    if (len == 0) {
+                        btnShowConform.setVisibility(GONE);
+                    } else {
+                        first = true;
+                        StringBuilder conformText = new StringBuilder();
+                        for (Object object : conformList) {
+                            if (!first) {
+                                conformText.append(" / ");
+                            }
+
+                            EasyJSONObject conform = (EasyJSONObject) object;
+                            conformText.append(conform.getString("shortRule"));
+
+                            GoodsConformItem goodsConformItem = new GoodsConformItem();
+                            goodsConformItem.conformId = conform.getInt("conformId");
+                            goodsConformItem.startTime = conform.getString("startTime");
+                            goodsConformItem.endTime = conform.getString("endTime");
+                            goodsConformItem.limitAmount = conform.getInt("limitAmount");
+                            goodsConformItem.conformPrice = conform.getInt("conformPrice");
+                            goodsConformItem.isFreeFreight = conform.getInt("isFreeFreight");
+                            goodsConformItem.templateId = conform.getInt("templateId");
+                            goodsConformItem.templatePrice = conform.getInt("templatePrice");
+
+                            goodsConformItemList.add(goodsConformItem);
+                            first = false;
+                        }
+
+                        tvConformText.setText(conformText);
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                     SLog.info("Error!%s", e.getMessage());
                 }
