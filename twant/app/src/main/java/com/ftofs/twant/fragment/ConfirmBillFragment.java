@@ -621,10 +621,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-    /*
-    {"code":200,"datas":{"address":null,
-     */
-
     private ConfirmOrderSummaryItem getSummaryItem() {
         int size = confirmOrderItemList.size();
         if (size < 1) {

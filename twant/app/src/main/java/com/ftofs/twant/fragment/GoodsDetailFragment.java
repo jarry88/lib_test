@@ -486,9 +486,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     boolean first;
                     // 【領券】優惠
                     EasyJSONArray voucherList = responseObj.getArray("datas.goodsDetail.goodsDetailCouponVoList");
-                    if (voucherList.length() < 1) {
-                        btnShowVoucher.setVisibility(GONE);
-                    } else {
+                    if (voucherList.length() > 0) {
                         first = true;
                         StringBuilder voucherText = new StringBuilder();
                         for (Object object : voucherList) {
@@ -502,6 +500,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
 
                         tvVoucherText.setText(voucherText);
+                        btnShowVoucher.setVisibility(View.VISIBLE);
                     }
 
 
@@ -528,14 +527,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             currGoodsId = goodsId;
                             if (giftItemList.size() > 0) {
                                 SLog.info("HERE");
-                                StringBuilder giftText = new StringBuilder("買就送");
-                                for (GiftItem giftItem : giftItemList) {
-                                    giftText.append(giftItem.goodsName);
-                                    giftText.append(" ");
-                                }
-                                tvGiftText.setText(giftText);
-                            } else {
-                                btnShowGift.setVisibility(GONE);
+                                showGiftHint(giftItemList);
                             }
                         }
                         first = false;
@@ -544,10 +536,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     // 【滿減】優惠
                     EasyJSONArray conformList = responseObj.getArray("datas.goodsDetail.conformList");
-                    int len = conformList.length();
-                    if (len == 0) {
-                        btnShowConform.setVisibility(GONE);
-                    } else {
+                    if (conformList.length() > 0) {
                         first = true;
                         StringBuilder conformText = new StringBuilder();
                         for (Object object : conformList) {
@@ -573,6 +562,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
 
                         tvConformText.setText(conformText);
+                        btnShowConform.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -580,6 +570,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
             }
         });
+    }
+
+    private void showGiftHint(List<GiftItem> giftItemList) {
+        StringBuilder giftText = new StringBuilder("買就送");
+        for (GiftItem giftItem : giftItemList) {
+            giftText.append(giftItem.goodsName);
+            giftText.append(" ");
+        }
+        tvGiftText.setText(giftText);
+        btnShowGift.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -602,8 +602,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             SLog.info("data[%s]", message.data);
             try {
                 EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(message.data);
-                int goodsId = easyJSONObject.getInt("goodsId");
+                currGoodsId = easyJSONObject.getInt("goodsId");
                 String imageSrc = easyJSONObject.getString("imageSrc");
+
+
+                List<GiftItem> giftItemList = giftMap.get(currGoodsId);
+                if (giftItemList == null || giftItemList.size() == 0) { // 如果當前規格沒有贈品，則隱藏贈品優惠提示
+                    btnShowGift.setVisibility(GONE);
+                } else {
+                    showGiftHint(giftItemList);
+                }
 
                 selSpecValueIdList.clear();
                 for (Object object : easyJSONObject.getArray("selSpecValueIdArr")) {

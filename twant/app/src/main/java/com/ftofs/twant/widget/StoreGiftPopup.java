@@ -8,12 +8,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsConformAdapter;
 import com.ftofs.twant.adapter.GoodsGiftAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsConformItem;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
+import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
@@ -94,6 +97,15 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvList.setLayoutManager(layoutManager);
         goodsGiftAdapter = new GoodsGiftAdapter(context, R.layout.goods_gift_list_item, giftItemList);
+        goodsGiftAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                GiftItem giftItem = giftItemList.get(position);
+                dismiss();
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(GoodsDetailFragment.newInstance(giftItem.commonId));
+            }
+        });
         goodsConformAdapter = new GoodsConformAdapter(context, R.layout.goods_conform_list_item, goodsConformItemList);
         if (tabId == TAB_ID_CONFORM) {
             rvList.setAdapter(goodsConformAdapter);

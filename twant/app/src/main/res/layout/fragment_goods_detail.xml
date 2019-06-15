@@ -263,7 +263,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
-                    android:layout_marginBottom="9dp">
+                    android:layout_marginBottom="9dp"
+                    android:visibility="gone">
                     <TextView
                         android:id="@+id/text_receive_voucher"
                         android:layout_width="wrap_content"
@@ -308,7 +309,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
-                    android:layout_marginBottom="9dp">
+                    android:layout_marginBottom="9dp"
+                    android:visibility="gone">
                     <TextView
                         android:id="@+id/text_gift"
                         android:layout_width="wrap_content"
@@ -351,7 +353,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
-                    android:layout_marginBottom="9dp">
+                    android:layout_marginBottom="9dp"
+                    android:visibility="gone">
                     <TextView
                         android:id="@+id/text_conform_simplify"
                         android:layout_width="wrap_content"

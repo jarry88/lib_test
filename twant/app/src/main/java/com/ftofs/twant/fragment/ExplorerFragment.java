@@ -17,6 +17,10 @@ import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
+/**
+ * 瀏覽器Fragment
+ * @author zwm
+ */
 public class ExplorerFragment extends BaseFragment implements View.OnClickListener {
     BasePopupView loadingPopup;
     String url;
