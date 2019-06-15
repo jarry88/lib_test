@@ -45,9 +45,10 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/icon_home"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/icon__bottom_bar_home"
+                android:src="@drawable/icon__bottom_bar_home_sel"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -73,6 +74,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/icon_message"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/icon__bottom_bar_message"
@@ -128,6 +130,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/icon_cart"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/icon__bottom_bar_cart"
@@ -156,6 +159,7 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
             <ImageView
+                android:id="@+id/icon_my"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/icon__bottom_bar_my"

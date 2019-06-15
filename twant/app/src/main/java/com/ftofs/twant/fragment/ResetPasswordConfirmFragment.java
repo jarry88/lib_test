@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ftofs.twant.R;
@@ -79,8 +80,12 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
 
         SLog.info("areaCode[%s], mobile[%s], smsCodeValidTime[%d]", areaCode, mobile, smsCodeValidTime);
 
+        TextView tvSmsCodeHint = view.findViewById(R.id.tv_sms_code_hint);
+        tvSmsCodeHint.setText(String.format(getString(R.string.text_sms_code_validate_hint), mobile, smsCodeValidTime));
+
         etSmsCode = view.findViewById(R.id.et_sms_code);
         etPassword = view.findViewById(R.id.et_password);
+        etPassword.setHint(String.format(getString(R.string.input_password_hint), "-"));
         etConfirmPassword = view.findViewById(R.id.et_confirm_password);
     }
 

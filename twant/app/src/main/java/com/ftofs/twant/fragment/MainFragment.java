@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
@@ -35,12 +36,17 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public static final int CIRCLE_FRAGMENT = 2;
     /** 購物車 */
     public static final int CART_FRAGMENT = 3;
-    /** 我的 */
+    /** 專頁 */
     public static final int MY_FRAGMENT = 4;
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_message, R.id.btn_circle,
                                                     R.id.btn_cart, R.id.btn_my};
+    private ImageView[] bottomBarIcons = new ImageView[5];
+    private int[] bottomBarIconResources = new int[] {R.drawable.icon__bottom_bar_home, R.drawable.icon__bottom_bar_message, 0,
+                                                        R.drawable.icon__bottom_bar_cart, R.drawable.icon__bottom_bar_my};
+    private int[] bottomBarSelIconResources = new int[] {R.drawable.icon__bottom_bar_home_sel, R.drawable.icon__bottom_bar_message_sel, 0,
+            R.drawable.icon__bottom_bar_cart_sel, R.drawable.icon__bottom_bar_my_sel};
 
     /**
      * 當前正在顯示的Fragment的下標
@@ -81,6 +87,11 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
         }
+
+        bottomBarIcons[HOME_FRAGMENT] = view.findViewById(R.id.icon_home);
+        bottomBarIcons[MESSAGE_FRAGMENT] = view.findViewById(R.id.icon_message);
+        bottomBarIcons[CART_FRAGMENT] = view.findViewById(R.id.icon_cart);
+        bottomBarIcons[MY_FRAGMENT] = view.findViewById(R.id.icon_my);
     }
 
     @Override
@@ -147,7 +158,18 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     public void showHideFragment(int index) {
         showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
+
+        // 切換未選中圖標
+        if (selectedFragmentIndex != CIRCLE_FRAGMENT) {
+            bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarIconResources[selectedFragmentIndex]);
+        }
+
         selectedFragmentIndex = index;
+
+        // 切換選中圖標
+        if (selectedFragmentIndex != CIRCLE_FRAGMENT) {
+            bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarSelIconResources[selectedFragmentIndex]);
+        }
     }
 
     @Override
