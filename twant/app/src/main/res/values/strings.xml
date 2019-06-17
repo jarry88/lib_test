@@ -34,6 +34,7 @@
     <string name="text_refund_message">退換貨消息</string>
 
     <string name="modify_nickname_fragment_title">修改暱稱</string>
+    <string name="mall_fragment_title">商城</string>
 
     <string name="text_confidentiality">保密</string>
     <string name="text_male">男</string>
@@ -95,6 +96,12 @@
 
     <string name="login_way_password">密碼</string>
     <string name="login_way_dynamic_code">動態碼</string>
+    <string name="input_personal_introduction_hint">新增個人簡介，讓大家更了解你</string>
+    <string name="text_popularity">人氣</string>
+    <string name="text_article">文章</string>
+    <string name="text_mall">商城</string>
+    <string name="text_friend">好友</string>
+    <string name="text_interactive">互動</string>
 
     <string name="category_shop">店鋪</string>
     <string name="category_commodity">商品</string>
@@ -277,6 +284,13 @@
     <string name="text_bill_to_be_shipped">待發貨</string>
     <string name="text_bill_to_be_received">待收貨</string>
     <string name="text_bill_to_be_commented">待評價</string>
+
+    <string name="text_my_logistics">我的快遞</string>
+    <string name="text_store_coupon">店鋪券</string>
+    <string name="text_footprint">足跡</string>
+    <string name="text_address">地址</string>
+    <string name="text_bonus">積分</string>
+    <string name="text_trust_value">信賴值</string>
 
     <string name="text_address_management">地址管理</string>
     <string name="text_add">添加</string>

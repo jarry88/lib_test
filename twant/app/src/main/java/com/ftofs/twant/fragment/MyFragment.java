@@ -7,14 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.orhanobut.hawk.Hawk;
 
 
 /**
@@ -31,8 +26,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         return fragment;
     }
 
-    TextView tvMobile;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,26 +36,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        tvMobile = view.findViewById(R.id.tv_mobile);
-
-        Util.setOnClickListener(view, R.id.btn_my_bill, this);
-
-        Util.setOnClickListener(view, R.id.btn_to_be_paid, this);
-        Util.setOnClickListener(view, R.id.btn_to_be_shipped, this);
-        Util.setOnClickListener(view, R.id.btn_to_be_received, this);
-        Util.setOnClickListener(view, R.id.btn_to_be_commented, this);
-
-        Util.setOnClickListener(view, R.id.btn_register, this);
         Util.setOnClickListener(view, R.id.img_avatar, this);
         Util.setOnClickListener(view, R.id.btn_setting, this);
-        Util.setOnClickListener(view, R.id.btn_my_address, this);
 
-        Util.setOnClickListener(view, R.id.icon_return_or_exchange, this);
-
-        Util.setOnClickListener(view, R.id.btn_my_footprint, this);
-        Util.setOnClickListener(view, R.id.btn_my_bonus, this);
-        Util.setOnClickListener(view, R.id.btn_my_trust_value, this);
+        Util.setOnClickListener(view, R.id.btn_mall, this);
     }
 
     @Override
@@ -71,83 +48,14 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         MainFragment mainFragment = (MainFragment) getParentFragment();
 
         switch (id) {
-            case R.id.btn_register:
-                mainFragment.start(RegisterFragment.newInstance());
+            case R.id.btn_mall:
+                mainFragment.start(new MallFragment());
                 break;
-
-            case R.id.img_avatar:
-                // 判斷是否已經登錄，采取不同的動作
-                int userId = User.getUserId();
-                if (userId > 0) {
-                    // 已經登錄，顯示【個人信息】
-                    mainFragment.start(PersonalInfoFragment.newInstance());
-                } else {
-                    // 未登錄，顯示【登錄】頁面
-                    mainFragment.start(LoginFragment.newInstance());
-                }
-                break;
-
             case R.id.btn_setting:
                 mainFragment.start(SettingFragment.newInstance());
                 break;
-
-            case R.id.btn_my_bill:
-                mainFragment.start(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
-                break;
-
-            case R.id.btn_my_address:
-                mainFragment.start(AddrManageFragment.newInstance());
-                break;
-
-            case R.id.btn_to_be_paid:
-            case R.id.btn_to_be_shipped:
-            case R.id.btn_to_be_received:
-            case R.id.btn_to_be_commented:
-                int orderStatus;
-                if (id == R.id.btn_to_be_paid) {
-                    orderStatus = Constant.ORDER_STATUS_TO_BE_PAID;
-                } else if (id == R.id.btn_to_be_shipped) {
-                    orderStatus = Constant.ORDER_STATUS_TO_BE_SHIPPED;
-                } else if (id == R.id.btn_to_be_received) {
-                    orderStatus = Constant.ORDER_STATUS_TO_BE_RECEIVED;
-                } else {
-                    orderStatus = Constant.ORDER_STATUS_TO_BE_COMMENTED;
-                }
-                mainFragment.start(BillFragment.newInstance(orderStatus));
-                break;
-
-            case R.id.icon_return_or_exchange:
-                mainFragment.start(RefundFragment.newInstance());
-                break;
-
-            case R.id.btn_my_footprint:
-                mainFragment.start(FootprintFragment.newInstance());
-                break;
-
-            case R.id.btn_my_bonus:
-                mainFragment.start(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_BONUS));
-                break;
-
-            case R.id.btn_my_trust_value:
-                mainFragment.start(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_TRUST_VALUE));
-                break;
-
             default:
                 break;
         }
-    }
-
-    @Override
-    public void onSupportVisible() {
-        super.onSupportVisible();
-
-        // 更新手機號顯示
-        String mobileEncrypt = Hawk.get(SPField.FIELD_MOBILE_ENCRYPT, "未登錄");
-        tvMobile.setText(mobileEncrypt);
-    }
-
-    @Override
-    public void onSupportInvisible() {
-        super.onSupportInvisible();
     }
 }
