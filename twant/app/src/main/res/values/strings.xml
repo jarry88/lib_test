@@ -318,6 +318,9 @@
     <string name="text_discount">折扣</string>
     <string name="text_reset">重置</string>
 
+    <string name="text_member">會員</string>
+    <string name="text_follow_me_square">關注\n我的</string>
+
     <string name="text_conform_simplify">滿減</string>
 
     <string name="search_tab_title_goods">商品</string>

@@ -19,13 +19,14 @@ public class User {
         String token = Hawk.get(SPField.FIELD_TOKEN, "");
         String nickname = Hawk.get(SPField.FIELD_NICKNAME, "");
         int lastLoginTime = Hawk.get(SPField.FIELD_LAST_LOGIN_TIME, 0);
+        String memberName = Hawk.get(SPField.FIELD_MEMBER_NAME, "");
 
         // SLog.info("userId[%d], token[%s], nickname[%s], lastLoginTime[%d]", userId, token, nickname, lastLoginTime);
 
         int now = Time.timestamp();
 
         if (userId > 0 && !StringUtil.isEmpty(token) && !StringUtil.isEmpty(nickname) &&
-                now - lastLoginTime < Config.LOGIN_VALID_TIME) {
+                now - lastLoginTime < Config.LOGIN_VALID_TIME && !StringUtil.isEmpty(memberName)) {
             // SLog.info("用戶已登錄, token[%s]", token);
             return userId;
         }
@@ -54,5 +55,12 @@ public class User {
             return null;
         }
         return Hawk.get(SPField.FIELD_TOKEN);
+    }
+
+    public static String getMemberName() {
+        if (getUserId() == 0) {
+            return null;
+        }
+        return Hawk.get(SPField.FIELD_MEMBER_NAME);
     }
 }

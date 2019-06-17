@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="177dp"
@@ -184,6 +185,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -293,5 +295,65 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- 關注我的 -->
+    <RelativeLayout
+        android:id="@+id/rl_follow_me_avatar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_below="@id/ll_buttons_container">
+        <TextView
+            android:id="@+id/tv_follow_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_follow_me_square"
+            android:textColor="#666"
+            android:textSize="12sp"
+            />
 
+        <ImageView
+            android:id="@+id/icon_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/expand_button"
+            />
+
+        <!-- 【關注我的】頭像列表 -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_follow_me_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@id/tv_follow_me"
+            android:layout_toLeftOf="@id/icon_expand"
+            android:layout_centerVertical="true">
+        </android.support.v7.widget.RecyclerView>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@id/icon_expand"
+            android:layout_centerVertical="true"
+            android:src="@drawable/avatar_transparent_gradient"
+            />
+
+    </RelativeLayout>
+
+    <!-- 分隔條 -->
+    <View
+        android:id="@+id/vw_separator"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@id/rl_follow_me_avatar_container"
+        android:background="#EDEDED"
+        />
+
+    <!-- 貼文列表 -->
 </RelativeLayout>
