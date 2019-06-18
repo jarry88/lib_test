@@ -374,6 +374,11 @@ public class Api {
     public static final String PATH_USER_DATA = "/memberpage/index";
 
     /**
+     * 個人專頁-互動-我的點贊-店鋪
+     */
+    public static final String PATH_MY_LIKE_STORE = "/memberpage/like/store";
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

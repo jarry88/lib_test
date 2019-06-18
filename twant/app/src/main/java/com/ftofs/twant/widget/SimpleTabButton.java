@@ -70,6 +70,7 @@ public class SimpleTabButton extends RelativeLayout {
         layoutParams.addRule(CENTER_IN_PARENT, TRUE);
         addView(tvTitle, layoutParams);
 
+        // ViewGroup需要設置這個為false，invalidate()才會觸發onDraw()調用
         setWillNotDraw(false);
 
         tvTitle.post(new Runnable() {

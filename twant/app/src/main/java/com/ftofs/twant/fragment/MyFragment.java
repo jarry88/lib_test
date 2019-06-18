@@ -166,7 +166,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     }
 
                     for (int i = 0; i < 20; i++) {
-                        followMeList.add("https://www.snailpad.cn/tmp/timg.jpg");
+                        // followMeList.add("https://www.snailpad.cn/tmp/timg.jpg");
                     }
 
 
