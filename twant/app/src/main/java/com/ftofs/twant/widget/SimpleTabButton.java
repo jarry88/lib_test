@@ -52,8 +52,8 @@ public class SimpleTabButton extends RelativeLayout {
         text = array.getString(R.styleable.SimpleTabButton_stb_text);
         paddingBottomPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_padding_bottom, 0);
 
-        SLog.info("strokeWidthPx[%d],useCap[%s],horizontalPaddingPx[%d],text[%s], paddingBottom[%d]",
-                strokeWidthPx, useCap, horizontalPaddingPx, text, paddingBottomPx);
+        // SLog.info("strokeWidthPx[%d],useCap[%s],horizontalPaddingPx[%d],text[%s], paddingBottom[%d]",
+        //         strokeWidthPx, useCap, horizontalPaddingPx, text, paddingBottomPx);
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         twBlack = getResources().getColor(R.color.tw_black, null);
@@ -77,7 +77,6 @@ public class SimpleTabButton extends RelativeLayout {
             @Override
             public void run() {
                 textWidth = tvTitle.getWidth();
-                SLog.info("textWidth[%d]", textWidth);
                 invalidate();
             }
         });
@@ -87,11 +86,11 @@ public class SimpleTabButton extends RelativeLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        SLog.info("status[%d], strokeWidthPx[%d], textWidth[%d]", status, strokeWidthPx, textWidth);
+        // SLog.info("status[%d], strokeWidthPx[%d], textWidth[%d]", status, strokeWidthPx, textWidth);
         if (status == Constant.STATUS_SELECTED && strokeWidthPx > 0 && textWidth > 0) {
             int width = getWidth();
             int height = getHeight();
-            SLog.info("height[%d]", height);
+            // SLog.info("height[%d]", height);
 
             int halfWidth = width / 2;
 

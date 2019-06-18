@@ -10,15 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.MyLikeArticleAdapter;
+import com.ftofs.twant.adapter.MyLikeGoodsAdapter;
 import com.ftofs.twant.adapter.MyLikeStoreAdapter;
-import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.entity.MyLikeArticleItem;
+import com.ftofs.twant.entity.MyLikeGoodsItem;
 import com.ftofs.twant.entity.MyLikeStoreItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -38,8 +42,20 @@ import okhttp3.Call;
  */
 public class MyLikeFragment extends BaseFragment implements View.OnClickListener {
     List<MyLikeStoreItem> myLikeStoreItemList = new ArrayList<>();
+    List<MyLikeGoodsItem> myLikeGoodsItemList = new ArrayList<>();
+    List<MyLikeArticleItem> myLikeArticleItemList = new ArrayList<>();
 
+    public static final int TAB_INDEX_STORE = 0;
+    public static final int TAB_INDEX_GOODS = 1;
+    public static final int TAB_INDEX_ARTICLE = 2;
+    int currTabIndex = TAB_INDEX_STORE;
+
+    boolean storeDataLoaded = false;
     MyLikeStoreAdapter myLikeStoreAdapter;
+    boolean goodsDataLoaded = false;
+    MyLikeGoodsAdapter myLikeGoodsAdapter;
+    boolean articleDataLoaded = false;
+    MyLikeArticleAdapter myLikeArticleAdapter;
 
     RecyclerView rvMyLikeList;
 
@@ -63,12 +79,38 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SimpleTabManager simpleTabManager = new SimpleTabManager(0) {
+        Util.setOnClickListener(view, R.id.btn_back, this);
+
+        SimpleTabManager simpleTabManager = new SimpleTabManager(TAB_INDEX_STORE) {
             @Override
             public void onClick(View v) {
                 boolean isRepeat = onSelect(v);
                 if (isRepeat) {
                     return;
+                }
+
+                int id = v.getId();
+                if (id == R.id.btn_store) {
+                    currTabIndex = TAB_INDEX_STORE;
+                    if (storeDataLoaded) {
+                        rvMyLikeList.setAdapter(myLikeStoreAdapter);
+                    } else {
+                        loadMyLikeStore();
+                    }
+                } else if (id == R.id.btn_goods) {
+                    currTabIndex = TAB_INDEX_GOODS;
+                    if (goodsDataLoaded) {
+                        rvMyLikeList.setAdapter(myLikeGoodsAdapter);
+                    } else {
+                        loadMyLikeGoods();
+                    }
+                } else if (id == R.id.btn_article) {
+                    currTabIndex = TAB_INDEX_ARTICLE;
+                    if (articleDataLoaded) {
+                        rvMyLikeList.setAdapter(myLikeArticleAdapter);
+                    } else {
+                        loadMyLikeArticle();
+                    }
                 }
             }
         };
@@ -80,6 +122,9 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvMyLikeList.setLayoutManager(layoutManager);
         myLikeStoreAdapter = new MyLikeStoreAdapter(R.layout.my_like_store_item, myLikeStoreItemList);
+        myLikeGoodsAdapter = new MyLikeGoodsAdapter(R.layout.my_like_goods_item, myLikeGoodsItemList);
+        myLikeArticleAdapter = new MyLikeArticleAdapter(R.layout.my_like_article_item, myLikeArticleItemList);
+
         rvMyLikeList.setAdapter(myLikeStoreAdapter);
 
         loadMyLikeStore();
@@ -153,6 +198,10 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
 
                             myLikeStoreItemList.add(myLikeStoreItem);
                         }
+                        storeDataLoaded = true;
+                        if (currTabIndex == TAB_INDEX_STORE) {
+                            rvMyLikeList.setAdapter(myLikeStoreAdapter);
+                        }
                         myLikeStoreAdapter.setNewData(myLikeStoreItemList);
                     } catch (Exception e) {
 
@@ -161,6 +210,80 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
             });
         } catch (Exception e) {
 
+        }
+    }
+
+    private void loadMyLikeGoods() {
+        SLog.info("HERE");
+        try {
+            String memberName = User.getMemberName();
+            if (StringUtil.isEmpty(memberName)) {
+                return;
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate("memberName", memberName);
+            String token = User.getToken();
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
+
+
+            final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+                    .asLoading(getString(R.string.text_loading))
+                    .show();
+
+            Api.postUI(Api.PATH_MY_LIKE_GOODS, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    loadingPopup.dismiss();
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    loadingPopup.dismiss();
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
+                        for (Object object : goodsList) {
+                            EasyJSONObject goods = (EasyJSONObject) object;
+
+                            MyLikeGoodsItem myLikeGoodsItem = new MyLikeGoodsItem();
+                            myLikeGoodsItem.commonId = goods.getInt("commonId");
+                            myLikeGoodsItem.goodsName = goods.getString("goodsName");
+                            myLikeGoodsItem.storeId = goods.getInt("storeVo.storeId");
+                            myLikeGoodsItem.storeName = goods.getString("storeVo.storeName");
+                            myLikeGoodsItem.imageSrc = goods.getString("imageSrc");
+                            myLikeGoodsItem.jingle = goods.getString("jingle");
+                            myLikeGoodsItem.likeCount = goods.getInt("goodsLike");
+                            myLikeGoodsItem.price = Util.getGoodsPrice(goods);
+
+                            myLikeGoodsItemList.add(myLikeGoodsItem);
+                        }
+                        goodsDataLoaded = true;
+                        if (currTabIndex == TAB_INDEX_GOODS) {
+                            rvMyLikeList.setAdapter(myLikeGoodsAdapter);
+                        }
+                        myLikeStoreAdapter.setNewData(myLikeStoreItemList);
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void loadMyLikeArticle() {
+        articleDataLoaded = true;
+        if (currTabIndex == TAB_INDEX_ARTICLE) {
+            rvMyLikeList.setAdapter(myLikeArticleAdapter);
         }
     }
 }

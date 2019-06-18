@@ -23,7 +23,7 @@ public class MyLikeStoreAdapter extends BaseQuickAdapter<MyLikeStoreItem, BaseVi
     @Override
     protected void convert(BaseViewHolder helper, MyLikeStoreItem item) {
         ImageView imgStoreAvatar = helper.getView(R.id.img_store_avatar);
-        Glide.with(mContext).load(item.stroreAvatar).centerCrop().into(imgStoreAvatar);
+        Glide.with(mContext).load(item.storeAvatar).centerCrop().into(imgStoreAvatar);
 
         helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_store_address, item.storeAddress)
