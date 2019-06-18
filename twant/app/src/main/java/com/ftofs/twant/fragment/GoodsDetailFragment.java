@@ -18,6 +18,8 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsConformItem;
@@ -183,8 +185,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
         Util.setOnClickListener(view, R.id.btn_buy, this);
         Util.setOnClickListener(view, R.id.btn_select_spec, this);
+        Util.setOnClickListener(view, R.id.tv_ship_to, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_shop, this);
+
 
         String token = User.getToken();
         loadGoodsDetail(commonId, token);
@@ -207,6 +211,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_select_spec:
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
+                break;
+            case R.id.tv_ship_to:
+                startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
                 break;
             case R.id.btn_bottom_bar_follow:
                 switchFavoriteState();
@@ -660,5 +667,34 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             ++index;
         }
         return Util.formatSpecString(specPairList);
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+
+        if (data == null) {
+            return;
+        }
+        // 從哪個Fragment返回
+        String from = data.getString("from");
+        SLog.info("requestCode[%d], resultCode[%d], from[%s]", requestCode, resultCode, from);
+        if (AddrManageFragment.class.getName().equals(from) || AddAddressFragment.class.getName().equals(from)) {
+            // 從地址管理Fragment返回 或 從地址添加Fragment返回
+            boolean isNoAddress = data.getBoolean("isNoAddress", false); // 標記是否刪除了所有地址
+            if (isNoAddress) {
+                // tvShipTo.setText("");
+                return;
+            }
+
+            // 上一級Fragment返回的地址項
+            AddrItem addrItem = data.getParcelable("addrItem");
+            if (addrItem == null) {
+                // tvShipTo.setText("");
+                return;
+            }
+            SLog.info("addrItem: %s", addrItem);
+            tvShipTo.setText(addrItem.areaInfo);
+        }
     }
 }
