@@ -69,10 +69,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         Util.setOnClickListener(view, R.id.img_avatar, this);
         Util.setOnClickListener(view, R.id.btn_setting, this);
 
         Util.setOnClickListener(view, R.id.btn_mall, this);
+        Util.setOnClickListener(view, R.id.btn_interactive, this);
 
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvMemberLevel = view.findViewById(R.id.tv_member_level);
@@ -100,7 +102,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 mainFragment.start(PersonalInfoFragment.newInstance());
                 break;
             case R.id.btn_mall:
-                mainFragment.start(new MallFragment());
+                mainFragment.start(MallFragment.newInstance());
+                break;
+            case R.id.btn_interactive:
+                mainFragment.start(InteractiveFragment.newInstance());
                 break;
             case R.id.btn_setting:
                 mainFragment.start(SettingFragment.newInstance());

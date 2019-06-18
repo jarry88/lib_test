@@ -7,16 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.amap.api.maps2d.AMap;
-import com.amap.api.maps2d.CameraUpdateFactory;
-import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.model.LatLng;
-import com.amap.api.maps2d.model.MarkerOptions;
 import com.ftofs.twant.R;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.AmapPopup;
+import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 
@@ -46,6 +41,26 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_test, this);
+
+        SimpleTabManager manager = new SimpleTabManager(1) {
+            @Override
+            public void onClick(View v) {
+                boolean isRepeat = onSelect(v);
+                SLog.info("isRepeat[%s]", isRepeat);
+
+                int id = v.getId();
+                if (id == R.id.btn_my_like) {
+                    SLog.info("btn_my_like");
+                } else if (id == R.id.btn_my_follow) {
+                    SLog.info("btn_my_follow");
+                } else if (id == R.id.btn_my_comment) {
+                    SLog.info("btn_my_comment");
+                }
+            }
+        };
+        manager.add(view.findViewById(R.id.btn_my_like));
+        manager.add(view.findViewById(R.id.btn_my_follow));
+        manager.add(view.findViewById(R.id.btn_my_comment));
     }
 
     @Override

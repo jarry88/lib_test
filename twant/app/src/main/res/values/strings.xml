@@ -321,6 +321,13 @@
     <string name="text_member">會員</string>
     <string name="text_follow_me_square">關注\n我的</string>
 
+    <string name="text_my_like">我的點贊</string>
+    <string name="text_my_like_desc">我點贊過的歷史紀錄</string>
+    <string name="text_my_comment">我的評論</string>
+    <string name="text_my_comment_desc">我評論過的歷史紀錄</string>
+    <string name="text_my_follow">我的關注</string>
+    <string name="text_my_follow_desc">我關注過的相關信息</string>
+
     <string name="text_conform_simplify">滿減</string>
 
     <string name="search_tab_title_goods">商品</string>

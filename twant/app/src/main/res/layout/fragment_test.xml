@@ -12,4 +12,56 @@
         android:layout_height="wrap_content"
         android:text="test"
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/btn_my_like"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            app:stb_text="@string/text_my_like"
+            app:stb_stroke_width="3dp"
+            app:stb_horizontal_padding="10dp"
+            app:stb_use_cap="true"
+            app:stb_padding_bottom="5dp"
+            />
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/btn_my_follow"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            app:stb_text="@string/text_my_follow"
+            app:stb_stroke_width="3dp"
+            app:stb_horizontal_padding="10dp"
+            app:stb_use_cap="true"
+            app:stb_padding_bottom="5dp"
+            />
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/btn_my_comment"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            app:stb_text="@string/text_my_comment"
+            app:stb_stroke_width="3dp"
+            app:stb_horizontal_padding="10dp"
+            app:stb_use_cap="true"
+            app:stb_padding_bottom="5dp"
+            />
+    </LinearLayout>
+
+    <com.ftofs.twant.widget.SimpleTabButton
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#ffa"
+        android:paddingBottom="20dp"
+        app:stb_stroke_width="5dp"
+        app:stb_use_cap="true"
+        app:stb_text="@string/text_shop"
+        app:stb_horizontal_padding="26dp"
+        app:stb_padding_bottom="10dp">
+
+    </com.ftofs.twant.widget.SimpleTabButton>
 </LinearLayout>

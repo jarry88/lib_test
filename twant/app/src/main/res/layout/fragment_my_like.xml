@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height">
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:text="@string/text_my_like"
+            android:textColor="@color/tw_black"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:orientation="horizontal"
+        android:background="@drawable/border_type_d">
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/btn_store"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:stb_text="@string/text_shop"
+            app:stb_stroke_width="2dp"
+            app:stb_horizontal_padding="9dp"
+            app:stb_use_cap="true"
+            />
+
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/btn_goods"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:stb_text="@string/text_commodity"
+            app:stb_stroke_width="2dp"
+            app:stb_horizontal_padding="9dp"
+            app:stb_use_cap="true"
+            />
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/btn_article"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:stb_text="@string/text_article"
+            app:stb_stroke_width="2dp"
+            app:stb_horizontal_padding="9dp"
+            app:stb_use_cap="true"
+            />
+    </LinearLayout>
+
+</LinearLayout>

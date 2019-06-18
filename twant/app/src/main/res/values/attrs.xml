@@ -17,4 +17,18 @@
         <attr name="ttb_stroke_width"></attr>
         <attr name="ttb_use_cap"></attr>
     </declare-styleable>
+
+    <!-- SimpleTabButton -->
+    <attr name="stb_stroke_width" format="dimension"></attr> <!-- 下劃線的寬度 -->
+    <attr name="stb_use_cap" format="boolean"></attr>  <!-- 是否使用圓角 -->
+    <attr name="stb_horizontal_padding" format="dimension"></attr> <!-- 向兩邊文字外擴展的寬度 -->
+    <attr name="stb_text" format="string"></attr>
+    <attr name="stb_padding_bottom" format="dimension"></attr> <!-- 下劃線離容器底部的距離 -->
+    <declare-styleable name="SimpleTabButton">
+        <attr name="stb_stroke_width"></attr>
+        <attr name="stb_use_cap"></attr>
+        <attr name="stb_horizontal_padding"></attr>
+        <attr name="stb_text"></attr>
+        <attr name="stb_padding_bottom"></attr>
+    </declare-styleable>
 </resources>
