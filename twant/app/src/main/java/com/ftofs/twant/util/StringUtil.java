@@ -27,11 +27,31 @@ public class StringUtil {
         return str == null || str.length() == 0;
     }
 
-    public static String implode(String glue, String[] strArray)
-    {
+    /**
+     * 用glue將array中的元素拼接起來，T必須為Object類型的子類，例如，如果是整數，不能為int，必須為Integer
+     * @param glue
+     * @param array
+     * @param <T>
+     * @return
+     */
+    public static<T> String implode(String glue, T[] array) {
         StringBuilder sb = new StringBuilder();
-        for(int i=0;i<strArray.length;i++) {
-            sb.append((i == strArray.length - 1) ? strArray[i] : strArray[i] + glue);
+        for (int i = 0; i < array.length; i++) {
+            sb.append((i == array.length - 1) ? array[i] : array[i] + glue);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 用glue將array中的元素拼接起來
+     * @param glue
+     * @param list
+     * @return
+     */
+    public static String implode(String glue, List list) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            sb.append((i == list.size() - 1) ? list.get(i) : list.get(i) + glue);
         }
         return sb.toString();
     }

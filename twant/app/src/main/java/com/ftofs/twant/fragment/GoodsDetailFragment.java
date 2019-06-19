@@ -438,7 +438,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, specList, specValueIdMap, selSpecValueIdList))
+                .asCustom(new SpecSelectPopup(_mActivity, action, specList, specValueIdMap, selSpecValueIdList, goodsInfoMap))
                 .show();
     }
 
@@ -634,6 +634,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.goodsPrice0 = (float) goodsInfoVo.getDouble("goodsPrice0");
                         goodsInfo.price = Util.getGoodsPrice(goodsInfoVo);
                         goodsInfo.imageSrc = goodsInfoVo.getString("imageSrc");
+                        goodsInfo.goodsStorage = goodsInfoVo.getInt("goodsStorage");
+                        goodsInfo.unitName = goodsInfoVo.getString("unitName");
 
                         goodsInfoMap.put(goodsId, goodsInfo);
 
@@ -713,7 +715,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             try {
                 EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(message.data);
                 int goodsId = easyJSONObject.getInt("goodsId");
-                String imageSrc = easyJSONObject.getString("imageSrc");
                 selectSku(goodsId);
             } catch (Exception e) {
 

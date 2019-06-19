@@ -16,6 +16,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
@@ -49,8 +50,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     int action;
     List<Spec> specList;
     ImageView skuImage;
-    String skuImageSrc = "";  // 當前正在顯示的圖片
+    TextView tvPrice;
+    TextView tvGoodsStorage;
+
     Map<String, Integer> specValueIdMap;
+    Map<Integer, GoodsInfo> goodsInfoMap;
 
     // 規格的數量
     int specCount;
@@ -63,6 +67,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     AdjustButton abQuantity;
 
     /**
+     * 當前選中的goodsId
+     */
+    int currGoodsId;
+
+    /**
      *
      * @param context
      * @param action
@@ -70,13 +79,16 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * @param specValueIdMap 根據逗號拼接的specValueId字符串，定位出商品的goodsId的映射
      * @param specValueIdList 傳進來的當前選中的specValueId列表，如果為null，則默認都選中第一項
      */
-    public SpecSelectPopup(@NonNull Context context, int action, List<Spec> specList, Map<String, Integer> specValueIdMap, List<Integer> specValueIdList) {
+    public SpecSelectPopup(@NonNull Context context, int action, List<Spec> specList,
+                           Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
+                           Map<Integer, GoodsInfo> goodsInfoMap) {
         super(context);
 
         this.context = context;
         this.action = action;
         this.specList = specList;
         this.specValueIdMap = specValueIdMap;
+        this.goodsInfoMap = goodsInfoMap;
 
         // 規格的數量
         specCount = specList.size();
@@ -111,6 +123,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         findViewById(R.id.btn_ok).setOnClickListener(this);
 
         skuImage = findViewById(R.id.sku_image);
+        tvPrice = findViewById(R.id.tv_price);
+        tvGoodsStorage = findViewById(R.id.tv_goods_storage);
+
         abQuantity = findViewById(R.id.ab_quantity);
         abQuantity.setValue(1);
         abQuantity.setMinValue(1);
@@ -118,15 +133,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         SLog.info("specList.size[%d]", specList.size());
         if (specList.size() < 1) {
             return;
-        }
-
-        // 找到第1個規格的照片
-        Spec firstSpec = specList.get(0);
-        String firstImageSrc = firstSpec.specValueList.get(0).imageSrc;
-        SLog.info("firstImageSrc[%s]", firstImageSrc);
-        if (!StringUtil.isEmpty(firstImageSrc)) {
-            skuImageSrc = firstImageSrc;
-            Glide.with(this).load(firstImageSrc).centerCrop().into(skuImage);
         }
 
 
@@ -190,13 +196,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                         // 將前一個選中的按鈕的邊框變灰，當前選中的變為高亮色
                         prevButton.setBackgroundResource(R.drawable.spec_item_unselected_bg);
                         currButton.setBackgroundResource(R.drawable.spec_item_selected_bg);
-                        if (!StringUtil.isEmpty(currData.imageSrc)) {
-                            Glide.with(SpecSelectPopup.this).load(currData.imageSrc).centerCrop().into(skuImage);
-                            skuImageSrc = currData.imageSrc;
-                        }
 
                         selSpecValueIdList.set(currData.position, currData.specValueId);
                         selSpecButtonList.set(currData.position, currButton);
+
+                        updateCurrGoodsId();
                     }
                 });
 
@@ -206,6 +210,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             llSpecContainer.addView(llSpec);
             ++position;
         }
+        updateCurrGoodsId();
 
         // 如果是選擇規格，則隱藏數量調整按鈕
         if (action == Constant.ACTION_SELECT_SPEC) {
@@ -297,10 +302,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         // 當前選中的goodsId
         int goodsId = getSelectedGoodsId();
         EasyJSONObject easyJSONObject = EasyJSONObject.generate(
-                "goodsId", goodsId,
-                "imageSrc", skuImageSrc,
-                "selSpecValueIdArr", EasyJSONArray.from(getSelectedSpecValueIdList())
-        );
+                "goodsId", goodsId);
 
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SELECT_SPECS, easyJSONObject.toString());
     }
@@ -343,6 +345,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         return goodsId;
     }
 
+    /**
+     * 克隆一份當前選中的規格Id列表
+     * @return
+     */
     private List<Integer> getSelectedSpecValueIdList() {
         List<Integer> idList = new ArrayList<>();
         for (Integer specValueId : selSpecValueIdList) {
@@ -350,5 +356,42 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         }
 
         return idList;
+    }
+
+    private String getSelectedSpecValueIdStr() {
+        return StringUtil.implode(",", selSpecValueIdList);
+    }
+
+    /**
+     * 更新當前選中的GoodsId
+     */
+    private void updateCurrGoodsId() {
+        String selectedSpecValueIdStr = getSelectedSpecValueIdStr();
+        SLog.info("selectedSpecValueIdStr[%s]", selectedSpecValueIdStr);
+        Integer goodsId = specValueIdMap.get(selectedSpecValueIdStr);
+        SLog.info("goodsId[%s]", goodsId);
+        if (goodsId == null) {
+            SLog.info("Error!找不到商品Id:" + selectedSpecValueIdStr);
+            ToastUtil.show(context, "Error!找不到商品Id:" + selectedSpecValueIdStr);
+            return;
+        }
+
+        currGoodsId = goodsId;
+
+        // 更新圖片的顯示
+        GoodsInfo goodsInfo = goodsInfoMap.get(goodsId);
+        if (goodsInfo == null) {
+            SLog.info("Error!找不到goodsId:" + goodsId);
+            ToastUtil.show(context, "Error!找不到goodsId:" + goodsId);
+            return;
+        }
+
+        String imageSrc = goodsInfo.imageSrc;
+        if (!StringUtil.isEmpty(imageSrc)) {
+            Glide.with(context).load(imageSrc).centerCrop().into(skuImage);
+        }
+
+        tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
+        tvGoodsStorage.setText("( 庫存: " + goodsInfo.goodsStorage + goodsInfo.unitName + " )");
     }
 }
