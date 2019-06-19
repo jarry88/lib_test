@@ -9,12 +9,14 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.User;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
 
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -42,8 +44,8 @@ public class TwantApplication extends Application {
         CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
 
         // 添加全局異常處理
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplicationContext());
+        // CrashHandler crashHandler = CrashHandler.getInstance();
+        // crashHandler.init(getApplicationContext());
 
         // 在開發過程中，啟用 StrictMode
         if (Config.DEVELOPER_MODE) {
@@ -107,6 +109,10 @@ public class TwantApplication extends Application {
             // 如果用戶已經登錄，則啟用用戶的數據庫
             SqliteUtil.switchUserDB(userId);
         }
+
+        // 設置時間處理工具的時區
+        TimeZone tz = TimeZone.getDefault();
+        DateTimeUtils.setTimeZone(tz.getID());
     }
 
 

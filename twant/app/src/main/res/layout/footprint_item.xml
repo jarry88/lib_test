@@ -118,6 +118,8 @@
                 android:id="@+id/tv_goods_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:textColor="@color/tw_black"
                 android:textSize="16sp"
                 android:text="Yueaeow香薰精油香氛淡薰香家用室"

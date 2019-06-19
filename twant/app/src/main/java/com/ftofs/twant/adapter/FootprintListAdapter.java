@@ -45,7 +45,7 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
     @Override
     protected void convert(BaseViewHolder helper, Footprint item) {
         int position = helper.getAdapterPosition();
-        SLog.info("position[%d]", position);
+        // SLog.info("position[%d]", position);
         List<Footprint> footprintList = getData();
         if (position > 0) {
             // 查看前一項，日期或店鋪是否相同

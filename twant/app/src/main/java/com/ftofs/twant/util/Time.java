@@ -1,5 +1,7 @@
 package com.ftofs.twant.util;
 
+import com.ftofs.twant.entity.TimeInfo;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -89,5 +91,28 @@ public class Time {
      */
     public static long timestampMillis() {
         return System.currentTimeMillis();
+    }
+
+    /**
+     * 計算兩個時間戳之差(開始時間不能晚于結束時間)
+     * @param from 開始時間
+     * @param to 結束時間
+     * @return
+     */
+    public static TimeInfo diff(int from, int to) {
+        if (from > to) {
+            return null;
+        }
+
+        int d = to - from;
+        TimeInfo timeInfo = new TimeInfo();
+        timeInfo.day = d / 86400;
+        d = d % 86400;
+        timeInfo.hour = d / 3600;
+        d = d % 3600;
+        timeInfo.minute = d / 60;
+        timeInfo.second = d % 60;
+
+        return timeInfo;
     }
 }

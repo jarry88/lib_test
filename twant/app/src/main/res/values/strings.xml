@@ -35,6 +35,7 @@
 
     <string name="modify_nickname_fragment_title">修改暱稱</string>
     <string name="mall_fragment_title">商城</string>
+    <string name="text_time_limited_offer">限時優惠</string>
 
     <string name="text_confidentiality">保密</string>
     <string name="text_male">男</string>

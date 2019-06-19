@@ -8,6 +8,9 @@ import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.Mobile;
 import com.ftofs.twant.log.SLog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 字符串工具類
  * @author zwm
@@ -138,5 +141,20 @@ public class StringUtil {
         }
 
         return strVal.substring(0, index);
+    }
+
+    /**
+     * 將規格Id字符串轉為List， 例如 "16,242,35" 轉為 [16, 242, 35]
+     * @param specValueIds
+     * @return
+     */
+    public static List<Integer> specValueIdsToList(String specValueIds) {
+        List<Integer> result = new ArrayList<>();
+        String[] specValueIdArr = specValueIds.split(",");
+        for (int i = 0; i < specValueIdArr.length; i++) {
+            result.add(Integer.parseInt(specValueIdArr[i]));
+        }
+
+        return result;
     }
 }

@@ -1,6 +1,9 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -23,11 +26,14 @@ import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsConformItem;
+import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.entity.SpecValue;
+import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -37,6 +43,8 @@ import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.ftofs.twant.widget.StoreGiftPopup;
 import com.ftofs.twant.widget.StoreVoucherPopup;
+import com.github.thunder413.datetimeutils.DateTimeUnits;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -45,11 +53,15 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
@@ -58,6 +70,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * 商品詳情頁面
@@ -72,8 +85,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     // 店鋪Id
     int storeId;
 
+    /**
+     * 限時折扣倒計時是否正在倒數
+     */
+    boolean isCountingDown;
+    int discountEndTime;
+    Timer timer;
+
     ImageView goodsImage;
     TextView tvGoodsPrice;
+    TextView tvGoodsPriceFinal;
+    TextView tvGoodsPriceOriginal;
     TextView tvGoodsName;
     TextView tvGoodsJingle;
 
@@ -112,11 +134,43 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     RelativeLayout btnShowGift;
     TextView tvGiftText;
 
+    TextView tvCountDownDay;
+    TextView tvCountDownHour;
+    TextView tvCountDownMinute;
+    TextView tvCountDownSecond;
+
+    RelativeLayout rlDiscountInfoContainer;
+    RelativeLayout rlPriceTag;
+
     /**
      * goodsId與贈品列表的映射表
      */
     Map<Integer, List<GiftItem>> giftMap = new HashMap<>();
     List<GoodsConformItem> goodsConformItemList = new ArrayList<>();
+    Map<Integer, GoodsInfo> goodsInfoMap = new HashMap<>();
+
+    static class CountDownHandler extends Handler {
+        WeakReference<GoodsDetailFragment> weakReference;
+
+        public CountDownHandler(GoodsDetailFragment goodsDetailFragment) {
+            weakReference = new WeakReference<>(goodsDetailFragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            TimeInfo timeInfo = (TimeInfo) msg.obj;
+            GoodsDetailFragment goodsDetailFragment = weakReference.get();
+            goodsDetailFragment.tvCountDownDay.setText("距結束 " + timeInfo.day + " 天");
+            goodsDetailFragment.tvCountDownHour.setText(String.format("%02d", timeInfo.hour));
+            goodsDetailFragment.tvCountDownMinute.setText(String.format("%02d", timeInfo.minute));
+            goodsDetailFragment.tvCountDownSecond.setText(String.format("%02d", timeInfo.second));
+        }
+    }
+
+
+    CountDownHandler countDownHandler;
 
     public static GoodsDetailFragment newInstance(int commonId) {
         Bundle args = new Bundle();
@@ -138,7 +192,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        SLog.info("onViewCreated");
+        countDownHandler = new CountDownHandler(this);
         EventBus.getDefault().register(this);
 
         Bundle args = getArguments();
@@ -149,6 +204,21 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
         tvGoodsName = view.findViewById(R.id.tv_goods_name);
         tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
+
+        rlDiscountInfoContainer = view.findViewById(R.id.rl_discount_info_container);
+        rlPriceTag = view.findViewById(R.id.rl_price_tag);
+
+        tvGoodsPriceOriginal = view.findViewById(R.id.tv_goods_price_original);
+        // 原價顯示刪除線
+        tvGoodsPriceOriginal.setPaintFlags(tvGoodsPriceOriginal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+
+        tvGoodsPriceFinal = view.findViewById(R.id.tv_goods_price_final);
+
+        tvCountDownDay = view.findViewById(R.id.tv_count_down_day);
+        tvCountDownHour = view.findViewById(R.id.tv_count_down_hour);
+        tvCountDownMinute = view.findViewById(R.id.tv_count_down_minute);
+        tvCountDownSecond = view.findViewById(R.id.tv_count_down_second);
 
         tvFreightAmount = view.findViewById(R.id.tv_freight_amount);
 
@@ -180,6 +250,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         btnShowGift = view.findViewById(R.id.btn_show_gift);
         btnShowGift.setOnClickListener(this);
         tvGiftText = view.findViewById(R.id.tv_gift_text);
+
+
 
         Util.setOnClickListener(view, R.id.btn_back_round, this);
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
@@ -370,7 +442,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 .show();
     }
 
-    private void loadGoodsDetail(int commonId, String token) {
+    private void loadGoodsDetail(final int commonId, String token) {
         final BasePopupView loadingPopup = new XPopup.Builder(getContext())
                 .asLoading(getString(R.string.text_loading))
                 .show();
@@ -517,14 +589,26 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
 
                         tvVoucherText.setText(voucherText);
-                        btnShowVoucher.setVisibility(View.VISIBLE);
+                        btnShowVoucher.setVisibility(VISIBLE);
                     }
 
+                    // 限時折扣
+                    EasyJSONObject discount = goodsDetail.getObject("discount");
+                    if (discount != null) {
+                        // 表明有限時折扣活動
+                        String endTime = discount.getString("endTime");
+                        SLog.info("endTime[%s]", endTime);
+                        Date date = DateTimeUtils.formatDate(endTime);
+                        discountEndTime = (int) (date.getTime() / 1000);
+                        SLog.info("discountEndTime[%d]", discountEndTime);
+                    }
 
                     // 【贈品】優惠
                     first = true;
                     EasyJSONArray goodsInfoVoList = responseObj.getArray("datas.goodsDetail.goodsInfoVoList");
                     for (Object object : goodsInfoVoList) {
+                        GoodsInfo goodsInfo = new GoodsInfo();
+
                         EasyJSONObject goodsInfoVo = (EasyJSONObject) object;
                         int goodsId = goodsInfoVo.getInt("goodsId");
                         EasyJSONArray giftVoList = goodsInfoVo.getArray("giftVoList");
@@ -537,18 +621,26 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             giftItemList.add(giftItem);
                         }
                         giftMap.put(goodsId, giftItemList);
-                        SLog.info("HERE");
                         // 默認選中第一項sku
                         if (first) {
-                            SLog.info("HERE");
                             currGoodsId = goodsId;
-                            if (giftItemList.size() > 0) {
-                                SLog.info("HERE");
-                                showGiftHint(giftItemList);
-                            }
+                            SLog.info("默認選中第一項sku, goodsId[%d]", goodsId);
                         }
+
+                        goodsInfo.goodsId = goodsId;
+                        goodsInfo.commonId = commonId;
+                        goodsInfo.goodsFullSpecs = goodsInfoVo.getString("goodsFullSpecs");
+                        goodsInfo.specValueIds = goodsInfoVo.getString("specValueIds");
+                        goodsInfo.goodsPrice0 = (float) goodsInfoVo.getDouble("goodsPrice0");
+                        goodsInfo.price = Util.getGoodsPrice(goodsInfoVo);
+                        goodsInfo.imageSrc = goodsInfoVo.getString("imageSrc");
+
+                        goodsInfoMap.put(goodsId, goodsInfo);
+
                         first = false;
                     }
+                    // 初始化默認選擇
+                    selectSku(currGoodsId);
 
 
                     // 【滿減】優惠
@@ -579,7 +671,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
 
                         tvConformText.setText(conformText);
-                        btnShowConform.setVisibility(View.VISIBLE);
+                        btnShowConform.setVisibility(VISIBLE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -596,12 +688,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             giftText.append(" ");
         }
         tvGiftText.setText(giftText);
-        btnShowGift.setVisibility(View.VISIBLE);
+        btnShowGift.setVisibility(VISIBLE);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        SLog.info("onDestroyView");
         EventBus.getDefault().unregister(this);
     }
 
@@ -619,27 +712,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             SLog.info("data[%s]", message.data);
             try {
                 EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(message.data);
-                currGoodsId = easyJSONObject.getInt("goodsId");
+                int goodsId = easyJSONObject.getInt("goodsId");
                 String imageSrc = easyJSONObject.getString("imageSrc");
-
-
-                List<GiftItem> giftItemList = giftMap.get(currGoodsId);
-                if (giftItemList == null || giftItemList.size() == 0) { // 如果當前規格沒有贈品，則隱藏贈品優惠提示
-                    btnShowGift.setVisibility(GONE);
-                } else {
-                    showGiftHint(giftItemList);
-                }
-
-                selSpecValueIdList.clear();
-                for (Object object : easyJSONObject.getArray("selSpecValueIdArr")) {
-                    selSpecValueIdList.add((Integer) object);
-                }
-
-                String fullSpecs = getFullSpecs();
-                tvCurrentSpecs.setText(fullSpecs);
-                if (!StringUtil.isEmpty(imageSrc)) {
-                    Glide.with(_mActivity).load(imageSrc).centerCrop().into(goodsImage);
-                }
+                selectSku(goodsId);
             } catch (Exception e) {
 
             }
@@ -695,6 +770,119 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             }
             SLog.info("addrItem: %s", addrItem);
             tvShipTo.setText(addrItem.areaInfo);
+        }
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        if (discountEndTime > 0) {
+            startCountDown();
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        SLog.info("onSupportInvisible");
+        stopCountDown();
+    }
+
+    private void startCountDown() {
+        if (timer == null) {
+            timer = new Timer();
+        }
+
+        if (isCountingDown) {
+            return;
+        }
+        // 定时服务
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                long threadId = Thread.currentThread().getId();
+                // SLog.info("threadId[%d]", threadId);
+
+                TimeInfo timeInfo = Time.diff((int) (System.currentTimeMillis() / 1000), discountEndTime);
+                if (timeInfo == null) {
+                    return;
+                }
+
+
+                Message message = new Message();
+                message.obj = timeInfo;
+
+                if (countDownHandler != null) {
+                    countDownHandler.sendMessage(message);
+                }
+            }
+        }, 500, 1000);  // 0.5秒后启动，每隔1秒运行一次
+    }
+
+    private void stopCountDown() {
+        isCountingDown = false;
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    /**
+     * 選擇當前Sku
+     * @param goodsId
+     */
+    private void selectSku(int goodsId) {
+        currGoodsId = goodsId;
+
+        GoodsInfo goodsInfo = goodsInfoMap.get(goodsId);
+        if (goodsInfo == null) {
+            return;
+        }
+
+        List<GiftItem> giftItemList = giftMap.get(currGoodsId);
+        if (giftItemList == null || giftItemList.size() == 0) { // 如果當前規格沒有贈品，則隱藏贈品優惠提示
+            btnShowGift.setVisibility(GONE);
+        } else {
+            showGiftHint(giftItemList);
+        }
+
+        selSpecValueIdList = StringUtil.specValueIdsToList(goodsInfo.specValueIds);
+
+        String fullSpecs = goodsInfo.goodsFullSpecs;
+        tvCurrentSpecs.setText(fullSpecs);
+
+        String imageSrc = goodsInfo.imageSrc;
+        if (!StringUtil.isEmpty(imageSrc)) {
+            Glide.with(_mActivity).load(imageSrc).centerCrop().into(goodsImage);
+        }
+
+        if (discountEndTime > 0 &&
+                Math.abs(goodsInfo.goodsPrice0 - goodsInfo.price) > Constant.STORE_DISTANCE_THRESHOLD) {  // 原價與最終價格有差值才算是折扣活動
+            showPriceTag(false);
+
+            tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+            tvGoodsPriceOriginal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
+        } else {
+            showPriceTag(true);
+
+            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+        }
+    }
+
+    /**
+     * 是顯示價格標簽還是顯示折扣活動信息
+     * @param show
+     */
+    private void showPriceTag(boolean show) {
+        if (show) {
+            rlPriceTag.setVisibility(VISIBLE);
+            rlDiscountInfoContainer.setVisibility(GONE);
+            stopCountDown();
+        } else {
+            rlPriceTag.setVisibility(GONE);
+            rlDiscountInfoContainer.setVisibility(VISIBLE);
+            startCountDown();
         }
     }
 }

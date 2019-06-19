@@ -85,6 +85,8 @@ dependencies {
     // 店鋪首頁公告垂直跑馬燈
     implementation 'com.github.zrunker:ZTextView:v1.0.2'
 
+    implementation 'com.github.thunder413:DateTimeUtils:3.0'
+
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
