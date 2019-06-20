@@ -35,6 +35,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     // 店鋪名稱
     String shopName = "";
 
+    public static final int FRAGMENT_COUNT = 5;
+
     /** 首頁 */
     public static final int HOME_FRAGMENT = 0;
     /** 商品 */
@@ -49,6 +51,13 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private SupportFragment[] mFragments = new SupportFragment[5];
     private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_commodity, R.id.btn_category,
             R.id.btn_activity, R.id.btn_customer_service};
+    private int[] bottomBarIconIds = new int[] {0, R.id.icon_shop_bottom_bar_commodity, R.id.icon_shop_bottom_bar_category,
+            R.id.icon_shop_bottom_bar_activity, R.id.icon_shop_bottom_bar_customer_service};
+    private ImageView[] bottomBarIcons = new ImageView[5];
+    private int[] bottomBarIconResources = new int[] {0, R.drawable.icon_shop_bottom_bar_commodity, R.drawable.icon_shop_bottom_bar_category,
+            R.drawable.icon_shop_bottom_bar_activity, R.drawable.icon_shop_bottom_bar_customer_service};
+    private int[] bottomBarSelIconResources = new int[] {0, R.drawable.icon_shop_bottom_bar_commodity_sel, R.drawable.icon_shop_bottom_bar_category_sel,
+            R.drawable.icon_shop_bottom_bar_activity_sel, R.drawable.icon_shop_bottom_bar_customer_service_sel};
 
     /**
      * 當前正在顯示的Fragment的下標
@@ -85,6 +94,14 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
         }
+
+        for (int i = 0; i < FRAGMENT_COUNT; i++) {
+            if (i == HOME_FRAGMENT) {
+                continue;
+            }
+            bottomBarIcons[i] = view.findViewById(bottomBarIconIds[i]);
+        }
+
 
         Util.setOnClickListener(view, R.id.btn_menu, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -151,6 +168,18 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     // 已經是當前Fragment，返回
                     return;
                 }
+
+                // 切換底部工具欄圖標的選中狀態
+                if (selectedFragmentIndex != HOME_FRAGMENT) {
+                    ImageView imgIcon = bottomBarIcons[selectedFragmentIndex];
+                    imgIcon.setImageResource(bottomBarIconResources[selectedFragmentIndex]);
+                }
+
+                if (index != HOME_FRAGMENT) {
+                    ImageView imgIcon = bottomBarIcons[index];
+                    imgIcon.setImageResource(bottomBarSelIconResources[index]);
+                }
+
                 showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
                 selectedFragmentIndex = index;
             }
