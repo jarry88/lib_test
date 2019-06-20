@@ -110,7 +110,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         break;
                     case "keyword":
                         // 关键字
-                        // String keyword = "233";
                         String keyword = webSliderItem.linkValue;
                         mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(),
                                 EasyJSONObject.generate("keyword", keyword).toString()));
@@ -186,19 +185,67 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     public static class BannerViewHolder implements MZViewHolder<File> {
         private ImageView mImageView;
+
+        public static final int GOODS_IMAGE_COUNT = 3;
+        ImageView imgDesktop;
+        ImageView[] goodsImageArr = new ImageView[GOODS_IMAGE_COUNT];
+
+        List<WebSliderItem> webSliderItemList;
+
+        public BannerViewHolder(List<WebSliderItem> webSliderItemList) {
+            this.webSliderItemList = webSliderItemList;
+        }
+
+        public void setGoodsImageVisibility(int visibility) {
+            for (int i = 0; i < GOODS_IMAGE_COUNT; ++i) {
+                goodsImageArr[i].setVisibility(visibility);
+            }
+        }
+
         @Override
         public View createView(Context context) {
             // 返回页面布局
             View view = LayoutInflater.from(context).inflate(R.layout.carousel_banner_item,null);
             mImageView = view.findViewById(R.id.img_banner);
+
+            imgDesktop = view.findViewById(R.id.img_goods_desktop);
+            goodsImageArr[0] = view.findViewById(R.id.goods_image1);
+            goodsImageArr[1] = view.findViewById(R.id.goods_image2);
+            goodsImageArr[2] = view.findViewById(R.id.goods_image3);
             return view;
         }
 
         @Override
         public void onBind(Context context, int position, File file) {
-            // 数据绑定
-            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-            mImageView.setImageBitmap(bitmap);
+            try {
+                // 数据绑定
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                mImageView.setImageBitmap(bitmap);
+
+                WebSliderItem webSliderItem = webSliderItemList.get(position);
+
+                if (webSliderItem.linkType.equals("store")) {
+                    imgDesktop.setVisibility(View.VISIBLE);
+                    setGoodsImageVisibility(View.VISIBLE);
+
+                    String goodsIds = webSliderItem.goodsIds;
+                    String goodsCommons = webSliderItem.goodsCommons;
+                    EasyJSONArray goodsArray = (EasyJSONArray) EasyJSONArray.parse(goodsCommons);
+
+                    int i = 0;
+                    for (Object object : goodsArray) {
+                        EasyJSONObject goods = (EasyJSONObject) object;
+                        String goodsImage = Config.OSS_BASE_URL + "/" + goods.getString("goodsImage");
+                        Glide.with(context).load(goodsImage).centerCrop().into(goodsImageArr[i]);
+                        ++i;
+                    }
+                } else {
+                    imgDesktop.setVisibility(View.GONE);
+                    setGoodsImageVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+
+            }
         }
     }
 
@@ -216,7 +263,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 bannerView.setPages(carouselList, new MZHolderCreator<BannerViewHolder>() {
                     @Override
                     public BannerViewHolder createViewHolder() {
-                        return new BannerViewHolder();
+                        return new BannerViewHolder(webSliderItemList);
                     }
                 });
             }

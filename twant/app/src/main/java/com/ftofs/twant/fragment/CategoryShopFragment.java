@@ -150,7 +150,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
                         categoryShopListMap.put(categoryId, categoryShopList);
                     }
 
-                    CategoryMenuAdapter adapter = new CategoryMenuAdapter(_mActivity, Constant.CATEGORY_TYPE_COMMODITY, categoryMenuList, CategoryShopFragment.this);
+                    CategoryMenuAdapter adapter = new CategoryMenuAdapter(_mActivity, Constant.CATEGORY_TYPE_SHOP, categoryMenuList, CategoryShopFragment.this);
                     rvCategoryMenu.setAdapter(adapter);
 
                     loadCategoryShopData(defaultCategoryId);

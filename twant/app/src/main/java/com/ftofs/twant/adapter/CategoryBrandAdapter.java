@@ -19,6 +19,7 @@ import com.ftofs.twant.entity.CategoryBrand;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
@@ -68,6 +69,13 @@ public class CategoryBrandAdapter extends BaseQuickAdapter<CategoryBrand, BaseVi
 
             helper.setText(R.id.tv_brand_name_chinese_right, categoryBrand.brandNameChinese);
             helper.setText(R.id.tv_brand_name_english_right, categoryBrand.brandNameEnglish);
+        }
+
+        int itemCount = getItemCount();
+        if (position == itemCount - 1) {
+            // 最后一項，設置大一點的bottomMargin
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
+            layoutParams.bottomMargin = Util.dip2px(context, 50);
         }
     }
 }

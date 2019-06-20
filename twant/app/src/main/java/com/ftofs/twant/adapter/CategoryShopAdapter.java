@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +18,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
@@ -48,5 +50,13 @@ public class CategoryShopAdapter extends BaseQuickAdapter<CategoryShop, BaseView
 
         String commodityCountStr = String.format("%s %d", commodityText, categoryShop.commodityCount);
         helper.setText(R.id.tv_commodity_count, commodityCountStr);
+
+        int itemCount = getItemCount();
+        int position = helper.getAdapterPosition();
+        if (position == itemCount - 1) {
+            // 最后一項，設置大一點的bottomMargin
+            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
+            layoutParams.bottomMargin = Util.dip2px(context, 50);
+        }
     }
 }
