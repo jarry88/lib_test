@@ -64,4 +64,11 @@
         app:stb_padding_bottom="10dp">
 
     </com.ftofs.twant.widget.SimpleTabButton>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="以微信的小视频为例，我们录制一个540p的mp4文件，对于来说，大体上是遵循这么一个流程以微信的小视频为例，我们录制一个540p的mp4文件，对于来说，大体上是遵循这么一个流程"
+        android:maxLines="2"
+        android:ellipsize="end"
+        />
 </LinearLayout>

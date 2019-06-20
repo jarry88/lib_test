@@ -60,6 +60,7 @@ public class SimpleTabButton extends RelativeLayout {
         twRed = getResources().getColor(R.color.tw_red, null);
 
         tvTitle = new TextView(context);
+        tvTitle.setTextColor(twBlack);
 
         if (!StringUtil.isEmpty(text)) {
             tvTitle.setText(text);

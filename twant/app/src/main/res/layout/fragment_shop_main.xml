@@ -104,6 +104,7 @@
                 android:id="@+id/img_bottom_bar_shop_avatar"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
+                android:background="@drawable/bottom_bar_shop_avatar_bg"
                 />
             <TextView
                 android:layout_width="wrap_content"

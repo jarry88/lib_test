@@ -29,12 +29,11 @@
             android:layout_gravity="center_vertical"
             android:paddingLeft="7dp"
             android:gravity="center_vertical"
-            android:text="2019-01-07"
+            android:text=""
             android:textSize="14sp"
             android:textColor="@color/tw_black"
             />
     </LinearLayout>
-
 
     <!-- 店名 -->
     <LinearLayout
@@ -71,7 +70,7 @@
             android:layout_marginLeft="5dp"
             android:textSize="14sp"
             android:textColor="@color/tw_black"
-            android:text="Yueaeow香薰"
+            android:text=""
             />
         <ImageView
             android:layout_width="wrap_content"
@@ -107,7 +106,6 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginLeft="7dp"
-            android:src="@drawable/cs_avatar_160"
             />
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,16 +120,18 @@
                 android:ellipsize="end"
                 android:textColor="@color/tw_black"
                 android:textSize="16sp"
-                android:text="Yueaeow香薰精油香氛淡薰香家用室"
+                android:text=""
                 />
             <TextView
                 android:id="@+id/tv_goods_jingle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:textColor="@color/tw_dark_grey"
                 android:textSize="14sp"
-                android:text="澳洲制造 优选羊毛缝制"
+                android:text=""
                 />
             <TextView
                 android:id="@+id/tv_goods_price"
@@ -140,8 +140,9 @@
                 android:layout_marginTop="4dp"
                 android:textColor="@color/tw_red"
                 android:textSize="14sp"
-                android:text="$129.00"
+                android:text=""
                 />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
+
