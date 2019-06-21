@@ -103,6 +103,7 @@
     <string name="text_mall">商城</string>
     <string name="text_friend">好友</string>
     <string name="text_interactive">互動</string>
+    <string name="text_recruitment">招聘</string>
 
     <string name="category_shop">店鋪</string>
     <string name="category_commodity">商品</string>
@@ -319,9 +320,9 @@
     <string name="text_discount">折扣</string>
     <string name="text_reset">重置</string>
 
-    <string name="text_member">會員</string>
     <string name="text_follow_me_square">關注\n我的</string>
 
+    <string name="text_member">會員</string>
     <string name="text_my_like">我的點贊</string>
     <string name="text_my_like_desc">我點贊過的歷史紀錄</string>
     <string name="text_my_comment">我的評論</string>

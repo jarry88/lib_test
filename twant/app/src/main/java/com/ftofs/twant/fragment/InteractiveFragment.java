@@ -38,6 +38,7 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_my_like, this);
+        Util.setOnClickListener(view, R.id.btn_my_follow, this);
     }
 
     @Override
@@ -50,6 +51,9 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_my_like:
                 mainFragment.start(MyLikeFragment.newInstance());
+                break;
+            case R.id.btn_my_follow:
+                mainFragment.start(MyFollowFragment.newInstance());
                 break;
             default:
                 break;

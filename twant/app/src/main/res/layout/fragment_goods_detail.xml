@@ -844,4 +844,15 @@
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/btn_goto_cart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="65dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/icon_goto_cart"
+        />
 </android.support.constraint.ConstraintLayout>

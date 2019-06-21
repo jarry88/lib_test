@@ -259,7 +259,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.tv_ship_to, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_shop, this);
-
+        Util.setOnClickListener(view, R.id.btn_goto_cart, this);
 
         String token = User.getToken();
         loadGoodsDetail(commonId, token);
@@ -269,6 +269,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        MainFragment mainFragment = MainFragment.getInstance();
 
         switch (id) {
             case R.id.btn_back_round:
@@ -276,6 +277,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_add_to_cart:
                 showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
+                break;
+            case R.id.btn_goto_cart:
+                mainFragment.start(CartFragment.newInstance(true));
                 break;
             case R.id.btn_buy:
                 showSpecSelectPopup(Constant.ACTION_BUY);
@@ -293,7 +297,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 switchThumbState();
                 break;
             case R.id.btn_bottom_bar_shop:
-                MainFragment mainFragment = MainFragment.getInstance();
                 mainFragment.start(ShopMainFragment.newInstance(storeId));
                 break;
             case R.id.btn_show_voucher:
