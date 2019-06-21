@@ -49,6 +49,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     TextView tvFansCount;
     TextView tvArticleCount;
 
+    boolean userDataLoaded;
+
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -88,8 +90,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         rvFollowMeList.setLayoutManager(layoutManager);
         adapter = new FollowMeAvatarAdapter(R.layout.follow_me_avatar_item, followMeList);
         rvFollowMeList.setAdapter(adapter);
-
-        loadUserData();
     }
 
     @Override
@@ -171,10 +171,26 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
 
                     adapter.setNewData(followMeList);
+
+                    userDataLoaded = true;
                 } catch (Exception e) {
 
                 }
             }
         });
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        if (!userDataLoaded) {
+            loadUserData();
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#ededed">
+            android:background="@color/tw_light_grey">
             <!-- block1 -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -180,7 +180,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="@dimen/toolbar_margin_left"
                     android:layout_marginRight="@dimen/toolbar_margin_right"
-                    android:background="#ededed"
+                    android:background="@color/tw_light_grey"
                     />
 
                 <RelativeLayout
@@ -239,7 +239,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="13dp"
-                    android:background="#ededed"
+                    android:background="@color/tw_light_grey"
                     />
 
                 <RelativeLayout
@@ -332,7 +332,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="25dp"
-                        android:background="#ededed"
+                        android:background="@color/tw_light_grey"
                         />
                     <RelativeLayout
                         android:layout_width="0dp"

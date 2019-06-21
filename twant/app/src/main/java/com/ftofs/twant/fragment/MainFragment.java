@@ -104,7 +104,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             mFragments[HOME_FRAGMENT] = HomeFragment.newInstance();
             mFragments[MESSAGE_FRAGMENT] = MessageFragment.newInstance();
             mFragments[CIRCLE_FRAGMENT] = CircleFragment.newInstance();
-            mFragments[CART_FRAGMENT] = CartFragment.newInstance();
+            mFragments[CART_FRAGMENT] = CartFragment.newInstance(false);
             mFragments[MY_FRAGMENT] = MyFragment.newInstance();
 
 

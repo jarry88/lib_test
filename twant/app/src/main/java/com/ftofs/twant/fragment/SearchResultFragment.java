@@ -147,6 +147,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         btnGotoTop = view.findViewById(R.id.btn_goto_top);
         btnGotoTop.setOnClickListener(this);
         btnGotoCart = view.findViewById(R.id.btn_goto_cart);
+        btnGotoCart.setOnClickListener(this);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_goods_filter, this);
@@ -412,6 +413,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.btn_goods_filter:
                 showGoodsFilterPopup();
+                break;
+            case R.id.btn_goto_cart:
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(CartFragment.newInstance(true));
                 break;
             case R.id.btn_goto_top:
                 rvSearchResultList.scrollToPosition(0);

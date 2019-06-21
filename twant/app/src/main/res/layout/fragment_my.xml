@@ -41,7 +41,7 @@
         android:layout_below="@id/img_avatar"
         android:textSize="18sp"
         android:textColor="@color/tw_black"
-        android:text="全朋友美妝"
+        android:text=""
         />
 
     <TextView
@@ -56,7 +56,7 @@
         android:gravity="center"
         android:textSize="10sp"
         android:textColor="@android:color/white"
-        android:text="V8會員"
+        android:text=""
         android:background="@drawable/member_level_bg"
         />
 
@@ -100,7 +100,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
-                    android:text="6"
+                    android:text=""
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
-                    android:text="219"
+                    android:text=""
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -146,7 +146,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
-                    android:text="28"
+                    android:text=""
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,7 +169,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
-                    android:text="9"
+                    android:text=""
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -352,7 +352,7 @@
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:layout_below="@id/rl_follow_me_avatar_container"
-        android:background="#EDEDED"
+        android:background="@color/tw_light_grey"
         />
 
     <!-- 貼文列表 -->

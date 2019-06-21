@@ -26,7 +26,7 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
 
     @Override
     public void bindView(int position, View itemView, StoreGoodsPair itemData) {
-        SLog.info("__position[%d]", position);
+        // SLog.info("__position[%d]", position);
         if (itemData.leftItem != null) {
             setText(itemView, R.id.tv_left_goods_name, itemData.leftItem.goodsName);
             setText(itemView, R.id.tv_left_goods_jingle, itemData.leftItem.jingle);

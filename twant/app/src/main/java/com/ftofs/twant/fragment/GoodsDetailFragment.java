@@ -212,7 +212,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         // 原價顯示刪除線
         tvGoodsPriceOriginal.setPaintFlags(tvGoodsPriceOriginal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-
         tvGoodsPriceFinal = view.findViewById(R.id.tv_goods_price_final);
 
         tvCountDownDay = view.findViewById(R.id.tv_count_down_day);

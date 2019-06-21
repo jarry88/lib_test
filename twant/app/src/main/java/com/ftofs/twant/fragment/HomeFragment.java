@@ -293,10 +293,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         }
                     });
                     bannerView.start();
+
+                    carouselLoaded = true;
                 } catch (Exception e) {
 
                 }
-                carouselLoaded = true;
             }
         });
     }
@@ -419,12 +420,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 }
                             });
                             llNewArrivalsContainer.addView(storeView, layoutParams);
+
+                            newArrivalsLoaded = true;
                         }
                     } catch (Exception e) {
 
                     }
-
-                    newArrivalsLoaded = true;
                 }
             });
         } catch (EasyJSONException e) {

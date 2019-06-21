@@ -419,7 +419,7 @@
             app:layout_constraintTop_toBottomOf="@id/rl_pay_way"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="#ededed"
+            android:background="@color/tw_light_grey"
             />
 
         <!-- 店鋪評論 -->
@@ -519,7 +519,7 @@
             app:layout_constraintTop_toBottomOf="@id/rl_shop_comment_container"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="#ededed"
+            android:background="@color/tw_light_grey"
             />
 
 

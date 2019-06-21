@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,18 +58,28 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     String textSettlement;
     TotalStatus totalStatus = new TotalStatus();
 
+    LinearLayout llTotalOperationContainer;
+
     TextView btnDelete;
     LinearLayout llViewModeButtonGroup;
     TextView btnEdit;
     TextView btnSettlement;
     TextView tvTotalPrice;
 
+    ScaledButton btnBack;
+
     int mode = Constant.MODE_VIEW;
     boolean needReloadData = true;
 
-    public static CartFragment newInstance() {
+    /**
+     * 是否獨立的Fragment，還是依附于MainFragment
+     */
+    boolean isStandalone;
+
+    public static CartFragment newInstance(boolean isStandalone) {
         Bundle args = new Bundle();
 
+        args.putBoolean("isStandalone", isStandalone);
         CartFragment fragment = new CartFragment();
         fragment.setArguments(args);
 
@@ -87,6 +98,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         EventBus.getDefault().register(this);
+
+        Bundle args = getArguments();
+        isStandalone = args.getBoolean("isStandalone");
 
         textSettlement = getResources().getString(R.string.text_settlement);
 
@@ -107,6 +121,20 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         btnSettlement = view.findViewById(R.id.btn_settlement);
         btnSettlement.setOnClickListener(this);
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
+
+        llTotalOperationContainer = view.findViewById(R.id.ll_total_operation_container);
+
+        btnBack = view.findViewById(R.id.btn_back);
+        if (isStandalone) {
+            btnBack.setVisibility(View.VISIBLE);
+            btnBack.setOnClickListener(this);
+
+            // 調整llTotalOperationContainer的高度為原來一半
+            ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) llTotalOperationContainer.getLayoutParams();
+            SLog.info("layoutParams: %s", layoutParams);
+            layoutParams.height = Util.dip2px(_mActivity, 49);
+            llTotalOperationContainer.setLayoutParams(layoutParams);
+        }
     }
 
     @Override
@@ -280,6 +308,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.btn_back:
+                pop();
+                break;
             case R.id.btn_edit:
                 switchMode();
                 break;
@@ -378,6 +409,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         SLog.info("onBackPressedSupport");
         if (mode == Constant.MODE_EDIT) {
             switchMode();
+            return true;
+        }
+
+        if (isStandalone) {
+            pop();
             return true;
         }
         return false;
