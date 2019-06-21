@@ -1,8 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,20 +13,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
-import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.task.TaskObservable;
-import com.ftofs.twant.task.TaskObserver;
-import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.MD5;
-import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -41,13 +33,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 
 /**
@@ -57,6 +50,9 @@ import cn.snailpad.easyjson.EasyJSONObject;
 public class HomeFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     LinearLayout llNewArrivalsContainer;
     MZBannerView bannerView;
+
+    boolean carouselLoaded;
+    boolean newArrivalsLoaded;
 
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
 
@@ -141,17 +137,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         });
-
-        // 加載輪播圖片
-        loadCarouselImage();
-        // 加載最新入駐
-        loadNewArrivals();
     }
 
 
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+
+        SLog.info("carouselLoaded[%s], newArrivalsLoaded[%s]", carouselLoaded, newArrivalsLoaded);
+        // 加載輪播圖片
+        if (!carouselLoaded) {
+            loadCarousel();
+        }
+
+        // 加載最新入駐
+        if (!newArrivalsLoaded) {
+            loadNewArrivals();
+        }
+
         bannerView.start();
     }
 
@@ -183,7 +186,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         SLog.info("onSelected, type[%d], id[%d], extra[%s]", type, id, extra);
     }
 
-    public static class BannerViewHolder implements MZViewHolder<File> {
+    public static class BannerViewHolder implements MZViewHolder<WebSliderItem> {
         private ImageView mImageView;
 
         public static final int GOODS_IMAGE_COUNT = 3;
@@ -216,19 +219,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         @Override
-        public void onBind(Context context, int position, File file) {
+        public void onBind(Context context, int position, WebSliderItem webSliderItem) {
             try {
                 // 数据绑定
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                mImageView.setImageBitmap(bitmap);
-
-                WebSliderItem webSliderItem = webSliderItemList.get(position);
+                String imageUrl = Config.OSS_BASE_URL + "/" + webSliderItem.image;
+                // SLog.info("imageUrl[%s]", imageUrl);
+                Glide.with(context).load(imageUrl).centerCrop().into(mImageView);
 
                 if (webSliderItem.linkType.equals("store")) {
                     imgDesktop.setVisibility(View.VISIBLE);
                     setGoodsImageVisibility(View.VISIBLE);
 
-                    String goodsIds = webSliderItem.goodsIds;
                     String goodsCommons = webSliderItem.goodsCommons;
                     EasyJSONArray goodsArray = (EasyJSONArray) EasyJSONArray.parse(goodsCommons);
 
@@ -253,39 +254,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     /**
      * 加載輪播圖片
      */
-    private void loadCarouselImage() {
-        TaskObserver taskObserver = new TaskObserver() {
+    private void loadCarousel() {
+        Api.getUI(Api.PATH_HOME_CAROUSEL, null, new UICallback() {
             @Override
-            public void onMessage() {
-                List carouselList = (List) message;
-
-                // 设置数据
-                bannerView.setPages(carouselList, new MZHolderCreator<BannerViewHolder>() {
-                    @Override
-                    public BannerViewHolder createViewHolder() {
-                        return new BannerViewHolder(webSliderItemList);
-                    }
-                });
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
             }
-        };
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
-            public Object doWork() {
-                List <File> imageFileList = new ArrayList<>();
-                try {
-                    String responseStr = Api.syncGet(Api.PATH_HOME_CAROUSEL, null);
-                    SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                    if (ToastUtil.isError(responseObj)) {
-                        return null;
+                try {
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
                     }
-                    int code = responseObj.getInt("code");
-                    if (code != ResponseCode.SUCCESS) {
-                        return null;
-                    }
+
                     EasyJSONArray itemList = responseObj.getArray("datas.webSliderItem");
+                    webSliderItemList.clear();
                     for (Object object : itemList) {
                         EasyJSONObject itemObj = (EasyJSONObject) object;
 
@@ -296,17 +283,20 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 itemObj.getString("goodsIds"),
                                 itemObj.getString("goodsCommons"));
                         webSliderItemList.add(webSliderItem);
-
-                        String imageUrl = Config.OSS_BASE_URL + "/" + webSliderItem.image;
-                        SLog.info("imageUrl[%s]", imageUrl);
-                        File imageFile = downloadIfNotExists(imageUrl);
-
-                        imageFileList.add(imageFile);
                     }
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
+
+                    // 设置数据
+                    bannerView.setPages(webSliderItemList, new MZHolderCreator<BannerViewHolder>() {
+                        @Override
+                        public BannerViewHolder createViewHolder() {
+                            return new BannerViewHolder(webSliderItemList);
+                        }
+                    });
+                    bannerView.start();
+                } catch (Exception e) {
+
                 }
-                return imageFileList;
+                carouselLoaded = true;
             }
         });
     }
@@ -316,176 +306,130 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
      */
     private void loadNewArrivals() {
         SLog.info("loadNewArrivals");
-        TaskObserver taskObserver = new TaskObserver() {
-            @Override
-            public void onMessage() {
-                try {
-                    List<EasyJSONObject> result = (List<EasyJSONObject>) message;
-                    if (result == null) {
-                        return;
-                    }
 
-                    SLog.info("store count[%d]", result.size());
-                    for (EasyJSONObject storeObject : result) {
-                        View storeView = LayoutInflater.from(_mActivity).inflate(R.layout.store_view, llNewArrivalsContainer, false);
-                        ImageView imgStoreFigure = storeView.findViewById(R.id.img_store_figure);
-                        Glide.with(_mActivity).load(storeObject.getString("figureImagePath")).centerCrop().into(imgStoreFigure);
+        String token = User.getToken();
+        SLog.info("token[%s]", token);
 
-                        // 獲取店鋪Id
-                        final int shopId = storeObject.getInt("storeId");
-
-                        // 設置店鋪名稱
-                        TextView tvStoreName = storeView.findViewById(R.id.tv_store_name);
-                        tvStoreName.setText(storeObject.getString("storeName"));
-                        // 設置店鋪類別
-                        TextView tvStoreClass = storeView.findViewById(R.id.tv_store_class);
-                        String className = storeObject.getString("className");
-                        // 拆分中英文
-                        String[] classNameArr = className.split(",");
-                        tvStoreClass.setText(classNameArr[0]);
-                        // 設置點贊數據
-                        TextView tvLikeData = storeView.findViewById(R.id.tv_like_data);
-                        String likeDataStr = getResources().getString(R.string.text_like) + " " + storeObject.getInt("likeCount");
-                        tvLikeData.setText(likeDataStr);
-                        // 設置關注數據
-                        TextView tvFollowData = storeView.findViewById(R.id.tv_follow_data);
-                        String followDataStr = getResources().getString(R.string.text_follow) + " " + storeObject.getInt("followCount");
-                        tvFollowData.setText(followDataStr);
-
-                        int index = 0;
-                        for (Object object : storeObject.getArray("goodsList")) {
-                            String imageSrc = (String) object;
-
-                            String uri = Config.OSS_BASE_URL + "/" + imageSrc;
-                            if (index == 0) {
-                                ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
-                                Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageLeft);
-                                storeView.findViewById(R.id.goods_image_left_container).setVisibility(View.VISIBLE);
-                            } else if (index == 1) {
-                                ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
-                                Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageMiddle);
-                                storeView.findViewById(R.id.goods_image_middle_container).setVisibility(View.VISIBLE);
-                            } else if (index == 2) {
-                                ImageView goodsImageRight = storeView.findViewById(R.id.goods_image_right);
-                                Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageRight);
-                                storeView.findViewById(R.id.goods_image_right_container).setVisibility(View.VISIBLE);
-                            }
-
-                            ++index;
-                        }
-
-                        // 添加控件到容器中
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                        int marginTop = Util.dip2px(_mActivity, 15);
-                        int marginBottom = Util.dip2px(_mActivity, 20);
-                        layoutParams.setMargins(0, marginTop, 0, marginBottom);
-
-
-                        storeView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                MainFragment mainFragment = (MainFragment) getParentFragment();
-                                mainFragment.start(ShopMainFragment.newInstance(shopId));
-                            }
-                        });
-                        llNewArrivalsContainer.addView(storeView, layoutParams);
-                    }
-
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
-                }
+        try {
+            EasyJSONObject params = EasyJSONObject.generate();
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
             }
-        };
 
-        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
-            @Override
-            public Object doWork() {
-                String token = User.getToken();
-                SLog.info("token[%s]", token);
+            Api.postUI(Api.PATH_NEW_ARRIVALS, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
 
-                try {
-                    EasyJSONObject params = EasyJSONObject.generate();
-                    if (!StringUtil.isEmpty(token)) {
-                        params.set("token", token);
-                    }
-
-                    String responseStr = Api.syncPost(Api.PATH_NEW_ARRIVALS, params);
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("PATH_NEW_ARRIVALS, responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                    if (ToastUtil.isError(responseObj)) {
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
                         SLog.info("Error!responseObj is invalid");
-                        return null;
+                        return;
                     }
 
-                    EasyJSONArray storeList = responseObj.getArray("datas.storeList");
-                    SLog.info("storeList size[%d]", storeList.length());
-                    List<EasyJSONObject> storeObjectList = new ArrayList<>();
-                    for (Object object : storeList) {
-                        EasyJSONObject store = (EasyJSONObject) object;
-                        String storeFigureImageUrl = Config.OSS_BASE_URL + "/" + store.getString("storeVo.storeFigureImage");
-                        SLog.info("storeFigureImageUrl[%s]", storeFigureImageUrl);
-                        // 如果店鋪圖片不存在，則下載
-                        File imageFile = downloadIfNotExists(storeFigureImageUrl);
-                        if (imageFile == null) {
-                            continue;
+                    try {
+                        EasyJSONArray storeList = responseObj.getArray("datas.storeList");
+                        SLog.info("storeList size[%d]", storeList.length());
+
+                        llNewArrivalsContainer.removeAllViews();
+                        for (Object object : storeList) {
+                            View storeView = LayoutInflater.from(_mActivity).inflate(R.layout.store_view, llNewArrivalsContainer, false);
+
+                            EasyJSONObject store = (EasyJSONObject) object;
+
+                            // 獲取店鋪Id
+                            final int storeId = store.getInt("storeVo.storeId");
+
+                            // 設置店鋪名稱
+                            String storeName = store.getString("storeVo.storeName");
+                            TextView tvStoreName = storeView.findViewById(R.id.tv_store_name);
+                            tvStoreName.setText(storeName);
+
+                            // 設置店鋪類別
+                            TextView tvStoreClass = storeView.findViewById(R.id.tv_store_class);
+                            String className = store.getString("storeVo.className");
+                            String[] classNameArr = className.split(",");  // 拆分中英文
+                            tvStoreClass.setText(classNameArr[0]);
+
+
+                            // 店鋪形象圖
+                            String storeFigureImageUrl = Config.OSS_BASE_URL + "/" + store.getString("storeVo.storeFigureImage");
+                            // SLog.info("storeFigureImageUrl[%s]", storeFigureImageUrl);
+                            ImageView imgStoreFigure = storeView.findViewById(R.id.img_store_figure);
+                            Glide.with(_mActivity).load(storeFigureImageUrl).centerCrop().into(imgStoreFigure);
+
+
+                            // 設置點贊數據
+                            int likeCount = store.getInt("storeVo.likeCount");
+                            TextView tvLikeData = storeView.findViewById(R.id.tv_like_data);
+                            String likeDataStr = getResources().getString(R.string.text_like) + " " + likeCount;
+                            tvLikeData.setText(likeDataStr);
+
+
+                            // 設置關注數據
+                            int followCount = store.getInt("storeVo.collectCount");
+                            TextView tvFollowData = storeView.findViewById(R.id.tv_follow_data);
+                            String followDataStr = getResources().getString(R.string.text_follow) + " " + followCount;
+                            tvFollowData.setText(followDataStr);
+
+
+                            int index = 0;
+                            // 店鋪的3個商品展示
+                            for (Object object2 : store.getArray("goodsList")) {
+                                EasyJSONObject goodsObject = (EasyJSONObject) object2;
+                                String imageSrc = goodsObject.getString("imageSrc");
+
+                                String uri = Config.OSS_BASE_URL + "/" + imageSrc;
+                                if (index == 0) {
+                                    ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
+                                    Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageLeft);
+                                    storeView.findViewById(R.id.goods_image_left_container).setVisibility(View.VISIBLE);
+                                } else if (index == 1) {
+                                    ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
+                                    Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageMiddle);
+                                    storeView.findViewById(R.id.goods_image_middle_container).setVisibility(View.VISIBLE);
+                                } else if (index == 2) {
+                                    ImageView goodsImageRight = storeView.findViewById(R.id.goods_image_right);
+                                    Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageRight);
+                                    storeView.findViewById(R.id.goods_image_right_container).setVisibility(View.VISIBLE);
+                                }
+
+                                ++index;
+                            }
+
+                            // 添加控件到容器中
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                            int marginTop = Util.dip2px(_mActivity, 15);
+                            int marginBottom = Util.dip2px(_mActivity, 20);
+                            layoutParams.setMargins(0, marginTop, 0, marginBottom);
+
+
+                            storeView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    MainFragment mainFragment = (MainFragment) getParentFragment();
+                                    mainFragment.start(ShopMainFragment.newInstance(storeId));
+                                }
+                            });
+                            llNewArrivalsContainer.addView(storeView, layoutParams);
                         }
+                    } catch (Exception e) {
 
-                        // 店鋪的3個商品展示
-                        EasyJSONArray goodsImageArray = EasyJSONArray.generate();
-                        for (Object object2 : store.getArray("goodsList")) {
-                            EasyJSONObject goodsObject = (EasyJSONObject) object2;
-                            goodsImageArray.append(goodsObject.getString("imageSrc"));
-                        }
-
-                        // 打包店鋪數據
-                        EasyJSONObject storeObject = EasyJSONObject.generate(
-                                "storeId", store.getInt("storeVo.storeId"),
-                                "storeName", store.getString("storeVo.storeName"),
-                                "className", store.getString("storeVo.className"),
-                                "figureImagePath", imageFile.getAbsolutePath(),
-                                "likeCount", store.getInt("storeVo.likeCount"),
-                                "followCount", store.getInt("storeVo.collectCount"),
-                                "goodsList", goodsImageArray);
-
-                        storeObjectList.add(storeObject);
                     }
-                    return storeObjectList;
-                } catch (EasyJSONException e) {
-                    SLog.info("Error!%s", e.getMessage());
+
+                    newArrivalsLoaded = true;
                 }
-
-                return null;
-            }
-        });
-    }
-
-
-    /**
-     * 如果文件不存在，則下載
-     * @param url 文件的url
-     * @return 如果下載不成功，返回null
-     */
-    private File downloadIfNotExists(String url) {
-        String ext = PathUtil.getExtension(url);
-
-        String md5 = MD5.get(url);
-        // 新文件名重命名為路徑的md5值
-        String newFilename = md5 + "." + ext;
-        File file = FileUtil.getCacheFile(_mActivity, "imageCache/" + newFilename);
-
-        if (!file.exists()) {
-            // 文件已經不存在，則下載
-            boolean success = Api.syncDownloadFile(url, file);
-            SLog.info("success[%s]", success);
-            if (!success) {
-                return null;
-            }
+            });
+        } catch (EasyJSONException e) {
+            SLog.info("Error!%s", e.getMessage());
         }
-
-        return file;
     }
 
     @Override

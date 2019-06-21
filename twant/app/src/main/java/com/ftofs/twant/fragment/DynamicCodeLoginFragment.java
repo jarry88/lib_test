@@ -242,6 +242,9 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             @Override
             public void onMessage() {
                 mobileZoneList = (List<MobileZone>) message;
+                if (mobileZoneList == null) {
+                    return;
+                }
                 SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
                 if (mobileZoneList.size() > 0) {
                     tvAreaName.setText(mobileZoneList.get(0).areaName);
