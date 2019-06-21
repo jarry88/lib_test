@@ -126,6 +126,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
         }
 
+        Util.setOnClickListener(view, R.id.btn_clear_all, this);
+
         iconPriceOrder = view.findViewById(R.id.icon_price_order);
 
         storeSortButtons[STORE_SEARCH_SORT_GENERAL] = view.findViewById(R.id.btn_store_search_order_general);
@@ -264,6 +266,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 Api.getUI(Api.PATH_SEARCH_GOODS, paramsObj, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        ToastUtil.showNetworkError(_mActivity, e);
                         loadingPopup.dismiss();
                     }
 
@@ -338,6 +341,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 Api.getUI(Api.PATH_SEARCH_STORE, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        ToastUtil.showNetworkError(_mActivity, e);
                         loadingPopup.dismiss();
                     }
 
@@ -402,6 +406,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         switch (id) {
             case R.id.btn_back:
                 pop();
+                break;
+            case R.id.btn_clear_all:
+                etKeyword.setText("");
                 break;
             case R.id.btn_goods_filter:
                 showGoodsFilterPopup();

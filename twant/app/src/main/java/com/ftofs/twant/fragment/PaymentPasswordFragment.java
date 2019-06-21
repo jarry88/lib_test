@@ -97,7 +97,7 @@ public class PaymentPasswordFragment extends BaseFragment implements View.OnClic
             Api.postUI(Api.PATH_EDIT_PAYMENT_PASSWORD, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

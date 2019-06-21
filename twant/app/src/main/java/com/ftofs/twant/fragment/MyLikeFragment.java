@@ -170,6 +170,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
             Api.postUI(Api.PATH_MY_LIKE_STORE, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
                     loadingPopup.dismiss();
                 }
 
@@ -235,6 +236,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
             Api.postUI(Api.PATH_MY_LIKE_GOODS, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
                     loadingPopup.dismiss();
                 }
 

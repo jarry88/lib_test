@@ -201,7 +201,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             Api.getUI(Api.PATH_SEARCH_GOODS_IN_STORE, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

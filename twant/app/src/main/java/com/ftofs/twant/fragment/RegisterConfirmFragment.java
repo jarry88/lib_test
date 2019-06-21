@@ -140,7 +140,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                     "nickName", nickname), new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

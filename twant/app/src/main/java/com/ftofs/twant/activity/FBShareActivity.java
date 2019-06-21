@@ -71,11 +71,13 @@ public class FBShareActivity extends Activity {
                         .build();
 
                 client.newCall(request).enqueue(new Callback() {
+                    @Override
                     public void onFailure(Call call, IOException e) {
                         e.printStackTrace();
 
                     }
 
+                    @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         InputStream inputStream = response.body().byteStream();
                         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);

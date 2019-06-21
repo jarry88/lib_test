@@ -222,7 +222,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
         Api.postUI(Api.PATH_DELETE_FOOTPRINT, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -274,7 +274,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
         Api.postUI(Api.PATH_FOOTPRINT, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

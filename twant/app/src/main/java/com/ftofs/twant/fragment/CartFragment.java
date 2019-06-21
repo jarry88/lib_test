@@ -151,6 +151,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         Api.postUI(Api.PATH_CART_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
                 loadingPopup.dismiss();
             }
 
@@ -323,7 +324,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     Api.postUI(Api.PATH_DELETE_CART, params, new UICallback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-
+                            ToastUtil.showNetworkError(_mActivity, e);
                         }
 
                         @Override

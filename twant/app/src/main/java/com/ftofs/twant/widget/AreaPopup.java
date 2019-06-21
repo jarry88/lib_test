@@ -189,7 +189,7 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
         Api.getUI(Api.PATH_AREA_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(context, e);
             }
 
             @Override

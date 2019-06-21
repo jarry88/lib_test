@@ -165,7 +165,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
         Api.postUI(Api.PATH_SET_BIRTHDAY, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(getContext(), e);
             }
 
             @Override

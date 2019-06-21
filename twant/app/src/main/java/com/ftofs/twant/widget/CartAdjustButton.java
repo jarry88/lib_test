@@ -54,7 +54,7 @@ public class CartAdjustButton extends AdjustButton {
         Api.postUI(Api.PATH_ADD_CART, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(getContext(), e);
             }
 
             @Override

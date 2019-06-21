@@ -102,7 +102,7 @@ public class LogisticsMessageListFragment  extends BaseFragment implements View.
         Api.postUI(Api.PATH_MESSAGE_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

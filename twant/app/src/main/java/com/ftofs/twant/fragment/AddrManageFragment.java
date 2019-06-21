@@ -101,7 +101,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                         Api.postUI(Api.PATH_EDIT_ADDRESS, params, new UICallback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-
+                                ToastUtil.showNetworkError(_mActivity, e);
                             }
 
                             @Override
@@ -200,7 +200,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
         Api.postUI(Api.PATH_LIST_ADDRESS, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -257,7 +257,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
         Api.postUI(Api.PATH_DELETE_ADDRESS, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

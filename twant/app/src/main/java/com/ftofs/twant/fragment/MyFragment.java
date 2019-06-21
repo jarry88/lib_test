@@ -133,7 +133,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         Api.postUI(Api.PATH_USER_DATA, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

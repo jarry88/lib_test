@@ -348,7 +348,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(Api.PATH_GOODS_FAVORITE, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -390,7 +390,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(Api.PATH_GOODS_LIKE, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -453,6 +453,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
                 loadingPopup.dismiss();
             }
 

@@ -189,6 +189,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
                     loadingPopup.dismiss();
                 }
 
@@ -515,7 +516,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         Api.postUI(Api.PATH_STORE_LIKE, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -562,7 +563,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

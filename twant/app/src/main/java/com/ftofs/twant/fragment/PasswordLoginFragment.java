@@ -124,7 +124,7 @@ public class PasswordLoginFragment extends BaseFragment implements
             Api.postUI(Api.PATH_LOGIN, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

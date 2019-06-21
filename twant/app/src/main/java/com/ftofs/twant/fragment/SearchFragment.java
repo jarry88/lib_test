@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -100,6 +101,16 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 loadSearchSuggestionData(term);
             }
         });
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    doSearch(textView.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
         flSearchHistoryContainer = view.findViewById(R.id.fl_search_history_container);
         flHotSearchContainer = view.findViewById(R.id.fl_hot_search_container);
 
@@ -141,7 +152,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         Api.getUI(Api.PATH_SEARCH_SUGGESTION, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -172,8 +183,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                         itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                currentKeyword = item;
-                                doSearch();
+                                doSearch(item);
                             }
                         });
                         llSuggestionList.addView(itemView);
@@ -202,8 +212,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 flSearchHistoryContainer.removeAllViews();
                 break;
             case R.id.btn_search:
-                currentKeyword = etKeyword.getText().toString().trim();
-                doSearch();
+                doSearch(etKeyword.getText().toString().trim());
                 break;
             case R.id.ll_mask:
                 llSearchSuggestionContainer.setVisibility(View.GONE);
@@ -213,7 +222,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void doSearch() {
+    private void doSearch(String keyword) {
+        currentKeyword = keyword;
         // 將keyword填充到搜索欄中，并跳轉到搜索結果頁面
         etKeyword.setText(currentKeyword);
         EditTextUtil.cursorSeekToEnd(etKeyword);
@@ -222,6 +232,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         if (StringUtil.isEmpty(currentKeyword)) {
             currentKeyword = defaultKeyword;
         }
+
+        hideSoftInput();
 
         MainFragment mainFragment = MainFragment.getInstance();
         mainFragment.start(SearchResultFragment.newInstance(searchType.name(),
@@ -250,7 +262,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         Api.getUI(Api.PATH_HOT_KEYWORD, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -282,8 +294,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                         hotKeywordButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                currentKeyword = hotKeyword;
-                                doSearch();
+                                doSearch(hotKeyword);
                             }
                         });
                         flHotSearchContainer.addView(hotKeywordButton, layoutParams);
@@ -303,7 +314,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         Api.getUI(Api.PATH_DEFAULT_KEYWORD, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -338,8 +349,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView) v;
-                currentKeyword = tv.getText().toString();
-                doSearch();
+                doSearch(tv.getText().toString());
             }
         });
 

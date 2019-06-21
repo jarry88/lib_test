@@ -113,7 +113,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
             Api.postUI(Api.PATH_RESET_PASSWORD, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

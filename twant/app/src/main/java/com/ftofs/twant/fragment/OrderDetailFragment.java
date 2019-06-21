@@ -289,7 +289,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override
@@ -339,7 +339,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(Api.PATH_CONFIRM_RECEIVE, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -375,7 +375,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         Api.postUI(Api.PATH_ORDER_DETAIL, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

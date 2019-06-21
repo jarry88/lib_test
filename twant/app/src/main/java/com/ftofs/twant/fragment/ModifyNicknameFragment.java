@@ -86,7 +86,7 @@ public class ModifyNicknameFragment extends BaseFragment implements View.OnClick
             Api.postUI(Api.PATH_MODIFY_NICKNAME, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

@@ -121,6 +121,7 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
             Api.postUI(Api.PATH_STORE_ACTIVITY, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(context, e);
                     loadingPopup.dismiss();
                 }
 
@@ -197,7 +198,7 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
         Api.postUI(Api.PATH_RECEIVE_VOUCHER, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(context, e);
             }
 
             @Override

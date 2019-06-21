@@ -145,6 +145,7 @@ public class RegisterFragment extends BaseFragment implements
                     "sendType", Sms.SEND_TYPE_REGISTER), new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

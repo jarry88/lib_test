@@ -177,7 +177,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
         Api.getUI(Api.PATH_COMMODITY_CATEGORY, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

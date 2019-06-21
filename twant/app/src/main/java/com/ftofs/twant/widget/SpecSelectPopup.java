@@ -261,7 +261,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         Api.postUI(Api.PATH_ADD_CART, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(context, e);
             }
 
             @Override

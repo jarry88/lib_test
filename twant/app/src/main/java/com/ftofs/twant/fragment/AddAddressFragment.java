@@ -240,7 +240,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

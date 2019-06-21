@@ -118,7 +118,7 @@ public class ResetPasswordFragment extends BaseFragment implements
             Api.getUI(Api.PATH_SEND_SMS_CODE, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

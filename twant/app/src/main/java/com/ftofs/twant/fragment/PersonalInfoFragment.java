@@ -142,7 +142,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         Api.postUI(Api.PATH_MEMBER_DETAIL, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
@@ -202,7 +202,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             Api.postUI(Api.PATH_SET_GENDER, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

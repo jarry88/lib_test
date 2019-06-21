@@ -103,7 +103,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
         Api.getUI(Api.PATH_SHOP_CATEGORY, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

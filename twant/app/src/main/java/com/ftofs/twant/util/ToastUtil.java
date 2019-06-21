@@ -5,6 +5,8 @@ import android.widget.Toast;
 
 import com.ftofs.twant.constant.ResponseCode;
 
+import java.io.IOException;
+
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -83,5 +85,9 @@ public class ToastUtil {
             return true;
         }
         return false;
+    }
+
+    public static void showNetworkError(Context context, IOException e) {
+        ToastUtil.show(context, e.getMessage());
     }
 }

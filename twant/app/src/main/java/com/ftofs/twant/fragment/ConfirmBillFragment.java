@@ -336,7 +336,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             Api.postUI(Api.PATH_COMMIT_BILL_DATA, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    ToastUtil.showNetworkError(_mActivity, e);
                 }
 
                 @Override

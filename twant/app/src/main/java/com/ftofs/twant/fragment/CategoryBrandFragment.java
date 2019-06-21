@@ -101,7 +101,7 @@ public class CategoryBrandFragment extends BaseFragment implements View.OnClickL
         Api.getUI(Api.PATH_BRAND_CATEGORY, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override

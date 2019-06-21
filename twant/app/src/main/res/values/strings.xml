@@ -341,7 +341,7 @@
     <string name="goods_tab_title_price">價格</string>
 
     <string name="store_tab_title_general">綜合</string>
-    <string name="store_tab_title_sale">綜合</string>
+    <string name="store_tab_title_sale">銷量</string>
     <string name="store_tab_title_follow">關注量</string>
 
     <string name="btn_logout_text">安全退出</string>
