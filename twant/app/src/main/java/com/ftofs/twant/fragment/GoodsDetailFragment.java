@@ -442,7 +442,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, specList, specValueIdMap, selSpecValueIdList, goodsInfoMap))
+                .asCustom(new SpecSelectPopup(_mActivity, action, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap))
                 .show();
     }
 
@@ -720,6 +720,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             try {
                 EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(message.data);
                 int goodsId = easyJSONObject.getInt("goodsId");
+                buyNum = easyJSONObject.getInt("quantity");
                 selectSku(goodsId);
             } catch (Exception e) {
 

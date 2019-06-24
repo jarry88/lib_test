@@ -65,6 +65,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
     // 調整數量
     AdjustButton abQuantity;
+    int quantity;  // 外面傳進來的數量初始值
 
     /**
      * 當前選中的goodsId
@@ -78,10 +79,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * @param specList
      * @param specValueIdMap 根據逗號拼接的specValueId字符串，定位出商品的goodsId的映射
      * @param specValueIdList 傳進來的當前選中的specValueId列表，如果為null，則默認都選中第一項
+     * @param quantity 数量
+     * @param goodsInfoMap
      */
     public SpecSelectPopup(@NonNull Context context, int action, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
-                           Map<Integer, GoodsInfo> goodsInfoMap) {
+                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap) {
         super(context);
 
         this.context = context;
@@ -89,6 +92,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         this.specList = specList;
         this.specValueIdMap = specValueIdMap;
         this.goodsInfoMap = goodsInfoMap;
+        this.quantity = quantity;
 
         // 規格的數量
         specCount = specList.size();
@@ -127,7 +131,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         tvGoodsStorage = findViewById(R.id.tv_goods_storage);
 
         abQuantity = findViewById(R.id.ab_quantity);
-        abQuantity.setValue(1);
+        abQuantity.setValue(quantity);
         abQuantity.setMinValue(1);
 
         SLog.info("specList.size[%d]", specList.size());
@@ -211,11 +215,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             ++position;
         }
         updateCurrGoodsId();
-
-        // 如果是選擇規格，則隱藏數量調整按鈕
-        if (action == Constant.ACTION_SELECT_SPEC) {
-            findViewById(R.id.ll_quantity_adjust_container).setVisibility(View.GONE);
-        }
     }
 
     //完全可见执行
@@ -302,7 +301,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         // 當前選中的goodsId
         int goodsId = getSelectedGoodsId();
         EasyJSONObject easyJSONObject = EasyJSONObject.generate(
-                "goodsId", goodsId);
+                "goodsId", goodsId,
+                "quantity", abQuantity.getValue());
 
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SELECT_SPECS, easyJSONObject.toString());
     }

@@ -48,6 +48,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
+        Util.setOnClickListener(view, R.id.btn_search, this);
 
         TabLayout tabLayout = view.findViewById(R.id.category_tab_layout);
         ViewPager viewPager = view.findViewById(R.id.category_viewpager);
@@ -73,9 +74,15 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int id = v.getId();
+
+        MainFragment mainFragment = MainFragment.getInstance();
+
         switch (id) {
             case R.id.btn_back:
                 pop();
+                break;
+            case R.id.btn_search:
+                mainFragment.start(SearchFragment.newInstance());
                 break;
             default:
                 break;

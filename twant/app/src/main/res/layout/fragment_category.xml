@@ -16,12 +16,22 @@
         app:layout_constraintTop_toTopOf="parent">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
             android:layout_marginLeft="7dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
+            />
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_message"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="7dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_message_black"
             />
 
         <RelativeLayout
@@ -30,7 +40,8 @@
             android:layout_marginLeft="44dp"
             android:layout_marginRight="44dp"
             android:layout_height="36dp"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:background="@drawable/search_container_bg">
             <ImageView
                 android:id="@+id/img_search_icon"
                 android:layout_width="wrap_content"
@@ -51,16 +62,6 @@
                 android:textSize="14sp"
                 />
         </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/btn_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_message_black"
-            />
     </RelativeLayout>
     <!-- END OF 工具欄 -->
 
