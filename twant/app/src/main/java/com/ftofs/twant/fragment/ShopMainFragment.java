@@ -180,6 +180,10 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     imgIcon.setImageResource(bottomBarSelIconResources[index]);
                 }
 
+                if (index != CUSTOMER_SERVICE_FRAGMENT) {
+                    tvShopTitle.setText(shopName);
+                }
+
                 showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
                 selectedFragmentIndex = index;
             }
