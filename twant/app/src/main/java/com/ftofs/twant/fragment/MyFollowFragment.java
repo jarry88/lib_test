@@ -18,7 +18,10 @@ import com.ftofs.twant.adapter.MyFollowStoreAdapter;
 import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.entity.MyFollowArticleItem;
 import com.ftofs.twant.entity.MyFollowGoodsItem;
+import com.ftofs.twant.entity.MyFollowMemberItem;
+import com.ftofs.twant.entity.MyFollowRecruitmentItem;
 import com.ftofs.twant.entity.MyFollowStoreItem;
 import com.ftofs.twant.entity.MyLikeStoreItem;
 import com.ftofs.twant.log.SLog;
@@ -52,6 +55,9 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
     List<MyFollowStoreItem> myFollowStoreItemList = new ArrayList<>();
     List<MyFollowGoodsItem> myFollowGoodsItemList = new ArrayList<>();
+    List<MyFollowArticleItem> myFollowArticleItemList = new ArrayList<>();
+    List<MyFollowRecruitmentItem> myFollowRecruitmentItemList = new ArrayList<>();
+    List<MyFollowMemberItem> myFollowMemberItemList = new ArrayList<>();
 
     int currTabIndex = TAB_INDEX_STORE;
 
@@ -95,6 +101,9 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
         rvMyFollowList.setLayoutManager(layoutManager);
         myFollowStoreAdapter = new MyFollowStoreAdapter(R.layout.my_follow_store_item, myFollowStoreItemList);
         myFollowGoodsAdapter = new MyFollowGoodsAdapter(R.layout.my_follow_goods_item, myFollowGoodsItemList);
+        myFollowArticleAdapter = new MyFollowArticleAdapter(R.layout.my_follow_article_item, myFollowArticleItemList);
+        myFollowRecruitmentAdapter = new MyFollowRecruitmentAdapter(R.layout.my_follow_recruitment_item, myFollowRecruitmentItemList);
+        myFollowMemberAdapter = new MyFollowMemberAdapter(R.layout.my_follow_member_item, myFollowMemberItemList);
 
         SimpleTabManager simpleTabManager = new SimpleTabManager(TAB_INDEX_STORE) {
             @Override
