@@ -393,6 +393,12 @@ public class Api {
      */
     public static final String PATH_MY_FOLLOW_GOODS = "/memberpage/favor/goods";
 
+    /**
+     * 商品详情 ：计算运费
+     * 用戶切換送貨地區時，重新計算運費
+     */
+    public static final String PATH_REFRESH_FREIGHT = "/app/goods/freight";
+
 
     /**
      * 發送Http請求

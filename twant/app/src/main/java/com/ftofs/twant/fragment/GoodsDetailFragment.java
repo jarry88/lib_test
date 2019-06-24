@@ -84,6 +84,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     // 店鋪Id
     int storeId;
+    // 購買數量
+    int buyNum = 1;
 
     /**
      * 限時折扣倒計時是否正在倒數
@@ -774,6 +776,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             }
             SLog.info("addrItem: %s", addrItem);
             tvShipTo.setText(addrItem.areaInfo);
+
+            updateFreight(addrItem);
         }
     }
 
@@ -888,5 +892,51 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             rlDiscountInfoContainer.setVisibility(VISIBLE);
             startCountDown();
         }
+    }
+
+    /**
+     * 用戶切換了送貨目的地
+     * 更新運費的顯示
+     */
+    private void updateFreight(AddrItem addrItem) {
+        int areaId2 = 0;
+
+        if (addrItem.areaIdList.size() >= 2) {
+            areaId2 = addrItem.areaIdList.get(1);
+        }
+
+        if (areaId2 == 0) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "commonId", commonId,
+                "buyNum", buyNum,
+                "areaId2", areaId2);
+        SLog.info("params[%s]", params.toString());
+
+        Api.postUI(Api.PATH_REFRESH_FREIGHT, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
+                    tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 }

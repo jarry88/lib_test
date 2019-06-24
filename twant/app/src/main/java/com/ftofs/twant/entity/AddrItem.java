@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.ftofs.twant.util.StringUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +45,9 @@ public class AddrItem implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return String.format("addressId[%d], realName[%s], areaId[%d], areaInfo[%s], address[%s], mobileAreaCode[%s], mobPhone[%s], isDefault[%d]",
-                addressId, realName, areaId, areaInfo, address, mobileAreaCode, mobPhone, isDefault);
+        String areaIdListStr = StringUtil.implode(",", areaIdList);
+        return String.format("addressId[%d], realName[%s], areaIdList[%s], areaId[%d], areaInfo[%s], address[%s], mobileAreaCode[%s], mobPhone[%s], isDefault[%d]",
+                addressId, realName, areaIdListStr, areaId, areaInfo, address, mobileAreaCode, mobPhone, isDefault);
     }
 
     public static final Creator<AddrItem> CREATOR = new Creator<AddrItem>() {

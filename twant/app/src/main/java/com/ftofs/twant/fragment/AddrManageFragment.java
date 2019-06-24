@@ -222,7 +222,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                         String realName = item.getString("realName");
                         List<Integer> areaIdList = new ArrayList<>();
                         for (int i = 1; i <= 4; ++i) {
-                            areaIdList.add(item.getInt("areaId") + i);
+                            areaIdList.add(item.getInt("areaId" + i));
                         }
                         int areaId = item.getInt("areaId");
                         String areaInfo = item.getString("areaInfo");
@@ -230,7 +230,6 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                         String mobileAreaCode = item.getString("mobileAreaCode");
                         String mobPhone = item.getString("mobPhone");
                         int isDefault = item.getInt("isDefault");
-
 
                         addrItemList.add(new AddrItem(addressId, realName, areaIdList, areaId, areaInfo, address, mobileAreaCode, mobPhone, isDefault));
                     }
