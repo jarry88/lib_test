@@ -32,7 +32,7 @@ public class MyLikeStoreAdapter extends BaseQuickAdapter<MyLikeStoreItem, BaseVi
         if (item.storeDistanceStr.equals("0")) {
             helper.setGone(R.id.tv_store_distance, false);
         } else {
-            helper.setText(R.id.tv_store_distance, item.storeDistanceStr);
+            helper.setText(R.id.tv_store_distance, item.storeDistanceStr + "km");
         }
     }
 }

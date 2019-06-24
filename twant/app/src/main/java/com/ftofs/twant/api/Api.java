@@ -384,6 +384,17 @@ public class Api {
     public static final String PATH_MY_LIKE_GOODS = "/memberpage/like/goods";
 
     /**
+     * 個人專頁-我的關注-店鋪
+     */
+    public static final String PATH_MY_FOLLOW_STORE = "/memberpage/favor/store";
+
+    /**
+     * 個人專頁-我的關注-商品
+     */
+    public static final String PATH_MY_FOLLOW_GOODS = "/memberpage/favor/goods";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST
