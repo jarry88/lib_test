@@ -401,6 +401,17 @@ public class Api {
 
 
     /**
+     * 個人中心：会员店铺券列表
+     */
+    public static final String PATH_STORE_COUPON_LIST = "/member/app/voucher/list";
+
+    /**
+     * 卡密领取店铺券
+     */
+    public static final String PATH_RECEIVE_STORE_COUPON = "/member/voucher/receive/pwd";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

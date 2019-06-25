@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/text_store_coupon"
+            android:textColor="@color/tw_black"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="52dp"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/mini_red_button"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+    <!-- END OF 工具欄 -->
+
+    <!-- Tab按鈕欄 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@drawable/border_type_d"
+        android:orientation="horizontal">
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/btn_my_store_coupon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:stb_text="@string/text_my_store_coupon"
+            app:stb_stroke_width="1dp"
+            app:stb_use_cap="true"
+            app:stb_padding_bottom="1dp"
+            />
+
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/btn_receive_store_coupon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:stb_text="@string/text_receive_store_coupon"
+            app:stb_stroke_width="1dp"
+            app:stb_use_cap="true"
+            app:stb_padding_bottom="1dp"
+            />
+    </LinearLayout>
+    <!-- END OF Tab按鈕欄 -->
+
+    <!-- 我的店鋪券 -->
+    <ScrollView
+        android:id="@+id/sv_my_store_coupon_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_available_store_coupon_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:orientation="vertical">
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_unavailable_store_coupon_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/text_unavailable_store_coupon"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_black"
+                        />
+                    <View
+                        android:layout_width="60dp"
+                        android:layout_height="1dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/tv_unavailable_store_coupon_title"
+                        android:background="@color/tw_black"
+                        />
+
+                    <View
+                        android:layout_width="60dp"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/tv_unavailable_store_coupon_title"
+                        android:background="@color/tw_black"
+                        />
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/ll_unavailable_store_coupon_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+    <!-- END OF 我的店鋪券 -->
+
+    <!-- 領取店鋪券 -->
+    <LinearLayout
+        android:id="@+id/ll_receive_store_coupon_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/text_receive_store_coupon_hint"
+            android:textSize="13sp"
+            android:textColor="#00B0FF"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            android:background="@drawable/border_type_d">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                android:text="@string/input_store_coupon_card_pass_hint"
+                />
+
+            <EditText
+                android:id="@+id/et_store_coupon_card_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/input_store_coupon_card_pass_hint"
+                android:textColor="@color/tw_black"
+                android:textSize="17sp"
+                android:inputType="number"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
+                android:background="@null"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            android:background="@drawable/border_type_d">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                android:text="@string/text_captcha"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/btn_refresh_captcha"
+                    android:layout_width="105dp"
+                    android:layout_height="29dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
+                    />
+                <EditText
+                    android:id="@+id/et_captcha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_toLeftOf="@id/btn_refresh_captcha"
+                    android:layout_centerVertical="true"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
+                    android:hint="@string/input_captcha_hint"
+                    android:textColor="@color/tw_black"
+                    android:textSize="17sp"
+                    android:background="@null"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+    <!-- END OF 領取店鋪券 -->
+</LinearLayout>

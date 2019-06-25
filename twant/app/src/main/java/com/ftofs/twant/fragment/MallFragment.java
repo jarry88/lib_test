@@ -46,11 +46,11 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_to_be_commented, this);
         Util.setOnClickListener(view, R.id.icon_return_or_exchange, this);
 
+        Util.setOnClickListener(view, R.id.btn_my_store_coupon, this);
         Util.setOnClickListener(view, R.id.btn_my_footprint, this);
         Util.setOnClickListener(view, R.id.btn_my_address, this);
         Util.setOnClickListener(view, R.id.btn_my_bonus, this);
         Util.setOnClickListener(view, R.id.btn_my_trust_value, this);
-
     }
 
     @Override
@@ -85,6 +85,10 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
             case R.id.icon_return_or_exchange:
                 mainFragment.start(RefundFragment.newInstance());
+                break;
+
+            case R.id.btn_my_store_coupon:
+                mainFragment.start(StoreCouponFragment.newInstance());
                 break;
 
             case R.id.btn_my_footprint:

@@ -251,6 +251,7 @@
                 </LinearLayout>
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/btn_my_store_coupon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -273,7 +274,7 @@
                         android:layout_gravity="center_horizontal"
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
-                        android:text="@string/text_coupon"
+                        android:text="@string/text_store_coupon"
                         />
                 </LinearLayout>
             </RelativeLayout>

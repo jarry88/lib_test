@@ -37,6 +37,12 @@
     <string name="mall_fragment_title">商城</string>
     <string name="text_time_limited_offer">限時優惠</string>
 
+    <string name="text_store_coupon_card_pass">店鋪券卡密</string>
+    <string name="input_store_coupon_card_pass_hint">請輸入店鋪券卡密</string>
+    <string name="text_captcha">驗證碼</string>
+
+    <string name="text_receive_store_coupon_hint">请输入已获得的店铺券卡密领取店铺券\n領取成功后可在购买商品时抵扣订单金额使用</string>
+
     <string name="text_confidentiality">保密</string>
     <string name="text_male">男</string>
     <string name="text_female">女</string>
@@ -76,6 +82,8 @@
 
     <string name="text_receive_voucher">領券</string>
     <string name="text_promotion">促銷</string>
+
+    <string name="text_unavailable_store_coupon">不可用店鋪券</string>
 
 
     <string name="mobile_zone_text">地區區號</string>
@@ -293,6 +301,9 @@
     <string name="text_address">地址</string>
     <string name="text_bonus">積分</string>
     <string name="text_trust_value">信賴值</string>
+
+    <string name="text_my_store_coupon">我的店鋪券</string>
+    <string name="text_receive_store_coupon">領取店鋪券</string>
 
     <string name="text_address_management">地址管理</string>
     <string name="text_add">添加</string>
