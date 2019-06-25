@@ -76,7 +76,7 @@
             android:layout_marginBottom="11dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:text="9/200"
+            android:text=""
             android:textColor="#C1C0C0"
             android:textSize="12sp"
             />

@@ -21,4 +21,8 @@ public enum EBMessageType {
      * 選擇規格消息
      */
     MESSAGE_TYPE_SELECT_SPECS,
+    /**
+     * 刷新數據
+     */
+    MESSAGE_TYPE_REFRESH_DATA,
 }

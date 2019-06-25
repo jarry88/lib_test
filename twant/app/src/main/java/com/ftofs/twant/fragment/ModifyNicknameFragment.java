@@ -11,7 +11,10 @@ import android.widget.EditText;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -56,6 +59,8 @@ public class ModifyNicknameFragment extends BaseFragment implements View.OnClick
 
         etNickname = view.findViewById(R.id.et_nickname);
         etNickname.setText(oldNickname);
+        EditTextUtil.cursorSeekToEnd(etNickname);
+        showSoftInput(etNickname);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
@@ -100,6 +105,9 @@ public class ModifyNicknameFragment extends BaseFragment implements View.OnClick
                         }
 
                         ToastUtil.show(_mActivity, "修改暱稱成功");
+                        hideSoftInput();
+
+                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_DATA, null);
                         pop();
                     } catch (Exception e) {
 

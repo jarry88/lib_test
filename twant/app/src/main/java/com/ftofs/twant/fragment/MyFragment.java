@@ -17,11 +17,17 @@ import com.ftofs.twant.adapter.FollowMeAvatarAdapter;
 import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -76,6 +82,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         inputPersonalProfileHint = getString(R.string.input_personal_profile_hint);
 
         Util.setOnClickListener(view, R.id.img_avatar, this);
@@ -98,6 +106,19 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         rvFollowMeList.setLayoutManager(layoutManager);
         adapter = new FollowMeAvatarAdapter(R.layout.follow_me_avatar_item, followMeList);
         rvFollowMeList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_REFRESH_DATA) {
+            loadUserData();
+        }
     }
 
     @Override
