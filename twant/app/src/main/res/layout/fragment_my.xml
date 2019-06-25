@@ -61,15 +61,16 @@
         />
 
     <TextView
-        android:id="@+id/tv_personal_introduction"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_personal_profile"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/tv_member_level"
+        android:gravity="center"
         android:textSize="14sp"
         android:textColor="@color/tw_black"
-        android:text="@string/input_personal_introduction_hint"
+        android:text="@string/input_personal_profile_hint"
         />
 
     <LinearLayout
@@ -79,7 +80,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_below="@id/tv_personal_introduction"
+        android:layout_below="@id/tv_personal_profile"
         android:paddingBottom="18dp"
         android:orientation="vertical"
         android:layout_centerHorizontal="true"

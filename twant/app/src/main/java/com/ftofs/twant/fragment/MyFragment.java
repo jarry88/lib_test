@@ -49,8 +49,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     TextView tvFansCount;
     TextView tvArticleCount;
 
+    TextView tvPersonalProfile;
+
     boolean userDataLoaded;
 
+    String personalProfile;
+    String inputPersonalProfileHint;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -72,6 +76,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        inputPersonalProfileHint = getString(R.string.input_personal_profile_hint);
+
         Util.setOnClickListener(view, R.id.img_avatar, this);
         Util.setOnClickListener(view, R.id.btn_setting, this);
 
@@ -84,6 +90,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         tvPopularity = view.findViewById(R.id.tv_popularity);
         tvFansCount = view.findViewById(R.id.tv_fans_count);
         tvArticleCount = view.findViewById(R.id.tv_article_count);
+        tvPersonalProfile = view.findViewById(R.id.tv_personal_profile);
+        tvPersonalProfile.setOnClickListener(this);
 
         RecyclerView rvFollowMeList = view.findViewById(R.id.rv_follow_me_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
@@ -109,6 +117,13 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.btn_setting:
                 mainFragment.start(SettingFragment.newInstance());
+                break;
+            case R.id.tv_personal_profile:
+                String profile = personalProfile;
+                if (StringUtil.isEmpty(profile)) {
+                    profile = "";
+                }
+                mainFragment.start(PersonalProfileFragment.newInstance(profile));
                 break;
             default:
                 break;
@@ -155,6 +170,13 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     tvPopularity.setText(String.valueOf(responseObj.getInt("datas.memberHomeStat.popularity")));
                     tvFansCount.setText(String.valueOf(responseObj.getInt("datas.memberHomeStat.follow")));
                     tvArticleCount.setText(String.valueOf(responseObj.getInt("datas.memberHomeStat.post")));
+
+                    personalProfile = responseObj.getString("datas.memberVo.memberBio");
+                    if (StringUtil.isEmpty(personalProfile)) {
+                        tvPersonalProfile.setText(inputPersonalProfileHint);
+                    } else {
+                        tvPersonalProfile.setText(personalProfile);
+                    }
 
                     // 【關注我的】數據
                     followMeList.clear();

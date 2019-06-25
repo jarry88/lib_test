@@ -102,7 +102,7 @@ public class PasswordLoginFragment extends BaseFragment implements
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_login) {
-            if (mobileZoneList.size() <= selectedMobileZoneIndex) {
+            if (mobileZoneList == null || mobileZoneList.size() <= selectedMobileZoneIndex) {
                 return;
             }
             MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);

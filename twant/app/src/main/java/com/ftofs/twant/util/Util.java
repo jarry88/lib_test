@@ -154,7 +154,9 @@ public class Util {
 
     public static void showLoginFragment() {
         MainFragment mainFragment = MainFragment.getInstance();
-        mainFragment.start(LoginFragment.newInstance());
+        if (mainFragment != null) {
+            mainFragment.start(LoginFragment.newInstance());
+        }
     }
 
     public static String formatSpecString(List<SpecPair> specPairList) {

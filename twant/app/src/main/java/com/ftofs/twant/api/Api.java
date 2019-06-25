@@ -412,6 +412,12 @@ public class Api {
 
 
     /**
+     * 修改個人簡介
+     */
+    public static final String PATH_SAVE_PERSONAL_PROFILE = "/memberpage/modify/bio";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

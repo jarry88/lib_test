@@ -105,13 +105,14 @@
 
     <string name="login_way_password">密碼</string>
     <string name="login_way_dynamic_code">動態碼</string>
-    <string name="input_personal_introduction_hint">新增個人簡介，讓大家更了解你</string>
+    <string name="input_personal_profile_hint">新增個人簡介，讓大家更了解你</string>
     <string name="text_popularity">人氣</string>
     <string name="text_article">文章</string>
     <string name="text_mall">商城</string>
     <string name="text_friend">好友</string>
     <string name="text_interactive">互動</string>
     <string name="text_recruitment">招聘</string>
+    <string name="text_personal_profile">個人簡介</string>
 
     <string name="category_shop">店鋪</string>
     <string name="category_commodity">商品</string>
