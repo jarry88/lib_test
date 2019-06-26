@@ -122,12 +122,15 @@
     <string name="text_merchant_introduction">商家介紹</string>
 
     <string name="text_register">註冊</string>
+    <string name="text_register_now">立即注冊</string>
     <string name="text_next_step">下一步</string>
     <string name="text_ok">確認</string>
 
     <string name="slogan_real">真實Real</string>
     <string name="slogan_social">社交Social</string>
     <string name="slogan_best">優選Best</string>
+
+    <string name="text_forget_password">忘記密碼？</string>
 
     <!-- APP的底部工具欄 -->
     <string name="bottom_bar_title_home">首頁</string>

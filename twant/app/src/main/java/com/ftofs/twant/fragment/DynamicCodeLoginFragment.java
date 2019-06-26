@@ -97,7 +97,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         countDownTimer = new CountDownTimer(60 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                btnGetSMSCode.setText(String.valueOf(millisUntilFinished / 1000) + getString(R.string.text_second));
+                btnGetSMSCode.setText(String.valueOf(Math.round(millisUntilFinished / 1000)) + getString(R.string.text_second));
             }
 
             @Override
@@ -109,6 +109,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
 
         Util.setOnClickListener(view, R.id.btn_login, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
+        Util.setOnClickListener(view, R.id.btn_forget_password, this);
 
         btnGetSMSCode = view.findViewById(R.id.btn_get_sms_code);
         btnGetSMSCode.setOnClickListener(this);
@@ -248,6 +249,9 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
                             Constant.POPUP_TYPE_MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
+        } else if (id == R.id.btn_forget_password) {
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.start(ResetPasswordFragment.newInstance());
         }
     }
 

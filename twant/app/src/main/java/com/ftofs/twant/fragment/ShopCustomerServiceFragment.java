@@ -147,7 +147,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                         }
 
                         if (isShown) {
-                            parentFragment.setShopName(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
+                            parentFragment.setFragmentTitle(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
                         }
 
                     } catch (Exception e) {
@@ -165,7 +165,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
         super.onSupportVisible();
 
         isShown = true;
-        parentFragment.setShopName(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
+        parentFragment.setFragmentTitle(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
     }
 
     @Override

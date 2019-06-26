@@ -71,7 +71,8 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         int id = v.getId();
         if (id == R.id.btn_test) {
             SLog.info("btn_test");
-            countDownTimer.start();
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.start(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
         }
     }
 

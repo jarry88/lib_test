@@ -272,25 +272,42 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         int id = v.getId();
         MainFragment mainFragment = MainFragment.getInstance();
+        int userId = User.getUserId();
 
         switch (id) {
             case R.id.btn_back_round:
                 pop();
                 break;
             case R.id.btn_add_to_cart:
-                showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
+                if (userId > 0) {
+                    showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
+                } else {
+                    Util.showLoginFragment();
+                }
                 break;
             case R.id.btn_goto_cart:
-                mainFragment.start(CartFragment.newInstance(true));
+                if (userId > 0) {
+                    mainFragment.start(CartFragment.newInstance(true));
+                } else {
+                    Util.showLoginFragment();
+                }
                 break;
             case R.id.btn_buy:
-                showSpecSelectPopup(Constant.ACTION_BUY);
+                if (userId > 0) {
+                    showSpecSelectPopup(Constant.ACTION_BUY);
+                } else {
+                    Util.showLoginFragment();
+                }
                 break;
             case R.id.btn_select_spec:
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
                 break;
             case R.id.tv_ship_to:
-                startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
+                if (userId > 0) {
+                    startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
+                } else {
+                    Util.showLoginFragment();
+                }
                 break;
             case R.id.btn_bottom_bar_follow:
                 switchFavoriteState();
@@ -339,6 +356,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private void switchFavoriteState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
+            Util.showLoginFragment();
             return;
         }
 
@@ -381,6 +399,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private void switchThumbState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
+            Util.showLoginFragment();
             return;
         }
 

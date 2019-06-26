@@ -181,6 +181,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 }
 
                 if (index != CUSTOMER_SERVICE_FRAGMENT) {
+                    SLog.info("shopName[%s]", shopName);
                     tvShopTitle.setText(shopName);
                 }
 
@@ -196,7 +197,11 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
-        tvShopTitle.setText(shopName);
+        setFragmentTitle(shopName);
+    }
+
+    public void setFragmentTitle(String title) {
+        tvShopTitle.setText(title);
     }
 
     public int getShopId() {

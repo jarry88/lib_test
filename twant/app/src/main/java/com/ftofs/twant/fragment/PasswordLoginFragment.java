@@ -86,6 +86,8 @@ public class PasswordLoginFragment extends BaseFragment implements
 
         Util.setOnClickListener(view, R.id.btn_login, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
+        Util.setOnClickListener(view, R.id.btn_forget_password, this);
+
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
 
@@ -170,6 +172,9 @@ public class PasswordLoginFragment extends BaseFragment implements
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
                             Constant.POPUP_TYPE_MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
+        } else if (id == R.id.btn_forget_password) {
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.start(ResetPasswordFragment.newInstance());
         }
     }
 
