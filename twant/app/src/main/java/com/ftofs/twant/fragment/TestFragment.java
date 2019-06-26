@@ -1,11 +1,13 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -23,6 +25,10 @@ import java.util.Date;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
+    CountDownTimer countDownTimer;
+    TextView tvCountDown;
+
+
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -43,49 +49,29 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        tvCountDown = view.findViewById(R.id.tv_count_down);
         Util.setOnClickListener(view, R.id.btn_test, this);
 
-        SimpleTabManager manager = new SimpleTabManager(1) {
+        countDownTimer = new CountDownTimer(20 * 1000, 1000) {
             @Override
-            public void onClick(View v) {
-                boolean isRepeat = onSelect(v);
-                SLog.info("isRepeat[%s]", isRepeat);
+            public void onTick(long millisUntilFinished) {
+                SLog.info("millisUntilFinished");
+                tvCountDown.setText(String.valueOf(millisUntilFinished / 1000));
+            }
 
-                int id = v.getId();
-                if (id == R.id.btn_my_like) {
-                    SLog.info("btn_my_like");
-                } else if (id == R.id.btn_my_follow) {
-                    SLog.info("btn_my_follow");
-                } else if (id == R.id.btn_my_comment) {
-                    SLog.info("btn_my_comment");
-                }
+            @Override
+            public void onFinish() {
+                SLog.info("onFinish");
             }
         };
-        manager.add(view.findViewById(R.id.btn_my_like));
-        manager.add(view.findViewById(R.id.btn_my_follow));
-        manager.add(view.findViewById(R.id.btn_my_comment));
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_test) {
-            new XPopup.Builder(_mActivity)
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new TwConfirmPopup(_mActivity, "確定要刪除這個地址嗎？", "廣東省珠海市香洲區人民東路", new OnConfirmCallback() {
-                        @Override
-                        public void onYes() {
-                            SLog.info("onYes");
-                        }
-
-                        @Override
-                        public void onNo() {
-                            SLog.info("onNo");
-                        }
-                    }))
-                    .show();
-
+            SLog.info("btn_test");
+            countDownTimer.start();
         }
     }
 

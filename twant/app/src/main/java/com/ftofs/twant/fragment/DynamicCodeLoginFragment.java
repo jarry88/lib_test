@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Pair;
@@ -28,6 +29,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.SharedPreferenceUtil;
 import com.ftofs.twant.util.SqliteUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
@@ -60,7 +62,10 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     EditText etCaptcha;
     EditText etSmsCode;
     TextView tvAreaName;
+    TextView btnGetSMSCode;
 
+    CountDownTimer countDownTimer;
+    boolean canSendSMS = true;
 
     CommonCallback commonCallback;
     public void setCommonCallback(CommonCallback commonCallback) {
@@ -88,9 +93,25 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Util.setOnClickListener(view, R.id.btn_get_sms_code, this);
+        // 60秒倒計時
+        countDownTimer = new CountDownTimer(60 * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                btnGetSMSCode.setText(String.valueOf(millisUntilFinished / 1000) + getString(R.string.text_second));
+            }
+
+            @Override
+            public void onFinish() {
+                canSendSMS = true;
+                btnGetSMSCode.setText(R.string.get_sms_code);
+            }
+        };
+
         Util.setOnClickListener(view, R.id.btn_login, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
+
+        btnGetSMSCode = view.findViewById(R.id.btn_get_sms_code);
+        btnGetSMSCode.setOnClickListener(this);
 
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
@@ -111,14 +132,26 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();
         } else if (id == R.id.btn_get_sms_code) {
+            if (!canSendSMS) {
+                return;
+            }
+
             if (mobileZoneList.size() <= selectedMobileZoneIndex) {
                 return;
             }
             MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
 
             String mobile = etMobile.getText().toString().trim();
+            if (StringUtil.isEmpty(mobile)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_mobile_hint));
+                return;
+            }
             String fullMobile = mobileZone.areaCode + "," + mobile;
             String captchaText = etCaptcha.getText().toString().trim();
+            if (StringUtil.isEmpty(captchaText)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_captcha_hint));
+                return;
+            }
 
             EasyJSONObject params = EasyJSONObject.generate(
                     "mobile", fullMobile,
@@ -147,7 +180,8 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                         }
 
                         ToastUtil.show(_mActivity, "動態碼已發送");
-
+                        canSendSMS = false;
+                        countDownTimer.start();
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }
