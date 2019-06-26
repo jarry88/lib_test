@@ -166,6 +166,7 @@ public class PasswordLoginFragment extends BaseFragment implements
                 itemList.add(item);
             }
 
+            hideSoftInput();
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)

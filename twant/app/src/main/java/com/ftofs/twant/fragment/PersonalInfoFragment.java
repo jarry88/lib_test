@@ -20,6 +20,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.DateSelectPopup;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
@@ -45,6 +46,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
     TextView tvGender;
     String birthday;
     TextView tvBirthday;
+    TextView tvMemberLocation;
 
     public static PersonalInfoFragment newInstance() {
         Bundle args = new Bundle();
@@ -73,6 +75,9 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         Util.setOnClickListener(view, R.id.btn_modify_nickname, this);
         Util.setOnClickListener(view, R.id.btn_set_gender, this);
         Util.setOnClickListener(view, R.id.btn_select_birthday, this);
+        Util.setOnClickListener(view, R.id.btn_set_location, this);
+
+        tvMemberLocation = view.findViewById(R.id.tv_member_location);
 
         contentView = view;
     }
@@ -115,6 +120,13 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
                         .asCustom(new DateSelectPopup(_mActivity, birthday, this))
+                        .show();
+                break;
+            case R.id.btn_set_location:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new AreaPopup(_mActivity, Constant.POPUP_TYPE_MEMBER_ADDRESS, this))
                         .show();
                 break;
             default:
@@ -176,9 +188,8 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     }
 
                     String location = memberInfo.getString("addressAreaInfo");
-                    if (!StringUtil.isEmpty(birthday)) {
-                        TextView tvBirthday = view.findViewById(R.id.tv_location);
-                        tvBirthday.setText(location);
+                    if (!StringUtil.isEmpty(location)) {
+                        tvMemberLocation.setText(location);
                     }
                 } catch (Exception e) {
 
@@ -222,6 +233,10 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             SLog.info("extra[%s]", extra);
             String birthday = (String) extra;
             tvBirthday.setText(birthday);
+        } else if (type == Constant.POPUP_TYPE_MEMBER_ADDRESS) {
+            SLog.info("extra[%s]", extra);
+            String location = (String) extra;
+            tvMemberLocation.setText(location);
         }
     }
 }

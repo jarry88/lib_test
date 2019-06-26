@@ -19,7 +19,9 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -74,6 +76,11 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
 
         llAreaContainer = findViewById(R.id.ll_area_container);
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
+
+        if (popupType == Constant.POPUP_TYPE_MEMBER_ADDRESS) {
+            // 如果是選擇會員地址，將【配送至】提示文本隱藏
+            findViewById(R.id.tv_ship_to).setVisibility(GONE);
+        }
 
         RecyclerView rvList = findViewById(R.id.rv_area_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -174,12 +181,71 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.btn_ok:
-                onSelectedListener.onSelected(popupType, 0, selectedAreaList);
-                dismiss();
+                if (popupType == Constant.POPUP_TYPE_MEMBER_ADDRESS) {
+                    setMemberAddress();
+                } else {
+                    onSelectedListener.onSelected(popupType, 0, selectedAreaList);
+                    dismiss();
+                }
+
                 break;
             default:
                 break;
         }
+    }
+
+    private void setMemberAddress() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        /*
+        token String 当前登录令牌
+addressProvinceId int 省级id
+addressCityId int 市级id
+addressAreaId int 区级 id
+addressAreaInfo String 地区全名
+         */
+        int addressProvinceId = selectedAreaList.get(0).getAreaId();
+        int addressCityId = selectedAreaList.get(1).getAreaId();
+        int addressAreaId = selectedAreaList.get(2).getAreaId();
+        final String addressAreaInfo = selectedAreaList.get(0).getAreaName() + " " + selectedAreaList.get(1).getAreaName()
+                + " " + selectedAreaList.get(2).getAreaName();
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "addressProvinceId", addressProvinceId,
+                "addressCityId", addressCityId,
+                "addressAreaId", addressAreaId,
+                "addressAreaInfo", addressAreaInfo);
+
+        SLog.info("params[%s]", params.toString());
+
+        Api.postUI(Api.PATH_SET_MEMBER_ADDRESS, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(context, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.show(context, "保存成功");
+                    onSelectedListener.onSelected(popupType, 0, addressAreaInfo);
+                    dismiss();
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 
     private void loadAreaData(int areaId) {

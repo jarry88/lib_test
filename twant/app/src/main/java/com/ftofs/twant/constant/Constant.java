@@ -37,6 +37,7 @@ public class Constant {
     public static final int POPUP_TYPE_MOBILE_ZONE = 1;
     public static final int POPUP_TYPE_AREA = 2;
     public static final int POPUP_TYPE_DATE = 3;
+    public static final int POPUP_TYPE_MEMBER_ADDRESS = 4;  // 選擇會員地址
 
 
     /**
