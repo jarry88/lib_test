@@ -23,11 +23,11 @@ import me.yokeyword.fragmentation.SupportFragment;
  * 設置Fragment
  * @author zwm
  */
-public class SettingFragment extends BaseFragment implements View.OnClickListener {
-    public static SettingFragment newInstance() {
+public class SecuritySettingFragment extends BaseFragment implements View.OnClickListener {
+    public static SecuritySettingFragment newInstance() {
         Bundle args = new Bundle();
 
-        SettingFragment fragment = new SettingFragment();
+        SecuritySettingFragment fragment = new SecuritySettingFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -37,7 +37,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_setting, container, false);
+        View view = inflater.inflate(R.layout.fragment_security_setting, container, false);
         return view;
     }
 

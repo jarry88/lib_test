@@ -131,8 +131,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
                         // 保存服務器端返回的數據
                         SharedPreferenceUtil.saveUserInfo(responseObj);
 
-                        // 重置密碼成功，退回到【設置】界面
-                        popTo(SettingFragment.class, false);
+                        pop();
                         ToastUtil.show(_mActivity, "重置密碼成功");
                     } catch (EasyJSONException e) {
                         e.printStackTrace();

@@ -26,6 +26,11 @@
     <string name="text_not_set">未設置</string>
     <string name="text_not_login">您未登錄</string>
 
+    <string name="text_security_setting">安全設置</string>
+    <string name="text_about_takewant">關于Takewant</string>
+    <string name="text_check_update">检测更新</string>
+    <string name="text_goto_rank">去评分</string>
+
     <string name="text_phone">電話</string>
     <string name="text_distance">距離</string>
 
@@ -131,6 +136,7 @@
     <string name="slogan_best">優選Best</string>
 
     <string name="text_forget_password">忘記密碼？</string>
+    <string name="text_universal">通用</string>
 
     <!-- APP的底部工具欄 -->
     <string name="bottom_bar_title_home">首頁</string>

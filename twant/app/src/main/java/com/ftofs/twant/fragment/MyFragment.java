@@ -137,7 +137,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 mainFragment.start(InteractiveFragment.newInstance());
                 break;
             case R.id.btn_setting:
-                mainFragment.start(SettingFragment.newInstance());
+                mainFragment.start(UniversalFragment.newInstance());
                 break;
             case R.id.tv_personal_profile:
                 String profile = personalProfile;
