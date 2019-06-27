@@ -56,13 +56,12 @@
             android:paddingLeft="15dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_avatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="20dp"
                 android:src="@mipmap/ic_launcher"
-                android:scaleType="fitXY"
                 />
             <ImageView
                 android:id="@+id/img_set_avatar"

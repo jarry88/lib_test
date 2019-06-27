@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FollowMeAvatarAdapter;
@@ -48,6 +50,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
     BaseQuickAdapter adapter;
 
+    ImageView imgAvatar;
     TextView tvNickname;
     TextView tvMemberLevel;
     TextView tvCartItemCount;
@@ -86,7 +89,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
         inputPersonalProfileHint = getString(R.string.input_personal_profile_hint);
 
-        Util.setOnClickListener(view, R.id.img_avatar, this);
+        imgAvatar = view.findViewById(R.id.img_avatar);
+        imgAvatar.setOnClickListener(this);
         Util.setOnClickListener(view, R.id.btn_setting, this);
 
         Util.setOnClickListener(view, R.id.btn_mall, this);
@@ -181,6 +185,11 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
+                    }
+
+                    String avatarUrl = responseObj.getString("datas.memberVo.avatarUrl");
+                    if (!StringUtil.isEmpty(avatarUrl)) {
+                        Glide.with(_mActivity).load(avatarUrl).centerCrop().into(imgAvatar);
                     }
 
                     String nickname = responseObj.getString("datas.memberVo.nickName");

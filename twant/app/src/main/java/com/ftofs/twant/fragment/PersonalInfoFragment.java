@@ -335,6 +335,8 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     return;
                 }
 
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_DATA, null);
+
                 ToastUtil.show(_mActivity, "設置頭像成功");
                 Glide.with(_mActivity).load(Config.OSS_BASE_URL + "/" + url)
                         .centerCrop().into(imgAvatar);
