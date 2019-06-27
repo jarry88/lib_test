@@ -1,21 +1,31 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.FileUtil;
+import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -25,6 +35,11 @@ import com.ftofs.twant.widget.DateSelectPopup;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +54,7 @@ import okhttp3.Call;
 public class PersonalInfoFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     String[] genderTextMap;
 
-
+    ImageView imgAvatar;
     View contentView;
     String nickname;
     int genderIndex;  // 當前選中的性別索引
@@ -68,18 +83,29 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         genderTextMap = new String[] {
                 getString(R.string.text_confidentiality), getString(R.string.text_male), getString(R.string.text_female)};
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_set_avatar, this);
         Util.setOnClickListener(view, R.id.btn_modify_nickname, this);
         Util.setOnClickListener(view, R.id.btn_set_gender, this);
         Util.setOnClickListener(view, R.id.btn_select_birthday, this);
         Util.setOnClickListener(view, R.id.btn_set_location, this);
 
+        imgAvatar = view.findViewById(R.id.img_avatar);
         tvMemberLocation = view.findViewById(R.id.tv_member_location);
 
         contentView = view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -96,6 +122,9 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         switch (id) {
             case R.id.btn_back:
                 pop();
+                break;
+            case R.id.btn_set_avatar:
+                openAlbum();
                 break;
             case R.id.btn_modify_nickname:
                 MainFragment mainFragment = MainFragment.getInstance();
@@ -168,6 +197,11 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     }
 
                     EasyJSONObject memberInfo = responseObj.getObject("datas.memberInfo");
+                    String avatarUrl = memberInfo.getString("avatarUrl");
+                    if (!StringUtil.isEmpty(avatarUrl)) {
+                        Glide.with(_mActivity).load(avatarUrl).centerCrop().into(imgAvatar);
+                    }
+
 
                     TextView tvUserName = view.findViewById(R.id.tv_user_name);
                     tvUserName.setText(memberInfo.getString("memberName"));
@@ -238,5 +272,73 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             String location = (String) extra;
             tvMemberLocation.setText(location);
         }
+    }
+
+    private void openAlbum() {
+        startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        SLog.info("onActivityResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        // 上傳頭像
+        if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
+            Uri uri = data.getData();
+            String absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
+            SLog.info("absolutePath[%s]", absolutePath);
+
+            File file = new File(absolutePath);
+            Api.uploadFile(file);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS) {
+            String avatarUrl = message.data;
+            SLog.info("avatarUrl[%s]", avatarUrl);
+            setUserAvatar(avatarUrl);
+        }
+    }
+
+    private void setUserAvatar(final String url) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "avatar", url
+        );
+
+        SLog.info("params[%s]", params);
+        Api.postUI(Api.PATH_SET_AVATAR, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                ToastUtil.show(_mActivity, "設置頭像成功");
+                Glide.with(_mActivity).load(Config.OSS_BASE_URL + "/" + url)
+                        .centerCrop().into(imgAvatar);
+            }
+        });
     }
 }

@@ -2,18 +2,24 @@ package com.ftofs.twant.api;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
 
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.ResponseCode;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,6 +36,8 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -43,6 +51,8 @@ import static com.ftofs.twant.config.Config.API_BASE_URL;
  * @author zwm
  */
 public class Api {
+    public static final MediaType STREAM = MediaType.parse("application/octet-stream");  // （ 二进制流，不知道下载文件类型）
+
     public static final int BUFFER_SIZE = 4096;
 
     /**
@@ -424,6 +434,17 @@ public class Api {
 
 
     /**
+     * 图片上传（退款退货凭证、评价追评、投诉凭证）
+     */
+    public static final String PATH_UPLOAD_FILE = "/member/image/upload";
+
+    /**
+     * 会员头像修改
+     */
+    public static final String PATH_SET_AVATAR = "/member/avatar/edit";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST
@@ -770,5 +791,62 @@ public class Api {
         }
 
         return queryString.toString();
+    }
+
+    /**
+     * 會員上傳文件
+     * @param file
+     */
+    public static void uploadFile(File file) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+
+        builder.addFormDataPart("token", token);
+        // 拼装文件参数
+        builder.addFormDataPart("file", file.getName(), RequestBody.create(STREAM, file));
+
+        RequestBody requestBody = builder.build();
+
+        String url = Config.API_BASE_URL + Api.PATH_UPLOAD_FILE;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    long threadId = Thread.currentThread().getId();
+
+                    String responseStr = response.body().string();
+                    SLog.info("threadId[%d], responseStr[%s]", threadId, responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.isError(responseObj)) {
+                        return;
+                    }
+
+                    String avatarUrl = responseObj.getString("datas.name");
+                    SLog.info("avatarUrl[%s]", avatarUrl);
+
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS, avatarUrl);
+                } catch (EasyJSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

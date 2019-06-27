@@ -1,6 +1,10 @@
 package com.ftofs.twant.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 
 import java.io.File;
 
@@ -39,5 +43,39 @@ public class FileUtil {
 
         String filename = PathUtil.getFilename(path);
         return new File(cacheDir, filename);
+    }
+
+
+    /**
+     * 根据Uri获取图片文件的绝对路径
+     * @param context  一般传入Activity
+     * @param uri
+     * @return
+     */
+    public static String getRealFilePath(Context context, final Uri uri) {
+        if (null == uri) {
+            return null;
+        }
+
+        final String scheme = uri.getScheme();
+        String data = null;
+        if (scheme == null) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            data = uri.getPath();
+        } else if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            Cursor cursor = context.getContentResolver().query(uri,
+                    new String[] { MediaStore.Images.ImageColumns.DATA }, null, null, null);
+            if (null != cursor) {
+                if (cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                    if (index > -1) {
+                        data = cursor.getString(index);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return data;
     }
 }

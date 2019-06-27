@@ -22,5 +22,10 @@ public enum RequestCode {
     /**
      * 編輯發票
      */
-    EDIT_RECEIPT
+    EDIT_RECEIPT,
+
+    /**
+     * 从相册选择文件
+     */
+    OPEN_ALBUM
 }

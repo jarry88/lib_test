@@ -47,26 +47,30 @@
             android:textSize="16sp"
             android:text="@string/text_avatar"
             />
-
-        <ImageView
-            android:id="@+id/img_set_avatar"
+        <LinearLayout
+            android:id="@+id/btn_set_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/expand_button"
-            />
-
-        <ImageView
-            android:id="@+id/img_avatar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="20dp"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/img_set_avatar"
-            android:src="@mipmap/ic_launcher"
-            android:scaleType="fitXY"
-            />
+            android:paddingLeft="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/img_avatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="20dp"
+                android:src="@mipmap/ic_launcher"
+                android:scaleType="fitXY"
+                />
+            <ImageView
+                android:id="@+id/img_set_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/expand_button"
+                />
+        </LinearLayout>
     </RelativeLayout>
 
     <!-- 用戶名 -->

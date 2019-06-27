@@ -25,4 +25,9 @@ public enum EBMessageType {
      * 刷新數據
      */
     MESSAGE_TYPE_REFRESH_DATA,
+
+    /**
+     * 頭像上傳成功
+     */
+    MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS
 }
