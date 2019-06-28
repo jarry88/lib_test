@@ -148,7 +148,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new DateSelectPopup(_mActivity, birthday, this))
+                        .asCustom(new DateSelectPopup(_mActivity, Constant.POPUP_TYPE_BIRTH_DAY, birthday, this))
                         .show();
                 break;
             case R.id.btn_set_location:
@@ -263,7 +263,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     tvGender.setText(genderTextMap[genderIndex]);
                 }
             });
-        } else if (type == Constant.POPUP_TYPE_DATE) {
+        } else if (type == Constant.POPUP_TYPE_BIRTH_DAY) {
             SLog.info("extra[%s]", extra);
             String birthday = (String) extra;
             tvBirthday.setText(birthday);

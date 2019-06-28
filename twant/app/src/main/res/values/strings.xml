@@ -286,6 +286,11 @@
     <string name="text_budget_price">預算價格</string>
     <string name="text_cover_image">封面圖</string>
     <string name="input_post_content_hint">想要說點什麼...</string>
+    <string name="input_budget_price_hint">請輸入預算價格</string>
+
+    <string name="currency_type_macao">葡幣</string>
+    <string name="currency_type_hongkong">港幣</string>
+    <string name="currency_type_rmb">人民幣</string>
 
     <!--支付-->
     <string name="text_pay_online">在線支付</string>

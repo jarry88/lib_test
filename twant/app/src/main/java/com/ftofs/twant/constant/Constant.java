@@ -36,8 +36,10 @@ public class Constant {
     public static final int POPUP_TYPE_DEFAULT = 0;
     public static final int POPUP_TYPE_MOBILE_ZONE = 1;
     public static final int POPUP_TYPE_AREA = 2;
-    public static final int POPUP_TYPE_DATE = 3;
+    public static final int POPUP_TYPE_BIRTH_DAY = 3;
     public static final int POPUP_TYPE_MEMBER_ADDRESS = 4;  // 選擇會員地址
+    public static final int POPUP_TYPE_DEADLINE = 5;  // 選擇截止日期
+    public static final int POPUP_TYPE_BUDGET_PRICE = 6;
 
 
     /**

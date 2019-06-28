@@ -27,5 +27,20 @@ public enum RequestCode {
     /**
      * 从相册选择文件
      */
-    OPEN_ALBUM
+    OPEN_ALBUM,
+
+    /**
+     * 選擇POST封面圖片
+     */
+    PICK_POST_COVER,
+
+    /**
+     * 編輯標題
+     */
+    EDIT_TITLE,
+
+    /**
+     * 編輯關鍵字
+     */
+    EDIT_KEYWORD,
 }

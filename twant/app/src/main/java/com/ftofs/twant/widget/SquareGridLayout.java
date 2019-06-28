@@ -51,7 +51,7 @@ public class SquareGridLayout extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         SLog.info("onMeasure");
-        /**
+        /*
          * 获得此ViewGroup上级容器为其推荐的宽和高，以及计算模式
          */
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -87,7 +87,6 @@ public class SquareGridLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b)
     {
-        SLog.info("onLayout");
         int childCount = getChildCount();
 
         int x = 0;
@@ -127,16 +126,27 @@ public class SquareGridLayout extends ViewGroup {
         }
     }
 
+    /**
+     * 獲取列數
+     * @return
+     */
     public int getColumnCount() {
         return columnCount;
     }
 
+    /**
+     * 設置列數
+     * @param columnCount
+     */
     public void setColumnCount(int columnCount) {
         if (columnCount < 1) {
             columnCount = 1;
         }
-        this.columnCount = columnCount;
 
-        requestLayout();
+        if (this.columnCount != columnCount) {
+            // 請求重新布局
+            this.columnCount = columnCount;
+            requestLayout();
+        }
     }
 }

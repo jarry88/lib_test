@@ -10,6 +10,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.LoginFragment;
@@ -240,5 +241,20 @@ public class Util {
         }
         //判断packageNames中是否有目标程序的包名，有TRUE，没有FALSE
         return packageNames.contains(packageName);
+    }
+
+    /**
+     * 显示软键盘
+     */
+    public static void showSoftInput(final View view) {
+        if (view == null || view.getContext() == null) return;
+        final InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        view.requestFocus();
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+            }
+        }, 200L);
     }
 }

@@ -36,6 +36,7 @@ import okhttp3.Call;
  */
 public class DateSelectPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
     Context context;
+    int popupType;
     OnSelectedListener onSelectedListener;
     String dateStr = "1992-01-01";
 
@@ -47,10 +48,11 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
      * @param dateStr 初始的日期，格式 2019-06-06，如果為null或空串，則默認為 1992-01-01
      * @param onSelectedListener
      */
-    public DateSelectPopup(@NonNull Context context, String dateStr, OnSelectedListener onSelectedListener) {
+    public DateSelectPopup(@NonNull Context context, int popupType, String dateStr, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
+        this.popupType = popupType;
         this.onSelectedListener = onSelectedListener;
         if (!StringUtil.isEmpty(dateStr)) {
             this.dateStr = dateStr;
@@ -65,6 +67,13 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
     @Override
     protected void onCreate() {
         super.onCreate();
+
+        TextView tvPopupTitle = findViewById(R.id.tv_popup_title);
+        if (popupType == Constant.POPUP_TYPE_BIRTH_DAY) {
+            tvPopupTitle.setText(context.getString(R.string.text_birthday));
+        } else {
+            tvPopupTitle.setText(context.getString(R.string.text_deadline));
+        }
 
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
         findViewById(R.id.btn_ok).setOnClickListener(this);
@@ -87,7 +96,12 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
                 int day = date.getDate();
                 String dateStr = String.format("%04d-%02d-%02d", year, month, day);
                 SLog.info("dateStr[%s]", dateStr);
-                setBirthday(year, month, day);
+                if (popupType == Constant.POPUP_TYPE_BIRTH_DAY) {
+                    setBirthday(year, month, day);
+                } else {
+                    dismiss();
+                    onSelectedListener.onSelected(popupType, 0, String.format("%d-%02d-%02d", year, month, day));
+                }
             }
         })
                 .setLayoutRes(R.layout.date_picker_view, new CustomListener() {
@@ -179,7 +193,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
                     }
 
                     dismiss();
-                    onSelectedListener.onSelected(Constant.POPUP_TYPE_DATE, 0, birthday.substring(0, 10));
+                    onSelectedListener.onSelected(popupType, 0, birthday.substring(0, 10));
                 } catch (Exception e) {
 
                 }
