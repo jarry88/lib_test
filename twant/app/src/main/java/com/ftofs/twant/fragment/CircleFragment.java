@@ -8,12 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.util.Util;
 
 /**
  * 想要圈
  * @author zwm
  */
-public class CircleFragment extends BaseFragment {
+public class CircleFragment extends BaseFragment implements View.OnClickListener {
     public static CircleFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -33,5 +34,17 @@ public class CircleFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Util.setOnClickListener(view, R.id.btn_add_post, this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.btn_add_post) {
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.start(AddPostFragment.newInstance());
+        }
     }
 }

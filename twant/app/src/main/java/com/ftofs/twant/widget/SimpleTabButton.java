@@ -51,6 +51,7 @@ public class SimpleTabButton extends RelativeLayout {
         horizontalPaddingPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_horizontal_padding, 0);
         text = array.getString(R.styleable.SimpleTabButton_stb_text);
         paddingBottomPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_padding_bottom, 0);
+        array.recycle();
 
         // SLog.info("strokeWidthPx[%d],useCap[%s],horizontalPaddingPx[%d],text[%s], paddingBottom[%d]",
         //         strokeWidthPx, useCap, horizontalPaddingPx, text, paddingBottomPx);

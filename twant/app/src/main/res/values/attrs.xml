@@ -10,6 +10,7 @@
         <attr name="icon_height"></attr>
     </declare-styleable>
 
+
     <!-- TwTabButton -->
     <attr name="ttb_stroke_width" format="dimension"></attr> <!-- 下劃線的寬度 -->
     <attr name="ttb_use_cap" format="boolean"></attr>  <!-- 是否使用圓角 -->
@@ -17,6 +18,7 @@
         <attr name="ttb_stroke_width"></attr>
         <attr name="ttb_use_cap"></attr>
     </declare-styleable>
+
 
     <!-- SimpleTabButton -->
     <attr name="stb_stroke_width" format="dimension"></attr> <!-- 下劃線的寬度 -->
@@ -30,5 +32,12 @@
         <attr name="stb_horizontal_padding"></attr>
         <attr name="stb_text"></attr>
         <attr name="stb_padding_bottom"></attr>
+    </declare-styleable>
+
+
+    <!-- SquareGridLayoutOut -->
+    <attr name="sql_column_count" format="integer"></attr>
+    <declare-styleable name="SquareGridLayout">
+        <attr name="sql_column_count"></attr>
     </declare-styleable>
 </resources>

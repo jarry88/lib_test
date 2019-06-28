@@ -41,6 +41,7 @@ public class TwTabButton extends android.support.v7.widget.AppCompatTextView {
         TypedArray array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TwTabButton, defStyleAttr, 0);
         strokeWidthPx = (int) array.getDimension(R.styleable.TwTabButton_ttb_stroke_width, 0);
         useCap = array.getBoolean(R.styleable.TwTabButton_ttb_use_cap, false);
+        array.recycle();
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         twBlack = getResources().getColor(R.color.tw_black, null);

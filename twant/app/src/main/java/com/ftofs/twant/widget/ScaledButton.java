@@ -36,6 +36,7 @@ public class ScaledButton extends RelativeLayout {
         final float imgWidth = array.getDimension(R.styleable.ScaledButton_icon_width, -1);
         final float imgHeight = array.getDimension(R.styleable.ScaledButton_icon_width, -1);
         // SLog.info("imgWidth[%f], imgHeight[%f]", imgWidth, imgHeight);
+        array.recycle();
 
         if (imgWidth > 0 && imgHeight > 0) {
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) imgWidth, (int) imgHeight);
