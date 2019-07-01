@@ -52,6 +52,7 @@ import static com.ftofs.twant.config.Config.API_BASE_URL;
  */
 public class Api {
     public static final MediaType STREAM = MediaType.parse("application/octet-stream");  // （ 二进制流，不知道下载文件类型）
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8"); // JSON字符串
 
     public static final int BUFFER_SIZE = 4096;
 
@@ -451,6 +452,12 @@ public class Api {
 
 
     /**
+     * 貼文發佈
+     */
+    public static final String PATH_COMMIT_POST = "/want_post/issue";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST
@@ -800,10 +807,10 @@ public class Api {
     }
 
     /**
-     * 會員上傳文件
+     * 會員異步上傳文件
      * @param file
      */
-    public static void uploadFile(File file) {
+    public static void asyncUploadFile(File file) {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             return;
@@ -854,5 +861,69 @@ public class Api {
                 }
             }
         });
+    }
+
+    /**
+     * 會員同步上傳文件
+     * 成功上傳返回文件相對URL
+     * @param file
+     */
+    public static String syncUploadFile(File file) {
+        long threadId = Thread.currentThread().getId();
+
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return null;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+
+        MultipartBody.Builder builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+
+        builder.addFormDataPart("token", token);
+        // 拼装文件参数
+        builder.addFormDataPart("file", file.getName(), RequestBody.create(STREAM, file));
+
+        RequestBody requestBody = builder.build();
+
+        String url = Config.API_BASE_URL + Api.PATH_UPLOAD_FILE;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+
+            String responseStr = response.body().string();
+            SLog.info("threadId[%d], responseStr[%s]", threadId, responseStr);
+
+            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+            if (ToastUtil.isError(responseObj)) {
+                return null;
+            }
+
+            return responseObj.getString("datas.name");
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
+
+    /**
+     * 同步POST JSON
+     * @param url
+     * @param json
+     * @return
+     * @throws IOException
+     */
+    public static String syncPostJSON(String url, String json) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create(JSON, json);
+        Request request = new Request.Builder().url(url).post(body).build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
     }
 }

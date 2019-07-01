@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,17 +16,23 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ArticleCategory;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.task.TaskObservable;
+import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ArticleCategoryPopup;
 import com.ftofs.twant.widget.BudgetPricePopup;
@@ -34,6 +41,7 @@ import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -52,6 +60,8 @@ import okhttp3.Call;
  */
 public class AddPostFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     BaseQuickAdapter adapter;
+
+    String coverImage;
     List<String> postImageList = new ArrayList<>();
 
     List<ArticleCategory> articleCategoryList = new ArrayList<>();
@@ -61,6 +71,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
     String keyword = "";
 
     TextView tvTitle;
+    EditText etContent;
     TextView tvKeyword;
     String deadline;
     TextView tvDeadline;
@@ -99,6 +110,8 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
         currencyTypeSign = getString(R.string.currency_type_sign);
 
         tvTitle = view.findViewById(R.id.tv_title);
+        etContent = view.findViewById(R.id.et_content);
+
         tvKeyword = view.findViewById(R.id.tv_keyword);
 
         deadline = Time.date("Y-m-d");
@@ -118,6 +131,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
         tvArticleCategory = view.findViewById(R.id.tv_article_category);
 
 
+        Util.setOnClickListener(view, R.id.btn_commit, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_input_title, this);
         Util.setOnClickListener(view, R.id.btn_input_keyword, this);
@@ -135,7 +149,9 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_back) {
+        if (id == R.id.btn_commit) {
+            commitPost();
+        } else if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_add_post_content_image) {
             startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
@@ -230,6 +246,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
             Uri uri = data.getData();
             String absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
             SLog.info("absolutePath[%s]", absolutePath);
+            coverImage = absolutePath;
 
             Glide.with(_mActivity).load(absolutePath).centerCrop().into(postCoverImage);
             btnAddPostCoverImage.setVisibility(View.GONE);
@@ -247,12 +264,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
             tvBudgetPrice.setText(currencyTypeSign + budgetPrice);
         } else if (type == Constant.POPUP_TYPE_ARTICLE_CATEGORY) {
             selectedCategoryId = id;
-            for (ArticleCategory articleCategory : articleCategoryList) {
-                if (id == articleCategory.categoryId) {
-                    tvArticleCategory.setText(articleCategory.categoryName);
-                    break;
-                }
-            }
+            tvArticleCategory.setText(getCategoryName(selectedCategoryId));
         }
     }
 
@@ -292,5 +304,145 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
                 }
             }
         });
+    }
+
+    /**
+     * 提交帖文
+     */
+    private void commitPost() {
+        final String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        if (StringUtil.isEmpty(title)) {
+            ToastUtil.show(_mActivity, "請輸入標題");
+            return;
+        }
+
+        final String content = etContent.getText().toString().trim();
+        if (StringUtil.isEmpty(content)) {
+            ToastUtil.show(_mActivity, "請輸入正文");
+            return;
+        }
+
+        if (StringUtil.isEmpty(keyword)) {
+            ToastUtil.show(_mActivity, "請輸入關鍵字");
+            return;
+        }
+
+        String categoryName = getCategoryName(selectedCategoryId);
+        if (StringUtil.isEmpty(categoryName)) {
+            ToastUtil.show(_mActivity, "請選擇文章分類");
+            return;
+        }
+
+        if (StringUtil.isEmpty(budgetPrice)) {
+            ToastUtil.show(_mActivity, "請輸入預算價格");
+            return;
+        }
+
+        if (StringUtil.isEmpty(coverImage)) {
+            ToastUtil.show(_mActivity, "請選擇封面圖");
+            return;
+        }
+
+
+        TaskObserver taskObserver = new TaskObserver() {
+            @Override
+            public void onMessage() {
+                boolean success = (boolean) message;
+
+                if (success) {
+                    ToastUtil.show(_mActivity, "提交成功");
+                    pop();
+                } else {
+                    ToastUtil.show(_mActivity, "提交失敗");
+                }
+            }
+        };
+
+        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            @Override
+            public Object doWork() {
+                try {
+                    SLog.info("上傳圖片開始");
+                    // 上傳封面圖
+                    String url = Api.syncUploadFile(new File(coverImage));
+                    if (StringUtil.isEmpty(url)) {
+                        return null;
+                    }
+                    String coverImageUrl = url;
+
+                    EasyJSONArray wantPostImages = EasyJSONArray.generate();
+                    for (String absolutePath : postImageList) {
+                        url = Api.syncUploadFile(new File(absolutePath));
+                        if (StringUtil.isEmpty(url)) {
+                            return null;
+                        }
+                        wantPostImages.append(url);
+                    }
+                    SLog.info("上傳圖片完成");
+
+
+                    // token要附在url中
+                    url = Config.API_BASE_URL + Api.PATH_COMMIT_POST + Api.makeQueryString(EasyJSONObject.generate("token", token));
+                    SLog.info("url[%s]", url);
+
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "title", title,
+                            "content", content,
+                            "postCategory", getCategoryName(selectedCategoryId),
+                            "coverImage", coverImageUrl,
+                            "postType", Constant.POST_TYPE_COMMON,
+                            "keyWord", keyword,
+                            "isPublish", 1,
+                            "expiresDate", deadline,
+                            "budgetPrice", budgetPrice,
+                            "wantPostImages", wantPostImages);
+
+                    // 提交數據
+                    String json = params.toString();
+                    SLog.info("json[%s]", json);
+
+                    String responseStr = Api.syncPostJSON(url, json);
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.isError(responseObj)) {
+                        return false;
+                    }
+
+                    return true;
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e);
+                }
+                return false;
+            }
+        });
+    }
+
+    private String getCategoryName(int categoryId) {
+        String categoryName = "";
+        for (ArticleCategory articleCategory : articleCategoryList) {
+            if (categoryId == articleCategory.categoryId) {
+                categoryName = articleCategory.categoryName;
+                break;
+            }
+        }
+
+        return categoryName;
+    }
+
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        hideSoftInput();
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

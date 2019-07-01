@@ -74,6 +74,13 @@ public class Constant {
     public static final int ACTION_BUY = 2;
     public static final int ACTION_SELECT_SPEC = 3; // 選擇規格
 
+    /**
+     * 帖文類型
+     * 1 -- 通用 2 -- 求購
+     */
+    public static final int POST_TYPE_COMMON = 1;
+    public static final int POST_TYPE_WANTED = 2;
+
 
     /**
      * 地區ID定義

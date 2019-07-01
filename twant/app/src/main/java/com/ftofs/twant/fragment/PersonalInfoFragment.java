@@ -295,7 +295,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             SLog.info("absolutePath[%s]", absolutePath);
 
             File file = new File(absolutePath);
-            Api.uploadFile(file);
+            Api.asyncUploadFile(file);
         }
     }
 
