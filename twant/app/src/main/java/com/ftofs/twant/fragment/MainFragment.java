@@ -186,6 +186,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
+        // 如果退出登錄，顯示主頁
         if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) {
             showHideFragment(HOME_FRAGMENT);
         }

@@ -45,6 +45,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     String defaultKeyword; // 默認搜索詞
     SearchType searchType = SearchType.GOODS;
 
+    LinearLayout llHistorySearchPane;
     FlowLayout flSearchHistoryContainer;
     FlowLayout flHotSearchContainer;
 
@@ -109,6 +110,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                 return false;
             }
         });
+
+        llHistorySearchPane = view.findViewById(R.id.ll_history_search_pane);
         flSearchHistoryContainer = view.findViewById(R.id.fl_search_history_container);
         flHotSearchContainer = view.findViewById(R.id.fl_hot_search_container);
 
@@ -208,6 +211,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             case R.id.btn_clear_search_history:
                 SearchHistoryUtil.clearSearchHistory(searchType.ordinal());
                 flSearchHistoryContainer.removeAllViews();
+                llHistorySearchPane.setVisibility(View.GONE);
                 break;
             case R.id.btn_search:
                 doSearch(etKeyword.getText().toString().trim());
@@ -245,10 +249,15 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         flSearchHistoryContainer.removeAllViews();
 
         Set<String> keywordSet = SearchHistoryUtil.loadSearchHistory(searchType.ordinal());
-
-        for (String keyword : keywordSet) {
-            addSearchHistoryItemView(keyword);
+        if (keywordSet.size() < 1) { // 如果沒有歷史搜索數據，隱藏
+            llHistorySearchPane.setVisibility(View.GONE);
+        } else {
+            for (String keyword : keywordSet) {
+                addSearchHistoryItemView(keyword);
+            }
+            llHistorySearchPane.setVisibility(View.VISIBLE);
         }
+
     }
 
     /**

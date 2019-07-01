@@ -122,6 +122,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_REFRESH_DATA) {
             loadUserData();
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) { // 如果用戶退出登錄，重新加載數據
+            userDataLoaded = false;
         }
     }
 
