@@ -15,22 +15,35 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.ArticleCategory;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.Time;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ArticleCategoryPopup;
 import com.ftofs.twant.widget.BudgetPricePopup;
 import com.ftofs.twant.widget.DateSelectPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
+import cn.snailpad.easyjson.EasyJSONException;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 
 /**
@@ -41,6 +54,9 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
     BaseQuickAdapter adapter;
     List<String> postImageList = new ArrayList<>();
 
+    List<ArticleCategory> articleCategoryList = new ArrayList<>();
+    int selectedCategoryId = -1;
+
     String title = "";
     String keyword = "";
 
@@ -50,6 +66,8 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
     TextView tvDeadline;
     String budgetPrice = "";
     TextView tvBudgetPrice;
+
+    TextView tvArticleCategory;
 
     String currencyTypeSign;
 
@@ -97,13 +115,20 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
 
         postCoverImage = view.findViewById(R.id.post_cover_image);
 
+        tvArticleCategory = view.findViewById(R.id.tv_article_category);
+
+
+        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_input_title, this);
         Util.setOnClickListener(view, R.id.btn_input_keyword, this);
+        Util.setOnClickListener(view, R.id.btn_article_category, this);
         Util.setOnClickListener(view, R.id.btn_deadline, this);
         Util.setOnClickListener(view, R.id.btn_budget_price, this);
 
         Util.setOnClickListener(view, R.id.btn_remove_cover_image, this);
         Util.setOnClickListener(view, R.id.btn_add_post_content_image, this);
+
+        loadArticleCategory();
     }
 
 
@@ -123,6 +148,12 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
             startForResult(PostTitleEditorFragment.newInstance(PostTitleEditorFragment.FOR_TITLE, title), RequestCode.EDIT_TITLE.ordinal());
         } else if (id == R.id.btn_input_keyword) {
             startForResult(PostTitleEditorFragment.newInstance(PostTitleEditorFragment.FOR_KEYWORD, keyword), RequestCode.EDIT_KEYWORD.ordinal());
+        } else if (id == R.id.btn_article_category) {
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new ArticleCategoryPopup(_mActivity, selectedCategoryId, articleCategoryList, this))
+                    .show();
         } else if (id == R.id.btn_deadline) {
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -214,7 +245,52 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
         } else if (type == Constant.POPUP_TYPE_BUDGET_PRICE) {
             budgetPrice = (String) extra;
             tvBudgetPrice.setText(currencyTypeSign + budgetPrice);
+        } else if (type == Constant.POPUP_TYPE_ARTICLE_CATEGORY) {
+            selectedCategoryId = id;
+            for (ArticleCategory articleCategory : articleCategoryList) {
+                if (id == articleCategory.categoryId) {
+                    tvArticleCategory.setText(articleCategory.categoryName);
+                    break;
+                }
+            }
         }
+    }
 
+    private void loadArticleCategory() {
+        Api.getUI(Api.PATH_POST_CATEGORY_LIST, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    EasyJSONArray categoryList = responseObj.getArray("datas.categoryList");
+                    for (Object object : categoryList) {
+                        EasyJSONObject category = (EasyJSONObject) object;
+                        ArticleCategory articleCategory = (ArticleCategory) EasyJSONBase.jsonDecode(ArticleCategory.class, category.toString());
+                        articleCategoryList.add(articleCategory);
+                    }
+                } catch (EasyJSONException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (java.lang.InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

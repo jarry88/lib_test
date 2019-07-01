@@ -40,6 +40,7 @@ public class Constant {
     public static final int POPUP_TYPE_MEMBER_ADDRESS = 4;  // 選擇會員地址
     public static final int POPUP_TYPE_DEADLINE = 5;  // 選擇截止日期
     public static final int POPUP_TYPE_BUDGET_PRICE = 6;
+    public static final int POPUP_TYPE_ARTICLE_CATEGORY = 7;  // 帖文分类
 
 
     /**
