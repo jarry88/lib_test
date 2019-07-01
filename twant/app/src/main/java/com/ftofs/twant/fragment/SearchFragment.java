@@ -47,6 +47,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
     LinearLayout llHistorySearchPane;
     FlowLayout flSearchHistoryContainer;
+    LinearLayout llHotSearchPane;
     FlowLayout flHotSearchContainer;
 
     LinearLayout llSearchSuggestionContainer;
@@ -113,6 +114,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
         llHistorySearchPane = view.findViewById(R.id.ll_history_search_pane);
         flSearchHistoryContainer = view.findViewById(R.id.fl_search_history_container);
+
+        llHotSearchPane = view.findViewById(R.id.ll_hot_search_pane);
         flHotSearchContainer = view.findViewById(R.id.fl_hot_search_container);
 
         TabLayout tabLayout = view.findViewById(R.id.search_tab_layout);
@@ -306,6 +309,12 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                         });
                         flHotSearchContainer.addView(hotKeywordButton, layoutParams);
                         ++count;
+                    }
+                    
+                    if (count > 0) {
+                        llHotSearchPane.setVisibility(View.VISIBLE);
+                    } else {
+                        llHotSearchPane.setVisibility(View.GONE);
                     }
                 } catch (Exception e) {
 
