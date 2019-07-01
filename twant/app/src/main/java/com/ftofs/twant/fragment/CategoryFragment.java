@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
 import java.util.ArrayList;
@@ -86,7 +87,12 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
                 mainFragment.start(SearchFragment.newInstance());
                 break;
             case R.id.btn_message:
-                mainFragment.start(MessageFragment.newInstance(true));
+                if (User.getUserId() > 0) {
+                    mainFragment.start(MessageFragment.newInstance(true));
+                } else {
+                    Util.showLoginFragment();
+                }
+
                 break;
             default:
                 break;

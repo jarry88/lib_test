@@ -13,6 +13,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
 
 /**
  * 更完善的Tab按鈕
@@ -23,8 +24,8 @@ public class SimpleTabButton extends RelativeLayout {
     int status = Constant.STATUS_UNSELECTED;
     Paint paint;
 
-    int twRed;
-    int twBlack;
+    int selectedColor;
+    int unselectedColor;
 	
 	int strokeWidthPx;
     boolean useCap;
@@ -46,7 +47,7 @@ public class SimpleTabButton extends RelativeLayout {
         super(context, attrs, defStyleAttr);
 
         TypedArray array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SimpleTabButton, defStyleAttr, 0);
-        strokeWidthPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_stroke_width, 0);
+        strokeWidthPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_stroke_width, Util.dip2px(context, 2));
         useCap = array.getBoolean(R.styleable.SimpleTabButton_stb_use_cap, false);
         horizontalPaddingPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_horizontal_padding, 0);
         text = array.getString(R.styleable.SimpleTabButton_stb_text);
@@ -57,11 +58,11 @@ public class SimpleTabButton extends RelativeLayout {
         //         strokeWidthPx, useCap, horizontalPaddingPx, text, paddingBottomPx);
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        twBlack = getResources().getColor(R.color.tw_black, null);
-        twRed = getResources().getColor(R.color.tw_red, null);
+        unselectedColor = getResources().getColor(R.color.tw_black, null);
+        selectedColor = getResources().getColor(R.color.tw_red, null);
 
         tvTitle = new TextView(context);
-        tvTitle.setTextColor(twBlack);
+        tvTitle.setTextColor(unselectedColor);
 
         if (!StringUtil.isEmpty(text)) {
             tvTitle.setText(text);
@@ -102,7 +103,7 @@ public class SimpleTabButton extends RelativeLayout {
                 paint.setStrokeCap(Paint.Cap.ROUND);
             }
 
-            paint.setColor(twRed);
+            paint.setColor(selectedColor);
 
             int y = height - strokeWidthPx / 2 - paddingBottomPx;
             float startX = halfWidth - textWidth / 2 - horizontalPaddingPx;
@@ -120,10 +121,22 @@ public class SimpleTabButton extends RelativeLayout {
         this.status = status;
 
         if (status == Constant.STATUS_SELECTED) {
-            tvTitle.setTextColor(twRed);
+            tvTitle.setTextColor(selectedColor);
         } else {
-            tvTitle.setTextColor(twBlack);
+            tvTitle.setTextColor(unselectedColor);
         }
         invalidate();
+    }
+
+    public void setText(String text) {
+        tvTitle.setText(text);
+    }
+
+    public void setSelectedColor(int color) {
+        selectedColor = color;
+    }
+
+    public void setUnselectedColor(int color) {
+        unselectedColor = color;
     }
 }

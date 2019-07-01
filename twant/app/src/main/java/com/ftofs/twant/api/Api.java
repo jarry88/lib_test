@@ -456,6 +456,11 @@ public class Api {
      */
     public static final String PATH_COMMIT_POST = "/want_post/issue";
 
+    /**
+     * 貼文搜索
+     */
+    public static final String PATH_SEARCH_POST = "/want_post/list";
+
 
     /**
      * 發送Http請求
