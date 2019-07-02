@@ -28,12 +28,13 @@
 
     <string name="text_security_setting">安全設置</string>
     <string name="text_about_takewant">關于Takewant</string>
-    <string name="text_check_update">检测更新</string>
-    <string name="text_goto_rank">去评分</string>
+    <string name="text_check_update">檢測更新</string>
+    <string name="text_goto_rank">去評分</string>
 
     <string name="text_phone">電話</string>
     <string name="text_distance">距離</string>
     <string name="text_create_post">發表帖文</string>
+    <string name="text_reply">回復</string>
 
     <string name="text_message">消息</string>
     <string name="text_logistics_message">交易物流消息</string>
@@ -261,6 +262,8 @@
     <string name="text_monthly_sale">月銷量</string>
     <string name="text_monthly_sale_unit">筆</string>
     <string name="text_fans">粉絲</string>
+    <string name="text_comment_list">評論列表</string>
+    <string name="text_publish">發表</string>
 
     <string name="text_confirm_bill">確認訂單</string>
     <string name="text_add_shipping_address">新增收貨地址</string>

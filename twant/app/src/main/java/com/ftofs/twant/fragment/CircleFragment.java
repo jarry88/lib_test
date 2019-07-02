@@ -105,7 +105,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     }
 
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (responseObj == null) {
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 

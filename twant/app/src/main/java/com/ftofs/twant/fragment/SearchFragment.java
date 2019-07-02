@@ -310,7 +310,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                         flHotSearchContainer.addView(hotKeywordButton, layoutParams);
                         ++count;
                     }
-                    
+
                     if (count > 0) {
                         llHotSearchPane.setVisibility(View.VISIBLE);
                     } else {

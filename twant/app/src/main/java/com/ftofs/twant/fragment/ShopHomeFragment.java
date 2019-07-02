@@ -165,6 +165,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvVerticalScroll = view.findViewById(R.id.tv_vertical_scroll);
 
         Util.setOnClickListener(view, R.id.btn_shop_map, this);
+        Util.setOnClickListener(view, R.id.btn_view_all_comment, this);
 
         this.savedInstanceState = savedInstanceState;
 
@@ -494,6 +495,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         .moveUpToKeyboard(false)
                         .asCustom(new SharePopup(_mActivity))
                         .show();
+                break;
+            case R.id.btn_view_all_comment:
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
                 break;
             default:
                 break;

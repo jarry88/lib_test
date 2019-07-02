@@ -461,6 +461,11 @@ public class Api {
      */
     public static final String PATH_SEARCH_POST = "/want_post/list";
 
+    /**
+     * 評論列表
+     */
+    public static final String PATH_COMMENT_LIST = "/app/comment/list";
+
 
     /**
      * 發送Http請求

@@ -146,4 +146,13 @@ public class Constant {
      * 未選中狀態
      */
     public static final int STATUS_UNSELECTED = 2;
+
+
+    public static final int COMMENT_CHANNEL_STORE = 2;
+    public static final int COMMENT_CHANNEL_GOODS = 3;
+    public static final int COMMENT_CHANNEL_POST = 4;
+
+    public static final int COMMENT_TYPE_ALL = 1;
+    public static final int COMMENT_TYPE_VIDEO = 2;
+    public static final int COMMENT_TYPE_TEXT = 3;
 }

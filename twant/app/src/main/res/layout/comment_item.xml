@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:paddingTop="15dp"
+    android:paddingLeft="@dimen/toolbar_margin_left"
+    android:paddingRight="@dimen/toolbar_margin_right"
+    android:paddingBottom="10dp"
+    android:orientation="vertical"
+    android:background="@drawable/border_type_d">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_commenter_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/avatar_male"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/img_commenter_avatar"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_commenter_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OPPO女裝店"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                />
+            <TextView
+                android:id="@+id/tv_comment_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:text="8小時"
+                android:textColor="#FFA8A8A8"
+                android:textSize="13sp"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="澳門藍花前地246號, 信和廣場96舖澳門藍花前地號信和廣場澳門藍花信和廣場"
+            android:textColor="@color/tw_black"
+            android:textSize="16sp"
+            />
+
+        <ImageView
+            android:id="@+id/image_view"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/avatar"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+            <TextView
+                android:id="@+id/btn_reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:textColor="#666"
+                android:textSize="14sp"
+                android:text="回覆 26"
+                android:background="@drawable/reply_number_bg"
+                />
+
+            <LinearLayout
+                android:id="@+id/btn_thumb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_comment_thumb_grey"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_thumb_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="689"
+                    android:textSize="14sp"
+                    android:textColor="#666"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
+
