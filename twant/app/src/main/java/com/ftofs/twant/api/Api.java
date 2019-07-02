@@ -466,6 +466,10 @@ public class Api {
      */
     public static final String PATH_COMMENT_LIST = "/app/comment/list";
 
+    /**
+     * 评论点赞/取消点赞
+     */
+    public static final String PATH_COMMENT_LIKE = "/app/comment/like";
 
     /**
      * 發送Http請求

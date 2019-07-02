@@ -28,13 +28,21 @@ public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHo
                 .setText(R.id.tv_comment_time, item.commentTime)
                 .setText(R.id.tv_content, item.content)
                 .setText(R.id.btn_reply, mContext.getString(R.string.text_reply) + " " + item.commentReply)
-                .setText(R.id.tv_thumb_count, String.valueOf(item.commentLike));
+                .setText(R.id.tv_thumb_count, String.valueOf(item.commentLike))
+                .addOnClickListener(R.id.btn_thumb);
 
         if (item.commentType == Constant.COMMENT_TYPE_TEXT || StringUtil.isEmpty(item.imageUrl)) {
             helper.setGone(R.id.image_view, false);
         } else {
             ImageView imageView = helper.getView(R.id.image_view);
             Glide.with(mContext).load(Config.OSS_BASE_URL + "/" + item.imageUrl).centerCrop().into(imageView);
+        }
+
+        ImageView iconThumb = helper.getView(R.id.icon_thumb);
+        if (item.isLike == 1) {
+            iconThumb.setImageResource(R.drawable.icon_comment_thumb_blue);
+        } else {
+            iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
         }
     }
 }

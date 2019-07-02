@@ -81,6 +81,12 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         rvCommentList.setLayoutManager(layoutManager);
         adapter = new CommentListAdapter(R.layout.comment_item, commentItemList);
         adapter.setOnLoadMoreListener(this, rvCommentList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switchThumbState(position);
+            }
+        });
         rvCommentList.setAdapter(adapter);
 
         loadCommentData(currPage + 1);
@@ -190,5 +196,53 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             return;
         }
         loadCommentData(currPage + 1);
+    }
+
+    private void switchThumbState(final int position) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        /*
+        token	string	true	普通参数		登陆token
+commentId	string	true	普通参数		评论ID
+state
+         */
+
+
+        final CommentItem commentItem = commentItemList.get(position);
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "commentId", commentItem.commentId,
+                "state", 1 - commentItem.isLike
+        );
+        Api.postUI(Api.PATH_COMMENT_LIKE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        adapter.loadMoreFail();
+                        return;
+                    }
+
+                    commentItem.isLike = 1 - commentItem.isLike;
+                    commentItem.commentLike = responseObj.getInt("datas.likeCount");
+
+                    adapter.notifyItemChanged(position);
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 }
