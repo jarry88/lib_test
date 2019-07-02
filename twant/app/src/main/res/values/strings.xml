@@ -35,6 +35,7 @@
     <string name="text_distance">距離</string>
     <string name="text_create_post">發表帖文</string>
     <string name="text_reply">回復</string>
+    <string name="text_comment_detail">評論詳情</string>
 
     <string name="text_message">消息</string>
     <string name="text_logistics_message">交易物流消息</string>
@@ -264,6 +265,7 @@
     <string name="text_fans">粉絲</string>
     <string name="text_comment_list">評論列表</string>
     <string name="text_publish">發表</string>
+    <string name="text_send">發送</string>
 
     <string name="text_confirm_bill">確認訂單</string>
     <string name="text_add_shipping_address">新增收貨地址</string>

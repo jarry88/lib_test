@@ -472,6 +472,11 @@ public class Api {
     public static final String PATH_COMMENT_LIKE = "/app/comment/like";
 
     /**
+     * 評論詳情
+     */
+    public static final String PATH_COMMENT_DETAIL = "/app/comment/info";
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

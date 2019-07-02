@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -84,7 +85,22 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                switchThumbState(position);
+                CommentItem commentItem = commentItemList.get(position);
+                int id = view.getId();
+                if (id == R.id.btn_thumb) {
+                    switchThumbState(position);
+                } else if (id == R.id.btn_reply) {
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(CommentDetailFragment.newInstance(commentItem));
+                }
+            }
+        });
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CommentItem commentItem = commentItemList.get(position);
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(CommentDetailFragment.newInstance(commentItem));
             }
         });
         rvCommentList.setAdapter(adapter);
@@ -104,80 +120,83 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void loadCommentData(int page) {
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
+        try {
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "channel", commentChannel,
+                    "bindId", bindId,
+                    "page", page);
 
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "channel", commentChannel,
-                "bindId", bindId,
-                "page", page);
-
-        SLog.info("params[%s]", params.toString());
-
-        Api.postUI(Api.PATH_COMMENT_LIST, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(_mActivity, e);
+            String token = User.getToken();
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
             }
 
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
+            SLog.info("params[%s]", params.toString());
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        adapter.loadMoreFail();
-                        return;
-                    }
+            Api.postUI(Api.PATH_COMMENT_LIST, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
 
-                    hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
-                    SLog.info("hasMore[%s]", hasMore);
-                    if (!hasMore) {
-                        adapter.loadMoreEnd();
-                        adapter.setEnableLoadMore(false);
-                    }
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONArray comments = responseObj.getArray("datas.comments");
-                    for (Object object : comments) {
-                        EasyJSONObject comment = (EasyJSONObject) object;
-                        CommentItem item = new CommentItem();
-                        item.commentId = comment.getInt("commentId");
-                        item.commentChannel = comment.getInt("commentChannel");
-                        item.commentType = comment.getInt("commentType");
-                        item.commentLike = comment.getInt("commentLike");
-                        item.content = comment.getString("content");
-                        item.isLike = comment.getInt("isLike");
-                        item.commentReply = comment.getInt("commentReply");
-
-                        item.commenterAvatar = comment.getString("memberVo.avatar");
-                        item.nickname = comment.getString("memberVo.nickName");
-                        item.commentTime = comment.getString("commentStartTime");
-
-                        if (item.commentType != Constant.COMMENT_TYPE_TEXT) {
-                            EasyJSONArray images = comment.getArray("images");
-                            if (images != null) {
-                                for (Object object2 : images) {
-                                    EasyJSONObject image = (EasyJSONObject) object2;
-                                    item.imageUrl = image.getString("imageUrl");
-                                }
-                            }
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            adapter.loadMoreFail();
+                            return;
                         }
 
-                        commentItemList.add(item);
-                    }
-                    adapter.loadMoreComplete();
+                        hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                        SLog.info("hasMore[%s]", hasMore);
+                        if (!hasMore) {
+                            adapter.loadMoreEnd();
+                            adapter.setEnableLoadMore(false);
+                        }
 
-                    currPage++;
-                    adapter.setNewData(commentItemList);
-                } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                        EasyJSONArray comments = responseObj.getArray("datas.comments");
+                        for (Object object : comments) {
+                            EasyJSONObject comment = (EasyJSONObject) object;
+                            CommentItem item = new CommentItem();
+                            item.commentId = comment.getInt("commentId");
+                            item.commentChannel = comment.getInt("commentChannel");
+                            item.commentType = comment.getInt("commentType");
+                            item.commentLike = comment.getInt("commentLike");
+                            item.content = comment.getString("content");
+                            item.isLike = comment.getInt("isLike");
+                            item.commentReply = comment.getInt("commentReply");
+
+                            item.commenterAvatar = comment.getString("memberVo.avatar");
+                            item.nickname = comment.getString("memberVo.nickName");
+                            item.commentTime = comment.getString("commentStartTime");
+
+                            if (item.commentType != Constant.COMMENT_TYPE_TEXT) {
+                                EasyJSONArray images = comment.getArray("images");
+                                if (images != null) {
+                                    for (Object object2 : images) {
+                                        EasyJSONObject image = (EasyJSONObject) object2;
+                                        item.imageUrl = image.getString("imageUrl");
+                                    }
+                                }
+                            }
+
+                            commentItemList.add(item);
+                        }
+                        adapter.loadMoreComplete();
+
+                        currPage++;
+                        adapter.setNewData(commentItemList);
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
                 }
-            }
-        });
+            });
+        } catch (EasyJSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -204,13 +223,6 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             return;
         }
 
-        /*
-        token	string	true	普通参数		登陆token
-commentId	string	true	普通参数		评论ID
-state
-         */
-
-
         final CommentItem commentItem = commentItemList.get(position);
 
         EasyJSONObject params = EasyJSONObject.generate(
@@ -231,7 +243,6 @@ state
 
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        adapter.loadMoreFail();
                         return;
                     }
 
