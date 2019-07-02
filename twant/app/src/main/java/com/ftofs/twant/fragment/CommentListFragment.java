@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommentListAdapter;
 import com.ftofs.twant.api.Api;
@@ -34,9 +35,14 @@ import okhttp3.Call;
  * 店鋪評論和商品評論共用一個Fragment
  * @author zwm
  */
-public class CommentListFragment extends BaseFragment implements View.OnClickListener {
+public class CommentListFragment extends BaseFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     int bindId;
     int commentChannel;
+
+    // 當前第幾頁
+    int currPage = 0;
+    // 是否還有數據
+    boolean hasMore = false;
 
     List<CommentItem> commentItemList = new ArrayList<>();
     CommentListAdapter adapter;
@@ -74,9 +80,10 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvCommentList.setLayoutManager(layoutManager);
         adapter = new CommentListAdapter(R.layout.comment_item, commentItemList);
+        adapter.setOnLoadMoreListener(this, rvCommentList);
         rvCommentList.setAdapter(adapter);
 
-        loadCommentData(1);
+        loadCommentData(currPage + 1);
     }
 
     @Override
@@ -117,7 +124,15 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
 
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        adapter.loadMoreFail();
                         return;
+                    }
+
+                    hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                    SLog.info("hasMore[%s]", hasMore);
+                    if (!hasMore) {
+                        adapter.loadMoreEnd();
+                        adapter.setEnableLoadMore(false);
                     }
 
                     EasyJSONArray comments = responseObj.getArray("datas.comments");
@@ -148,12 +163,32 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
 
                         commentItemList.add(item);
                     }
+                    adapter.loadMoreComplete();
 
+                    currPage++;
                     adapter.setNewData(commentItemList);
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        SLog.info("onLoadMoreRequested");
+
+        if (!hasMore) {
+            adapter.setEnableLoadMore(false);
+            return;
+        }
+        loadCommentData(currPage + 1);
     }
 }
