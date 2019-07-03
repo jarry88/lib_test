@@ -3,15 +3,19 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.PostListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.PostCategory;
+import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -34,9 +38,11 @@ import okhttp3.Call;
  */
 public class CircleFragment extends BaseFragment implements View.OnClickListener {
     List<PostCategory> postCategoryList = new ArrayList<>();
+    List<PostItem> postItemList = new ArrayList<>();
 
     LinearLayout llTabButtonContainer;
 
+    PostListAdapter adapter;
     public static CircleFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -60,6 +66,13 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
 
         Util.setOnClickListener(view, R.id.btn_add_post, this);
+
+        RecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
+        adapter = new PostListAdapter(R.layout.post_list_item, postItemList);
+        GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);
+        layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
+        rvPostList.setLayoutManager(layoutManagerCommodity);
+        rvPostList.setAdapter(adapter);
 
 
         // 添加前兩個固定的Item
@@ -109,6 +122,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         return;
                     }
 
+                    // 如果未初始化，則初始化分類菜單
                     if (postCategoryList.size() <= 2) {
                         int twBlue = getResources().getColor(R.color.tw_blue, null);
                         EasyJSONArray wantPostCategoryList = responseObj.getArray("datas.wantPostCategoryList");
@@ -145,6 +159,25 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                             tabManager.add(button);
                         }
                     }
+
+                    EasyJSONArray wantPostList = responseObj.getArray("datas.wantPostList");
+                    for (Object object : wantPostList) {
+                        EasyJSONObject post = (EasyJSONObject) object;
+                        PostItem item = new PostItem();
+
+                        item.postId = post.getInt("postId");
+                        item.coverImage = post.getString("coverImage");
+                        item.postCategory = post.getString("postCategory");
+                        item.title = post.getString("title");
+
+                        item.authorAvatar = post.getString("memberVo.avatar");
+                        item.authorNickname = post.getString("memberVo.nickName");
+                        item.postLike = post.getInt("postLike");
+
+                        postItemList.add(item);
+                    }
+
+
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                 }

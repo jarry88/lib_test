@@ -203,7 +203,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         } else {
             iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
         }
-        
+
         tvThumbCount.setText(String.valueOf(commentItem.commentLike));
     }
 }
