@@ -36,8 +36,8 @@
 
 
     <!-- SquareGridLayoutOut -->
-    <attr name="sql_column_count" format="integer"></attr>
+    <attr name="sgl_column_count" format="integer"></attr>
     <declare-styleable name="SquareGridLayout">
-        <attr name="sql_column_count"></attr>
+        <attr name="sgl_column_count"></attr>
     </declare-styleable>
 </resources>

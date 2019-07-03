@@ -34,7 +34,7 @@ public class SquareGridLayout extends ViewGroup {
         super(context, attrs, defStyleAttr);
 
         TypedArray array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.SquareGridLayout, defStyleAttr, 0);
-        columnCount = array.getInteger(R.styleable.SquareGridLayout_sql_column_count, 1);
+        columnCount = array.getInteger(R.styleable.SquareGridLayout_sgl_column_count, 1);
         array.recycle();
     }
 
@@ -60,15 +60,18 @@ public class SquareGridLayout extends ViewGroup {
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
 
         int childCount = getChildCount();
+        int nonGoneChildCount = 0;
+
+
         int itemWidthOrig = sizeWidth / columnCount;
         int itemHeightOrig = itemWidthOrig;
-        sizeHeight = itemWidthOrig * ((childCount + columnCount - 1) / columnCount);  // 總高度
 
-        SLog.info("onMeasure, childCount[%d], sizeWidth[%d], sizeHeight[%d], itemWidth[%d], itemHeight[%d]",
-                childCount, sizeWidth, sizeHeight, itemWidthOrig, itemHeightOrig);
 
         for (int i = 0; i < childCount; i++) {
             View childView = getChildAt(i);
+            if (childView.getVisibility() != GONE) {
+                ++nonGoneChildCount;
+            }
             MarginLayoutParams marginLayoutParams = (MarginLayoutParams) childView.getLayoutParams();
 
             int itemWidth = itemWidthOrig - marginLayoutParams.leftMargin - marginLayoutParams.rightMargin;
@@ -80,6 +83,11 @@ public class SquareGridLayout extends ViewGroup {
             int childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(itemHeight, MeasureSpec.EXACTLY);
             measureChild(childView, childWidthMeasureSpec, childHeightMeasureSpec);
         }
+
+        sizeHeight = itemWidthOrig * ((nonGoneChildCount + columnCount - 1) / columnCount);  // 總高度
+
+        SLog.info("onMeasure, childCount[%d], sizeWidth[%d], sizeHeight[%d], itemWidth[%d], itemHeight[%d]",
+                childCount, sizeWidth, sizeHeight, itemWidthOrig, itemHeightOrig);
 
         setMeasuredDimension(sizeWidth, sizeHeight);
     }
@@ -94,8 +102,13 @@ public class SquareGridLayout extends ViewGroup {
         /**
          * 遍历所有childView根据其宽和高，以及margin进行布局
          */
+        int index = 0;
         for (int i = 0; i < childCount; i++) {
             View childView = getChildAt(i);
+            if (childView.getVisibility() == GONE) {
+                continue;
+            }
+
             int childWidth = childView.getMeasuredWidth();
             int childHeight = childView.getMeasuredHeight();
             MarginLayoutParams marginLayoutParams = (MarginLayoutParams) childView.getLayoutParams();
@@ -104,12 +117,12 @@ public class SquareGridLayout extends ViewGroup {
                     childWidth, childHeight, marginLayoutParams.topMargin, marginLayoutParams.bottomMargin,
                     marginLayoutParams.leftMargin, marginLayoutParams.rightMargin);
 
-            int remainder = i % columnCount;
+            int remainder = index % columnCount;
             if (remainder == 0) {
                 x = 0;
 
                 // 重新另立一行
-                if (i > 0) {
+                if (index > 0) {
                     y += childHeight + marginLayoutParams.topMargin + marginLayoutParams.bottomMargin;
                 }
             } else {
@@ -123,6 +136,8 @@ public class SquareGridLayout extends ViewGroup {
             int bottom = top + childHeight;
             SLog.info("left[%d], top[%d], right[%d], bottom[%d]", left, top, right, bottom);
             childView.layout(left, top, right, bottom);
+
+            index++;
         }
     }
 
