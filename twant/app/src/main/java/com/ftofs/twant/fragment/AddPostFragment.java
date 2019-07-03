@@ -386,7 +386,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
 
 
                     // token要附在url中
-                    url = Config.API_BASE_URL + Api.PATH_COMMIT_POST + Api.makeQueryString(EasyJSONObject.generate("token", token));
+                    String path = Api.PATH_COMMIT_POST + Api.makeQueryString(EasyJSONObject.generate("token", token));
                     SLog.info("url[%s]", url);
 
                     EasyJSONObject params = EasyJSONObject.generate(
@@ -405,7 +405,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
                     String json = params.toString();
                     SLog.info("json[%s]", json);
 
-                    String responseStr = Api.syncPostJSON(url, json);
+                    String responseStr = Api.syncPostJson(path, json);
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {

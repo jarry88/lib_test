@@ -176,7 +176,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         } else if (id == R.id.btn_test) {
             if (Config.DEVELOPER_MODE) {
                 MainFragment mainFragment = (MainFragment) getParentFragment();
-                mainFragment.start(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
+                // mainFragment.start(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
+                mainFragment.start(TestFragment.newInstance());
             }
         }
     }

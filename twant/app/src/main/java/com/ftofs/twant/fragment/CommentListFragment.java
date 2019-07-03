@@ -116,7 +116,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             pop();
         } else if (id == R.id.btn_publish) {
             MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(AddCommentFragment.newInstance());
+            mainFragment.start(AddCommentFragment.newInstance(bindId));
         }
     }
 

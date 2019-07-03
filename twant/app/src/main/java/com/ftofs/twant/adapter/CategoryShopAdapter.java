@@ -56,7 +56,7 @@ public class CategoryShopAdapter extends BaseQuickAdapter<CategoryShop, BaseView
         if (position == itemCount - 1) {
             // 最后一項，設置大一點的bottomMargin
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
-            layoutParams.bottomMargin = Util.dip2px(context, 50);
+            layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
         }
     }
 }

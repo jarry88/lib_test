@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                app:sql_column_count="3">
+                app:sgl_column_count="3">
                 <ImageView
                     android:id="@+id/btn_add_image"
                     android:layout_width="match_parent"

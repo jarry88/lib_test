@@ -476,6 +476,12 @@ public class Api {
      */
     public static final String PATH_COMMENT_DETAIL = "/app/comment/info";
 
+
+    /**
+     * 發表回復評論
+     */
+    public static final String PATH_PUBLISH_COMMENT = "/member/comment/send";
+
     /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
@@ -933,16 +939,86 @@ public class Api {
 
     /**
      * 同步POST JSON
-     * @param url
+     * @param path
      * @param json
      * @return
      * @throws IOException
      */
-    public static String syncPostJSON(String url, String json) throws IOException {
+    public static String syncPostJson(String path, String json) {
+        return postJson(path, json, null, null);
+    }
+
+    /**
+     * 以POST方式提交 JSON,回調在UI線程中執行
+     * @param path
+     * @param json
+     * @param uiCallback
+     */
+    public static void postJsonUi(String path, String json, UICallback uiCallback) {
+        postJson(path, json, null, uiCallback);
+    }
+
+    /**
+     * 以POST方式提交 JSON,回調在UI線程中執行
+     * @param path
+     * @param json
+     * @param ioCallback
+     */
+    public static void postJsonIo(String path, String json, Callback ioCallback) {
+        postJson(path, json, ioCallback, null);
+    }
+
+
+    /**
+     * 以【POST】方式提交JSON字符串
+     * 如果ioCallback和uiCallback同時為null，表示同步方式執行
+     * @param path URL的路徑
+     * @param json 提交給服務器的json字符串
+     * @param ioCallback 在IO線程中執行的回調(可以為null)
+     * @param uiCallback 在UI線程中執行的回調(可以為null)
+     * @return 如果以異步方式執行，固定返回null；如果以同步方式執行，返回結果字符串
+     */
+    public static String postJson(String path, String json, Callback ioCallback, final UICallback uiCallback) {
+        String url = API_BASE_URL + path;
+
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder().url(url).post(body).build();
-        Response response = client.newCall(request).execute();
-        return response.body().string();
+
+        if (uiCallback != null) {
+            // 在UI線程中執行回調
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    uiCallback.setOnFailure(call, e);
+                    handler.post(uiCallback);
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    int statusCode = response.code();
+                    SLog.info("statusCode[%d]", statusCode);
+
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    uiCallback.setOnResponse(call, response.body().string());
+                    handler.post(uiCallback);
+                }
+            });
+        } else if(ioCallback != null) {
+            // 在IO線程中執行回調
+            client.newCall(request).enqueue(ioCallback);
+        } else {
+            // 同步方式執行
+            try {
+                Response response = client.newCall(request).execute();
+                String responseStr = response.body().string();
+                return responseStr;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
     }
 }
