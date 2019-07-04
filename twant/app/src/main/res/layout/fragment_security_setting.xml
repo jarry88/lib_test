@@ -14,7 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        >
+        android:background="@drawable/border_type_d">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"
@@ -30,7 +30,7 @@
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
-            android:text="@string/setting_fragment_title"
+            android:text="@string/security_setting_fragment_title"
             />
     </RelativeLayout>
 
@@ -82,14 +82,13 @@
     <RelativeLayout
         android:id="@+id/btn_login_password"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="68dp"
         android:layout_marginLeft="@dimen/toolbar_margin_left"
         android:layout_marginRight="@dimen/toolbar_margin_right"
         app:layout_constraintTop_toBottomOf="@id/tool_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp">
+        android:background="@drawable/border_type_d">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,6 +106,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_login_password_hint"
+                android:textColor="@color/tw_grey"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/expand_button"
+            />
+
+
+    </RelativeLayout>
+
+
+    <!-- 手機修改 -->
+    <RelativeLayout
+        android:id="@+id/btn_change_mobile"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        app:layout_constraintTop_toBottomOf="@id/btn_login_password"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/border_type_d">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_change_mobile"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_change_mobile_hint"
                 android:textColor="@color/tw_grey"
                 android:textSize="14sp"
                 />
@@ -134,62 +177,17 @@
             />
     </RelativeLayout>
 
-
-    <!-- 手機修改 -->
-    <RelativeLayout
-        android:id="@+id/btn_change_mobile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
-        app:layout_constraintTop_toBottomOf="@id/btn_login_password"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setting_change_mobile"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/setting_change_mobile_hint"
-                android:textColor="@color/tw_grey"
-                android:textSize="14sp"
-                />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/expand_button"
-            />
-    </RelativeLayout>
-
     <!-- 支付密碼 -->
-    <!--
     <RelativeLayout
         android:id="@+id/btn_payment_password"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="68dp"
         android:layout_marginLeft="@dimen/toolbar_margin_left"
         android:layout_marginRight="@dimen/toolbar_margin_right"
         app:layout_constraintTop_toBottomOf="@id/btn_change_mobile"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp">
+        android:background="@drawable/border_type_d">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -219,7 +217,7 @@
             android:src="@drawable/expand_button"
             />
     </RelativeLayout>
-    -->
+
 
     <!-- 實名認證 -->
     <!--

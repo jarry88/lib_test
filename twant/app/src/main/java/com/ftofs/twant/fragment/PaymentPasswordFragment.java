@@ -52,6 +52,7 @@ public class PaymentPasswordFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
         Util.setOnClickListener(view, R.id.btn_clear_password, this);
         Util.setOnClickListener(view, R.id.btn_view_password, this);
@@ -67,7 +68,9 @@ public class PaymentPasswordFragment extends BaseFragment implements View.OnClic
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_ok) {
+        if (id == R.id.btn_back) {
+            pop();
+        } else if (id == R.id.btn_ok) {
             String password = etPassword.getText().toString();
             String confirmPassword = etConfirmPassword.getText().toString();
 
