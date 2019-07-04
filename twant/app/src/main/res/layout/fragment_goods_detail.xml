@@ -659,7 +659,6 @@
                             android:id="@+id/img_commenter_avatar"
                             android:layout_width="21dp"
                             android:layout_height="21dp"
-                            android:src="@drawable/avatar_male"
                             />
 
                         <TextView
@@ -669,7 +668,7 @@
                             android:layout_marginLeft="6dp"
                             android:textSize="13sp"
                             android:textColor="@color/tw_dark_grey"
-                            android:text="zwm"
+                            android:text=""
                             />
                     </LinearLayout>
 
@@ -680,13 +679,12 @@
                         android:layout_marginTop="10dp"
                         android:singleLine="true"
                         android:ellipsize="end"
-                        android:text="想要帶你去浪漫的土耳其，看日暮寧靜後的想要帶你去浪漫的土耳其，看日暮寧靜後的"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
                 </LinearLayout>
             </LinearLayout>
-
 
             <!-- 店友 -->
             <RelativeLayout

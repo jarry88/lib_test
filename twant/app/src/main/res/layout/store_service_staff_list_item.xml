@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/toolbar_margin_left"
+    android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:background="@drawable/border_type_d">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_staff_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/avatar_male"
+        />
+
+    <TextView
+        android:id="@+id/tv_staff_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/img_staff_avatar"
+        android:text="小全"
+        android:textSize="16sp"
+        android:textColor="@color/tw_black"
+        />
+</RelativeLayout>

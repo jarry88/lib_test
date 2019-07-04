@@ -23,6 +23,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.AddrItem;
+import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsConformItem;
@@ -41,6 +42,7 @@ import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SpecSelectPopup;
+import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.StoreGiftPopup;
 import com.ftofs.twant.widget.StoreVoucherPopup;
 import com.github.thunder413.datetimeutils.DateTimeUnits;
@@ -114,6 +116,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     ImageView btnGoodsThumb;
     int isLike; // 是否點贊
+
+    List<CustomerServiceStaff> staffList = new ArrayList<>();
 
     List<Spec> specList = new ArrayList<>();
     // 從逗號連接的specValueId定位出goodsId的Map
@@ -278,6 +282,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_shop, this);
         Util.setOnClickListener(view, R.id.btn_goto_cart, this);
+        Util.setOnClickListener(view, R.id.btn_bottom_bar_customer_service, this);
 
         String token = User.getToken();
         loadGoodsDetail(commonId, token);
@@ -363,6 +368,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_view_all_comment:
                 mainFragment.start(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
+                break;
+            case R.id.btn_bottom_bar_customer_service:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new StoreCustomerServicePopup(_mActivity, staffList))
+                        .show();
                 break;
             default:
                 break;
@@ -733,6 +745,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             // 如果沒有評論，隱藏相應的控件
                             btnViewAllComment.setVisibility(GONE);
                             llFirstCommentContainer.setVisibility(GONE);
+                        }
+
+                        // 獲取店鋪客服人員數據
+                        EasyJSONArray storeServiceStaffList = responseObj.getArray("datas.storeServiceStaffList");
+                        for (Object object : storeServiceStaffList) {
+                            EasyJSONObject storeServiceStaff = (EasyJSONObject) object;
+
+                            CustomerServiceStaff staff = new CustomerServiceStaff();
+                            staff.staffId = storeServiceStaff.getInt("staffId");
+                            staff.staffName = storeServiceStaff.getString("staffName");
+                            staff.avatar = storeServiceStaff.getString("avatar");
+
+                            staffList.add(staff);
                         }
                     }
                 } catch (Exception e) {
