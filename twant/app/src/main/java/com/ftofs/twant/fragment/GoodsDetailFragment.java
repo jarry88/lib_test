@@ -144,6 +144,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     RelativeLayout rlDiscountInfoContainer;
     RelativeLayout rlPriceTag;
 
+    // 商品評論條數
+    int commentCount = 0;
+    TextView tvCommentCount;
+    LinearLayout btnViewAllComment;
+    LinearLayout llFirstCommentContainer;
+    ImageView imgCommenterAvatar;
+    TextView tvCommenterNickname;
+    TextView tvComment;
+
     /**
      * goodsId與贈品列表的映射表
      */
@@ -252,7 +261,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         btnShowGift.setOnClickListener(this);
         tvGiftText = view.findViewById(R.id.tv_gift_text);
 
+        tvCommentCount = view.findViewById(R.id.tv_comment_count);
+        btnViewAllComment = view.findViewById(R.id.btn_view_all_comment);
+        btnViewAllComment.setOnClickListener(this);
 
+        llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
+        imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
+        tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
+        tvComment = view.findViewById(R.id.tv_comment);
 
         Util.setOnClickListener(view, R.id.btn_back_round, this);
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
@@ -344,6 +360,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .moveUpToKeyboard(false)
                         .asCustom(new SharePopup(_mActivity))
                         .show();
+                break;
+            case R.id.btn_view_all_comment:
+                mainFragment.start(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
                 break;
             default:
                 break;
@@ -698,6 +717,23 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                         tvConformText.setText(conformText);
                         btnShowConform.setVisibility(VISIBLE);
+
+                        commentCount = responseObj.getInt("datas.wantCommentVoInfoCount");
+                        tvCommentCount.setText(String.format(getString(R.string.text_comment) + "(%d)", commentCount));
+
+                        if (commentCount > 0) {
+                            // 如果有評論，顯示首條評論
+                            EasyJSONObject wantCommentVoInfo = responseObj.getObject("datas.wantCommentVoInfoList[0]");
+
+                            String commenterAvatarUrl = Config.OSS_BASE_URL + "/" + wantCommentVoInfo.getString("memberVo.avatar");
+                            Glide.with(_mActivity).load(commenterAvatarUrl).centerCrop().into(imgCommenterAvatar);
+                            tvCommenterNickname.setText(wantCommentVoInfo.getString("memberVo.nickName"));
+                            tvComment.setText(wantCommentVoInfo.getString("content"));
+                        } else {
+                            // 如果沒有評論，隱藏相應的控件
+                            btnViewAllComment.setVisibility(GONE);
+                            llFirstCommentContainer.setVisibility(GONE);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

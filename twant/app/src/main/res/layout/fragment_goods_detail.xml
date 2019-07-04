@@ -593,35 +593,100 @@
             </RelativeLayout>
 
             <!-- 評論 -->
-            <RelativeLayout
-                android:id="@+id/rl_comment_container"
+            <LinearLayout
+                android:id="@+id/ll_comment_container"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/toolbar_height"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="@dimen/toolbar_margin_left"
                 android:layout_marginRight="@dimen/toolbar_margin_right"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_send_to_container"
+                android:paddingBottom="15dp"
                 android:background="@drawable/bottom_separator_box"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/text_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="@string/text_comment"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_dark_grey"
-                    />
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_comment_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/text_comment"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_dark_grey"
+                        />
 
-                <ImageView
-                    android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/btn_view_all_comment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="30dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/tw_black"
+                            android:text="@string/text_view_all"
+                            />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:src="@drawable/expand_button"
+                            />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_first_comment_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/expand_button"
-                    />
-            </RelativeLayout>
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/img_commenter_avatar"
+                            android:layout_width="21dp"
+                            android:layout_height="21dp"
+                            android:src="@drawable/avatar_male"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_commenter_nickname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:textSize="13sp"
+                            android:textColor="@color/tw_dark_grey"
+                            android:text="zwm"
+                            />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:text="想要帶你去浪漫的土耳其，看日暮寧靜後的想要帶你去浪漫的土耳其，看日暮寧靜後的"
+                        android:textSize="14sp"
+                        android:textColor="@color/tw_black"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
 
             <!-- 店友 -->
             <RelativeLayout
@@ -632,7 +697,7 @@
                 android:layout_marginRight="@dimen/toolbar_margin_right"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_comment_container"
+                app:layout_constraintTop_toBottomOf="@id/ll_comment_container"
                 android:background="@drawable/bottom_separator_box"
                 android:orientation="horizontal">
                 <TextView
