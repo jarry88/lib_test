@@ -243,6 +243,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         .show();
             } else if (tag.equals(TEXT_MEMBER_BUY_AGAIN)) {
                 orderOperation(ORDER_OPERATION_TYPE_BUY_AGAIN);
+            } else if (tag.equals(TEXT_EVALUATION)) {
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(GoodsEvaluationFragment.newInstance());
             }
         } catch (Exception e) {
             return true;

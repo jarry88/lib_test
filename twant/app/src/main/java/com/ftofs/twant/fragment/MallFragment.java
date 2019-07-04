@@ -58,6 +58,10 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         int id = v.getId();
 
         MainFragment mainFragment = MainFragment.getInstance();
+        if (mainFragment == null) {
+            return;
+        }
+
         switch (id) {
             case R.id.btn_back:
                 pop();
