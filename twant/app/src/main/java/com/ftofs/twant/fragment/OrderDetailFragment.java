@@ -19,6 +19,7 @@ import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -27,6 +28,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
@@ -52,6 +54,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
+    List<CustomerServiceStaff> staffList = new ArrayList<>();
 
     TextView tvReceiverName;
     TextView tvMobile;
@@ -149,6 +152,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         llOrderButtonContainer = view.findViewById(R.id.ll_order_button_container);
 
         Util.setOnClickListener(view, R.id.btn_dial_store_phone, this);
+        Util.setOnClickListener(view, R.id.btn_advisory_service, this);
 
         RecyclerView rvOrderDetailGoodsList = view.findViewById(R.id.rv_order_detail_goods_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -264,6 +268,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_dial_store_phone:
                 SLog.info("storePhone[%s]", storePhone);
                 Util.dialPhone(_mActivity, storePhone);
+                break;
+            case R.id.btn_advisory_service:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new StoreCustomerServicePopup(_mActivity, staffList))
+                        .show();
                 break;
             default:
                 break;
@@ -395,6 +406,18 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
+                    }
+
+                    EasyJSONArray serviceStaffList = responseObj.getArray("datas.serviceStaffList");
+                    for (Object object : serviceStaffList) {
+                        EasyJSONObject serviceStaff = (EasyJSONObject) object;
+
+                        CustomerServiceStaff staff = new CustomerServiceStaff();
+                        staff.staffId = serviceStaff.getInt("staffId");
+                        staff.staffName = serviceStaff.getString("staffName");
+                        staff.avatar = serviceStaff.getString("avatar");
+
+                        staffList.add(staff);
                     }
 
                     EasyJSONObject ordersVo = responseObj.getObject("datas.ordersVo");
