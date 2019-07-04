@@ -72,6 +72,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     LinearLayout llOrderButtonContainer;
 
+    String storePhone;
+
     public static final int ORDER_OPERATION_TYPE_CANCEL = 1;
     public static final int ORDER_OPERATION_TYPE_DELETE = 2;
     public static final int ORDER_OPERATION_TYPE_BUY_AGAIN = 3;
@@ -95,6 +97,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         Bundle args = new Bundle();
 
         args.putInt("ordersId", ordersId);
+        SLog.info("ordersId[%d]", ordersId);
 
         OrderDetailFragment fragment = new OrderDetailFragment();
         fragment.setArguments(args);
@@ -144,6 +147,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         tvSendTime = view.findViewById(R.id.tv_send_time);
 
         llOrderButtonContainer = view.findViewById(R.id.ll_order_button_container);
+
+        Util.setOnClickListener(view, R.id.btn_dial_store_phone, this);
 
         RecyclerView rvOrderDetailGoodsList = view.findViewById(R.id.rv_order_detail_goods_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -255,6 +260,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         switch (id) {
             case R.id.btn_back:
                 pop();
+                break;
+            case R.id.btn_dial_store_phone:
+                SLog.info("storePhone[%s]", storePhone);
+                Util.dialPhone(_mActivity, storePhone);
                 break;
             default:
                 break;
@@ -415,6 +424,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String paymentTime = ordersVo.getString("paymentTime");
                     String sendTime = ordersVo.getString("sendTime");
 
+                    storePhone = ordersVo.getString("storePhone");
+
                     tvReceiverName.setText(getString(R.string.text_receiver) + ":  " + receiverName);
                     tvMobile.setText(mobile);
                     tvAddress.setText(address);
@@ -453,6 +464,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
                     llOrderButtonContainer.removeAllViews();
                     int size = showButtonNameList.size();
+                    SLog.info("按鈕個數[%d]", size);
                     for (int i = 0; i < size; ++i) {
                         String buttonName = showButtonNameList.get(i);
                         TextView button = new TextView(_mActivity);

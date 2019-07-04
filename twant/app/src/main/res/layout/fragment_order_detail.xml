@@ -339,6 +339,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
                         <LinearLayout
+                            android:id="@+id/btn_dial_store_phone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
@@ -486,7 +487,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:background="@drawable/bottom_separator_box_white">
+        android:background="@drawable/border_type_e">
         <LinearLayout
             android:id="@+id/ll_order_button_container"
             android:layout_width="wrap_content"

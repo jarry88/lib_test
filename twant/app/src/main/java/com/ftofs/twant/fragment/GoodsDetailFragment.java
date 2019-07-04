@@ -268,6 +268,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvCommentCount = view.findViewById(R.id.tv_comment_count);
         btnViewAllComment = view.findViewById(R.id.btn_view_all_comment);
         btnViewAllComment.setOnClickListener(this);
+        Util.setOnClickListener(view, R.id.btn_goods_comment, this);
 
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
         imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
@@ -367,6 +368,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .show();
                 break;
             case R.id.btn_view_all_comment:
+            case R.id.btn_goods_comment:
                 mainFragment.start(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
                 break;
             case R.id.btn_bottom_bar_customer_service:
@@ -732,36 +734,38 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                         tvConformText.setText(conformText);
                         btnShowConform.setVisibility(VISIBLE);
+                    }
 
-                        commentCount = responseObj.getInt("datas.wantCommentVoInfoCount");
-                        tvCommentCount.setText(String.format(getString(R.string.text_comment) + "(%d)", commentCount));
 
-                        if (commentCount > 0) {
-                            // 如果有評論，顯示首條評論
-                            EasyJSONObject wantCommentVoInfo = responseObj.getObject("datas.wantCommentVoInfoList[0]");
+                    commentCount = responseObj.getInt("datas.wantCommentVoInfoCount");
+                    tvCommentCount.setText(String.format(getString(R.string.text_comment) + "(%d)", commentCount));
 
-                            String commenterAvatarUrl = Config.OSS_BASE_URL + "/" + wantCommentVoInfo.getString("memberVo.avatar");
-                            Glide.with(_mActivity).load(commenterAvatarUrl).centerCrop().into(imgCommenterAvatar);
-                            tvCommenterNickname.setText(wantCommentVoInfo.getString("memberVo.nickName"));
-                            tvComment.setText(wantCommentVoInfo.getString("content"));
-                        } else {
-                            // 如果沒有評論，隱藏相應的控件
-                            btnViewAllComment.setVisibility(GONE);
-                            llFirstCommentContainer.setVisibility(GONE);
-                        }
+                    SLog.info("commentCount[%d]", commentCount);
+                    if (commentCount > 0) {
+                        // 如果有評論，顯示首條評論
+                        EasyJSONObject wantCommentVoInfo = responseObj.getObject("datas.wantCommentVoInfoList[0]");
 
-                        // 獲取店鋪客服人員數據
-                        EasyJSONArray storeServiceStaffList = responseObj.getArray("datas.storeServiceStaffList");
-                        for (Object object : storeServiceStaffList) {
-                            EasyJSONObject storeServiceStaff = (EasyJSONObject) object;
+                        String commenterAvatarUrl = Config.OSS_BASE_URL + "/" + wantCommentVoInfo.getString("memberVo.avatar");
+                        Glide.with(_mActivity).load(commenterAvatarUrl).centerCrop().into(imgCommenterAvatar);
+                        tvCommenterNickname.setText(wantCommentVoInfo.getString("memberVo.nickName"));
+                        tvComment.setText(wantCommentVoInfo.getString("content"));
+                    } else {
+                        // 如果沒有評論，隱藏相應的控件
+                        btnViewAllComment.setVisibility(GONE);
+                        llFirstCommentContainer.setVisibility(GONE);
+                    }
 
-                            CustomerServiceStaff staff = new CustomerServiceStaff();
-                            staff.staffId = storeServiceStaff.getInt("staffId");
-                            staff.staffName = storeServiceStaff.getString("staffName");
-                            staff.avatar = storeServiceStaff.getString("avatar");
+                    // 獲取店鋪客服人員數據
+                    EasyJSONArray storeServiceStaffList = responseObj.getArray("datas.storeServiceStaffList");
+                    for (Object object : storeServiceStaffList) {
+                        EasyJSONObject storeServiceStaff = (EasyJSONObject) object;
 
-                            staffList.add(staff);
-                        }
+                        CustomerServiceStaff staff = new CustomerServiceStaff();
+                        staff.staffId = storeServiceStaff.getInt("staffId");
+                        staff.staffName = storeServiceStaff.getString("staffName");
+                        staff.avatar = storeServiceStaff.getString("avatar");
+
+                        staffList.add(staff);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
