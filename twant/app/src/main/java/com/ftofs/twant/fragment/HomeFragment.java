@@ -237,7 +237,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     int i = 0;
                     for (Object object : goodsArray) {
                         EasyJSONObject goods = (EasyJSONObject) object;
-                        String goodsImage = Config.OSS_BASE_URL + "/" + goods.getString("goodsImage");
+                        String goodsImage = StringUtil.normalizeImageUrl(goods.getString("goodsImage"));
                         Glide.with(context).load(goodsImage).centerCrop().into(goodsImageArr[i]);
                         ++i;
                     }
@@ -386,7 +386,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 EasyJSONObject goodsObject = (EasyJSONObject) object2;
                                 String imageSrc = goodsObject.getString("imageSrc");
 
-                                String uri = Config.OSS_BASE_URL + "/" + imageSrc;
+                                String uri = StringUtil.normalizeImageUrl(imageSrc);
                                 if (index == 0) {
                                     ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
                                     Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageLeft);

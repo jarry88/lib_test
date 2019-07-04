@@ -3,6 +3,7 @@ package com.ftofs.twant.util;
 import android.content.Context;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.Mobile;
@@ -170,11 +171,30 @@ public class StringUtil {
      */
     public static List<Integer> specValueIdsToList(String specValueIds) {
         List<Integer> result = new ArrayList<>();
+        if (StringUtil.isEmpty(specValueIds)) {
+            return result;
+        }
         String[] specValueIdArr = specValueIds.split(",");
         for (int i = 0; i < specValueIdArr.length; i++) {
             result.add(Integer.parseInt(specValueIdArr[i]));
         }
 
         return result;
+    }
+
+
+    /**
+     * 規范圖片的Url，如果沒有前綴，添加前綴
+     * @param imageUrl
+     */
+    public static String normalizeImageUrl(String imageUrl) {
+        if (imageUrl == null) {
+            return null;
+        }
+        if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+            return imageUrl;
+        }
+
+        return Config.OSS_BASE_URL + "/" + imageUrl;
     }
 }

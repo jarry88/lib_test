@@ -43,6 +43,7 @@ import okhttp3.Response;
 
 /**
  * 規格選擇框
+ * 有些商品沒有規格，只有一個goodsId
  * @author zwm
  */
 public class SpecSelectPopup extends BottomPopupView implements View.OnClickListener {
@@ -135,10 +136,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         abQuantity.setMinValue(1);
 
         SLog.info("specList.size[%d]", specList.size());
-        if (specList.size() < 1) {
-            return;
-        }
-
 
         int position = 0;
         LinearLayout llSpecContainer = findViewById(R.id.ll_spec_container);

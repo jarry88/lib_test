@@ -601,6 +601,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONArray goodsSpecValueArr = (EasyJSONArray) EasyJSONArray.parse(goodsSpecValues);
                     for (Object object : goodsSpecValueArr) {
                         EasyJSONObject mapItem = (EasyJSONObject) object;
+                        SLog.info("kkkkey[%s], vvvalue[%s]", mapItem.getString("specValueIds"), mapItem.getInt("goodsId"));
+                        // 有些沒有規格的商品，只有一個goodsId，且specValueIds字符串為空串
                         specValueIdMap.put(mapItem.getString("specValueIds"), mapItem.getInt("goodsId"));
                     }
 
@@ -697,6 +699,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         first = false;
                     }
                     // 初始化默認選擇
+                    SLog.info("currGoodsId[%d]", currGoodsId);
                     selectSku(currGoodsId);
 
 
@@ -936,6 +939,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             showGiftHint(giftItemList);
         }
 
+        SLog.info("goodsInfo.specValueIds[%s]", goodsInfo.specValueIds);
         selSpecValueIdList = StringUtil.specValueIdsToList(goodsInfo.specValueIds);
 
         String fullSpecs = goodsInfo.goodsFullSpecs;
