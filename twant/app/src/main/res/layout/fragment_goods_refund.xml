@@ -215,6 +215,9 @@
                 android:textColor="@color/tw_black"
                 android:textSize="12sp"
                 android:text=""
+                android:singleLine="true"
+                android:inputType="numberDecimal"
+                android:imeOptions="actionNext"
                 android:hint="@string/input_refund_amount_hint"
                 android:background="@null"
                 />
@@ -269,6 +272,9 @@
                 android:hint="@string/input_refund_desc_hint"
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
+                android:singleLine="true"
+                android:inputType="text"
+                android:imeOptions="actionDone"
                 android:background="@null"
                 />
         </RelativeLayout>

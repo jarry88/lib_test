@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,13 +17,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.entity.footprint.TotalStatus;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.task.TaskObservable;
+import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -33,6 +38,7 @@ import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +58,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     public static final int ACTION_COMPLAIN = 3;
 
     int action;
+    int ordersId;
+    int ordersGoodsId;
+
     EasyJSONObject paramsInObj;
 
     SquareGridLayout sglImageContainer;
@@ -66,6 +75,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
     TextView tvRefundReason;
     TextView tvMaxRefundAmount;
+    float maxRefundAmount;
     EditText etRefundAmount;
     EditText etRefundDesc;
 
@@ -104,6 +114,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         paramsInObj = (EasyJSONObject) EasyJSONObject.parse(paramsIn);
         try {
             action = paramsInObj.getInt("action");
+            ordersId = paramsInObj.getInt("ordersId");
+            ordersGoodsId = paramsInObj.getInt("ordersGoodsId");
         } catch (EasyJSONException e) {
             e.printStackTrace();
         }
@@ -162,6 +174,98 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     .show();
         } else if (id == R.id.btn_add_image) {
             startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+        } else if (id == R.id.btn_commit) {
+            commitRefundRequest();
+        }
+    }
+
+
+    private void commitRefundRequest() {
+        final String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        if (action == ACTION_REFUND) {
+            if (reasonIndex == -1) {
+                ToastUtil.show(_mActivity, getString(R.string.select_refund_reason_hint));
+                return;
+            }
+
+            String refundAmountStr = etRefundAmount.getText().toString().trim();
+            if (StringUtil.isEmpty(refundAmountStr)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_refund_amount_hint));
+                return;
+            }
+
+
+            final float refundAmount = Float.valueOf(etRefundAmount.getText().toString().trim());
+            SLog.info("refundAmount[%s], maxRefundAmount[%s], comp[%s]", refundAmount, maxRefundAmount, refundAmount > maxRefundAmount);
+            if (refundAmount > maxRefundAmount) {
+                ToastUtil.show(_mActivity, "退款金額不能超過最多可退金額");
+                return;
+            }
+
+            final String buyerMessage = etRefundDesc.getText().toString().trim();
+
+            final List<String> imagePathList = new ArrayList<>();
+            int childCount = sglImageContainer.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View view = sglImageContainer.getChildAt(i);
+                if (view instanceof ImageView) {  // 如果是添加按鈕，則跳過
+                    continue;
+                }
+                imagePathList.add((String) view.getTag());
+            }
+
+
+            TaskObserver taskObserver = new TaskObserver() {
+                @Override
+                public void onMessage() {
+                    String responseStr = (String) message;
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.show(_mActivity, "提交成功");
+                    pop();
+                }
+            };
+
+            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+                @Override
+                public Object doWork() {
+                    StringBuilder picJson = new StringBuilder();
+                    // 上傳圖片文件
+                    for (String imagePath : imagePathList) {
+                        String result = Api.syncUploadFile(new File(imagePath));
+                        SLog.info("result[%s]", result);
+                        if (StringUtil.isEmpty(result)) {
+                            return null;
+                        }
+
+                        if (picJson.length() > 0) {
+                            picJson.append(",");
+                        }
+                        picJson.append(result);
+                    }
+
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "token", token,
+                            "ordersId", ordersId,
+                            "picJson", picJson.toString(),
+                            "buyerMessage", buyerMessage,
+                            "ordersGoodsId", ordersGoodsId,
+                            "reasonId", reasonItemList.get(reasonIndex).id,
+                            "refundAmount", refundAmount);
+
+                    SLog.info("params[%s]", params.toString());
+                    String responseStr = Api.syncPost(Api.PATH_SINGLE_GOODS_REFUND_SAVE, params);
+                    SLog.info("responseStr[%s]", responseStr);
+                    return responseStr;
+                }
+            });
         }
     }
 
@@ -224,10 +328,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                                     null));
                         }
 
-                        float goodsPayAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
-                        tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, goodsPayAmount, 0));
-
-
+                        maxRefundAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
+                        tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
 
                     }
@@ -261,12 +363,24 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         String imageAbsolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
         SLog.info("imageAbsolutePath[%s]", imageAbsolutePath);
 
-        RelativeLayout imageWidget = (RelativeLayout) LayoutInflater.from(_mActivity).inflate(R.layout.refund_image_widget, sglImageContainer, false);
+        final View imageWidget = LayoutInflater.from(_mActivity).inflate(R.layout.refund_image_widget, sglImageContainer, false);
         ImageView imageView = imageWidget.findViewById(R.id.refund_image);
+        imageWidget.findViewById(R.id.btn_remove_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sglImageContainer.removeView(imageWidget);
+                btnAddImage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        imageWidget.setTag(imageAbsolutePath);
 
         Glide.with(_mActivity).load(imageAbsolutePath).centerCrop().into(imageView);
         int childCount = sglImageContainer.getChildCount();
         if (childCount > 0) {
+            if (childCount == 3) { // 最多3張圖片，如果原本已經有2張 加1個添加按鈕，則隱藏添加按鈕
+                btnAddImage.setVisibility(View.GONE);
+            }
             sglImageContainer.addView(imageWidget, childCount - 1);
         }
     }

@@ -487,6 +487,13 @@ public class Api {
      */
     public static final String PATH_SINGLE_GOODS_REFUND = "/member/refund/goods";
 
+
+    /**
+     * 单个商品退款申请保存
+     */
+    public static final String PATH_SINGLE_GOODS_REFUND_SAVE = "/member/refund/goods/save";
+
+
     /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
@@ -895,7 +902,7 @@ public class Api {
 
     /**
      * 會員同步上傳文件
-     * 成功上傳返回文件相對URL
+     * 成功上傳返回文件相對URL  失敗返回null
      * @param file
      */
     public static String syncUploadFile(File file) {
