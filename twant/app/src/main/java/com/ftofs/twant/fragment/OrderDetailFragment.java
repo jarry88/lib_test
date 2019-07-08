@@ -214,7 +214,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 if (operationType == ORDER_OPERATION_TYPE_DELETE) {
                     confirmText = "確定要刪除訂單嗎?";
                 }
-                new XPopup.Builder(getContext())
+                new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
                         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
@@ -239,7 +239,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             }))
                         .show();
             } else if (tag.equals(TEXT_MEMBER_RECEIVE)) { // 確認收貨
-                new XPopup.Builder(getContext())
+                new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
                         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)

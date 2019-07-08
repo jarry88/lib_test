@@ -1,5 +1,7 @@
 package com.ftofs.twant.fragment;
 
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -10,15 +12,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.AssetsUtil;
+import com.ftofs.twant.util.Guid;
+import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.SimpleTabManager;
-import com.ftofs.twant.widget.TwConfirmPopup;
-import com.lxj.xpopup.XPopup;
+import com.macau.pay.sdk.MacauPaySdk;
+import com.macaupay.sdk.AcpService;
+import com.macaupay.sdk.SDKConstants;
+import com.macaupay.sdk.SDKUtil;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.io.File;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 測試用Fragment
@@ -71,8 +78,53 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         int id = v.getId();
         if (id == R.id.btn_test) {
             SLog.info("btn_test");
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
+            // MainFragment mainFragment = MainFragment.getInstance();
+            // mainFragment.start(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
+
+
+            EasyJSONObject bizContent = EasyJSONObject.generate(
+                    "out_trade_no", Guid.getSpUuid(),
+                    "total_amount", 0.01,
+                    "subject", "Iphone6 16G",
+                    "trade_mode", "0002",
+                    "body", "Iphone6 16G",
+                    "order_no", Guid.getSpUuid(),
+                    "goods_id", "apple-01",
+                    "goods_name", "ipad",
+                    "quantity", 1,
+                    "price", 0.01
+            );
+
+
+            // String sign = AcpService.sign(bizContent.toString(), SDKConstants.UTF_8_ENCODING);
+
+            // AssetManager assetsManager = _mActivity.getAssets();
+            // AssetFileDescriptor fd = assetsManager.openFd("dd");
+
+
+            AssetsUtil.copyAssetAndWrite(_mActivity, "test.pfx");
+
+            String sign = SDKUtil.sign(bizContent.toString(), "/data/user/0/com.ftofs.twant/cache/test.pfx", "12345678", SDKConstants.UTF_8_ENCODING);
+            SLog.info("sign[%s]", sign);
+
+
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "app_id", "00000000046326",
+                    "api_name", "preCreate",
+                    "biz_api_code", "100020007",
+                    "data_type", "JSON",
+                    "charset", "utf-8",
+                    "sign_type", "RSA",
+                    "sign", sign,
+                    "timestamp", Time.date("Y-m-d H:i:s"),
+                    "version", "1.0",
+                    "biz_content", bizContent.toString()
+            );
+
+
+            SLog.info("params[%s]", params.toString());
+            // MacauPaySdk.aliPay(_mActivity, params.toString(), (MainActivity) _mActivity);
+            MacauPaySdk.macauPay(_mActivity, params.toString(), (MainActivity) _mActivity);
         }
     }
 

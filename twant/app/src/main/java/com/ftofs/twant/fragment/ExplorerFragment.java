@@ -72,7 +72,7 @@ public class ExplorerFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
-        loadingPopup = new XPopup.Builder(getContext())
+        loadingPopup = new XPopup.Builder(_mActivity)
                 .asLoading(getString(R.string.text_loading))
                 .show();
         webView.loadUrl(url);

@@ -241,7 +241,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private void doSearch(SearchType searchType, String keyword, EasyJSONObject filter) {
         SLog.info("searchType[%s], keyword[%s]", searchType, keyword);
 
-        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                 .asLoading(getString(R.string.text_loading))
                 .show();
 
@@ -509,7 +509,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
 
     private void showGoodsFilterPopup() {
-        new XPopup.Builder(getContext())
+        new XPopup.Builder(_mActivity)
                 .popupPosition(PopupPosition.Right)//右边
                 .hasStatusBarShadow(true) //启用状态栏阴影
                 .asCustom(new GoodsFilterDrawerPopupView(_mActivity, filterCategoryGroupList, this))

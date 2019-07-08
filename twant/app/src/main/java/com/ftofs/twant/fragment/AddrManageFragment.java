@@ -137,7 +137,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                 } else if (id == R.id.btn_delete) {
                     SLog.info("刪除地址");
                     AddrItem item = addrItemList.get(position);
-                    new XPopup.Builder(getContext())
+                    new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
                             // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)

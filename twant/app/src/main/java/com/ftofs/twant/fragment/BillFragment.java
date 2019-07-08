@@ -168,7 +168,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
             }
             SLog.info("params[%s]", params);
 
-            final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                     .asLoading(getString(R.string.text_loading))
                     .show();
 

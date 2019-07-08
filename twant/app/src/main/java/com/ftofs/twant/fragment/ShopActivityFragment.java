@@ -165,7 +165,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
 
             SLog.info("params[%s]", params);
 
-            final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                     .asLoading(getString(R.string.text_loading))
                     .show();
 

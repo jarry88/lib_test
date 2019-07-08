@@ -192,7 +192,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
             }
 
 
-            final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                     .asLoading(getString(R.string.text_loading))
                     .show();
 
@@ -258,7 +258,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
             }
 
 
-            final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                     .asLoading(getString(R.string.text_loading))
                     .show();
 

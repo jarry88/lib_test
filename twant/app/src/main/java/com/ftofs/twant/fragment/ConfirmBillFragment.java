@@ -343,7 +343,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(getContext(), responseObj)) {
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
                     ToastUtil.show(_mActivity, "提交訂單成功");
@@ -425,7 +425,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void loadBillData() {
-        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                 .asLoading("正在生成訂單")
                 .show();
         TaskObserver taskObserver = new TaskObserver() {

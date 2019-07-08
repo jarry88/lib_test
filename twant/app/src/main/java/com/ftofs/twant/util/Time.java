@@ -10,6 +10,11 @@ import java.util.Date;
  * @author zwm
  */
 public class Time {
+    /**
+     * 類似php的date()函數
+     * @param format
+     * @return
+     */
     public static String date(String format) {
         return fromMillisUnixtime(System.currentTimeMillis(), format);
     }

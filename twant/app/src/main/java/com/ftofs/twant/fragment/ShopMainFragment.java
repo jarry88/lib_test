@@ -143,7 +143,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             pop();
         } if (id == R.id.btn_menu) {
             SLog.info("here");
-            new XPopup.Builder(getContext())
+            new XPopup.Builder(_mActivity)
                     .offsetX(-50)
                     .offsetY(-20)
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖

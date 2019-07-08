@@ -499,7 +499,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void loadGoodsDetail(final int commonId, String token) {
-        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                 .asLoading(getString(R.string.text_loading))
                 .show();
         String path = Api.PATH_GOODS_DETAIL + "/" + commonId;

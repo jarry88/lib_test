@@ -96,7 +96,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
     }
 
     private void loadStaffData() {
-        final BasePopupView loadingPopup = new XPopup.Builder(getContext())
+        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                 .asLoading(getString(R.string.text_loading))
                 .show();
 
