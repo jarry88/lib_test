@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <RelativeLayout
+        android:id="@+id/btn_goto_goods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp">
@@ -81,36 +82,61 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:orientation="horizontal">
-            <!--
-            退款、退貨時才做，暫時注釋
             <TextView
+                android:id="@+id/btn_refund"
                 android:layout_width="76dp"
                 android:layout_height="26dp"
                 android:gravity="center"
-                android:text="退款"
+                android:text="@string/text_refund_tab"
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 android:background="@drawable/smaller_outline_button_revert"
+                android:visibility="gone"
                 />
             <TextView
+                android:id="@+id/btn_view_refund"
                 android:layout_width="76dp"
                 android:layout_height="26dp"
                 android:gravity="center"
-                android:text="退貨"
+                android:text="@string/text_view_refund"
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 android:background="@drawable/smaller_outline_button"
+                android:visibility="gone"
                 />
             <TextView
+                android:id="@+id/btn_return"
                 android:layout_width="76dp"
                 android:layout_height="26dp"
                 android:gravity="center"
-                android:text="查看投訴"
+                android:text="@string/text_return_tab"
+                android:textColor="@color/tw_black"
+                android:textSize="13sp"
+                android:background="@drawable/smaller_outline_button"
+                android:visibility="gone"
+                />
+            <TextView
+                android:id="@+id/btn_view_complaint"
+                android:layout_width="76dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:text="@string/text_view_complaint"
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 android:background="@drawable/smaller_outline_button_revert"
+                android:visibility="gone"
                 />
-                -->
+            <TextView
+                android:id="@+id/btn_complain"
+                android:layout_width="76dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:text="@string/text_complain_tab"
+                android:textColor="@color/tw_black"
+                android:textSize="13sp"
+                android:background="@drawable/smaller_outline_button_revert"
+                android:visibility="gone"
+                />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

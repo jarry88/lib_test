@@ -483,6 +483,11 @@ public class Api {
     public static final String PATH_PUBLISH_COMMENT = "/member/comment/send";
 
     /**
+     * 单个商品退款申请页面
+     */
+    public static final String PATH_SINGLE_GOODS_REFUND = "/member/refund/goods";
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

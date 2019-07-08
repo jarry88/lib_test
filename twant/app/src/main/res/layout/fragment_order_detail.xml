@@ -124,6 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp">
                     <LinearLayout
+                        android:id="@+id/btn_goto_store"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/toolbar_margin_left"

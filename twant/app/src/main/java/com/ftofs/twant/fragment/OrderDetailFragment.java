@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
@@ -51,6 +52,7 @@ import okhttp3.Response;
  */
 public class OrderDetailFragment extends BaseFragment implements View.OnClickListener {
     int ordersId;
+    int storeId;
 
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
@@ -151,6 +153,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
         llOrderButtonContainer = view.findViewById(R.id.ll_order_button_container);
 
+        Util.setOnClickListener(view, R.id.btn_goto_store, this);
         Util.setOnClickListener(view, R.id.btn_dial_store_phone, this);
         Util.setOnClickListener(view, R.id.btn_advisory_service, this);
 
@@ -158,6 +161,25 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderDetailGoodsList.setLayoutManager(layoutManager);
         adapter = new OrderDetailGoodsAdapter(_mActivity, R.layout.order_detail_goods_item, orderDetailGoodsItemList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                OrderDetailGoodsItem item = orderDetailGoodsItemList.get(position);
+                int id = view.getId();
+                SLog.info("id[%d]", id);
+
+                if (id == R.id.btn_goto_goods) {
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(GoodsDetailFragment.newInstance(item.commonId));
+                } else if (id == R.id.btn_refund) {
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
+                            "action", GoodsRefundFragment.ACTION_REFUND,
+                            "ordersId", item.ordersId,
+                            "ordersGoodsId", item.ordersGoodsId).toString()));
+                }
+            }
+        });
         rvOrderDetailGoodsList.setAdapter(adapter);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -263,6 +285,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             }
         }
 
+        MainFragment mainFragment = MainFragment.getInstance();
         int id = v.getId();
         switch (id) {
             case R.id.btn_back:
@@ -279,12 +302,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         .asCustom(new StoreCustomerServicePopup(_mActivity, staffList))
                         .show();
                 break;
+            case R.id.btn_goto_store:
+                mainFragment.start(ShopMainFragment.newInstance(storeId));
+                break;
             default:
                 break;
         }
     }
-
-
 
     private void orderOperation(final int operationType) {
         try {
@@ -428,6 +452,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String mobile = ordersVo.getString("receiverPhone");
                     String address = ordersVo.getString("receiverAreaInfo") + ordersVo.getString("receiverAddress");
 
+                    storeId = ordersVo.getInt("storeId");
                     String storeName = ordersVo.getString("storeName");
                     String ordersStateName = ordersVo.getString("ordersStateName");
                     float freightAmount = (float) ordersVo.getDouble("freightAmount");
@@ -523,12 +548,17 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
 
                         orderDetailGoodsItemList.add(new OrderDetailGoodsItem(
+                                goodsVo.getInt("commonId"),
                                 goodsVo.getInt("goodsId"),
+                                goodsVo.getInt("ordersId"),
+                                goodsVo.getInt("ordersGoodsId"),
                                 goodsVo.getString("imageSrc"),
                                 goodsVo.getString("goodsName"),
                                 (float) goodsVo.getDouble("goodsPrice"),
                                 goodsVo.getInt("buyNum"),
-                                goodsVo.getString("goodsFullSpecs")));
+                                goodsVo.getString("goodsFullSpecs"),
+                                goodsVo.getInt("refundType"),
+                                goodsVo.getInt("showRefund")));
                     }
                     adapter.setNewData(orderDetailGoodsItemList);
                 } catch (Exception e) {
