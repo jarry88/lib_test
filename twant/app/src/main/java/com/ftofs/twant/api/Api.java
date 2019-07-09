@@ -495,6 +495,22 @@ public class Api {
 
 
     /**
+     * 退款记录列表
+     */
+    public static final String PATH_REFUND_LIST = "/member/refund/list";
+
+    /**
+     * 退款申请取消
+     */
+    public static final String PATH_CANCEL_REFUND = "/member/refund/cancel";
+
+    /**
+     * 查看退款详情
+     */
+    public static final String PATH_REFUND_INFO = "/member/refund/info";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

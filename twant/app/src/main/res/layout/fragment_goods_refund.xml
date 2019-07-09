@@ -207,13 +207,14 @@
 
             <EditText
                 android:id="@+id/et_refund_amount"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="23dp"
+                android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@id/tv_refund_amount"
+                android:layout_toLeftOf="@+id/ll_max_refund_amount_container"
                 android:layout_centerVertical="true"
                 android:textColor="@color/tw_black"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:text=""
                 android:singleLine="true"
                 android:inputType="numberDecimal"
@@ -223,6 +224,7 @@
                 />
 
             <LinearLayout
+                android:id="@+id/ll_max_refund_amount_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

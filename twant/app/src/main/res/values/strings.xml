@@ -322,6 +322,8 @@
     <string name="select_refund_reason_hint">请选择退款原因</string>
     <string name="input_refund_amount_hint">请输入退款金额</string>
 
+    <string name="text_refund_detail">退款詳情</string>
+
     <string name="text_goods_refund">商品退款</string>
     <string name="text_goods_return">商品退貨</string>
     <string name="text_goods_complain">商品投訴</string>
@@ -331,6 +333,23 @@
     <string name="text_refund_desc">退款說明</string>
     <string name="input_refund_desc_hint">請輸入您要退貨的說明文字（選填）</string>
     <string name="text_upload_evidence">上傳憑證</string>
+
+    <string name="text_goods_info">商品信息</string>
+    <string name="text_refund_application">退款申請</string>
+    <string name="text_refund_status">退款狀態</string>
+    <string name="text_return_no">退貨編號</string>
+    <string name="text_return_reason">退貨原因</string>
+    <string name="text_return_amount">退貨金額</string>
+    <string name="text_return_desc">退貨說明</string>
+    <string name="text_evidence_uploaded">憑證上傳</string>
+    <string name="text_seller_process">商家處理</string>
+    <string name="text_audit_status">審核狀態</string>
+    <string name="text_seller_remark">商家備注</string>
+    <string name="text_platform_process">平臺處理</string>
+    <string name="text_platform_audit">平臺審核</string>
+    <string name="text_platform_remark">平臺備注</string>
+
+    <string name="text_refund_way">退款方式</string>
 
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>
