@@ -6,9 +6,23 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+
+import java.io.IOException;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 
 /**
@@ -17,6 +31,33 @@ import com.ftofs.twant.util.Util;
  */
 public class RefundDetailFragment extends BaseFragment implements View.OnClickListener {
     int refundId;
+
+    TextView tvOrderNo;
+    ImageView goodsImage;
+    TextView tvGoodsName;
+    TextView tvGoodsFullSpecs;
+    TextView tvGoodsPrice;
+    TextView tvBuyNum;
+    TextView tvRefundStatus;
+    TextView tvReturnNo;
+    TextView tvReturnReason;
+    TextView tvReturnAmount;
+    TextView tvReturnDesc;
+
+    ImageView imgEvidence1;
+    ImageView imgEvidence2;
+    ImageView imgEvidence3;
+
+    TextView tvAuditStatus;
+    TextView tvSellerRemark;
+
+    TextView tvPlatformAudit;
+    TextView tvPlatformRemark;
+
+    TextView tvRefundStatus2;
+    TextView tvRefundWay;
+    TextView tvRefundAmount;
+
 
     public static RefundDetailFragment newInstance(int refundId) {
         Bundle args = new Bundle();
@@ -44,6 +85,34 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
         refundId = args.getInt("refundId");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+
+        tvOrderNo = view.findViewById(R.id.tv_order_no);
+        goodsImage = view.findViewById(R.id.goods_image);
+        tvGoodsName = view.findViewById(R.id.tv_goods_name);
+        tvGoodsFullSpecs = view.findViewById(R.id.tv_goods_full_specs);
+        tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
+        tvBuyNum = view.findViewById(R.id.tv_buy_num);
+        tvRefundStatus = view.findViewById(R.id.tv_refund_status);
+        tvReturnNo = view.findViewById(R.id.tv_return_no);
+        tvReturnReason = view.findViewById(R.id.tv_return_reason);
+        tvReturnAmount = view.findViewById(R.id.tv_return_amount);
+        tvReturnDesc = view.findViewById(R.id.tv_return_desc);
+
+        imgEvidence1 = view.findViewById(R.id.img_evidence1);
+        imgEvidence2 = view.findViewById(R.id.img_evidence2);
+        imgEvidence3 = view.findViewById(R.id.img_evidence3);
+
+        tvAuditStatus = view.findViewById(R.id.tv_audit_status);
+        tvSellerRemark = view.findViewById(R.id.tv_seller_remark);
+
+        tvPlatformAudit = view.findViewById(R.id.tv_platform_audit);
+        tvPlatformRemark = view.findViewById(R.id.tv_platform_remark);
+
+        tvRefundStatus2 = view.findViewById(R.id.tv_refund_status2);
+        tvRefundWay = view.findViewById(R.id.tv_refund_way);
+        tvRefundAmount = view.findViewById(R.id.tv_refund_amount);
+
+        loadRefundDetail();
     }
     
     
@@ -54,5 +123,94 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
         if (id == R.id.btn_back) {
             pop();
         }
+    }
+
+    private void loadRefundDetail() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            SLog.info("Error!token 為空");
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "refundId", refundId);
+
+        SLog.info("params[%s]", params);
+
+        Api.postUI(Api.PATH_REFUND_INFO, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    EasyJSONObject refundItemVo = responseObj.getObject("datas.refundItemVo");
+
+                    long ordersSn = refundItemVo.getLong("ordersSn");
+                    tvOrderNo.setText(String.valueOf(ordersSn));
+
+                    String goodsImageUrl = refundItemVo.getString("goodsImage");
+                    Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
+
+                    tvGoodsName.setText(refundItemVo.getString("goodsName"));
+                    tvGoodsFullSpecs.setText("");
+
+                    String refundStatus = refundItemVo.getString("currentStateText");
+                    tvRefundStatus.setText(refundStatus);
+
+                    long refundSn = refundItemVo.getLong("refundSn");
+                    tvReturnNo.setText(String.valueOf(refundSn));
+
+                    tvReturnReason.setText(refundItemVo.getString("reasonInfo"));
+                    float refundAmount = (float) refundItemVo.getDouble("refundAmount");
+                    tvReturnAmount.setText(StringUtil.formatPrice(_mActivity, refundAmount, 0));
+
+                    tvReturnDesc.setText(refundItemVo.getString("buyerMessage"));
+
+                    String picJson = refundItemVo.getString("picJson");
+                    String[] picJsonArr = picJson.split(",");
+
+                    if (picJsonArr.length > 0) {
+                        imgEvidence1.setVisibility(View.VISIBLE);
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[0])).centerCrop().into(imgEvidence1);
+                    }
+                    if (picJsonArr.length > 1) {
+                        imgEvidence2.setVisibility(View.VISIBLE);
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[1])).centerCrop().into(imgEvidence2);
+                    }
+                    if (picJsonArr.length > 2) {
+                        imgEvidence3.setVisibility(View.VISIBLE);
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[2])).centerCrop().into(imgEvidence3);
+                    }
+
+                    tvAuditStatus.setText(refundItemVo.getString("sellerStateText"));
+                    String sellerMessage = refundItemVo.getString("sellerMessage");
+                    if (!StringUtil.isEmpty(sellerMessage)) {
+                        tvSellerRemark.setText(sellerMessage);
+                    }
+
+
+                    tvPlatformAudit.setText(refundItemVo.getString("refundStateText"));
+                    String adminMessage = refundItemVo.getString("adminMessage");
+                    if (!StringUtil.isEmpty(adminMessage)) {
+                        tvPlatformRemark.setText(adminMessage);
+                    }
+
+                    tvRefundStatus2.setText(refundStatus);
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 }

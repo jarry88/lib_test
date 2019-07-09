@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="11111111111111111"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
 
@@ -221,11 +221,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_refund_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="處理中"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_red"
                         />
@@ -246,11 +247,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_return_no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="12222343"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -271,11 +273,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_return_reason"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="不想買"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -296,11 +299,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_return_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -321,11 +325,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_return_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -357,21 +362,21 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:src="@drawable/cs_avatar_160"
+                            android:visibility="gone"
                             />
                         <ImageView
                             android:id="@+id/img_evidence2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:src="@drawable/cs_avatar_160"
+                            android:visibility="gone"
                             />
                         <ImageView
                             android:id="@+id/img_evidence3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:src="@drawable/cs_avatar_160"
+                            android:visibility="gone"
                             />
                     </com.ftofs.twant.widget.SquareGridLayout>
                 </RelativeLayout>
@@ -413,11 +418,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_audit_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -438,11 +444,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_seller_remark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -484,11 +491,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_platform_audit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -508,11 +516,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_platform_remark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -553,11 +562,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_refund_status2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -578,11 +588,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_refund_way"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />
@@ -602,11 +613,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_refund_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="$129.00"
+                        android:text=""
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />

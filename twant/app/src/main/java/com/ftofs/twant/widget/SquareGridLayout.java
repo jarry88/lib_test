@@ -50,7 +50,6 @@ public class SquareGridLayout extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
-        SLog.info("onMeasure");
         /*
          * 获得此ViewGroup上级容器为其推荐的宽和高，以及计算模式
          */
@@ -76,7 +75,7 @@ public class SquareGridLayout extends ViewGroup {
 
             int itemWidth = itemWidthOrig - marginLayoutParams.leftMargin - marginLayoutParams.rightMargin;
             int itemHeight = itemHeightOrig - marginLayoutParams.topMargin - marginLayoutParams.bottomMargin;
-            SLog.info("itemWidth[%d], itemHeight[%d]", itemWidth, itemHeight);
+            // SLog.info("itemWidth[%d], itemHeight[%d]", itemWidth, itemHeight);
 
             // 计算出所有的childView的宽和高
             int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY);
@@ -86,8 +85,10 @@ public class SquareGridLayout extends ViewGroup {
 
         sizeHeight = itemWidthOrig * ((nonGoneChildCount + columnCount - 1) / columnCount);  // 總高度
 
+        /*
         SLog.info("onMeasure, childCount[%d], sizeWidth[%d], sizeHeight[%d], itemWidth[%d], itemHeight[%d]",
                 childCount, sizeWidth, sizeHeight, itemWidthOrig, itemHeightOrig);
+                */
 
         setMeasuredDimension(sizeWidth, sizeHeight);
     }
@@ -113,9 +114,11 @@ public class SquareGridLayout extends ViewGroup {
             int childHeight = childView.getMeasuredHeight();
             MarginLayoutParams marginLayoutParams = (MarginLayoutParams) childView.getLayoutParams();
 
+            /*
             SLog.info("childWidth[%d], childHeight[%d], margins[%d][%d][%d][%d]",
                     childWidth, childHeight, marginLayoutParams.topMargin, marginLayoutParams.bottomMargin,
                     marginLayoutParams.leftMargin, marginLayoutParams.rightMargin);
+                    */
 
             int remainder = index % columnCount;
             if (remainder == 0) {
@@ -127,14 +130,14 @@ public class SquareGridLayout extends ViewGroup {
                 }
             } else {
                 x += childWidth + marginLayoutParams.leftMargin + marginLayoutParams.rightMargin;
-                SLog.info("x=%d", x);
+                // SLog.info("x=%d", x);
             }
 
             int left = x + marginLayoutParams.leftMargin;
             int top = y + marginLayoutParams.topMargin;
             int right = left + childWidth;
             int bottom = top + childHeight;
-            SLog.info("left[%d], top[%d], right[%d], bottom[%d]", left, top, right, bottom);
+            // SLog.info("left[%d], top[%d], right[%d], bottom[%d]", left, top, right, bottom);
             childView.layout(left, top, right, bottom);
 
             index++;
