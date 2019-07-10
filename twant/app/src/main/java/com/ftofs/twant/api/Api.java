@@ -514,6 +514,16 @@ public class Api {
      */
     public static final String PATH_SINGLE_GOODS_RETURN = "/member/return/add";
 
+    /**
+     * 单个商品申请退货保存
+     */
+    public static final String PATH_SINGLE_GOODS_RETURN_SAVE = "/member/return/save";
+
+    /**
+     * 退货记录列表
+     */
+    public static final String PATH_RETURN_LIST = "/member/return/list";
+
 
     /**
      * 發送Http請求

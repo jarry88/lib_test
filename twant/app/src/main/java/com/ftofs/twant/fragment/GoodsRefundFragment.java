@@ -79,6 +79,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     TextView tvRefundReason;
     TextView tvMaxRefundAmount;
     float maxRefundAmount;
+    // 最多可退貨數量
+    int maxReturnCount;
     EditText etRefundAmount;
     EditText etRefundDesc;
 
@@ -291,6 +293,93 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     return responseStr;
                 }
             });
+        } else if (action == ACTION_RETURN) {
+            if (reasonIndex == -1) {
+                ToastUtil.show(_mActivity, getString(R.string.select_return_reason_hint));
+                return;
+            }
+
+            final int returnCount = abReturnCount.getValue();
+            SLog.info("returnCount[%d], maxReturnCount[%d]", returnCount, maxReturnCount);
+            if (returnCount > maxReturnCount) {
+                ToastUtil.show(_mActivity, "退貨數量不能超過購買數量");
+                return;
+            }
+
+            String refundAmountStr = etRefundAmount.getText().toString().trim();
+            if (StringUtil.isEmpty(refundAmountStr)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_return_amount_hint));
+                return;
+            }
+
+            final float refundAmount = Float.valueOf(etRefundAmount.getText().toString().trim());
+            SLog.info("refundAmount[%s], maxRefundAmount[%s], comp[%s]", refundAmount, maxRefundAmount, refundAmount > maxRefundAmount);
+            if (refundAmount > maxRefundAmount) {
+                ToastUtil.show(_mActivity, "退貨金額不能超過最多可退金額");
+                return;
+            }
+
+            final String buyerMessage = etRefundDesc.getText().toString().trim();
+
+            final List<String> imagePathList = new ArrayList<>();
+            int childCount = sglImageContainer.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View view = sglImageContainer.getChildAt(i);
+                if (view instanceof ImageView) {  // 如果是添加按鈕，則跳過
+                    continue;
+                }
+                imagePathList.add((String) view.getTag());
+            }
+
+
+            TaskObserver taskObserver = new TaskObserver() {
+                @Override
+                public void onMessage() {
+                    String responseStr = (String) message;
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.show(_mActivity, "提交成功");
+                    pop();
+                }
+            };
+
+            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+                @Override
+                public Object doWork() {
+                    StringBuilder picJson = new StringBuilder();
+                    // 上傳圖片文件
+                    for (String imagePath : imagePathList) {
+                        String result = Api.syncUploadFile(new File(imagePath));
+                        SLog.info("result[%s]", result);
+                        if (StringUtil.isEmpty(result)) {
+                            return null;
+                        }
+
+                        if (picJson.length() > 0) {
+                            picJson.append(",");
+                        }
+                        picJson.append(result);
+                    }
+
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "token", token,
+                            "ordersId", ordersId,
+                            "goodsNum", returnCount,
+                            "picJson", picJson.toString(),
+                            "buyerMessage", buyerMessage,
+                            "ordersGoodsId", ordersGoodsId,
+                            "reasonId", reasonItemList.get(reasonIndex).id,
+                            "refundAmount", refundAmount);
+
+                    SLog.info("params[%s]", params.toString());
+                    String responseStr = Api.syncPost(Api.PATH_SINGLE_GOODS_RETURN_SAVE, params);
+                    SLog.info("responseStr[%s]", responseStr);
+                    return responseStr;
+                }
+            });
         }
     }
 
@@ -413,6 +502,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         tvPrice.setText(StringUtil.formatPrice(_mActivity, price, 0));
 
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
+                        maxReturnCount = ordersGoodsVo.getInt("buyNum");
                         tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
                         abReturnCount.setMinValue(1);
                         abReturnCount.setValue(goodsNum);
@@ -481,5 +571,12 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             }
             sglImageContainer.addView(imageWidget, childCount - 1);
         }
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
     }
 }
