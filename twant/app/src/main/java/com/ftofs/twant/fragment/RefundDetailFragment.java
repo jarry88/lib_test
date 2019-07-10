@@ -18,9 +18,13 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ProcessProgressIndicator;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -31,6 +35,11 @@ import okhttp3.Call;
  */
 public class RefundDetailFragment extends BaseFragment implements View.OnClickListener {
     int refundId;
+    EasyJSONObject paramsInObj;
+
+    ProcessProgressIndicator indicator;
+    // 當前已經處理到哪一步
+    int currentStep = 0;
 
     TextView tvOrderNo;
     ImageView goodsImage;
@@ -59,10 +68,11 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
     TextView tvRefundAmount;
 
 
-    public static RefundDetailFragment newInstance(int refundId) {
+    public static RefundDetailFragment newInstance(int refundId, String paramsIn) {
         Bundle args = new Bundle();
 
         args.putInt("refundId", refundId);
+        args.putString("paramsIn", paramsIn);
 
         RefundDetailFragment fragment = new RefundDetailFragment();
         fragment.setArguments(args);
@@ -83,8 +93,12 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
 
         Bundle args = getArguments();
         refundId = args.getInt("refundId");
+        String paramsIn = args.getString("paramsIn");
+        paramsInObj = (EasyJSONObject) EasyJSONObject.parse(paramsIn);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+
+        indicator = view.findViewById(R.id.progress_indicator);
 
         tvOrderNo = view.findViewById(R.id.tv_order_no);
         goodsImage = view.findViewById(R.id.goods_image);
@@ -132,7 +146,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        EasyJSONObject params = EasyJSONObject.generate(
+        final EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "refundId", refundId);
 
@@ -156,6 +170,23 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                 try {
                     EasyJSONObject refundItemVo = responseObj.getObject("datas.refundItemVo");
 
+                    int sellerState = refundItemVo.getInt("sellerState");
+                    if (sellerState > 1) { // 商家已處理
+                        currentStep++;
+                        int adminState = refundItemVo.getInt("adminState");
+                        if (adminState > 1) {
+                            currentStep++;
+                        }
+                    }
+
+                    List<String> progressList = new ArrayList<>();
+                    progressList.add(getString(R.string.text_refund_applied));
+                    progressList.add(getString(R.string.text_seller_process));
+                    progressList.add(getString(R.string.text_refund_finished));
+
+                    indicator.setData(progressList, currentStep);
+
+
                     long ordersSn = refundItemVo.getLong("ordersSn");
                     tvOrderNo.setText(String.valueOf(ordersSn));
 
@@ -163,7 +194,10 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                     Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
 
                     tvGoodsName.setText(refundItemVo.getString("goodsName"));
-                    tvGoodsFullSpecs.setText("");
+                    tvGoodsFullSpecs.setText(paramsInObj.getString("goodsFullSpecs"));
+
+                    tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, (float) paramsInObj.getDouble("goodsPrice"), 0));
+                    tvBuyNum.setText(getString(R.string.times_sign) + " " + paramsInObj.getInt("buyNum"));
 
                     String refundStatus = refundItemVo.getString("currentStateText");
                     tvRefundStatus.setText(refundStatus);
@@ -212,5 +246,12 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
     }
 }

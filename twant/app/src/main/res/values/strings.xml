@@ -348,6 +348,8 @@
     <string name="text_platform_process">平臺處理</string>
     <string name="text_platform_audit">平臺審核</string>
     <string name="text_platform_remark">平臺備注</string>
+    <string name="text_refund_applied">申請退款</string>
+    <string name="text_refund_finished">完成退款</string>
 
     <string name="text_refund_way">退款方式</string>
 

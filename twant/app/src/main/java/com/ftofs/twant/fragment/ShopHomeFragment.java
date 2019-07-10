@@ -86,8 +86,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     String storeName;
     String storePhone;
     String storeAddress;
-    Double storeLongitude;
-    Double storeLatitude;
+    double storeLongitude;
+    double storeLatitude;
 
     int isFavorite;
     ImageView btnStoreFavorite;

@@ -40,12 +40,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
+            <com.ftofs.twant.widget.ProcessProgressIndicator
+                android:id="@+id/progress_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="115dp"
-                android:background="@color/tw_red">
+                android:paddingTop="36dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp">
 
-            </LinearLayout>
+            </com.ftofs.twant.widget.ProcessProgressIndicator>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -135,7 +138,7 @@
                                 android:ellipsize="end"
                                 android:textSize="14sp"
                                 android:textColor="@color/tw_black"
-                                android:text="Yueaeow香薰精油香氛淡薰香家用室內臥室空氣清新留香"
+                                android:text=""
                                 />
 
                             <LinearLayout
@@ -147,7 +150,7 @@
                                     android:layout_width="75dp"
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
-                                    android:text="$129.00"
+                                    android:text=""
                                     android:textSize="14sp"
                                     android:textColor="@color/tw_black"
                                     />
@@ -156,7 +159,7 @@
                                     android:layout_width="75dp"
                                     android:layout_height="wrap_content"
                                     android:gravity="right"
-                                    android:text="X 1"
+                                    android:text=""
                                     android:textSize="13sp"
                                     android:textColor="@color/tw_black"
                                     />
@@ -178,7 +181,7 @@
                                 android:layout_weight="1"
                                 android:textSize="13sp"
                                 android:textColor="#929292"
-                                android:text="类型:玫瑰, 规格:10ml, 颜色:黑色"
+                                android:text=""
                                 />
                         </LinearLayout>
                     </LinearLayout>
@@ -425,7 +428,7 @@
                         android:layout_centerVertical="true"
                         android:text=""
                         android:textSize="14sp"
-                        android:textColor="@color/tw_black"
+                        android:textColor="@color/tw_red"
                         />
                 </RelativeLayout>
 
@@ -498,7 +501,7 @@
                         android:layout_centerVertical="true"
                         android:text=""
                         android:textSize="14sp"
-                        android:textColor="@color/tw_black"
+                        android:textColor="@color/tw_red"
                         />
                 </RelativeLayout>
                 <RelativeLayout
@@ -569,7 +572,7 @@
                         android:layout_centerVertical="true"
                         android:text=""
                         android:textSize="14sp"
-                        android:textColor="@color/tw_black"
+                        android:textColor="@color/tw_red"
                         />
                 </RelativeLayout>
                 <RelativeLayout
