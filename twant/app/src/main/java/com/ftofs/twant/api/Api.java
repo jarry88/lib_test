@@ -509,6 +509,11 @@ public class Api {
      */
     public static final String PATH_REFUND_INFO = "/member/refund/info";
 
+    /**
+     * 单个商品退货申请页面
+     */
+    public static final String PATH_SINGLE_GOODS_RETURN = "/member/return/add";
+
 
     /**
      * 發送Http請求

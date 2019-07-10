@@ -34,6 +34,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AdjustButton;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
@@ -61,6 +62,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     int ordersId;
     int ordersGoodsId;
 
+    LinearLayout llWidgetContainer;
+
     EasyJSONObject paramsInObj;
 
     SquareGridLayout sglImageContainer;
@@ -80,6 +83,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     EditText etRefundDesc;
 
     ImageView btnAddImage;
+
+    AdjustButton abReturnCount;
 
     // 退货原因列表
     List<ListPopupItem> reasonItemList = new ArrayList<>();
@@ -120,6 +125,15 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             e.printStackTrace();
         }
 
+        llWidgetContainer = view.findViewById(R.id.ll_widget_container);
+        if (action == ACTION_REFUND) {
+            LayoutInflater.from(_mActivity).inflate(R.layout.refund_widget, llWidgetContainer, true);
+        } else if (action == ACTION_RETURN) {
+            LayoutInflater.from(_mActivity).inflate(R.layout.return_widget, llWidgetContainer, true);
+        } else if (action == ACTION_COMPLAIN) {
+
+        }
+
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
 
@@ -142,6 +156,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         btnAddImage = view.findViewById(R.id.btn_add_image);
         btnAddImage.setOnClickListener(this);
 
+        abReturnCount = view.findViewById(R.id.ab_return_amount);
+
         switch (action) {
             case ACTION_REFUND:
                 tvFragmentTitle.setText(getString(R.string.text_goods_refund));
@@ -149,6 +165,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 break;
             case ACTION_RETURN:
                 tvFragmentTitle.setText(getString(R.string.text_goods_return));
+                loadSingleGoodsReturnData();
                 break;
             case ACTION_COMPLAIN:
                 tvFragmentTitle.setText(getString(R.string.text_goods_complain));
@@ -166,10 +183,18 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         } else if (id == R.id.btn_select_refund_reason) {
             hideSoftInput();
 
+            String title = "";
+            if (action == ACTION_REFUND) {
+                title = getString(R.string.text_refund_reason);
+            } else if (action == ACTION_RETURN) {
+                title = getString(R.string.text_return_reason);
+            }
+
+
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new ListPopup(_mActivity, getString(R.string.text_refund_reason),
+                    .asCustom(new ListPopup(_mActivity, title,
                             Constant.POPUP_TYPE_DEFAULT, reasonItemList, reasonIndex != -1 ? reasonIndex : 0, this))
                     .show();
         } else if (id == R.id.btn_add_image) {
@@ -318,6 +343,79 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
                         tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
+
+                        EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");
+                        for (Object object : refundReasonList) {
+                            EasyJSONObject reason = (EasyJSONObject) object;
+                            reasonItemList.add(new ListPopupItem(
+                                    reason.getInt("reasonId"),
+                                    reason.getString("reasonInfo"),
+                                    null));
+                        }
+
+                        maxRefundAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
+                        tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void loadSingleGoodsReturnData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        try {
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "ordersId", paramsInObj.getInt("ordersId"),
+                    "ordersGoodsId", paramsInObj.getInt("ordersGoodsId"));
+
+            SLog.info("params[%s]", params);
+
+            Api.postUI(Api.PATH_SINGLE_GOODS_RETURN, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        String storeName = responseObj.getString("datas.ordersVo.storeName");
+                        tvStoreName.setText(storeName);
+
+                        EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
+
+                        String goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
+                        Glide.with(_mActivity).load(goodsImageUrl).into(goodsImage);
+
+                        String goodsName = ordersGoodsVo.getString("goodsName");
+                        tvGoodsName.setText(goodsName);
+
+                        String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                        tvGoodsFullSpecs.setText(goodsFullSpecs);
+
+                        float price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                        tvPrice.setText(StringUtil.formatPrice(_mActivity, price, 0));
+
+                        int goodsNum = ordersGoodsVo.getInt("buyNum");
+                        tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
+                        abReturnCount.setMinValue(1);
+                        abReturnCount.setValue(goodsNum);
 
                         EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");
                         for (Object object : refundReasonList) {
