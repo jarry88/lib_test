@@ -206,7 +206,6 @@
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 android:background="@drawable/common_outline_button_down"
-                android:visibility="gone"
                 />
             <TextView
                 android:id="@+id/btn_view_refund_info"

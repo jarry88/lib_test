@@ -174,13 +174,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 } else if (id == R.id.btn_refund) {
                     MainFragment mainFragment = MainFragment.getInstance();
                     mainFragment.start(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
-                            "action", GoodsRefundFragment.ACTION_REFUND,
+                            "action", Constant.ACTION_REFUND,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
                 } else if (id == R.id.btn_return) {
                     MainFragment mainFragment = MainFragment.getInstance();
                     mainFragment.start(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
-                            "action", GoodsRefundFragment.ACTION_RETURN,
+                            "action", Constant.ACTION_RETURN,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
                 }

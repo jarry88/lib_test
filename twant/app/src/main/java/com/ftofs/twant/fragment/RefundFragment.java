@@ -14,6 +14,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.RefundListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.RefundItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
@@ -35,10 +36,24 @@ import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
+
+/**
+ * 退款、退貨、投訴列表Fragment
+ * @author zwm
+ */
 public class RefundFragment extends BaseFragment implements View.OnClickListener {
     RecyclerView rvRefundList;
 
+    int action = Constant.ACTION_REFUND;
+
+    boolean refundDataLoaded = false;
+    boolean returnDataLoaded = false;
+    boolean complainDataLoaded = false;
+
     List<RefundItem> refundItemList = new ArrayList<>();
+    List<RefundItem> returnItemList = new ArrayList<>();
+    List<RefundItem> complainItemList = new ArrayList<>();
+
     RefundListAdapter refundListAdapter;
 
     public static RefundFragment newInstance() {
@@ -68,7 +83,15 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
         refundListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
-                RefundItem refundItem = refundItemList.get(position);
+                RefundItem refundItem;
+                if (action == Constant.ACTION_REFUND) {
+                    refundItem = refundItemList.get(position);
+                } else if (action == Constant.ACTION_RETURN) {
+                    refundItem = returnItemList.get(position);
+                } else {
+                    refundItem = complainItemList.get(position);
+                }
+
 
                 int id = view.getId();
                 if (id == R.id.btn_cancel_refund) {
@@ -99,6 +122,7 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                 } else if (id == R.id.btn_view_refund_info) {
                     MainFragment mainFragment = MainFragment.getInstance();
                     mainFragment.start(RefundDetailFragment.newInstance(refundItem.refundId, EasyJSONObject.generate(
+                            "action", action,
                             "goodsFullSpecs", refundItem.goodsFullSpecs,
                             "goodsPrice", refundItem.goodsPrice,
                             "buyNum", refundItem.buyNum).toString()));
@@ -119,6 +143,15 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                     SLog.info("重復點擊");
                     return;
                 }
+
+                if (id == R.id.btn_refund) {
+                    action = Constant.ACTION_REFUND;
+                } else if (id == R.id.btn_return) {
+                    action = Constant.ACTION_RETURN;
+                } else {
+                    action = Constant.ACTION_COMPLAIN;
+                }
+                loadRefundList();
             }
         };
         simpleTabManager.add(view.findViewById(R.id.btn_refund));
@@ -150,6 +183,17 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void loadRefundList() {
+        if (action == Constant.ACTION_REFUND && refundDataLoaded) {
+            refundListAdapter.setNewData(refundItemList);
+            return;
+        } else if (action == Constant.ACTION_RETURN && returnDataLoaded) {
+            refundListAdapter.setNewData(returnItemList);
+            return;
+        } else if (action == Constant.ACTION_COMPLAIN && complainDataLoaded) {
+            refundListAdapter.setNewData(complainItemList);
+            return;
+        }
+
         try {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
@@ -160,8 +204,17 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
             EasyJSONObject params = EasyJSONObject.generate("token", token);
 
             SLog.info("params[%s]", params);
+            String path;
 
-            Api.postUI(Api.PATH_REFUND_LIST, params, new UICallback() {
+            if (action == Constant.ACTION_REFUND) {
+                path = Api.PATH_REFUND_LIST;
+            } else if (action == Constant.ACTION_RETURN) {
+                path = Api.PATH_RETURN_LIST;
+            } else {
+                path = Api.PATH_COMPLAIN_LIST;
+            }
+
+            Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
@@ -177,7 +230,14 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                     }
 
                     try {
-                        EasyJSONArray refundItemVoList = responseObj.getArray("datas.refundItemVoList");
+                        EasyJSONArray refundItemVoList;
+
+                        if (action == Constant.ACTION_REFUND || action == Constant.ACTION_RETURN) {
+                            refundItemVoList = responseObj.getArray("datas.refundItemVoList");
+                        } else {
+                            refundItemVoList = responseObj.getArray("datas.complainList");
+                        }
+
                         for (Object object : refundItemVoList) {
                             EasyJSONObject item = (EasyJSONObject) object;
                             RefundItem refundItem = new RefundItem();
@@ -193,11 +253,34 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                             refundItem.goodsPayAmount = (float) item.getDouble("ordersGoodsVoList[0].goodsPayAmount");
                             refundItem.enableMemberCancel = item.getInt("enableMemberCancel");
 
-                            refundItemList.add(refundItem);
+                            SLog.info("enableMemberCancel[%d]", refundItem.enableMemberCancel);
+
+                            if (action == Constant.ACTION_REFUND) {
+                                refundItemList.add(refundItem);
+                            } else if (action == Constant.ACTION_RETURN) {
+                                returnItemList.add(refundItem);
+                            } else {
+                                complainItemList.add(refundItem);
+                            }
+
                         }
 
-                        SLog.info("refundItemList[%d]", refundItemList.size());
-                        refundListAdapter.setNewData(refundItemList);
+                        if (action == Constant.ACTION_REFUND) {
+                            refundDataLoaded = true;
+
+                            SLog.info("refundItemList[%d]", refundItemList.size());
+                            refundListAdapter.setNewData(refundItemList);
+                        } else if (action == Constant.ACTION_RETURN) {
+                            returnDataLoaded = true;
+
+                            SLog.info("returnItemList[%d]", returnItemList.size());
+                            refundListAdapter.setNewData(returnItemList);
+                        } else {
+                            complainDataLoaded = true;
+
+                            SLog.info("complainItemList[%d]", complainItemList.size());
+                            refundListAdapter.setNewData(complainItemList);
+                        }
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                         SLog.info("Error!loadRefundList failed");
@@ -221,14 +304,25 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                 return;
             }
 
-            int refundId = refundItemList.get(position).refundId;
+
+            int refundId = 0;
+            String path = "";
+
+            if (action == Constant.ACTION_REFUND) {
+                refundId = refundItemList.get(position).refundId;
+                path = Api.PATH_CANCEL_REFUND;
+            } else if (action == Constant.ACTION_RETURN) {
+                refundId = returnItemList.get(position).refundId;
+                path = Api.PATH_CANCEL_RETURN;
+            }
+
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "refundId", refundId);
 
             SLog.info("params[%s]", params);
 
-            Api.postUI(Api.PATH_CANCEL_REFUND, params, new UICallback() {
+            Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);

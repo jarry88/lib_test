@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -24,7 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONBase;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -34,12 +36,18 @@ import okhttp3.Call;
  * @author zwm
  */
 public class RefundDetailFragment extends BaseFragment implements View.OnClickListener {
+    int action;
     int refundId;
     EasyJSONObject paramsInObj;
+
+
+    TextView tvFragmentTitle;
 
     ProcessProgressIndicator indicator;
     // 當前已經處理到哪一步
     int currentStep = 0;
+
+    LinearLayout llWidgetContainer;
 
     TextView tvOrderNo;
     ImageView goodsImage;
@@ -96,9 +104,30 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
         String paramsIn = args.getString("paramsIn");
         paramsInObj = (EasyJSONObject) EasyJSONObject.parse(paramsIn);
 
+
+        try {
+            action = paramsInObj.getInt("action");
+        } catch (EasyJSONException e) {
+            e.printStackTrace();
+        }
+
         Util.setOnClickListener(view, R.id.btn_back, this);
 
+        tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
+
         indicator = view.findViewById(R.id.progress_indicator);
+
+        llWidgetContainer = view.findViewById(R.id.ll_widget_container);
+        if (action == Constant.ACTION_REFUND) {
+            tvFragmentTitle.setText(R.string.text_refund_detail);
+            LayoutInflater.from(_mActivity).inflate(R.layout.refund_detail_widget, llWidgetContainer, true);
+        } else if (action == Constant.ACTION_RETURN) {
+            tvFragmentTitle.setText(R.string.text_return_detail);
+            LayoutInflater.from(_mActivity).inflate(R.layout.return_detail_widget, llWidgetContainer, true);
+        } else if (action == Constant.ACTION_COMPLAIN) {
+
+        }
+
 
         tvOrderNo = view.findViewById(R.id.tv_order_no);
         goodsImage = view.findViewById(R.id.goods_image);
@@ -150,9 +179,15 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                 "token", token,
                 "refundId", refundId);
 
-        SLog.info("params[%s]", params);
+        String path = "";
+        if (action == Constant.ACTION_REFUND) {
+            path = Api.PATH_REFUND_INFO;
+        } else if (action == Constant.ACTION_RETURN) {
+            path = Api.PATH_RETURN_INFO;
+        }
 
-        Api.postUI(Api.PATH_REFUND_INFO, params, new UICallback() {
+        SLog.info("path[%s], params[%s]", path, params);
+        Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
@@ -180,12 +215,18 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                     }
 
                     List<String> progressList = new ArrayList<>();
-                    progressList.add(getString(R.string.text_refund_applied));
-                    progressList.add(getString(R.string.text_seller_process));
-                    progressList.add(getString(R.string.text_refund_finished));
+                    if (action == Constant.ACTION_REFUND) {
+                        progressList.add(getString(R.string.text_refund_applied));
+                        progressList.add(getString(R.string.text_seller_process));
+                        progressList.add(getString(R.string.text_refund_finished));
+                    } else if (action == Constant.ACTION_RETURN) {
+                        progressList.add(getString(R.string.text_return_applied));
+                        progressList.add(getString(R.string.text_seller_process));
+                        progressList.add(getString(R.string.text_buyer_returned));
+                        progressList.add(getString(R.string.text_refund_finished));
+                    }
 
                     indicator.setData(progressList, currentStep);
-
 
                     long ordersSn = refundItemVo.getLong("ordersSn");
                     tvOrderNo.setText(String.valueOf(ordersSn));

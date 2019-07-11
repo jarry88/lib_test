@@ -15,10 +15,13 @@ import android.view.inputmethod.InputMethodManager;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.log.SLog;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -256,5 +259,25 @@ public class Util {
                 imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
             }
         }, 200L);
+    }
+
+    /*
+    判斷是否為合法的手機號
+     */
+    public static boolean isMobileValid(String mobile, int areaId) {
+        String[] mobileRex = new String[] {
+                "",
+                "^[6|9][0-9]{7}$", // 香港
+                "^1[0-9]{10}$",    // 大陸
+                "^6[0-9]{7}$"   // 澳門
+        };
+
+        Pattern pattern = Pattern.compile(mobileRex[areaId]);
+
+        Matcher matcher = pattern.matcher(mobile);
+
+        boolean result = matcher.matches();
+        SLog.info("matches[%s]", result);
+        return result;
     }
 }

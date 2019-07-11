@@ -325,6 +325,10 @@
     <string name="input_return_amount_hint">请输入退貨金额</string>
 
     <string name="text_refund_detail">退款詳情</string>
+    <string name="text_return_detail">退貨詳情</string>
+    <string name="text_logistics_status">物流狀態</string>
+    <string name="text_logistics_company">物流公司</string>
+    <string name="text_logistics_order_no">物流單號</string>
 
     <string name="text_goods_refund">商品退款</string>
     <string name="text_goods_return">商品退貨</string>
@@ -353,10 +357,17 @@
     <string name="text_platform_remark">平臺備注</string>
     <string name="text_refund_applied">申請退款</string>
     <string name="text_refund_finished">完成退款</string>
+    <string name="text_return_applied">申請退貨</string>
+    <string name="text_buyer_returned">買家退貨</string>
+    <string name="text_return_application">退貨申請</string>
 
     <string name="text_refund_way">退款方式</string>
-
     <string name="text_return_amount">退貨金額</string>
+
+    <string name="text_invalid_mobile">你輸入的%s手機號碼有誤，請重新輸入</string>
+    <string name="text_mainland">大陸</string>
+    <string name="text_hongkong">香港</string>
+    <string name="text_macao">澳門</string>
 
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>

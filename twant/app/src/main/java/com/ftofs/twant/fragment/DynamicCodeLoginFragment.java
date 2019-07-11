@@ -147,6 +147,21 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 ToastUtil.show(_mActivity, getString(R.string.input_mobile_hint));
                 return;
             }
+
+            if (!Util.isMobileValid(mobile, mobileZone.areaId)) {
+                String[] areaArray = new String[] {
+                        "",
+                        getString(R.string.text_hongkong),
+                        getString(R.string.text_mainland),
+                        getString(R.string.text_macao)
+                };
+
+                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
+                ToastUtil.show(_mActivity, msg);
+                return;
+            }
+
+
             String fullMobile = mobileZone.areaCode + "," + mobile;
             String captchaText = etCaptcha.getText().toString().trim();
             if (StringUtil.isEmpty(captchaText)) {

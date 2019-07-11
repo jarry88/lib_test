@@ -33,6 +33,8 @@ public class RefundListAdapter extends BaseQuickAdapter<RefundItem, BaseViewHold
 
         if (item.enableMemberCancel == 1) {
             helper.setGone(R.id.btn_cancel_refund, true);
+        } else {
+            helper.setGone(R.id.btn_cancel_refund, false);
         }
 
         helper.addOnClickListener(R.id.btn_view_refund_info, R.id.btn_cancel_refund);

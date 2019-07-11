@@ -155,4 +155,9 @@ public class Constant {
     public static final int COMMENT_TYPE_ALL = 1;
     public static final int COMMENT_TYPE_VIDEO = 2;
     public static final int COMMENT_TYPE_TEXT = 3;
+
+
+    public static final int ACTION_REFUND = 1;
+    public static final int ACTION_RETURN = 2;
+    public static final int ACTION_COMPLAIN = 3;
 }

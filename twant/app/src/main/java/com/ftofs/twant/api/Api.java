@@ -524,6 +524,21 @@ public class Api {
      */
     public static final String PATH_RETURN_LIST = "/member/return/list";
 
+    /**
+     * 退货申请取消
+     */
+    public static final String PATH_CANCEL_RETURN = "/member/return/cancel";
+
+    /**
+     * 查看退货详情
+     */
+    public static final String PATH_RETURN_INFO = "/member/return/info";
+
+    /**
+     * 投诉列表
+     */
+    public static final String PATH_COMPLAIN_LIST = "/member/complain/list";
+
 
     /**
      * 發送Http請求

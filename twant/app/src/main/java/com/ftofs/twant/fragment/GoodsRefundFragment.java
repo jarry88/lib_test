@@ -54,10 +54,6 @@ import okhttp3.Call;
  * @author zwm
  */
 public class GoodsRefundFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
-    public static final int ACTION_REFUND = 1;
-    public static final int ACTION_RETURN = 2;
-    public static final int ACTION_COMPLAIN = 3;
-
     int action;
     int ordersId;
     int ordersGoodsId;
@@ -128,11 +124,11 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         }
 
         llWidgetContainer = view.findViewById(R.id.ll_widget_container);
-        if (action == ACTION_REFUND) {
+        if (action == Constant.ACTION_REFUND) {
             LayoutInflater.from(_mActivity).inflate(R.layout.refund_widget, llWidgetContainer, true);
-        } else if (action == ACTION_RETURN) {
+        } else if (action == Constant.ACTION_RETURN) {
             LayoutInflater.from(_mActivity).inflate(R.layout.return_widget, llWidgetContainer, true);
-        } else if (action == ACTION_COMPLAIN) {
+        } else if (action == Constant.ACTION_COMPLAIN) {
 
         }
 
@@ -161,15 +157,15 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         abReturnCount = view.findViewById(R.id.ab_return_amount);
 
         switch (action) {
-            case ACTION_REFUND:
+            case Constant.ACTION_REFUND:
                 tvFragmentTitle.setText(getString(R.string.text_goods_refund));
                 loadSingleGoodsRefundData();
                 break;
-            case ACTION_RETURN:
+            case Constant.ACTION_RETURN:
                 tvFragmentTitle.setText(getString(R.string.text_goods_return));
                 loadSingleGoodsReturnData();
                 break;
-            case ACTION_COMPLAIN:
+            case Constant.ACTION_COMPLAIN:
                 tvFragmentTitle.setText(getString(R.string.text_goods_complain));
                 break;
             default:
@@ -186,9 +182,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             hideSoftInput();
 
             String title = "";
-            if (action == ACTION_REFUND) {
+            if (action == Constant.ACTION_REFUND) {
                 title = getString(R.string.text_refund_reason);
-            } else if (action == ACTION_RETURN) {
+            } else if (action == Constant.ACTION_RETURN) {
                 title = getString(R.string.text_return_reason);
             }
 
@@ -213,7 +209,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             return;
         }
 
-        if (action == ACTION_REFUND) {
+        if (action == Constant.ACTION_REFUND) {
             if (reasonIndex == -1) {
                 ToastUtil.show(_mActivity, getString(R.string.select_refund_reason_hint));
                 return;
@@ -293,7 +289,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     return responseStr;
                 }
             });
-        } else if (action == ACTION_RETURN) {
+        } else if (action == Constant.ACTION_RETURN) {
             if (reasonIndex == -1) {
                 ToastUtil.show(_mActivity, getString(R.string.select_return_reason_hint));
                 return;

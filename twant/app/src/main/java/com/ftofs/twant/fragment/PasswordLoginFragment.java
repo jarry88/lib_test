@@ -26,6 +26,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.SharedPreferenceUtil;
 import com.ftofs.twant.util.SqliteUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
@@ -112,6 +113,35 @@ public class PasswordLoginFragment extends BaseFragment implements
             String mobile = etMobile.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             String captcha = etCaptcha.getText().toString().trim();
+
+            if (StringUtil.isEmpty(mobile)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_mobile_hint));
+                return;
+            }
+
+            if (!Util.isMobileValid(mobile, mobileZone.areaId)) {
+                String[] areaArray = new String[] {
+                        "",
+                        getString(R.string.text_hongkong),
+                        getString(R.string.text_mainland),
+                        getString(R.string.text_macao)
+                };
+
+                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
+                ToastUtil.show(_mActivity, msg);
+                return;
+            }
+
+            if (StringUtil.isEmpty(password)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_login_password_hint));
+                return;
+            }
+
+            if (StringUtil.isEmpty(captcha)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_captcha_hint));
+                return;
+            }
+
 
             String fullMobile = mobileZone.areaCode + "," + mobile;
 
