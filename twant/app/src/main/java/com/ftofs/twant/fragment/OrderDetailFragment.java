@@ -183,6 +183,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             "action", Constant.ACTION_RETURN,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
+                } else if (id == R.id.btn_complain) {
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
+                            "action", Constant.ACTION_COMPLAIN,
+                            "ordersId", item.ordersId,
+                            "ordersGoodsId", item.ordersGoodsId).toString()));
                 }
             }
         });
@@ -549,6 +555,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
 
+                    int showMemberComplain = ordersVo.getInt("showMemberComplain");
                     EasyJSONArray ordersGoodsVoList = ordersVo.getArray("ordersGoodsVoList");
                     for (Object object : ordersGoodsVoList) {
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
@@ -564,7 +571,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("buyNum"),
                                 goodsVo.getString("goodsFullSpecs"),
                                 goodsVo.getInt("refundType"),
-                                goodsVo.getInt("showRefund")));
+                                goodsVo.getInt("showRefund"),
+                                showMemberComplain,
+                                goodsVo.getInt("complainId")));
                     }
                     adapter.setNewData(orderDetailGoodsItemList);
                 } catch (Exception e) {

@@ -539,6 +539,16 @@ public class Api {
      */
     public static final String PATH_COMPLAIN_LIST = "/member/complain/list";
 
+    /**
+     * 投诉发起页面
+     */
+    public static final String PATH_COMPLAIN = "/member/complain/add";
+
+    /**
+     * 投诉保存
+     */
+    public static final String PATH_COMPLAIN_SAVE = "/member/complain/add/save";
+
 
     /**
      * 發送Http請求

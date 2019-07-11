@@ -43,11 +43,24 @@ public class OrderDetailGoodsAdapter extends BaseQuickAdapter<OrderDetailGoodsIt
             if (item.showRefund == 1) {
                 helper.setVisible(R.id.btn_refund, true)
                         .setVisible(R.id.btn_return, true);
+            } else {
+                helper.setVisible(R.id.btn_refund, false)
+                        .setVisible(R.id.btn_return, false);
             }
         } else if (item.refundType == 1) { // 查看退款
 
         } else if (item.refundType == 2) { // 查看退貨
 
+        }
+
+        if (item.showMemberComplain == 1) {
+            if (item.complainId == 0) {
+                helper.setVisible(R.id.btn_complain, true);
+                helper.setVisible(R.id.btn_view_complaint, false);
+            } else {
+                helper.setVisible(R.id.btn_complain, false);
+                helper.setVisible(R.id.btn_view_complaint, true);
+            }
         }
     }
 }

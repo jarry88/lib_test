@@ -125,7 +125,6 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
             tvFragmentTitle.setText(R.string.text_return_detail);
             LayoutInflater.from(_mActivity).inflate(R.layout.return_detail_widget, llWidgetContainer, true);
         } else if (action == Constant.ACTION_COMPLAIN) {
-
         }
 
 

@@ -322,7 +322,9 @@
     <string name="select_refund_reason_hint">请选择退款原因</string>
     <string name="input_refund_amount_hint">请输入退款金额</string>
     <string name="select_return_reason_hint">请选择退貨原因</string>
+    <string name="select_complain_subject_hint">请选投訴主題</string>
     <string name="input_return_amount_hint">请输入退貨金额</string>
+    <string name="input_complain_content_hint">請輸入您的投訴內容</string>
 
     <string name="text_refund_detail">退款詳情</string>
     <string name="text_return_detail">退貨詳情</string>
@@ -339,7 +341,10 @@
     <string name="text_refund_desc">退款說明</string>
     <string name="input_refund_desc_hint">請輸入您要退貨的說明文字（選填）</string>
     <string name="text_upload_evidence">上傳憑證</string>
+    <string name="text_complain_evidence">投訴憑證</string>
     <string name="text_return_count">退貨數量</string>
+    <string name="text_upload_image_tips">特别提示:退貨憑證選擇直接拍照或從手機相冊上傳圖片時,請注意圖片尺寸控制在1M以內, 超出請壓縮剪裁後在選擇上傳!</string>
+    <string name="text_complain_subject">投訴主題</string>
 
 
     <string name="text_goods_info">商品信息</string>
@@ -360,6 +365,7 @@
     <string name="text_return_applied">申請退貨</string>
     <string name="text_buyer_returned">買家退貨</string>
     <string name="text_return_application">退貨申請</string>
+    <string name="text_complain_content">投訴內容</string>
 
     <string name="text_refund_way">退款方式</string>
     <string name="text_return_amount">退貨金額</string>

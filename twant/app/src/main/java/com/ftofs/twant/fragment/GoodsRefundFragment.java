@@ -58,6 +58,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     int ordersId;
     int ordersGoodsId;
 
+    LinearLayout llGoodsOuterContainer;
+
     LinearLayout llWidgetContainer;
 
     EasyJSONObject paramsInObj;
@@ -123,13 +125,16 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             e.printStackTrace();
         }
 
+        llGoodsOuterContainer = view.findViewById(R.id.ll_goods_outer_container);
         llWidgetContainer = view.findViewById(R.id.ll_widget_container);
         if (action == Constant.ACTION_REFUND) {
             LayoutInflater.from(_mActivity).inflate(R.layout.refund_widget, llWidgetContainer, true);
         } else if (action == Constant.ACTION_RETURN) {
             LayoutInflater.from(_mActivity).inflate(R.layout.return_widget, llWidgetContainer, true);
         } else if (action == Constant.ACTION_COMPLAIN) {
-
+            LayoutInflater.from(_mActivity).inflate(R.layout.complain_widget, llWidgetContainer, true);
+            // 如果是投訴，隱藏底部的線條
+            llGoodsOuterContainer.setBackground(null);
         }
 
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -167,6 +172,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 break;
             case Constant.ACTION_COMPLAIN:
                 tvFragmentTitle.setText(getString(R.string.text_goods_complain));
+                loadComplainData();
                 break;
             default:
                 break;
@@ -186,6 +192,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 title = getString(R.string.text_refund_reason);
             } else if (action == Constant.ACTION_RETURN) {
                 title = getString(R.string.text_return_reason);
+            } else {
+                title = getString(R.string.text_complain_subject);
             }
 
 
@@ -376,6 +384,75 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     return responseStr;
                 }
             });
+        } else { // 商品投訴
+            if (reasonIndex == -1) {
+                ToastUtil.show(_mActivity, getString(R.string.select_complain_subject_hint));
+                return;
+            }
+
+            final String buyerMessage = etRefundDesc.getText().toString().trim();
+            if (StringUtil.isEmpty(buyerMessage)) {
+                ToastUtil.show(_mActivity, getString(R.string.input_complain_content_hint));
+                return;
+            }
+
+            // 憑證圖片收集
+            final List<String> imagePathList = new ArrayList<>();
+            int childCount = sglImageContainer.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View view = sglImageContainer.getChildAt(i);
+                if (view instanceof ImageView) {  // 如果是添加按鈕，則跳過
+                    continue;
+                }
+                imagePathList.add((String) view.getTag());
+            }
+
+            TaskObserver taskObserver = new TaskObserver() {
+                @Override
+                public void onMessage() {
+                    String responseStr = (String) message;
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.show(_mActivity, "提交成功");
+                    pop();
+                }
+            };
+
+            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+                @Override
+                public Object doWork() {
+                    StringBuilder picJson = new StringBuilder();
+                    // 上傳圖片文件
+                    for (String imagePath : imagePathList) {
+                        String result = Api.syncUploadFile(new File(imagePath));
+                        SLog.info("result[%s]", result);
+                        if (StringUtil.isEmpty(result)) {
+                            return null;
+                        }
+
+                        if (picJson.length() > 0) {
+                            picJson.append(",");
+                        }
+                        picJson.append(result);
+                    }
+
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "token", token,
+                            "ordersId", ordersId,
+                            "ordersGoodsId", ordersGoodsId,
+                            "subjectId", reasonItemList.get(reasonIndex).id,
+                            "accuserImages", picJson.toString(),
+                            "accuserContent", buyerMessage);
+
+                    SLog.info("params[%s]", params.toString());
+                    String responseStr = Api.syncPost(Api.PATH_COMPLAIN_SAVE, params);
+                    SLog.info("responseStr[%s]", responseStr);
+                    return responseStr;
+                }
+            });
         }
     }
 
@@ -516,6 +593,79 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
 
+                    }
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
+
+    private void loadComplainData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        try {
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "ordersId", paramsInObj.getInt("ordersId"),
+                    "ordersGoodsId", paramsInObj.getInt("ordersGoodsId"));
+
+            SLog.info("params[%s]", params);
+
+            Api.postUI(Api.PATH_COMPLAIN, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        String storeName = responseObj.getString("datas.ordersVo.storeName");
+                        tvStoreName.setText(storeName);
+
+                        EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
+
+                        String goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
+                        Glide.with(_mActivity).load(goodsImageUrl).into(goodsImage);
+
+                        String goodsName = ordersGoodsVo.getString("goodsName");
+                        tvGoodsName.setText(goodsName);
+
+                        String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                        tvGoodsFullSpecs.setText(goodsFullSpecs);
+
+                        float price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                        tvPrice.setText(StringUtil.formatPrice(_mActivity, price, 0));
+
+                        int goodsNum = ordersGoodsVo.getInt("buyNum");
+                        maxReturnCount = ordersGoodsVo.getInt("buyNum");
+                        tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
+
+                        EasyJSONArray refundReasonList = responseObj.getArray("datas.complainSubjectList");
+                        for (Object object : refundReasonList) {
+                            EasyJSONObject reason = (EasyJSONObject) object;
+                            reasonItemList.add(new ListPopupItem(
+                                    reason.getInt("subjectId"),
+                                    reason.getString("title"),
+                                    null));
+                        }
+
+                        maxRefundAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
+                        tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
                     }
                 }
             });
