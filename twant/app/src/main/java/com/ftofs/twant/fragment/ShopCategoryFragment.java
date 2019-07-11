@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.AddrListAdapter;
 import com.ftofs.twant.adapter.StoreLabelListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -167,6 +166,10 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
                             }
 
                             storeLabel.setStoreLabelList(storeLabels);
+                        }
+
+                        if (storeLabel.getStoreLabelList() == null) {
+                            storeLabel.setStoreLabelList(new ArrayList<StoreLabel>());
                         }
 
                         shopStoreLabelList.add(storeLabel);
