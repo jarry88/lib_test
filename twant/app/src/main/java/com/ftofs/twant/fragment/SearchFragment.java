@@ -288,6 +288,10 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                     for (Object object : keywordList) {
                         final String hotKeyword = (String) object;
 
+                        if (StringUtil.isEmpty(hotKeyword)) {
+                            continue;
+                        }
+
                         TextView hotKeywordButton = new TextView(_mActivity);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         hotKeywordButton.setBackgroundResource(R.drawable.search_item_bg);

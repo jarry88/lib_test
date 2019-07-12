@@ -1,7 +1,5 @@
 package com.ftofs.twant.fragment;
 
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -12,18 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.Guid;
-import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
-import com.macau.pay.sdk.MacauPaySdk;
-import com.macaupay.sdk.AcpService;
-import com.macaupay.sdk.SDKConstants;
-import com.macaupay.sdk.SDKUtil;
-
-import java.io.File;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -104,6 +94,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
 
             AssetsUtil.copyAssetAndWrite(_mActivity, "test.pfx");
 
+            /*
             String sign = SDKUtil.sign(bizContent.toString(), "/data/user/0/com.ftofs.twant/cache/test.pfx", "12345678", SDKConstants.UTF_8_ENCODING);
             SLog.info("sign[%s]", sign);
 
@@ -125,6 +116,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
             SLog.info("params[%s]", params.toString());
             // MacauPaySdk.aliPay(_mActivity, params.toString(), (MainActivity) _mActivity);
             MacauPaySdk.macauPay(_mActivity, params.toString(), (MainActivity) _mActivity);
+            */
         }
     }
 

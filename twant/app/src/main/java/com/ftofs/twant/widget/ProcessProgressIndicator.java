@@ -69,7 +69,7 @@ public class ProcessProgressIndicator extends ViewGroup {
 
         int parentWidth = getWidth();
         int parentHeight = getHeight();
-        SLog.info("onMeasure, childCount[%d], width[%d], height[%d]", childCount, parentWidth, parentHeight);
+        // SLog.info("onMeasure, childCount[%d], width[%d], height[%d]", childCount, parentWidth, parentHeight);
 
         for (int i = 0; i < childCount; i++) {
             View childView = getChildAt(i);
@@ -89,7 +89,7 @@ public class ProcessProgressIndicator extends ViewGroup {
         int paddingLeft = getPaddingLeft();
         int paddingRight = getPaddingRight();
 
-        SLog.info("onLayout, childCount[%d], paddingLeft[%d], paddingRight[%d]", childCount, paddingLeft, paddingRight);
+        // SLog.info("onLayout, childCount[%d], paddingLeft[%d], paddingRight[%d]", childCount, paddingLeft, paddingRight);
 
         int textViewCount = 0;
         int totalChildWidth = 0;

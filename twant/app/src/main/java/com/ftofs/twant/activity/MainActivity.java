@@ -2,22 +2,18 @@ package com.ftofs.twant.activity;
 
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.fragment.MainFragment;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
-import com.macau.pay.sdk.base.PayResult;
-import com.macau.pay.sdk.interfaces.MacauPaySdkInterfaces;
 
 /**
  * 主Activity
  * @author zwm
  */
-public class MainActivity extends BaseActivity implements MacauPaySdkInterfaces {
+public class MainActivity extends BaseActivity {
     long lastBackPressedTime;
     MainFragment mainFragment;
     @Override
@@ -48,15 +44,5 @@ public class MainActivity extends BaseActivity implements MacauPaySdkInterfaces 
             // 在時間差內兩次按下返回鍵，退出
             finish();
         }
-    }
-
-    @Override
-    public void APayInterfaces(PayResult payResult) {
-        SLog.info("APayInterfaces[%s]", payResult.toString());
-    }
-
-    @Override
-    public void MPayInterfaces(PayResult payResult) {
-        SLog.info("MPayInterfaces[%s]", payResult.toString());
     }
 }

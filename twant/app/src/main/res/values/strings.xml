@@ -66,6 +66,7 @@
     <string name="text_time_create_order">生成訂單:</string>
     <string name="text_time_pay_order">完成付款:</string>
     <string name="text_time_ship_order">完成發貨:</string>
+    <string name="text_order_num">訂單編號</string>
 
     <!-- 訂單詳情的按鈕 -->
     <string name="text_cancel_order">取消訂單</string>
@@ -285,6 +286,7 @@
     <string name="text_mall_discount">商城優惠</string>
     <string name="text_commit_bill">提交訂單</string>
     <string name="text_order_amount">訂單金額</string>
+    <string name="text_order_total_amount">訂單總額</string>
     <string name="text_commit">提交</string>
     <string name="text_title">標題</string>
     <string name="input_hint">請輸入</string>
@@ -326,11 +328,13 @@
     <string name="input_return_amount_hint">请输入退貨金额</string>
     <string name="input_complain_content_hint">請輸入您的投訴內容</string>
 
-    <string name="text_refund_detail">退款詳情</string>
+
     <string name="text_return_detail">退貨詳情</string>
+    <string name="text_complain_detail">投訴詳情</string>
     <string name="text_logistics_status">物流狀態</string>
     <string name="text_logistics_company">物流公司</string>
     <string name="text_logistics_order_no">物流單號</string>
+    <string name="text_merchant">商家</string>
 
     <string name="text_goods_refund">商品退款</string>
     <string name="text_goods_return">商品退貨</string>
@@ -345,6 +349,10 @@
     <string name="text_return_count">退貨數量</string>
     <string name="text_upload_image_tips">特别提示:退貨憑證選擇直接拍照或從手機相冊上傳圖片時,請注意圖片尺寸控制在1M以內, 超出請壓縮剪裁後在選擇上傳!</string>
     <string name="text_complain_subject">投訴主題</string>
+    <string name="text_cancel_refund">取消退款</string>
+    <string name="text_refund_detail">退款詳情</string>
+    <string name="text_cancel_return">取消退貨</string>
+    <string name="text_cancel_complain">取消投訴</string>
 
 
     <string name="text_goods_info">商品信息</string>
@@ -366,6 +374,18 @@
     <string name="text_buyer_returned">買家退貨</string>
     <string name="text_return_application">退貨申請</string>
     <string name="text_complain_content">投訴內容</string>
+    <string name="text_complain_info">投訴信息</string>
+    <string name="text_complain_time">投訴時間</string>
+    <string name="text_platform_arbitration">平臺仲裁</string>
+    <string name="text_arbitration_time">仲裁時間</string>
+    <string name="text_arbitration_opinion">仲裁意見</string>
+
+
+    <string name="text_to_be_applied">待申請</string>
+    <string name="text_new_complain">新投訴</string>
+    <string name="text_in_conversation">對話中</string>
+    <string name="text_to_be_arbitrated">待仲裁</string>
+    <string name="text_finished">已完成</string>
 
     <string name="text_refund_way">退款方式</string>
     <string name="text_return_amount">退貨金額</string>

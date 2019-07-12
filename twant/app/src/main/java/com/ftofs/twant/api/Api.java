@@ -551,6 +551,17 @@ public class Api {
 
 
     /**
+     * 撤销投诉
+     */
+    public static final String PATH_CANCEL_COMPLAIN = "/member/complain/close";
+
+    /**
+     * 查看投诉详情
+     */
+    public static final String PATH_COMPLAIN_INFO = "/member/complain/info";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

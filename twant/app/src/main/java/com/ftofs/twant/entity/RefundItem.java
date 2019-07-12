@@ -1,6 +1,7 @@
 package com.ftofs.twant.entity;
 
 public class RefundItem {
+    public int action;
     public int refundId;
     public String storeName;
     public String orderStatus;

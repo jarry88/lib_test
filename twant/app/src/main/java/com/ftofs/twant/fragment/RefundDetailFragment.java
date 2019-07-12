@@ -75,6 +75,16 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
     TextView tvRefundWay;
     TextView tvRefundAmount;
 
+    TextView tvComplainTime;
+    TextView tvComplainSubject;
+    TextView tvComplainContent;
+
+    TextView tvFreightAmount;
+    TextView tvOrderTotalAmount;
+    TextView tvOrderNum;
+    TextView tvLogisticsOrderNo;
+    TextView tvMerchant;
+
 
     public static RefundDetailFragment newInstance(int refundId, String paramsIn) {
         Bundle args = new Bundle();
@@ -91,13 +101,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_refund_detail, container, false);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view;
 
         Bundle args = getArguments();
         refundId = args.getInt("refundId");
@@ -110,6 +114,17 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
         } catch (EasyJSONException e) {
             e.printStackTrace();
         }
+        if (action == Constant.ACTION_REFUND || action == Constant.ACTION_RETURN) {
+            view = inflater.inflate(R.layout.fragment_refund_detail, container, false);
+        } else {
+            view = inflater.inflate(R.layout.fragment_refund_detail_complain, container, false);
+        }
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
 
@@ -125,6 +140,8 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
             tvFragmentTitle.setText(R.string.text_return_detail);
             LayoutInflater.from(_mActivity).inflate(R.layout.return_detail_widget, llWidgetContainer, true);
         } else if (action == Constant.ACTION_COMPLAIN) {
+            tvFragmentTitle.setText(R.string.text_complain_detail);
+            LayoutInflater.from(_mActivity).inflate(R.layout.complain_detail_widget, llWidgetContainer, true);
         }
 
 
@@ -154,6 +171,16 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
         tvRefundWay = view.findViewById(R.id.tv_refund_way);
         tvRefundAmount = view.findViewById(R.id.tv_refund_amount);
 
+        tvComplainTime = view.findViewById(R.id.tv_complain_time);
+        tvComplainSubject = view.findViewById(R.id.tv_complain_subject);
+        tvComplainContent = view.findViewById(R.id.tv_complain_content);
+
+        tvFreightAmount = view.findViewById(R.id.tv_freight_amount);
+        tvOrderTotalAmount = view.findViewById(R.id.tv_order_total_amount);
+        tvOrderNum = view.findViewById(R.id.tv_order_num);
+        tvLogisticsOrderNo = view.findViewById(R.id.tv_logistics_order_no);
+        tvMerchant = view.findViewById(R.id.tv_merchant);
+
         loadRefundDetail();
     }
     
@@ -174,16 +201,24 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        final EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "refundId", refundId);
+        final EasyJSONObject params = EasyJSONObject.generate("token", token);
 
-        String path = "";
-        if (action == Constant.ACTION_REFUND) {
-            path = Api.PATH_REFUND_INFO;
-        } else if (action == Constant.ACTION_RETURN) {
-            path = Api.PATH_RETURN_INFO;
+        String path = null;
+        try {
+            if (action == Constant.ACTION_REFUND) {
+                path = Api.PATH_REFUND_INFO;
+                params.set("refundId", refundId);
+            } else if (action == Constant.ACTION_RETURN) {
+                path = Api.PATH_RETURN_INFO;
+                params.set("refundId", refundId);
+            } else {
+                path = Api.PATH_COMPLAIN_INFO;
+                params.set("complainId", refundId);
+            }
+        } catch (Exception e) {
+
         }
+
 
         SLog.info("path[%s], params[%s]", path, params);
         Api.postUI(path, params, new UICallback() {
@@ -202,17 +237,6 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                 }
 
                 try {
-                    EasyJSONObject refundItemVo = responseObj.getObject("datas.refundItemVo");
-
-                    int sellerState = refundItemVo.getInt("sellerState");
-                    if (sellerState > 1) { // 商家已處理
-                        currentStep++;
-                        int adminState = refundItemVo.getInt("adminState");
-                        if (adminState > 1) {
-                            currentStep++;
-                        }
-                    }
-
                     List<String> progressList = new ArrayList<>();
                     if (action == Constant.ACTION_REFUND) {
                         progressList.add(getString(R.string.text_refund_applied));
@@ -223,66 +247,139 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                         progressList.add(getString(R.string.text_seller_process));
                         progressList.add(getString(R.string.text_buyer_returned));
                         progressList.add(getString(R.string.text_refund_finished));
+                    } else {
+                        progressList.add(getString(R.string.text_new_complain));
+                        progressList.add(getString(R.string.text_to_be_applied));
+                        progressList.add(getString(R.string.text_in_conversation));
+                        progressList.add(getString(R.string.text_to_be_arbitrated));
+                        progressList.add(getString(R.string.text_finished));
                     }
 
                     indicator.setData(progressList, currentStep);
 
-                    long ordersSn = refundItemVo.getLong("ordersSn");
-                    tvOrderNo.setText(String.valueOf(ordersSn));
+                    if (action == Constant.ACTION_REFUND || action == Constant.ACTION_RETURN) {
+                        EasyJSONObject refundItemVo = responseObj.getObject("datas.refundItemVo");
 
-                    String goodsImageUrl = refundItemVo.getString("goodsImage");
-                    Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
+                        int sellerState = refundItemVo.getInt("sellerState");
+                        if (sellerState > 1) { // 商家已處理
+                            currentStep++;
+                            int adminState = refundItemVo.getInt("adminState");
+                            if (adminState > 1) {
+                                currentStep++;
+                            }
+                        }
 
-                    tvGoodsName.setText(refundItemVo.getString("goodsName"));
-                    tvGoodsFullSpecs.setText(paramsInObj.getString("goodsFullSpecs"));
+                        long ordersSn = refundItemVo.getLong("ordersSn");
+                        tvOrderNo.setText(String.valueOf(ordersSn));
 
-                    tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, (float) paramsInObj.getDouble("goodsPrice"), 0));
-                    tvBuyNum.setText(getString(R.string.times_sign) + " " + paramsInObj.getInt("buyNum"));
+                        String goodsImageUrl = refundItemVo.getString("goodsImage");
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
 
-                    String refundStatus = refundItemVo.getString("currentStateText");
-                    tvRefundStatus.setText(refundStatus);
+                        tvGoodsName.setText(refundItemVo.getString("goodsName"));
+                        tvGoodsFullSpecs.setText(paramsInObj.getString("goodsFullSpecs"));
 
-                    long refundSn = refundItemVo.getLong("refundSn");
-                    tvReturnNo.setText(String.valueOf(refundSn));
+                        tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, (float) paramsInObj.getDouble("goodsPrice"), 0));
+                        tvBuyNum.setText(getString(R.string.times_sign) + " " + paramsInObj.getInt("buyNum"));
 
-                    tvReturnReason.setText(refundItemVo.getString("reasonInfo"));
-                    float refundAmount = (float) refundItemVo.getDouble("refundAmount");
-                    tvReturnAmount.setText(StringUtil.formatPrice(_mActivity, refundAmount, 0));
+                        String refundStatus = refundItemVo.getString("currentStateText");
+                        tvRefundStatus.setText(refundStatus);
 
-                    tvReturnDesc.setText(refundItemVo.getString("buyerMessage"));
+                        long refundSn = refundItemVo.getLong("refundSn");
+                        tvReturnNo.setText(String.valueOf(refundSn));
 
-                    String picJson = refundItemVo.getString("picJson");
-                    String[] picJsonArr = picJson.split(",");
+                        tvReturnReason.setText(refundItemVo.getString("reasonInfo"));
+                        float refundAmount = (float) refundItemVo.getDouble("refundAmount");
+                        tvReturnAmount.setText(StringUtil.formatPrice(_mActivity, refundAmount, 0));
 
-                    if (picJsonArr.length > 0) {
-                        imgEvidence1.setVisibility(View.VISIBLE);
-                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[0])).centerCrop().into(imgEvidence1);
+                        tvReturnDesc.setText(refundItemVo.getString("buyerMessage"));
+
+                        String picJson = refundItemVo.getString("picJson");
+                        String[] picJsonArr = picJson.split(",");
+
+                        if (picJsonArr.length > 0) {
+                            imgEvidence1.setVisibility(View.VISIBLE);
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[0])).centerCrop().into(imgEvidence1);
+                        }
+                        if (picJsonArr.length > 1) {
+                            imgEvidence2.setVisibility(View.VISIBLE);
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[1])).centerCrop().into(imgEvidence2);
+                        }
+                        if (picJsonArr.length > 2) {
+                            imgEvidence3.setVisibility(View.VISIBLE);
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[2])).centerCrop().into(imgEvidence3);
+                        }
+
+                        tvAuditStatus.setText(refundItemVo.getString("sellerStateText"));
+                        String sellerMessage = refundItemVo.getString("sellerMessage");
+                        if (!StringUtil.isEmpty(sellerMessage)) {
+                            tvSellerRemark.setText(sellerMessage);
+                        }
+
+
+                        tvPlatformAudit.setText(refundItemVo.getString("refundStateText"));
+                        String adminMessage = refundItemVo.getString("adminMessage");
+                        if (!StringUtil.isEmpty(adminMessage)) {
+                            tvPlatformRemark.setText(adminMessage);
+                        }
+
+                        tvRefundStatus2.setText(refundStatus);
+                    } else {
+                        EasyJSONObject complain = responseObj.getObject("datas.complain");
+                        String complainTime = complain.getString("accuserTime");
+                        tvComplainTime.setText(complainTime);
+
+                        String complainSubject = complain.getString("subjectTitle");
+                        tvComplainSubject.setText(complainSubject);
+
+                        String complainContent = complain.getString("accuserContent");
+                        tvComplainContent.setText(complainContent);
+
+                        String accuserImages = complain.getString("accuserImages");
+
+                        String[] evidenceArr = accuserImages.split(",");
+                        if (evidenceArr.length > 0) {
+                            imgEvidence1.setVisibility(View.VISIBLE);
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(evidenceArr[0])).centerCrop().into(imgEvidence1);
+                        }
+                        if (evidenceArr.length > 1) {
+                            imgEvidence2.setVisibility(View.VISIBLE);
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(evidenceArr[1])).centerCrop().into(imgEvidence2);
+                        }
+                        if (evidenceArr.length > 2) {
+                            imgEvidence3.setVisibility(View.VISIBLE);
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(evidenceArr[2])).centerCrop().into(imgEvidence3);
+                        }
+
+
+                        String goodsName = complain.getString("goodsName");
+                        tvGoodsName.setText(goodsName);
+
+                        String goodsImageUrl = complain.getString("goodsImage");
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
+
+                        String goodsFullSpecs = complain.getString("goodsFullSpecs");
+                        tvGoodsFullSpecs.setText(goodsFullSpecs);
+
+                        EasyJSONObject ordersVo = responseObj.getObject("datas.ordersVo");
+                        // EasyJSONObject ordersGoodsVo = ordersVo.getObject("ordersGoodsVoList[0]");
+                        float freightAmount = (float) ordersVo.getDouble("freightAmount");
+                        float ordersAmount = (float) ordersVo.getDouble("ordersAmount");
+
+                        EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
+                        float goodsPrice = (float) ordersGoodsVo.getDouble("goodsPrice");
+                        tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
+                        int buyNum = ordersGoodsVo.getInt("buyNum");
+                        tvBuyNum.setText(getString(R.string.times_sign) + " " + buyNum);
+
+                        tvFreightAmount.setText(StringUtil.formatPrice(_mActivity, freightAmount, 1));
+                        tvOrderTotalAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1));
+                        tvOrderNum.setText(ordersVo.getString("ordersSnStr"));
+                        tvLogisticsOrderNo.setText(ordersVo.getString("shipSn"));
+                        tvMerchant.setText(ordersVo.getString("storeName"));
                     }
-                    if (picJsonArr.length > 1) {
-                        imgEvidence2.setVisibility(View.VISIBLE);
-                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[1])).centerCrop().into(imgEvidence2);
-                    }
-                    if (picJsonArr.length > 2) {
-                        imgEvidence3.setVisibility(View.VISIBLE);
-                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[2])).centerCrop().into(imgEvidence3);
-                    }
 
-                    tvAuditStatus.setText(refundItemVo.getString("sellerStateText"));
-                    String sellerMessage = refundItemVo.getString("sellerMessage");
-                    if (!StringUtil.isEmpty(sellerMessage)) {
-                        tvSellerRemark.setText(sellerMessage);
-                    }
-
-
-                    tvPlatformAudit.setText(refundItemVo.getString("refundStateText"));
-                    String adminMessage = refundItemVo.getString("adminMessage");
-                    if (!StringUtil.isEmpty(adminMessage)) {
-                        tvPlatformRemark.setText(adminMessage);
-                    }
-
-                    tvRefundStatus2.setText(refundStatus);
                 } catch (Exception e) {
-
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });
