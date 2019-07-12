@@ -241,14 +241,23 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                         for (Object object : refundItemVoList) {
                             EasyJSONObject item = (EasyJSONObject) object;
                             RefundItem refundItem = new RefundItem();
-                            refundItem.refundId = item.getInt("refundId");
+                            if (action == Constant.ACTION_REFUND || action == Constant.ACTION_RETURN) {
+                                refundItem.refundId = item.getInt("refundId");
+                                refundItem.goodsName = item.getString("ordersGoodsVoList[0].goodsName");
+                                refundItem.goodsFullSpecs = item.getString("ordersGoodsVoList[0].goodsFullSpecs");
+                                refundItem.goodsPrice = (float) item.getDouble("ordersGoodsVoList[0].goodsPrice");
+                                refundItem.buyNum = item.getInt("ordersGoodsVoList[0].buyNum");
+                            } else {
+                                refundItem.refundId = item.getInt("complainId");
+                                refundItem.goodsName = item.getString("goodsName");
+                                refundItem.goodsFullSpecs = item.getString("goodsFullSpecs");
+                                refundItem.goodsPrice = (float) item.getDouble("ordersGoodsVoList[0].goodsPrice");
+                                refundItem.buyNum = item.getInt("ordersGoodsVoList[0].buyNum");
+                            }
                             refundItem.storeName = item.getString("storeName");
                             refundItem.orderStatus = item.getString("currentStateText");
                             refundItem.goodsImage = item.getString("goodsImage");
-                            refundItem.goodsName = item.getString("ordersGoodsVoList[0].goodsName");
-                            refundItem.goodsFullSpecs = item.getString("ordersGoodsVoList[0].goodsFullSpecs");
-                            refundItem.goodsPrice = (float) item.getDouble("ordersGoodsVoList[0].goodsPrice");
-                            refundItem.buyNum = item.getInt("ordersGoodsVoList[0].buyNum");
+
                             refundItem.addTime = item.getString("addTime");
                             refundItem.goodsPayAmount = (float) item.getDouble("ordersGoodsVoList[0].goodsPayAmount");
                             refundItem.enableMemberCancel = item.getInt("enableMemberCancel");
@@ -262,7 +271,6 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                             } else {
                                 complainItemList.add(refundItem);
                             }
-
                         }
 
                         if (action == Constant.ACTION_REFUND) {
@@ -303,7 +311,6 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                 SLog.info("Error!token 為空");
                 return;
             }
-
 
             int refundId = 0;
             String path = "";
