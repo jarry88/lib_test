@@ -224,6 +224,7 @@
             android:layout_height="86dp"
             android:orientation="horizontal">
             <RelativeLayout
+                android:id="@+id/btn_my_express"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
