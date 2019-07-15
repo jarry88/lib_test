@@ -403,7 +403,20 @@
     <string name="text_package_receiver">收件人</string>
     <string name="input_package_receiver_info_hint">點擊填寫收件人信息</string>
     <string name="text_address_book">地址簿</string>
+    <string name="text_package_type">包裹類型</string>
+    <string name="text_evaluated_weight">预估重量:</string>
+    <string name="input_package_weight_hint">請輸入包裹重量（必填）</string>
+    <string name="text_package_length">包裹长度:</string>
+    <string name="input_package_length_hint">請填入包裹長度（選填）</string>
+    <string name="text_package_width">包裹宽度:</string>
+    <string name="input_package_width_hint">請填入包裹寬度（選填）</string>
+    <string name="text_package_height">包裹高度:</string>
+    <string name="input_package_height_hint">請填入包裹高度（選填）</string>
+    <!-- 兩個空格的備注， 參考 https://blog.csdn.net/fan7983377/article/details/52229380  -->
+    <string name="text_remark">備注:</string>
+    <string name="input_remark_hint">給快遞員留言（選填）</string>
 
+    
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>
     <string name="umeng_app_key">5cee21bd4ca357016b00068d</string>

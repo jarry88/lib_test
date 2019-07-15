@@ -35,9 +35,15 @@
     </declare-styleable>
 
 
-    <!-- SquareGridLayoutOut -->
+    <!-- SquareGridLayout -->
     <attr name="sgl_column_count" format="integer"></attr>
     <declare-styleable name="SquareGridLayout">
         <attr name="sgl_column_count"></attr>
+    </declare-styleable>
+
+    <!-- GridLayout -->
+    <attr name="gl_column_count" format="integer"></attr>
+    <declare-styleable name="GridLayout">
+        <attr name="gl_column_count"></attr>
     </declare-styleable>
 </resources>

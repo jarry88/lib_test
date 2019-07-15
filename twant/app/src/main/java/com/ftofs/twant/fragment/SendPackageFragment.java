@@ -46,6 +46,7 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
 
         switch (id) {
             case R.id.btn_back:
+                pop();
                 break;
             default:
                 break;
