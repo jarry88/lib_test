@@ -64,6 +64,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     TextView tvAreaName;
     TextView btnGetSMSCode;
 
+    String textSecond;
     CountDownTimer countDownTimer;
     boolean canSendSMS = true;
 
@@ -93,11 +94,12 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        textSecond = getString(R.string.text_second);
         // 60秒倒計時
         countDownTimer = new CountDownTimer(60 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                btnGetSMSCode.setText(String.valueOf(Math.round(millisUntilFinished / 1000)) + getString(R.string.text_second));
+                btnGetSMSCode.setText(Math.round(millisUntilFinished / 1000) + textSecond);
             }
 
             @Override
