@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import es.dmoral.toasty.Toasty;
 
 /**
  * Toast工具類
@@ -21,7 +22,7 @@ public class ToastUtil {
     public static String COMMON_ERROR_MESSAGE = "系統錯誤";
 
     public static void show(Context context, String text) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        Toasty.info(context, text, Toasty.LENGTH_SHORT, true).show();
     }
 
     /**
@@ -59,7 +60,7 @@ public class ToastUtil {
                 }
             }
 
-            show(context, errorMessage);
+            Toasty.error(context, errorMessage, Toasty.LENGTH_SHORT, true).show();
             return true;
         }
         return false;
@@ -88,6 +89,6 @@ public class ToastUtil {
     }
 
     public static void showNetworkError(Context context, IOException e) {
-        ToastUtil.show(context, e.getMessage());
+        Toasty.error(context, e.getMessage(), Toasty.LENGTH_SHORT, true).show();
     }
 }
