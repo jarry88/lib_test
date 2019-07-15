@@ -93,13 +93,14 @@
                                 android:textSize="16sp"
                                 android:text="@string/text_package_sender"
                                 />
-                            <EditText
+                            <TextView
+                                android:id="@+id/btn_input_sender_info"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:textColor="@color/tw_black"
+                                android:textColor="#FFA8A8A8"
                                 android:textSize="14sp"
-                                android:hint="@string/input_package_sender_info_hint"
+                                android:text="@string/input_package_sender_info_hint"
                                 android:background="@null"
                                 />
                         </LinearLayout>
@@ -141,13 +142,14 @@
                                 android:textSize="16sp"
                                 android:text="@string/text_package_receiver"
                                 />
-                            <EditText
+                            <TextView
+                                android:id="@+id/btn_input_receiver_info"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:textColor="@color/tw_black"
+                                android:textColor="#FFA8A8A8"
                                 android:textSize="14sp"
-                                android:hint="@string/input_package_receiver_info_hint"
+                                android:text="@string/input_package_receiver_info_hint"
                                 android:background="@null"
                                 />
                         </LinearLayout>

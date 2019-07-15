@@ -416,6 +416,15 @@
     <string name="text_remark">備注:</string>
     <string name="input_remark_hint">給快遞員留言（選填）</string>
 
+    <string name="text_sender_info">寄件人信息</string>
+    <string name="text_receiver_info">收件人信息</string>
+    <string name="input_sender_name_hint">填寫寄件人姓名</string>
+    <string name="input_receiver_name_hint">填寫收件人姓名</string>
+    <string name="input_contact_hint">填寫聯系電話</string>
+    <string name="select_location_hint">選擇所在地</string>
+    <string name="input_detail_address_hint">填寫詳細地址</string>
+    <string name="text_save">保存</string>
+
     
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>
