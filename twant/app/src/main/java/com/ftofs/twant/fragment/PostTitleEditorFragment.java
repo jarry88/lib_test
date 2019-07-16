@@ -114,7 +114,7 @@ public class PostTitleEditorFragment extends BaseFragment implements View.OnClic
 
             content = etContent.getText().toString().trim();
             if (content.length() < 1) {
-                ToastUtil.show(_mActivity, "內容不能為空");
+                ToastUtil.error(_mActivity, "內容不能為空");
                 return;
             }
 

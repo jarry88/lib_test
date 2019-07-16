@@ -382,7 +382,7 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                     } else {
                         msg = "取消投訴成功";
                     }
-                    ToastUtil.show(_mActivity, msg);
+                    ToastUtil.success(_mActivity, msg);
                 }
             });
         } catch (Exception e) {

@@ -184,24 +184,24 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         try {
             final String realName = etReceiverName.getText().toString().trim();
             if (realName.length() < 1) {
-                ToastUtil.show(_mActivity, getResources().getText(R.string.hint_input_receiver_name).toString());
+                ToastUtil.error(_mActivity, getResources().getText(R.string.hint_input_receiver_name).toString());
                 return;
             }
 
             final String mobile = etMobile.getText().toString().trim();
             if (mobile.length() < 1) {
-                ToastUtil.show(_mActivity, getResources().getText(R.string.input_mobile_hint).toString());
+                ToastUtil.error(_mActivity, getResources().getText(R.string.input_mobile_hint).toString());
                 return;
             }
 
             if (areaList.size() < 1) {
-                ToastUtil.show(_mActivity, getResources().getText(R.string.hint_select_area).toString());
+                ToastUtil.error(_mActivity, getResources().getText(R.string.hint_select_area).toString());
                 return;
             }
 
             final String detailAddress = etDetailAddress.getText().toString().trim();
             if (detailAddress.length() < 1) {
-                ToastUtil.show(_mActivity, getResources().getText(R.string.hint_input_detail_address).toString());
+                ToastUtil.error(_mActivity, getResources().getText(R.string.hint_input_detail_address).toString());
                 return;
             }
 
@@ -263,9 +263,9 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                             bundle.putParcelable("addrItem", addrItem);
                             setFragmentResult(RESULT_OK, bundle);
 
-                            ToastUtil.show(_mActivity, "地址添加成功");
+                            ToastUtil.success(_mActivity, "地址添加成功");
                         } else {
-                            ToastUtil.show(_mActivity, "地址編輯成功");
+                            ToastUtil.success(_mActivity, "地址編輯成功");
                         }
 
                         pop();

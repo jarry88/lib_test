@@ -1,7 +1,6 @@
 package com.ftofs.twant.util;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.ftofs.twant.constant.ResponseCode;
 
@@ -21,8 +20,16 @@ public class ToastUtil {
      */
     public static String COMMON_ERROR_MESSAGE = "系統錯誤";
 
-    public static void show(Context context, String text) {
+    public static void info(Context context, String text) {
         Toasty.info(context, text, Toasty.LENGTH_SHORT, true).show();
+    }
+
+    public static void success(Context context, String text) {
+        Toasty.success(context, text, Toasty.LENGTH_SHORT, true).show();
+    }
+
+    public static void error(Context context, String text) {
+        Toasty.error(context, text, Toasty.LENGTH_SHORT, true).show();
     }
 
     /**
@@ -60,7 +67,7 @@ public class ToastUtil {
                 }
             }
 
-            Toasty.error(context, errorMessage, Toasty.LENGTH_SHORT, true).show();
+            error(context, errorMessage);
             return true;
         }
         return false;
@@ -89,6 +96,6 @@ public class ToastUtil {
     }
 
     public static void showNetworkError(Context context, IOException e) {
-        Toasty.error(context, e.getMessage(), Toasty.LENGTH_SHORT, true).show();
+        error(context, e.getMessage());
     }
 }

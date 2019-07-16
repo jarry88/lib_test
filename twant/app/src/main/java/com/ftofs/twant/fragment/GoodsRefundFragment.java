@@ -219,13 +219,13 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
         if (action == Constant.ACTION_REFUND) {
             if (reasonIndex == -1) {
-                ToastUtil.show(_mActivity, getString(R.string.select_refund_reason_hint));
+                ToastUtil.error(_mActivity, getString(R.string.select_refund_reason_hint));
                 return;
             }
 
             String refundAmountStr = etRefundAmount.getText().toString().trim();
             if (StringUtil.isEmpty(refundAmountStr)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_refund_amount_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_refund_amount_hint));
                 return;
             }
 
@@ -233,7 +233,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             final float refundAmount = Float.valueOf(etRefundAmount.getText().toString().trim());
             SLog.info("refundAmount[%s], maxRefundAmount[%s], comp[%s]", refundAmount, maxRefundAmount, refundAmount > maxRefundAmount);
             if (refundAmount > maxRefundAmount) {
-                ToastUtil.show(_mActivity, "退款金額不能超過最多可退金額");
+                ToastUtil.error(_mActivity, "退款金額不能超過最多可退金額");
                 return;
             }
 
@@ -259,7 +259,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, "提交成功");
+                    ToastUtil.success(_mActivity, "提交成功");
                     pop();
                 }
             };
@@ -299,27 +299,27 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             });
         } else if (action == Constant.ACTION_RETURN) {
             if (reasonIndex == -1) {
-                ToastUtil.show(_mActivity, getString(R.string.select_return_reason_hint));
+                ToastUtil.error(_mActivity, getString(R.string.select_return_reason_hint));
                 return;
             }
 
             final int returnCount = abReturnCount.getValue();
             SLog.info("returnCount[%d], maxReturnCount[%d]", returnCount, maxReturnCount);
             if (returnCount > maxReturnCount) {
-                ToastUtil.show(_mActivity, "退貨數量不能超過購買數量");
+                ToastUtil.error(_mActivity, "退貨數量不能超過購買數量");
                 return;
             }
 
             String refundAmountStr = etRefundAmount.getText().toString().trim();
             if (StringUtil.isEmpty(refundAmountStr)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_return_amount_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_return_amount_hint));
                 return;
             }
 
             final float refundAmount = Float.valueOf(etRefundAmount.getText().toString().trim());
             SLog.info("refundAmount[%s], maxRefundAmount[%s], comp[%s]", refundAmount, maxRefundAmount, refundAmount > maxRefundAmount);
             if (refundAmount > maxRefundAmount) {
-                ToastUtil.show(_mActivity, "退貨金額不能超過最多可退金額");
+                ToastUtil.error(_mActivity, "退貨金額不能超過最多可退金額");
                 return;
             }
 
@@ -345,7 +345,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, "提交成功");
+                    ToastUtil.success(_mActivity, "提交成功");
                     pop();
                 }
             };
@@ -386,13 +386,13 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             });
         } else { // 商品投訴
             if (reasonIndex == -1) {
-                ToastUtil.show(_mActivity, getString(R.string.select_complain_subject_hint));
+                ToastUtil.error(_mActivity, getString(R.string.select_complain_subject_hint));
                 return;
             }
 
             final String buyerMessage = etRefundDesc.getText().toString().trim();
             if (StringUtil.isEmpty(buyerMessage)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_complain_content_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_complain_content_hint));
                 return;
             }
 
@@ -416,7 +416,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, "提交成功");
+                    ToastUtil.success(_mActivity, "提交成功");
                     pop();
                 }
             };

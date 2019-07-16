@@ -133,7 +133,7 @@ public class ICBCFragment extends BaseFragment {
                                 queryHandler.postDelayed(this, postFrequency);
                             }
                         } else {
-                            ToastUtil.show(_mActivity, ToastUtil.COMMON_ERROR_MESSAGE);
+                            ToastUtil.error(_mActivity, ToastUtil.COMMON_ERROR_MESSAGE);
                         }
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());

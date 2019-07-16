@@ -120,7 +120,7 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
 
         String profile = etPersonalProfile.getText().toString().trim();
         if (StringUtil.isEmpty(profile)) {
-            ToastUtil.show(_mActivity, getString(R.string.text_personal_profile) + "不能為空");
+            ToastUtil.error(_mActivity, getString(R.string.text_personal_profile) + "不能為空");
             return;
         }
 
@@ -146,7 +146,7 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, getString(R.string.text_personal_profile) + "保存成功");
+                    ToastUtil.success(_mActivity, getString(R.string.text_personal_profile) + "保存成功");
                     hideSoftInput();
 
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_DATA, null);

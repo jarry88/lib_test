@@ -28,9 +28,9 @@ public class PackageListAdapter extends BaseMultiItemQuickAdapter<PackageItem, B
 
         int itemViewType = helper.getItemViewType();
         if (itemViewType == PackageItem.ITEM_TYPE_SEARCH) {
-
+            helper.addOnClickListener(R.id.btn_search_package);
         } else {
-
+            helper.addOnClickListener(R.id.btn_copy);
         }
 
         int itemCount = getItemCount();

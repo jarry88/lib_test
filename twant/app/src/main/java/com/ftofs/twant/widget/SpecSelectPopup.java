@@ -269,7 +269,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                     return;
                 }
 
-                ToastUtil.show(context, "添加購物車成功");
+                ToastUtil.success(context, "添加購物車成功");
                 dismiss();
             }
         });
@@ -369,7 +369,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         SLog.info("goodsId[%s]", goodsId);
         if (goodsId == null) {
             SLog.info("Error!找不到商品Id:" + selectedSpecValueIdStr);
-            ToastUtil.show(context, "Error!找不到商品Id:" + selectedSpecValueIdStr);
+            ToastUtil.error(context, "Error!找不到商品Id:" + selectedSpecValueIdStr);
             return;
         }
 
@@ -379,7 +379,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         GoodsInfo goodsInfo = goodsInfoMap.get(goodsId);
         if (goodsInfo == null) {
             SLog.info("Error!找不到goodsId:" + goodsId);
-            ToastUtil.show(context, "Error!找不到goodsId:" + goodsId);
+            ToastUtil.error(context, "Error!找不到goodsId:" + goodsId);
             return;
         }
 

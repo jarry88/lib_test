@@ -110,22 +110,22 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
             String nickname = etNickname.getText().toString().trim();
 
             if (StringUtil.isEmpty(smsCode)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_sms_code_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_sms_code_hint));
                 return;
             }
 
             if (StringUtil.isEmpty(password)) {
-                ToastUtil.show(_mActivity, "請輸入密碼");
+                ToastUtil.error(_mActivity, "請輸入密碼");
                 return;
             }
 
             if (!password.equals(confirmPassword)) {
-                ToastUtil.show(_mActivity, "密碼不一致");
+                ToastUtil.error(_mActivity, "密碼不一致");
                 return;
             }
 
             if (StringUtil.isEmpty(nickname)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_nickname_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_nickname_hint));
                 return;
             }
 
@@ -151,7 +151,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.show(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
                             return;
                         }
 
@@ -161,7 +161,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
                         SqliteUtil.switchUserDB(userId);
 
-                        ToastUtil.show(_mActivity, "注冊成功");
+                        ToastUtil.success(_mActivity, "注冊成功");
 
                         // 注冊成功，跳到主頁面
                         popTo(MainFragment.class, false);

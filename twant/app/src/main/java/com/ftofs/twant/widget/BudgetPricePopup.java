@@ -82,7 +82,7 @@ public class BudgetPricePopup extends BottomPopupView implements View.OnClickLis
             budgetPrice = etBudgetPrice.getText().toString().trim();
 
             if (StringUtil.isEmpty(budgetPrice)) {
-                ToastUtil.show(context, context.getString(R.string.input_budget_price_hint));
+                ToastUtil.error(context, context.getString(R.string.input_budget_price_hint));
                 return;
             }
 

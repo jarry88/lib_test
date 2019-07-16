@@ -75,18 +75,18 @@ public class PaymentPasswordFragment extends BaseFragment implements View.OnClic
             String confirmPassword = etConfirmPassword.getText().toString();
 
             if (!password.equals(confirmPassword)) {
-                ToastUtil.show(_mActivity, "密碼不一致");
+                ToastUtil.error(_mActivity, "密碼不一致");
                 return;
             }
 
             if (password.length() < 1) {
-                ToastUtil.show(_mActivity, "密碼不能為空");
+                ToastUtil.error(_mActivity, "密碼不能為空");
                 return;
             }
 
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
-                ToastUtil.show(_mActivity, "未登錄");
+                ToastUtil.error(_mActivity, "請先登錄");
                 return;
             }
 
@@ -110,7 +110,7 @@ public class PaymentPasswordFragment extends BaseFragment implements View.OnClic
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, "設置支付密碼成功");
+                    ToastUtil.success(_mActivity, "設置支付密碼成功");
                     return;
                 }
             });

@@ -236,7 +236,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                     }
 
                     // 刪除成功，重新加載數據
-                    ToastUtil.show(_mActivity, "刪除成功");
+                    ToastUtil.success(_mActivity, "刪除成功");
                     loadFootprintData();
                 } catch (Exception e) {
 

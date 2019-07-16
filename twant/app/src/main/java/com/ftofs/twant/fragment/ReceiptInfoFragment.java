@@ -126,15 +126,15 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
             receipt.taxPayerId = etTaxPayerId.getText().toString().trim();
 
             if (StringUtil.isEmpty(receipt.header)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_receipt_header_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_receipt_header_hint));
                 return;
             }
             if (StringUtil.isEmpty(receipt.content)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_receipt_content_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_receipt_content_hint));
                 return;
             }
             if (StringUtil.isEmpty(receipt.taxPayerId)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_taxpayer_id_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_taxpayer_id_hint));
                 return;
             }
             bundle.putParcelable("receipt", receipt);

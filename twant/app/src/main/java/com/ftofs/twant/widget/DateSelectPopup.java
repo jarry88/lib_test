@@ -168,7 +168,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
     private void setBirthday(int year, int month, int day) {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            ToastUtil.show(context, context.getString(R.string.text_not_login));
+            ToastUtil.error(context, context.getString(R.string.text_not_login));
             return;
         }
 

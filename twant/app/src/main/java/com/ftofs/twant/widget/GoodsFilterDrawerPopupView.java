@@ -223,12 +223,12 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
 
             try {
                 if (StringUtil.isEmpty(lowestPrice) && !StringUtil.isEmpty(highestPrice)) {
-                    ToastUtil.show(context, "請輸入最低價");
+                    ToastUtil.error(context, "請輸入最低價");
                     return;
                 }
 
                 if (!StringUtil.isEmpty(lowestPrice) && StringUtil.isEmpty(highestPrice)) {
-                    ToastUtil.show(context, "請輸入最高價");
+                    ToastUtil.error(context, "請輸入最高價");
                     return;
                 }
 
@@ -237,17 +237,17 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
                     float highest = Float.valueOf(highestPrice);
 
                     if (lowest < 0) {
-                        ToastUtil.show(context, "價格不能小于零");
+                        ToastUtil.error(context, "價格不能小于零");
                         return;
                     }
 
                     if (Math.abs(highest - lowest) < Constant.STORE_DISTANCE_THRESHOLD) {
-                        ToastUtil.show(context, "最低價不能與最高價相同");
+                        ToastUtil.error(context, "最低價不能與最高價相同");
                         return;
                     }
 
                     if (lowest > highest) {
-                        ToastUtil.show(context, "最低價不能高于最高價");
+                        ToastUtil.error(context, "最低價不能高于最高價");
                         return;
                     }
 

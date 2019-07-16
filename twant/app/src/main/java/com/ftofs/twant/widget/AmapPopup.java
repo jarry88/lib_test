@@ -128,7 +128,7 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
                 } else {
                     SLog.info("未安裝高德地圖");
                     // 如果未安裝高德地圖，則跳轉到應用市場
-                    ToastUtil.show(activity, "您尚未安裝高德地圖");
+                    ToastUtil.error(activity, "您尚未安裝高德地圖");
                     Uri uri = Uri.parse("market://details?id=com.autonavi.minimap");
                     intent = new Intent(Intent.ACTION_VIEW, uri);
                     activity.startActivity(intent);

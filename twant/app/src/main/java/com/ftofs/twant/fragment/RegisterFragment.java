@@ -127,7 +127,7 @@ public class RegisterFragment extends BaseFragment implements
             // 注账号为 区号,手机号
             final String mobile = etMobile.getText().toString().trim();
             if (StringUtil.isEmpty(mobile)) {
-                ToastUtil.show(_mActivity, "手機號不能為空");
+                ToastUtil.error(_mActivity, "手機號不能為空");
                 return;
             }
 
@@ -141,7 +141,7 @@ public class RegisterFragment extends BaseFragment implements
                 };
 
                 String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-                ToastUtil.show(_mActivity, msg);
+                ToastUtil.error(_mActivity, msg);
                 return;
             }
 
@@ -149,7 +149,7 @@ public class RegisterFragment extends BaseFragment implements
 
             String captchaText = etCaptcha.getText().toString().trim();
             if (StringUtil.isEmpty(captchaText)) {
-                ToastUtil.show(_mActivity, "驗證碼不能為空");
+                ToastUtil.error(_mActivity, "驗證碼不能為空");
                 return;
             }
 
@@ -172,7 +172,7 @@ public class RegisterFragment extends BaseFragment implements
                         if (code != ResponseCode.SUCCESS) {
                             // 如果出錯，刷新驗證碼
                             refreshCaptcha();
-                            ToastUtil.show(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
                             return;
                         }
 

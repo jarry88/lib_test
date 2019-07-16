@@ -316,34 +316,34 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
         }
 
         if (StringUtil.isEmpty(title)) {
-            ToastUtil.show(_mActivity, "請輸入標題");
+            ToastUtil.error(_mActivity, "請輸入標題");
             return;
         }
 
         final String content = etContent.getText().toString().trim();
         if (StringUtil.isEmpty(content)) {
-            ToastUtil.show(_mActivity, "請輸入正文");
+            ToastUtil.error(_mActivity, "請輸入正文");
             return;
         }
 
         if (StringUtil.isEmpty(keyword)) {
-            ToastUtil.show(_mActivity, "請輸入關鍵字");
+            ToastUtil.error(_mActivity, "請輸入關鍵字");
             return;
         }
 
         String categoryName = getCategoryName(selectedCategoryId);
         if (StringUtil.isEmpty(categoryName)) {
-            ToastUtil.show(_mActivity, "請選擇文章分類");
+            ToastUtil.error(_mActivity, "請選擇文章分類");
             return;
         }
 
         if (StringUtil.isEmpty(budgetPrice)) {
-            ToastUtil.show(_mActivity, "請輸入預算價格");
+            ToastUtil.error(_mActivity, "請輸入預算價格");
             return;
         }
 
         if (StringUtil.isEmpty(coverImage)) {
-            ToastUtil.show(_mActivity, "請選擇封面圖");
+            ToastUtil.error(_mActivity, "請選擇封面圖");
             return;
         }
 
@@ -354,10 +354,10 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
                 boolean success = (boolean) message;
 
                 if (success) {
-                    ToastUtil.show(_mActivity, "提交成功");
+                    ToastUtil.success(_mActivity, "提交成功");
                     pop();
                 } else {
-                    ToastUtil.show(_mActivity, "提交失敗");
+                    ToastUtil.error(_mActivity, "提交失敗");
                 }
             }
         };

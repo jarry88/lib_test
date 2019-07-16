@@ -369,7 +369,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 return;
                             }
 
-                            ToastUtil.show(_mActivity, "刪除成功");
+                            ToastUtil.success(_mActivity, "刪除成功");
                             reloadList();
                         }
                     });

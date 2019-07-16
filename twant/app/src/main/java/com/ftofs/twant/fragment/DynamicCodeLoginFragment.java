@@ -146,7 +146,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
 
             String mobile = etMobile.getText().toString().trim();
             if (StringUtil.isEmpty(mobile)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_mobile_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
                 return;
             }
 
@@ -159,7 +159,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 };
 
                 String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-                ToastUtil.show(_mActivity, msg);
+                ToastUtil.error(_mActivity, msg);
                 return;
             }
 
@@ -167,7 +167,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             String fullMobile = mobileZone.areaCode + "," + mobile;
             String captchaText = etCaptcha.getText().toString().trim();
             if (StringUtil.isEmpty(captchaText)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_captcha_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_captcha_hint));
                 return;
             }
 
@@ -193,11 +193,11 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.show(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
                             return;
                         }
 
-                        ToastUtil.show(_mActivity, "動態碼已發送");
+                        ToastUtil.success(_mActivity, "動態碼已發送");
                         canSendSMS = false;
                         countDownTimer.start();
                     } catch (EasyJSONException e) {
@@ -232,13 +232,13 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.show(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
                             // 如果出錯，刷新驗證碼
                             refreshCaptcha();
                             return;
                         }
 
-                        ToastUtil.show(_mActivity, "登入成功");
+                        ToastUtil.success(_mActivity, "登入成功");
                         int userId = responseObj.getInt("datas.memberId");
                         SharedPreferenceUtil.saveUserInfo(responseObj);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);

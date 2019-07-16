@@ -97,7 +97,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
                 // 顯示搜索結果頁面
                 String keyword = etKeyword.getText().toString().trim();
                 if (keyword.length() < 1) {
-                    ToastUtil.show(_mActivity, "請輸入搜索關鍵字");
+                    ToastUtil.error(_mActivity, "請輸入搜索關鍵字");
                     return;
                 }
                 MainFragment mainFragment = MainFragment.getInstance();

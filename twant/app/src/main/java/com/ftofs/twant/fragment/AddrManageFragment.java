@@ -268,7 +268,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                     return;
                 }
 
-                ToastUtil.show(_mActivity, "刪除成功");
+                ToastUtil.success(_mActivity, "刪除成功");
 
                 addrItemList.remove(position);
                 adapter.setNewData(addrItemList);

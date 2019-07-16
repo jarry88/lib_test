@@ -9,6 +9,7 @@
     android:background="@drawable/reply_edit_text_bg">
 
     <LinearLayout
+        android:id="@+id/btn_search_package"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

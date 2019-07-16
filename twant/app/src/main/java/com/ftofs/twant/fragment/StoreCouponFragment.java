@@ -171,7 +171,7 @@ public class StoreCouponFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, "領取成功");
+                    ToastUtil.success(_mActivity, "領取成功");
                 } catch (Exception e) {
 
                 }

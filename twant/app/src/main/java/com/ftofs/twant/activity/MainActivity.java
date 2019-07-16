@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
         lastBackPressedTime = now;
 
         if (diff >= 2000) {
-            ToastUtil.show(this, "再按一次退出應用");
+            ToastUtil.info(this, "再按一次退出應用");
         } else {
             // 在時間差內兩次按下返回鍵，退出
             finish();

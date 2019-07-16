@@ -210,7 +210,7 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
                     return;
                 }
 
-                ToastUtil.show(context, "領取成功");
+                ToastUtil.success(context, "領取成功");
                 StoreVoucher storeVoucher = storeVoucherList.get(position);
                 storeVoucher.memberIsReceive = 1;
                 adapter.setNewData(storeVoucherList);

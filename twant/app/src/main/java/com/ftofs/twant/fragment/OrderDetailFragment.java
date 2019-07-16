@@ -362,11 +362,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         }
 
                         if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
-                            ToastUtil.show(_mActivity, "取消訂單成功");
+                            ToastUtil.success(_mActivity, "取消訂單成功");
                         } else if(operationType == ORDER_OPERATION_TYPE_DELETE) {
-                            ToastUtil.show(_mActivity, "刪除訂單成功");
+                            ToastUtil.success(_mActivity, "刪除訂單成功");
                         } else if (operationType == ORDER_OPERATION_TYPE_BUY_AGAIN) {
-                            ToastUtil.show(_mActivity, "訂單已添加到購物車");
+                            ToastUtil.success(_mActivity, "訂單已添加到購物車");
                         }
 
                         pop();
@@ -411,7 +411,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, "確認收貨成功");
+                    ToastUtil.success(_mActivity, "確認收貨成功");
                     pop();
                 } catch (Exception e) {
 

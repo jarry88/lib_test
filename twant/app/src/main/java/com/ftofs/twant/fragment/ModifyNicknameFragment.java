@@ -75,7 +75,7 @@ public class ModifyNicknameFragment extends BaseFragment implements View.OnClick
         } else if (id == R.id.btn_ok) {
             String nickname = etNickname.getText().toString().trim();
             if (nickname.length() < 1) {
-                ToastUtil.show(_mActivity, "暱稱不能為空");
+                ToastUtil.error(_mActivity, "暱稱不能為空");
                 return;
             }
 
@@ -104,7 +104,7 @@ public class ModifyNicknameFragment extends BaseFragment implements View.OnClick
                             return;
                         }
 
-                        ToastUtil.show(_mActivity, "修改暱稱成功");
+                        ToastUtil.success(_mActivity, "修改暱稱成功");
                         hideSoftInput();
 
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_DATA, null);

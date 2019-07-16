@@ -238,7 +238,7 @@ addressAreaInfo String 地区全名
                         return;
                     }
 
-                    ToastUtil.show(context, "保存成功");
+                    ToastUtil.success(context, "保存成功");
                     onSelectedListener.onSelected(popupType, 0, addressAreaInfo);
                     dismiss();
                 } catch (Exception e) {

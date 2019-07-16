@@ -271,7 +271,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                     return;
                 }
 
-                ToastUtil.show(_mActivity, "領取成功");
+                ToastUtil.success(_mActivity, "領取成功");
                 StoreVoucher storeVoucher = storeVoucherList.get(position);
                 storeVoucher.memberIsReceive = 1;
                 voucherListAdapter.setData(storeVoucherList);

@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.PackageListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.PackageItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -81,6 +83,23 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvPackageList.setLayoutManager(layoutManager);
         adapter = new PackageListAdapter(packageItemList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_search_package) {
+
+                } else if (id == R.id.btn_copy) {
+                    // 復制快遞客戶單號
+                    PackageItem packageItem = packageItemList.get(position);
+                    String text = packageItem.customerOrderNumber;
+                    if (!StringUtil.isEmpty(text)) {
+                        ClipboardUtils.copyText(_mActivity, text);
+                        ToastUtil.success(_mActivity, "復制成功");
+                    }
+                }
+            }
+        });
         rvPackageList.setAdapter(adapter);
 
         loadPackageData();

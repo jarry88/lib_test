@@ -160,7 +160,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         content = etContent.getText().toString().trim();
 
         if (StringUtil.isEmpty(content)) {
-            ToastUtil.show(_mActivity, "評論內容不能為空");
+            ToastUtil.error(_mActivity, "評論內容不能為空");
             return;
         }
 
@@ -220,7 +220,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                         return;
                     }
 
-                    ToastUtil.show(_mActivity, "發表成功");
+                    ToastUtil.success(_mActivity, "發表成功");
                     pop();
                 } catch (Exception e) {
 

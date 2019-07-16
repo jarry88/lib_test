@@ -99,7 +99,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
             String confirmPassword = etConfirmPassword.getText().toString();
 
             if (!password.equals(confirmPassword)) {
-                ToastUtil.show(_mActivity, "密碼不一致");
+                ToastUtil.error(_mActivity, "密碼不一致");
                 return;
             }
 
@@ -124,7 +124,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.show(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
                             return;
                         }
 
@@ -132,7 +132,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
                         SharedPreferenceUtil.saveUserInfo(responseObj);
 
                         pop();
-                        ToastUtil.show(_mActivity, "重置密碼成功");
+                        ToastUtil.success(_mActivity, "重置密碼成功");
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }

@@ -134,11 +134,11 @@ public class ResetPasswordFragment extends BaseFragment implements
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.show(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
                             return;
                         }
 
-                        ToastUtil.show(_mActivity, "動態碼已發送");
+                        ToastUtil.success(_mActivity, "動態碼已發送");
 
                         MainFragment mainFragment = MainFragment.getInstance();
                         int smsCodeValidTime = responseObj.getInt("datas.authCodeValidTime");

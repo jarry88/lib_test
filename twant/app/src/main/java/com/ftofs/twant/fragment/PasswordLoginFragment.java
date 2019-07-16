@@ -115,7 +115,7 @@ public class PasswordLoginFragment extends BaseFragment implements
             String captcha = etCaptcha.getText().toString().trim();
 
             if (StringUtil.isEmpty(mobile)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_mobile_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
                 return;
             }
 
@@ -128,17 +128,17 @@ public class PasswordLoginFragment extends BaseFragment implements
                 };
 
                 String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-                ToastUtil.show(_mActivity, msg);
+                ToastUtil.error(_mActivity, msg);
                 return;
             }
 
             if (StringUtil.isEmpty(password)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_login_password_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_login_password_hint));
                 return;
             }
 
             if (StringUtil.isEmpty(captcha)) {
-                ToastUtil.show(_mActivity, getString(R.string.input_captcha_hint));
+                ToastUtil.error(_mActivity, getString(R.string.input_captcha_hint));
                 return;
             }
 
@@ -170,7 +170,7 @@ public class PasswordLoginFragment extends BaseFragment implements
                             return;
                         }
 
-                        ToastUtil.show(_mActivity, "登錄成功");
+                        ToastUtil.success(_mActivity, "登錄成功");
                         int userId = responseObj.getInt("datas.memberId");
                         SharedPreferenceUtil.saveUserInfo(responseObj);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);

@@ -322,14 +322,14 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         } else if (id == R.id.btn_commit) {
             if (mAddrItem == null) {
                 SLog.info("Error!地址信息無效");
-                ToastUtil.show(_mActivity, "地址信息無效");
+                ToastUtil.error(_mActivity, "地址信息無效");
                 return;
             }
 
             EasyJSONObject params = collectParams(true);
             SLog.info("params[%s]", params);
             if (params == null) {
-                ToastUtil.show(_mActivity, "數據無效");
+                ToastUtil.error(_mActivity, "數據無效");
                 return;
             }
 
@@ -346,7 +346,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
-                    ToastUtil.show(_mActivity, "提交訂單成功");
+                    ToastUtil.success(_mActivity, "提交訂單成功");
                     pop();
 
                     MainFragment mainFragment = MainFragment.getInstance();
@@ -434,7 +434,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 loadingPopup.dismiss();
                 List<EasyJSONObject> resultList = (List<EasyJSONObject>) message;
                 if (resultList == null) {
-                    ToastUtil.show(_mActivity, "生成訂單失敗");
+                    ToastUtil.error(_mActivity, "生成訂單失敗");
                     pop();
                     return;
                 }
