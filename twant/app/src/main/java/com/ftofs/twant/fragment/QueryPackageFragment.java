@@ -88,7 +88,8 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
                 if (id == R.id.btn_search_package) {
-
+                    MainFragment mainFragment = MainFragment.getInstance();
+                    mainFragment.start(ExpressQueryFragment.newInstance());
                 } else if (id == R.id.btn_copy) {
                     // 復制快遞客戶單號
                     PackageItem packageItem = packageItemList.get(position);

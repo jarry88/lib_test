@@ -431,6 +431,8 @@
     <string name="text_accepted_order_no">受理單號：</string>
     <string name="text_package_send_time">發貨時間：</string>
     <string name="text_copy">復制</string>
+    <string name="express_query_fragment_title">快遞信息查詢</string>
+    <string name="input_express_no_hint">請輸入快遞單號</string>
 
     
     <!--社交-->
