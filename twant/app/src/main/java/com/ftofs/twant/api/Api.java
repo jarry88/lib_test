@@ -560,6 +560,11 @@ public class Api {
      */
     public static final String PATH_COMPLAIN_INFO = "/member/complain/info";
 
+    /**
+     * 快遞查詢
+     */
+    public static final String PATH_SEARCH_LOGISTICS = "/member/logistics/search";
+
 
     /**
      * 發送Http請求

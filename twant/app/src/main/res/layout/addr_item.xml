@@ -69,7 +69,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/img_default_addr_indicator"
             android:text="@string/text_set_as_default"
-            android:textColor="#a8a8a8"
+            android:textColor="@color/tw_medium_grey"
             android:textSize="14sp"
             />
 

@@ -79,7 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="9dp"
                             android:text=""
-                            android:textColor="#FFA8A8A8"
+                            android:textColor="@color/tw_medium_grey"
                             android:textSize="13sp"
                             />
                     </LinearLayout>
@@ -150,7 +150,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:background="#EDEDED"
+                android:background="@color/tw_light_grey"
                 />
 
             <TextView

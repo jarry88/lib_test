@@ -38,6 +38,7 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_query_package, this);
         Util.setOnClickListener(view, R.id.btn_input_sender_info, this);
         Util.setOnClickListener(view, R.id.btn_input_receiver_info, this);
     }
@@ -51,6 +52,9 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
         switch (id) {
             case R.id.btn_back:
                 pop();
+                break;
+            case R.id.btn_query_package:
+                mainFragment.start(QueryPackageFragment.newInstance());
                 break;
             case R.id.btn_input_sender_info:
                 mainFragment.start(SenderInfoFragment.newInstance(SenderInfoFragment.DATA_TYPE_SENDER_INFO));

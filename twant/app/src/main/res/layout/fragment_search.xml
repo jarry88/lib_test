@@ -71,7 +71,7 @@
                 android:inputType="text"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
-                android:textColorHint="#FFA8A8A8"
+                android:textColorHint="@color/tw_medium_grey"
                 />
         </RelativeLayout>
 
@@ -110,7 +110,7 @@
         app:layout_constraintTop_toBottomOf="@id/search_tab_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:background="#FFEDEDED"
+        android:background="@color/tw_light_grey"
         />
 
     <LinearLayout

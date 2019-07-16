@@ -424,6 +424,13 @@
     <string name="select_location_hint">選擇所在地</string>
     <string name="input_detail_address_hint">填寫詳細地址</string>
     <string name="text_save">保存</string>
+    <string name="text_my_send">我的寄件</string>
+    <string name="text_my_receive">我的收件</string>
+    <string name="search_package_hint">輸入快遞客戶單號進行查詢</string>
+    <string name="text_package_order_no">快遞客戶單號：</string>
+    <string name="text_accepted_order_no">受理單號：</string>
+    <string name="text_package_send_time">發貨時間：</string>
+    <string name="text_copy">復制</string>
 
     
     <!--社交-->

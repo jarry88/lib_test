@@ -101,7 +101,7 @@
                     android:layout_marginTop="5dp"
                     android:text="@string/text_most_refund_amount"
                     android:textSize="12sp"
-                    android:textColor="#A8A8A8"
+                    android:textColor="@color/tw_medium_grey"
                     />
             </LinearLayout>
         </RelativeLayout>

@@ -69,7 +69,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#EDEDED"
+            android:background="@color/tw_light_grey"
             />
         <RelativeLayout
             android:id="@+id/btn_security_setting"

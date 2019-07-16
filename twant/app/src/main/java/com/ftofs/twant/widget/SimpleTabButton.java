@@ -52,6 +52,7 @@ public class SimpleTabButton extends RelativeLayout {
         horizontalPaddingPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_horizontal_padding, 0);
         text = array.getString(R.styleable.SimpleTabButton_stb_text);
         paddingBottomPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_padding_bottom, 0);
+        selectedColor = array.getColor(R.styleable.SimpleTabButton_stb_selected_color, getResources().getColor(R.color.tw_red, null));
         array.recycle();
 
         // SLog.info("strokeWidthPx[%d],useCap[%s],horizontalPaddingPx[%d],text[%s], paddingBottom[%d]",
@@ -59,7 +60,6 @@ public class SimpleTabButton extends RelativeLayout {
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         unselectedColor = getResources().getColor(R.color.tw_black, null);
-        selectedColor = getResources().getColor(R.color.tw_red, null);
 
         tvTitle = new TextView(context);
         tvTitle.setTextColor(unselectedColor);

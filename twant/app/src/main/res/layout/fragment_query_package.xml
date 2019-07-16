@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+    <!-- 工具欄 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_type_d"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height">
+            <com.ftofs.twant.widget.ScaledButton
+                android:id="@+id/btn_back"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginLeft="7dp"
+                android:layout_centerVertical="true"
+                app:icon_src="@drawable/icon_back"
+                />
+            <TextView
+                android:id="@+id/tv_fragment_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/text_query_package"
+                android:textSize="18sp"
+                android:textColor="@color/tw_black"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginTop="5dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true">
+                <com.ftofs.twant.widget.SimpleTabButton
+                    android:id="@+id/btn_my_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="20dp"
+                    app:stb_text="@string/text_my_send"
+                    app:stb_stroke_width="2dp"
+                    app:stb_horizontal_padding="9dp"
+                    app:stb_use_cap="true"
+                    app:stb_selected_color="@color/tw_blue"
+                    />
+                <com.ftofs.twant.widget.SimpleTabButton
+                    android:id="@+id/btn_my_receive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    app:stb_text="@string/text_my_receive"
+                    app:stb_stroke_width="2dp"
+                    app:stb_horizontal_padding="9dp"
+                    app:stb_use_cap="true"
+                    app:stb_selected_color="@color/tw_blue"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <!-- END OF 工具欄 -->
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_package_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F3F3F3">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

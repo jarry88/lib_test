@@ -33,10 +33,12 @@
             />
 
         <TextView
+            android:id="@+id/btn_query_package"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
+            android:paddingLeft="15dp"
             android:gravity="center"
             android:text="@string/text_query_package"
             android:textColor="@color/tw_black"
@@ -98,7 +100,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:textColor="#FFA8A8A8"
+                                android:textColor="@color/tw_medium_grey"
                                 android:textSize="14sp"
                                 android:text="@string/input_package_sender_info_hint"
                                 android:background="@null"
@@ -147,7 +149,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:textColor="#FFA8A8A8"
+                                android:textColor="@color/tw_medium_grey"
                                 android:textSize="14sp"
                                 android:text="@string/input_package_receiver_info_hint"
                                 android:background="@null"
@@ -295,7 +297,7 @@
                     android:paddingLeft="11dp"
                     android:gravity="center_vertical"
                     android:textSize="15sp"
-                    android:textColor="#A8A8A8"
+                    android:textColor="@color/tw_medium_grey"
                     android:text="請補充其他物品名稱"
                     android:background="@drawable/border_type_a"
                     />
