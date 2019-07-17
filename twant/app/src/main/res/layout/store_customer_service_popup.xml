@@ -37,7 +37,7 @@
         android:layout_height="35dp"
         android:paddingLeft="15dp"
         android:gravity="center_vertical"
-        android:background="#F3F3F3"
+        android:background="@color/tw_slight_grey"
         android:text="@string/text_store_service_staff"
         android:textColor="@color/tw_dark_grey"
         android:textSize="13sp"

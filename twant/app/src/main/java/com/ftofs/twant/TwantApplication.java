@@ -1,12 +1,16 @@
 package com.ftofs.twant;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.StrictMode;
 
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.handler.CrashHandler;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.AppStatus;
+import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.Test;
+import com.ftofs.twant.task.DownloadEmojiTask;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.User;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
@@ -36,9 +40,17 @@ public class TwantApplication extends Application {
     // 線程池
     private static ExecutorService executorService;
 
+    private static Context applicationContext = null;
+
+    public static Context getContext() {
+        return applicationContext;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        applicationContext = getApplicationContext();
 
         //Bugly异常处理
         CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
@@ -91,7 +103,7 @@ public class TwantApplication extends Application {
 
         /* 添加各個表，如果新增表，需要在這里添加表，然后增加數據庫版本號
            例如： SqliteUtil.addTables(Table1.class.getName(), Table2.class.getName()); */
-        SqliteUtil.addTables(Test.class.getName());
+        SqliteUtil.addTables(Test.class.getName(), AppStatus.class.getName(), Emoji.class.getName());
 
         Fragmentation.builder()
                 // show stack view. Mode: BUBBLE, SHAKE, NONE
@@ -113,6 +125,9 @@ public class TwantApplication extends Application {
         // 設置時間處理工具的時區
         TimeZone tz = TimeZone.getDefault();
         DateTimeUtils.setTimeZone(tz.getID());
+
+        // 檢查是否需要下載表情
+        getThreadPool().execute(new DownloadEmojiTask());
     }
 
 

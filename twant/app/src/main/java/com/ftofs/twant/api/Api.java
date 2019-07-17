@@ -565,6 +565,16 @@ public class Api {
      */
     public static final String PATH_SEARCH_LOGISTICS = "/member/logistics/search";
 
+    /**
+     * 獲取表情列表
+     */
+    public static final String PATH_GET_EMOJI_LIST = "/app/emoji/list";
+
+    /**
+     * mpay參數獲取
+     */
+    public static final String PATH_MPAY_PARAMS = "/member/mpay/params";
+
 
     /**
      * 發送Http請求

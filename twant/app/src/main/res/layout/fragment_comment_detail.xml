@@ -172,7 +172,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:gravity="center_vertical"
-        android:background="#F3F3F3">
+        android:background="@color/tw_slight_grey">
         <EditText
             android:id="@+id/et_reply_content"
             android:layout_width="0dp"
