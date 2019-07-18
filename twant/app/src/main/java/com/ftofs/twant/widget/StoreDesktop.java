@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.ftofs.twant.R;
+
 
 /**
  * 商品展架平臺的灰色桌面
@@ -32,7 +34,7 @@ public class StoreDesktop extends View {
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         path = new Path();
-        color = Color.parseColor("@color/tw_slight_grey");
+        color = context.getColor(R.color.tw_slight_grey);
     }
 
     @Override

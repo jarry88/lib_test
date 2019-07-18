@@ -425,7 +425,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             newArrivalsLoaded = true;
                         }
                     } catch (Exception e) {
-
+                        SLog.info("Error!%s", e.getMessage());
                     }
                 }
             });

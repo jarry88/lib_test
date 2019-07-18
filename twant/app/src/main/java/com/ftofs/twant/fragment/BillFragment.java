@@ -227,7 +227,6 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                                 OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount, orderSkuItemList);
                                 // 最后一個顯示【支付訂單】按鈕
                                 if (index == len -1) {
-                                    SLog.info("DDFFAA");
                                     orderItem.setShowPayButton(true);
                                     orderItem.setPayId(payId);
                                 }

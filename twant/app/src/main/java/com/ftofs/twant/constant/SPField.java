@@ -13,4 +13,5 @@ public class SPField {
     public static final String FIELD_MOBILE_ENCRYPT = "mobile_encrypt";
     public static final String FIELD_SEARCH_TYPE = "search_type_";
     public static final String FIELD_MEMBER_NAME = "member_name";
+    public static final String FIELD_KEYBOARD_HEIGHT = "keyboard_height";
 }

@@ -40,6 +40,7 @@
 
         </com.ftofs.twant.widget.ScaledButton>
     </RelativeLayout>
+    <!--  END OF 工具欄 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -49,37 +50,85 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
-            
         </android.support.v7.widget.RecyclerView>
         <LinearLayout
+            android:id="@+id/ll_keyboard_container"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="@drawable/border_type_e">
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_weight="1"
-                android:paddingLeft="17dp"
-                android:paddingRight="17dp"
-                android:background="@drawable/reply_edit_text_bg"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/icon_emoji"
-                />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/icon_circle_add"
-                />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.ftofs.twant.widget.KeyboardLayout
+                android:id="@+id/keyboard_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/border_type_f_dedede">
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="36dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="15dp"
+                            android:paddingLeft="17dp"
+                            android:paddingRight="17dp"
+                            android:background="@drawable/reply_edit_text_bg"
+                            />
+                        <RelativeLayout
+                            android:id="@+id/btn_emoji"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="7.5dp">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/icon_emoji"
+                                />
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:id="@+id/btn_circle_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="7.5dp"
+                            android:paddingRight="15dp">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/icon_circle_add"
+                                />
+                        </RelativeLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_panel_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+                        <TextView
+                            android:id="@+id/tv_emoji_panel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Emoji Panel"
+                            />
+                        <TextView
+                            android:id="@+id/tv_tool_panel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Tool Panel"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.ftofs.twant.widget.KeyboardLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

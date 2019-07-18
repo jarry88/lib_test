@@ -77,6 +77,7 @@
     <string name="text_view_logistics">查看物流</string>
     <string name="text_refund_all">全部退款</string>
     <string name="text_delete_order">刪除訂單</string>
+    <string name="text_pay_order">支付訂單</string>
 
     <string name="receipt_info_fragment_title">發票信息</string>
     <string name="text_receipt_header">發票抬頭</string>
@@ -208,6 +209,10 @@
     <string name="text_pay_success">訂單支付成功</string>
     <string name="text_view_order">查看訂單</string>
     <string name="text_continue_shopping">繼續逛逛</string>
+    <string name="text_pay_type">支付類型</string>
+    <string name="text_want_pay_purse">想付錢包</string>
+    <string name="text_balance">余額</string>
+    <string name="text_balance_not_enough">余額不足</string>
 
     <string name="text_receive_now">立即領取</string>
     <string name="text_been_received">已領取</string>

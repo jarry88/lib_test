@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
 import com.ftofs.twant.api.Api;
@@ -29,6 +30,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.PayPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
@@ -53,6 +56,8 @@ import okhttp3.Response;
 public class OrderDetailFragment extends BaseFragment implements View.OnClickListener {
     int ordersId;
     int storeId;
+    String paySnStr;
+    float ordersAmount = -1;
 
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
@@ -91,10 +96,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     public static final String TEXT_SHIP_SEARCH = "showShipSearch";
     public static final String TEXT_MEMBER_CANCEL = "showMemberCancel";
     public static final String TEXT_MEMBER_DELETE = "showMemberDelete";
+    public static final String TEXT_MEMBER_PAY = "showMemberPay";
 
     String[] buttonNameList = new String[] {
             TEXT_MEMBER_BUY_AGAIN, TEXT_MEMBER_RECEIVE, TEXT_REFUND_WAITING, TEXT_MEMBER_REFUND_ALL,
-            TEXT_EVALUATION, TEXT_SHIP_SEARCH, TEXT_MEMBER_CANCEL, TEXT_MEMBER_DELETE};
+            TEXT_EVALUATION, TEXT_SHIP_SEARCH, TEXT_MEMBER_CANCEL, TEXT_MEMBER_DELETE, TEXT_MEMBER_PAY};
 
     Map<String, String> orderButtonNameMap = new HashMap<>();
 
@@ -133,6 +139,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         orderButtonNameMap.put(buttonNameList[5], getString(R.string.text_view_logistics));
         orderButtonNameMap.put(buttonNameList[6], getString(R.string.text_cancel_order));
         orderButtonNameMap.put(buttonNameList[7], getString(R.string.text_delete_order));
+        orderButtonNameMap.put(buttonNameList[8], getString(R.string.text_pay_order));
 
         tvReceiverName = view.findViewById(R.id.tv_receiver_name);
         tvMobile = view.findViewById(R.id.tv_mobile);
@@ -280,6 +287,15 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             } else if (tag.equals(TEXT_EVALUATION)) {
                 MainFragment mainFragment = MainFragment.getInstance();
                 mainFragment.start(GoodsEvaluationFragment.newInstance());
+            } else if (tag.equals(TEXT_MEMBER_PAY)) {
+                if (ordersAmount < 0) { // 數據未初始化好
+                    return true;
+                }
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new PayPopup(_mActivity, (MainActivity) _mActivity, paySnStr, String.valueOf(ordersAmount), "商品訂單"))
+                        .show();
             }
         } catch (Exception e) {
             return true;
@@ -468,7 +484,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String storeName = ordersVo.getString("storeName");
                     String ordersStateName = ordersVo.getString("ordersStateName");
                     float freightAmount = (float) ordersVo.getDouble("freightAmount");
-                    float ordersAmount = (float) ordersVo.getDouble("ordersAmount");
+                    ordersAmount = (float) ordersVo.getDouble("ordersAmount");
                     String shipTime = ordersVo.getString("shipTime");
 
                     // 發票信息
@@ -483,6 +499,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     long ordersSn = ordersVo.getLong("ordersSn");
+                    paySnStr = ordersVo.getString("paySnStr");
                     String createTime = ordersVo.getString("createTime");
                     String paymentTime = ordersVo.getString("paymentTime");
                     String sendTime = ordersVo.getString("sendTime");
@@ -523,7 +540,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             showButtonNameList.add(buttonName);
                         }
                     }
-
 
                     llOrderButtonContainer.removeAllViews();
                     int size = showButtonNameList.size();

@@ -59,10 +59,6 @@ import static com.ftofs.twant.widget.ListPopup.LIST_POPUP_TYPE_SHIPPING_TIME;
 public class ConfirmBillFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     String buyData;
 
-    /**
-     * 是否來源于購物車
-     * todo 暫時寫死
-     */
     int isFromCart;
 
     List<ListPopupItem> payWayItemList = new ArrayList<>();
@@ -88,7 +84,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
     String currencyTypeSign;
     String textConfirmOrderTotalItemCount;
-    String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_OFFLINE, Constant.PAYMENT_TYPE_CODE_OFFLINE,
+    String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_ONLINE, Constant.PAYMENT_TYPE_CODE_OFFLINE,
             Constant.PAYMENT_TYPE_CODE_CHAIN};
 
     /**
@@ -170,7 +166,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         shippingTimePopup(position);
                         break;
                     case R.id.btn_change_pay_way:
-                        // 暫時屏蔽支付方式切換 payWayPopup();
+                        payWayPopup();
                         break;
                     default:
                         break;
@@ -283,8 +279,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 }
 
                 ConfirmOrderSummaryItem summaryItem = getSummaryItem();
-                // 暫時寫死為【貨到付款】 commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
-                commitBuyData.set("paymentTypeCode", Constant.PAYMENT_TYPE_CODE_OFFLINE);
+                commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
                 commitBuyData.set("storeList", storeList);
             }
 
@@ -606,12 +601,14 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     public void onSelected(int type, int id, Object extra) {
         if (type == LIST_POPUP_TYPE_PAY_WAY) {
             payWayIndex = id;
-
+            SLog.info("payWayIndex[%d]", payWayIndex);
             ConfirmOrderSummaryItem summaryItem = getSummaryItem();
             if (summaryItem == null) {
                 return;
             }
+
             summaryItem.paymentTypeCode = getPaymentTypeCode(payWayIndex);
+            SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
             adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
         } else if (type == LIST_POPUP_TYPE_SHIPPING_TIME) {
             int position = (int) extra;

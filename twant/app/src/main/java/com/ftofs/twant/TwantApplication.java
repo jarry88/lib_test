@@ -14,6 +14,7 @@ import com.ftofs.twant.task.DownloadEmojiTask;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.User;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
+import com.macau.pay.sdk.MacauPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -128,6 +129,13 @@ public class TwantApplication extends Application {
 
         // 檢查是否需要下載表情
         getThreadPool().execute(new DownloadEmojiTask());
+
+        // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT
+        if (Config.DEVELOPER_MODE) {
+            MacauPaySdk.setEnvironmentType(2);
+        } else {
+            MacauPaySdk.setEnvironmentType(0);
+        }
     }
 
 
