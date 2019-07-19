@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.entity.EmojiPage;
@@ -94,6 +95,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
 
         adapter = new EmojiPageAdapter(R.layout.emoji_page, emojiPageList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                EmojiPage emojiPage = emojiPageList.get(position);
+                int id = view.getId();
+                SLog.info("id[%d]", id);
+
+                if (id == R.id.btn_delete_emoji) {
+                    SLog.info("btn_delete_emoji");
+                } else {
+                    int index = 0;
+                    for (int btnId : EmojiPageAdapter.btnIds) {
+                        if (btnId == id) {
+                            Emoji emoji = emojiPage.emojiList.get(index);
+                            SLog.info("emojiId[%d], emojiCode[%s]", emoji.emojiId, emoji.emojiCode);
+                            break;
+                        }
+                        index++;
+                    }
+                }
+            }
+        });
         rvEmojiPageList.setAdapter(adapter);
 
         loadEmojiData();

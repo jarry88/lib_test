@@ -1,13 +1,10 @@
 package com.ftofs.twant.task;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.orm.AppStatus;
 import com.ftofs.twant.orm.Emoji;
+import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -15,7 +12,6 @@ import com.ftofs.twant.util.ToastUtil;
 
 import org.litepal.LitePal;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -24,13 +20,15 @@ import cn.snailpad.easyjson.EasyJSONObject;
 public class DownloadEmojiTask implements Runnable {
     @Override
     public void run() {
+        SLog.info("DownloadEmojiTask begin...");
+
         try {
-            AppStatus appStatus = LitePal.where("key = ?", String.valueOf(AppStatus.Key.KEY_EMOJI_VERSION.ordinal()))
-                    .findFirst(AppStatus.class);
+            UserStatus userStatus = LitePal.where("key = ?", String.valueOf(UserStatus.Key.KEY_EMOJI_VERSION.ordinal()))
+                    .findFirst(UserStatus.class);
 
             String emojiVersion = "";
-            if (appStatus != null) {
-                emojiVersion = appStatus.value;
+            if (userStatus != null) {
+                emojiVersion = userStatus.value;
             }
             SLog.info("emojiVersion[%s]", emojiVersion);
 
@@ -83,12 +81,12 @@ public class DownloadEmojiTask implements Runnable {
 
                 // 更新表情版本號
                 if (allSuceess) {
-                    if (appStatus == null) {
-                        appStatus = new AppStatus();
-                        appStatus.key = AppStatus.Key.KEY_EMOJI_VERSION.ordinal();
+                    if (userStatus == null) {
+                        userStatus = new UserStatus();
+                        userStatus.key = UserStatus.Key.KEY_EMOJI_VERSION.ordinal();
                     }
-                    appStatus.value = versions;
-                    appStatus.save();
+                    userStatus.value = versions;
+                    userStatus.save();
                 }
             }
         } catch (Exception e) {

@@ -1,7 +1,9 @@
 package com.ftofs.twant.util;
 
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.orm.Test;
+import com.ftofs.twant.task.DownloadEmojiTask;
 
 import org.litepal.LitePal;
 import org.litepal.LitePalDB;
@@ -47,6 +49,13 @@ public class SqliteUtil {
 
         LitePal.use(litePalDB);
         LitePal.getDatabase();
+
+        ////////////////////////////
+        // 切換用戶相關的操作
+        // 檢查是否需要下載表情
+        TwantApplication.getThreadPool().execute(new DownloadEmojiTask());
+        ///////////////////////////
+
 
         return true;
     }

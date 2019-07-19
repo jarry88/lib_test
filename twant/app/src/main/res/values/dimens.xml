@@ -6,4 +6,7 @@
 
     <!-- 設置為80dp是為了防止底部導航條擋住內容區 -->
     <dimen name="bottom_toolbar_max_height">80dp</dimen>
+
+    <dimen name="emoji_icon_width">32dp</dimen>
+    <dimen name="emoji_icon_height">32dp</dimen>
 </resources>

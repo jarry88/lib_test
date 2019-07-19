@@ -20,6 +20,14 @@ public class EmojiPageAdapter extends BaseQuickAdapter<EmojiPage, BaseViewHolder
             R.id.img_emoji_11, R.id.img_emoji_12, R.id.img_emoji_13, R.id.img_emoji_14, R.id.img_emoji_15,
             R.id.img_emoji_16, R.id.img_emoji_17, R.id.img_emoji_18, R.id.img_emoji_19, R.id.img_emoji_20,
     };
+
+    public static final int[] btnIds = new int[] {
+            R.id.btn_emoji_1, R.id.btn_emoji_2, R.id.btn_emoji_3, R.id.btn_emoji_4, R.id.btn_emoji_5,
+            R.id.btn_emoji_6, R.id.btn_emoji_7, R.id.btn_emoji_8, R.id.btn_emoji_9, R.id.btn_emoji_10,
+            R.id.btn_emoji_11, R.id.btn_emoji_12, R.id.btn_emoji_13, R.id.btn_emoji_14, R.id.btn_emoji_15,
+            R.id.btn_emoji_16, R.id.btn_emoji_17, R.id.btn_emoji_18, R.id.btn_emoji_19, R.id.btn_emoji_20,
+    };
+
     public EmojiPageAdapter(int layoutResId, @Nullable List<EmojiPage> data) {
         super(layoutResId, data);
     }
@@ -31,6 +39,10 @@ public class EmojiPageAdapter extends BaseQuickAdapter<EmojiPage, BaseViewHolder
             ImageView imageView = helper.getView(emojiIds[i]);
             SLog.info("emoji.absolutePath[%s]", emoji.absolutePath);
             Glide.with(mContext).load(emoji.absolutePath).centerCrop().into(imageView);
+
+            helper.addOnClickListener(btnIds[i]);
         }
+
+        helper.addOnClickListener(R.id.btn_delete_emoji);
     }
 }
