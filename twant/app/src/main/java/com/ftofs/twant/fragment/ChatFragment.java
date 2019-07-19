@@ -3,6 +3,9 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,8 +16,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.EmojiPageAdapter;
+import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.util.Util;
+
+import org.litepal.LitePal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import am.widget.smoothinputlayout.SmoothInputLayout;
 
@@ -32,6 +43,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     View btnTool;
     View llEmojiPane;
     View llToolPane;
+
+    RecyclerView rvEmojiPageList;
+    EmojiPageAdapter adapter;
+    List<EmojiPage> emojiPageList = new ArrayList<>();
 
     public static ChatFragment newInstance() {
         Bundle args = new Bundle();
@@ -68,6 +83,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         view.findViewById(R.id.rv_message_list).setOnTouchListener(this);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+
+        rvEmojiPageList = view.findViewById(R.id.rv_emoji_page_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
+        rvEmojiPageList.setLayoutManager(layoutManager);
+
+        // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
+        // https://www.jianshu.com/p/e54db232df62
+        (new PagerSnapHelper()).attachToRecyclerView(rvEmojiPageList);
+
+
+        adapter = new EmojiPageAdapter(R.layout.emoji_page, emojiPageList);
+        rvEmojiPageList.setAdapter(adapter);
+
+        loadEmojiData();
     }
 
     @Override
@@ -100,6 +129,34 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 break;
             default:
                 break;
+        }
+    }
+
+    private void loadEmojiData() {
+        List<Emoji> emojiList = LitePal.findAll(Emoji.class);
+        if (emojiList == null) {
+            return;
+        }
+        // 表情數
+        int emojiCount = emojiList.size();
+        // 表情頁數
+        int pageCount = (emojiCount + EmojiPage.EMOJI_PER_PAGE - 1) / EmojiPage.EMOJI_PER_PAGE;
+
+        SLog.info("emojiCount[%d], pageCount[%d]", emojiCount, pageCount);
+
+        for (int i = 0; i < pageCount; i++) {
+            int start = EmojiPage.EMOJI_PER_PAGE * i;
+            int stop = start + EmojiPage.EMOJI_PER_PAGE;
+            if (stop > emojiCount) {
+                stop = emojiCount;
+            }
+
+            EmojiPage emojiPage = new EmojiPage();
+            for (int j = start; j < stop; j++) {
+                emojiPage.emojiList.add(emojiList.get(j));
+            }
+
+            emojiPageList.add(emojiPage);
         }
     }
 

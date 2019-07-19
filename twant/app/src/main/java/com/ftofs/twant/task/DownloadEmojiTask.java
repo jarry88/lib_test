@@ -74,6 +74,7 @@ public class DownloadEmojiTask implements Runnable {
                     emoji.emojiImage = emojiItem.getString("emojiImage");
                     emoji.sort = emojiItem.getInt("sort");
                     emoji.absolutePath = emojiFile.getAbsolutePath();
+                    SLog.info("emoji.absolutePath[%s]", emoji.absolutePath);
 
                     emoji.save();
                 } else {

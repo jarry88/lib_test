@@ -236,6 +236,11 @@
     <string name="text_quantity">數量</string>
     <string name="text_finish">完成</string>
     <string name="text_delete">刪除</string>
+    <string name="text_order">訂單</string>
+    <string name="text_image">圖片</string>
+    <string name="text_take_photo">拍攝</string>
+    <string name="text_common_used_speech">常用語</string>
+    <string name="text_locate">定位</string>
 
     <string name="text_loading">正在加載</string>
 
