@@ -37,7 +37,7 @@ public class EmojiPageAdapter extends BaseQuickAdapter<EmojiPage, BaseViewHolder
         for (int i = 0; i < emojiPage.emojiList.size(); i++) {
             Emoji emoji = emojiPage.emojiList.get(i);
             ImageView imageView = helper.getView(emojiIds[i]);
-            SLog.info("emoji.absolutePath[%s]", emoji.absolutePath);
+            // SLog.info("emoji.absolutePath[%s]", emoji.absolutePath);
             Glide.with(mContext).load(emoji.absolutePath).centerCrop().into(imageView);
 
             helper.addOnClickListener(btnIds[i]);

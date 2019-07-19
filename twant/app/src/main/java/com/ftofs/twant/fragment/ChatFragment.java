@@ -1,12 +1,19 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,6 +29,7 @@ import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
 
 import org.litepal.LitePal;
 
@@ -110,6 +118,38 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         if (btnId == id) {
                             Emoji emoji = emojiPage.emojiList.get(index);
                             SLog.info("emojiId[%d], emojiCode[%s]", emoji.emojiId, emoji.emojiCode);
+
+                            Editable message = etMessage.getEditableText();
+                            SLog.info("message[%s]", message);
+
+                            // Get the selected text.
+                            int start = etMessage.getSelectionStart();
+                            int end = etMessage.getSelectionEnd();
+
+                            Bitmap bitmap = BitmapFactory.decodeFile(emoji.absolutePath);
+                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                            drawable.setBounds(0, 0,
+                                    ((int) etMessage.getTextSize() + 12), ((int) etMessage.getTextSize() + 12));
+                            QMUIAlignMiddleImageSpan span = new QMUIAlignMiddleImageSpan(drawable, QMUIAlignMiddleImageSpan.ALIGN_MIDDLE);
+
+
+                            String emoticon = emoji.emojiCode;
+                            // Insert the emoticon.
+                            if (start < 0) {
+                                start = 0;
+                            }
+                            if (end < 0) {
+                                end = 0;
+                            }
+                            message.replace(start, end, emoticon);
+                            SLog.info("message[%s]", message);
+
+
+                            SLog.info("start[%d], stop[%d]", start, start + emoticon.length());
+                            message.setSpan(span, start, start + emoticon.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            etMessage.setText(message);
+                            // 重新定位光標
+                            etMessage.setSelection(start + emoticon.length());
                             break;
                         }
                         index++;
