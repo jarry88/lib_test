@@ -88,6 +88,9 @@ dependencies {
     implementation 'com.github.thunder413:DateTimeUtils:3.0'
     implementation 'com.github.GrenderG:Toasty:1.4.2'
 
+    // 仿微信軟鍵盤、表情切換
+    implementation 'am.widget:smoothinputlayout:1.1.2'
+
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

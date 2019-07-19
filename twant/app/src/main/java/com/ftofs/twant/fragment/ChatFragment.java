@@ -1,36 +1,37 @@
 package com.ftofs.twant.fragment;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.DisplayMetrics;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.SoftInputUtil;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.KeyboardLayout;
+
+import am.widget.smoothinputlayout.SmoothInputLayout;
 
 /**
  * 聊天會話Fragment
  * @author zwm
  */
-public class ChatFragment extends BaseFragment implements View.OnClickListener {
-    KeyboardLayout keyboardLayout;
-    TextView tvEmojiPanel;
-    TextView tvToolPanel;
-    LinearLayout llPanelContainer;
-    long lastClickTime;
+public class ChatFragment extends BaseFragment implements View.OnClickListener,
+        View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener {
+
+    SmoothInputLayout silMainContainer;
+    EditText etMessage;
+    View btnEmoji;
+    ImageView iconEmoji;
+    View btnTool;
+    View llEmojiPane;
+    View llToolPane;
 
     public static ChatFragment newInstance() {
         Bundle args = new Bundle();
@@ -52,78 +53,144 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        silMainContainer = view.findViewById(R.id.sil_main_container);
+        etMessage = view.findViewById(R.id.et_message);
+        btnEmoji = view.findViewById(R.id.btn_emoji);
+        iconEmoji = view.findViewById(R.id.icon_emoji);
+        btnTool = view.findViewById(R.id.btn_tool);
+        llEmojiPane = view.findViewById(R.id.ll_emoji_pane);
+        llToolPane = view.findViewById(R.id.ll_tool_pane);
+        silMainContainer.setOnVisibilityChangeListener(this);
+        etMessage.addTextChangedListener(this);
+        btnEmoji.setOnClickListener(this);
+        btnTool.setOnClickListener(this);
+        etMessage.setOnTouchListener(this);
+        view.findViewById(R.id.rv_message_list).setOnTouchListener(this);
+
         Util.setOnClickListener(view, R.id.btn_back, this);
-        keyboardLayout = view.findViewById(R.id.keyboard_layout);
-        tvEmojiPanel = view.findViewById(R.id.tv_emoji_panel);
-        tvEmojiPanel.setOnClickListener(this);
-        tvToolPanel = view.findViewById(R.id.tv_tool_panel);
-        llPanelContainer = view.findViewById(R.id.ll_panel_container);
+    }
 
-        keyboardLayout.setKeyboardListener(new KeyboardLayout.KeyboardLayoutListener() {
-            @Override
-            public void onKeyboardStateChanged(boolean isActive, int keyboardHeight) {
-                long now = System.currentTimeMillis();
-                long diff = now - lastClickTime;
-                SLog.info("isActive[%s], diff[%s], now[%s], lastClickTime[%s]", isActive, diff, now, lastClickTime);
-                if (isActive && diff > 200) {
-                    tvEmojiPanel.setVisibility(View.GONE);
-                    tvToolPanel.setVisibility(View.GONE);
-                    llPanelContainer.setVisibility(View.GONE);
-                }
-                if (isActive) {
-                    SLog.info("keyboardHeight[%s]", keyboardHeight);
-                    SoftInputUtil.setSoftInputHeight(keyboardHeight);
-                }
-            }
-        });
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
 
-        Util.setOnClickListener(view, R.id.btn_emoji, this);
-        Util.setOnClickListener(view, R.id.btn_circle_add, this);
-        Util.setOnClickListener(view, R.id.ll_keyboard_container, this);  // 因為Fragment設置了全局點擊空白的地方，就隱藏軟鍵盤，所以要攔截事件
+        switch (id) {
+            case R.id.btn_back:
+                pop();
+                break;
+            case R.id.btn_emoji:
+                btnTool.setSelected(false);
+                if (btnEmoji.isSelected()) {
+                    btnEmoji.setSelected(false);
+                    showInput();
+                } else {
+                    btnEmoji.setSelected(true);
+                    showEmoji();
+                }
+                break;
+            case R.id.btn_tool:
+                btnEmoji.setSelected(false);
+                if (btnTool.isSelected()) {
+                    btnTool.setSelected(false);
+                    showInput();
+                } else {
+                    btnTool.setSelected(true);
+                    showTool();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 显示输入面板
+     */
+    private void showInput() {
+        silMainContainer.showKeyboard();
+        iconEmoji.setImageResource(R.drawable.icon_emoji);
+        afterTextChanged(etMessage.getText());
+    }
+
+    /**
+     *  显示Emoji面板
+     */
+    private void showEmoji() {
+        llEmojiPane.setVisibility(View.VISIBLE);
+        llToolPane.setVisibility(View.GONE);
+        iconEmoji.setImageResource(R.drawable.icon_keyboard);
+        silMainContainer.showInputPane(true);
+    }
+
+    /**
+     * 显示Tool面板
+     */
+    private void showTool() {
+        llEmojiPane.setVisibility(View.GONE);
+        llToolPane.setVisibility(View.VISIBLE);
+        iconEmoji.setImageResource(R.drawable.icon_emoji);
+        silMainContainer.showInputPane(false);
     }
 
 
     @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btn_back) {
-            pop();
-        } else if (id == R.id.btn_emoji) {
-            lastClickTime = System.currentTimeMillis();
-            SLog.info("here");
-            hideSoftInput();
-            tvToolPanel.setVisibility(View.GONE);
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            int keyboardHeight = SoftInputUtil.getSoftInputHeight();
-            SLog.info("keyboardHeight[%s]", keyboardHeight);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) tvEmojiPanel.getLayoutParams();
-            layoutParams.height = keyboardHeight;
-            tvEmojiPanel.setLayoutParams(layoutParams);
-            tvEmojiPanel.setVisibility(View.VISIBLE);
-            llPanelContainer.setVisibility(View.VISIBLE);
-        } else if (id == R.id.btn_circle_add) {
-            lastClickTime = System.currentTimeMillis();
-            SLog.info("here");
-            hideSoftInput();
-            tvEmojiPanel.setVisibility(View.GONE);
+    }
 
-            int keyboardHeight = SoftInputUtil.getSoftInputHeight();
-            SLog.info("keyboardHeight[%s]", keyboardHeight);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) tvToolPanel.getLayoutParams();
-            layoutParams.height = keyboardHeight;
-            tvToolPanel.setLayoutParams(layoutParams);
-            tvToolPanel.setVisibility(View.VISIBLE);
-            llPanelContainer.setVisibility(View.VISIBLE);
-        } else if (id == R.id.ll_keyboard_container) {
-            SLog.info("ll_keyboard_container");
-        } else if (id == R.id.tv_emoji_panel) {
-            SLog.info("%s", tvEmojiPanel.getHeight());
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if (editable.toString().trim().length() > 0) {
+            // 显示发送按钮
+        } else {
+            // 隐藏发送按钮
         }
+    }
+
+    @Override
+    public void onVisibilityChange(int visibility) {
+        if (visibility == View.GONE) {
+            btnEmoji.setSelected(false);
+        } else {
+            btnEmoji.setSelected(llEmojiPane.getVisibility() == View.VISIBLE);
+        }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        switch (view.getId()) {
+            case R.id.rv_message_list:
+                btnEmoji.setSelected(false);
+                btnTool.setSelected(false);
+                silMainContainer.closeKeyboard(true);
+                silMainContainer.closeInputPane();
+                break;
+            case R.id.et_message:
+                btnEmoji.setSelected(false);
+                btnTool.setSelected(false);
+                iconEmoji.setImageResource(R.drawable.icon_emoji);
+                afterTextChanged(etMessage.getText());
+                break;
+            default:
+                break;
+        }
+
+        return false;
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
+        if (silMainContainer.isInputPaneOpen()) {
+            silMainContainer.closeInputPane();
+            iconEmoji.setImageResource(R.drawable.icon_emoji);
+            return true;
+        }
         pop();
         return true;
     }

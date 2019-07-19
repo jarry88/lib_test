@@ -35,19 +35,18 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         Util.setOnClickListener(view, R.id.btn_test, this);
     }
 
     @Override
-    public void onClick(View v) {
-        int id = v.getId();
+    public void onClick(View view) {
+        int id = view.getId();
         if (id == R.id.btn_test) {
-            SLog.info("btn_test");
             MainFragment mainFragment = MainFragment.getInstance();
             mainFragment.start(ChatFragment.newInstance());
         }
     }
+
 
     @Override
     public boolean onBackPressedSupport() {
