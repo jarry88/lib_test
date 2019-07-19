@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -7,14 +8,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +24,7 @@ import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.log.SLog;
@@ -112,6 +113,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                 if (id == R.id.btn_delete_emoji) {
                     SLog.info("btn_delete_emoji");
+
+                    /*
+                    KEYCODE_DEL	        退格键	       67
+                    KEYCODE_FORWARD_DEL	删除键	      112
+                     */
+                    TwantApplication.getThreadPool().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Instrumentation inst = new Instrumentation();
+                            inst.sendKeyDownUpSync(KeyEvent.KEYCODE_DEL);
+                        }
+                    });
                 } else {
                     int index = 0;
                     for (int btnId : EmojiPageAdapter.btnIds) {
