@@ -50,6 +50,9 @@ public class StringUtil {
      * @return
      */
     public static String implode(String glue, List list) {
+        if (list == null) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             sb.append((i == list.size() - 1) ? list.get(i) : list.get(i) + glue);

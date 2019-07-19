@@ -199,13 +199,27 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                 return;
             }
 
+            MobileZone mobileZone = mobileZoneList.get(mobileZoneIndex);
+            if (!Util.isMobileValid(mobile, mobileZone.areaId)) {
+                String[] areaArray = new String[] {
+                        "",
+                        getString(R.string.text_hongkong),
+                        getString(R.string.text_mainland),
+                        getString(R.string.text_macao)
+                };
+
+                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
+                ToastUtil.error(_mActivity, msg);
+                return;
+            }
+
             final String detailAddress = etDetailAddress.getText().toString().trim();
             if (detailAddress.length() < 1) {
                 ToastUtil.error(_mActivity, getResources().getText(R.string.hint_input_detail_address).toString());
                 return;
             }
 
-            String fullMobile = mobileZoneList.get(mobileZoneIndex).areaCode + "" + mobile;
+            String fullMobile = mobileZone.areaCode + "" + mobile;
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "realName", realName,
@@ -270,6 +284,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
 
                         pop();
                     } catch (Exception e) {
+                        e.printStackTrace();
                         SLog.info("Error!%s", e.getMessage());
                     }
                 }

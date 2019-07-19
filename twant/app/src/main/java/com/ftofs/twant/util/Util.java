@@ -261,8 +261,11 @@ public class Util {
         }, 200L);
     }
 
-    /*
-    判斷是否為合法的手機號
+    /**
+     * 判斷是否為合法的手機號
+     * @param mobile 手機號
+     * @param areaId 地區Id 1 -- 香港 2 -- 大陸 3 -- 澳門
+     * @return
      */
     public static boolean isMobileValid(String mobile, int areaId) {
         String[] mobileRex = new String[] {
