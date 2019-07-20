@@ -577,7 +577,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
                         maxReturnCount = ordersGoodsVo.getInt("buyNum");
                         tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
-                        abReturnCount.setMinValue(1);
+                        abReturnCount.setMinValue(1, null);
                         abReturnCount.setValue(goodsNum);
 
                         EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");

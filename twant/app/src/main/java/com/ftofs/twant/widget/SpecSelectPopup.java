@@ -67,6 +67,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     // 調整數量
     AdjustButton abQuantity;
     int quantity;  // 外面傳進來的數量初始值
+    String outOfMaxValueReason;
 
     /**
      * 當前選中的goodsId
@@ -133,7 +134,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
         abQuantity = findViewById(R.id.ab_quantity);
         abQuantity.setValue(quantity);
-        abQuantity.setMinValue(1);
+        abQuantity.setMinValue(1, new AdjustButton.OutOfValueCallback() {
+            @Override
+            public void outOfValue() {
+                ToastUtil.error(context, "購買數量不能小于1");
+            }
+        });
 
         SLog.info("specList.size[%d]", specList.size());
 
@@ -390,5 +396,20 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
         tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
         tvGoodsStorage.setText("( 庫存: " + goodsInfo.goodsStorage + goodsInfo.unitName + " )");
+
+        // 限定購買的數量
+        outOfMaxValueReason = "購買數量不能大于庫存數量";
+        int maxValue = goodsInfo.goodsStorage;
+        if (maxValue > goodsInfo.limitAmount) {
+            maxValue = goodsInfo.limitAmount;
+            outOfMaxValueReason = String.format("每人限購%d%s", goodsInfo.limitAmount, goodsInfo.unitName);
+        }
+        SLog.info("maxValue[%d]", maxValue);
+        abQuantity.setMaxValue(maxValue, new AdjustButton.OutOfValueCallback() {
+            @Override
+            public void outOfValue() {
+                ToastUtil.error(context, outOfMaxValueReason);
+            }
+        });
     }
 }

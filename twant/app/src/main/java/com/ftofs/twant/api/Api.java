@@ -575,6 +575,11 @@ public class Api {
      */
     public static final String PATH_MPAY_PARAMS = "/member/mpay/params";
 
+    /**
+     * mpay支付
+     */
+    public static final String PATH_MPAY = "/member/buy/pay/app/mpay";
+
 
     /**
      * 發送Http請求

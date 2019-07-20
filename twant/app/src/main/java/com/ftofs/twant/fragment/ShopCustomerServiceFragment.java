@@ -109,6 +109,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                 params.set("token", token);
             }
 
+            SLog.info("path[%s], params[%s]", path, params.toString());
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {

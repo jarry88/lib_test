@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.ConfirmOrderStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -38,12 +39,14 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.macau.pay.sdk.MacauPaySdk;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -315,44 +318,103 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         if (id == R.id.btn_back) {
             popWithOutRefresh();
         } else if (id == R.id.btn_commit) {
-            if (mAddrItem == null) {
-                SLog.info("Error!地址信息無效");
-                ToastUtil.error(_mActivity, "地址信息無效");
-                return;
-            }
-
-            EasyJSONObject params = collectParams(true);
-            SLog.info("params[%s]", params);
-            if (params == null) {
-                ToastUtil.error(_mActivity, "數據無效");
-                return;
-            }
-
-            Api.postUI(Api.PATH_COMMIT_BILL_DATA, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(_mActivity, e);
+            try {
+                if (mAddrItem == null) {
+                    SLog.info("Error!地址信息無效");
+                    ToastUtil.error(_mActivity, "地址信息無效");
+                    return;
                 }
 
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        return;
+                EasyJSONObject params = collectParams(true);
+                SLog.info("params[%s]", params);
+                if (params == null) {
+                    ToastUtil.error(_mActivity, "數據無效");
+                    return;
+                }
+
+                String buyData = params.getString("buyData");
+                EasyJSONObject buyDataObj = (EasyJSONObject) EasyJSONObject.parse(buyData);
+                final String paymentTypeCode = buyDataObj.getString("paymentTypeCode");
+
+                Api.postUI(Api.PATH_COMMIT_BILL_DATA, params, new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        ToastUtil.showNetworkError(_mActivity, e);
                     }
-                    ToastUtil.success(_mActivity, "提交訂單成功");
-                    pop();
 
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(PaySuccessFragment.newInstance(EasyJSONObject.generate().toString()));
-                }
-            });
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        SLog.info("responseStr[%s]", responseStr);
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+                        ToastUtil.success(_mActivity, "提交訂單成功");
+                        pop();
+
+                        MainFragment mainFragment = MainFragment.getInstance();
+                        mainFragment.start(PaySuccessFragment.newInstance(EasyJSONObject.generate().toString()));
+
+
+                        if (paymentTypeCode.equals(Constant.PAYMENT_TYPE_CODE_ONLINE)) {
+                            SLog.info("在線支付方式");
+                            try {
+                                int payId = responseObj.getInt("datas.payId");
+                                mpay(payId);
+                            } catch (EasyJSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                SLog.info("Error!%s", e.getMessage());
+            }
         } else if (id == R.id.btn_add_shipping_address) {
             startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.ADD_ADDRESS.ordinal());
         } else if (id == R.id.btn_change_shipping_address) {
             startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
         }
+    }
+
+    /**
+     * MPay支付
+     * @param payId
+     */
+    private void mpay(int payId) {
+        SLog.info("payId[%s]", payId);
+
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "payId", payId);
+
+        Api.postUI(Api.PATH_MPAY, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
+                    MacauPaySdk.macauPay(_mActivity, datas.toString(), (MainActivity) _mActivity);
+                } catch (EasyJSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

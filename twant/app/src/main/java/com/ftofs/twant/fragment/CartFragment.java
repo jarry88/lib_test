@@ -267,7 +267,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
                                 // 購買數量調節按鈕
                                 CartAdjustButton abQuantity = cartSkuItem.findViewById(R.id.ab_quantity);
-                                abQuantity.setMinValue(1);  // 調節數量不能小于1
+                                abQuantity.setMinValue(1, null);  // 調節數量不能小于1
                                 abQuantity.setSkuStatus(skuStatus);
                                 setCheckButtonOnClickListener(btnCheckSku);
                                 skuStatus.setRadio(btnCheckSku);

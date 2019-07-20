@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AdjustButton;
 
 /**
  * 測試用Fragment
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
+    AdjustButton abQuantity;
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -36,6 +38,21 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Util.setOnClickListener(view, R.id.btn_test, this);
+
+        abQuantity = view.findViewById(R.id.ab_quantity);
+        abQuantity.setMinValue(1, new AdjustButton.OutOfValueCallback() {
+            @Override
+            public void outOfValue() {
+                SLog.info("outOfMinValue, %d", abQuantity.getValue());
+            }
+        });
+
+        abQuantity.setMaxValue(5, new AdjustButton.OutOfValueCallback() {
+            @Override
+            public void outOfValue() {
+                SLog.info("outOfMaxValue, %d", abQuantity.getValue());
+            }
+        });
     }
 
     @Override

@@ -12,6 +12,7 @@ public class GoodsInfo {
     public float goodsPrice0; // 原價
     public float price;  // 最終價，如果沒有打折，最終價與原價相同
     public String imageSrc;
-    public int goodsStorage;
+    public int goodsStorage;  // 商品庫存
+    public int limitAmount;   // 每人限購多少
     public String unitName;
 }

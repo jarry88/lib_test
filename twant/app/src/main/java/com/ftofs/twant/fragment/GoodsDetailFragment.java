@@ -694,6 +694,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.price = Util.getGoodsPrice(goodsInfoVo);
                         goodsInfo.imageSrc = goodsInfoVo.getString("imageSrc");
                         goodsInfo.goodsStorage = goodsInfoVo.getInt("goodsStorage");
+                        goodsInfo.limitAmount = goodsInfoVo.getInt("limitAmount");
                         goodsInfo.unitName = goodsInfoVo.getString("unitName");
 
                         goodsInfoMap.put(goodsId, goodsInfo);

@@ -10,4 +10,10 @@
         android:layout_height="wrap_content"
         android:text="test"
         />
+    <com.ftofs.twant.widget.AdjustButton
+        android:id="@+id/ab_quantity"
+        android:layout_width="100dp"
+        android:layout_height="27dp"
+
+        />
 </LinearLayout>

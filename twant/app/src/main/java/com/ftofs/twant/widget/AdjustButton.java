@@ -20,7 +20,17 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
 
     protected SkuStatus skuStatus;
 
+    // 有效的取值范圍為 [minValue, maxValue]，開區間
     int minValue = 0;
+    int maxValue = Integer.MAX_VALUE;
+
+    /**
+     * 超出有效范圍的Callback
+     */
+    OutOfValueCallback outOfMinValue;
+    OutOfValueCallback outOfMaxValue;
+
+    // 當前值，value的取值范圍為 [minValue, maxValue]，開區間
     int value;
     // 調節按鈕的閾值，范圍  0 ~ 0.5
     float threshold = DEFAULT_THRESHOLD;
@@ -60,11 +70,21 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         if (proportion < threshold) {
             if (value <= minValue) {
                 // 不能小于最小值
+                if (outOfMinValue != null) {
+                    outOfMinValue.outOfValue();
+                }
                 return true;
             }
             changeValue(-1);
         }
         if (proportion > 1 - threshold) {
+            if (value >= maxValue) {
+                // 不能大于最大值
+                if (outOfMaxValue != null) {
+                    outOfMaxValue.outOfValue();
+                }
+                return true;
+            }
             changeValue(1);
         }
 
@@ -79,12 +99,26 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         return value;
     }
 
-    public void setValue(int value) {
+    /**
+     * 設置當前值
+     * @param value
+     * @return 是否設置成功
+     */
+    public boolean setValue(int value) {
+        if (value < minValue) {
+            return false;
+        }
+        if (value > maxValue) {
+            return false;
+        }
+
         this.value = value;
         if (skuStatus != null) {
             skuStatus.setCount(value);
         }
         updateView();
+
+        return true;
     }
 
     /**
@@ -95,11 +129,21 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         setValue(value + delta);
     }
 
-    public void setMinValue(int minValue) {
+    public void setMinValue(int minValue, OutOfValueCallback outOfValueCallback) {
         this.minValue = minValue;
+        this.outOfMinValue = outOfValueCallback;
+    }
+
+    public void setMaxValue(int maxValue, OutOfValueCallback outOfValueCallback) {
+        this.maxValue = maxValue;
+        this.outOfMaxValue = outOfValueCallback;
     }
 
     public void setSkuStatus(SkuStatus skuStatus) {
         this.skuStatus = skuStatus;
+    }
+
+    public interface OutOfValueCallback {
+        void outOfValue();
     }
 }

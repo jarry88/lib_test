@@ -187,6 +187,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 params.set("token", token);
             }
 
+            SLog.info("path[%s], params[%s]", path, params.toString());
             Api.postUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
