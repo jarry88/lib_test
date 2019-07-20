@@ -159,6 +159,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                         int userId = responseObj.getInt("datas.memberId");
                         SharedPreferenceUtil.saveUserInfo(responseObj);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                        hideSoftInput();
                         SqliteUtil.switchUserDB(userId);
 
                         ToastUtil.success(_mActivity, "注冊成功");

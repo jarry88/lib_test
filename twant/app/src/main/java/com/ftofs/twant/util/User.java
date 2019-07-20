@@ -3,6 +3,8 @@ package com.ftofs.twant.util;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 import com.orhanobut.hawk.Hawk;
 
 /**
@@ -39,11 +41,37 @@ public class User {
      * 退出登錄，清空數據
      */
     public static void logout() {
+        EMClient emClient = EMClient.getInstance();
+        if (emClient != null) {
+            emClient.logout(true, new EMCallBack() {
+
+                @Override
+                public void onSuccess() {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onProgress(int progress, String status) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+        }
+
         Hawk.delete(SPField.FIELD_USER_ID);
         Hawk.delete(SPField.FIELD_TOKEN);
         Hawk.delete(SPField.FIELD_NICKNAME);
-        Hawk.delete(SPField.FIELD_LAST_LOGIN_TIME);
         Hawk.delete(SPField.FIELD_MOBILE_ENCRYPT);
+        Hawk.delete(SPField.FIELD_MEMBER_NAME);
+        Hawk.delete(SPField.FIELD_IM_TOKEN);
+        Hawk.delete(SPField.FIELD_LAST_LOGIN_TIME);
     }
 
     /**
@@ -55,6 +83,13 @@ public class User {
             return null;
         }
         return Hawk.get(SPField.FIELD_TOKEN);
+    }
+
+    public static String getIMToken() {
+        if (getUserId() == 0) {
+            return null;
+        }
+        return Hawk.get(SPField.FIELD_IM_TOKEN);
     }
 
     public static String getMemberName() {

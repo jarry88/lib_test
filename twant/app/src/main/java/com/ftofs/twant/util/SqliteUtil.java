@@ -1,9 +1,14 @@
 package com.ftofs.twant.util;
 
+import android.util.Log;
+
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.task.DownloadEmojiTask;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import org.litepal.LitePal;
 import org.litepal.LitePalDB;
@@ -54,7 +59,34 @@ public class SqliteUtil {
         // 切換用戶相關的操作
         // 檢查是否需要下載表情
         TwantApplication.getThreadPool().execute(new DownloadEmojiTask());
+
         ///////////////////////////
+        // 登錄環信
+        ///////////////////////////
+        EMClient emClient = EMClient.getInstance();
+        String memberName = User.getMemberName();
+        String imToken = User.getIMToken();
+        SLog.info("memberName[%s], imToken[%s]", memberName, imToken);
+        if (emClient != null && !StringUtil.isEmpty(memberName) && !StringUtil.isEmpty(imToken)) {
+            emClient.loginWithToken(memberName, imToken, new EMCallBack() {//回调
+                @Override
+                public void onSuccess() {
+                    EMClient.getInstance().groupManager().loadAllGroups();
+                    EMClient.getInstance().chatManager().loadAllConversations();
+                    SLog.info("登录聊天服务器成功！");
+                }
+
+                @Override
+                public void onProgress(int progress, String status) {
+
+                }
+
+                @Override
+                public void onError(int code, String message) {
+                    SLog.info("Error!登录聊天服务器失败,code[%d], message[%s]", code, message);
+                }
+            });
+        }
 
 
         return true;

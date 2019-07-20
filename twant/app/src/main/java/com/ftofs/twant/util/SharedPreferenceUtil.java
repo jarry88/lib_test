@@ -24,9 +24,8 @@ public class SharedPreferenceUtil {
             Hawk.put(SPField.FIELD_NICKNAME, responseObj.getString("datas.nickName"));
             Hawk.put(SPField.FIELD_MOBILE_ENCRYPT, responseObj.getString("datas.memberVo.mobileEncrypt"));
             Hawk.put(SPField.FIELD_MEMBER_NAME, responseObj.getString("datas.memberName"));
-
-            // 最近一次登錄時間
-            Hawk.put(SPField.FIELD_LAST_LOGIN_TIME, Time.timestamp());
+            Hawk.put(SPField.FIELD_IM_TOKEN, responseObj.getString("datas.imToken"));
+            Hawk.put(SPField.FIELD_LAST_LOGIN_TIME, Time.timestamp());  // 最近一次登錄時間
         } catch (EasyJSONException e) {
             e.printStackTrace();
         }

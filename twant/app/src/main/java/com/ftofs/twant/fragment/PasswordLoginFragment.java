@@ -174,6 +174,7 @@ public class PasswordLoginFragment extends BaseFragment implements
                         int userId = responseObj.getInt("datas.memberId");
                         SharedPreferenceUtil.saveUserInfo(responseObj);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                        hideSoftInput();
                         SqliteUtil.switchUserDB(userId);
 
                         SLog.info("登錄成功");
