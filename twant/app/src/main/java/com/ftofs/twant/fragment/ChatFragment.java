@@ -46,11 +46,19 @@ import am.widget.smoothinputlayout.SmoothInputLayout;
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
         View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener {
 
+    /**
+     * 定義發送按鈕的動作，是顯示工具菜單還是發送消息
+     */
+    private static final int ACTION_SHOW_MENU = 1;
+    private static final int ACTION_SEND_MESSAGE = 2;
+
+    int action = ACTION_SHOW_MENU;
     SmoothInputLayout silMainContainer;
     EditText etMessage;
     View btnEmoji;
     ImageView iconEmoji;
     View btnTool;
+    ImageView iconCircleAdd;
     View llEmojiPane;
     View llToolPane;
 
@@ -83,6 +91,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         btnEmoji = view.findViewById(R.id.btn_emoji);
         iconEmoji = view.findViewById(R.id.icon_emoji);
         btnTool = view.findViewById(R.id.btn_tool);
+        iconCircleAdd = view.findViewById(R.id.icon_circle_add);
         llEmojiPane = view.findViewById(R.id.ll_emoji_pane);
         llToolPane = view.findViewById(R.id.ll_tool_pane);
         silMainContainer.setOnVisibilityChangeListener(this);
@@ -195,6 +204,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.btn_tool:
                 btnEmoji.setSelected(false);
+                if (action == ACTION_SEND_MESSAGE) {
+                    String message = etMessage.getText().toString();
+                    SLog.info("message[%s]", message);
+                    etMessage.setText("");
+                    btnTool.setSelected(false);
+
+                    return;
+                }
                 if (btnTool.isSelected()) {
                     btnTool.setSelected(false);
                     showInput();
@@ -280,8 +297,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public void afterTextChanged(Editable editable) {
         if (editable.toString().trim().length() > 0) {
             // 显示发送按钮
+            iconCircleAdd.setImageResource(R.drawable.ic_iconfont_send);
+            action = ACTION_SEND_MESSAGE;
         } else {
             // 隐藏发送按钮
+            iconCircleAdd.setImageResource(R.drawable.icon_circle_add);
+            action = ACTION_SHOW_MENU;
         }
     }
 

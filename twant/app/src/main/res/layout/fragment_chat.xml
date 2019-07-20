@@ -91,8 +91,8 @@
                 android:paddingRight="7.5dp">
                 <ImageView
                     android:id="@+id/icon_emoji"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_emoji"
                     />
@@ -103,9 +103,11 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="7.5dp"
                 android:paddingRight="15dp">
+
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/icon_circle_add"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_circle_add"
                     />
