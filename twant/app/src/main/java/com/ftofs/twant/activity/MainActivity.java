@@ -57,5 +57,10 @@ public class MainActivity extends BaseActivity implements MacauPaySdkInterfaces 
     @Override
     public void MPayInterfaces(PayResult payResult) {
         SLog.info("payResult[%s]", payResult);
+        if ("9000".equals(payResult.getResultStatus())) {
+            ToastUtil.success(this, payResult.getResult());
+        } else {
+            ToastUtil.error(this, payResult.getResult());
+        }
     }
 }

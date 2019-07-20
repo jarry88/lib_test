@@ -65,6 +65,7 @@
     <string name="text_order_no">訂單編號:</string>
     <string name="text_time_create_order">生成訂單:</string>
     <string name="text_time_pay_order">完成付款:</string>
+    <string name="text_pay_sn">支付單號:</string>
     <string name="text_time_ship_order">完成發貨:</string>
     <string name="text_order_num">訂單編號</string>
 

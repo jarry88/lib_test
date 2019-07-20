@@ -67,7 +67,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     // 調整數量
     AdjustButton abQuantity;
     int quantity;  // 外面傳進來的數量初始值
-    String outOfMaxValueReason;
+
+    String outOfMaxValueReason; // 購買數量超過庫存數或限購數的提示
+    int goodsStorage;
+    int limitAmount;
 
     /**
      * 當前選中的goodsId
@@ -316,6 +319,13 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         if (id == R.id.ll_title_padding || id == R.id.btn_close) {
             dismiss();
         } else if (id == R.id.btn_ok) {
+            if (action == Constant.ACTION_ADD_TO_CART || action == Constant.ACTION_BUY) {
+                if (goodsStorage == 0) {
+                    ToastUtil.error(context, "庫存為零");
+                    return;
+                }
+            }
+
             if (action == Constant.ACTION_ADD_TO_CART) {
                 addToCart();
             } if (action == Constant.ACTION_BUY) {
@@ -399,10 +409,15 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
         // 限定購買的數量
         outOfMaxValueReason = "購買數量不能大于庫存數量";
-        int maxValue = goodsInfo.goodsStorage;
-        if (maxValue > goodsInfo.limitAmount) {
-            maxValue = goodsInfo.limitAmount;
-            outOfMaxValueReason = String.format("每人限購%d%s", goodsInfo.limitAmount, goodsInfo.unitName);
+        goodsStorage = goodsInfo.goodsStorage;
+        limitAmount = goodsInfo.limitAmount;
+        SLog.info("goodsStorage[%d], limitAmount[%d]", goodsStorage, limitAmount);
+
+        int maxValue = goodsStorage;
+        if (limitAmount > 0  // limitAmount 大于0才表示有效
+                && maxValue > limitAmount) {
+            maxValue = limitAmount;
+            outOfMaxValueReason = String.format("每人限購%d%s", limitAmount, goodsInfo.unitName);
         }
         SLog.info("maxValue[%d]", maxValue);
         abQuantity.setMaxValue(maxValue, new AdjustButton.OutOfValueCallback() {

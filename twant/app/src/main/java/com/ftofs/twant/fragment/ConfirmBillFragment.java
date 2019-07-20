@@ -349,11 +349,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
-                        ToastUtil.success(_mActivity, "提交訂單成功");
-                        pop();
 
-                        MainFragment mainFragment = MainFragment.getInstance();
-                        mainFragment.start(PaySuccessFragment.newInstance(EasyJSONObject.generate().toString()));
+                        pop();
 
 
                         if (paymentTypeCode.equals(Constant.PAYMENT_TYPE_CODE_ONLINE)) {
@@ -361,9 +358,14 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             try {
                                 int payId = responseObj.getInt("datas.payId");
                                 mpay(payId);
+                                ToastUtil.success(_mActivity, "提交訂單成功，正在打開支付界面，請稍候...");
                             } catch (EasyJSONException e) {
                                 e.printStackTrace();
                             }
+                        } else {
+                            MainFragment mainFragment = MainFragment.getInstance();
+                            mainFragment.start(PaySuccessFragment.newInstance(EasyJSONObject.generate().toString()));
+                            ToastUtil.success(_mActivity, "提交訂單成功");
                         }
                     }
                 });

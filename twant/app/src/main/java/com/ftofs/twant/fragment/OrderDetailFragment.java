@@ -77,6 +77,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvCreateTime;
     LinearLayout llOrderPaymentTimeContainer;
     TextView tvPaymentTime;
+    LinearLayout llOrderPaySnContainer;
+    TextView tvPaySn;
     LinearLayout llOrderSendTimeContainer;
     TextView tvSendTime;
 
@@ -155,6 +157,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         tvCreateTime = view.findViewById(R.id.tv_create_time);
         llOrderPaymentTimeContainer = view.findViewById(R.id.ll_order_payment_time_container);
         tvPaymentTime = view.findViewById(R.id.tv_payment_time);
+        llOrderPaySnContainer = view.findViewById(R.id.ll_order_pay_sn_container);
+        tvPaySn = view.findViewById(R.id.tv_pay_sn);
         llOrderSendTimeContainer = view.findViewById(R.id.ll_order_send_time_container);
         tvSendTime = view.findViewById(R.id.tv_send_time);
 
@@ -525,6 +529,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         llOrderPaymentTimeContainer.setVisibility(View.GONE);
                     } else {
                         tvPaymentTime.setText(paymentTime);
+                    }
+
+                    if (StringUtil.isEmpty(paySnStr)) {
+                        llOrderPaySnContainer.setVisibility(View.GONE);
+                    } else {
+                        tvPaySn.setText(paySnStr);
                     }
 
                     if (StringUtil.isEmpty(sendTime)) {
