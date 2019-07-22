@@ -26,6 +26,12 @@
     <string name="text_not_set">未設置</string>
     <string name="text_not_login">您未登錄</string>
 
+    <string name="text_contact">通訊錄</string>
+    <string name="text_new_friend">新的朋友</string>
+    <string name="text_scan_qr_code">掃一掃</string>
+    <string name="text_add_friend">添加朋友</string>
+    <string name="text_setting">設置</string>
+
     <string name="text_security_setting">安全設置</string>
     <string name="text_about_takewant">關于Takewant</string>
     <string name="text_check_update">檢測更新</string>

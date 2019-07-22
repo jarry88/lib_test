@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.BlackDropdownMenuStore;
 import com.lxj.xpopup.XPopup;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -144,12 +144,12 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         } if (id == R.id.btn_menu) {
             SLog.info("here");
             new XPopup.Builder(_mActivity)
-                    .offsetX(-50)
-                    .offsetY(-20)
+                    .offsetX(-Util.dip2px(_mActivity, 15))
+                    .offsetY(-Util.dip2px(_mActivity, 9))
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
                     .hasShadowBg(false) // 去掉半透明背景
                     .atView(v)
-                    .asCustom(new BlackDropdownMenu(_mActivity))
+                    .asCustom(new BlackDropdownMenuStore(_mActivity))
                     .show();
         } else { // 點擊底部導航欄
             int len = bottomBarButtonIds.length;

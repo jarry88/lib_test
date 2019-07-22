@@ -33,6 +33,30 @@
             android:text="@string/text_message"
             android:textColor="@color/tw_black"
             />
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_message_menu"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="7dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_shop_menu">
+
+        </com.ftofs.twant.widget.ScaledButton>
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_message_search"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="7dp"
+            android:layout_toLeftOf="@id/btn_message_menu"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_shop_search">
+
+        </com.ftofs.twant.widget.ScaledButton>
+
+
     </RelativeLayout>
 
     <!-- 交易物流消息 -->

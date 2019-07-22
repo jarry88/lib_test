@@ -580,6 +580,11 @@ public class Api {
      */
     public static final String PATH_MPAY = "/member/buy/pay/app/mpay";
 
+    /**
+     * 通訊錄
+     */
+    public static final String PATH_CONTACT_LIST = "/member/contact_list";
+
 
     /**
      * 發送Http請求

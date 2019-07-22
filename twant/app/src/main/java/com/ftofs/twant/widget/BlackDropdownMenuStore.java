@@ -11,14 +11,14 @@ import com.lxj.xpopup.core.AttachPopupView;
  * 黑色下拉菜单
  * @author zwm
  */
-public class BlackDropdownMenu extends AttachPopupView {
-    public BlackDropdownMenu(@NonNull Context context) {
+public class BlackDropdownMenuStore extends AttachPopupView {
+    public BlackDropdownMenuStore(@NonNull Context context) {
         super(context);
     }
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.layout_black_menu;
+        return R.layout.layout_black_menu_store;
     }
 
     @Override
@@ -31,6 +31,6 @@ public class BlackDropdownMenu extends AttachPopupView {
     // 如果要自定义弹窗的背景，不要给布局设置背景图片，重写这个方法返回一个Drawable即可
     @Override
     protected Drawable getPopupBackground() {
-        return getResources().getDrawable(R.drawable.black_menu_bg);
+        return getResources().getDrawable(R.drawable.black_menu_bg, null);
     }
 }

@@ -39,7 +39,6 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
-import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;

@@ -11,7 +11,9 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BlackDropdownMenuMessage;
 import com.ftofs.twant.widget.ScaledButton;
+import com.lxj.xpopup.XPopup;
 
 
 /**
@@ -49,6 +51,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         Bundle args = getArguments();
         isStandalone = args.getBoolean("isStandalone");
 
+        Util.setOnClickListener(view, R.id.btn_message_menu, this);
         Util.setOnClickListener(view, R.id.btn_view_logistics_message, this);
         Util.setOnClickListener(view, R.id.btn_view_refund_message, this);
 
@@ -68,6 +71,15 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_message_menu) {
+            new XPopup.Builder(_mActivity)
+                    .offsetX(-Util.dip2px(_mActivity, 6))
+                    .offsetY(-Util.dip2px(_mActivity, 8))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                    .hasShadowBg(false) // 去掉半透明背景
+                    .atView(v)
+                    .asCustom(new BlackDropdownMenuMessage(_mActivity))
+                    .show();
         } else if (id == R.id.btn_view_logistics_message) {
             mainFragment.start(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_LOGISTICS));
         } else if (id == R.id.btn_view_refund_message) {
