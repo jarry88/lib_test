@@ -30,18 +30,14 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
 
     MainActivity mainActivity; // 主Activity
-    String paySn; // 支付單號
-    String totalAmount; // 總金額
-    String subject; // 訂單名稱
+    int payId;
 
-    public PayPopup(@NonNull Context context, MainActivity mainActivity, String paySn, String totalAmount, String subject) {
+    public PayPopup(@NonNull Context context, MainActivity mainActivity, int payId) {
         super(context);
 
         this.context = context;
         this.mainActivity = mainActivity;
-        this.paySn = paySn;
-        this.totalAmount = totalAmount;
-        this.subject = subject;
+        this.payId = payId;
     }
 
     @Override
@@ -91,14 +87,17 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
         } else if (id == R.id.btn_mpay) {
             String token = User.getToken();
 
+            if (StringUtil.isEmpty(token)) {
+                ToastUtil.error(mainActivity, "用戶未登錄");
+                return;
+            }
+
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
-                    "paySn", paySn,
-                    "totalAmount", totalAmount,
-                    "subject", subject);
+                    "payId", payId);
 
             SLog.info("params[%s]", params);
-            Api.getUI(Api.PATH_MPAY_PARAMS, params, new UICallback() {
+            Api.postUI(Api.PATH_MPAY, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(context, e);
@@ -113,6 +112,9 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                         if (ToastUtil.checkError(context, responseObj)) {
                             return;
                         }
+
+                        ToastUtil.success(mainActivity, "提交訂單成功，正在打開支付界面，請稍候...");
+                        dismiss();
 
                         EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
                         MacauPaySdk.macauPay(mainActivity, datas.toString(), mainActivity);

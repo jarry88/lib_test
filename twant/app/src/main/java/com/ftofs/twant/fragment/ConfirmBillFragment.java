@@ -37,6 +37,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.PayPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.macau.pay.sdk.MacauPaySdk;
@@ -89,6 +90,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     String textConfirmOrderTotalItemCount;
     String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_ONLINE, Constant.PAYMENT_TYPE_CODE_OFFLINE,
             Constant.PAYMENT_TYPE_CODE_CHAIN};
+
 
     /**
      * 提交訂單時上去的店鋪列表
@@ -355,10 +357,15 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                         if (paymentTypeCode.equals(Constant.PAYMENT_TYPE_CODE_ONLINE)) {
                             SLog.info("在線支付方式");
+
+
                             try {
                                 int payId = responseObj.getInt("datas.payId");
-                                mpay(payId);
-                                ToastUtil.success(_mActivity, "提交訂單成功，正在打開支付界面，請稍候...");
+                                new XPopup.Builder(_mActivity)
+                                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                                        .moveUpToKeyboard(false)
+                                        .asCustom(new PayPopup(_mActivity, (MainActivity) _mActivity, payId))
+                                        .show();
                             } catch (EasyJSONException e) {
                                 e.printStackTrace();
                             }
@@ -377,46 +384,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         } else if (id == R.id.btn_change_shipping_address) {
             startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
         }
-    }
-
-    /**
-     * MPay支付
-     * @param payId
-     */
-    private void mpay(int payId) {
-        SLog.info("payId[%s]", payId);
-
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
-
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "payId", payId);
-
-        Api.postUI(Api.PATH_MPAY, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(_mActivity, e);
-            }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                if (ToastUtil.checkError(_mActivity, responseObj)) {
-                    return;
-                }
-
-                try {
-                    EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
-                    MacauPaySdk.macauPay(_mActivity, datas.toString(), (MainActivity) _mActivity);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     @Override

@@ -4,6 +4,8 @@ package com.ftofs.twant.activity;
 import android.os.Bundle;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Time;
@@ -59,6 +61,7 @@ public class MainActivity extends BaseActivity implements MacauPaySdkInterfaces 
         SLog.info("payResult[%s]", payResult);
         if ("9000".equals(payResult.getResultStatus())) {
             ToastUtil.success(this, payResult.getResult());
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_PAY_SUCCESS, null);
         } else {
             ToastUtil.error(this, payResult.getResult());
         }

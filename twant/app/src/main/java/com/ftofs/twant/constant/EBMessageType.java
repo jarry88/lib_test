@@ -29,5 +29,10 @@ public enum EBMessageType {
     /**
      * 頭像上傳成功
      */
-    MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS
+    MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS,
+
+    /**
+     * 支付成功
+     */
+    MESSAGE_TYPE_PAY_SUCCESS,
 }

@@ -21,7 +21,9 @@ import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -37,6 +39,10 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +63,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     int ordersId;
     int storeId;
     String paySnStr;
+    int payId;
     float ordersAmount = -1;
 
     OrderDetailGoodsAdapter adapter;
@@ -128,6 +135,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        EventBus.getDefault().register(this);
 
         Bundle args = getArguments();
         ordersId = args.getInt("ordersId");
@@ -208,6 +217,23 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_back, this);
 
         loadOrderDetail();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_PAY_SUCCESS) {
+            // 如果支付成功，重新加載訂單詳情
+            SLog.info("支付成功，重新加載訂單詳情");
+            loadOrderDetail();
+        }
     }
 
     private boolean handleOrderButtonClick(String tag) {
@@ -292,13 +318,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 MainFragment mainFragment = MainFragment.getInstance();
                 mainFragment.start(GoodsEvaluationFragment.newInstance());
             } else if (tag.equals(TEXT_MEMBER_PAY)) {
-                if (ordersAmount < 0) { // 數據未初始化好
-                    return true;
-                }
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new PayPopup(_mActivity, (MainActivity) _mActivity, paySnStr, String.valueOf(ordersAmount), "商品訂單"))
+                        .asCustom(new PayPopup(_mActivity, (MainActivity) _mActivity, payId))
                         .show();
             }
         } catch (Exception e) {
@@ -504,6 +527,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
                     long ordersSn = ordersVo.getLong("ordersSn");
                     paySnStr = ordersVo.getString("paySnStr");
+                    payId = ordersVo.getInt("payId");
                     String createTime = ordersVo.getString("createTime");
                     String paymentTime = ordersVo.getString("paymentTime");
                     String sendTime = ordersVo.getString("sendTime");
