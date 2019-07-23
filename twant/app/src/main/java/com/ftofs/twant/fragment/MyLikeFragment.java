@@ -15,6 +15,7 @@ import com.ftofs.twant.adapter.MyLikeGoodsAdapter;
 import com.ftofs.twant.adapter.MyLikeStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.MyLikeArticleItem;
 import com.ftofs.twant.entity.MyLikeGoodsItem;
 import com.ftofs.twant.entity.MyLikeStoreItem;
@@ -151,7 +152,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
 
     private void loadMyLikeStore() {
         try {
-            String memberName = User.getMemberName();
+            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }
@@ -217,7 +218,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
     private void loadMyLikeGoods() {
         SLog.info("HERE");
         try {
-            String memberName = User.getMemberName();
+            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }

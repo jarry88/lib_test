@@ -18,6 +18,7 @@ import com.ftofs.twant.adapter.MyFollowStoreAdapter;
 import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.MyFollowArticleItem;
 import com.ftofs.twant.entity.MyFollowGoodsItem;
 import com.ftofs.twant.entity.MyFollowMemberItem;
@@ -180,7 +181,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
     private void loadMyFollowStore() {
         try {
-            String memberName = User.getMemberName();
+            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }
@@ -246,7 +247,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
     private void loadMyFollowGoods() {
         try {
-            String memberName = User.getMemberName();
+            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }

@@ -20,6 +20,7 @@ import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -162,7 +163,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
      */
     private void loadUserData() {
         String token = User.getToken();
-        String memberName = User.getMemberName();
+        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
 
         if (StringUtil.isEmpty(token) || StringUtil.isEmpty(memberName)) {
             return;

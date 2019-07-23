@@ -103,7 +103,7 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
                     String fragmentTitle = getString(R.string.text_contact) + "(" + contactCount + ")";
                     tvFragmentTitle.setText(fragmentTitle);
 
-                    
+
                 } catch (Exception e) {
 
                 }

@@ -6,8 +6,10 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.fragment.AddFriendFragment;
 import com.ftofs.twant.fragment.ContactFragment;
 import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.fragment.QrCodeCardFragment;
 import com.lxj.xpopup.core.AttachPopupView;
 
 /**
@@ -47,6 +49,9 @@ public class BlackDropdownMenuMessage extends AttachPopupView implements View.On
         if (id == R.id.btn_item_1) {
             MainFragment mainFragment = MainFragment.getInstance();
             mainFragment.start(ContactFragment.newInstance());
+        } else if (id == R.id.btn_item_3) {
+            MainFragment mainFragment = MainFragment.getInstance();
+            mainFragment.start(AddFriendFragment.newInstance());
         }
 
         dismiss();

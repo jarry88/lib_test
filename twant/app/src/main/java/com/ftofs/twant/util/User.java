@@ -68,10 +68,22 @@ public class User {
         Hawk.delete(SPField.FIELD_USER_ID);
         Hawk.delete(SPField.FIELD_TOKEN);
         Hawk.delete(SPField.FIELD_NICKNAME);
+        Hawk.delete(SPField.FIELD_LAST_LOGIN_TIME);
         Hawk.delete(SPField.FIELD_MOBILE_ENCRYPT);
         Hawk.delete(SPField.FIELD_MEMBER_NAME);
         Hawk.delete(SPField.FIELD_IM_TOKEN);
-        Hawk.delete(SPField.FIELD_LAST_LOGIN_TIME);
+        Hawk.delete(SPField.FIELD_AVATAR);
+        Hawk.delete(SPField.FIELD_GENDER);
+        Hawk.delete(SPField.FIELD_MEMBER_SIGNATURE);
+        Hawk.delete(SPField.FIELD_MEMBER_BIO);
+    }
+
+    public static <T> T getUserInfo(String field, T defaultValue) {
+        if (getUserId() == 0) {
+            return defaultValue;
+        }
+
+        return Hawk.get(field, defaultValue);
     }
 
     /**
@@ -83,19 +95,5 @@ public class User {
             return null;
         }
         return Hawk.get(SPField.FIELD_TOKEN);
-    }
-
-    public static String getIMToken() {
-        if (getUserId() == 0) {
-            return null;
-        }
-        return Hawk.get(SPField.FIELD_IM_TOKEN);
-    }
-
-    public static String getMemberName() {
-        if (getUserId() == 0) {
-            return null;
-        }
-        return Hawk.get(SPField.FIELD_MEMBER_NAME);
     }
 }

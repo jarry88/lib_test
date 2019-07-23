@@ -31,6 +31,9 @@
     <string name="text_scan_qr_code">掃一掃</string>
     <string name="text_add_friend">添加朋友</string>
     <string name="text_setting">設置</string>
+    <string name="text_my_qr_code">我的二維碼</string>
+    <string name="text_qr_code_card">二維碼名片</string>
+    <string name="text_scan_qr_code_add_friend">用想要掃描二維碼，加我為朋友吧～</string>
 
     <string name="text_security_setting">安全設置</string>
     <string name="text_about_takewant">關于Takewant</string>

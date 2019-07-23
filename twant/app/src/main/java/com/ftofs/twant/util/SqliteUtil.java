@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.task.DownloadEmojiTask;
@@ -64,8 +65,8 @@ public class SqliteUtil {
         // 登錄環信
         ///////////////////////////
         EMClient emClient = EMClient.getInstance();
-        String memberName = User.getMemberName();
-        String imToken = User.getIMToken();
+        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+        String imToken = User.getUserInfo(SPField.FIELD_IM_TOKEN, null);
         SLog.info("memberName[%s], imToken[%s]", memberName, imToken);
         if (emClient != null && !StringUtil.isEmpty(memberName) && !StringUtil.isEmpty(imToken)) {
             emClient.loginWithToken(memberName, imToken, new EMCallBack() {//回调
