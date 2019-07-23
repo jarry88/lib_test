@@ -23,6 +23,7 @@ import com.hyphenate.chat.EMOptions;
 import com.macau.pay.sdk.MacauPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.litepal.LitePal;
 import org.litepal.tablemanager.callback.DatabaseListener;
@@ -144,6 +145,9 @@ public class TwantApplication extends Application {
         } else {
             MacauPaySdk.setEnvironmentType(0);
         }
+
+        // 初始化ZXing二維碼庫
+        ZXingLibrary.initDisplayOpinion(this);
     }
 
 

@@ -43,4 +43,9 @@ public enum RequestCode {
      * 編輯關鍵字
      */
     EDIT_KEYWORD,
+
+    /**
+     * 掃描二維碼
+     */
+    SCAN_QR_CODE,
 }

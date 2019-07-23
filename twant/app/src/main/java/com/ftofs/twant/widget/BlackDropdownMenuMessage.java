@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.fragment.AddFriendFragment;
+import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.ContactFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.QrCodeCardFragment;
@@ -17,8 +18,10 @@ import com.lxj.xpopup.core.AttachPopupView;
  * @author zwm
  */
 public class BlackDropdownMenuMessage extends AttachPopupView implements View.OnClickListener {
-    public BlackDropdownMenuMessage(@NonNull Context context) {
+    BaseFragment baseFragment;
+    public BlackDropdownMenuMessage(@NonNull Context context, BaseFragment baseFragment) {
         super(context);
+        this.baseFragment = baseFragment;
     }
 
     @Override
@@ -49,6 +52,8 @@ public class BlackDropdownMenuMessage extends AttachPopupView implements View.On
         if (id == R.id.btn_item_1) {
             MainFragment mainFragment = MainFragment.getInstance();
             mainFragment.start(ContactFragment.newInstance());
+        } else if (id == R.id.btn_item_2) {
+            baseFragment.startCaptureActivity();
         } else if (id == R.id.btn_item_3) {
             MainFragment mainFragment = MainFragment.getInstance();
             mainFragment.start(AddFriendFragment.newInstance());

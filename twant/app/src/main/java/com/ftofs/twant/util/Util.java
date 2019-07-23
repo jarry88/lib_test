@@ -7,15 +7,18 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.log.SLog;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -282,5 +285,29 @@ public class Util {
         boolean result = matcher.matches();
         SLog.info("matches[%s]", result);
         return result;
+    }
+
+    public static void handleQRCodeResult(Context context, Intent data) {
+        //处理扫描结果（在界面上显示）
+        if (null != data) {
+            Bundle bundle = data.getExtras();
+            if (bundle == null) {
+                return;
+            }
+
+            if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                String result = bundle.getString(CodeUtils.RESULT_STRING);
+                SLog.info("解析结果[%s]", result);
+                if (result.startsWith("tw_member_")) {
+                    // 添加好友
+                    String memberName = result.substring(10);
+                    SLog.info("memberName[%s]", memberName);
+                } else {
+                    ToastUtil.error(context, "無效的二維碼");
+                }
+            } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                ToastUtil.error(context, "解析二維碼失敗");
+            }
+        }
     }
 }

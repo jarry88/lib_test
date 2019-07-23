@@ -18,6 +18,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 /**
  * 二維碼名片Fragment
@@ -67,8 +68,8 @@ public class QrCodeCardFragment extends BaseFragment implements View.OnClickList
         ImageView imgMyQrCode = view.findViewById(R.id.img_my_qr_code);
         String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
         String textContent = "tw_member_" + memberName;
-        // Bitmap bitmap = CodeUtils.createImage(textContent, 400, 400, null);
-        // imgMyQrCode.setImageBitmap(bitmap);
+        Bitmap bitmap = CodeUtils.createImage(textContent, 400, 400, null);
+        imgMyQrCode.setImageBitmap(bitmap);
     }
 
     @Override
