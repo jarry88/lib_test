@@ -539,6 +539,9 @@
     <string name="menu_item_shop_home_customer_service">諮詢客服</string>
     <string name="menu_item_shop_home_message">消息</string>
 
+    <string name="text_verify_application">驗證申請</string>
+    <string name="input_add_friend_verification_prompt">發送驗證申請，等待對方通過</string>
+
     <!-- 貨幣種類標志 -->
     <string name="currency_type_sign">$</string>
     <!-- 乘号 -->

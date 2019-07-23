@@ -3,14 +3,19 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.FriendItemListAdapter;
+import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.entity.FriendItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -18,6 +23,8 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -30,6 +37,9 @@ import okhttp3.Call;
  */
 public class ContactFragment extends BaseFragment implements View.OnClickListener {
     TextView tvFragmentTitle;
+
+    List<FriendItem> friendItemList = new ArrayList<>();
+    FriendItemListAdapter adapter;
 
     public static ContactFragment newInstance() {
         Bundle args = new Bundle();
@@ -52,6 +62,12 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
 
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         Util.setOnClickListener(view, R.id.btn_back, this);
+
+        RecyclerView rvContactList = view.findViewById(R.id.rv_contact_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        rvContactList.setLayoutManager(layoutManager);
+        adapter = new FriendItemListAdapter(R.layout.layout_friend_item, friendItemList);
+        rvContactList.setAdapter(adapter);
 
         loadContactData();
     }
@@ -103,7 +119,19 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
                     String fragmentTitle = getString(R.string.text_contact) + "(" + contactCount + ")";
                     tvFragmentTitle.setText(fragmentTitle);
 
+                    for (Object object : friendList) {
+                        EasyJSONObject friend = (EasyJSONObject) object;
+                        FriendItem friendItem = new FriendItem();
+                        friendItem.memberId = friend.getInt("memberId");
+                        friendItem.memberName = friend.getString("memberName");
+                        friendItem.avatarUrl = friend.getString("avatar");
+                        friendItem.gender = friend.getInt("memberSex");
+                        friendItem.nickname = friend.getString("nickName");
 
+                        friendItemList.add(friendItem);
+                    }
+
+                    adapter.setNewData(friendItemList);
                 } catch (Exception e) {
 
                 }

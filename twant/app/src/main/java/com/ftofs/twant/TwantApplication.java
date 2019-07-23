@@ -17,6 +17,7 @@ import com.ftofs.twant.util.User;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
@@ -207,6 +208,38 @@ public class TwantApplication extends Application {
                     //当前网络不可用，请检查网络设置
                     */
                 }
+            }
+        });
+
+        EMClient.getInstance().contactManager().setContactListener(new EMContactListener() {
+            @Override
+            public void onContactInvited(String username, String reason) {
+                //收到好友邀请
+                SLog.info("onContactInvited, username[%s],reason[%s]", username, reason);
+            }
+
+            @Override
+            public void onFriendRequestAccepted(String s) {
+                //好友请求被同意
+                SLog.info("onFriendRequestAccepted, s[%s]", s);
+            }
+
+            @Override
+            public void onFriendRequestDeclined(String s) {
+                //好友请求被拒绝
+                SLog.info("onFriendRequestDeclined, s[%s]", s);
+            }
+
+            @Override
+            public void onContactDeleted(String username) {
+                //被删除时回调此方法
+                SLog.info("onContactDeleted, username[%s]", username);
+            }
+
+            @Override
+            public void onContactAdded(String username) {
+                //增加了联系人时回调此方法
+                SLog.info("onContactAdded, username[%s]", username);
             }
         });
     }
