@@ -28,15 +28,18 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ChatMessageAdapter;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.entity.FriendItem;
+import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
+import com.ftofs.twant.widget.SizeChangedRecyclerView;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -54,7 +57,7 @@ import am.widget.smoothinputlayout.SmoothInputLayout;
  * @author zwm
  */
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
-        View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener {
+        View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener, ViewSizeChangedListener {
 
     /**
      * 定義發送按鈕的動作，是顯示工具菜單還是發送消息
@@ -77,7 +80,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     EmojiPageAdapter emojiPageAdapter;
     List<EmojiPage> emojiPageList = new ArrayList<>();
 
-    RecyclerView rvMessageList;
+    SizeChangedRecyclerView rvMessageList;
     ChatMessageAdapter chatMessageAdapter;
     List<ChatMessage> chatMessageList = new ArrayList<>();
 
@@ -104,11 +107,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         Bundle args = getArguments();
         friendItem = args.getParcelable("friendItem");
 
         TextView tvNickname = view.findViewById(R.id.tv_nickname);
         tvNickname.setText(friendItem.nickname);
+        tvNickname.setOnClickListener(this);
 
         silMainContainer = view.findViewById(R.id.sil_main_container);
         etMessage = view.findViewById(R.id.et_message);
@@ -183,7 +188,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             chatMessage.origin = ChatMessage.YOUR_MESSAGE;
         }
         chatMessage.timestamp = emMessage.getMsgTime();
-        chatMessageList.add(chatMessage);
 
         return chatMessage;
     }
@@ -225,6 +229,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     showTool();
                 }
                 break;
+            case R.id.tv_nickname:
+                if (Config.DEVELOPER_MODE) {
+                    SLog.info("heeee");
+                    rvMessageList.smoothScrollBy(0, 825);
+                }
+                break;
             default:
                 break;
         }
@@ -232,6 +242,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private void initChatUI(View contentView) {
         rvMessageList = contentView.findViewById(R.id.rv_message_list);
+        rvMessageList.setViewSizeChangedListener(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvMessageList.setLayoutManager(layoutManager);
 
@@ -479,5 +490,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
         pop();
         return true;
+    }
+
+    @Override
+    public void onViewSizeChanged(View view, int w, int h, int oldw, int oldh) {
+        int id = view.getId();
+        if (id == R.id.rv_message_list) {
+            if (oldh > 0) {
+                int diff = h - oldh;
+                SLog.info("diff[%d]", diff);
+                // rvMessageList.scrollBy(0, -diff);
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        SLog.info("滾動[%d]", diff);
+                        rvMessageList.scrollBy(0, -diff);
+                    }
+                }, 100);
+            }
+        }
     }
 }
