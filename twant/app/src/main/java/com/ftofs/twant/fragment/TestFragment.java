@@ -60,7 +60,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         int id = view.getId();
         if (id == R.id.btn_test) {
             MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(ChatFragment.newInstance());
+            mainFragment.start(TestFragment.newInstance());
         }
     }
 

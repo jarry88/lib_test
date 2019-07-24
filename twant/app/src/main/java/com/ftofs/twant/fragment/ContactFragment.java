@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FriendItemListAdapter;
 import com.ftofs.twant.adapter.TrustValueListAdapter;
@@ -67,6 +68,15 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvContactList.setLayoutManager(layoutManager);
         adapter = new FriendItemListAdapter(R.layout.layout_friend_item, friendItemList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                FriendItem friendItem = friendItemList.get(position);
+
+                MainFragment mainFragment = MainFragment.getInstance();
+                mainFragment.start(ChatFragment.newInstance(friendItem));
+            }
+        });
         rvContactList.setAdapter(adapter);
 
         loadContactData();

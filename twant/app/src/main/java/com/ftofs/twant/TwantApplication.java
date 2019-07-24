@@ -19,9 +19,12 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMOptions;
-import com.macau.pay.sdk.MacauPaySdk;
+import com.macau.pay.sdk.MPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
@@ -142,9 +145,9 @@ public class TwantApplication extends Application {
 
         // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT
         if (Config.DEVELOPER_MODE) {
-            MacauPaySdk.setEnvironmentType(2);
+            MPaySdk.setEnvironmentType(2);
         } else {
-            MacauPaySdk.setEnvironmentType(0);
+            MPaySdk.setEnvironmentType(0);
         }
 
         // 初始化ZXing二維碼庫
@@ -242,6 +245,57 @@ public class TwantApplication extends Application {
                 SLog.info("onContactAdded, username[%s]", username);
             }
         });
+
+        EMMessageListener msgListener = new EMMessageListener() {
+            @Override
+            public void onMessageReceived(List<EMMessage> messages) {
+                //收到消息
+                SLog.info("收到消息，條數[%d]", messages.size());
+                for (EMMessage message : messages) {
+                    String msgId = message.getMsgId();
+                    EMMessage.Type type = message.getType();
+                    EMMessageBody body = message.getBody();
+                    String from = message.getFrom();
+                    String to = message.getTo();
+                    SLog.info("msgId[%s], from[%s], to[%s], body[%s]", msgId, from, to, body.toString());
+
+                    if (type == EMMessage.Type.TXT) {
+                        SLog.info("收到文本消息");
+                    }
+                }
+            }
+
+            @Override
+            public void onCmdMessageReceived(List<EMMessage> messages) {
+                //收到透传消息
+                SLog.info("收到透传消息");
+            }
+
+            @Override
+            public void onMessageRead(List<EMMessage> messages) {
+                //收到已读回执
+                SLog.info("收到已读回执");
+            }
+
+            @Override
+            public void onMessageDelivered(List<EMMessage> message) {
+                //收到已送达回执
+                SLog.info("收到已送达回执");
+            }
+
+            @Override
+            public void onMessageRecalled(List<EMMessage> messages) {
+                //消息被撤回
+                SLog.info("消息被撤回");
+            }
+
+            @Override
+            public void onMessageChanged(EMMessage message, Object change) {
+                //消息状态变动
+                SLog.info("消息状态变动");
+            }
+        };
+        EMClient.getInstance().chatManager().addMessageListener(msgListener);
     }
 
     private String getAppName(int pID) {

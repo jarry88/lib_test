@@ -12,13 +12,13 @@ import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.macau.pay.sdk.base.PayResult;
-import com.macau.pay.sdk.interfaces.MacauPaySdkInterfaces;
+import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
 
 /**
  * 主Activity
  * @author zwm
  */
-public class MainActivity extends BaseActivity implements MacauPaySdkInterfaces {
+public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     long lastBackPressedTime;
     MainFragment mainFragment;
     @Override
@@ -52,11 +52,6 @@ public class MainActivity extends BaseActivity implements MacauPaySdkInterfaces 
     }
 
     @Override
-    public void APayInterfaces(PayResult payResult) {
-        SLog.info("payResult[%s]", payResult);
-    }
-
-    @Override
     public void MPayInterfaces(PayResult payResult) {
         SLog.info("payResult[%s]", payResult);
         if ("9000".equals(payResult.getResultStatus())) {
@@ -65,5 +60,15 @@ public class MainActivity extends BaseActivity implements MacauPaySdkInterfaces 
         } else {
             ToastUtil.error(this, payResult.getResult());
         }
+    }
+
+    @Override
+    public void WeChatPayInterfaces(PayResult payResult) {
+        SLog.info("payResult[%s]", payResult);
+    }
+
+    @Override
+    public void AliPayInterfaces(PayResult payResult) {
+        SLog.info("payResult[%s]", payResult);
     }
 }

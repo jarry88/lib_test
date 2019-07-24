@@ -15,7 +15,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
-import com.macau.pay.sdk.MacauPaySdk;
+import com.macau.pay.sdk.MPaySdk;
 
 import java.io.IOException;
 
@@ -117,7 +117,7 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                         dismiss();
 
                         EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
-                        MacauPaySdk.macauPay(mainActivity, datas.toString(), mainActivity);
+                        MPaySdk.mPay(mainActivity, datas.toString(), mainActivity);
                     } catch (Exception e) {
 
                     }

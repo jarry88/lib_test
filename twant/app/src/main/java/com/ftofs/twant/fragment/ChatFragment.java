@@ -21,16 +21,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.adapter.ChatMessageAdapter;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
+import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EmojiPage;
+import com.ftofs.twant.entity.FriendItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
 
 import org.litepal.LitePal;
 
@@ -62,13 +70,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     View llEmojiPane;
     View llToolPane;
 
+    FriendItem friendItem;
     RecyclerView rvEmojiPageList;
-    EmojiPageAdapter adapter;
+    EmojiPageAdapter emojiPageAdapter;
     List<EmojiPage> emojiPageList = new ArrayList<>();
 
-    public static ChatFragment newInstance() {
+    RecyclerView rvMessageList;
+    ChatMessageAdapter chatMessageAdapter;
+    List<ChatMessage> chatMessageList = new ArrayList<>();
+
+    public static ChatFragment newInstance(FriendItem friendItem) {
         Bundle args = new Bundle();
 
+        args.putParcelable("friendItem", friendItem);
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
 
@@ -85,6 +99,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle args = getArguments();
+        friendItem = args.getParcelable("friendItem");
+
+        TextView tvNickname = view.findViewById(R.id.tv_nickname);
+        tvNickname.setText(friendItem.nickname);
 
         silMainContainer = view.findViewById(R.id.sil_main_container);
         etMessage = view.findViewById(R.id.et_message);
@@ -103,7 +123,101 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         Util.setOnClickListener(view, R.id.btn_back, this);
 
-        rvEmojiPageList = view.findViewById(R.id.rv_emoji_page_list);
+        initEmojiPage(view);
+        loadEmojiData();
+
+        initChatUI(view);
+        loadChatData();
+    }
+
+    private void loadChatData() {
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(friendItem.memberName);
+        //获取此会话的所有消息
+        String startMsgId = "";
+        List<EMMessage> messages = conversation.getAllMessages();
+        SLog.info("消息條數[%d]", messages.size());
+        for (EMMessage emMessage : messages) {
+            startMsgId = emMessage.getMsgId();
+            SLog.info("message[%s]", emMessage.toString());
+
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.content = emMessage.getBody().toString();
+            chatMessageList.add(chatMessage);
+        }
+
+        //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
+        //获取startMsgId之前的pagesize条消息，此方法获取的messages SDK会自动存入到此会话中，APP中无需再次把获取到的messages添加到会话中
+        int pagesize = 20;
+        messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
+        for (EMMessage emMessage : messages) {
+            SLog.info("message[%s]", emMessage.toString());
+
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.content = emMessage.getBody().toString();
+            chatMessageList.add(chatMessage);
+        }
+
+        chatMessageAdapter.setNewData(chatMessageList);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        switch (id) {
+            case R.id.btn_back:
+                pop();
+                break;
+            case R.id.btn_emoji:
+                btnTool.setSelected(false);
+                if (btnEmoji.isSelected()) {
+                    btnEmoji.setSelected(false);
+                    showInput();
+                } else {
+                    btnEmoji.setSelected(true);
+                    showEmoji();
+                }
+                break;
+            case R.id.btn_tool:
+                btnEmoji.setSelected(false);
+                if (action == ACTION_SEND_MESSAGE) {
+                    String message = etMessage.getText().toString();
+                    SLog.info("message[%s]", message);
+                    etMessage.setText("");
+                    btnTool.setSelected(false);
+
+                    sendMessage(message);
+                    return;
+                }
+                if (btnTool.isSelected()) {
+                    btnTool.setSelected(false);
+                    showInput();
+                } else {
+                    btnTool.setSelected(true);
+                    showTool();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void initChatUI(View contentView) {
+        rvMessageList = contentView.findViewById(R.id.rv_message_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        rvMessageList.setLayoutManager(layoutManager);
+
+        chatMessageAdapter = new ChatMessageAdapter(R.layout.chat_message_item, chatMessageList);
+        rvMessageList.setAdapter(chatMessageAdapter);
+    }
+
+
+    /**
+     * 初始化表情輸入面板
+     * @param contentView
+     */
+    private void initEmojiPage(View contentView) {
+        rvEmojiPageList = contentView.findViewById(R.id.rv_emoji_page_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
         rvEmojiPageList.setLayoutManager(layoutManager);
 
@@ -112,8 +226,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         (new PagerSnapHelper()).attachToRecyclerView(rvEmojiPageList);
 
 
-        adapter = new EmojiPageAdapter(R.layout.emoji_page, emojiPageList);
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        emojiPageAdapter = new EmojiPageAdapter(R.layout.emoji_page, emojiPageList);
+        emojiPageAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 EmojiPage emojiPage = emojiPageList.get(position);
@@ -179,50 +293,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }
             }
         });
-        rvEmojiPageList.setAdapter(adapter);
-
-        loadEmojiData();
-    }
-
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-
-        switch (id) {
-            case R.id.btn_back:
-                pop();
-                break;
-            case R.id.btn_emoji:
-                btnTool.setSelected(false);
-                if (btnEmoji.isSelected()) {
-                    btnEmoji.setSelected(false);
-                    showInput();
-                } else {
-                    btnEmoji.setSelected(true);
-                    showEmoji();
-                }
-                break;
-            case R.id.btn_tool:
-                btnEmoji.setSelected(false);
-                if (action == ACTION_SEND_MESSAGE) {
-                    String message = etMessage.getText().toString();
-                    SLog.info("message[%s]", message);
-                    etMessage.setText("");
-                    btnTool.setSelected(false);
-
-                    return;
-                }
-                if (btnTool.isSelected()) {
-                    btnTool.setSelected(false);
-                    showInput();
-                } else {
-                    btnTool.setSelected(true);
-                    showTool();
-                }
-                break;
-            default:
-                break;
-        }
+        rvEmojiPageList.setAdapter(emojiPageAdapter);
     }
 
     private void loadEmojiData() {
@@ -251,6 +322,30 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             emojiPageList.add(emojiPage);
         }
+    }
+
+    private void sendMessage(String content) {
+        SLog.info("content[%s]", content);
+        //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
+        EMMessage message = EMMessage.createTxtSendMessage(content, friendItem.memberName);
+        //发送消息
+        EMClient.getInstance().chatManager().sendMessage(message);
+        message.setMessageStatusCallback(new EMCallBack(){
+            @Override
+            public void onSuccess() {
+                SLog.info("onSuccess, body[%s]", message.getBody());
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                SLog.info("onError, i[%d], s[%s]", i, s);
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+                SLog.info("onProgress, i[%d], s[%s]", i, s);
+            }
+        });
     }
 
     /**

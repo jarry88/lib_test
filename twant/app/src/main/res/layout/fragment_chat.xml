@@ -25,12 +25,13 @@
             />
 
         <TextView
+            android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
-            android:text="corrizi旗艦店"
+            android:text=""
             />
 
         <com.ftofs.twant.widget.ScaledButton
@@ -60,6 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="#F3F3F3"
             />
 
         <!-- 底部工具条 -->
