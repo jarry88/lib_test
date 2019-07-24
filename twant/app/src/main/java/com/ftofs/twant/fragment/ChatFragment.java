@@ -28,11 +28,13 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ChatMessageAdapter;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.entity.FriendItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
 import com.hyphenate.EMCallBack;
@@ -79,6 +81,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     ChatMessageAdapter chatMessageAdapter;
     List<ChatMessage> chatMessageList = new ArrayList<>();
 
+    String myMemberName;
+
     public static ChatFragment newInstance(FriendItem friendItem) {
         Bundle args = new Bundle();
 
@@ -121,6 +125,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         etMessage.setOnTouchListener(this);
         view.findViewById(R.id.rv_message_list).setOnTouchListener(this);
 
+        myMemberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
+
         Util.setOnClickListener(view, R.id.btn_back, this);
 
         initEmojiPage(view);
@@ -130,19 +136,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         loadChatData();
     }
 
+    /**
+     * 消息列表滾動到底部
+     */
+    private void messageListScrollToBottom() {
+        rvMessageList.scrollToPosition(chatMessageAdapter.getItemCount() - 1);
+    }
+
     private void loadChatData() {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(friendItem.memberName);
         //获取此会话的所有消息
         String startMsgId = "";
         List<EMMessage> messages = conversation.getAllMessages();
         SLog.info("消息條數[%d]", messages.size());
+
+        EMMessage lastMessage = null;
+
         for (EMMessage emMessage : messages) {
             startMsgId = emMessage.getMsgId();
             SLog.info("message[%s]", emMessage.toString());
-
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.content = emMessage.getBody().toString();
-            chatMessageList.add(chatMessage);
+            lastMessage = emMessage;
         }
 
         //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
@@ -151,13 +164,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
         for (EMMessage emMessage : messages) {
             SLog.info("message[%s]", emMessage.toString());
+            chatMessageList.add(emMessageToChatMessage(emMessage));
+        }
 
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.content = emMessage.getBody().toString();
-            chatMessageList.add(chatMessage);
+        if (lastMessage != null) {
+            chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
 
         chatMessageAdapter.setNewData(chatMessageList);
+    }
+
+    private ChatMessage emMessageToChatMessage(EMMessage emMessage) {
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.content = emMessage.getBody().toString();
+        if (emMessage.getFrom().equals(myMemberName)) {
+            chatMessage.origin = ChatMessage.MY_MESSAGE;
+        } else {
+            chatMessage.origin = ChatMessage.YOUR_MESSAGE;
+        }
+        chatMessage.timestamp = emMessage.getMsgTime();
+        chatMessageList.add(chatMessage);
+
+        return chatMessage;
     }
 
     @Override
@@ -346,6 +374,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 SLog.info("onProgress, i[%d], s[%s]", i, s);
             }
         });
+
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.content = "txt:" + "\"" + content + "\"";
+        chatMessage.origin = ChatMessage.MY_MESSAGE;
+        chatMessage.timestamp = System.currentTimeMillis();
+        chatMessageList.add(chatMessage);
+
+        chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+        messageListScrollToBottom();
     }
 
     /**

@@ -68,6 +68,9 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
 
     public static MainFragment getInstance() {
+        if (instance == null) {
+
+        }
         return instance;
     }
 

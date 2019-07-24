@@ -41,6 +41,8 @@ public class Constant {
     public static final int POPUP_TYPE_DEADLINE = 5;  // 選擇截止日期
     public static final int POPUP_TYPE_BUDGET_PRICE = 6;
     public static final int POPUP_TYPE_ARTICLE_CATEGORY = 7;  // 帖文分类
+    public static final int POPUP_TYPE_SHIPPING_TIME = 8;  // 發貨時間
+    public static final int POPUP_TYPE_PAY_WAY = 9;
 
 
     /**

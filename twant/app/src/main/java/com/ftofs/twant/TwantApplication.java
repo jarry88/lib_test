@@ -25,6 +25,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMOptions;
 import com.macau.pay.sdk.MPaySdk;
+import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
@@ -145,9 +146,11 @@ public class TwantApplication extends Application {
 
         // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT
         if (Config.DEVELOPER_MODE) {
-            MPaySdk.setEnvironmentType(2);
+            ConstantBase.MPayPackageName = ConstantBase.mpay_uat_packetname;
+            MPaySdk.setEnvironmentType(ConstantBase.ConnectUrl_UAT);
         } else {
-            MPaySdk.setEnvironmentType(0);
+            ConstantBase.MPayPackageName = ConstantBase.mpay_prd_packetname;
+            MPaySdk.setEnvironmentType(ConstantBase.ConnectUrl_PRD);
         }
 
         // 初始化ZXing二維碼庫

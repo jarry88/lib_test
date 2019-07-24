@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.Receipt;
+import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -40,7 +41,6 @@ import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.PayPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.macau.pay.sdk.MacauPaySdk;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,10 +50,6 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
-
-import static com.ftofs.twant.widget.ListPopup.LIST_POPUP_TYPE_PAY_WAY;
-import static com.ftofs.twant.widget.ListPopup.LIST_POPUP_TYPE_SHIPPING_TIME;
 
 
 /**
@@ -82,6 +78,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
     RelativeLayout btnAddShippingAddress;
     LinearLayout btnChangeShippingAddress;
+    LinearLayout llSelfFetchInfoContainer;
 
     BaseQuickAdapter adapter;
     List<MultiItemEntity> confirmOrderItemList = new ArrayList<>();
@@ -91,6 +88,17 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_ONLINE, Constant.PAYMENT_TYPE_CODE_OFFLINE,
             Constant.PAYMENT_TYPE_CODE_CHAIN};
 
+    boolean isFirstShowSelfFetchInfo = true; // 是否首次顯示門店自提信息，如果是，則自動填充默認地址信息
+    EditText etSelfFetchNickname;
+    EditText etSelfFetchMobile;
+    LinearLayout btnChangeSelfFetchMobileZone;
+    TextView tvSelfFetchMobileZone;
+
+    List<MobileZone> mobileZoneList = new ArrayList<>();
+    /**
+     * 當前選中的區號索引
+     */
+    private int selectedMobileZoneIndex = 0;
 
     /**
      * 提交訂單時上去的店鋪列表
@@ -146,12 +154,19 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
 
         btnAddShippingAddress = view.findViewById(R.id.btn_add_shipping_address);
+        btnAddShippingAddress.setOnClickListener(this);
         btnChangeShippingAddress = view.findViewById(R.id.btn_change_shipping_address);
+        btnChangeShippingAddress.setOnClickListener(this);
+        llSelfFetchInfoContainer = view.findViewById(R.id.ll_self_fetch_info_container);
+
+        etSelfFetchNickname = view.findViewById(R.id.et_self_fetch_nickname);
+        etSelfFetchMobile = view.findViewById(R.id.et_self_fetch_mobile);
+        btnChangeSelfFetchMobileZone = view.findViewById(R.id.btn_change_self_fetch_mobile_zone);
+        btnChangeSelfFetchMobileZone.setOnClickListener(this);
+        tvSelfFetchMobileZone = view.findViewById(R.id.tv_self_fetch_mobile_zone);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
-        Util.setOnClickListener(view, R.id.btn_add_shipping_address, this);
-        Util.setOnClickListener(view, R.id.btn_change_shipping_address, this);
 
         RecyclerView rvStoreList = view.findViewById(R.id.rv_store_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -181,6 +196,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         rvStoreList.setAdapter(adapter);
 
         loadBillData();
+
+        getMobileZoneList();
     }
 
     @Override
@@ -194,8 +211,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_pay_fetch),
-                        LIST_POPUP_TYPE_PAY_WAY, payWayItemList, payWayIndex, this))
+                .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_pay_way),
+                        Constant.POPUP_TYPE_PAY_WAY, payWayItemList, payWayIndex, this))
                 .show();
     }
 
@@ -205,7 +222,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
                 .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_shipping_time),
-                        LIST_POPUP_TYPE_SHIPPING_TIME, shippingItemList, storeItem.shipTimeType, this, position))
+                        Constant.POPUP_TYPE_SHIPPING_TIME, shippingItemList, storeItem.shipTimeType, this, position))
                 .show();
     }
 
@@ -358,7 +375,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         if (paymentTypeCode.equals(Constant.PAYMENT_TYPE_CODE_ONLINE)) {
                             SLog.info("在線支付方式");
 
-
                             try {
                                 int payId = responseObj.getInt("datas.payId");
                                 new XPopup.Builder(_mActivity)
@@ -383,6 +399,20 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.ADD_ADDRESS.ordinal());
         } else if (id == R.id.btn_change_shipping_address) {
             startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
+        } else if (id == R.id.btn_change_self_fetch_mobile_zone) {
+            List<ListPopupItem> itemList = new ArrayList<>();
+            for (MobileZone mobileZone : mobileZoneList) {
+                ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);
+                itemList.add(item);
+            }
+
+            hideSoftInput();
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
+                            Constant.POPUP_TYPE_MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
+                    .show();
         }
     }
 
@@ -448,6 +478,26 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             tvMobile.setText(mAddrItem.mobPhone);
             tvAddress.setText(mAddrItem.areaInfo + " " + mAddrItem.address);
         }
+    }
+
+    /**
+     * 顯示自提信息
+     */
+    private void showSelfFetchInfo() {
+        btnAddShippingAddress.setVisibility(View.GONE);
+        btnChangeShippingAddress.setVisibility(View.GONE);
+
+        if (isFirstShowSelfFetchInfo) {  // 首次顯示自提信息
+            if (mAddrItem != null) {
+                etSelfFetchNickname.setText(mAddrItem.realName);
+                etSelfFetchMobile.setText(mAddrItem.mobPhone);
+
+                SLog.info("mAddrItem[%s]", mAddrItem.toString());
+            }
+
+            isFirstShowSelfFetchInfo = false;
+        }
+        llSelfFetchInfoContainer.setVisibility(View.VISIBLE);
     }
 
     private void loadBillData() {
@@ -630,7 +680,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onSelected(int type, int id, Object extra) {
-        if (type == LIST_POPUP_TYPE_PAY_WAY) {
+        if (type == Constant.POPUP_TYPE_PAY_WAY) {
             payWayIndex = id;
             SLog.info("payWayIndex[%d]", payWayIndex);
             ConfirmOrderSummaryItem summaryItem = getSummaryItem();
@@ -641,11 +691,27 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             summaryItem.paymentTypeCode = getPaymentTypeCode(payWayIndex);
             SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
             adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
-        } else if (type == LIST_POPUP_TYPE_SHIPPING_TIME) {
+
+            if (payWayIndex == 2) { // 門店自提
+                showSelfFetchInfo();
+            } else { // 在線支付 或 貨到付款
+                llSelfFetchInfoContainer.setVisibility(View.GONE);
+                updateAddrView();
+            }
+        } else if (type == Constant.POPUP_TYPE_SHIPPING_TIME) {
             int position = (int) extra;
             ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
             storeItem.shipTimeType = id;
             adapter.notifyItemChanged(position);
+        } else if (type == Constant.POPUP_TYPE_MOBILE_ZONE) {
+            SLog.info("selectedMobileZoneIndex[%d], id[%d]", selectedMobileZoneIndex, id);
+            if (this.selectedMobileZoneIndex == id) {
+                return;
+            }
+
+            this.selectedMobileZoneIndex = id;
+            String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
+            tvSelfFetchMobileZone.setText(areaName);
         }
     }
 
@@ -659,5 +725,25 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
     private String getPaymentTypeCode(int index) {
         return paymentTypeCodeArr[index];
+    }
+
+    /**
+     * 获取区号列表
+     */
+    private void getMobileZoneList() {
+        Api.getMobileZoneList(new TaskObserver() {
+            @Override
+            public void onMessage() {
+                mobileZoneList = (List<MobileZone>) message;
+                if (mobileZoneList == null) {
+                    return;
+                }
+                SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
+                if (mobileZoneList.size() > 0) {
+                    SLog.info("areaName[%s]", mobileZoneList.get(0).areaName);
+                    tvSelfFetchMobileZone.setText(mobileZoneList.get(0).areaName);
+                }
+            }
+        });
     }
 }

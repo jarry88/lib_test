@@ -27,9 +27,6 @@ import java.util.List;
 public class ListPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
     Context context;
 
-    public static final int LIST_POPUP_TYPE_PAY_WAY = 1;
-    public static final int LIST_POPUP_TYPE_SHIPPING_TIME = 2;
-
     String title; // 彈出框的標題
     List<ListPopupItem> itemList;
     int index; // 選中的index
@@ -114,7 +111,7 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
     @Override
     public void onSelected(int type, int id, Object extra) {
         SLog.info("onSelected, type[%d], id[%d], args[%s], extra[%s]", type, id, args, extra);
-        if (type == LIST_POPUP_TYPE_SHIPPING_TIME) {
+        if (type == Constant.POPUP_TYPE_SHIPPING_TIME) {
             extra = args;
         }
         onSelectedListener.onSelected(type, id, extra);
