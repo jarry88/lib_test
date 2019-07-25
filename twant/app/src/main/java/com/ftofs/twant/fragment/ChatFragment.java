@@ -276,6 +276,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         rvMessageList.setLayoutManager(layoutManager);
 
         chatMessageAdapter = new ChatMessageAdapter(R.layout.chat_message_item, chatMessageList);
+        chatMessageAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("onItemChildClick");
+            }
+        });
+        chatMessageAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
+            @Override
+            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("onItemChildLongClick");
+                return false;
+            }
+        });
+
         rvMessageList.setAdapter(chatMessageAdapter);
     }
 
@@ -416,9 +430,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         });
 
         ChatMessage chatMessage = new ChatMessage();
+        chatMessage.messageId = message.getMsgId();
         chatMessage.content = "txt:" + "\"" + content + "\"";
         chatMessage.origin = ChatMessage.MY_MESSAGE;
-        chatMessage.timestamp = System.currentTimeMillis();
+        chatMessage.timestamp = message.getMsgTime();
         chatMessageList.add(chatMessage);
 
         chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);

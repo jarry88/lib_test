@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * 文件操作
@@ -77,5 +80,31 @@ public class FileUtil {
             }
         }
         return data;
+    }
+
+    /**
+     * 讀取小文件
+     * @param file
+     * @return
+     */
+    public static byte[] readFile(File file) {
+        if (!file.isFile()) {
+            return null;
+        }
+
+        long size = file.length();
+        byte[] buffer = new byte[(int) size];
+
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            fis.read(buffer);
+            return buffer;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

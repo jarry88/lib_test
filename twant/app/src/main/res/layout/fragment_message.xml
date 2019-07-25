@@ -58,56 +58,11 @@
 
 
     </RelativeLayout>
+    <!-- END OF 工具欄 -->
 
-    <!-- 交易物流消息 -->
-    <LinearLayout
-        android:id="@+id/btn_view_logistics_message"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_chat_conversation_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/bottom_separator_box"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/icon_logistics_message"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            android:text="@string/text_logistics_message"
-            />
-    </LinearLayout>
-
-    <!-- 退換貨消息 -->
-    <LinearLayout
-        android:id="@+id/btn_view_refund_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/bottom_separator_box"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/icon_refund_message"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            android:text="@string/text_refund_message"
-            />
-    </LinearLayout>
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

@@ -8,6 +8,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.task.DownloadEmojiTask;
+import com.ftofs.twant.task.UpdateFriendInfoTask;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
@@ -72,9 +73,13 @@ public class SqliteUtil {
             emClient.loginWithToken(memberName, imToken, new EMCallBack() {//回调
                 @Override
                 public void onSuccess() {
+                    SLog.info("threadId[%s]", Thread.currentThread().getId());
                     EMClient.getInstance().groupManager().loadAllGroups();
                     EMClient.getInstance().chatManager().loadAllConversations();
                     SLog.info("登录聊天服务器成功！");
+
+                    // 登錄聊天服務器成功，更新會話列表
+                    TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(null));
                 }
 
                 @Override

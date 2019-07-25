@@ -29,24 +29,27 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, ChatMessage item) {
+        helper.addOnClickListener(R.id.img_my_avatar, R.id.img_your_avatar);
+        helper.addOnLongClickListener(R.id.tv_message);
+
         String timestamp = Time.fromMillisUnixtime(item.timestamp, "Y-m-d H:i:s");
         helper.setText(R.id.tv_message_time, timestamp);
 
-        if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
-            TextView textView = helper.getView(R.id.tv_my_message);
-            helper.setGone(R.id.rl_your_message_container, false);
-            helper.setGone(R.id.rl_my_message_container, true);
-            textView.setText(getMessageText(item.content, (int) textView.getTextSize()));
+        TextView textView = helper.getView(R.id.tv_message);
+        textView.setText(getMessageText(item.content, (int) textView.getTextSize()));
 
+        if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
             // 設置頭像
             ImageView imgMyAvatar = helper.getView(R.id.img_my_avatar);
             Glide.with(mContext).load(myAvatarUrl).centerCrop().into(imgMyAvatar);
+            helper.setGone(R.id.img_your_avatar, false);
+            helper.setGone(R.id.img_my_avatar, true);
         } else { // 是別人的消息
-            TextView textView = helper.getView(R.id.tv_your_message);
-            helper.setGone(R.id.rl_my_message_container, false);
-            helper.setGone(R.id.rl_your_message_container, true);
-            textView.setText(getMessageText(item.content, (int) textView.getTextSize()));
+
+            helper.setGone(R.id.img_my_avatar, false);
+            helper.setGone(R.id.img_your_avatar, true);
         }
+
 
         int itemCount = getItemCount();
         int position = helper.getAdapterPosition();

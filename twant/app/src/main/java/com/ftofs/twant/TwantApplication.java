@@ -12,6 +12,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.Test;
@@ -123,7 +124,8 @@ public class TwantApplication extends Application {
 
         /* 添加各個表，如果新增表，需要在這里添加表，然后增加數據庫版本號
            例如： SqliteUtil.addTables(Table1.class.getName(), Table2.class.getName()); */
-        SqliteUtil.addTables(Test.class.getName(), UserStatus.class.getName(), Emoji.class.getName());
+        SqliteUtil.addTables(Test.class.getName(), UserStatus.class.getName(), Emoji.class.getName(),
+                FriendInfo.class.getName());
 
         Fragmentation.builder()
                 // show stack view. Mode: BUBBLE, SHAKE, NONE

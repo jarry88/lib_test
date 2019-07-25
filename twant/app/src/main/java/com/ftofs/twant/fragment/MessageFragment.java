@@ -4,18 +4,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.ChatConversationAdapter;
+import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.ChatConversation;
+import com.ftofs.twant.entity.FriendItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenuMessage;
 import com.ftofs.twant.widget.ScaledButton;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
 import com.lxj.xpopup.XPopup;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -28,6 +43,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
      */
     boolean isStandalone;
     ScaledButton btnBack;
+    ChatConversationAdapter adapter;
+
+    List<ChatConversation> chatConversationList = new ArrayList<>();
 
     public static MessageFragment newInstance(boolean isStandalone) {
         Bundle args = new Bundle();
@@ -63,13 +81,55 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             btnBack.setOnClickListener(this);
             btnBack.setVisibility(View.VISIBLE);
         }
+
+        // 添加【交易物流消息】、【退換貨消息】
+        chatConversationList.add(new ChatConversation(ChatConversation.ITEM_TYPE_LOGISTICS));
+        chatConversationList.add(new ChatConversation(ChatConversation.ITEM_TYPE_RETURN));
+
+        // 獲取環信所有會話列表
+        Map<String, EMConversation> conversationMap = EMClient.getInstance().chatManager().getAllConversations();
+        SLog.info("會話數[%d]", conversationMap.size());
+        for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
+            String key = entry.getKey();
+            EMConversation value = entry.getValue();
+            EMMessage lastMessage = value.getLastMessage();
+            long timestamp = lastMessage.getMsgTime();
+            SLog.info("key[%s], lastMessage[%s], timestamp[%s]",
+                    key, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"));
+
+            chatConversationList.add(new ChatConversation(ChatConversation.ITEM_TYPE_IM));
+        }
+
+        RecyclerView rvChatConversationList = view.findViewById(R.id.rv_chat_conversation_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        rvChatConversationList.setLayoutManager(layoutManager);
+
+
+        adapter = new ChatConversationAdapter(chatConversationList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ChatConversation chatConversation = chatConversationList.get(position);
+                int itemType = chatConversation.itemType;
+
+                MainFragment mainFragment = MainFragment.getInstance();
+                if (itemType == ChatConversation.ITEM_TYPE_LOGISTICS) {
+                    mainFragment.start(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_LOGISTICS));
+                } else if (itemType == ChatConversation.ITEM_TYPE_RETURN) {
+                    mainFragment.start(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
+                } else {
+                    FriendItem friendItem = new FriendItem();
+                    mainFragment.start(ChatFragment.newInstance(friendItem));
+                }
+            }
+        });
+        rvChatConversationList.setAdapter(adapter);
     }
 
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        MainFragment mainFragment = MainFragment.getInstance();
 
         if (id == R.id.btn_back) {
             pop();
@@ -83,9 +143,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     .asCustom(new BlackDropdownMenuMessage(_mActivity, this))
                     .show();
         } else if (id == R.id.btn_view_logistics_message) {
-            mainFragment.start(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_LOGISTICS));
         } else if (id == R.id.btn_view_refund_message) {
-            mainFragment.start(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
+
         }
     }
 

@@ -585,6 +585,11 @@ public class Api {
      */
     public static final String PATH_CONTACT_LIST = "/member/contact_list";
 
+    /**
+     * 查看好友信息
+     */
+    public static final String PATH_FRIEND_INFO = "/member/friend/friend_info";
+
 
     /**
      * 發送Http請求
