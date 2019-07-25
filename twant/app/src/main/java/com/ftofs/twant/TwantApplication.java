@@ -8,6 +8,9 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.ChatMessage;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.orm.Emoji;
@@ -28,6 +31,7 @@ import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.umeng.commonsdk.debug.E;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.litepal.LitePal;
@@ -41,6 +45,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.Fragmentation;
 
 /**
@@ -264,6 +269,16 @@ public class TwantApplication extends Application {
 
                     if (type == EMMessage.Type.TXT) {
                         SLog.info("收到文本消息");
+
+                        ChatMessage chatMessage = new ChatMessage();
+                        chatMessage.timestamp = message.getMsgTime();
+                        chatMessage.origin = ChatMessage.YOUR_MESSAGE;
+                        chatMessage.content = message.getBody().toString();
+                        chatMessage.avatar = "";
+                        chatMessage.memberName = message.getFrom();
+                        chatMessage.nickname = "";
+                        chatMessage.messageType = message.getType();
+                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE, chatMessage);
                     }
                 }
             }

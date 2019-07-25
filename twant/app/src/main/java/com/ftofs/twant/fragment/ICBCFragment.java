@@ -160,7 +160,7 @@ public class ICBCFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ICBC_PAY_FINISH) {
-            EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(message.data);
+            EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse((String) message.data);
             try {
                 if (easyJSONObject.getInt("payResult") == Constant.ONE) {
                     paymentView.setVisibility(View.INVISIBLE);

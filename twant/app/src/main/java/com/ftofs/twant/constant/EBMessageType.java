@@ -35,4 +35,9 @@ public enum EBMessageType {
      * 支付成功
      */
     MESSAGE_TYPE_PAY_SUCCESS,
+
+    /**
+     * 收到聊天消息
+     */
+    MESSAGE_TYPE_NEW_CHAT_MESSAGE,
 }

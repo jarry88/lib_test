@@ -805,7 +805,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             // 選擇規則完成
             SLog.info("data[%s]", message.data);
             try {
-                EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(message.data);
+                EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse((String) message.data);
                 int goodsId = easyJSONObject.getInt("goodsId");
                 buyNum = easyJSONObject.getInt("quantity");
                 selectSku(goodsId);

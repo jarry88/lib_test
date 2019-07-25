@@ -302,7 +302,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS) {
-            String avatarUrl = message.data;
+            String avatarUrl = (String) message.data;
             SLog.info("avatarUrl[%s]", avatarUrl);
             setUserAvatar(avatarUrl);
         }

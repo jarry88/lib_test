@@ -29,8 +29,10 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ChatMessageAdapter;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.entity.FriendItem;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
@@ -45,6 +47,9 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
@@ -107,6 +112,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
 
         Bundle args = getArguments();
         friendItem = args.getParcelable("friendItem");
@@ -139,6 +145,29 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         initChatUI(view);
         loadChatData();
+
+        messageListScrollToBottom();
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        // 如果退出登錄，顯示主頁
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE) {
+            SLog.info("收到新消息");
+            ChatMessage chatMessage = (ChatMessage) message.data;
+
+            chatMessageList.add(chatMessage);
+            chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+
+            messageListScrollToBottom();
+        }
     }
 
     /**
@@ -503,10 +532,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 view.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        SLog.info("滾動[%d]", diff);
-                        rvMessageList.scrollBy(0, -diff);
+                        int y;
+                        if (diff < 0) {
+                            y = -diff;
+                        } else {
+                            y = diff;
+                        }
+                        SLog.info("滾動y[%d]", y);
+                        rvMessageList.smoothScrollBy(0, y);
                     }
-                }, 100);
+                }, 200);
             }
         }
     }
