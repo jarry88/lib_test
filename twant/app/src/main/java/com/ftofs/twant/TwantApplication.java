@@ -48,6 +48,7 @@ import java.util.concurrent.TimeUnit;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.Fragmentation;
+import pl.com.salsoft.sqlitestudioremote.SQLiteStudioService;
 
 /**
  * TwantApplication
@@ -162,8 +163,17 @@ public class TwantApplication extends Application {
 
         // 初始化ZXing二維碼庫
         ZXingLibrary.initDisplayOpinion(this);
+
+        // 打開SQLiteStudio
+        SQLiteStudioService.instance().start(this);
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        SQLiteStudioService.instance().stop();
+    }
 
     public static ExecutorService getThreadPool() {
         return executorService;
