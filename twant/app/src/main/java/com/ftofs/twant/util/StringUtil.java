@@ -1,6 +1,15 @@
 package com.ftofs.twant.util;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
@@ -8,8 +17,15 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.Mobile;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.Emoji;
+import com.ftofs.twant.orm.UserStatus;
+import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -199,5 +215,56 @@ public class StringUtil {
         }
 
         return Config.OSS_BASE_URL + "/" + imageUrl;
+    }
+
+    /**
+     * 替換text文本中的表情占位符為圖片
+     * @param context
+     * @param text
+     * @param textSize  文本控件中的文字大小
+     * @return
+     */
+    public static Editable translateEmoji(Context context, String text, int textSize) {
+        SpannableStringBuilder spannableString = new SpannableStringBuilder(text);
+
+        List<Emoji> emojiList = LitePal.findAll(Emoji.class);
+        HashMap<String, String> emojiMap = new HashMap<>();
+        for (Emoji emoji : emojiList) {
+            emojiMap.put(emoji.emojiCode, emoji.absolutePath);
+        }
+
+        int len = text.length();
+        int startIndex = -1;
+        int stopIndex = -1;
+        for (int i = 0; i < len; i++) {
+            char ch = text.charAt(i);
+
+            if (ch == '[') {
+                startIndex = i;
+                stopIndex = -1;
+            } else if (ch == ']') {
+                stopIndex = i;
+                if (startIndex >= 0) { // 符合表情標簽格式
+                    String str = text.substring(startIndex, stopIndex + 1);
+                    SLog.info("str[%s]", str);
+                    String emojiAbsolutePath = emojiMap.get(str);
+
+                    if (emojiAbsolutePath != null) { // 如果是有效的表情
+                        Bitmap bitmap = BitmapFactory.decodeFile(emojiAbsolutePath);
+                        Drawable drawable = new BitmapDrawable(context.getResources(), bitmap);
+                        drawable.setBounds(0, 0, textSize + 12, textSize + 12);
+                        QMUIAlignMiddleImageSpan span = new QMUIAlignMiddleImageSpan(drawable, QMUIAlignMiddleImageSpan.ALIGN_MIDDLE);
+
+                        spannableString.setSpan(span, startIndex, stopIndex + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
+
+
+                startIndex = -1;
+                stopIndex = -1;
+            }
+        }
+
+        return spannableString;
     }
 }

@@ -1,5 +1,8 @@
 package com.ftofs.twant.orm;
 
+import com.ftofs.twant.log.SLog;
+
+import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 /**
@@ -16,4 +19,22 @@ public class UserStatus extends LitePalSupport {
 
     public int key;
     public String value;
+
+
+    /**
+     * 獲取當前用戶的表情版本號
+     * @return
+     */
+    public static String getEmojiVersion() {
+        UserStatus userStatus = LitePal.where("key = ?", String.valueOf(UserStatus.Key.KEY_EMOJI_VERSION.ordinal()))
+                .findFirst(UserStatus.class);
+
+        String emojiVersion = "";
+        if (userStatus != null) {
+            emojiVersion = userStatus.value;
+        }
+        SLog.info("emojiVersion[%s]", emojiVersion);
+
+        return emojiVersion;
+    }
 }

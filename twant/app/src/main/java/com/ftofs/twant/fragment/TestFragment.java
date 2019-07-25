@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
 
@@ -17,7 +19,7 @@ import com.ftofs.twant.widget.AdjustButton;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
-    AdjustButton abQuantity;
+    TextView textView;
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -39,28 +41,14 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         Util.setOnClickListener(view, R.id.btn_test, this);
 
-        abQuantity = view.findViewById(R.id.ab_quantity);
-        abQuantity.setMinValue(1, new AdjustButton.OutOfValueCallback() {
-            @Override
-            public void outOfValue() {
-                SLog.info("outOfMinValue, %d", abQuantity.getValue());
-            }
-        });
-
-        abQuantity.setMaxValue(5, new AdjustButton.OutOfValueCallback() {
-            @Override
-            public void outOfValue() {
-                SLog.info("outOfMaxValue, %d", abQuantity.getValue());
-            }
-        });
+        textView = view.findViewById(R.id.text_view);
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(TestFragment.newInstance());
+            textView.setText(StringUtil.translateEmoji(_mActivity, "[睡覺]東奔[睡覺]西走[思考]", (int) textView.getTextSize()));
         }
     }
 

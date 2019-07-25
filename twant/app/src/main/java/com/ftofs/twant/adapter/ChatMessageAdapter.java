@@ -2,7 +2,9 @@ package com.ftofs.twant.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -31,17 +33,19 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
         helper.setText(R.id.tv_message_time, timestamp);
 
         if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
+            TextView textView = helper.getView(R.id.tv_my_message);
             helper.setGone(R.id.rl_your_message_container, false);
             helper.setGone(R.id.rl_my_message_container, true);
-            helper.setText(R.id.tv_my_message, getMessageText(item.content));
+            textView.setText(getMessageText(item.content, (int) textView.getTextSize()));
 
             // 設置頭像
             ImageView imgMyAvatar = helper.getView(R.id.img_my_avatar);
             Glide.with(mContext).load(myAvatarUrl).centerCrop().into(imgMyAvatar);
         } else { // 是別人的消息
+            TextView textView = helper.getView(R.id.tv_your_message);
             helper.setGone(R.id.rl_my_message_container, false);
             helper.setGone(R.id.rl_your_message_container, true);
-            helper.setText(R.id.tv_your_message, getMessageText(item.content));
+            textView.setText(getMessageText(item.content, (int) textView.getTextSize()));
         }
 
         int itemCount = getItemCount();
@@ -53,8 +57,9 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
         }
     }
 
-    private String getMessageText(String message) {
+    private Editable getMessageText(String message, int textSize) {
         // txt:"abc" 返回 abc
-        return message.substring(5, message.length() - 1);
+        message = message.substring(5, message.length() - 1);
+        return StringUtil.translateEmoji(mContext, message, textSize);
     }
 }

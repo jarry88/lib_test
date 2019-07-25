@@ -48,6 +48,9 @@ public class DownloadEmojiTask implements Runnable {
 
             String versions = responseObj.getString("datas.versions");
 
+            // 先刪除所有舊的表情信息
+            LitePal.deleteAll(Emoji.class);
+
             EasyJSONArray emojiList = responseObj.getArray("datas.emojiList");
             boolean allSuceess = true; // 所有表情是否保存成功
             for (Object object : emojiList) {
