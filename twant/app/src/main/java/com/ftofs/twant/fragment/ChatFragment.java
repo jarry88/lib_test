@@ -34,10 +34,11 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
-import com.ftofs.twant.entity.FriendItem;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
+import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.task.UpdateFriendInfoTask;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
@@ -80,7 +81,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     View llEmojiPane;
     View llToolPane;
 
-    FriendItem friendItem;
+    FriendInfo friendInfo;
     RecyclerView rvEmojiPageList;
     EmojiPageAdapter emojiPageAdapter;
     List<EmojiPage> emojiPageList = new ArrayList<>();
@@ -90,11 +91,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     List<ChatMessage> chatMessageList = new ArrayList<>();
 
     String myMemberName;
+    String yourMemberName;
 
-    public static ChatFragment newInstance(FriendItem friendItem) {
+    TextView tvNickname;
+
+    public static ChatFragment newInstance(String yourMemberName) {
         Bundle args = new Bundle();
 
-        args.putParcelable("friendItem", friendItem);
+        args.putString("yourMemberName", yourMemberName);
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
 
@@ -115,10 +119,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         EventBus.getDefault().register(this);
 
         Bundle args = getArguments();
-        friendItem = args.getParcelable("friendItem");
+        yourMemberName = args.getString("yourMemberName");
+        friendInfo = LitePal.where("memberName = ?", yourMemberName).findFirst(FriendInfo.class);
+        if (friendInfo == null) {
+            SLog.info("好友信息[%s]為空，更新好友信息", yourMemberName);
+            TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(yourMemberName));
+        } else {
+            if (friendInfo.avatarImg == null) {
+                SLog.info("friendInfo.avatarImg is null");
+            } else {
+                SLog.info("friendInfo.avatarImg size[%d]", friendInfo.avatarImg.length);
+            }
+        }
 
-        TextView tvNickname = view.findViewById(R.id.tv_nickname);
-        tvNickname.setText(friendItem.nickname);
+        tvNickname = view.findViewById(R.id.tv_nickname);
         tvNickname.setOnClickListener(this);
 
         silMainContainer = view.findViewById(R.id.sil_main_container);
@@ -147,6 +161,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         loadChatData();
 
         messageListScrollToBottom();
+
+        bindFriendInfo();
+    }
+
+    private void bindFriendInfo() {
+        if (friendInfo != null) {
+            tvNickname.setText(friendInfo.nickname);
+        }
     }
 
 
@@ -178,7 +200,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void loadChatData() {
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(friendItem.memberName);
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName);
         //获取此会话的所有消息
         String startMsgId = "";
         List<EMMessage> messages = conversation.getAllMessages();
@@ -197,7 +219,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         int pagesize = 20;
         messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
         for (EMMessage emMessage : messages) {
-            SLog.info("message[%s]", emMessage.toString());
+            // SLog.info("message[%s]", emMessage.toString());
             chatMessageList.add(emMessageToChatMessage(emMessage));
         }
 
@@ -275,7 +297,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvMessageList.setLayoutManager(layoutManager);
 
-        chatMessageAdapter = new ChatMessageAdapter(R.layout.chat_message_item, chatMessageList);
+        byte[] yourAvatarData = null;
+        if (friendInfo != null) {
+            yourAvatarData = friendInfo.avatarImg;
+        }
+        chatMessageAdapter = new ChatMessageAdapter(R.layout.chat_message_item, chatMessageList, yourAvatarData);
         chatMessageAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -409,7 +435,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private void sendMessage(String content) {
         SLog.info("content[%s]", content);
         //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
-        EMMessage message = EMMessage.createTxtSendMessage(content, friendItem.memberName);
+        EMMessage message = EMMessage.createTxtSendMessage(content, yourMemberName);
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
         message.setMessageStatusCallback(new EMCallBack(){
@@ -539,24 +565,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onViewSizeChanged(View view, int w, int h, int oldw, int oldh) {
         int id = view.getId();
+        /*
+        微信鍵盤伸縮對消息列表的影響
+        1.如果展開軟鍵盤，消息列表滾動到最底
+        2.如果收縮鍵盤，消息列表中消息定位保持不變
+
+        目前的做法與【釘釘】的一致
+        1.如果展開軟鍵盤，消息列表滾動到最底
+        2.在展開軟鍵盤的情況下，點擊消息列表中的任一處地方，收縮軟鍵盤
+         */
         if (id == R.id.rv_message_list) {
             if (oldh > 0) {
                 int diff = h - oldh;
                 SLog.info("diff[%d]", diff);
-                // rvMessageList.scrollBy(0, -diff);
-                view.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        int y;
-                        if (diff < 0) {
-                            y = -diff;
-                        } else {
-                            y = diff;
-                        }
-                        SLog.info("滾動y[%d]", y);
-                        rvMessageList.smoothScrollBy(0, y);
-                    }
-                }, 200);
+                if (diff < 0) {  // 展開鍵盤
+                    messageListScrollToBottom();
+                }
             }
         }
     }

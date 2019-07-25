@@ -1,5 +1,7 @@
 package com.ftofs.twant.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -15,16 +17,18 @@ import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
 public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHolder> {
     String myAvatarUrl;
-
-    public ChatMessageAdapter(int layoutResId, @Nullable List<ChatMessage> data) {
+    byte[] yourAvatarData;  // 讀圖片文件讀出來的數據
+    public ChatMessageAdapter(int layoutResId, @Nullable List<ChatMessage> data, byte[] yourAvatarData) {
         super(layoutResId, data);
 
         myAvatarUrl = StringUtil.normalizeImageUrl(User.getUserInfo(SPField.FIELD_AVATAR, ""));
+        this.yourAvatarData = yourAvatarData;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
         helper.setText(R.id.tv_message_time, timestamp);
 
         TextView textView = helper.getView(R.id.tv_message);
-        textView.setText(getMessageText(item.content, (int) textView.getTextSize()));
+        textView.setText(StringUtil.getMessageText(mContext, item.content, (int) textView.getTextSize()));
 
         if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
             // 設置頭像
@@ -44,11 +48,21 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             Glide.with(mContext).load(myAvatarUrl).centerCrop().into(imgMyAvatar);
             helper.setGone(R.id.img_your_avatar, false);
             helper.setGone(R.id.img_my_avatar, true);
+            textView.setBackgroundResource(R.drawable.my_message_bg);
         } else { // 是別人的消息
+            // 設置頭像
+            ImageView imgYourAvatar = helper.getView(R.id.img_your_avatar);
+            if (yourAvatarData != null) {
+                Glide.with(mContext).load(yourAvatarData).centerCrop().into(imgYourAvatar);
+            }
 
             helper.setGone(R.id.img_my_avatar, false);
             helper.setGone(R.id.img_your_avatar, true);
+            textView.setBackgroundResource(R.drawable.your_message_bg);
         }
+        // 設置了background后，會重置Padding
+        textView.setPadding(Util.dip2px(mContext, 15), Util.dip2px(mContext, 12),
+                Util.dip2px(mContext, 15), Util.dip2px(mContext, 12));
 
 
         int itemCount = getItemCount();
@@ -58,11 +72,5 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
             layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
         }
-    }
-
-    private Editable getMessageText(String message, int textSize) {
-        // txt:"abc" 返回 abc
-        message = message.substring(5, message.length() - 1);
-        return StringUtil.translateEmoji(mContext, message, textSize);
     }
 }

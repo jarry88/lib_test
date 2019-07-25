@@ -13,12 +13,11 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
-import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ChatConversation;
-import com.ftofs.twant.entity.FriendItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenuMessage;
@@ -90,14 +89,23 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         Map<String, EMConversation> conversationMap = EMClient.getInstance().chatManager().getAllConversations();
         SLog.info("會話數[%d]", conversationMap.size());
         for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
-            String key = entry.getKey();
-            EMConversation value = entry.getValue();
-            EMMessage lastMessage = value.getLastMessage();
+            String memberName = entry.getKey();
+            EMConversation conversation = entry.getValue();
+            EMMessage lastMessage = conversation.getLastMessage();
             long timestamp = lastMessage.getMsgTime();
-            SLog.info("key[%s], lastMessage[%s], timestamp[%s]",
-                    key, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"));
+            SLog.info("memberName[%s], lastMessage[%s], timestamp[%s]",
+                    memberName, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"));
+            ChatConversation chatConversation = new ChatConversation(ChatConversation.ITEM_TYPE_IM);
 
-            chatConversationList.add(new ChatConversation(ChatConversation.ITEM_TYPE_IM));
+            FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
+            if (friendInfo != null) {
+                chatConversation.friendInfo = friendInfo;
+            }
+            chatConversation.unreadCount = conversation.getUnreadMsgCount();
+            chatConversation.lastMessage = lastMessage.getBody().toString();
+            chatConversation.timestamp = lastMessage.getMsgTime();
+
+            chatConversationList.add(chatConversation);
         }
 
         RecyclerView rvChatConversationList = view.findViewById(R.id.rv_chat_conversation_list);
@@ -118,8 +126,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 } else if (itemType == ChatConversation.ITEM_TYPE_RETURN) {
                     mainFragment.start(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
                 } else {
-                    FriendItem friendItem = new FriendItem();
-                    mainFragment.start(ChatFragment.newInstance(friendItem));
+                    String memberName = chatConversation.friendInfo.memberName;
+                    mainFragment.start(ChatFragment.newInstance(memberName));
                 }
             }
         });

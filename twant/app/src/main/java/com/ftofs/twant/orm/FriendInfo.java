@@ -1,5 +1,6 @@
 package com.ftofs.twant.orm;
 
+import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 /**
@@ -16,4 +17,8 @@ public class FriendInfo extends LitePalSupport {
     public String memberSignature;
     public String memberBio;
     public long updateTime;  // 好友資料更新時間
+
+    public static FriendInfo getFriendInfoByMemberName(String memberName) {
+        return LitePal.where("memberName = ?", memberName).findFirst(FriendInfo.class);
+    }
 }

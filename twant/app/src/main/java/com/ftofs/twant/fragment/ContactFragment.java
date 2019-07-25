@@ -13,11 +13,10 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FriendItemListAdapter;
-import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.entity.FriendItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -39,7 +38,7 @@ import okhttp3.Call;
 public class ContactFragment extends BaseFragment implements View.OnClickListener {
     TextView tvFragmentTitle;
 
-    List<FriendItem> friendItemList = new ArrayList<>();
+    List<FriendInfo> friendInfoList = new ArrayList<>();
     FriendItemListAdapter adapter;
 
     public static ContactFragment newInstance() {
@@ -67,14 +66,14 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
         RecyclerView rvContactList = view.findViewById(R.id.rv_contact_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvContactList.setLayoutManager(layoutManager);
-        adapter = new FriendItemListAdapter(R.layout.layout_friend_item, friendItemList);
+        adapter = new FriendItemListAdapter(R.layout.layout_friend_item, friendInfoList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                FriendItem friendItem = friendItemList.get(position);
+                FriendInfo friendInfo = friendInfoList.get(position);
 
                 MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(ChatFragment.newInstance(friendItem));
+                mainFragment.start(ChatFragment.newInstance(friendInfo.memberName));
             }
         });
         rvContactList.setAdapter(adapter);
@@ -131,17 +130,17 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
 
                     for (Object object : friendList) {
                         EasyJSONObject friend = (EasyJSONObject) object;
-                        FriendItem friendItem = new FriendItem();
-                        friendItem.memberId = friend.getInt("memberId");
-                        friendItem.memberName = friend.getString("memberName");
-                        friendItem.avatarUrl = friend.getString("avatar");
-                        friendItem.gender = friend.getInt("memberSex");
-                        friendItem.nickname = friend.getString("nickName");
+                        FriendInfo friendInfo = new FriendInfo();
+                        friendInfo.userId = friend.getInt("memberId");
+                        friendInfo.memberName = friend.getString("memberName");
+                        friendInfo.avatarUrl = friend.getString("avatar");
+                        friendInfo.gender = friend.getInt("memberSex");
+                        friendInfo.nickname = friend.getString("nickName");
 
-                        friendItemList.add(friendItem);
+                        friendInfoList.add(friendInfo);
                     }
 
-                    adapter.setNewData(friendItemList);
+                    adapter.setNewData(friendInfoList);
                 } catch (Exception e) {
 
                 }
