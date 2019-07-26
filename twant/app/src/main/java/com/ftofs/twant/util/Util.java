@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.LoginFragment;
@@ -27,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.snailpad.easyjson.EasyJSONObject;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 
 /**
@@ -309,5 +311,15 @@ public class Util {
                 ToastUtil.error(context, "解析二維碼失敗");
             }
         }
+    }
+
+    public static void startFragment(ISupportFragment fragment) {
+        MainFragment mainFragment = MainFragment.getInstance();
+        if (mainFragment == null) {
+            ToastUtil.error(TwantApplication.getContext(), "MainFragment為空");
+            return;
+        }
+
+        mainFragment.start(fragment);
     }
 }

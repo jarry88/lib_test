@@ -7,6 +7,7 @@ package com.ftofs.twant.entity;
 public class CustomerServiceStaff {
     public int staffId;
     public String staffName;
+    public String memberName;
     public String avatar;
     public String welcomeMessage;
 }

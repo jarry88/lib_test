@@ -184,9 +184,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE) {
             SLog.info("收到新消息");
             ChatMessage chatMessage = (ChatMessage) message.data;
+            if (yourMemberName.equals(chatMessage.toMemberName)) {
 
-            chatMessageList.add(chatMessage);
-            chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+            }
+
 
             messageListScrollToBottom();
         }

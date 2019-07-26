@@ -1,4 +1,4 @@
-package com.example;
+package com.ftofs.twant.util;
 
 import java.util.Date;
 
@@ -53,7 +53,13 @@ public class Jarbon {
 
         Date date = new Date(timestamp);
         year = date.getYear();
-        month =
+        month = date.getMonth();
+        day = date.getDay();
+
+        hour = date.getHours();
+        minute = date.getMinutes();
+        second = date.getSeconds();
+        milliSecond = (int) (date.getTime() % 1000);
     }
 
     /**

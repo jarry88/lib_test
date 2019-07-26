@@ -287,7 +287,8 @@ public class TwantApplication extends Application {
                         chatMessage.origin = ChatMessage.YOUR_MESSAGE;
                         chatMessage.content = message.getBody().toString();
                         chatMessage.avatar = "";
-                        chatMessage.memberName = message.getFrom();
+                        chatMessage.fromMemberName = message.getFrom();
+                        chatMessage.toMemberName = message.getTo();
                         chatMessage.nickname = "";
                         chatMessage.messageType = message.getType();
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE, chatMessage);

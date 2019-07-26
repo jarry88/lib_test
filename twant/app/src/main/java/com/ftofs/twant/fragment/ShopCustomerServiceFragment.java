@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CustomerServiceStaffListAdapter;
-import com.ftofs.twant.adapter.FollowMeAvatarAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -77,6 +77,20 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
         GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, LinearLayoutManager.VERTICAL, false);
         rvStaffList.setLayoutManager(layoutManager);
         adapter = new CustomerServiceStaffListAdapter(R.layout.store_customer_service_staff, customerServiceStaffList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                CustomerServiceStaff staff = customerServiceStaffList.get(position);
+                // staff.welcomeMessage
+
+                String memberName = staff.memberName;
+                SLog.info("memberName[%s]", memberName);
+                MainFragment mainFragment = MainFragment.getInstance();
+                if (mainFragment != null) {
+
+                }
+            }
+        });
         rvStaffList.setAdapter(adapter);
 
         loadStaffData();
@@ -141,6 +155,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
                             staff.staffId = storeServiceStaffVo.getInt("staffId");
                             staff.staffName = storeServiceStaffVo.getString("staffName");
+                            staff.memberName = storeServiceStaffVo.getString("memberName");
                             staff.avatar = storeServiceStaffVo.getString("avatar");
                             staff.welcomeMessage = storeServiceStaffVo.getString("welcome");
 

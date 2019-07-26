@@ -10,7 +10,8 @@ public class ChatMessage {
     public int origin; // 我發的消息還是別人發的消息
     public long timestamp; // 毫秒
     public EMMessage.Type messageType;
-    public String memberName;
+    public String fromMemberName;
+    public String toMemberName;
     public String nickname;
     public String avatar;
     public String content;
