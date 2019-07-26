@@ -189,23 +189,19 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 SLog.info("id[%d]", id);
 
                 if (id == R.id.btn_goto_goods) {
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(GoodsDetailFragment.newInstance(item.commonId));
+                    Util.startFragment(GoodsDetailFragment.newInstance(item.commonId));
                 } else if (id == R.id.btn_refund) {
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
+                    Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
                             "action", Constant.ACTION_REFUND,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
                 } else if (id == R.id.btn_return) {
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
+                    Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
                             "action", Constant.ACTION_RETURN,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
                 } else if (id == R.id.btn_complain) {
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
+                    Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
                             "action", Constant.ACTION_COMPLAIN,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
@@ -315,8 +311,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             } else if (tag.equals(TEXT_MEMBER_BUY_AGAIN)) {
                 orderOperation(ORDER_OPERATION_TYPE_BUY_AGAIN);
             } else if (tag.equals(TEXT_EVALUATION)) {
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(GoodsEvaluationFragment.newInstance());
+                Util.startFragment(GoodsEvaluationFragment.newInstance());
             } else if (tag.equals(TEXT_MEMBER_PAY)) {
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -340,7 +335,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             }
         }
 
-        MainFragment mainFragment = MainFragment.getInstance();
         int id = v.getId();
         switch (id) {
             case R.id.btn_back:
@@ -358,7 +352,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         .show();
                 break;
             case R.id.btn_goto_store:
-                mainFragment.start(ShopMainFragment.newInstance(storeId));
+                Util.startFragment(ShopMainFragment.newInstance(storeId));
                 break;
             default:
                 break;

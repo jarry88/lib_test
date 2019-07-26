@@ -146,8 +146,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                     categoryCommodity = categoryCommodityRow.categoryCommodityList.get(2);
                 }
 
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
                 EasyJSONObject.generate("cat", String.valueOf(categoryCommodity.categoryId)).toString()));
             }
         });

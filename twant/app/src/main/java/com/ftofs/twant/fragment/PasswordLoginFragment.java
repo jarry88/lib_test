@@ -205,8 +205,7 @@ public class PasswordLoginFragment extends BaseFragment implements
                             Constant.POPUP_TYPE_MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
         } else if (id == R.id.btn_forget_password) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(ResetPasswordFragment.newInstance());
+            Util.startFragment(ResetPasswordFragment.newInstance());
         }
     }
 

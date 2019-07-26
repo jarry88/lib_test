@@ -100,12 +100,10 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
         int id = v.getId();
         switch (id) {
             case R.id.btn_search_goods:
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(ShopSearchFragment.newInstance(parentFragment.getShopId(), responseStr));
+                Util.startFragment(ShopSearchFragment.newInstance(parentFragment.getShopId(), responseStr));
                 break;
             case R.id.btn_all_goods:
-                mainFragment = MainFragment.getInstance();
-                mainFragment.start(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", parentFragment.getShopId()).toString()));
+                Util.startFragment(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", parentFragment.getShopId()).toString()));
                 break;
             default:
                 break;
@@ -190,7 +188,6 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
         EasyJSONObject params = EasyJSONObject.generate(
                 "storeId", parentFragment.getShopId(),
                 "labelId", id);
-        MainFragment mainFragment = MainFragment.getInstance();
-        mainFragment.start(ShopCommodityFragment.newInstance(params.toString()));
+        Util.startFragment(ShopCommodityFragment.newInstance(params.toString()));
     }
 }

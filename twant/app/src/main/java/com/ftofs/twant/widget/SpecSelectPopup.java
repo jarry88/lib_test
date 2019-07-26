@@ -297,8 +297,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 "buyNum", abQuantity.getValue(),
                 "goodsId", goodsId));
 
-        MainFragment mainFragment = MainFragment.getInstance();
-        mainFragment.start(ConfirmBillFragment.newInstance(0, easyJSONArray.toString()));
+        Util.startFragment(ConfirmBillFragment.newInstance(0, easyJSONArray.toString()));
     }
 
     private void selectSpecs() {

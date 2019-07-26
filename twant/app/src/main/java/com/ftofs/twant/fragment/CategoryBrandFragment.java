@@ -23,6 +23,7 @@ import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,8 +85,7 @@ public class CategoryBrandFragment extends BaseFragment implements View.OnClickL
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 CategoryBrand categoryBrand = categoryBrandList.get(position);
                 SLog.info("brandId[%d]", categoryBrand.brandId);
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(), EasyJSONObject.generate(
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(), EasyJSONObject.generate(
                         "brand", categoryBrand.brandId).toString()));
             }
         });

@@ -386,8 +386,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                                 e.printStackTrace();
                             }
                         } else {
-                            MainFragment mainFragment = MainFragment.getInstance();
-                            mainFragment.start(PaySuccessFragment.newInstance(EasyJSONObject.generate().toString()));
+                            Util.startFragment(PaySuccessFragment.newInstance(EasyJSONObject.generate().toString()));
                             ToastUtil.success(_mActivity, "提交訂單成功");
                         }
                     }

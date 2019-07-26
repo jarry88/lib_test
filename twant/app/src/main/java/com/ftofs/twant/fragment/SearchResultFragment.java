@@ -193,8 +193,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     GoodsSearchItem goodsSearchItem = goodsItemList.get(position);
                     int commonId = goodsSearchItem.commonId;
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId));
                 }
             });
             mGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -203,8 +202,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     int id = view.getId();
                     if (id == R.id.btn_goto_store) {
                         GoodsSearchItem item = goodsItemList.get(position);
-                        MainFragment mainFragment = MainFragment.getInstance();
-                        mainFragment.start(ShopMainFragment.newInstance(item.storeId));
+                        Util.startFragment(ShopMainFragment.newInstance(item.storeId));
                     }
                 }
             });
@@ -226,8 +224,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     StoreSearchItem storeSearchItem = storeItemList.get(position);
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(ShopMainFragment.newInstance(storeSearchItem.storeId));
+                    Util.startFragment(ShopMainFragment.newInstance(storeSearchItem.storeId));
                 }
             });
         } else {
@@ -415,8 +412,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 showGoodsFilterPopup();
                 break;
             case R.id.btn_goto_cart:
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(CartFragment.newInstance(true));
+                Util.startFragment(CartFragment.newInstance(true));
                 break;
             case R.id.btn_goto_top:
                 rvSearchResultList.scrollToPosition(0);

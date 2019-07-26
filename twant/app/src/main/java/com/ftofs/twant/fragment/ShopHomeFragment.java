@@ -369,8 +369,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     commonId = pair.rightItem.commonId;
                                 }
 
-                                MainFragment mainFragment = MainFragment.getInstance();
-                                mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                                Util.startFragment(GoodsDetailFragment.newInstance(commonId));
                             }
                         });
                         newInGoodsAdapter.setData(storeNewInItemList);
@@ -423,8 +422,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     commonId = pair.rightItem.commonId;
                                 }
 
-                                MainFragment mainFragment = MainFragment.getInstance();
-                                mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                                Util.startFragment(GoodsDetailFragment.newInstance(commonId));
                             }
                         });
                         hotGoodsAdapter.setData(storeHotItemList);
@@ -498,8 +496,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         .show();
                 break;
             case R.id.btn_view_all_comment:
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
+                Util.startFragment(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
                 break;
             default:
                 break;

@@ -292,7 +292,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        MainFragment mainFragment = MainFragment.getInstance();
         int userId = User.getUserId();
 
         switch (id) {
@@ -308,7 +307,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_goto_cart:
                 if (userId > 0) {
-                    mainFragment.start(CartFragment.newInstance(true));
+                    Util.startFragment(CartFragment.newInstance(true));
                 } else {
                     Util.showLoginFragment();
                 }
@@ -337,7 +336,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 switchThumbState();
                 break;
             case R.id.btn_bottom_bar_shop:
-                mainFragment.start(ShopMainFragment.newInstance(storeId));
+                Util.startFragment(ShopMainFragment.newInstance(storeId));
                 break;
             case R.id.btn_show_voucher:
                 new XPopup.Builder(_mActivity)
@@ -368,7 +367,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_view_all_comment:
             case R.id.btn_goods_comment:
-                mainFragment.start(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
+                Util.startFragment(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
                 break;
             case R.id.btn_bottom_bar_customer_service:
                 new XPopup.Builder(_mActivity)

@@ -240,8 +240,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
         hideSoftInput();
 
-        MainFragment mainFragment = MainFragment.getInstance();
-        mainFragment.start(SearchResultFragment.newInstance(searchType.name(),
+        Util.startFragment(SearchResultFragment.newInstance(searchType.name(),
                 EasyJSONObject.generate("keyword", currentKeyword).toString()));
     }
 

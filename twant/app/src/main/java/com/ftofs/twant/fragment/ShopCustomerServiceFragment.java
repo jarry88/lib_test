@@ -23,6 +23,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -85,10 +86,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
                 String memberName = staff.memberName;
                 SLog.info("memberName[%s]", memberName);
-                MainFragment mainFragment = MainFragment.getInstance();
-                if (mainFragment != null) {
-
-                }
+                Util.startFragment(ChatFragment.newInstance(memberName));
             }
         });
         rvStaffList.setAdapter(adapter);

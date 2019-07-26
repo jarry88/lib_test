@@ -130,8 +130,7 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                     }))
                             .show();
                 } else if (id == R.id.btn_view_refund_info) {
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(RefundDetailFragment.newInstance(refundItem.refundId, EasyJSONObject.generate(
+                    Util.startFragment(RefundDetailFragment.newInstance(refundItem.refundId, EasyJSONObject.generate(
                             "action", action,
                             "goodsFullSpecs", refundItem.goodsFullSpecs,
                             "goodsPrice", refundItem.goodsPrice,

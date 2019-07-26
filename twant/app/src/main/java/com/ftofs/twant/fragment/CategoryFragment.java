@@ -77,18 +77,16 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
 
-        MainFragment mainFragment = MainFragment.getInstance();
-
         switch (id) {
             case R.id.btn_back:
                 pop();
                 break;
             case R.id.btn_search:
-                mainFragment.start(SearchFragment.newInstance());
+                Util.startFragment(SearchFragment.newInstance());
                 break;
             case R.id.btn_message:
                 if (User.getUserId() > 0) {
-                    mainFragment.start(MessageFragment.newInstance(true));
+                    Util.startFragment(MessageFragment.newInstance(true));
                 } else {
                     Util.showLoginFragment();
                 }

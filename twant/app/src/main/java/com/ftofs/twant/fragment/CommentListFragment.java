@@ -90,8 +90,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                 if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 } else if (id == R.id.btn_reply) {
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(CommentDetailFragment.newInstance(commentItem));
+                    Util.startFragment(CommentDetailFragment.newInstance(commentItem));
                 }
             }
         });
@@ -99,8 +98,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 CommentItem commentItem = commentItemList.get(position);
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(CommentDetailFragment.newInstance(commentItem));
+                Util.startFragment(CommentDetailFragment.newInstance(commentItem));
             }
         });
         rvCommentList.setAdapter(adapter);
@@ -115,8 +113,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_publish) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(AddCommentFragment.newInstance(bindId));
+            Util.startFragment(AddCommentFragment.newInstance(bindId));
         }
     }
 

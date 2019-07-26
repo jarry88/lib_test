@@ -44,20 +44,19 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        MainFragment mainFragment = MainFragment.getInstance();
         int id = v.getId();
         switch (id) {
             case R.id.btn_back:
                 pop();
                 break;
             case R.id.btn_my_like:
-                mainFragment.start(MyLikeFragment.newInstance());
+                Util.startFragment(MyLikeFragment.newInstance());
                 break;
             case R.id.btn_my_comment:
-                mainFragment.start(MyCommentFragment.newInstance());
+                Util.startFragment(MyCommentFragment.newInstance());
                 break;
             case R.id.btn_my_follow:
-                mainFragment.start(MyFollowFragment.newInstance());
+                Util.startFragment(MyFollowFragment.newInstance());
                 break;
             default:
                 break;

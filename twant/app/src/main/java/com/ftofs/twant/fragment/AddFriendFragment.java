@@ -55,8 +55,7 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_my_qr_code) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(QrCodeCardFragment.newInstance());
+            Util.startFragment(QrCodeCardFragment.newInstance());
         } else if (id == R.id.btn_scan_qr_code) {
             startCaptureActivity();
         }

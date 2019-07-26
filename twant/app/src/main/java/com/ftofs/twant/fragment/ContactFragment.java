@@ -72,8 +72,7 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 FriendInfo friendInfo = friendInfoList.get(position);
 
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(ChatFragment.newInstance(friendInfo.memberName));
+                Util.startFragment(ChatFragment.newInstance(friendInfo.memberName));
             }
         });
         rvContactList.setAdapter(adapter);

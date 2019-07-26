@@ -162,10 +162,7 @@ public class Util {
     }
 
     public static void showLoginFragment() {
-        MainFragment mainFragment = MainFragment.getInstance();
-        if (mainFragment != null) {
-            mainFragment.start(LoginFragment.newInstance());
-        }
+        Util.startFragment(LoginFragment.newInstance());
     }
 
     public static String formatSpecString(List<SpecPair> specPairList) {
@@ -321,5 +318,15 @@ public class Util {
         }
 
         mainFragment.start(fragment);
+    }
+
+    public static void startFragmentForResult(ISupportFragment fragment, int requestCode) {
+        MainFragment mainFragment = MainFragment.getInstance();
+        if (mainFragment == null) {
+            ToastUtil.error(TwantApplication.getContext(), "MainFragment為空");
+            return;
+        }
+
+        mainFragment.startForResult(fragment, requestCode);
     }
 }

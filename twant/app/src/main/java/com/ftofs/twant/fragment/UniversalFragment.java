@@ -53,17 +53,15 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
 
-        MainFragment mainFragment = MainFragment.getInstance();
-
         switch (id) {
             case R.id.btn_back:
                 pop();
                 break;
             case R.id.btn_personal_info:
-                mainFragment.start(PersonalInfoFragment.newInstance());
+                Util.startFragment(PersonalInfoFragment.newInstance());
                 break;
             case R.id.btn_security_setting:
-                mainFragment.start(SecuritySettingFragment.newInstance());
+                Util.startFragment(SecuritySettingFragment.newInstance());
                 break;
             case R.id.btn_logout:
                 User.logout();
@@ -71,7 +69,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
                 pop();
                 break;
             case R.id.btn_about_takewant:
-                mainFragment.start(AboutFragment.newInstance());
+                Util.startFragment(AboutFragment.newInstance());
                 break;
             default:
                 break;

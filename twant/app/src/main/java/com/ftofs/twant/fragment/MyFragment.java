@@ -131,27 +131,27 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        MainFragment mainFragment = (MainFragment) getParentFragment();
+
 
         switch (id) {
             case R.id.img_avatar:
-                mainFragment.start(PersonalInfoFragment.newInstance());
+                Util.startFragment(PersonalInfoFragment.newInstance());
                 break;
             case R.id.btn_mall:
-                mainFragment.start(MallFragment.newInstance());
+                Util.startFragment(MallFragment.newInstance());
                 break;
             case R.id.btn_interactive:
-                mainFragment.start(InteractiveFragment.newInstance());
+                Util.startFragment(InteractiveFragment.newInstance());
                 break;
             case R.id.btn_setting:
-                mainFragment.start(UniversalFragment.newInstance());
+                Util.startFragment(UniversalFragment.newInstance());
                 break;
             case R.id.tv_personal_profile:
                 String profile = personalProfile;
                 if (StringUtil.isEmpty(profile)) {
                     profile = "";
                 }
-                mainFragment.start(PersonalProfileFragment.newInstance(profile));
+                Util.startFragment(PersonalProfileFragment.newInstance(profile));
                 break;
             default:
                 break;

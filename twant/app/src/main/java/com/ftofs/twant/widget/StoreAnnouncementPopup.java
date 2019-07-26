@@ -16,6 +16,7 @@ import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -54,8 +55,7 @@ public class StoreAnnouncementPopup extends BottomPopupView implements View.OnCl
                 String url = Config.WEB_BASE_URL + "/store/announcement/" + storeAnnouncement.id;
 
                 // 使用瀏覽器顯示店鋪公告
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(ExplorerFragment.newInstance(url));
+                Util.startFragment(ExplorerFragment.newInstance(url));
 
                 dismiss();
             }

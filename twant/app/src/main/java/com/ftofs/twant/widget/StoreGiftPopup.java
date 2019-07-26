@@ -19,6 +19,7 @@ import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -102,8 +103,7 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GiftItem giftItem = giftItemList.get(position);
                 dismiss();
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(GoodsDetailFragment.newInstance(giftItem.commonId));
+                Util.startFragment(GoodsDetailFragment.newInstance(giftItem.commonId));
             }
         });
         goodsConformAdapter = new GoodsConformAdapter(context, R.layout.goods_conform_list_item, goodsConformItemList);

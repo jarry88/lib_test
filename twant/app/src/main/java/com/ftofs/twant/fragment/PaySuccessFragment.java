@@ -65,8 +65,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_view_order) {
             SLog.info("here");
             pop();
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
+            Util.startFragment(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
         } else if (id == R.id.btn_goto_home) {
             popTo(MainFragment.class, false);
         }

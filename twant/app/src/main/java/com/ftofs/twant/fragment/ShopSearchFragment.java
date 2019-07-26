@@ -100,8 +100,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
                     ToastUtil.error(_mActivity, "請輸入搜索關鍵字");
                     return;
                 }
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", storeId, "keyword", keyword).toString()));
+                Util.startFragment(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", storeId, "keyword", keyword).toString()));
                 break;
             case R.id.btn_clear_all:
                 etKeyword.setText("");
@@ -194,8 +193,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
      * @param commonId
      */
     private void redirectToGoodsDetailFragment(int commonId) {
-        MainFragment mainFragment = MainFragment.getInstance();
-        mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+        Util.startFragment(GoodsDetailFragment.newInstance(commonId));
     }
 
     private void loadShopSearchData() {

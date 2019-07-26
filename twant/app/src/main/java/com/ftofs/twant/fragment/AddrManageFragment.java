@@ -132,8 +132,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                 } else if (id == R.id.btn_edit) {
                     SLog.info("編輯地址");
                     AddrItem addrItem = addrItemList.get(position);
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(AddAddressFragment.newInstance(Constant.ACTION_EDIT, addrItem));
+                    Util.startFragment(AddAddressFragment.newInstance(Constant.ACTION_EDIT, addrItem));
                 } else if (id == R.id.btn_delete) {
                     SLog.info("刪除地址");
                     AddrItem item = addrItemList.get(position);
@@ -185,8 +184,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_back) {
             pop(null);
         } else if (id == R.id.btn_add_address) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.ADD_ADDRESS.ordinal());
+            Util.startFragmentForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.ADD_ADDRESS.ordinal());
         }
     }
 

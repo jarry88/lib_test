@@ -120,14 +120,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 ChatConversation chatConversation = chatConversationList.get(position);
                 int itemType = chatConversation.itemType;
 
-                MainFragment mainFragment = MainFragment.getInstance();
                 if (itemType == ChatConversation.ITEM_TYPE_LOGISTICS) {
-                    mainFragment.start(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_LOGISTICS));
+                    Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_LOGISTICS));
                 } else if (itemType == ChatConversation.ITEM_TYPE_RETURN) {
-                    mainFragment.start(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
+                    Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
                 } else {
                     String memberName = chatConversation.friendInfo.memberName;
-                    mainFragment.start(ChatFragment.newInstance(memberName));
+                    Util.startFragment(ChatFragment.newInstance(memberName));
                 }
             }
         });

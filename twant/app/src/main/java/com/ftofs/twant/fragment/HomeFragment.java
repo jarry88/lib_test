@@ -92,8 +92,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 WebSliderItem webSliderItem = webSliderItemList.get(i);
                 String linkType = webSliderItem.linkType;
 
-                MainFragment mainFragment = MainFragment.getInstance();
-
                 switch (linkType) {
                     case "none":
                         // 无操作
@@ -102,28 +100,28 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         // 外部鏈接
                         // String url = "https://www.jianshu.com/p/596a168c33d7";
                         String url = webSliderItem.linkValue;
-                        mainFragment.start(ExplorerFragment.newInstance(url));
+                        Util.startFragment(ExplorerFragment.newInstance(url));
                         break;
                     case "keyword":
                         // 关键字
                         String keyword = webSliderItem.linkValue;
-                        mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
                                 EasyJSONObject.generate("keyword", keyword).toString()));
                         break;
                     case "goods":
                         // 商品
                         int commonId = Integer.valueOf(webSliderItem.linkValue);
-                        mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                        Util.startFragment(GoodsDetailFragment.newInstance(commonId));
                         break;
                     case "store":
                         // 店铺
                         int storeId = Integer.valueOf(webSliderItem.linkValue);
-                        mainFragment.start(ShopMainFragment.newInstance(storeId));
+                        Util.startFragment(ShopMainFragment.newInstance(storeId));
                         break;
                     case "category":
                         // 商品搜索结果页(分类)
                         String cat = webSliderItem.linkValue;
-                        mainFragment.start(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
                                 EasyJSONObject.generate("cat", cat).toString()));
                         break;
                     case "brandList":
@@ -168,16 +166,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_category) {
-            MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.start(CategoryFragment.newInstance());
+            Util.startFragment(CategoryFragment.newInstance());
         } else if (id == R.id.ll_search_box) {
-            MainFragment mainFragment = (MainFragment) getParentFragment();
-            mainFragment.start(SearchFragment.newInstance());
+            Util.startFragment(SearchFragment.newInstance());
         } else if (id == R.id.btn_test) {
             if (Config.DEVELOPER_MODE) {
-                MainFragment mainFragment = (MainFragment) getParentFragment();
-                // mainFragment.start(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
-                mainFragment.start(TestFragment.newInstance());
+                // Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
+                Util.startFragment(TestFragment.newInstance());
             }
         }
     }
@@ -416,8 +411,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             storeView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    MainFragment mainFragment = (MainFragment) getParentFragment();
-                                    mainFragment.start(ShopMainFragment.newInstance(storeId));
+                                    Util.startFragment(ShopMainFragment.newInstance(storeId));
                                 }
                             });
                             llNewArrivalsContainer.addView(storeView, layoutParams);

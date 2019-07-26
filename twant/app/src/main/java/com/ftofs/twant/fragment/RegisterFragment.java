@@ -177,9 +177,8 @@ public class RegisterFragment extends BaseFragment implements
                         }
 
                         // 發送驗證碼成功
-                        MainFragment mainFragment = MainFragment.getInstance();
                         int smsCodeValidTime = responseObj.getInt("datas.authCodeValidTime");
-                        mainFragment.start(RegisterConfirmFragment.newInstance(mobileZone.areaCode, mobile, smsCodeValidTime));
+                        Util.startFragment(RegisterConfirmFragment.newInstance(mobileZone.areaCode, mobile, smsCodeValidTime));
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }

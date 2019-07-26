@@ -58,17 +58,12 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
 
-        MainFragment mainFragment = MainFragment.getInstance();
-        if (mainFragment == null) {
-            return;
-        }
-
         switch (id) {
             case R.id.btn_back:
                 pop();
                 break;
             case R.id.btn_my_bill:
-                mainFragment.start(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
+                Util.startFragment(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
                 break;
 
             case R.id.btn_to_be_paid:
@@ -85,35 +80,35 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 } else {
                     orderStatus = Constant.ORDER_STATUS_TO_BE_COMMENTED;
                 }
-                mainFragment.start(BillFragment.newInstance(orderStatus));
+                Util.startFragment(BillFragment.newInstance(orderStatus));
                 break;
 
             case R.id.icon_return_or_exchange:
-                mainFragment.start(RefundFragment.newInstance());
+                Util.startFragment(RefundFragment.newInstance());
                 break;
 
             case R.id.btn_my_express:
-                mainFragment.start(SendPackageFragment.newInstance());
+                Util.startFragment(SendPackageFragment.newInstance());
                 break;
 
             case R.id.btn_my_store_coupon:
-                mainFragment.start(StoreCouponFragment.newInstance());
+                Util.startFragment(StoreCouponFragment.newInstance());
                 break;
 
             case R.id.btn_my_footprint:
-                mainFragment.start(FootprintFragment.newInstance());
+                Util.startFragment(FootprintFragment.newInstance());
                 break;
 
             case R.id.btn_my_address:
-                mainFragment.start(AddrManageFragment.newInstance());
+                Util.startFragment(AddrManageFragment.newInstance());
                 break;
 
             case R.id.btn_my_bonus:
-                mainFragment.start(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_BONUS));
+                Util.startFragment(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_BONUS));
                 break;
 
             case R.id.btn_my_trust_value:
-                mainFragment.start(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_TRUST_VALUE));
+                Util.startFragment(TrustValueFragment.newInstance(TrustValueFragment.DATA_TYPE_TRUST_VALUE));
                 break;
             default:
                 break;

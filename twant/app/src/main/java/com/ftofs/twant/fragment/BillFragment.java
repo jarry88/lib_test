@@ -103,8 +103,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
                 OrderItem orderItem = orderItemList.get(position);
 
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(OrderDetailFragment.newInstance(orderItem.orderId));
+                Util.startFragment(OrderDetailFragment.newInstance(orderItem.orderId));
             }
         });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -115,8 +114,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                 if (id == R.id.btn_pay_order) {
                     int payId = (int) view.getTag();
                     SLog.info("payId[%d]", payId);
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(ICBCFragment.newInstance(String.valueOf(payId)));
+                    Util.startFragment(ICBCFragment.newInstance(String.valueOf(payId)));
                 }
             }
         });

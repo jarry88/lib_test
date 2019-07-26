@@ -140,9 +140,8 @@ public class ResetPasswordFragment extends BaseFragment implements
 
                         ToastUtil.success(_mActivity, "動態碼已發送");
 
-                        MainFragment mainFragment = MainFragment.getInstance();
                         int smsCodeValidTime = responseObj.getInt("datas.authCodeValidTime");
-                        mainFragment.start(ResetPasswordConfirmFragment.newInstance(mobileZone.areaCode, mobile, smsCodeValidTime));
+                        Util.startFragment(ResetPasswordConfirmFragment.newInstance(mobileZone.areaCode, mobile, smsCodeValidTime));
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }

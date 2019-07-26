@@ -94,8 +94,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         int id = v.getId();
 
         if (id == R.id.btn_add_post) {
-            MainFragment mainFragment = MainFragment.getInstance();
-            mainFragment.start(AddPostFragment.newInstance());
+            Util.startFragment(AddPostFragment.newInstance());
         }
     }
 

@@ -219,8 +219,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                         cartStoreItem.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                MainFragment mainFragment = MainFragment.getInstance();
-                                mainFragment.start(ShopMainFragment.newInstance(storeId));
+                                Util.startFragment(ShopMainFragment.newInstance(storeId));
                             }
                         });
                         tvStoreName.setText(cartStoreVo.getString("storeName"));
@@ -245,8 +244,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                             cartSpuItem.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    MainFragment mainFragment = MainFragment.getInstance();
-                                    mainFragment.start(GoodsDetailFragment.newInstance(commonId));
+                                    Util.startFragment(GoodsDetailFragment.newInstance(commonId));
                                 }
                             });
 
@@ -321,8 +319,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     return;
                 }
 
-                MainFragment mainFragment = (MainFragment) getParentFragment();
-                mainFragment.startForResult(ConfirmBillFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
+                Util.startFragmentForResult(ConfirmBillFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
                 break;
             case R.id.btn_delete:
                 try {

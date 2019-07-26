@@ -23,6 +23,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -109,8 +110,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             "storeId", parentFragment.getShopId(),
                             "conformId", storeConformList.get(position).conformId);
 
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(ShopCommodityFragment.newInstance(params.toString()));
+                    Util.startFragment(ShopCommodityFragment.newInstance(params.toString()));
                 }
             }
         });
@@ -126,8 +126,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             "storeId", parentFragment.getShopId(),
                             "discountId", storeDiscountList.get(position).discountId);
 
-                    MainFragment mainFragment = MainFragment.getInstance();
-                    mainFragment.start(ShopCommodityFragment.newInstance(params.toString()));
+                    Util.startFragment(ShopCommodityFragment.newInstance(params.toString()));
                 }
             }
         });

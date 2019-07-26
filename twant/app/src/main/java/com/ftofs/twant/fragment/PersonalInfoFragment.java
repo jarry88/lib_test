@@ -127,8 +127,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                 openAlbum();
                 break;
             case R.id.btn_modify_nickname:
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(ModifyNicknameFragment.newInstance(nickname));
+                Util.startFragment(ModifyNicknameFragment.newInstance(nickname));
                 break;
             case R.id.btn_set_gender:
                 List<ListPopupItem> itemList = new ArrayList<>();

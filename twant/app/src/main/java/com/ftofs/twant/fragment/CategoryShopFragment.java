@@ -22,6 +22,7 @@ import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,8 +82,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 CategoryShop categoryShop = categoryShopList.get(position);
 
-                MainFragment mainFragment = MainFragment.getInstance();
-                mainFragment.start(SearchResultFragment.newInstance(SearchType.STORE.name(),
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.STORE.name(),
                         EasyJSONObject.generate("keyword", String.valueOf(categoryShop.shopId)).toString()));
             }
         });
