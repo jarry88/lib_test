@@ -7,9 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreServiceStaffListAdapter;
 import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -48,6 +51,18 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rvStaffList.setLayoutManager(layoutManager);
         adapter = new StoreServiceStaffListAdapter(R.layout.store_service_staff_list_item, staffList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                CustomerServiceStaff staff = staffList.get(position);
+                String memberName = staff.memberName;
+                String imName = staff.imName;
+
+                dismiss();
+
+                Util.startFragment(ChatFragment.newInstance(memberName));
+            }
+        });
         rvStaffList.setAdapter(adapter);
     }
 

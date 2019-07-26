@@ -225,6 +225,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
+        SLog.info("OrderDetailFragment::onEBMessage()");
         if (message.messageType == EBMessageType.MESSAGE_TYPE_PAY_SUCCESS) {
             // 如果支付成功，重新加載訂單詳情
             SLog.info("支付成功，重新加載訂單詳情");
@@ -489,9 +490,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         EasyJSONObject serviceStaff = (EasyJSONObject) object;
 
                         CustomerServiceStaff staff = new CustomerServiceStaff();
-                        staff.staffId = serviceStaff.getInt("staffId");
-                        staff.staffName = serviceStaff.getString("staffName");
-                        staff.avatar = serviceStaff.getString("avatar");
+                        Util.packStaffInfo(staff, serviceStaff);
 
                         staffList.add(staff);
                     }
@@ -635,3 +634,5 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         return true;
     }
 }
+
+

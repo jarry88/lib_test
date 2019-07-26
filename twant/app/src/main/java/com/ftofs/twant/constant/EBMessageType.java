@@ -40,4 +40,19 @@ public enum EBMessageType {
      * 收到聊天消息
      */
     MESSAGE_TYPE_NEW_CHAT_MESSAGE,
+
+    /**
+     * 更新好友的個人資料完成
+     */
+    MESSAGE_TYPE_UPDATE_FRIEND_INFO,
+
+    /**
+     * 重建MainFragment
+     */
+    MESSAGE_TYPE_RECREATE_MAIN_FRAGMENT,
+
+    /**
+     * 刷新訂單列表數據
+     */
+    MESSAGE_TYPE_REFRESH_ORDER_LIST,
 }

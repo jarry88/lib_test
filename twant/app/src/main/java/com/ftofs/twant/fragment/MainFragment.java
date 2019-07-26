@@ -62,15 +62,11 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         MainFragment fragment = new MainFragment();
         fragment.setArguments(args);
 
-        instance = fragment;
         return fragment;
     }
 
 
     public static MainFragment getInstance() {
-        if (instance == null) {
-
-        }
         return instance;
     }
 
@@ -78,6 +74,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        instance = this;
         return view;
     }
 

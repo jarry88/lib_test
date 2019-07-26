@@ -590,6 +590,11 @@ public class Api {
      */
     public static final String PATH_FRIEND_INFO = "/member/friend/friend_info";
 
+    /**
+     * MPay訂單支付查詢
+     */
+    public static final String PATH_MPAY_ORDERS_QUERY = "/member/mpay/orders/query";
+
 
     /**
      * 發送Http請求

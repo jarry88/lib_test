@@ -120,17 +120,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         Bundle args = getArguments();
         yourMemberName = args.getString("yourMemberName");
-        friendInfo = LitePal.where("memberName = ?", yourMemberName).findFirst(FriendInfo.class);
-        if (friendInfo == null) {
-            SLog.info("好友信息[%s]為空，更新好友信息", yourMemberName);
-            TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(yourMemberName));
-        } else {
-            if (friendInfo.avatarImg == null) {
-                SLog.info("friendInfo.avatarImg is null");
-            } else {
-                SLog.info("friendInfo.avatarImg size[%d]", friendInfo.avatarImg.length);
-            }
-        }
+        loadFriendInfo();
 
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvNickname.setOnClickListener(this);
@@ -184,12 +174,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE) {
             SLog.info("收到新消息");
             ChatMessage chatMessage = (ChatMessage) message.data;
-            if (yourMemberName.equals(chatMessage.toMemberName)) {
-
+            if (yourMemberName.equals(chatMessage.fromMemberName)) {
+                SLog.info("是對方發來的消息");
+                chatMessageList.add(chatMessage);
+                chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+            } else {
+                SLog.info("是另一個人發來的消息");
             }
 
 
             messageListScrollToBottom();
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_FRIEND_INFO) {
+            if (loadFriendInfo()) {
+                SLog.info("更新到最新的好友資料");
+                chatMessageAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -200,8 +199,29 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         rvMessageList.scrollToPosition(chatMessageAdapter.getItemCount() - 1);
     }
 
+    private boolean loadFriendInfo() {
+        friendInfo = LitePal.where("memberName = ?", yourMemberName).findFirst(FriendInfo.class);
+        if (friendInfo == null) {
+            SLog.info("好友信息[%s]為空，更新好友信息", yourMemberName);
+            TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(yourMemberName));
+
+            return false;
+        } else {
+            if (friendInfo.avatarImg == null) {
+                SLog.info("friendInfo.avatarImg is null");
+            } else {
+                SLog.info("friendInfo.avatarImg size[%d]", friendInfo.avatarImg.length);
+            }
+
+            return true;
+        }
+    }
+
     private void loadChatData() {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName);
+        if (conversation == null) {
+            return;
+        }
         //获取此会话的所有消息
         String startMsgId = "";
         List<EMMessage> messages = conversation.getAllMessages();

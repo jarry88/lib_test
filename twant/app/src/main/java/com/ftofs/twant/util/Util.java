@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
@@ -328,5 +329,18 @@ public class Util {
         }
 
         mainFragment.startForResult(fragment, requestCode);
+    }
+
+    public static void packStaffInfo(CustomerServiceStaff staff, EasyJSONObject storeServiceStaffVo) {
+        try {
+            staff.staffId = storeServiceStaffVo.getInt("staffId");
+            staff.staffName = storeServiceStaffVo.getString("staffName");
+            staff.memberName = storeServiceStaffVo.getString("memberName");
+            staff.imName = storeServiceStaffVo.getString("imName");
+            staff.avatar = storeServiceStaffVo.getString("avatar");
+            staff.welcomeMessage = storeServiceStaffVo.getString("welcome");
+        } catch (Exception e) {
+
+        }
     }
 }

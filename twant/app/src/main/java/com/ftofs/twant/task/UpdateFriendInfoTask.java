@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.FileUtil;
@@ -107,6 +109,7 @@ public class UpdateFriendInfoTask implements Runnable {
 
 
             friendInfo.save();
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_FRIEND_INFO, null);
         } catch (EasyJSONException e) {
             e.printStackTrace();
             SLog.info("Error!%s", e.getMessage());

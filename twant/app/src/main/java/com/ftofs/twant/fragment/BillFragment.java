@@ -18,6 +18,8 @@ import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.OrderSkuItem;
 import com.ftofs.twant.log.SLog;
@@ -28,6 +30,10 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwTabButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,6 +60,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
     int twRed;
     int twBlack;
+    boolean needRefresh;
 
     public static BillFragment newInstance(int billStatus) {
         Bundle args = new Bundle();
@@ -76,6 +83,8 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         Bundle args = getArguments();
         billStatus = args.getInt("billStatus", Constant.ORDER_STATUS_ALL);
         SLog.info("billStatus[%d]", billStatus);
@@ -83,6 +92,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
 
+        Util.setOnClickListener(view, R.id.tv_fragment_title, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
         int index = 0;
         for (int id : orderStatusIds) {
@@ -126,10 +136,27 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        SLog.info("BillFragment::onEBMessage()");
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_REFRESH_ORDER_LIST) {
+            SLog.info("重新加載訂單列表數據, billStatus[%d]", billStatus);
+            needRefresh = true;
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.tv_fragment_title) {
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_ORDER_LIST, null);
         }
     }
 
@@ -277,5 +304,21 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         int id = tabButton.getId();
         handleOrderStatusSwitch(id);
         loadBillData(billStatus);
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        if (needRefresh) {
+            SLog.info("onSupportVisible::billStatus[%d]", billStatus);
+            loadBillData(billStatus);
+            needRefresh = false;
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

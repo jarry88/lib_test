@@ -78,14 +78,14 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
         GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, LinearLayoutManager.VERTICAL, false);
         rvStaffList.setLayoutManager(layoutManager);
         adapter = new CustomerServiceStaffListAdapter(R.layout.store_customer_service_staff, customerServiceStaffList);
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 CustomerServiceStaff staff = customerServiceStaffList.get(position);
-                // staff.welcomeMessage
 
                 String memberName = staff.memberName;
-                SLog.info("memberName[%s]", memberName);
+                String imName = staff.imName;
+                SLog.info("memberName[%s], imName[%s]", memberName, imName);
                 Util.startFragment(ChatFragment.newInstance(memberName));
             }
         });
@@ -150,12 +150,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                         for (Object object : storeServiceStaffVoList) {
                             EasyJSONObject storeServiceStaffVo = (EasyJSONObject) object;
                             CustomerServiceStaff staff = new CustomerServiceStaff();
-
-                            staff.staffId = storeServiceStaffVo.getInt("staffId");
-                            staff.staffName = storeServiceStaffVo.getString("staffName");
-                            staff.memberName = storeServiceStaffVo.getString("memberName");
-                            staff.avatar = storeServiceStaffVo.getString("avatar");
-                            staff.welcomeMessage = storeServiceStaffVo.getString("welcome");
+                            Util.packStaffInfo(staff, storeServiceStaffVo);
 
                             customerServiceStaffList.add(staff);
                         }

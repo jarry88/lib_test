@@ -840,7 +840,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_shop"
+                    android:src="@drawable/icon_shop_big"
                     />
                 <TextView
                     android:layout_width="wrap_content"

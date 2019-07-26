@@ -95,6 +95,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_setting, this);
 
         Util.setOnClickListener(view, R.id.btn_mall, this);
+        Util.setOnClickListener(view, R.id.btn_friends, this);
         Util.setOnClickListener(view, R.id.btn_interactive, this);
 
         tvNickname = view.findViewById(R.id.tv_nickname);
@@ -139,6 +140,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.btn_mall:
                 Util.startFragment(MallFragment.newInstance());
+                break;
+            case R.id.btn_friends:
+                Util.startFragment(ContactFragment.newInstance());
                 break;
             case R.id.btn_interactive:
                 Util.startFragment(InteractiveFragment.newInstance());

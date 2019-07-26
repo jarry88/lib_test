@@ -9,6 +9,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -16,6 +17,7 @@ import com.ftofs.twant.util.User;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 import com.macau.pay.sdk.MPaySdk;
+import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 
@@ -118,6 +120,13 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
 
                         EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
                         MPaySdk.mPay(mainActivity, datas.toString(), mainActivity);
+
+                        int userId = User.getUserId();
+                        if (userId > 0) {
+                            String key = String.format(SPField.FIELD_MPAY_PAY_ID, userId);
+                            SLog.info("key[%s]", key);
+                            Hawk.put(key, EasyJSONObject.generate("payId", payId, "timestampMillis", System.currentTimeMillis()).toString());
+                        }
                     } catch (Exception e) {
 
                     }

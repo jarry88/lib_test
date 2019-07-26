@@ -760,9 +760,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         EasyJSONObject storeServiceStaff = (EasyJSONObject) object;
 
                         CustomerServiceStaff staff = new CustomerServiceStaff();
-                        staff.staffId = storeServiceStaff.getInt("staffId");
-                        staff.staffName = storeServiceStaff.getString("staffName");
-                        staff.avatar = storeServiceStaff.getString("avatar");
+                        Util.packStaffInfo(staff, storeServiceStaff);
 
                         staffList.add(staff);
                     }

@@ -18,4 +18,10 @@ public class SPField {
     public static final String FIELD_GENDER = "gender";
     public static final String FIELD_MEMBER_SIGNATURE = "member_signature";
     public static final String FIELD_MEMBER_BIO = "member_bio";
+
+
+    /**
+     * MPay 訂單的PayId
+     */
+    public static final String FIELD_MPAY_PAY_ID = "mpay_pay_id_%d";
 }
