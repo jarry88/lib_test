@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:layout_marginLeft="@dimen/toolbar_margin_left"
     android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:background="@drawable/border_type_d">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_avatar"
@@ -15,51 +17,61 @@
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/img_avatar"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/tv_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="齊天大聖孫悟空"
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            />
-        <TextView
-            android:id="@+id/tv_last_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="在的, 有什麼能幫您的嗎?"
-            android:textColor="@color/tw_dark_grey"
-            android:textSize="14sp"
-            />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tv_message_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="昨天"
-            android:textSize="12sp"
-            android:textColor="@color/tw_dark_grey"
-            />
+        <!-- 上面那行 -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_nickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:text="齊天大聖孫悟空"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:singleLine="true"
+                android:ellipsize="end"
+                />
+            <TextView
+                android:id="@+id/tv_message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="昨天"
+                android:textSize="12sp"
+                android:textColor="@color/tw_dark_grey"
+                />
+
+        </LinearLayout>
+
+        <!-- 下面那行 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_last_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:text="在的, 有什麼能幫您的嗎?"
+                android:textColor="@color/tw_dark_grey"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                />
             <TextView
                 android:id="@+id/tv_unread_count"
                 android:layout_width="wrap_content"
@@ -80,4 +92,4 @@
                 />
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

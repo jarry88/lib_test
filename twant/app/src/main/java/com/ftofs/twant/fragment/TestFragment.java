@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
@@ -48,7 +49,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            textView.setText(StringUtil.translateEmoji(_mActivity, "[睡覺]東奔[睡覺]西走[思考]", (int) textView.getTextSize()));
+            textView.setText(new Jarbon().toString());
         }
     }
 

@@ -238,6 +238,31 @@ public class Jarbon {
                 case '%':
                     sb.append("%%");
                     break;
+                case 'y':
+                    // 兩位數的年(帶前導0)
+                    sb.append("%02d");
+                    paramList.add(year % 100);
+                    break;
+                case 'n':
+                    // 月份(不帶前導0)
+                    sb.append("%d");
+                    paramList.add(month);
+                    break;
+                case 'j':
+                    // 日(不帶前導0）
+                    sb.append("%d");
+                    paramList.add(day);
+                    break;
+                case '\\':
+                    if (i + 1 < len) {
+                        ch = format.charAt(i + 1);
+                        if (ch == '%') {
+                            sb.append("%%");
+                        } else {
+                            sb.append(ch);
+                        }
+                    }
+                    break;
                 default:
                     sb.append(ch);
                     break;

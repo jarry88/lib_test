@@ -17,10 +17,12 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.hyphenate.chat.EMConversation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,8 +73,9 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 FriendInfo friendInfo = friendInfoList.get(position);
-
-                Util.startFragment(ChatFragment.newInstance(friendInfo.memberName));
+                EMConversation conversation = ChatUtil.getConversation(friendInfo.memberName,
+                        friendInfo.nickname, friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
+                Util.startFragment(ChatFragment.newInstance(conversation));
             }
         });
         rvContactList.setAdapter(adapter);

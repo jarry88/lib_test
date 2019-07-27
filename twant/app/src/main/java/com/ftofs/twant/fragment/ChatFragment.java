@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,8 +31,10 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ChatMessageAdapter;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
+import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
@@ -39,7 +44,11 @@ import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.task.TaskObservable;
+import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.task.UpdateFriendInfoTask;
+import com.ftofs.twant.util.FileUtil;
+import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
@@ -58,10 +67,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.LitePal;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import am.widget.smoothinputlayout.SmoothInputLayout;
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 聊天會話Fragment
@@ -77,6 +88,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private static final int ACTION_SEND_MESSAGE = 2;
 
     int action = ACTION_SHOW_MENU;
+
+    EMConversation conversation;
+
     SmoothInputLayout silMainContainer;
     EditText etMessage;
     View btnEmoji;
@@ -97,15 +111,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     String myMemberName;
     String yourMemberName;
+    String yourAvatarUrl;
+    int yourRole;
 
     TextView tvNickname;
 
-    public static ChatFragment newInstance(String yourMemberName) {
+    public static ChatFragment newInstance(EMConversation conversation) {
         Bundle args = new Bundle();
 
-        args.putString("yourMemberName", yourMemberName);
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
+        fragment.setConversation(conversation);
 
         return fragment;
     }
@@ -123,8 +139,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         EventBus.getDefault().register(this);
 
-        Bundle args = getArguments();
-        yourMemberName = args.getString("yourMemberName");
+        String ext = conversation.getExtField();
+        EasyJSONObject extObj = (EasyJSONObject) EasyJSONObject.parse(ext);
+
+        try {
+            yourMemberName = extObj.getString("nickName");
+            yourAvatarUrl = extObj.getString("avatarUrl");
+            yourRole = extObj.getInt("role");
+        } catch (Exception e) {
+
+        }
+
+
+
         loadFriendInfo();
 
         tvNickname = view.findViewById(R.id.tv_nickname);
@@ -148,6 +175,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         myMemberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_send_image, this);
 
         initEmojiPage(view);
         loadEmojiData();
@@ -175,18 +203,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        // 如果退出登錄，顯示主頁
         if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE) {
             SLog.info("收到新消息");
             ChatMessage chatMessage = (ChatMessage) message.data;
             if (yourMemberName.equals(chatMessage.fromMemberName)) {
                 SLog.info("是對方發來的消息");
                 chatMessageList.add(chatMessage);
-                chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+                // chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+                chatMessageAdapter.notifyDataSetChanged();
+                messageListScrollToBottom();
             } else {
                 SLog.info("是另一個人發來的消息");
             }
-
 
             messageListScrollToBottom();
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_FRIEND_INFO) {
@@ -227,6 +255,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         if (conversation == null) {
             return;
         }
+
+        //指定会话消息未读数清零
+        conversation.markAllMessagesAsRead();
+
         //获取此会话的所有消息
         String startMsgId = "";
         List<EMMessage> messages = conversation.getAllMessages();
@@ -278,6 +310,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             case R.id.btn_back:
                 pop();
                 break;
+            case R.id.btn_send_image:
+                startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+                break;
             case R.id.btn_emoji:
                 btnTool.setSelected(false);
                 if (btnEmoji.isSelected()) {
@@ -296,7 +331,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     etMessage.setText("");
                     btnTool.setSelected(false);
 
-                    sendMessage(message);
+                    sendTextMessage(message);
                     return;
                 }
                 if (btnTool.isSelected()) {
@@ -474,7 +509,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
-    private void sendMessage(String content) {
+    private void sendTextMessage(String content) {
         SLog.info("content[%s]", content);
         //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
         EMMessage message = EMMessage.createTxtSendMessage(content, yourMemberName);
@@ -498,13 +533,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         });
 
         ChatMessage chatMessage = new ChatMessage();
+        chatMessage.messageType = message.getType();
         chatMessage.messageId = message.getMsgId();
         chatMessage.content = "txt:" + "\"" + content + "\"";
         chatMessage.origin = ChatMessage.MY_MESSAGE;
         chatMessage.timestamp = message.getMsgTime();
         chatMessageList.add(chatMessage);
 
-        chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+        // chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+        chatMessageAdapter.notifyDataSetChanged();
         messageListScrollToBottom();
     }
 
@@ -658,5 +695,84 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         }))
                 .show();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        SLog.info("onActivityResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        // 上傳圖片到OSS
+        if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
+            Uri uri = data.getData();
+            String absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
+            SLog.info("absolutePath[%s]", absolutePath);
+
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.messageType = EMMessage.Type.IMAGE;
+            chatMessage.origin = ChatMessage.MY_MESSAGE;
+            chatMessage.content = absolutePath;
+            chatMessage.timestamp = System.currentTimeMillis();
+            chatMessageList.add(chatMessage);
+
+            chatMessageAdapter.notifyDataSetChanged();
+            messageListScrollToBottom();
+
+            TaskObserver taskObserver = new TaskObserver() {
+                @Override
+                public void onMessage() {
+                    Pair<String, String> result = (Pair<String, String>) message;
+                    if (result == null) {
+                        return;
+                    }
+
+                    //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
+                    EMMessage message = EMMessage.createImageSendMessage(absolutePath, false, yourMemberName);
+                    chatMessage.messageId = message.getMsgId();
+                    message.setAttribute("messageType", "image");
+                    message.setAttribute("ossUrl", result.first);
+
+                    //发送消息
+                    EMClient.getInstance().chatManager().sendMessage(message);
+                    message.setMessageStatusCallback(new EMCallBack(){
+                        @Override
+                        public void onSuccess() {
+                            SLog.info("onSuccess, body[%s]", message.getBody());
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+                            SLog.info("onError, i[%d], s[%s]", i, s);
+                        }
+
+                        @Override
+                        public void onProgress(int i, String s) {
+                            SLog.info("onProgress, i[%d], s[%s]", i, s);
+                        }
+                    });
+                }
+            };
+
+            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+                @Override
+                public Object doWork() {
+                    File file = new File(absolutePath);
+                    String name = Api.syncUploadFile(file);
+                    return new Pair<>(name, absolutePath);
+                }
+            });
+
+
+        }
+    }
+
+    public void setConversation(EMConversation conversation) {
+        this.conversation = conversation;
     }
 }

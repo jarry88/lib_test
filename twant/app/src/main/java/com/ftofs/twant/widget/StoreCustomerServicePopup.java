@@ -12,7 +12,9 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreServiceStaffListAdapter;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Util;
+import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -59,8 +61,8 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
                 String imName = staff.imName;
 
                 dismiss();
-
-                Util.startFragment(ChatFragment.newInstance(memberName));
+                EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
+                Util.startFragment(ChatFragment.newInstance(conversation));
             }
         });
         rvStaffList.setAdapter(adapter);

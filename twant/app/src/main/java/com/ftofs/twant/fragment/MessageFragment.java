@@ -14,10 +14,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ChatConversation;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenuMessage;
@@ -26,6 +29,10 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.lxj.xpopup.XPopup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +74,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         Bundle args = getArguments();
         isStandalone = args.getBoolean("isStandalone");
 
@@ -96,12 +105,27 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 } else if (itemType == ChatConversation.ITEM_TYPE_RETURN) {
                     Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
                 } else {
-                    String memberName = chatConversation.friendInfo.memberName;
-                    Util.startFragment(ChatFragment.newInstance(memberName));
+                    EMConversation conversation = ChatUtil.getConversation(chatConversation.friendInfo.memberName,
+                            chatConversation.friendInfo.nickname, chatConversation.friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
+                    Util.startFragment(ChatFragment.newInstance(conversation));
                 }
             }
         });
         rvChatConversationList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE) {
+            loadData();
+        }
     }
 
     private void loadData() {

@@ -40,20 +40,42 @@
             android:src="@drawable/avatar_female"
             />
 
-        <TextView
-            android:id="@+id/tv_message"
+        <!-- 消息內容容器 -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:background="@drawable/my_message_bg"
-            android:text=""
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            />
+            android:orientation="vertical">
+            <!-- 文本消息 -->
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:background="@drawable/my_message_bg"
+                android:text=""
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                />
+            <!-- 圖片消息 -->
+            <LinearLayout
+                android:id="@+id/ll_image_message_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="right">
+                <ImageView
+                    android:id="@+id/img_message"
+                    android:layout_width="135dp"
+                    android:layout_height="135dp"
+                    android:src="@drawable/cs_avatar_160"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
     </RelativeLayout>
 </LinearLayout>

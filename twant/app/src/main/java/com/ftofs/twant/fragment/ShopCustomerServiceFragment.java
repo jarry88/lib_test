@@ -20,10 +20,12 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -86,7 +88,9 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                 String memberName = staff.memberName;
                 String imName = staff.imName;
                 SLog.info("memberName[%s], imName[%s]", memberName, imName);
-                Util.startFragment(ChatFragment.newInstance(memberName));
+
+                EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
+                Util.startFragment(ChatFragment.newInstance(conversation));
             }
         });
         rvStaffList.setAdapter(adapter);
