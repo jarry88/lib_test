@@ -9,7 +9,7 @@ public class Config {
      * 數據庫版本
      * 改變表結構或新增表等操作，都要遞增數據庫版本
      */
-    public static final int DB_VERSION = 8;
+    public static final int DB_VERSION = 10;
 
     /**
      * 登錄有效期(秒)

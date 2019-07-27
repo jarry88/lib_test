@@ -44,9 +44,11 @@ import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.task.UpdateFriendInfoTask;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.User;
@@ -110,6 +112,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     List<ChatMessage> chatMessageList = new ArrayList<>();
 
     String myMemberName;
+
+    String yourNickname;
     String yourMemberName;
     String yourAvatarUrl;
     int yourRole;
@@ -143,14 +147,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         EasyJSONObject extObj = (EasyJSONObject) EasyJSONObject.parse(ext);
 
         try {
-            yourMemberName = extObj.getString("nickName");
+            yourMemberName = conversation.conversationId();
+            yourNickname = extObj.getString("nickName");
             yourAvatarUrl = extObj.getString("avatarUrl");
             yourRole = extObj.getInt("role");
+            SLog.info("yourMemberName[%s], yourNickname[%s], yourAvatarUrl[%s], yourRole[%d]",
+                    yourMemberName, yourNickname, yourAvatarUrl, yourRole);
         } catch (Exception e) {
 
         }
-
-
 
         loadFriendInfo();
 
@@ -220,6 +225,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_FRIEND_INFO) {
             if (loadFriendInfo()) {
                 SLog.info("更新到最新的好友資料");
+                tvNickname.setText(friendInfo.nickname);
                 chatMessageAdapter.notifyDataSetChanged();
             }
         }
@@ -233,10 +239,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private boolean loadFriendInfo() {
-        friendInfo = LitePal.where("memberName = ?", yourMemberName).findFirst(FriendInfo.class);
+        String memberName = null;
+
+        if (yourRole == ChatUtil.ROLE_CS_AVAILABLE) {
+            ImNameMap map = ImNameMap.getByImName(yourMemberName);
+            if (map == null) {
+                return false;
+            }
+
+            memberName = map.memberName;
+        }
+
+
+        friendInfo = LitePal.where("memberName = ?", memberName).findFirst(FriendInfo.class);
         if (friendInfo == null) {
-            SLog.info("好友信息[%s]為空，更新好友信息", yourMemberName);
-            TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(yourMemberName));
+            SLog.info("好友信息[%s]為空，更新好友信息", memberName);
+            TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(memberName));
 
             return false;
         } else {

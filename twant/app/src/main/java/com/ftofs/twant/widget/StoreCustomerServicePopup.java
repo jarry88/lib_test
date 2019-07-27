@@ -12,6 +12,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreServiceStaffListAdapter;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Util;
 import com.hyphenate.chat.EMConversation;
@@ -59,6 +60,7 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
                 CustomerServiceStaff staff = staffList.get(position);
                 String memberName = staff.memberName;
                 String imName = staff.imName;
+                ImNameMap.saveMap(imName, memberName);
 
                 dismiss();
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);

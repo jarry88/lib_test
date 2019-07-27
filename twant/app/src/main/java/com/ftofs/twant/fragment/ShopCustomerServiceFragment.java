@@ -20,6 +20,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -87,6 +88,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
                 String memberName = staff.memberName;
                 String imName = staff.imName;
+                ImNameMap.saveMap(imName, memberName);
                 SLog.info("memberName[%s], imName[%s]", memberName, imName);
 
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
