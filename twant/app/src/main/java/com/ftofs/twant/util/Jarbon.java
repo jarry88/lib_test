@@ -2,8 +2,6 @@ package com.ftofs.twant.util;
 
 import java.util.Calendar;
 
-import java.util.Calendar;
-
 public class Jarbon {
     /**
      * 時間戳(秒)
@@ -138,6 +136,10 @@ public class Jarbon {
         int timestamp2 = startOfDay2.getTimestamp();
 
         return (timestamp1 - timestamp2) / 86400;
+    }
+
+    public int diffInMinutes(Jarbon jarbon) {
+        
     }
 
     @Override

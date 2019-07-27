@@ -34,6 +34,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
@@ -43,10 +44,14 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
 import com.ftofs.twant.widget.SizeChangedRecyclerView;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -253,6 +258,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private ChatMessage emMessageToChatMessage(EMMessage emMessage) {
         ChatMessage chatMessage = new ChatMessage();
+        chatMessage.messageId = emMessage.getMsgId();
         chatMessage.content = emMessage.getBody().toString();
         if (emMessage.getFrom().equals(myMemberName)) {
             chatMessage.origin = ChatMessage.MY_MESSAGE;
@@ -333,6 +339,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("onItemChildLongClick");
+                ChatMessage chatMessage = chatMessageList.get(position);
+                String messageId = chatMessage.messageId;
+                new XPopup.Builder(getContext())
+//                        .maxWidth(600)
+                        .asCenterList("請選擇操作", new String[]{"刪除"},
+                                new OnSelectListener() {
+                                    @Override
+                                    public void onSelect(int position, String text) {
+                                        SLog.info("position[%d], text[%s]", position, text);
+                                        if (position == 0) {
+                                            showDeleteMessageConfirm(position, messageId);
+                                        }
+                                    }
+                                })
+                        .show();
                 return false;
             }
         });
@@ -604,5 +625,38 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }
             }
         }
+    }
+
+    private void showDeleteMessageConfirm(int position, String messageId) {
+        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(_mActivity, "確認", "確定要刪除這條消息嗎?", new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+                //删除当前会话的某条聊天记录
+                SLog.info("messageId[%s]", messageId);
+                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName);
+                conversation.removeMessage(messageId);
+
+                chatMessageList.remove(position);
+                chatMessageAdapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        }))
+                .show();
     }
 }

@@ -81,6 +81,32 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             btnBack.setVisibility(View.VISIBLE);
         }
 
+        RecyclerView rvChatConversationList = view.findViewById(R.id.rv_chat_conversation_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        rvChatConversationList.setLayoutManager(layoutManager);
+        adapter = new ChatConversationAdapter(chatConversationList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ChatConversation chatConversation = chatConversationList.get(position);
+                int itemType = chatConversation.itemType;
+
+                if (itemType == ChatConversation.ITEM_TYPE_LOGISTICS) {
+                    Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_LOGISTICS));
+                } else if (itemType == ChatConversation.ITEM_TYPE_RETURN) {
+                    Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
+                } else {
+                    String memberName = chatConversation.friendInfo.memberName;
+                    Util.startFragment(ChatFragment.newInstance(memberName));
+                }
+            }
+        });
+        rvChatConversationList.setAdapter(adapter);
+    }
+
+    private void loadData() {
+        chatConversationList.clear();
+
         // 添加【交易物流消息】、【退換貨消息】
         chatConversationList.add(new ChatConversation(ChatConversation.ITEM_TYPE_LOGISTICS));
         chatConversationList.add(new ChatConversation(ChatConversation.ITEM_TYPE_RETURN));
@@ -108,29 +134,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             chatConversationList.add(chatConversation);
         }
 
-        RecyclerView rvChatConversationList = view.findViewById(R.id.rv_chat_conversation_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
-        rvChatConversationList.setLayoutManager(layoutManager);
-
-
-        adapter = new ChatConversationAdapter(chatConversationList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ChatConversation chatConversation = chatConversationList.get(position);
-                int itemType = chatConversation.itemType;
-
-                if (itemType == ChatConversation.ITEM_TYPE_LOGISTICS) {
-                    Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_LOGISTICS));
-                } else if (itemType == ChatConversation.ITEM_TYPE_RETURN) {
-                    Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
-                } else {
-                    String memberName = chatConversation.friendInfo.memberName;
-                    Util.startFragment(ChatFragment.newInstance(memberName));
-                }
-            }
-        });
-        rvChatConversationList.setAdapter(adapter);
+        adapter.setNewData(chatConversationList);
     }
 
 
@@ -149,9 +153,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     .atView(v)
                     .asCustom(new BlackDropdownMenuMessage(_mActivity, this))
                     .show();
-        } else if (id == R.id.btn_view_logistics_message) {
-        } else if (id == R.id.btn_view_refund_message) {
-
         }
     }
 
@@ -176,5 +177,16 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         if (requestCode == RequestCode.SCAN_QR_CODE.ordinal()) {
             Util.handleQRCodeResult(_mActivity, data);
         }
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        loadData();
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }
