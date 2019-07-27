@@ -195,6 +195,8 @@
     <string name="setting_realname_authentication">實名認證</string>
     <string name="setting_realname_authentication_hint">您認證的實名信息</string>
 
+    <string name="input_custom_package_type_hint">請補充其他物品名稱</string>
+
     <string name="text_new_arrivals_chinese">最新入駐</string>
     <string name="text_new_arrivals_english">NEW ARRIVALS</string>
 

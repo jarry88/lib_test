@@ -205,6 +205,7 @@
                     android:layout_height="wrap_content"
                     app:gl_column_count="3">
                     <TextView
+                        android:id="@+id/btn_package_type_daily_use"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="4dp"
@@ -219,6 +220,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/btn_package_type_digital"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="4dp"
@@ -233,6 +235,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/btn_package_type_clothes"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="4dp"
@@ -247,6 +250,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/btn_package_type_food"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="4dp"
@@ -261,6 +265,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/btn_package_type_file"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="4dp"
@@ -275,6 +280,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/btn_package_type_medicine"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         android:layout_marginLeft="4dp"
@@ -283,13 +289,14 @@
                         android:layout_marginBottom="8dp"
                         android:gravity="center"
                         android:text="醫藥用品"
-                        android:textColor="@color/tw_blue"
+                        android:textColor="@color/tw_black"
                         android:textSize="16sp"
                         android:background="@drawable/package_type_btn_bg"
                         />
                 </com.ftofs.twant.widget.GridLayout>
 
-                <TextView
+                <EditText
+                    android:id="@+id/et_custom_package_type"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:layout_marginLeft="9dp"
@@ -297,8 +304,11 @@
                     android:paddingLeft="11dp"
                     android:gravity="center_vertical"
                     android:textSize="15sp"
-                    android:textColor="@color/tw_medium_grey"
-                    android:text="請補充其他物品名稱"
+                    android:textColor="@color/tw_black"
+                    android:hint="@string/input_custom_package_type_hint"
+                    android:singleLine="true"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
                     android:background="@drawable/border_type_a"
                     />
             </LinearLayout>
@@ -338,6 +348,9 @@
                         android:textSize="15sp"
                         android:textColor="@color/tw_black"
                         android:text=""
+                        android:singleLine="true"
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionNext"
                         android:hint="@string/input_package_weight_hint"
                         android:background="@null"
                         />
@@ -372,6 +385,9 @@
                         android:textSize="15sp"
                         android:textColor="@color/tw_black"
                         android:text=""
+                        android:singleLine="true"
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionNext"
                         android:hint="@string/input_package_length_hint"
                         android:background="@null"
                         />
@@ -406,6 +422,9 @@
                         android:textSize="15sp"
                         android:textColor="@color/tw_black"
                         android:text=""
+                        android:singleLine="true"
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionNext"
                         android:hint="@string/input_package_width_hint"
                         android:background="@null"
                         />
@@ -440,6 +459,9 @@
                         android:textSize="15sp"
                         android:textColor="@color/tw_black"
                         android:text=""
+                        android:singleLine="true"
+                        android:inputType="numberDecimal"
+                        android:imeOptions="actionNext"
                         android:hint="@string/input_package_height_hint"
                         android:background="@null"
                         />
@@ -473,6 +495,9 @@
                         android:textSize="15sp"
                         android:textColor="@color/tw_black"
                         android:text=""
+                        android:singleLine="true"
+                        android:inputType="text"
+                        android:imeOptions="actionDone"
                         android:hint="@string/input_remark_hint"
                         android:background="@null"
                         />

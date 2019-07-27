@@ -371,7 +371,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                         pop();
 
-
                         if (paymentTypeCode.equals(Constant.PAYMENT_TYPE_CODE_ONLINE)) {
                             SLog.info("在線支付方式");
 
