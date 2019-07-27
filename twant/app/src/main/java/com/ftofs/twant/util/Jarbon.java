@@ -1,8 +1,13 @@
 package com.ftofs.twant.util;
 
-import java.util.Calendar;
+package com.example;
 
+
+import com.example.SLog;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class Jarbon {
     /**
@@ -76,6 +81,23 @@ public class Jarbon {
         }
     }
 
+
+    public static com.example.Jarbon create(int year, int month, int day, int hour, int minute, int second, int milliSecond) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day, hour, minute, second);
+        calendar.set(Calendar.MILLISECOND, milliSecond);
+
+        return new com.example.Jarbon(calendar.getTimeInMillis());
+    }
+
+    public static com.example.Jarbon create(int year, int month, int day, int hour, int minute, int second) {
+        return create(year, month, day, hour, minute, second, 0);
+    }
+
+    public static com.example.Jarbon create(int year, int month, int day) {
+        return create(year, month, day, 0, 0, 0);
+    }
+
     /**
      * 解析字符串格式的日期时间
      * 支持如下格式:
@@ -85,7 +107,7 @@ public class Jarbon {
      * @param datetime
      * @return
      */
-    public static Jarbon parse(String datetime) {
+    public static com.example.Jarbon parse(String datetime) {
         if (datetime == null) {
             return null;
         }
@@ -115,33 +137,135 @@ public class Jarbon {
             }
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Y, m, d, H, i, s);
-        calendar.set(Calendar.MILLISECOND, u);
-
-        return new Jarbon(calendar.getTimeInMillis());
+        return create(Y, m, d, H, i, s, u);
     }
 
-    public Jarbon startOfDay() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, day, 0, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return new Jarbon(calendar.getTimeInMillis());
+    public com.example.Jarbon startOfDay() {
+        return create(year, month, day);
     }
 
 
-    public int diffInDays(Jarbon jarbon) {
-        Jarbon startOfDay1 = startOfDay();
-        Jarbon startOfDay2 = jarbon.startOfDay();
+    /**
+     * 相差的天数(自然天)
+     * @param jarbon
+     * @return 如果早于jarbon，返回正数  如果是同一天，返回0  如果晚于jarbon，返回负数
+     */
+    public int diffInDays(com.example.Jarbon jarbon) {
+        com.example.Jarbon startOfDay1 = startOfDay();
+        com.example.Jarbon startOfDay2 = jarbon.startOfDay();
 
         int timestamp1 = startOfDay1.getTimestamp();
         int timestamp2 = startOfDay2.getTimestamp();
 
-        return (timestamp1 - timestamp2) / 86400;
+        return (timestamp2 - timestamp1) / 86400;
     }
+
+
+    public int diffInMinutes(com.example.Jarbon jarbon) {
+        /*
+        必须用毫秒比较，比如下面的这个时间，如果用秒比较，会认为是相差1分钟，实际上是相差 59.999 秒，不足1分钟
+        2019-07-27 20:05:17.466
+        2019-07-27 20:06:17.465
+         */
+        long timestampMillis1 = timestampMillis;
+        long timestampMillis2 = jarbon.timestampMillis;
+
+        return (int) ((timestampMillis2 - timestampMillis1) / 60000);
+    }
+
+    /**
+     * 返回日期部分 格式 2019-07-26
+     * @return
+     */
+    public String toDateString() {
+        return toString().substring(0, 10);
+    }
+
+    /**
+     * 返回时间部分 格式 14:15:16
+     * @return
+     */
+    public String toTimeString() {
+        return toString().substring(11, 19);
+    }
+
+    /**
+     * 返回日期时间（不包括毫秒） 格式 2019-07-26 20:13:30
+     * @return
+     */
+    public String toDateTimeString() {
+        return toString().substring(0, 19);
+    }
+
 
     @Override
     public String toString() {
+        // return String.format("%04d-%02d-%02d %02d:%02d:%02d.%03d", year, month, day, hour, minute, second, milliSecond);
+        return format("Y-m-d H:i:s.u");
+    }
+
+    public String format(String format) {
+        StringBuilder sb = new StringBuilder();
+        List<Object> paramList = new ArrayList<>();
+        int len = format.length();
+        for (int i = 0; i < len; i++) {
+            char ch = format.charAt(i);
+
+            switch (ch) {
+                case 'Y':
+                    sb.append("%04d");
+                    paramList.add(year);
+                    break;
+                case 'm':
+                    sb.append("%02d");
+                    paramList.add(month);
+                    break;
+                case 'd':
+                    sb.append("%02d");
+                    paramList.add(day);
+                    break;
+                case 'H':
+                    sb.append("%02d");
+                    paramList.add(hour);
+                    break;
+                case 'i':
+                    sb.append("%02d");
+                    paramList.add(minute);
+                    break;
+                case 's':
+                    sb.append("%02d");
+                    paramList.add(second);
+                    break;
+                case 'u':
+                    sb.append("%03d");
+                    paramList.add(milliSecond);
+                    break;
+                case '%':
+                    sb.append("%%");
+                    break;
+                default:
+                    sb.append(ch);
+                    break;
+
+            }
+        }
+
+        // SLog.info("sb[%s]", sb.toString());
+
+
+        Object[] params = new Object[paramList.size()];
+        for (int i = 0; i < paramList.size(); i++) {
+            params[i] = paramList.get(i);
+        }
+
+        return String.format(sb.toString(), params);
+    }
+
+    /**
+     * 返回详细信息的字符串
+     * @return
+     */
+    public String dump() {
         return String.format("datetime[%04d-%02d-%02d %02d:%02d:%02d.%03d],timestamp[%d],timestampMillis[%s],dayOfWeek[%d]",
                 year, month, day, hour, minute, second, milliSecond, timestamp, timestampMillis, dayOfWeek);
     }
@@ -152,12 +276,21 @@ public class Jarbon {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof Jarbon)) {
+        if (!(obj instanceof com.example.Jarbon)) {
             return false;
         }
 
-        Jarbon jarbon = (Jarbon) obj;
+        com.example.Jarbon jarbon = (com.example.Jarbon) obj;
         return timestampMillis == jarbon.timestampMillis;
+    }
+
+    /**
+     * 获取时区ID 例如 Asia/Shanghai
+     * @return
+     */
+    public static String getTimeZoneID() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.getTimeZone().getID();
     }
 
     public int getTimestamp() {
