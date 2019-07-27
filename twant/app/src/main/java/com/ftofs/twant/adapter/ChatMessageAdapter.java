@@ -20,7 +20,6 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.hyphenate.chat.EMMessage;
 
 import java.io.File;
 import java.util.List;
@@ -79,31 +78,39 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             helper.setGone(R.id.tv_message, false);
             llImageMessageContainer.setVisibility(View.VISIBLE);
 
+
+            ImageView imageView = helper.getView(R.id.img_message);
+
+            EasyJSONObject data = (EasyJSONObject) EasyJSONObject.parse(item.content);
+
+            String absolutePath = null;
+            String imgUrl = null;
             try {
-                ImageView imageView = helper.getView(R.id.img_message);
-
-                EasyJSONObject data = (EasyJSONObject) EasyJSONObject.parse(item.content);
-
-                String absolutePath = data.getString("absolutePath");
-                String imgUrl = data.getString("imgUrl");
-
-                SLog.info("absolutePath[%s], imgUrl[%s]", absolutePath, imgUrl);
-
-                boolean imgLoaded = false;
-                if (!StringUtil.isEmpty(absolutePath)) {  // 優先加載本地的圖片
-                    File file = new File(absolutePath);
-                    if (file.exists()) {
-                        Glide.with(mContext).load(file).centerCrop().into(imageView);
-                        imgLoaded = true;
-                    }
-                }
-
-                if (!imgLoaded && !StringUtil.isEmpty(imgUrl)) {
-                    Glide.with(mContext).load(StringUtil.normalizeImageUrl(imgUrl)).centerCrop().into(imageView);
-                }
-
+                absolutePath = data.getString("absolutePath");
+                imgUrl = data.getString("imgUrl");
             } catch (Exception e) {
+            }
 
+            SLog.info("position[%d], absolutePath[%s], imgUrl[%s]", helper.getAdapterPosition(), absolutePath, imgUrl);
+
+            boolean imgLoaded = false;
+            if (!StringUtil.isEmpty(absolutePath)) {  // 優先加載本地的圖片
+                File file = new File(absolutePath);
+                if (file.exists()) {
+                    Glide.with(mContext).load(file).centerCrop().into(imageView);
+                    imgLoaded = true;
+                    SLog.info("!!!!!!!!!!!!!!!!!!圖片已加載【%s][%s]", imgUrl, absolutePath);
+                }
+            }
+
+            if (!imgLoaded && !StringUtil.isEmpty(imgUrl)) {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(imgUrl)).centerCrop().into(imageView);
+                imgLoaded = true;
+                SLog.info("!!!!!!!!!!!!!!!!!!圖片已加載【%s][%s]", imgUrl, absolutePath);
+            }
+
+            if (!imgLoaded) {
+                SLog.info("Error!!!!!!!!!!!!!!!!!!!圖片未加載【%s][%s]", imgUrl, absolutePath);
             }
         }
 

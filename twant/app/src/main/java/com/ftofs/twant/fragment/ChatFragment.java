@@ -318,6 +318,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             String absolutePath = emMessage.getStringAttribute("absolutePath", "");
 
             chatMessage.content = EasyJSONObject.generate("imgUrl", imgUrl, "absolutePath", absolutePath).toString();
+            SLog.info("chatMessage.content[%s]", chatMessage.content);
         }
 
         if (emMessage.getFrom().equals(myMemberName)) {
@@ -747,7 +748,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.messageType = Constant.CHAT_MESSAGE_TYPE_IMAGE;
             chatMessage.origin = ChatMessage.MY_MESSAGE;
-            chatMessage.content = absolutePath;
+            chatMessage.content = EasyJSONObject.generate("absolutePath", absolutePath).toString();
             chatMessage.timestamp = System.currentTimeMillis();
             chatMessageList.add(chatMessage);
 
@@ -768,6 +769,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     message.setAttribute("messageType", "image");
                     message.setAttribute("ossUrl", result.first);
                     message.setAttribute("absolutePath", result.second);
+
+                    SLog.info("ossUrl[%s], absolutePath[%s]", result.first, result.second);
 
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(message);

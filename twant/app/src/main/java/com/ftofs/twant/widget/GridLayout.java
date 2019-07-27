@@ -79,7 +79,7 @@ public class GridLayout extends ViewGroup {
 
             int itemWidth = itemWidthOrig - marginLayoutParams.leftMargin - marginLayoutParams.rightMargin;
             int itemHeight = sizeHeight - marginLayoutParams.topMargin - marginLayoutParams.bottomMargin;
-            SLog.info("itemWidth[%d], itemHeight[%d]", itemWidth, itemHeight);
+            // SLog.info("itemWidth[%d], itemHeight[%d]", itemWidth, itemHeight);
 
             // 计算出所有的childView的宽和高
             int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(itemWidth, MeasureSpec.EXACTLY);
@@ -87,7 +87,7 @@ public class GridLayout extends ViewGroup {
 
             measureChild(childView, childWidthMeasureSpec, childHeightMeasureSpec);
             itemHeight = childView.getMeasuredHeight();
-            SLog.info("itemHeight[%d]", itemHeight);
+            // SLog.info("itemHeight[%d]", itemHeight);
 
             if (maxRowChildHeight < marginLayoutParams.topMargin + itemHeight + marginLayoutParams.bottomMargin) {
                 maxRowChildHeight = marginLayoutParams.topMargin + itemHeight + marginLayoutParams.bottomMargin;
