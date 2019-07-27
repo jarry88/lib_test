@@ -152,6 +152,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 chatConversation.friendInfo = friendInfo;
             }
             chatConversation.unreadCount = conversation.getUnreadMsgCount();
+            chatConversation.lastMessageType = ChatUtil.getIntMessageType(lastMessage);
             chatConversation.lastMessage = lastMessage.getBody().toString();
             chatConversation.timestamp = lastMessage.getMsgTime();
 

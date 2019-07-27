@@ -1,7 +1,9 @@
 package com.ftofs.twant.util;
 
+import com.ftofs.twant.constant.Constant;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
@@ -31,5 +33,30 @@ public class ChatUtil {
         conversation.setExtField(ext);
 
         return conversation;
+    }
+
+
+    /**
+     * 獲取整數類型的消息類型
+     * @param message
+     * @return
+     */
+    public static int getIntMessageType(EMMessage message) {
+        EMMessage.Type messageType = message.getType();
+        if (messageType == EMMessage.Type.IMAGE) {
+            return Constant.CHAT_MESSAGE_TYPE_IMAGE;
+        } else if (messageType == EMMessage.Type.TXT) {
+            // 拓展的文本消息類型
+            String txtMessageType = message.getStringAttribute("messageType", "");
+            if ("goods".equals(txtMessageType)) {
+                return Constant.CHAT_MESSAGE_TYPE_GOODS;
+            } else if ("orders".equals(txtMessageType)) {
+                return Constant.CHAT_MESSAGE_TYPE_ORDER;
+            } else { // 默認為文本消息
+                return Constant.CHAT_MESSAGE_TYPE_TXT;
+            }
+        }
+
+        return Constant.CHAT_MESSAGE_TYPE_UNKNOWN;
     }
 }

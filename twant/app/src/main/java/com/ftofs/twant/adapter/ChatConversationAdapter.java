@@ -7,10 +7,12 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
+import com.hyphenate.chat.EMMessage;
 
 import java.util.List;
 
@@ -48,7 +50,16 @@ public class ChatConversationAdapter extends BaseMultiItemQuickAdapter<ChatConve
 
             helper.setText(R.id.tv_nickname, chatConversation.friendInfo.nickname);
             TextView tvLastMessage = helper.getView(R.id.tv_last_message);
-            tvLastMessage.setText(StringUtil.getMessageText(mContext, chatConversation.lastMessage, (int) tvLastMessage.getTextSize()));
+            if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
+                tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_IMAGE);
+            } else if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_GOODS) {
+                tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_GOODS);
+            } else if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_ORDER) {
+                tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_GOODS);
+            } else if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
+                tvLastMessage.setText(StringUtil.getMessageText(mContext, chatConversation.lastMessage, (int) tvLastMessage.getTextSize()));
+            }
+
 
             helper.setText(R.id.tv_message_time, formatMessageTime(chatConversation.timestamp));
             if (chatConversation.isDoNotDisturb) {

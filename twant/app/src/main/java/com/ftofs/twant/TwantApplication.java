@@ -17,6 +17,7 @@ import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.Test;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.User;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
@@ -291,7 +292,7 @@ public class TwantApplication extends Application {
                         chatMessage.fromMemberName = message.getFrom();
                         chatMessage.toMemberName = message.getTo();
                         chatMessage.nickname = "";
-                        chatMessage.messageType = message.getType();
+                        chatMessage.messageType = ChatUtil.getIntMessageType(message);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE, chatMessage);
                     }
                 }

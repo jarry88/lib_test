@@ -2,21 +2,30 @@ package com.ftofs.twant.adapter;
 
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.hyphenate.chat.EMMessage;
 
+import java.io.File;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHolder> {
     String myAvatarUrl;
@@ -39,6 +48,8 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
         TextView textView = helper.getView(R.id.tv_message);
         textView.setText(StringUtil.getMessageText(mContext, item.content, (int) textView.getTextSize()));
 
+        LinearLayout llImageMessageContainer = helper.getView(R.id.ll_image_message_container);
+
         if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
             // 設置頭像
             ImageView imgMyAvatar = helper.getView(R.id.img_my_avatar);
@@ -46,6 +57,7 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             helper.setGone(R.id.img_your_avatar, false);
             helper.setGone(R.id.img_my_avatar, true);
             textView.setBackgroundResource(R.drawable.my_message_bg);
+            llImageMessageContainer.setGravity(Gravity.RIGHT);
         } else { // 是別人的消息
             // 設置頭像
             ImageView imgYourAvatar = helper.getView(R.id.img_your_avatar);
@@ -56,7 +68,46 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             helper.setGone(R.id.img_my_avatar, false);
             helper.setGone(R.id.img_your_avatar, true);
             textView.setBackgroundResource(R.drawable.your_message_bg);
+            llImageMessageContainer.setGravity(Gravity.LEFT);
         }
+
+        SLog.info("messageType[%s]", item.messageType);
+        if (item.messageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
+            helper.setGone(R.id.tv_message, true);
+            llImageMessageContainer.setVisibility(View.GONE);
+        } else if (item.messageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
+            helper.setGone(R.id.tv_message, false);
+            llImageMessageContainer.setVisibility(View.VISIBLE);
+
+            try {
+                ImageView imageView = helper.getView(R.id.img_message);
+
+                EasyJSONObject data = (EasyJSONObject) EasyJSONObject.parse(item.content);
+
+                String absolutePath = data.getString("absolutePath");
+                String imgUrl = data.getString("imgUrl");
+
+                SLog.info("absolutePath[%s], imgUrl[%s]", absolutePath, imgUrl);
+
+                boolean imgLoaded = false;
+                if (!StringUtil.isEmpty(absolutePath)) {  // 優先加載本地的圖片
+                    File file = new File(absolutePath);
+                    if (file.exists()) {
+                        Glide.with(mContext).load(file).centerCrop().into(imageView);
+                        imgLoaded = true;
+                    }
+                }
+
+                if (!imgLoaded && !StringUtil.isEmpty(imgUrl)) {
+                    Glide.with(mContext).load(StringUtil.normalizeImageUrl(imgUrl)).centerCrop().into(imageView);
+                }
+
+            } catch (Exception e) {
+
+            }
+        }
+
+
         // 設置了background后，會重置Padding
         textView.setPadding(Util.dip2px(mContext, 15), Util.dip2px(mContext, 12),
                 Util.dip2px(mContext, 15), Util.dip2px(mContext, 12));
@@ -64,10 +115,12 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
 
         int itemCount = getItemCount();
         int position = helper.getAdapterPosition();
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
         if (position == itemCount - 1) {
             // 最后一項，設置大一點的bottomMargin
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
             layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
+        } else {
+            layoutParams.bottomMargin = 0;
         }
     }
 }

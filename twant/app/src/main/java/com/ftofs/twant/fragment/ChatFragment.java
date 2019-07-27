@@ -33,6 +33,7 @@ import com.ftofs.twant.adapter.ChatMessageAdapter;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
@@ -204,6 +205,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
+
+        //指定会话消息未读数清零
+        conversation.markAllMessagesAsRead();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -239,7 +243,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private boolean loadFriendInfo() {
-        String memberName = null;
+        String memberName = yourMemberName;
 
         if (yourRole == ChatUtil.ROLE_CS_AVAILABLE) {
             ImNameMap map = ImNameMap.getByImName(yourMemberName);
@@ -274,9 +278,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             return;
         }
 
-        //指定会话消息未读数清零
-        conversation.markAllMessagesAsRead();
-
         //获取此会话的所有消息
         String startMsgId = "";
         List<EMMessage> messages = conversation.getAllMessages();
@@ -308,8 +309,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private ChatMessage emMessageToChatMessage(EMMessage emMessage) {
         ChatMessage chatMessage = new ChatMessage();
+        chatMessage.messageType = ChatUtil.getIntMessageType(emMessage);
         chatMessage.messageId = emMessage.getMsgId();
-        chatMessage.content = emMessage.getBody().toString();
+        if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
+            chatMessage.content = emMessage.getBody().toString();
+        } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
+            String imgUrl = emMessage.getStringAttribute("ossUrl", "");
+            String absolutePath = emMessage.getStringAttribute("absolutePath", "");
+
+            chatMessage.content = EasyJSONObject.generate("imgUrl", imgUrl, "absolutePath", absolutePath).toString();
+        }
+
         if (emMessage.getFrom().equals(myMemberName)) {
             chatMessage.origin = ChatMessage.MY_MESSAGE;
         } else {
@@ -531,6 +541,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         SLog.info("content[%s]", content);
         //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
         EMMessage message = EMMessage.createTxtSendMessage(content, yourMemberName);
+        message.setAttribute("messageType", "txt");
+
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
         message.setMessageStatusCallback(new EMCallBack(){
@@ -551,7 +563,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         });
 
         ChatMessage chatMessage = new ChatMessage();
-        chatMessage.messageType = message.getType();
+        chatMessage.messageType = ChatUtil.getIntMessageType(message);
         chatMessage.messageId = message.getMsgId();
         chatMessage.content = "txt:" + "\"" + content + "\"";
         chatMessage.origin = ChatMessage.MY_MESSAGE;
@@ -733,7 +745,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             SLog.info("absolutePath[%s]", absolutePath);
 
             ChatMessage chatMessage = new ChatMessage();
-            chatMessage.messageType = EMMessage.Type.IMAGE;
+            chatMessage.messageType = Constant.CHAT_MESSAGE_TYPE_IMAGE;
             chatMessage.origin = ChatMessage.MY_MESSAGE;
             chatMessage.content = absolutePath;
             chatMessage.timestamp = System.currentTimeMillis();
@@ -755,6 +767,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     chatMessage.messageId = message.getMsgId();
                     message.setAttribute("messageType", "image");
                     message.setAttribute("ossUrl", result.first);
+                    message.setAttribute("absolutePath", result.second);
 
                     //发送消息
                     EMClient.getInstance().chatManager().sendMessage(message);
@@ -771,7 +784,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                         @Override
                         public void onProgress(int i, String s) {
-                            SLog.info("onProgress, i[%d], s[%s]", i, s);
+                            // SLog.info("onProgress, i[%d], s[%s]", i, s);
                         }
                     });
                 }

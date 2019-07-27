@@ -166,4 +166,13 @@ public class Constant {
     public static final int GENDER_UNKNOWN = 0;
     public static final int GENDER_MALE = 1;
     public static final int GENDER_FEMALE = 2;
+
+    /*
+     * IM消息類型
+     */
+    public static final int CHAT_MESSAGE_TYPE_UNKNOWN = 0;
+    public static final int CHAT_MESSAGE_TYPE_TXT = 1;
+    public static final int CHAT_MESSAGE_TYPE_GOODS = 2;
+    public static final int CHAT_MESSAGE_TYPE_ORDER = 3;
+    public static final int CHAT_MESSAGE_TYPE_IMAGE = 4;
 }
