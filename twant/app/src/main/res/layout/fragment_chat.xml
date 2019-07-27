@@ -45,7 +45,7 @@
         </com.ftofs.twant.widget.ScaledButton>
     </RelativeLayout>
     <!--  END OF 工具欄 -->
-    <am.widget.smoothinputlayout.SmoothInputLayout
+    <com.ftofs.twant.widget.SmoothInputLayout
         android:id="@+id/sil_main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -313,5 +313,5 @@
                     />
             </RelativeLayout>
         </FrameLayout>
-    </am.widget.smoothinputlayout.SmoothInputLayout>
+    </com.ftofs.twant.widget.SmoothInputLayout>
 </LinearLayout>

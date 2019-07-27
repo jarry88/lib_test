@@ -48,4 +48,12 @@
     <declare-styleable name="GridLayout">
         <attr name="gl_column_count"></attr>
     </declare-styleable>
+
+    <declare-styleable name="SmoothInputLayout">
+        <attr name="silDefaultKeyboardHeight" format="dimension" />
+        <attr name="silMinKeyboardHeight" format="dimension" />
+        <attr name="silInputView" format="reference" />
+        <attr name="silInputPane" format="reference" />
+        <attr name="silAutoSaveKeyboardHeight" format="boolean" />
+    </declare-styleable>
 </resources>

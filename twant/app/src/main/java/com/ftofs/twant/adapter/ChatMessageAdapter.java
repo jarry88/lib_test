@@ -91,26 +91,18 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             } catch (Exception e) {
             }
 
-            SLog.info("position[%d], absolutePath[%s], imgUrl[%s]", helper.getAdapterPosition(), absolutePath, imgUrl);
-
             boolean imgLoaded = false;
             if (!StringUtil.isEmpty(absolutePath)) {  // 優先加載本地的圖片
                 File file = new File(absolutePath);
                 if (file.exists()) {
                     Glide.with(mContext).load(file).centerCrop().into(imageView);
                     imgLoaded = true;
-                    SLog.info("!!!!!!!!!!!!!!!!!!圖片已加載【%s][%s]", imgUrl, absolutePath);
                 }
             }
 
             if (!imgLoaded && !StringUtil.isEmpty(imgUrl)) {
                 Glide.with(mContext).load(StringUtil.normalizeImageUrl(imgUrl)).centerCrop().into(imageView);
                 imgLoaded = true;
-                SLog.info("!!!!!!!!!!!!!!!!!!圖片已加載【%s][%s]", imgUrl, absolutePath);
-            }
-
-            if (!imgLoaded) {
-                SLog.info("Error!!!!!!!!!!!!!!!!!!!圖片未加載【%s][%s]", imgUrl, absolutePath);
             }
         }
 

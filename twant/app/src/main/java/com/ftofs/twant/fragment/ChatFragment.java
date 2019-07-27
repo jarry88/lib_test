@@ -56,6 +56,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
 import com.ftofs.twant.widget.SizeChangedRecyclerView;
+import com.ftofs.twant.widget.SmoothInputLayout;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -74,7 +75,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import am.widget.smoothinputlayout.SmoothInputLayout;
+
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
