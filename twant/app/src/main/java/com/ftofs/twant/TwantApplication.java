@@ -5,23 +5,23 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.StrictMode;
-import android.util.Log;
 
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
-import com.ftofs.twant.orm.UserStatus;
-import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.Test;
+import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.User;
+import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -34,7 +34,6 @@ import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.umeng.commonsdk.debug.E;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.litepal.LitePal;
@@ -48,7 +47,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.Fragmentation;
 import pl.com.salsoft.sqlitestudioremote.SQLiteStudioService;
 
@@ -168,6 +166,10 @@ public class TwantApplication extends Application {
 
         // 打開SQLiteStudio
         SQLiteStudioService.instance().start(this);
+
+        // MUST use app context to avoid memory leak!
+        // or load with glide
+        BigImageViewer.initialize(GlideImageLoader.with(this));
     }
 
     @Override

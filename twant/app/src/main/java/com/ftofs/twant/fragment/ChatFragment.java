@@ -53,6 +53,7 @@ import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -419,6 +420,47 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("onItemChildClick");
+                int id = view.getId();
+                if (id == R.id.img_message) {
+                    SLog.info("預覽大圖");
+
+                    ChatMessage chatMessage = chatMessageList.get(position);
+                    if (chatMessage.messageType != Constant.CHAT_MESSAGE_TYPE_IMAGE) {
+                        return;
+                    }
+
+                    SLog.info("chatMessage.content[%s]", chatMessage.content);
+
+                    if (StringUtil.isEmpty(chatMessage.content)) {
+                        return;
+                    }
+
+                    EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(chatMessage.content);
+                    if (easyJSONObject == null) {
+                        return;
+                    }
+
+                    try {
+                        String absolutePath = easyJSONObject.getString("absolutePath");
+                        String imgUrl = easyJSONObject.getString("imgUrl");
+
+                        String imageUri;
+
+                        // 優先加載本地的Copy
+                        File file = new File(absolutePath);
+                        if (file.isFile()) {
+                            imageUri = absolutePath;
+                        } else { // 否則，加載oss上的Copy
+                            imageUri = StringUtil.normalizeImageUrl(imgUrl);
+                        }
+
+                        Util.startFragment(ImageViewerFragment.newInstance(imageUri));
+                        return;
+                    } catch (Exception e) {
+
+                    }
+
+                }
             }
         });
         chatMessageAdapter.setOnItemChildLongClickListener(new BaseQuickAdapter.OnItemChildLongClickListener() {
