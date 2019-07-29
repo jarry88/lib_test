@@ -297,10 +297,12 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         Api.getMobileZoneList(new TaskObserver() {
             @Override
             public void onMessage() {
-                mobileZoneList = (List<MobileZone>) message;
-                if (mobileZoneList == null) {
+                List<MobileZone> result = (List<MobileZone>) message;
+                if (result == null) {
                     return;
                 }
+                mobileZoneList = result;
+
                 SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
                 if (mobileZoneList.size() > 0) {
                     tvAreaName.setText(mobileZoneList.get(0).areaName);
