@@ -1145,4 +1145,70 @@ public class Api {
 
         return null;
     }
+
+    /**
+     * IM發送消息到服務器
+     */
+    public static void imSendMessage(String to, String messageType, String messageId, String content, String ossUrl,
+                                     String easemobUrl, int commonId, String goodsName, String goodsImage,
+                                     int ordersId, String ordersSn) {
+        SLog.info("IM發送消息到服務器");
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject messageBody = EasyJSONObject.generate(
+                "messageId", messageId,
+                "content", content);
+
+        try {
+            if (ossUrl != null) {
+                messageBody.set("ossUrl", ossUrl);
+            }
+            if (easemobUrl != null) {
+                messageBody.set("easemobUrl", easemobUrl);
+            }
+            if (commonId > 0) {
+                messageBody.set("commonId", commonId);
+            }
+            if (goodsName != null) {
+                messageBody.set("goodsName", goodsName);
+            }
+            if (goodsImage != null) {
+                messageBody.set("goodsImage", goodsImage);
+            }
+            if (ordersId > 0) {
+                messageBody.set("ordersId", ordersId);
+            }
+            if (ordersSn != null) {
+                messageBody.set("ordersSn", ordersSn);
+            }
+        } catch (Exception e) {
+
+        }
+
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "to", to,
+                "messageType", messageType,
+                "targetType", "users",
+                "messageBody", messageBody.toString()
+        );
+
+        SLog.info("params[%s]", params.toString());
+
+        Api.postIO(Api.PATH_IM_SEND_MESSAGE, params, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                SLog.info("Error!%s", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                SLog.info("發送成功");
+            }
+        });
+    }
 }

@@ -64,7 +64,9 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.adapter.message.EMAImageMessageBody;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -119,7 +121,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     String myMemberName;
 
     String yourNickname;
-    String yourMemberName;
+    String yourMemberName;  // 如果是客服聊天，則為imName; 如果是普通聊天，則為memberName
     String yourAvatarUrl;
     int yourRole;
 
@@ -614,6 +616,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             @Override
             public void onSuccess() {
                 SLog.info("onSuccess, body[%s]", message.getBody());
+
+                Api.imSendMessage(yourMemberName, "txt", message.getMsgId(), message.getBody().toString(),
+                        null, null, 0, null, null, 0, null);
             }
 
             @Override
@@ -846,7 +851,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     message.setMessageStatusCallback(new EMCallBack(){
                         @Override
                         public void onSuccess() {
-                            SLog.info("onSuccess, body[%s]", message.getBody());
+                            SLog.info("onSuccess, body[%s]", message.getBody().toString());
+
+                            EMImageMessageBody imageMessageBody = (EMImageMessageBody) message.getBody();
+                            Api.imSendMessage(yourMemberName, "image", message.getMsgId(), message.getBody().toString(),
+                                    result.first, imageMessageBody.getRemoteUrl(), 0, null, null, 0, null);
                         }
 
                         @Override

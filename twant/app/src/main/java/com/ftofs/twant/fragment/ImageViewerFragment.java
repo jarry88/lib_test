@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator;
 import com.github.piasy.biv.view.BigImageView;
 
 
@@ -45,11 +46,13 @@ public class ImageViewerFragment extends BaseFragment implements View.OnClickLis
         Bundle args = getArguments();
         imagePath = args.getString("imagePath");
 
+        // 如果是本地路徑，還要添加上file://協議前綴
         if (imagePath.startsWith("/")) {
             imagePath = "file://" + imagePath;
         }
 
         BigImageView bigImageView = view.findViewById(R.id.big_image_view);
+        bigImageView.setProgressIndicator(new ProgressPieIndicator());
         bigImageView.showImage(Uri.parse(imagePath));
     }
     
