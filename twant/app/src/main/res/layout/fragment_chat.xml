@@ -150,54 +150,7 @@
                     android:layout_marginLeft="13dp"
                     android:layout_marginRight="13dp"
                     app:gl_column_count="4">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="13dp"
-                        android:layout_marginLeft="13dp"
-                        android:layout_marginRight="13dp"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/icon_chat_goods"
-                            android:scaleType="fitXY"
-                            android:background="@drawable/chat_tool_icon_bg"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="@string/text_commodity"
-                            android:textSize="12sp"
-                            android:textColor="@color/tw_black"
-                            />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="13dp"
-                        android:layout_marginLeft="13dp"
-                        android:layout_marginRight="13dp"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/icon_chat_order"
-                            android:scaleType="fitXY"
-                            android:background="@drawable/chat_tool_icon_bg"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="@string/text_order"
-                            android:textSize="12sp"
-                            android:textColor="@color/tw_black"
-                            />
-                    </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/btn_send_image"
                         android:layout_width="match_parent"
@@ -249,6 +202,57 @@
                             />
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/btn_send_goods"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginLeft="13dp"
+                        android:layout_marginRight="13dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/icon_chat_goods"
+                            android:scaleType="fitXY"
+                            android:background="@drawable/chat_tool_icon_bg"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/text_commodity"
+                            android:textSize="12sp"
+                            android:textColor="@color/tw_black"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/btn_send_order"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginLeft="13dp"
+                        android:layout_marginRight="13dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/icon_chat_order"
+                            android:scaleType="fitXY"
+                            android:background="@drawable/chat_tool_icon_bg"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/text_order"
+                            android:textSize="12sp"
+                            android:textColor="@color/tw_black"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/btn_send_common_used_speech"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"
@@ -273,6 +277,7 @@
                             />
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/btn_send_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="13dp"

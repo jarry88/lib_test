@@ -333,8 +333,11 @@
     <string name="text_pay_fetch">門店自提</string>
     <string name="text_pay_result_success">訂單支付成功</string>
     <string name="text_pay_result_fail">訂單支付失敗</string>
-    <string name="self_fetch_hint">*門店自提不需要收貨地址，請輸入手機號確保及時獲得兌換碼</string>
-    <string name="self_fetcher">自提人</string>
+    <string name="self_take_hint">*門店自提不需要收貨地址，請輸入手機號確保及時獲得兌換碼</string>
+    <string name="self_taker">自提人</string>
+    <string name="input_self_take_nickname_hint">請填寫自提人姓名</string>
+    <string name="input_self_take_mobile_hint">請填寫自提手機號</string>
+    <string name="select_mobile_zone_hint">請選擇區號</string>
 
     <!--退換貨-->
     <string name="text_refund_tab">退款</string>

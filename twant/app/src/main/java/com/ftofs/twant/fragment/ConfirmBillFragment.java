@@ -157,13 +157,13 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         btnAddShippingAddress.setOnClickListener(this);
         btnChangeShippingAddress = view.findViewById(R.id.btn_change_shipping_address);
         btnChangeShippingAddress.setOnClickListener(this);
-        llSelfFetchInfoContainer = view.findViewById(R.id.ll_self_fetch_info_container);
+        llSelfFetchInfoContainer = view.findViewById(R.id.ll_self_take_info_container);
 
-        etSelfFetchNickname = view.findViewById(R.id.et_self_fetch_nickname);
-        etSelfFetchMobile = view.findViewById(R.id.et_self_fetch_mobile);
-        btnChangeSelfFetchMobileZone = view.findViewById(R.id.btn_change_self_fetch_mobile_zone);
+        etSelfFetchNickname = view.findViewById(R.id.et_self_take_nickname);
+        etSelfFetchMobile = view.findViewById(R.id.et_self_take_mobile);
+        btnChangeSelfFetchMobileZone = view.findViewById(R.id.btn_change_self_take_mobile_zone);
         btnChangeSelfFetchMobileZone.setOnClickListener(this);
-        tvSelfFetchMobileZone = view.findViewById(R.id.tv_self_fetch_mobile_zone);
+        tvSelfFetchMobileZone = view.findViewById(R.id.tv_self_take_mobile_zone);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
@@ -303,6 +303,47 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 ConfirmOrderSummaryItem summaryItem = getSummaryItem();
                 commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
                 commitBuyData.set("storeList", storeList);
+
+                // 如果是門店自提的話，還要自提手機號和買家姓名
+                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(summaryItem.paymentTypeCode)) {
+                    SLog.info("是門店自提");
+
+                    String realName = etSelfFetchNickname.getText().toString().trim();
+                    if (StringUtil.isEmpty(realName)) {
+                        ToastUtil.error(_mActivity, getString(R.string.input_self_take_nickname_hint));
+                        return null;
+                    }
+
+                    if (mobileZoneList == null || mobileZoneList.size() < 1) {
+                        ToastUtil.error(_mActivity, getString(R.string.select_mobile_zone_hint));
+                        return null;
+                    }
+
+                    String mobile = etSelfFetchMobile.getText().toString().trim();
+                    if (StringUtil.isEmpty(mobile)) {
+                        ToastUtil.error(_mActivity, getString(R.string.input_self_take_mobile_hint));
+                        return null;
+                    }
+
+                    MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+                    if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
+                        String[] areaArray = new String[] {
+                                "",
+                                getString(R.string.text_hongkong),
+                                getString(R.string.text_mainland),
+                                getString(R.string.text_macao)
+                        };
+
+                        String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
+                        ToastUtil.error(_mActivity, msg);
+                        return null;
+                    }
+
+                    String fullMobile = mobileZone.areaCode + mobile;
+
+                    commitBuyData.set("realName", realName);
+                    commitBuyData.set("mobile", fullMobile);
+                }
             }
 
             // 收貨地址
@@ -338,24 +379,33 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             popWithOutRefresh();
         } else if (id == R.id.btn_commit) {
             try {
-                if (mAddrItem == null) {
-                    SLog.info("Error!地址信息無效");
-                    ToastUtil.error(_mActivity, "地址信息無效");
-                    return;
-                }
-
                 EasyJSONObject params = collectParams(true);
                 SLog.info("params[%s]", params);
                 if (params == null) {
-                    ToastUtil.error(_mActivity, "數據無效");
+                    // ToastUtil.error(_mActivity, "數據無效");
                     return;
                 }
 
                 String buyData = params.getString("buyData");
                 EasyJSONObject buyDataObj = (EasyJSONObject) EasyJSONObject.parse(buyData);
                 final String paymentTypeCode = buyDataObj.getString("paymentTypeCode");
+                SLog.info("paymentTypeCode[%s]", paymentTypeCode);
 
-                Api.postUI(Api.PATH_COMMIT_BILL_DATA, params, new UICallback() {
+                // 如果不是門店自提的話，一定要有收貨地址信息
+                if (!Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode) && mAddrItem == null) {
+                    SLog.info("Error!地址信息無效");
+                    ToastUtil.error(_mActivity, "地址信息無效");
+                    return;
+                }
+
+                String path;
+                if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
+                    path = Api.PATH_SELF_TAKE;
+                } else {
+                    path = Api.PATH_COMMIT_BILL_DATA;
+                }
+
+                Api.postUI(path, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         ToastUtil.showNetworkError(_mActivity, e);
@@ -371,9 +421,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                         pop();
 
-                        if (paymentTypeCode.equals(Constant.PAYMENT_TYPE_CODE_ONLINE)) {
-                            SLog.info("在線支付方式");
-
+                        SLog.info("paymentTypeCode[%s]", paymentTypeCode);
+                        if (Constant.PAYMENT_TYPE_CODE_ONLINE.equals(paymentTypeCode) || Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
+                            // 在線支付或門店自提都需要先付款
                             try {
                                 int payId = responseObj.getInt("datas.payId");
                                 new XPopup.Builder(_mActivity)
@@ -397,7 +447,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             startForResult(AddAddressFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.ADD_ADDRESS.ordinal());
         } else if (id == R.id.btn_change_shipping_address) {
             startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
-        } else if (id == R.id.btn_change_self_fetch_mobile_zone) {
+        } else if (id == R.id.btn_change_self_take_mobile_zone) {
             List<ListPopupItem> itemList = new ArrayList<>();
             for (MobileZone mobileZone : mobileZoneList) {
                 ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);

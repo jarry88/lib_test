@@ -132,7 +132,7 @@ public class RegisterFragment extends BaseFragment implements
             }
 
 
-            if (!Util.isMobileValid(mobile, mobileZone.areaId)) {
+            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
                 String[] areaArray = new String[] {
                         "",
                         getString(R.string.text_hongkong),

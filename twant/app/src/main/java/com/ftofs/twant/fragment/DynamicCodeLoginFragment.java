@@ -150,7 +150,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 return;
             }
 
-            if (!Util.isMobileValid(mobile, mobileZone.areaId)) {
+            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
                 String[] areaArray = new String[] {
                         "",
                         getString(R.string.text_hongkong),

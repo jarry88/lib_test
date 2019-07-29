@@ -200,7 +200,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             }
 
             MobileZone mobileZone = mobileZoneList.get(mobileZoneIndex);
-            if (!Util.isMobileValid(mobile, mobileZone.areaId)) {
+            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
                 String[] areaArray = new String[] {
                         "",
                         getString(R.string.text_hongkong),

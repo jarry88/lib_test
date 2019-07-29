@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 字符串工具類
@@ -280,5 +282,28 @@ public class StringUtil {
         // txt:"abc" 返回 abc
         message = message.substring(5, message.length() - 1);
         return translateEmoji(context, message, textSize);
+    }
+
+    /**
+     * 判斷是否為合法的手機號
+     * @param mobile 手機號
+     * @param areaId 地區Id 1 -- 香港 2 -- 大陸 3 -- 澳門
+     * @return
+     */
+    public static boolean isMobileValid(String mobile, int areaId) {
+        String[] mobileRex = new String[] {
+                "",
+                "^[6|9][0-9]{7}$", // 香港
+                "^1[0-9]{10}$",    // 大陸
+                "^6[0-9]{7}$"   // 澳門
+        };
+
+        Pattern pattern = Pattern.compile(mobileRex[areaId]);
+
+        Matcher matcher = pattern.matcher(mobile);
+
+        boolean result = matcher.matches();
+        SLog.info("matches[%s]", result);
+        return result;
     }
 }

@@ -53,6 +53,7 @@ import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
@@ -190,6 +191,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_send_image, this);
         Util.setOnClickListener(view, R.id.btn_capture_image, this);
+        Util.setOnClickListener(view, R.id.btn_send_goods, this);
+        Util.setOnClickListener(view, R.id.btn_send_order, this);
+        Util.setOnClickListener(view, R.id.btn_send_common_used_speech, this);
+        Util.setOnClickListener(view, R.id.btn_send_location, this);
 
         initEmojiPage(view);
         loadEmojiData();
@@ -352,6 +357,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.btn_capture_image:
                 captureImageFile = CameraUtil.openCamera(_mActivity, this, Constant.CAMERA_ACTION_IMAGE);
+                break;
+            case R.id.btn_send_goods:
+            case R.id.btn_send_order:
+            case R.id.btn_send_common_used_speech:
+            case R.id.btn_send_location:
+                ToastUtil.info(_mActivity, "暫未實現");
                 break;
             case R.id.btn_emoji:
                 btnTool.setSelected(false);
@@ -823,6 +834,4 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     public void setConversation(EMConversation conversation) {
         this.conversation = conversation;
     }
-
-
 }

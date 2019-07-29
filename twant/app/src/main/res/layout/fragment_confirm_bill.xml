@@ -141,7 +141,7 @@
 
             <!-- 門店自提信息填寫 -->
             <LinearLayout
-                android:id="@+id/ll_self_fetch_info_container"
+                android:id="@+id/ll_self_take_info_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
@@ -152,7 +152,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/self_fetch_hint"
+                    android:text="@string/self_take_hint"
                     android:textColor="@color/tw_blue"
                     android:textSize="12sp"
                     />
@@ -165,7 +165,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/self_fetcher"
+                        android:text="@string/self_taker"
                         android:textColor="@color/tw_black"
                         android:textSize="16sp"
                         />
@@ -178,7 +178,7 @@
                         />
 
                     <EditText
-                        android:id="@+id/et_self_fetch_nickname"
+                        android:id="@+id/et_self_take_nickname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -213,7 +213,7 @@
                             />
 
                         <EditText
-                            android:id="@+id/et_self_fetch_mobile"
+                            android:id="@+id/et_self_take_mobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="15dp"
@@ -224,13 +224,13 @@
                             />
                     </LinearLayout>
                     <LinearLayout
-                        android:id="@+id/btn_change_self_fetch_mobile_zone"
+                        android:id="@+id/btn_change_self_take_mobile_zone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:gravity="center_vertical">
                         <TextView
-                            android:id="@+id/tv_self_fetch_mobile_zone"
+                            android:id="@+id/tv_self_take_mobile_zone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
