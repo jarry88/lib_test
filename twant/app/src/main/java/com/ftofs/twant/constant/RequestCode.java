@@ -62,5 +62,5 @@ public enum RequestCode {
     /**
      * 請求權限
      */
-    REQUSET_PREMISSION,
+    REQUEST_PREMISSION,
 }

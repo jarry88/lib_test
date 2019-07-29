@@ -15,7 +15,6 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RequestExecutor;
 import com.yanzhenjie.permission.runtime.Permission;
-import com.yanzhenjie.permission.setting.Setting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +88,7 @@ public class PermissionUtil {
                             AndPermission.with(context)
                                     .runtime()
                                     .setting()
-                                    .start(RequestCode.REQUSET_PREMISSION.ordinal());
+                                    .start(RequestCode.REQUEST_PREMISSION.ordinal());
                         }
                     }
                 })
@@ -154,7 +153,7 @@ public class PermissionUtil {
                                 AndPermission.with(context)
                                         .runtime()
                                         .setting()
-                                        .start(RequestCode.REQUSET_PREMISSION.ordinal());
+                                        .start(RequestCode.REQUEST_PREMISSION.ordinal());
                             }
                         }
                     })

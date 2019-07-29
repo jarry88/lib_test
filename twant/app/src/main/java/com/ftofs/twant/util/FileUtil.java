@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 
@@ -12,6 +13,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 文件操作
@@ -129,5 +132,55 @@ public class FileUtil {
         }
 
         return null;
+    }
+
+
+    /**
+     * 创建目录，并添加nomedia文件
+     * @param dir
+     */
+    public static boolean createDirNomedia(File dir) throws IOException {
+        List<String> folderList = new ArrayList<>();
+        // 遍历每一层，都要加上nomedia文件
+        while (!dir.exists()) {
+            folderList.add(dir.getName());
+            dir = dir.getParentFile();
+        }
+
+        for (int i = folderList.size() - 1; i >= 0; --i) {
+            String folderName = folderList.get(i);
+            dir = new File(dir, folderName);
+            // 创建目录
+            if (!dir.mkdir()) {
+                return false;
+            }
+            // 在目录中新建.nomedia文件
+            File nomediaFile = new File(dir, ".nomedia");
+            nomediaFile.createNewFile();
+        }
+
+        return true;
+    }
+
+    /**
+     * 获取App数据路径
+     * 类似 /storage/emulated/0/twant 的这种路径
+     * @return
+     */
+    public static String getAppDataRoot() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath() + "/twant";
+    }
+
+    public static String getImageRoot() {
+        return getAppDataRoot() + "/DCIM";
+    }
+
+    /**
+     * 獲取今天拍照的照片存放目錄(每天一個存放目錄)
+     * @return
+     */
+    public static String getTodayImageRoot() {
+        Jarbon jarbon = new Jarbon();
+        return getImageRoot() + "/" + jarbon.format("Ymd");
     }
 }

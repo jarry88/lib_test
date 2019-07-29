@@ -595,6 +595,16 @@ public class Api {
      */
     public static final String PATH_MPAY_ORDERS_QUERY = "/member/mpay/orders/query";
 
+    /**
+     * IM發送消息
+     */
+    public static final String PATH_IM_SEND_MESSAGE = "/member/im/message/send";
+
+    /**
+     * 購買：門店自提
+     */
+    public static final String PATH_SELF_TAKE = "/member/buy/take/save";
+
 
     /**
      * 發送Http請求

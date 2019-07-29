@@ -16,6 +16,7 @@ import com.ftofs.twant.log.SLog;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
+import java.io.IOException;
 
 public class CameraUtil {
     /**
@@ -29,7 +30,7 @@ public class CameraUtil {
         } else {
             rationaleHint = "拍攝視頻需要授予";
         }
-        PermissionUtil.actionWithPermission(context, Permission.Group.CAMERA, rationaleHint, new CommonCallback() {
+        PermissionUtil.actionWithPermission(context, new String[] {Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE}, rationaleHint, new CommonCallback() {
             @Override
             public String onSuccess(@Nullable String data) {
                 openAlbumCamera(context, caller, cameraAction);
@@ -56,7 +57,7 @@ public class CameraUtil {
         try {
 
             // 用當前時間給取得的圖片或視頻命名
-            String filename = String.valueOf(new Jarbon().getTimestamp());
+            String pureFilename = String.valueOf(System.currentTimeMillis());
             String ext = "";  // 扩展名
             if (cameraAction == Constant.CAMERA_ACTION_IMAGE) {
                 ext = ".jpg";
@@ -65,9 +66,17 @@ public class CameraUtil {
             }
 
 
-            String fullFilename = filename + ext;
-            File photoFile = FileUtil.getCacheFile(context, fullFilename);
+            String filename = pureFilename + ext;
+            // File photoFile = FileUtil.getCacheFile(context, fullFilename);
+            File photoFile = new File(FileUtil.getTodayImageRoot() + "/" + filename);
+            try {
+                FileUtil.createDirNomedia(new File(FileUtil.getTodayImageRoot()));
+            } catch (IOException e) {
+                e.printStackTrace();
+                SLog.info("Error!%s", e.getMessage());
+            }
 
+            // Uri imageUri = Uri.fromFile(photoFile);
             Uri imageUri = FileUtil.getCompatUriFromFile(context, photoFile);
 
             /*
@@ -92,9 +101,11 @@ public class CameraUtil {
             Intent intent = new Intent(action);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             if (caller instanceof Activity) {
+                SLog.info("從Activity啟動");
                 Activity activity = (Activity)caller;
                 activity.startActivityForResult(intent, requestCode);
             } else if (caller instanceof Fragment) {
+                SLog.info("從Fragment啟動");
                 Fragment fragment = (Fragment)caller;
                 fragment.startActivityForResult(intent, requestCode);
             }

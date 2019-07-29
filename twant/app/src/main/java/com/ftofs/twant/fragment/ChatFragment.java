@@ -49,6 +49,7 @@ import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.task.UpdateFriendInfoTask;
+import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
@@ -122,6 +123,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     TextView tvNickname;
 
+    /**
+     * 拍照的圖片文件
+     */
+    File captureImageFile;
+
     public static ChatFragment newInstance(EMConversation conversation) {
         Bundle args = new Bundle();
 
@@ -183,6 +189,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_send_image, this);
+        Util.setOnClickListener(view, R.id.btn_capture_image, this);
 
         initEmojiPage(view);
         loadEmojiData();
@@ -342,6 +349,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 break;
             case R.id.btn_send_image:
                 startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+                break;
+            case R.id.btn_capture_image:
+                captureImageFile = CameraUtil.openCamera(_mActivity, this, Constant.CAMERA_ACTION_IMAGE);
                 break;
             case R.id.btn_emoji:
                 btnTool.setSelected(false);
@@ -741,9 +751,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
 
         // 上傳圖片到OSS
-        if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
-            Uri uri = data.getData();
-            String absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
+        if (requestCode == RequestCode.OPEN_ALBUM.ordinal() || requestCode == RequestCode.CAMERA_IMAGE.ordinal()) {
+            String absolutePath;
+            if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
+                Uri uri = data.getData();
+                absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
+            } else {
+                absolutePath = captureImageFile.getAbsolutePath();  // 拍照得到的文件路徑
+            }
             SLog.info("absolutePath[%s]", absolutePath);
 
             ChatMessage chatMessage = new ChatMessage();
@@ -802,12 +817,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     return new Pair<>(name, absolutePath);
                 }
             });
-
-
         }
     }
 
     public void setConversation(EMConversation conversation) {
         this.conversation = conversation;
     }
+
+
 }
