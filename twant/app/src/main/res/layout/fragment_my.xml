@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
-    <ImageView
+    <com.ftofs.twant.widget.QuickClickButton
+        android:id="@+id/btn_quick_click"
         android:layout_width="match_parent"
         android:layout_height="177dp"
         android:background="@color/tw_red"

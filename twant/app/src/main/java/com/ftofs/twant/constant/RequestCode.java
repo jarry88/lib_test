@@ -48,4 +48,19 @@ public enum RequestCode {
      * 掃描二維碼
      */
     SCAN_QR_CODE,
+
+    /**
+     * 拍照片
+     */
+    CAMERA_IMAGE,
+
+    /**
+     * 拍視頻
+     */
+    CAMERA_VIDEO,
+
+    /**
+     * 請求權限
+     */
+    REQUSET_PREMISSION,
 }

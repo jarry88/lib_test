@@ -16,4 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
+
+    <com.ftofs.twant.widget.QuickClickButton
+        android:id="@+id/btn_quick_click"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:gravity="center"
+        android:text="click"
+        />
 </LinearLayout>

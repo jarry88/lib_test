@@ -27,6 +27,9 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.QuickClickButton;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -98,6 +101,28 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_friends, this);
         Util.setOnClickListener(view, R.id.btn_interactive, this);
 
+        QuickClickButton btnQuickClick = view.findViewById(R.id.btn_quick_click);
+        btnQuickClick.setOnQuickClickListener(new QuickClickButton.OnQuickClickListener() {
+            @Override
+            public void onQuickClick(View view) {
+                new XPopup.Builder(getContext())
+//                        .maxWidth(600)
+                        .asCenterList("請選擇操作", new String[] {"顯示Fragment棧", "顯示調試頁面"},
+                                new OnSelectListener() {
+                                    @Override
+                                    public void onSelect(int position, String text) {
+                                        SLog.info("position[%d], text[%s]", position, text);
+                                        if (position == 0) {
+
+                                        } else {
+                                            Util.startFragment(DebugFragment.newInstance());
+                                        }
+                                    }
+                                })
+                        .show();
+            }
+        });
+
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvMemberLevel = view.findViewById(R.id.tv_member_level);
         tvCartItemCount = view.findViewById(R.id.tv_cart_item_count);
@@ -132,7 +157,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
 
         switch (id) {
             case R.id.img_avatar:

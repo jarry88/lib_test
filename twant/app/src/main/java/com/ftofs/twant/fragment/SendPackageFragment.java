@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 
 import java.util.HashSet;
@@ -25,6 +26,12 @@ import java.util.Set;
 public class SendPackageFragment extends BaseFragment implements View.OnClickListener {
     Set<String> packageTypeSet = new HashSet<>();
     EditText etCustomPackageType;
+
+    EditText etPackageWeight;
+    EditText etPackageLength;
+    EditText etPackageWidth;
+    EditText etPackageHeight;
+    EditText etRemark;
 
     public static SendPackageFragment newInstance() {
         Bundle args = new Bundle();
@@ -128,6 +135,19 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
         }
 
         SLog.info("packageType[%s]", packageType);
+
+        String packageWeight = etPackageWeight.getText().toString().trim();
+        String packageLength = etPackageLength.getText().toString().trim();
+        String packageWidth = etPackageWidth.getText().toString().trim();
+        String packageHeight = etPackageHeight.getText().toString().trim();
+        String remark = etRemark.getText().toString().trim();
+
+        if (StringUtil.isEmpty(packageWeight)) {
+            ToastUtil.error(_mActivity, getString(R.string.input_package_weight_hint));
+            return;
+        }
+
+
     }
 
     @Override

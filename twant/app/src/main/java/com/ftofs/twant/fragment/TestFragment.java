@@ -12,8 +12,10 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
+import com.ftofs.twant.widget.QuickClickButton;
 
 /**
  * 測試用Fragment
@@ -21,6 +23,8 @@ import com.ftofs.twant.widget.AdjustButton;
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
     TextView textView;
+    QuickClickButton quickClickButton;
+
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -43,6 +47,13 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_test, this);
 
         textView = view.findViewById(R.id.text_view);
+        quickClickButton = view.findViewById(R.id.btn_quick_click);
+        quickClickButton.setOnQuickClickListener(new QuickClickButton.OnQuickClickListener() {
+            @Override
+            public void onQuickClick(View view) {
+                ToastUtil.info(_mActivity, "onQuickClick");
+            }
+        });
     }
 
     @Override

@@ -341,6 +341,7 @@
                         />
 
                     <EditText
+                        android:id="@+id/et_package_weight"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -378,6 +379,7 @@
                         />
 
                     <EditText
+                        android:id="@+id/et_package_length"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -415,6 +417,7 @@
                         />
 
                     <EditText
+                        android:id="@+id/et_package_width"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -452,6 +455,7 @@
                         />
 
                     <EditText
+                        android:id="@+id/et_package_height"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -488,6 +492,7 @@
                         />
 
                     <EditText
+                        android:id="@+id/et_remark"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

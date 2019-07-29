@@ -175,4 +175,8 @@ public class Constant {
     public static final int CHAT_MESSAGE_TYPE_GOODS = 2;
     public static final int CHAT_MESSAGE_TYPE_ORDER = 3;
     public static final int CHAT_MESSAGE_TYPE_IMAGE = 4;
+
+    // 摄像头动作类型
+    public static final int CAMERA_ACTION_IMAGE = 1;  // 用Camera拍照片
+    public static final int CAMERA_ACTION_VIDEO = 2;  // 用Camera拍视频
 }

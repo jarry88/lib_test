@@ -4,7 +4,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -80,6 +82,27 @@ public class FileUtil {
             }
         }
         return data;
+    }
+
+    public static String getFileProviderAuthority(Context context) {
+        // 返回这个字符串  com.ftofs.twant.fileprovider
+        return context.getPackageName() + ".fileprovider";
+    }
+
+    public static Uri getCompatUriFromFile(Context context, File file) {
+        Uri uri;
+        if (Build.VERSION.SDK_INT < 24) {
+            uri = Uri.fromFile(file);
+        } else {
+                /*
+                从Android 7.0系统开始，直接使用本地真实路径的Uri被认为是不安全的，会抛出一个FileUriExposedException异常(参考《第一行代码(第2版)》第8章)
+                FileProvider则是一种特殊的内容提供器，它使用了和内容提供器类似的机制来对数据进行保护，可以选择性地将封装过的Uri【共享给外部】，从而提高了应用的安全性。
+                */
+            String authority = getFileProviderAuthority(context);
+            uri = FileProvider.getUriForFile(context, authority, file);
+        }
+
+        return uri;
     }
 
     /**
