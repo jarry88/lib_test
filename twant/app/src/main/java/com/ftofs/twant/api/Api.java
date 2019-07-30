@@ -605,6 +605,11 @@ public class Api {
      */
     public static final String PATH_SELF_TAKE = "/member/buy/take/save";
 
+    /**
+     * 物流詳情
+     */
+    public static final String PATH_LOGISTICS_DETAIL = "/member/orders/logistics/info";
+
 
     /**
      * 發送Http請求

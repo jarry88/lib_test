@@ -66,9 +66,9 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
             if (id == R.id.btn_has_storage_permission) {
                 permissionGroup = Permission.Group.STORAGE;
             } else if (id == R.id.btn_has_camera_permission) {
-                permissionGroup = Permission.Group.STORAGE;
+                permissionGroup = Permission.Group.CAMERA;
             } else {
-                permissionGroup = Permission.Group.STORAGE;
+                permissionGroup = Permission.Group.LOCATION;
             }
 
             if (PermissionUtil.hasPermission(permissionGroup)) {

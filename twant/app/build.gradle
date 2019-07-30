@@ -122,6 +122,14 @@ dependencies {
     implementation 'com.github.piasy:GlideImageViewFactory:1.5.7'
 
 
+    // For developers using the Android Support Library
+    implementation 'pub.devrel:easypermissions:2.0.1'
+
+    //4，permissionsdispatcher权限
+    implementation'com.github.hotchemi:permissionsdispatcher:3.1.0'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
+
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation 'junit:junit:4.12'

@@ -319,6 +319,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         .moveUpToKeyboard(false)
                         .asCustom(new PayPopup(_mActivity, (MainActivity) _mActivity, payId))
                         .show();
+            } else if (tag.equals(TEXT_SHIP_SEARCH)) {
+                SLog.info("查看物流");
+                Util.startFragment(OrderLogisticsInfoFragment.newInstance(ordersId));
             }
         } catch (Exception e) {
             return true;

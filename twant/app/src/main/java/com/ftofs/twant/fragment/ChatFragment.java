@@ -66,7 +66,6 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.adapter.message.EMAImageMessageBody;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -442,25 +441,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         return;
                     }
 
+                    String absolutePath = null;
+                    String imgUrl = null;
                     try {
-                        String absolutePath = easyJSONObject.getString("absolutePath");
-                        String imgUrl = easyJSONObject.getString("imgUrl");
-
-                        String imageUri;
-
-                        // 優先加載本地的Copy
-                        File file = new File(absolutePath);
-                        if (file.isFile()) {
-                            imageUri = absolutePath;
-                        } else { // 否則，加載oss上的Copy
-                            imageUri = StringUtil.normalizeImageUrl(imgUrl);
-                        }
-
-                        Util.startFragment(ImageViewerFragment.newInstance(imageUri));
-                        return;
+                        absolutePath = easyJSONObject.getString("absolutePath");
+                        imgUrl = easyJSONObject.getString("imgUrl");
                     } catch (Exception e) {
 
                     }
+
+                    String imageUri;
+
+                    // 優先加載本地的Copy
+                    File file = new File(absolutePath);
+                    if (file.isFile()) {
+                        imageUri = absolutePath;
+                    } else { // 否則，加載oss上的Copy
+                        imageUri = StringUtil.normalizeImageUrl(imgUrl);
+                    }
+
+                    Util.startFragment(ImageViewerFragment.newInstance(imageUri));
 
                 }
             }
