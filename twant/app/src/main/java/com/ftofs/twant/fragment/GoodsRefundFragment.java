@@ -20,7 +20,9 @@ import com.ftofs.twant.adapter.RefundGoodsListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.RefundGoodsItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -279,6 +281,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
+
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
                     ToastUtil.success(_mActivity, "提交成功");
                     pop();
                 }
@@ -378,6 +383,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
+
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
                     ToastUtil.success(_mActivity, "提交成功");
                     pop();
                 }
@@ -449,6 +457,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
+
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
                     ToastUtil.success(_mActivity, "提交成功");
                     pop();
                 }

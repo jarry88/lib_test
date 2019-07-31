@@ -32,9 +32,14 @@ public enum EBMessageType {
     MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS,
 
     /**
-     * 支付成功
+     * 重新加載數據(訂單詳情)
      */
-    MESSAGE_TYPE_PAY_SUCCESS,
+    MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL,
+
+    /**
+     * 重新加載數據(訂單列表)
+     */
+    MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST,
 
     /**
      * 收到聊天消息
@@ -50,9 +55,4 @@ public enum EBMessageType {
      * 重建MainFragment
      */
     MESSAGE_TYPE_RECREATE_MAIN_FRAGMENT,
-
-    /**
-     * 刷新訂單列表數據
-     */
-    MESSAGE_TYPE_REFRESH_ORDER_LIST,
 }

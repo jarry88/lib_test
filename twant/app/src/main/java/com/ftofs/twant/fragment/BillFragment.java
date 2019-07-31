@@ -144,7 +144,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         SLog.info("BillFragment::onEBMessage()");
-        if (message.messageType == EBMessageType.MESSAGE_TYPE_REFRESH_ORDER_LIST) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST) {
             SLog.info("重新加載訂單列表數據, billStatus[%d]", billStatus);
             needRefresh = true;
         }
@@ -156,7 +156,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.tv_fragment_title) {
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_ORDER_LIST, null);
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
         }
     }
 

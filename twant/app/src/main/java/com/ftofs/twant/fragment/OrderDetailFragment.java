@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -32,12 +31,10 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.PayPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,7 +50,6 @@ import java.util.Map;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 訂單詳情
@@ -92,6 +88,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     LinearLayout llOrderButtonContainer;
 
     String storePhone;
+    boolean needReloadData;
 
     public static final int ORDER_OPERATION_TYPE_CANCEL = 1;
     public static final int ORDER_OPERATION_TYPE_DELETE = 2;
@@ -226,10 +223,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         SLog.info("OrderDetailFragment::onEBMessage()");
-        if (message.messageType == EBMessageType.MESSAGE_TYPE_PAY_SUCCESS) {
-            // 如果支付成功，重新加載訂單詳情
-            SLog.info("支付成功，重新加載訂單詳情");
-            loadOrderDetail();
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL) {
+            // 重新加載訂單詳情
+            SLog.info("重新加載訂單詳情");
+            needReloadData = true;
         }
     }
 
@@ -641,6 +638,20 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         SLog.info("onBackPressedSupport");
         pop();
         return true;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (needReloadData) {
+            loadOrderDetail();
+            needReloadData = false;
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }
 

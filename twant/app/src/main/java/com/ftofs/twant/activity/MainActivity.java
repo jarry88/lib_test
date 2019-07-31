@@ -95,8 +95,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         SLog.info("payResult[%s]", payResult);
         if ("9000".equals(payResult.getResultStatus())) {
             ToastUtil.success(this, payResult.getResult());
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_PAY_SUCCESS, null);
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_ORDER_LIST, null);
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
 
             Util.startFragment(PaySuccessFragment.newInstance(""));
 
