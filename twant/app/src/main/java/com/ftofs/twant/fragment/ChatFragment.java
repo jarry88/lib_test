@@ -617,6 +617,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
         EMMessage message = EMMessage.createTxtSendMessage(content, yourMemberName);
         message.setAttribute("messageType", "txt");
+        ChatUtil.setMessageCommonAttr(message, ChatUtil.ROLE_MEMBER);
+
 
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
@@ -851,6 +853,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     EMMessage message = EMMessage.createImageSendMessage(absolutePath, false, yourMemberName);
                     chatMessage.messageId = message.getMsgId();
                     message.setAttribute("messageType", "image");
+                    ChatUtil.setMessageCommonAttr(message, ChatUtil.ROLE_MEMBER);
+
                     message.setAttribute("ossUrl", result.first);
                     message.setAttribute("absolutePath", result.second);
 

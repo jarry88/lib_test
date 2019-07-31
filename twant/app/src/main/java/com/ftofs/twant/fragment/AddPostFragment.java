@@ -148,6 +148,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
         btnAddPostCoverImage.setOnClickListener(this);
 
         postCoverImage = view.findViewById(R.id.post_cover_image);
+        postCoverImage.setOnClickListener(this);
 
         tvArticleCategory = view.findViewById(R.id.tv_article_category);
 
@@ -203,6 +204,10 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
                     .moveUpToKeyboard(true)
                     .asCustom(new BudgetPricePopup(_mActivity, budgetPrice, this))
                     .show();
+        } else if (id == R.id.post_cover_image) {
+            SLog.info("點擊封面圖");
+            SLog.info("coverImage[%s]", coverImage);
+            Util.startFragment(ImageViewerFragment.newInstance(coverImage));
         }
     }
 

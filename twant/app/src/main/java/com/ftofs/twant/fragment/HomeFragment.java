@@ -211,6 +211,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             goodsImageArr[0] = view.findViewById(R.id.goods_image1);
             goodsImageArr[1] = view.findViewById(R.id.goods_image2);
             goodsImageArr[2] = view.findViewById(R.id.goods_image3);
+            SLog.info("id0[%s], id1[%s], id2[%s]", goodsImageArr[0].getId(), goodsImageArr[1].getId(), goodsImageArr[2].getId());
+            for (int i = 0; i < GOODS_IMAGE_COUNT; i++) {
+                goodsImageArr[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int commonId = (int) v.getTag();
+                        SLog.info("commonId[%d]", commonId);
+                        Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                    }
+                });
+            }
             return view;
         }
 
@@ -232,8 +243,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     int i = 0;
                     for (Object object : goodsArray) {
                         EasyJSONObject goods = (EasyJSONObject) object;
+                        int commonId = goods.getInt("commonId");
                         String goodsImage = StringUtil.normalizeImageUrl(goods.getString("goodsImage"));
                         Glide.with(context).load(goodsImage).centerCrop().into(goodsImageArr[i]);
+                        goodsImageArr[i].setTag(commonId);
                         ++i;
                     }
                 } else {
@@ -380,21 +393,31 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             for (Object object2 : store.getArray("goodsList")) {
                                 EasyJSONObject goodsObject = (EasyJSONObject) object2;
                                 String imageSrc = goodsObject.getString("imageSrc");
-
+                                int commonId = goodsObject.getInt("commonId");
                                 String uri = StringUtil.normalizeImageUrl(imageSrc);
+                                LinearLayout llGoodsImageContainer = null;
+
                                 if (index == 0) {
                                     ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
                                     Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageLeft);
-                                    storeView.findViewById(R.id.goods_image_left_container).setVisibility(View.VISIBLE);
+                                    llGoodsImageContainer = storeView.findViewById(R.id.goods_image_left_container);
                                 } else if (index == 1) {
                                     ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
                                     Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageMiddle);
-                                    storeView.findViewById(R.id.goods_image_middle_container).setVisibility(View.VISIBLE);
+                                    llGoodsImageContainer = storeView.findViewById(R.id.goods_image_middle_container);
                                 } else if (index == 2) {
                                     ImageView goodsImageRight = storeView.findViewById(R.id.goods_image_right);
                                     Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageRight);
-                                    storeView.findViewById(R.id.goods_image_right_container).setVisibility(View.VISIBLE);
+                                    llGoodsImageContainer = storeView.findViewById(R.id.goods_image_right_container);
                                 }
+
+                                llGoodsImageContainer.setVisibility(View.VISIBLE);
+                                llGoodsImageContainer.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                                    }
+                                });
 
                                 ++index;
                             }

@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SPField;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -58,5 +59,15 @@ public class ChatUtil {
         }
 
         return Constant.CHAT_MESSAGE_TYPE_UNKNOWN;
+    }
+
+
+    public static void setMessageCommonAttr(EMMessage message, int role) {
+        String nickname = User.getUserInfo(SPField.FIELD_NICKNAME, "");
+        String avatarUrl = User.getUserInfo(SPField.FIELD_AVATAR, "");
+
+        message.setAttribute("nickName", nickname);
+        message.setAttribute("avatarUrl", avatarUrl);
+        message.setAttribute("role", role);
     }
 }
