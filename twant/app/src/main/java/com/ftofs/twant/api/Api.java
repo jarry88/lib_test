@@ -610,6 +610,16 @@ public class Api {
      */
     public static final String PATH_LOGISTICS_DETAIL = "/member/orders/logistics/info";
 
+    /**
+     * 全部退款申请页面
+     */
+    public static final String PATH_REFUND_ALL = "/member/refund/all";
+
+    /**
+     * 全部退款申请保存
+     */
+    public static final String PATH_REFUND_ALL_SAVE = "/member/refund/all/save";
+
 
     /**
      * 發送Http請求

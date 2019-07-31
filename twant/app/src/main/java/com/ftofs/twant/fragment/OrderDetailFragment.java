@@ -322,6 +322,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             } else if (tag.equals(TEXT_SHIP_SEARCH)) {
                 SLog.info("查看物流");
                 Util.startFragment(OrderLogisticsInfoFragment.newInstance(ordersId));
+            } else if (tag.equals(TEXT_MEMBER_REFUND_ALL)) {
+                SLog.info("全部退款");
+                Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
+                        "action", Constant.ACTION_REFUND_ALL,
+                        "ordersId", ordersId
+                ).toString()));
             }
         } catch (Exception e) {
             return true;

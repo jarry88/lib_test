@@ -141,23 +141,19 @@ public abstract class ViewGroupAdapter<T> {
      * itemView和childView都共用這個接口
      */
     public interface OnItemClickListener {
-        public void onClick(ViewGroupAdapter adapter, View view, int position);
+        void onClick(ViewGroupAdapter adapter, View view, int position);
     }
 
 
-    public <V extends View> V findViewById(View parentView, int id) {
-        return parentView.findViewById(id);
-    }
-
-    public void setText(View parentView, int id, CharSequence text) {
-        TextView textView = findViewById(parentView, id);
+    public void setText(View itemView, int id, CharSequence text) {
+        TextView textView = itemView.findViewById(id);
         if (textView != null) {
             textView.setText(text);
         }
     }
 
-    public void setBackgroundResource(View parentView, int id, int resid) {
-        View view = findViewById(parentView, id);
+    public void setBackgroundResource(View itemView, int id, int resid) {
+        View view = itemView.findViewById(id);
         if (view != null) {
             view.setBackgroundResource(resid);
         }

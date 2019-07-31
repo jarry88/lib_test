@@ -2,7 +2,6 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,18 +11,18 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.adapter.RefundGoodsListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.footprint.TotalStatus;
+import com.ftofs.twant.entity.RefundGoodsItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -59,6 +58,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     int ordersGoodsId;
 
     LinearLayout llGoodsOuterContainer;
+    LinearLayout llGoodsListContainer;
 
     LinearLayout llWidgetContainer;
 
@@ -92,6 +92,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     LinearLayout btnSelectRefundReason;
     int reasonIndex = -1;
 
+    RefundGoodsListAdapter adapter;
+
     public static GoodsRefundFragment newInstance(String paramsIn) {
         Bundle args = new Bundle();
 
@@ -116,6 +118,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
         Bundle args = getArguments();
         String paramsIn = args.getString("paramsIn");
+        SLog.info("paramsIn[%s]", paramsIn);
+
         paramsInObj = (EasyJSONObject) EasyJSONObject.parse(paramsIn);
         try {
             action = paramsInObj.getInt("action");
@@ -127,8 +131,12 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
         llGoodsOuterContainer = view.findViewById(R.id.ll_goods_outer_container);
         llWidgetContainer = view.findViewById(R.id.ll_widget_container);
-        if (action == Constant.ACTION_REFUND) {
-            LayoutInflater.from(_mActivity).inflate(R.layout.refund_widget, llWidgetContainer, true);
+        if (action == Constant.ACTION_REFUND || action == Constant.ACTION_REFUND_ALL) {
+            View vwWidget = LayoutInflater.from(_mActivity).inflate(R.layout.refund_widget, llWidgetContainer, true);
+            if (action == Constant.ACTION_REFUND_ALL) {
+                vwWidget.findViewById(R.id.ll_refund_reason_container).setVisibility(View.GONE);
+                vwWidget.findViewById(R.id.rl_refund_amount_container).setVisibility(View.GONE);
+            }
         } else if (action == Constant.ACTION_RETURN) {
             LayoutInflater.from(_mActivity).inflate(R.layout.return_widget, llWidgetContainer, true);
         } else if (action == Constant.ACTION_COMPLAIN) {
@@ -136,6 +144,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             // 如果是投訴，隱藏底部的線條
             llGoodsOuterContainer.setBackground(null);
         }
+
+        llGoodsListContainer = view.findViewById(R.id.ll_goods_list_container);
+        adapter = new RefundGoodsListAdapter(_mActivity, llGoodsListContainer, R.layout.refund_goods_list_item);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
@@ -174,10 +185,17 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 tvFragmentTitle.setText(getString(R.string.text_goods_complain));
                 loadComplainData();
                 break;
+            case Constant.ACTION_REFUND_ALL:
+                // 全部退款
+                tvFragmentTitle.setText(getString(R.string.text_goods_refund));
+                loadRefundAllData();
+                break;
             default:
                 break;
         }
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -491,20 +509,17 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
                         EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
 
-                        String goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
-                        Glide.with(_mActivity).load(goodsImageUrl).into(goodsImage);
 
-                        String goodsName = ordersGoodsVo.getString("goodsName");
-                        tvGoodsName.setText(goodsName);
+                        List<RefundGoodsItem> refundGoodsItemList = new ArrayList<>();
 
-                        String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
-                        tvGoodsFullSpecs.setText(goodsFullSpecs);
-
-                        float price = (float) ordersGoodsVo.getDouble("goodsPrice");
-                        tvPrice.setText(StringUtil.formatPrice(_mActivity, price, 0));
-
-                        int goodsNum = ordersGoodsVo.getInt("buyNum");
-                        tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
+                        RefundGoodsItem refundGoodsItem = new RefundGoodsItem();
+                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
+                        refundGoodsItem.goodsName = ordersGoodsVo.getString("goodsName");
+                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                        refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                        refundGoodsItem.goodsNum = ordersGoodsVo.getInt("buyNum");
+                        refundGoodsItemList.add(refundGoodsItem);
+                        adapter.setData(refundGoodsItemList);
 
                         EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");
                         for (Object object : refundReasonList) {
@@ -518,12 +533,82 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         maxRefundAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
                         tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
-
+                        SLog.info("Error!%s", e.getMessage());
                     }
                 }
             });
         } catch (Exception e) {
+            SLog.info("Error!%s", e.getMessage());
+        }
+    }
 
+    private void loadRefundAllData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        try {
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "ordersId", paramsInObj.getInt("ordersId"));
+
+            SLog.info("params[%s]", params);
+
+            Api.postUI(Api.PATH_REFUND_ALL, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        String storeName = responseObj.getString("datas.ordersVo.storeName");
+                        tvStoreName.setText(storeName);
+
+                        EasyJSONArray ordersGoodsVoList = responseObj.getArray("datas.ordersVo.ordersGoodsVoList");
+                        List<RefundGoodsItem> refundGoodsItemList = new ArrayList<>();
+                        for (Object object : ordersGoodsVoList) {
+                            EasyJSONObject ordersGoodsVo = (EasyJSONObject) object;
+
+                            RefundGoodsItem refundGoodsItem = new RefundGoodsItem();
+                            refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
+                            refundGoodsItem.goodsName = ordersGoodsVo.getString("goodsName");
+                            refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                            refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                            refundGoodsItem.goodsNum = ordersGoodsVo.getInt("buyNum");
+                            refundGoodsItemList.add(refundGoodsItem);
+                        }
+                        adapter.setData(refundGoodsItemList);
+
+                        /*
+                        EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");
+                        for (Object object : refundReasonList) {
+                            EasyJSONObject reason = (EasyJSONObject) object;
+                            reasonItemList.add(new ListPopupItem(
+                                    reason.getInt("reasonId"),
+                                    reason.getString("reasonInfo"),
+                                    null));
+                        }
+                        */
+
+                        maxRefundAmount = (float) responseObj.getDouble("datas.ordersVo.ordersAmount");
+                        tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            SLog.info("Error!%s", e.getMessage());
         }
     }
 
@@ -562,19 +647,17 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
                         EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
 
-                        String goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
-                        Glide.with(_mActivity).load(goodsImageUrl).into(goodsImage);
+                        List<RefundGoodsItem> refundGoodsItemList = new ArrayList<>();
 
-                        String goodsName = ordersGoodsVo.getString("goodsName");
-                        tvGoodsName.setText(goodsName);
-
-                        String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
-                        tvGoodsFullSpecs.setText(goodsFullSpecs);
-
-                        float price = (float) ordersGoodsVo.getDouble("goodsPrice");
-                        tvPrice.setText(StringUtil.formatPrice(_mActivity, price, 0));
-
+                        RefundGoodsItem refundGoodsItem = new RefundGoodsItem();
+                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
+                        refundGoodsItem.goodsName = ordersGoodsVo.getString("goodsName");
+                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                        refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
+                        refundGoodsItem.goodsNum = goodsNum;
+                        refundGoodsItemList.add(refundGoodsItem);
+                        adapter.setData(refundGoodsItemList);
                         maxReturnCount = ordersGoodsVo.getInt("buyNum");
                         tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
                         abReturnCount.setMinValue(1, null);
@@ -637,19 +720,18 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
                         EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
 
-                        String goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
-                        Glide.with(_mActivity).load(goodsImageUrl).into(goodsImage);
+                        List<RefundGoodsItem> refundGoodsItemList = new ArrayList<>();
 
-                        String goodsName = ordersGoodsVo.getString("goodsName");
-                        tvGoodsName.setText(goodsName);
-
-                        String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
-                        tvGoodsFullSpecs.setText(goodsFullSpecs);
-
-                        float price = (float) ordersGoodsVo.getDouble("goodsPrice");
-                        tvPrice.setText(StringUtil.formatPrice(_mActivity, price, 0));
-
+                        RefundGoodsItem refundGoodsItem = new RefundGoodsItem();
+                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
+                        refundGoodsItem.goodsName = ordersGoodsVo.getString("goodsName");
+                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                        refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
+                        refundGoodsItem.goodsNum = goodsNum;
+                        refundGoodsItemList.add(refundGoodsItem);
+                        adapter.setData(refundGoodsItemList);
+
                         maxReturnCount = ordersGoodsVo.getInt("buyNum");
                         tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
 

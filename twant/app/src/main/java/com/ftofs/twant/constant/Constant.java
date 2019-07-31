@@ -162,6 +162,7 @@ public class Constant {
     public static final int ACTION_REFUND = 1;
     public static final int ACTION_RETURN = 2;
     public static final int ACTION_COMPLAIN = 3;
+    public static final int ACTION_REFUND_ALL = 4;  // 全部退款
 
     public static final int GENDER_UNKNOWN = 0;
     public static final int GENDER_MALE = 1;
