@@ -77,6 +77,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     TextView tvRefundReason;
     TextView tvMaxRefundAmount;
     float maxRefundAmount;
+    float refundAmount;
     // 最多可退貨數量
     int maxReturnCount;
     EditText etRefundAmount;
@@ -235,24 +236,25 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             return;
         }
 
-        if (action == Constant.ACTION_REFUND) {
-            if (reasonIndex == -1) {
-                ToastUtil.error(_mActivity, getString(R.string.select_refund_reason_hint));
-                return;
-            }
+        if (action == Constant.ACTION_REFUND || action == Constant.ACTION_REFUND_ALL) {
+            if (action == Constant.ACTION_REFUND) {
+                if (reasonIndex == -1) {
+                    ToastUtil.error(_mActivity, getString(R.string.select_refund_reason_hint));
+                    return;
+                }
 
-            String refundAmountStr = etRefundAmount.getText().toString().trim();
-            if (StringUtil.isEmpty(refundAmountStr)) {
-                ToastUtil.error(_mActivity, getString(R.string.input_refund_amount_hint));
-                return;
-            }
+                String refundAmountStr = etRefundAmount.getText().toString().trim();
+                if (StringUtil.isEmpty(refundAmountStr)) {
+                    ToastUtil.error(_mActivity, getString(R.string.input_refund_amount_hint));
+                    return;
+                }
 
-
-            final float refundAmount = Float.valueOf(etRefundAmount.getText().toString().trim());
-            SLog.info("refundAmount[%s], maxRefundAmount[%s], comp[%s]", refundAmount, maxRefundAmount, refundAmount > maxRefundAmount);
-            if (refundAmount > maxRefundAmount) {
-                ToastUtil.error(_mActivity, "退款金額不能超過最多可退金額");
-                return;
+                refundAmount = Float.valueOf(etRefundAmount.getText().toString().trim());
+                SLog.info("refundAmount[%s], maxRefundAmount[%s], comp[%s]", refundAmount, maxRefundAmount, refundAmount > maxRefundAmount);
+                if (refundAmount > maxRefundAmount) {
+                    ToastUtil.error(_mActivity, "退款金額不能超過最多可退金額");
+                    return;
+                }
             }
 
             final String buyerMessage = etRefundDesc.getText().toString().trim();
@@ -300,17 +302,30 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         picJson.append(result);
                     }
 
-                    EasyJSONObject params = EasyJSONObject.generate(
-                            "token", token,
-                            "ordersId", ordersId,
-                            "picJson", picJson.toString(),
-                            "buyerMessage", buyerMessage,
-                            "ordersGoodsId", ordersGoodsId,
-                            "reasonId", reasonItemList.get(reasonIndex).id,
-                            "refundAmount", refundAmount);
+                    EasyJSONObject params;
+                    String path;
+                    if (action == Constant.ACTION_REFUND) {
+                        path = Api.PATH_SINGLE_GOODS_REFUND_SAVE;
+                        params = EasyJSONObject.generate(
+                                "token", token,
+                                "ordersId", ordersId,
+                                "picJson", picJson.toString(),
+                                "buyerMessage", buyerMessage,
+                                "ordersGoodsId", ordersGoodsId,
+                                "reasonId", reasonItemList.get(reasonIndex).id,
+                                "refundAmount", refundAmount);
+                    } else {
+                        path = Api.PATH_REFUND_ALL_SAVE;
+                        params = EasyJSONObject.generate(
+                                "token", token,
+                                "ordersId", ordersId,
+                                "picJson", picJson.toString(),
+                                "buyerMessage", buyerMessage);
+                    }
 
                     SLog.info("params[%s]", params.toString());
-                    String responseStr = Api.syncPost(Api.PATH_SINGLE_GOODS_REFUND_SAVE, params);
+
+                    String responseStr = Api.syncPost(path, params);
                     SLog.info("responseStr[%s]", responseStr);
                     return responseStr;
                 }
@@ -334,7 +349,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 return;
             }
 
-            final float refundAmount = Float.valueOf(etRefundAmount.getText().toString().trim());
+            refundAmount = Float.valueOf(etRefundAmount.getText().toString().trim());
             SLog.info("refundAmount[%s], maxRefundAmount[%s], comp[%s]", refundAmount, maxRefundAmount, refundAmount > maxRefundAmount);
             if (refundAmount > maxRefundAmount) {
                 ToastUtil.error(_mActivity, "退貨金額不能超過最多可退金額");
