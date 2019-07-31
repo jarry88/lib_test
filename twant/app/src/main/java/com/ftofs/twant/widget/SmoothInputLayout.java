@@ -28,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.log.SLog;
 
 /**
  * 顺滑的输入面板
@@ -169,6 +170,7 @@ public class SmoothInputLayout extends LinearLayout {
      * 存储键盘高度
      */
     private void saveKeyboardHeight() {
+        SLog.info("saveKeyboardHeight[%d]", mKeyboardHeight);
         if (mAutoSaveKeyboardHeight)
             getKeyboardSharedPreferences().edit().putInt(KEY_HEIGHT, mKeyboardHeight).commit();
         else {
@@ -193,11 +195,14 @@ public class SmoothInputLayout extends LinearLayout {
     }
 
     private int getKeyboardHeight(int defaultHeight) {
+        int keyboardHeight;
         if (mAutoSaveKeyboardHeight)
-            return getKeyboardSharedPreferences().getInt(KEY_HEIGHT, defaultHeight);
+            keyboardHeight = getKeyboardSharedPreferences().getInt(KEY_HEIGHT, defaultHeight);
         else
-            return mKeyboardProcessor != null ?
+            keyboardHeight = mKeyboardProcessor != null ?
                     mKeyboardProcessor.getSavedKeyboardHeight(defaultHeight) : defaultHeight;
+        SLog.info("getKeyboardHeight[%d]", keyboardHeight);
+        return keyboardHeight;
     }
 
     /**

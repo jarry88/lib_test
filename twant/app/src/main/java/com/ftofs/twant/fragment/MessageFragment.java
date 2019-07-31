@@ -141,6 +141,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
             String memberName = entry.getKey();
             EMConversation conversation = entry.getValue();
+
+            String extField = conversation.getExtField();
+            SLog.info("extField[%s]", extField);
+
             EMMessage lastMessage = conversation.getLastMessage();
             long timestamp = lastMessage.getMsgTime();
             SLog.info("memberName[%s], lastMessage[%s], timestamp[%s]",

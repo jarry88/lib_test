@@ -41,8 +41,17 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
         helper.addOnClickListener(R.id.img_my_avatar, R.id.img_your_avatar, R.id.img_message);
         helper.addOnLongClickListener(R.id.tv_message, R.id.img_message);
 
-        String timestamp = Time.fromMillisUnixtime(item.timestamp, "Y-m-d H:i:s");
-        helper.setText(R.id.tv_message_time, timestamp);
+        TextView tvMessageTime = helper.getView(R.id.tv_message_time);
+
+
+        SLog.info("item.showTimestamp[%s]", item.showTimestamp);
+        if (item.showTimestamp) {
+            String timestamp = Time.fromMillisUnixtime(item.timestamp, "Y-m-d H:i:s");
+            tvMessageTime.setText(timestamp);
+            tvMessageTime.setVisibility(View.VISIBLE);
+        } else {
+            tvMessageTime.setVisibility(View.GONE);
+        }
 
         TextView textView = helper.getView(R.id.tv_message);
         textView.setText(StringUtil.getMessageText(mContext, item.content, (int) textView.getTextSize()));

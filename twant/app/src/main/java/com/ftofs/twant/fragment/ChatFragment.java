@@ -234,6 +234,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 SLog.info("是對方發來的消息");
                 chatMessageList.add(chatMessage);
                 // chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+                setShowTimestamp(chatMessageList);
                 chatMessageAdapter.notifyDataSetChanged();
                 messageListScrollToBottom();
             } else {
@@ -245,6 +246,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             if (loadFriendInfo()) {
                 SLog.info("更新到最新的好友資料");
                 tvNickname.setText(friendInfo.nickname);
+                setShowTimestamp(chatMessageList);
                 chatMessageAdapter.notifyDataSetChanged();
             }
         }
@@ -319,6 +321,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
 
+        setShowTimestamp(chatMessageList);
         chatMessageAdapter.setNewData(chatMessageList);
     }
 
@@ -387,11 +390,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     sendTextMessage(message);
                     return;
                 }
-                if (btnTool.isSelected()) {
-                    btnTool.setSelected(false);
+
+                // 如果原先打開的是表情面板，則點擊工具按鈕，顯示工具面板
+                if (silMainContainer.isInputPaneOpen() && llEmojiPane.getVisibility() == View.VISIBLE) {
+                    showTool();
+                    return;
+                }
+
+                if (silMainContainer.isInputPaneOpen()) {
                     showInput();
                 } else {
-                    btnTool.setSelected(true);
                     showTool();
                 }
                 break;
@@ -641,6 +649,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         chatMessageList.add(chatMessage);
 
         // chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
+        setShowTimestamp(chatMessageList);
         chatMessageAdapter.notifyDataSetChanged();
         messageListScrollToBottom();
     }
@@ -826,6 +835,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             chatMessage.timestamp = System.currentTimeMillis();
             chatMessageList.add(chatMessage);
 
+            setShowTimestamp(chatMessageList);
             chatMessageAdapter.notifyDataSetChanged();
             messageListScrollToBottom();
 
@@ -884,5 +894,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     public void setConversation(EMConversation conversation) {
         this.conversation = conversation;
+    }
+
+    private void setShowTimestamp(List<ChatMessage> chatMessages) {
+        if (chatMessages == null) {
+            return;
+        }
+
+        long lastShowTimestamp = 0;
+        for (int i = 0; i < chatMessages.size(); i++) {
+            ChatMessage chatMessage = chatMessages.get(i);
+            if (i == 0) {
+                chatMessage.showTimestamp = true;
+                lastShowTimestamp = chatMessage.timestamp;
+            } else {
+                if (chatMessage.timestamp - lastShowTimestamp >= 5 * 60 * 1000) { // 超過5分鐘就顯示消息時間
+                    chatMessage.showTimestamp = true;
+                    lastShowTimestamp = chatMessage.timestamp;
+                }
+            }
+        }
     }
 }
