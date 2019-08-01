@@ -329,6 +329,7 @@
     <string name="currency_type_macao">葡幣</string>
     <string name="currency_type_hongkong">港幣</string>
     <string name="currency_type_rmb">人民幣</string>
+    <string name="text_send_invitation">發出邀請</string>
 
     <!--支付-->
     <string name="text_pay_online">在線支付</string>
@@ -443,8 +444,9 @@
     <string name="text_package_height">包裹高度:</string>
     <string name="input_package_height_hint">請填入包裹高度（選填）</string>
     <!-- 兩個空格的備注， 參考 https://blog.csdn.net/fan7983377/article/details/52229380  -->
-    <string name="text_remark">備注:</string>
+    <string name="text_remark">備注</string>
     <string name="input_remark_hint">給快遞員留言（選填）</string>
+    <string name="input_remark_info_hint">請輸入備注信息</string>
 
     <string name="text_sender_info">寄件人信息</string>
     <string name="text_receiver_info">收件人信息</string>

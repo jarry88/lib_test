@@ -19,6 +19,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.InviteAddFriendPopup;
+import com.lxj.xpopup.XPopup;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.io.IOException;
@@ -143,8 +145,12 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
             }
         } else if (id == R.id.btn_add_friend) {
             if (isFriend == 0) { // 添加好友
-
+                new XPopup.Builder(_mActivity)
+                        .autoOpenSoftInput(true)
+                        .asCustom(new InviteAddFriendPopup(_mActivity))
+                        .show();
             } else { // 訪問專頁
+
 
             }
         }
