@@ -15,9 +15,24 @@ public enum RequestCode {
     CONFIRM_ORDER,
 
     /**
+     * 選擇发貨地址
+     */
+    SELECT_SENDER_ADDR,
+
+    /**
+     * 填寫發貨信息
+     */
+    INPUT_SENDER_INFO,
+
+    /**
      * 選擇收貨地址
      */
-    SELECT_ADDR,
+    SELECT_RECEIVER_ADDR,
+
+    /**
+     * 填寫發貨信息
+     */
+    INPUT_RECEIVER_INFO,
 
     /**
      * 編輯發票
@@ -62,5 +77,5 @@ public enum RequestCode {
     /**
      * 請求權限
      */
-    REQUEST_PREMISSION,
+    REQUEST_PERMISSION,
 }

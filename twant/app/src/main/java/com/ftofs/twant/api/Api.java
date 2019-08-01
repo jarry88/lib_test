@@ -573,7 +573,7 @@ public class Api {
     /**
      * mpay參數獲取
      */
-    public static final String PATH_MPAY_PARAMS = "/member/mpay/params";
+    // public static final String PATH_MPAY_PARAMS = "/member/mpay/params";
 
     /**
      * mpay支付
@@ -629,6 +629,16 @@ public class Api {
      * 關注/取消關注會員
      */
     public static final String PATH_MEMBER_FOLLOW = "/member/follow";
+
+    /**
+     * 寄件/創建受理單
+     */
+    public static final String PATH_PACKAGE_DELIVERY = "/member/logistics/delivery";
+
+    /**
+     * 快遞查詢
+     */
+    public static final String PATH_PACKAGE_QUERY = "/member/logistics/search";
 
 
     /**

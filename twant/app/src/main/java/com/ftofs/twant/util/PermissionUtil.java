@@ -88,7 +88,7 @@ public class PermissionUtil {
                             AndPermission.with(context)
                                     .runtime()
                                     .setting()
-                                    .start(RequestCode.REQUEST_PREMISSION.ordinal());
+                                    .start(RequestCode.REQUEST_PERMISSION.ordinal());
                         }
                     }
                 })
@@ -153,7 +153,7 @@ public class PermissionUtil {
                                 AndPermission.with(context)
                                         .runtime()
                                         .setting()
-                                        .start(RequestCode.REQUEST_PREMISSION.ordinal());
+                                        .start(RequestCode.REQUEST_PERMISSION.ordinal());
                             }
                         }
                     })

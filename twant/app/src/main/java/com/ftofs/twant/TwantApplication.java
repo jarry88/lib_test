@@ -128,9 +128,15 @@ public class TwantApplication extends Application {
         SqliteUtil.addTables(Test.class.getName(), UserStatus.class.getName(), Emoji.class.getName(),
                 FriendInfo.class.getName(), ImNameMap.class.getName());
 
+        int fragmentationMode;
+        if (Config.DEVELOPER_MODE) {
+            fragmentationMode = Fragmentation.BUBBLE;
+        } else {
+            fragmentationMode = Fragmentation.NONE;
+        }
         Fragmentation.builder()
                 // show stack view. Mode: BUBBLE, SHAKE, NONE
-                .stackViewMode(Fragmentation.NONE)
+                .stackViewMode(fragmentationMode)
                 .debug(BuildConfig.DEBUG)
                 .install();
 
