@@ -211,7 +211,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             goodsImageArr[0] = view.findViewById(R.id.goods_image1);
             goodsImageArr[1] = view.findViewById(R.id.goods_image2);
             goodsImageArr[2] = view.findViewById(R.id.goods_image3);
-            SLog.info("id0[%s], id1[%s], id2[%s]", goodsImageArr[0].getId(), goodsImageArr[1].getId(), goodsImageArr[2].getId());
             for (int i = 0; i < GOODS_IMAGE_COUNT; i++) {
                 goodsImageArr[i].setOnClickListener(new View.OnClickListener() {
                     @Override

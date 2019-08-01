@@ -16,10 +16,10 @@ public class ChatUtil {
 
     /**
      * 獲取或創建會話
-     * @param yourMemberName
-     * @param nickname
-     * @param avatarUrl
-     * @param role
+     * @param yourMemberName 對方的memberName
+     * @param nickname  對方的nickname
+     * @param avatarUrl 對方的頭像Url
+     * @param role  對方的role
      */
     public static EMConversation getConversation(String yourMemberName, String nickname, String avatarUrl, int role) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName, EMConversation.EMConversationType.Chat, true);

@@ -620,6 +620,16 @@ public class Api {
      */
     public static final String PATH_REFUND_ALL_SAVE = "/member/refund/all/save";
 
+    /**
+     * 获取作者详情和作者其他文章
+     */
+    public static final String PATH_MEMBER_INFO = "/want_post/member/info";
+
+    /**
+     * 關注/取消關注會員
+     */
+    public static final String PATH_MEMBER_FOLLOW = "/member/follow";
+
 
     /**
      * 發送Http請求

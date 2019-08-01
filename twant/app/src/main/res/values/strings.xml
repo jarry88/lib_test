@@ -239,6 +239,8 @@
     <string name="text_like">點贊</string>
     <string name="text_follow">關注</string>
     <string name="text_main_business">主營</string>
+    <string name="text_add_friend_simplify">加好友</string>
+    <string name="text_chat_with_him">與他聊天</string>
 
     <string name="text_shop">店鋪</string>
     <string name="text_commodity">商品</string>
@@ -255,6 +257,7 @@
     <string name="text_locate">定位</string>
 
     <string name="text_loading">正在加載</string>
+    <string name="text_visit_my_home">訪問專頁</string>
 
     <string name="text_history_search">歷史搜索</string>
     <string name="text_hot_search">熱門搜索</string>

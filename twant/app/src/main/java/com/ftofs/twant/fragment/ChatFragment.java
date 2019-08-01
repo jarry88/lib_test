@@ -470,6 +470,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     Util.startFragment(ImageViewerFragment.newInstance(imageUri));
 
+                } else if (id == R.id.img_your_avatar) {
+                    Util.startFragment(MemberInfoFragment.newInstance(yourMemberName));
                 }
             }
         });
