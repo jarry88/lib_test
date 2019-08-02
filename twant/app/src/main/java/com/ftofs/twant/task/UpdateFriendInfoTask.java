@@ -110,6 +110,7 @@ public class UpdateFriendInfoTask implements Runnable {
 
             friendInfo.save();
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_FRIEND_INFO, null);
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE, null);
         } catch (EasyJSONException e) {
             e.printStackTrace();
             SLog.info("Error!%s", e.getMessage());

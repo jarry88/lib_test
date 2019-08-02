@@ -12,23 +12,29 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.task.UpdateFriendInfoTask;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenuMessage;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -111,6 +117,32 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 }
             }
         });
+        adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                ChatConversation chatConversation = chatConversationList.get(position);
+                int itemType = chatConversation.itemType;
+
+                if (itemType == ChatConversation.ITEM_TYPE_IM) {
+                    new XPopup.Builder(getContext())
+//                        .maxWidth(600)
+                            .asCenterList("請選擇操作", new String[] {"刪除該聊天"},
+                                    new OnSelectListener() {
+                                        @Override
+                                        public void onSelect(int position, String text) {
+                                            SLog.info("position[%d], text[%s]", position, text);
+                                            if (position == 0) {
+                                                showDeleteConversationConfirm(chatConversation.friendInfo.memberName);
+                                            }
+                                        }
+                                    })
+                            .show();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         rvChatConversationList.setAdapter(adapter);
     }
 
@@ -126,6 +158,41 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE) {
             loadData();
         }
+    }
+
+    /**
+     * 彈出是否要刪除該會話的確認框
+     * @param memberName
+     */
+    private void showDeleteConversationConfirm(String memberName) {
+        SLog.info("showDeleteConversationConfirm, memberName[%s]", memberName);
+
+        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(_mActivity, "確認", "刪除后，將清空該聊天的消息記錄", new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+                // 刪除選定的會話及其所有聊天
+                EMClient.getInstance().chatManager().deleteConversation(memberName, true);
+                loadData();
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        }))
+                .show();
     }
 
     private void loadData() {
@@ -152,7 +219,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             ChatConversation chatConversation = new ChatConversation(ChatConversation.ITEM_TYPE_IM);
 
             FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
-            if (friendInfo != null) {
+            if (friendInfo == null) {
+                // 如果FriendInfo為空，更新FriendInfo
+                TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(memberName));
+            } else {
                 chatConversation.friendInfo = friendInfo;
             }
             chatConversation.unreadCount = conversation.getUnreadMsgCount();
