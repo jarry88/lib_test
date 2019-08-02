@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.SpecPair;
@@ -316,6 +317,25 @@ public class Util {
             staff.welcomeMessage = storeServiceStaffVo.getString("welcome");
         } catch (Exception e) {
 
+        }
+    }
+
+    /**
+     * 獲取物流狀態描述
+     * 物流狀態 1000待处理，2000进行中，3000已完成
+     * @param context
+     * @param state
+     * @return
+     */
+    public static String getLogisticsStateDesc(Context context, int state) {
+        if (state == 1000) {
+            return context.getString(R.string.text_logistics_state_desc_to_be_processed);
+        } else if (state == 2000) {
+            return context.getString(R.string.text_logistics_state_desc_in_progress);
+        } else if (state == 3000) {
+            return context.getString(R.string.text_logistics_state_desc_finished);
+        } else {
+            return "";
         }
     }
 }

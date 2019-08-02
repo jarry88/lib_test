@@ -78,4 +78,9 @@ public enum RequestCode {
      * 請求權限
      */
     REQUEST_PERMISSION,
+
+    /**
+     * 快遞查詢
+     */
+    LOGISTICS_QUERY,
 }

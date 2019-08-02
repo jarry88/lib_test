@@ -13,6 +13,9 @@ public class PackageItem implements MultiItemEntity {
     }
 
     public int itemType;
+
+    public String searchPackageHint;  // 搜索按鈕的顯示，顯示提示或是當前要搜索的單號
+
     public String originalOrderNumber; //受理單號
 
     public String consigneeAddress; //收件人地址

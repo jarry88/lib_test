@@ -24,6 +24,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/tv_logistics_state_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/tw_black"
@@ -32,6 +33,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_update_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -54,6 +56,7 @@
                 android:textSize="14sp"
                 />
             <TextView
+                android:id="@+id/tv_customer_order_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="QT700345678900087"
@@ -84,6 +87,7 @@
                 android:textSize="14sp"
                 />
             <TextView
+                android:id="@+id/tv_original_order_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="700345678900087"
@@ -106,6 +110,7 @@
                 android:textSize="14sp"
                 />
             <TextView
+                android:id="@+id/tv_create_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2019-05-09 12:59:21"
@@ -162,6 +167,7 @@
                 android:layout_marginLeft="15dp"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/tv_sender_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="小藍"
@@ -169,6 +175,7 @@
                     android:textColor="@color/tw_black"
                     />
                 <TextView
+                    android:id="@+id/tv_sender_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0008617665441259"
@@ -176,6 +183,7 @@
                     android:textColor="@color/tw_black"
                     />
                 <TextView
+                    android:id="@+id/tv_sender_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="廣東省珠海市香洲區珠澳跨境工業區"
@@ -190,6 +198,7 @@
                     android:background="@color/tw_light_grey"
                     />
                 <TextView
+                    android:id="@+id/tv_receiver_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -198,6 +207,7 @@
                     android:textColor="@color/tw_black"
                     />
                 <TextView
+                    android:id="@+id/tv_receiver_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0008617665441259"
@@ -205,6 +215,7 @@
                     android:textColor="@color/tw_black"
                     />
                 <TextView
+                    android:id="@+id/tv_receiver_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="廣東省珠海市香洲區珠澳跨境工業區中心路188號聯發大廈二樓"
@@ -214,6 +225,4 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>
-

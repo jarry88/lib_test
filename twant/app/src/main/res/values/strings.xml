@@ -560,6 +560,11 @@
     <string name="text_shipping_in_progress">運輸中：</string>
 
 
+    <string name="text_logistics_state_desc_to_be_processed">待處理</string>
+    <string name="text_logistics_state_desc_in_progress">進行中</string>
+    <string name="text_logistics_state_desc_finished">已完成</string>
+
+
     <!-- 貨幣種類標志 -->
     <string name="currency_type_sign">$</string>
     <!-- 乘号 -->

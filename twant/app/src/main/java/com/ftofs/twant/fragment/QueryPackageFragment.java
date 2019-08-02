@@ -14,6 +14,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.PackageListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.PackageItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ClipboardUtils;
@@ -22,11 +23,15 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -44,6 +49,8 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
     List<PackageItem> packageItemList = new ArrayList<>();
 
     PackageListAdapter adapter;
+
+    String queryOrderNumber; // 待查詢的單號
 
     public static QueryPackageFragment newInstance() {
         Bundle args = new Bundle();
@@ -71,6 +78,20 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
                 boolean isRepeat = onSelect(v);
                 int id = v.getId();
                 SLog.info("id[%d]", id);
+
+                if (isRepeat) {
+                    return;
+                }
+
+                if (id == R.id.btn_my_send) {
+                    SLog.info("我的寄件");
+                    packageType = PACKAGE_TYPE_MY_SEND;
+                } else {
+                    SLog.info("我的收件");
+                    packageType = PACKAGE_TYPE_MY_RECEIVE;
+                }
+
+                loadPackageData();
             }
         };
 
@@ -88,7 +109,7 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
                 if (id == R.id.btn_search_package) {
-                    Util.startFragment(ExpressQueryFragment.newInstance());
+                    startForResult(ExpressQueryFragment.newInstance(queryOrderNumber), RequestCode.LOGISTICS_QUERY.ordinal());
                 } else if (id == R.id.btn_copy) {
                     // 復制快遞客戶單號
                     PackageItem packageItem = packageItemList.get(position);
@@ -118,6 +139,12 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
         if (StringUtil.isEmpty(token)) {
             return;
         }
+
+        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
+                .asLoading(getString(R.string.text_loading))
+                .show();
+
+
         String type;
         if (packageType == PACKAGE_TYPE_MY_SEND) {
             type = "consigner";
@@ -128,15 +155,25 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
                 "token", token,
                 "type", type);
 
+        if (!StringUtil.isEmpty(queryOrderNumber)) {
+            try {
+                params.set("number", queryOrderNumber);
+            } catch (EasyJSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         SLog.info("params[%s]", params.toString());
         Api.getUI(Api.PATH_SEARCH_LOGISTICS, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
                 try {
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
@@ -145,21 +182,44 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
                         return;
                     }
 
+                    packageItemList.clear();
+
                     PackageItem packageItem = new PackageItem();
                     packageItem.itemType = PackageItem.ITEM_TYPE_SEARCH;
+                    if (StringUtil.isEmpty(queryOrderNumber)) {
+                        packageItem.searchPackageHint = getString(R.string.search_package_hint);
+                    } else {
+                        packageItem.searchPackageHint = queryOrderNumber;
+                    }
                     packageItemList.add(packageItem);
 
-                    packageItem = new PackageItem();
-                    packageItem.itemType = PackageItem.ITEM_TYPE_INFO;
-                    packageItemList.add(packageItem);
+                    EasyJSONArray resultList = responseObj.getArray("datas.resultList");
+                    for (Object object : resultList) {
+                        EasyJSONObject result = (EasyJSONObject) object;
 
-                    packageItem = new PackageItem();
-                    packageItem.itemType = PackageItem.ITEM_TYPE_INFO;
-                    packageItemList.add(packageItem);
+                        packageItem = new PackageItem();
+                        packageItem.itemType = PackageItem.ITEM_TYPE_INFO;
+                        packageItem.state = result.getInt("state");
+                        packageItem.updateTime = result.getString("updateTime");
+                        packageItem.customerOrderNumber = result.getString("customerOrderNumber");
+                        packageItem.originalOrderNumber = result.getString("originalOrderNumber");
+                        packageItem.createTime = result.getString("createTime");
+
+                        packageItem.consignerName = result.getString("consignerName");
+                        packageItem.consignerPhone = result.getString("consignerPhone");
+                        packageItem.consignerAddress = result.getString("consignerAddress");
+
+                        packageItem.consigneeName = result.getString("consigneeName");
+                        packageItem.consigneePhone = result.getString("consigneePhone");
+                        packageItem.consigneeAddress = result.getString("consigneeAddress");
+
+                        packageItemList.add(packageItem);
+                    }
+
 
                     adapter.setNewData(packageItemList);
                 } catch (Exception e) {
-
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });
@@ -170,5 +230,20 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
         SLog.info("onBackPressedSupport");
         pop();
         return true;
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+
+        SLog.info("requestCode[%d], resultCode[%d]", requestCode, resultCode);
+        if (resultCode != RESULT_OK || data == null) {
+            return;
+        }
+
+        queryOrderNumber = data.getString("queryOrderNumber"); // 更新要查詢的快遞單號
+        SLog.info("queryOrderNumber[%s]", queryOrderNumber);
+
+        loadPackageData();
     }
 }
