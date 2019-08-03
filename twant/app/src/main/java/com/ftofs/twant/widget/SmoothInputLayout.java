@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 
 /**
  * 顺滑的输入面板
@@ -123,7 +124,8 @@ public class SmoothInputLayout extends LinearLayout {
         }
         final int heightChange = mMaxKeyboardHeight - heightSize;
         if (heightChange > mMinKeyboardHeight) {
-            if (mKeyboardHeight != heightChange) {
+            // 如果高度大于150dp，才認為是有效的鍵盤高度
+            if (mKeyboardHeight != heightChange && heightChange > Util.dip2px(getContext(), 150)) {
                 mKeyboardHeight = heightChange;
                 saveKeyboardHeight();
             }
