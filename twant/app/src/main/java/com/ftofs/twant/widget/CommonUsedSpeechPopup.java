@@ -10,8 +10,10 @@ import com.ftofs.twant.adapter.CommonUsedSpeechAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.CommonUsedSpeech;
+import com.ftofs.twant.fragment.CommonUsedSpeechSettingFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -51,6 +53,7 @@ public class CommonUsedSpeechPopup extends BottomPopupView implements View.OnCli
         super.onCreate();
 
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
+        findViewById(R.id.btn_setting).setOnClickListener(this);
 
         LinearLayout llCommonUsedSpeechContainer = findViewById(R.id.ll_common_used_speech_container);
         CommonUsedSpeechAdapter commonUsedSpeechAdapter = new CommonUsedSpeechAdapter(context, llCommonUsedSpeechContainer, R.layout.common_used_speech);
@@ -115,6 +118,9 @@ public class CommonUsedSpeechPopup extends BottomPopupView implements View.OnCli
         int id = v.getId();
 
         if (id == R.id.btn_dismiss) {
+            dismiss();
+        } else if (id == R.id.btn_setting) {
+            Util.startFragment(CommonUsedSpeechSettingFragment.newInstance());
             dismiss();
         }
     }

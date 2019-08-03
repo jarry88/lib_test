@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".activity.MainActivity">
     <!-- 工具欄 -->
     <RelativeLayout
@@ -30,11 +31,11 @@
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
-            android:text="@string/text_common_used_speech_setting"
+            android:text="@string/text_add_common_used_speech"
             />
 
         <TextView
-            android:id="@+id/btn_add"
+            android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="@dimen/toolbar_margin_right"
@@ -43,8 +44,136 @@
             android:gravity="center_vertical"
             android:textColor="@color/tw_black"
             android:textSize="14sp"
-            android:text="@string/text_add"
+            android:text="@string/text_save"
             />
     </RelativeLayout>
     <!--  END OF 工具欄 -->
+
+    <!-- 切換 Tab -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/btn_common_used_speech"
+            android:layout_width="135dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/tw_blue"
+            android:text="+ 常用語"
+            android:background="@drawable/price_room_edit_text_bg"
+            />
+
+        <TextView
+            android:id="@+id/btn_common_used_template"
+            android:layout_width="135dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            android:text="+ 常用版式"
+            android:background="@drawable/price_room_edit_text_bg"
+            />
+
+    </LinearLayout>
+
+    <!-- 常用語輸入 -->
+    <RelativeLayout
+        android:id="@+id/rl_common_used_speech_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/border_type_d">
+        <EditText
+            android:id="@+id/et_common_used_speech"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:hint="@string/input_common_used_speech_hint"
+            />
+
+        <TextView
+            android:id="@+id/tv_word_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="0"
+            android:textColor="#C0C0C0"
+            android:textSize="13sp"
+            />
+    </RelativeLayout>
+
+
+    <!-- 常用版式輸入 -->
+    <LinearLayout
+        android:id="@+id/ll_common_used_template_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:background="@drawable/border_type_d">
+            <EditText
+                android:id="@+id/et_common_used_template"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:hint="@string/input_common_used_template_title_hint"
+                />
+
+            <TextView
+                android:id="@+id/tv_template_title_word_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="0"
+                android:textColor="#C0C0C0"
+                android:textSize="13sp"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="194dp"
+            android:layout_marginTop="15dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:padding="15dp"
+                android:hint="@string/input_common_used_template_content_hint"
+                android:background="@drawable/border_type_a"
+                />
+
+            <TextView
+                android:id="@+id/tv_template_content_word_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="11dp"
+                android:layout_marginBottom="11dp"
+                android:text="0"
+                android:textSize="13sp"
+                android:textColor="#C0C0C0"
+                />
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

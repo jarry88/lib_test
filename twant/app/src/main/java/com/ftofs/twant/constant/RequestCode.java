@@ -83,4 +83,9 @@ public enum RequestCode {
      * 快遞查詢
      */
     LOGISTICS_QUERY,
+
+    /**
+     * 添加、編輯常用語、常用版式
+     */
+    UPDATE_COMMON_USED_SPEECH,
 }

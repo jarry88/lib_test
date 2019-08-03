@@ -79,6 +79,7 @@
     <string name="text_order_num">訂單編號</string>
 
     <string name="text_common_used_speech_setting">常用語設置</string>
+    <string name="text_add_common_used_speech">添加常用語</string>
 
     <!-- 訂單詳情的按鈕 -->
     <string name="text_cancel_order">取消訂單</string>
@@ -198,6 +199,9 @@
     <string name="setting_realname_authentication_hint">您認證的實名信息</string>
 
     <string name="input_custom_package_type_hint">請補充其他物品名稱</string>
+    <string name="input_common_used_speech_hint">請輸入常用語</string>
+    <string name="input_common_used_template_title_hint">請輸入標題</string>
+    <string name="input_common_used_template_content_hint">請輸入固定版式內容</string>
 
     <string name="text_new_arrivals_chinese">最新入駐</string>
     <string name="text_new_arrivals_english">NEW ARRIVALS</string>

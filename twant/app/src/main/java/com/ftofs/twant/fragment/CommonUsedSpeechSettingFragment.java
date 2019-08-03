@@ -8,22 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
-import com.hyphenate.chat.EMConversation;
+import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 
 /**
  * 常用語、常用版式設置Fragment
  * @author zwm
  */
 public class CommonUsedSpeechSettingFragment extends BaseFragment implements View.OnClickListener {
-    public static ChatFragment newInstance(EMConversation conversation, ChatFragment.Extra extra) {
+    public static CommonUsedSpeechSettingFragment newInstance() {
         Bundle args = new Bundle();
 
-        ChatFragment fragment = new ChatFragment();
+        CommonUsedSpeechSettingFragment fragment = new CommonUsedSpeechSettingFragment();
         fragment.setArguments(args);
-        fragment.setConversation(conversation);
-        if (extra != null) {
-            fragment.setExtraData(extra);
-        }
 
         return fragment;
     }
@@ -38,12 +36,27 @@ public class CommonUsedSpeechSettingFragment extends BaseFragment implements Vie
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_add, this);
     }
 
 
     @Override
     public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_back) {
+            pop();
+        } else if (id == R.id.btn_add) {
+            startForResult(AddCommonUsedSpeechFragment.newInstance(), RequestCode.UPDATE_COMMON_USED_SPEECH.ordinal());
+        }
+    }
 
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        pop();
+        return true;
     }
 }
 
