@@ -64,7 +64,7 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
 
                 dismiss();
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                Util.startFragment(ChatFragment.newInstance(conversation));
+                Util.startFragment(ChatFragment.newInstance(conversation, new ChatFragment.Extra(staff.storeId)));
             }
         });
         rvStaffList.setAdapter(adapter);

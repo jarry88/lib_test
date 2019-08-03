@@ -28,24 +28,19 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-/**
- * IM聊天訂單列表選擇彈窗
- * @author zwm
- */
-public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickListener {
+public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
 
     PopupType popupType;
+    int storeId;
     OnSelectedListener onSelectedListener;
     String imName;
-    int storeId;
 
     List<ImStoreOrderItem> imStoreOrderItemList = new ArrayList<>();
 
-    public ImStoreOrderPopup(@NonNull Context context, PopupType popupType, int storeId, String imName, OnSelectedListener onSelectedListener) {
+    public ImStoreGoodsPopup(@NonNull Context context, PopupType popupType, int storeId, String imName, OnSelectedListener onSelectedListener) {
         super(context);
 
-        this.context = context;
         this.popupType = popupType;
         this.storeId = storeId;
         this.imName = imName;
@@ -54,7 +49,7 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.im_store_order_popup;
+        return R.layout.im_store_goods_popup;
     }
 
     @Override
@@ -66,15 +61,7 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
         RecyclerView rvList = findViewById(R.id.rv_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvList.setLayoutManager(layoutManager);
-        ImStoreOrderListAdapter adapter = new ImStoreOrderListAdapter(R.layout.im_store_order_item, imStoreOrderItemList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ImStoreOrderItem item = imStoreOrderItemList.get(position);
 
-            }
-        });
-        rvList.setAdapter(adapter);
 
         loadData();
     }
@@ -86,11 +73,11 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
         }
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
-                "storeId", storeId,
-                "imName", imName);
+                "imName", imName,
+                "storeId", storeId);
 
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_IM_STORE_ORDER_LIST, params, new UICallback() {
+        Api.getUI(Api.PATH_IM_STORE_GOODS_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(context, e);
@@ -137,4 +124,3 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
         }
     }
 }
-

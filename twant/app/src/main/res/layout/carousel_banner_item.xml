@@ -27,7 +27,6 @@
         android:layout_marginLeft="25dp"
         android:layout_alignLeft="@id/img_goods_desktop"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/cs_avatar_160"
         app:riv_corner_radius="5dp"
         />
 
@@ -39,7 +38,6 @@
         android:layout_marginRight="25dp"
         android:layout_alignRight="@id/img_goods_desktop"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/cs_avatar_160"
         app:riv_corner_radius="5dp"
         />
 
@@ -51,7 +49,6 @@
         android:layout_toLeftOf="@id/goods_image2"
         android:layout_toRightOf="@id/goods_image1"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/cs_avatar_160"
         app:riv_corner_radius="5dp"
         />
 </RelativeLayout>

@@ -111,7 +111,7 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
-        SLog.info("onSelected, type[%d], id[%d], args[%s], extra[%s]", type, id, args, extra);
+        SLog.info("onSelected, type[%s], id[%d], args[%s], extra[%s]", type, id, args, extra);
         if (type == PopupType.SHIPPING_TIME) {
             extra = args;
         }

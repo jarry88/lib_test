@@ -5,6 +5,7 @@ package com.ftofs.twant.entity;
  * @author zwm
  */
 public class CustomerServiceStaff {
+    public int storeId;
     public int staffId;
     public String staffName;
     public String memberName;  // 好友聊天時，用這個

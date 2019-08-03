@@ -309,6 +309,7 @@ public class Util {
 
     public static void packStaffInfo(CustomerServiceStaff staff, EasyJSONObject storeServiceStaffVo) {
         try {
+            staff.storeId = storeServiceStaffVo.getInt("storeId");
             staff.staffId = storeServiceStaffVo.getInt("staffId");
             staff.staffName = storeServiceStaffVo.getString("staffName");
             staff.memberName = storeServiceStaffVo.getString("memberName");

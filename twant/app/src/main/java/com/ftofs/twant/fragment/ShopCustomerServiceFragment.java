@@ -92,7 +92,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                 SLog.info("memberName[%s], imName[%s]", memberName, imName);
 
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                Util.startFragment(ChatFragment.newInstance(conversation));
+                Util.startFragment(ChatFragment.newInstance(conversation, new ChatFragment.Extra(parentFragment.getShopId())));
             }
         });
         rvStaffList.setAdapter(adapter);

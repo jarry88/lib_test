@@ -112,7 +112,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_chat_with_him) {
-            Util.startFragment(ChatFragment.newInstance(ChatUtil.getConversation(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER)));
+            Util.startFragment(ChatFragment.newInstance(ChatUtil.getConversation(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER), null));
         } else if (id == R.id.btn_follow) {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {

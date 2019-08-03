@@ -59,7 +59,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.AreaPopup;
+import com.ftofs.twant.widget.ImStoreGoodsPopup;
 import com.ftofs.twant.widget.ImStoreOrderPopup;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
 import com.ftofs.twant.widget.SizeChangedRecyclerView;
@@ -83,7 +83,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
@@ -93,12 +92,25 @@ import cn.snailpad.easyjson.EasyJSONObject;
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
         View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener, ViewSizeChangedListener,
         OnSelectedListener {
+    /**
+     * 傳進來的附加參數
+     */
+    public static class Extra {
+        public Extra(int storeId) {
+            this.storeId = storeId;
+        }
+
+        public int storeId;
+    }
+
 
     /**
      * 定義發送按鈕的動作，是顯示工具菜單還是發送消息
      */
     private static final int ACTION_SHOW_MENU = 1;
     private static final int ACTION_SEND_MESSAGE = 2;
+
+    int storeId;
 
     int action = ACTION_SHOW_MENU;
 
@@ -136,12 +148,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
      */
     File captureImageFile;
 
-    public static ChatFragment newInstance(EMConversation conversation) {
+    public static ChatFragment newInstance(EMConversation conversation, Extra extra) {
         Bundle args = new Bundle();
 
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
         fragment.setConversation(conversation);
+        if (extra != null) {
+            fragment.setExtraData(extra);
+        }
 
         return fragment;
     }
@@ -369,13 +384,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 captureImageFile = CameraUtil.openCamera(_mActivity, this, Constant.CAMERA_ACTION_IMAGE);
                 break;
             case R.id.btn_send_goods:
-
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new ImStoreGoodsPopup(_mActivity, PopupType.IM_CHAT_SEND_GOODS, storeId, yourMemberName,this))
+                        .show();
                 break;
             case R.id.btn_send_order:
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new ImStoreOrderPopup(_mActivity, PopupType.IM_CHAT_SEND_ORDER, yourMemberName,this))
+                        .asCustom(new ImStoreOrderPopup(_mActivity, PopupType.IM_CHAT_SEND_ORDER, storeId, yourMemberName,this))
                         .show();
                 break;
             case R.id.btn_send_common_used_speech:
@@ -913,6 +932,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     public void setConversation(EMConversation conversation) {
         this.conversation = conversation;
+    }
+
+    public void setExtraData(Extra extra) {
+        storeId = extra.storeId;
     }
 
     private void setShowTimestamp(List<ChatMessage> chatMessages) {

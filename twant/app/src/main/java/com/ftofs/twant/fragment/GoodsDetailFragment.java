@@ -44,7 +44,6 @@ import com.ftofs.twant.widget.SpecSelectPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.StoreGiftPopup;
 import com.ftofs.twant.widget.StoreVoucherPopup;
-import com.github.thunder413.datetimeutils.DateTimeUnits;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -55,7 +54,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,7 +64,6 @@ import java.util.TimerTask;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 

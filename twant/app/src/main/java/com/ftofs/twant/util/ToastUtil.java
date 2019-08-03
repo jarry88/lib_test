@@ -54,7 +54,7 @@ public class ToastUtil {
         if (isError(responseObj)) {
             String errorMessage = defaultErrorMessage;
             if (StringUtil.isEmpty(errorMessage)) {
-                if (responseObj.exists("datas.error")) {
+                if (responseObj != null && responseObj.exists("datas.error")) {
                     try {
                         errorMessage = responseObj.getString("datas.error");
                     } catch (EasyJSONException e) {
@@ -64,6 +64,8 @@ public class ToastUtil {
                     if (StringUtil.isEmpty(errorMessage)) {
                         return true;
                     }
+                } else {
+                    error(context, "返回內容為空");
                 }
             }
 
