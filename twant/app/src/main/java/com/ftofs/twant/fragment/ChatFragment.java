@@ -39,6 +39,7 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
+import com.ftofs.twant.entity.CommonUsedSpeech;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -967,6 +968,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
+        if (type == PopupType.IM_CHAT_COMMON_USED_SPEECH) {
+            CommonUsedSpeech speech = (CommonUsedSpeech) extra;
 
+            if (speech.dataType == CommonUsedSpeech.DATA_TYPE_SPEECH) { // 常用語
+                sendTextMessage(speech.content);
+            } else { // 常用版式
+                sendTextMessage(speech.content);
+            }
+        }
     }
 }

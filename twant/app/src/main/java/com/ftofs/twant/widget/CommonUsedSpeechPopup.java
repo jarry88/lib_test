@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonUsedSpeechAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.CommonUsedSpeech;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -27,7 +28,6 @@ public class CommonUsedSpeechPopup extends BottomPopupView implements View.OnCli
 
     OnSelectedListener onSelectedListener;
 
-    PopupType type;
     // 常用語
     List<CommonUsedSpeech> commonUsedSpeechList = new ArrayList<>();
     // 常用版式
@@ -38,6 +38,7 @@ public class CommonUsedSpeechPopup extends BottomPopupView implements View.OnCli
         super(context);
 
         this.context = context;
+        this.onSelectedListener = onSelectedListener;
     }
 
     @Override
@@ -54,19 +55,40 @@ public class CommonUsedSpeechPopup extends BottomPopupView implements View.OnCli
         LinearLayout llCommonUsedSpeechContainer = findViewById(R.id.ll_common_used_speech_container);
         CommonUsedSpeechAdapter commonUsedSpeechAdapter = new CommonUsedSpeechAdapter(context, llCommonUsedSpeechContainer, R.layout.common_used_speech);
 
-        commonUsedSpeechList.add(new CommonUsedSpeech("親，有什麼可以幫到您？"));
-        commonUsedSpeechList.add(new CommonUsedSpeech("不客氣，這是我們應該做的"));
-        commonUsedSpeechList.add(new CommonUsedSpeech("很高興能為您服務～"));
+        commonUsedSpeechList.add(new CommonUsedSpeech(CommonUsedSpeech.DATA_TYPE_SPEECH, "親，有什麼可以幫到您？"));
+        commonUsedSpeechList.add(new CommonUsedSpeech(CommonUsedSpeech.DATA_TYPE_SPEECH, "不客氣，這是我們應該做的"));
+        commonUsedSpeechList.add(new CommonUsedSpeech(CommonUsedSpeech.DATA_TYPE_SPEECH, "很高興能為您服務～"));
 
+        commonUsedSpeechAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                CommonUsedSpeech speech = commonUsedSpeechList.get(position);
+                SLog.info("speech[%s]", speech.content);
+                onSelectedListener.onSelected(PopupType.IM_CHAT_COMMON_USED_SPEECH, 0, speech);
+
+                dismiss();
+            }
+        });
         commonUsedSpeechAdapter.setData(commonUsedSpeechList);
 
         LinearLayout llCommonUsedTemplateContainer = findViewById(R.id.ll_common_used_template_container);
         CommonUsedSpeechAdapter commonUsedTemplateAdapter = new CommonUsedSpeechAdapter(context, llCommonUsedTemplateContainer, R.layout.common_used_speech);
-        commonUsedTemplateList.add(new CommonUsedSpeech("我們的聯繫方式..."));
-        commonUsedTemplateList.add(new CommonUsedSpeech("售後服務..."));
-        commonUsedTemplateList.add(new CommonUsedSpeech("公司介紹..."));
-        commonUsedTemplateList.add(new CommonUsedSpeech("快遞收費制度..."));
-        commonUsedTemplateList.add(new CommonUsedSpeech("促銷活動介紹..."));
+        commonUsedTemplateList.add(new CommonUsedSpeech(CommonUsedSpeech.DATA_TYPE_TEMPLATE, "我們的聯繫方式..."));
+        commonUsedTemplateList.add(new CommonUsedSpeech(CommonUsedSpeech.DATA_TYPE_TEMPLATE, "售後服務..."));
+        commonUsedTemplateList.add(new CommonUsedSpeech(CommonUsedSpeech.DATA_TYPE_TEMPLATE, "公司介紹..."));
+        commonUsedTemplateList.add(new CommonUsedSpeech(CommonUsedSpeech.DATA_TYPE_TEMPLATE, "快遞收費制度..."));
+        commonUsedTemplateList.add(new CommonUsedSpeech(CommonUsedSpeech.DATA_TYPE_TEMPLATE, "促銷活動介紹..."));
+
+        commonUsedTemplateAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                CommonUsedSpeech speech = commonUsedTemplateList.get(position);
+                SLog.info("speech[%s]", speech.content);
+                onSelectedListener.onSelected(PopupType.IM_CHAT_COMMON_USED_SPEECH, 0, speech);
+
+                dismiss();
+            }
+        });
 
         commonUsedTemplateAdapter.setData(commonUsedTemplateList);
     }
