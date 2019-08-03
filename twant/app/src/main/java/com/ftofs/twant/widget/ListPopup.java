@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ListPopupAdapter;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.ConfirmBillFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -32,11 +33,11 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
     int index; // 選中的index
     OnSelectedListener onSelectedListener;
 
-    int type;
+    PopupType type;
     Object args; // 傳進來的調用參數
 
 
-    public ListPopup(@NonNull Context context, String title, int type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener, Object args) {
+    public ListPopup(@NonNull Context context, String title, PopupType type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener, Object args) {
         this(context, title, type, itemList, index, onSelectedListener);
         this.args = args;
     }
@@ -50,7 +51,7 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
      * @param index 初始選中的索引
      * @param onSelectedListener
      */
-    public ListPopup(@NonNull Context context, String title, int type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener) {
+    public ListPopup(@NonNull Context context, String title, PopupType type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
@@ -109,9 +110,9 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("onSelected, type[%d], id[%d], args[%s], extra[%s]", type, id, args, extra);
-        if (type == Constant.POPUP_TYPE_SHIPPING_TIME) {
+        if (type == PopupType.SHIPPING_TIME) {
             extra = args;
         }
         onSelectedListener.onSelected(type, id, extra);

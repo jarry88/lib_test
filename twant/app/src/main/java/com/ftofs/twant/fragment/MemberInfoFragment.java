@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -20,7 +22,11 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.InviteAddFriendPopup;
+import com.ftofs.twant.widget.TwConfirmPopup;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.io.IOException;
@@ -80,6 +86,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
         memberName = args.getString("memberName");
 
         imageAvatar = view.findViewById(R.id.img_avatar);
+        imageAvatar.setOnClickListener(this);
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvLocation = view.findViewById(R.id.tv_location);
         tvMemberSignature = view.findViewById(R.id.tv_member_signature);
@@ -147,11 +154,70 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
             if (isFriend == 0) { // 添加好友
                 new XPopup.Builder(_mActivity)
                         .autoOpenSoftInput(true)
-                        .asCustom(new InviteAddFriendPopup(_mActivity))
+                        .asCustom(new InviteAddFriendPopup(_mActivity, memberName))
                         .show();
             } else { // 訪問專頁
 
 
+            }
+        } else if (id == R.id.img_avatar) {
+            if (Config.DEVELOPER_MODE) {
+                new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                        .setPopupCallback(new XPopupCallback() {
+                            @Override
+                            public void onShow() {
+                            }
+                            @Override
+                            public void onDismiss() {
+                            }
+                        }).asCustom(new TwConfirmPopup(_mActivity, "確認", "確定要刪除這個好友嗎？", new OnConfirmCallback() {
+                    @Override
+                    public void onYes() {
+                        SLog.info("onYes");
+
+                        String token = User.getToken();
+                        if (StringUtil.isEmpty(token)) {
+                            return;
+                        }
+
+                        EasyJSONObject params = EasyJSONObject.generate(
+                                "token", token,
+                                "friendMemberName", memberName);
+
+                        SLog.info("params[%s]", params.toString());
+                        Api.postUI(Api.PATH_DELETE_FRIEND, params, new UICallback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                ToastUtil.showNetworkError(_mActivity, e);
+                            }
+
+                            @Override
+                            public void onResponse(Call call, String responseStr) throws IOException {
+                                try {
+                                    SLog.info("responseStr[%s]", responseStr);
+
+                                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                        return;
+                                    }
+
+                                    ToastUtil.success(_mActivity, "刪除成功");
+                                } catch (Exception e) {
+
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNo() {
+                        SLog.info("onNo");
+                    }
+                }))
+                        .show();
             }
         }
     }

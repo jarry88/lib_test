@@ -16,6 +16,7 @@ import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -43,7 +44,7 @@ import okhttp3.Response;
  */
 public class AreaPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
-    int popupType;
+    PopupType popupType;
 
     List<Area> areaList = new ArrayList<>();
     List<Area> selectedAreaList = new ArrayList<>();
@@ -56,7 +57,7 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
     LinearLayout llAreaContainer;
     TextView btnOk;
 
-    public AreaPopup(@NonNull Context context, int popupType, OnSelectedListener onSelectedListener) {
+    public AreaPopup(@NonNull Context context, PopupType popupType, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
@@ -77,7 +78,7 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
         llAreaContainer = findViewById(R.id.ll_area_container);
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
 
-        if (popupType == Constant.POPUP_TYPE_MEMBER_ADDRESS) {
+        if (popupType == PopupType.MEMBER_ADDRESS) {
             // 如果是選擇會員地址，將【配送至】提示文本隱藏
             findViewById(R.id.tv_ship_to).setVisibility(GONE);
         }
@@ -181,7 +182,7 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.btn_ok:
-                if (popupType == Constant.POPUP_TYPE_MEMBER_ADDRESS) {
+                if (popupType == PopupType.MEMBER_ADDRESS) {
                     setMemberAddress();
                 } else {
                     onSelectedListener.onSelected(popupType, 0, selectedAreaList);

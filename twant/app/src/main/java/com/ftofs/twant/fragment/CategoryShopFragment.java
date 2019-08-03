@@ -16,6 +16,7 @@ import com.ftofs.twant.adapter.CategoryShopAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.entity.CategoryShop;
@@ -175,7 +176,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
      * @param categoryId 菜單對應的分類Id
      */
     @Override
-    public void onSelected(int type, int categoryId, Object extra) {
+    public void onSelected(PopupType type, int categoryId, Object extra) {
         loadCategoryShopData(categoryId);
     }
 }

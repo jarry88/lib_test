@@ -12,6 +12,7 @@ import com.ftofs.twant.adapter.GoodsVoucherListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -179,7 +180,7 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
 
     }
 

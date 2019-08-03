@@ -20,6 +20,7 @@ import com.ftofs.twant.adapter.StoreSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.FilterCategoryGroup;
 import com.ftofs.twant.entity.FilterCategoryItem;
@@ -520,7 +521,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
         EasyJSONObject params = (EasyJSONObject) extra;
         SLog.info("params[%s]", params.toString());
 

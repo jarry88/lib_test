@@ -1,6 +1,8 @@
 package com.ftofs.twant.interfaces;
 
 
+import com.ftofs.twant.constant.PopupType;
+
 /**
  * 選中監聽接口，一般用于選中事件的回調
  * @author zwm
@@ -12,5 +14,5 @@ public interface OnSelectedListener {
      * @param id 選中哪一個
      * @param extra 附加數據
      */
-    public void onSelected(int type, int id, Object extra);
+    void onSelected(PopupType type, int id, Object extra);
 }

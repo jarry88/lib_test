@@ -27,9 +27,9 @@ public enum EBMessageType {
     MESSAGE_TYPE_REFRESH_DATA,
 
     /**
-     * 頭像上傳成功
+     * 文件上傳成功
      */
-    MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS,
+    MESSAGE_TYPE_UPLOAD_FILE_SUCCESS,
 
     /**
      * 重新加載數據(訂單詳情)

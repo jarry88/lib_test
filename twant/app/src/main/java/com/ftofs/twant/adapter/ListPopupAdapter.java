@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -34,7 +35,7 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
     }
 
     Context context;
-    int type;
+    PopupType type;
 
     OnSelectedListener onSelectedListener;
     List<ListPopupItem> itemList;
@@ -50,7 +51,7 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
      * @param itemList
      * @param index 初始選中哪個index
      */
-    public ListPopupAdapter(Context context, int type,
+    public ListPopupAdapter(Context context, PopupType type,
                             OnSelectedListener onSelectedListener, List<ListPopupItem> itemList, int index) {
         this.context = context;
         this.type = type;

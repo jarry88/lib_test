@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
@@ -113,7 +114,7 @@ public class RegisterFragment extends BaseFragment implements
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
-                            Constant.POPUP_TYPE_MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
+                            PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
         } else if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();
@@ -225,7 +226,7 @@ public class RegisterFragment extends BaseFragment implements
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("selectedMobileZoneIndex[%d], selectedIndex[%d]", selectedMobileZoneIndex, id);
         if (this.selectedMobileZoneIndex == id) {
             return;

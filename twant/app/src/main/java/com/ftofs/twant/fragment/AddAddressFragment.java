@@ -13,6 +13,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ListPopupItem;
@@ -150,14 +151,14 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
-                            Constant.POPUP_TYPE_MOBILE_ZONE, itemList, mobileZoneIndex, this))
+                            PopupType.MOBILE_ZONE, itemList, mobileZoneIndex, this))
                     .show();
         } else if (id == R.id.btn_select_area) {
             hideSoftInput();
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new AreaPopup(_mActivity, Constant.POPUP_TYPE_AREA, this))
+                    .asCustom(new AreaPopup(_mActivity, PopupType.AREA, this))
                     .show();
         } else if (id == R.id.sb_default_addr) {
             if (mIsDefaultAddr == 1) {
@@ -295,11 +296,11 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
-        if (type == Constant.POPUP_TYPE_MOBILE_ZONE) {
+    public void onSelected(PopupType type, int id, Object extra) {
+        if (type == PopupType.MOBILE_ZONE) {
             tvMobileZone.setText(mobileZoneList.get(id).areaName);
             mobileZoneIndex = id;
-        } else if (type == Constant.POPUP_TYPE_AREA) {
+        } else if (type == PopupType.AREA) {
             areaList = (List<Area>) extra;
             String text = "";
             for (Area area : areaList) {

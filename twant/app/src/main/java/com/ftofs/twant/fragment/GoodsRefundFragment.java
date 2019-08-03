@@ -21,6 +21,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
@@ -222,7 +223,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new ListPopup(_mActivity, title,
-                            Constant.POPUP_TYPE_DEFAULT, reasonItemList, reasonIndex != -1 ? reasonIndex : 0, this))
+                            PopupType.DEFAULT, reasonItemList, reasonIndex != -1 ? reasonIndex : 0, this))
                     .show();
         } else if (id == R.id.btn_add_image) {
             startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
@@ -783,9 +784,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("type[%d], id[%d], extra[%s]", type, id, extra);
-        if (type == Constant.POPUP_TYPE_DEFAULT) {
+        if (type == PopupType.DEFAULT) {
             reasonIndex = id;
             tvRefundReason.setText(reasonItemList.get(reasonIndex).title);
         }

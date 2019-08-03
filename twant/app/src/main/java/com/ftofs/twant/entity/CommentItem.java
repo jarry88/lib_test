@@ -5,8 +5,11 @@ import android.os.Parcelable;
 
 public class CommentItem implements Parcelable {
     public int commentId;
+    /**
+     * 評論類型 1全部 2視頻 3文本
+     */
     public int commentType;
-    public int commentChannel;
+    public int commentChannel; // 貼文渠道 1全部 2店鋪 3商品 4貼文 5推文
 
     public String content;
     public int isLike; // 是否點贊
@@ -17,6 +20,12 @@ public class CommentItem implements Parcelable {
     public String nickname;
     public String commentTime;
     public String imageUrl;
+
+    public int relateCommonId;
+    public int relateStoreId;
+    public int replyCommentId;
+    public int relatePostId;
+    public int parentCommentId;
 
     public CommentItem() {
 
@@ -34,6 +43,12 @@ public class CommentItem implements Parcelable {
         nickname = in.readString();
         commentTime = in.readString();
         imageUrl = in.readString();
+
+        relateCommonId = in.readInt();
+        relateStoreId = in.readInt();
+        replyCommentId = in.readInt();
+        relatePostId = in.readInt();
+        parentCommentId = in.readInt();
     }
 
     public static final Creator<CommentItem> CREATOR = new Creator<CommentItem>() {
@@ -66,5 +81,11 @@ public class CommentItem implements Parcelable {
         dest.writeString(nickname);
         dest.writeString(commentTime);
         dest.writeString(imageUrl);
+
+        dest.writeInt(relateCommonId);
+        dest.writeInt(relateStoreId);
+        dest.writeInt(replyCommentId);
+        dest.writeInt(relatePostId);
+        dest.writeInt(parentCommentId);
     }
 }

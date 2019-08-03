@@ -33,17 +33,6 @@ public class Constant {
     public static final int PAY_WAY_FETCH = 2;
 
 
-    public static final int POPUP_TYPE_DEFAULT = 0;
-    public static final int POPUP_TYPE_MOBILE_ZONE = 1;
-    public static final int POPUP_TYPE_AREA = 2;
-    public static final int POPUP_TYPE_BIRTH_DAY = 3;
-    public static final int POPUP_TYPE_MEMBER_ADDRESS = 4;  // 選擇會員地址
-    public static final int POPUP_TYPE_DEADLINE = 5;  // 選擇截止日期
-    public static final int POPUP_TYPE_BUDGET_PRICE = 6;
-    public static final int POPUP_TYPE_ARTICLE_CATEGORY = 7;  // 帖文分类
-    public static final int POPUP_TYPE_SHIPPING_TIME = 8;  // 發貨時間
-    public static final int POPUP_TYPE_PAY_WAY = 9;
-
 
     /**
      * 訂單狀態

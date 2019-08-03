@@ -84,6 +84,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_thumb, this);
+        Util.setOnClickListener(view, R.id.btn_commit, this);
 
         loadCommentDetail();
     }
@@ -97,6 +98,55 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             pop();
         } else if (id == R.id.btn_thumb) {
             switchThumbState();
+        } else if (id == R.id.btn_commit) {
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "commentChannel", commentItem.commentChannel,
+                    "deep", 2,
+                    "content", etReplyContent.getText().toString().trim());
+
+            try {
+                if (commentItem.relateCommonId > 0) {
+                    params.set("relateCommonId", commentItem.relateCommonId);
+                }
+                if (commentItem.relateStoreId > 0) {
+                    params.set("relateStoreId", commentItem.relateStoreId);
+                }
+                if (commentItem.replyCommentId > 0) {
+                    params.set("replyCommentId", commentItem.replyCommentId);
+                }
+                if (commentItem.relatePostId > 0) {
+                    params.set("relatePostId", commentItem.relatePostId);
+                }
+                if (commentItem.parentCommentId > 0) {
+                    params.set("parentCommentId", commentItem.parentCommentId);
+                }
+            } catch (Exception e) {
+
+            }
+
+            SLog.info("params[%s]", params.toString());
+            Api.postUI(Api.PATH_PUBLISH_COMMENT, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        ToastUtil.success(_mActivity, "回復成功");
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
         }
     }
 

@@ -109,8 +109,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        // 如果退出登錄，顯示主頁
-        if (message.messageType == EBMessageType.MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_UPLOAD_FILE_SUCCESS) {
             String url = (String) message.data;
             SLog.info("url[%s]", url);
             commitCommentInternal(url);

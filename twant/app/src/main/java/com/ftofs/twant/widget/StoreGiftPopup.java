@@ -13,6 +13,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsConformAdapter;
 import com.ftofs.twant.adapter.GoodsGiftAdapter;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsConformItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -159,7 +160,7 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
 
     }
 }

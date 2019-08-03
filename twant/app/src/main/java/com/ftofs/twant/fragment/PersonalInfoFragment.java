@@ -18,6 +18,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
@@ -140,21 +141,21 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
                         .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_select_gender),
-                                Constant.POPUP_TYPE_DEFAULT, itemList, genderIndex, this))
+                                PopupType.DEFAULT, itemList, genderIndex, this))
                         .show();
                 break;
             case R.id.btn_select_birthday:
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new DateSelectPopup(_mActivity, Constant.POPUP_TYPE_BIRTH_DAY, birthday, this))
+                        .asCustom(new DateSelectPopup(_mActivity, PopupType.BIRTH_DAY, birthday, this))
                         .show();
                 break;
             case R.id.btn_set_location:
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new AreaPopup(_mActivity, Constant.POPUP_TYPE_MEMBER_ADDRESS, this))
+                        .asCustom(new AreaPopup(_mActivity, PopupType.MEMBER_ADDRESS, this))
                         .show();
                 break;
             default:
@@ -232,10 +233,10 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onSelected(int type, final int id, Object extra) {
+    public void onSelected(PopupType type, final int id, Object extra) {
         SLog.info("type[%d]", type);
 
-        if (type == Constant.POPUP_TYPE_DEFAULT) {
+        if (type == PopupType.DEFAULT) {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
                 return;
@@ -262,11 +263,11 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     tvGender.setText(genderTextMap[genderIndex]);
                 }
             });
-        } else if (type == Constant.POPUP_TYPE_BIRTH_DAY) {
+        } else if (type == PopupType.BIRTH_DAY) {
             SLog.info("extra[%s]", extra);
             String birthday = (String) extra;
             tvBirthday.setText(birthday);
-        } else if (type == Constant.POPUP_TYPE_MEMBER_ADDRESS) {
+        } else if (type == PopupType.MEMBER_ADDRESS) {
             SLog.info("extra[%s]", extra);
             String location = (String) extra;
             tvMemberLocation.setText(location);
@@ -300,7 +301,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        if (message.messageType == EBMessageType.MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_UPLOAD_FILE_SUCCESS) {
             String avatarUrl = (String) message.data;
             SLog.info("avatarUrl[%s]", avatarUrl);
             setUserAvatar(avatarUrl);

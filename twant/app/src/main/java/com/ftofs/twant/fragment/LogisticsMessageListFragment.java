@@ -99,6 +99,8 @@ public class LogisticsMessageListFragment  extends BaseFragment implements View.
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "tplClass", tplClass);
+
+        SLog.info("params[%s]", params.toString());
         Api.postUI(Api.PATH_MESSAGE_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -116,6 +118,10 @@ public class LogisticsMessageListFragment  extends BaseFragment implements View.
                     }
 
                     EasyJSONArray messageClassVoList = responseObj.getArray("datas.memberMessageList");
+                    if (messageClassVoList.length() < 1) {
+                        ToastUtil.info(_mActivity, "暫無消息");
+                        return;
+                    }
                     for (Object object : messageClassVoList) {
                         EasyJSONObject memberMessage = (EasyJSONObject) object;
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ArticleCategory;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.util.Util;
@@ -123,7 +124,7 @@ public class ArticleCategoryPopup extends BottomPopupView implements View.OnClic
         if (id == R.id.btn_dismiss) {
             dismiss();
         } else if (id == R.id.btn_ok) {
-            onSelectedListener.onSelected(Constant.POPUP_TYPE_ARTICLE_CATEGORY, selectedId, null);
+            onSelectedListener.onSelected(PopupType.ARTICLE_CATEGORY, selectedId, null);
             dismiss();
         }
     }

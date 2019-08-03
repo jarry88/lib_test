@@ -23,6 +23,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ArticleCategory;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -196,7 +197,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new DateSelectPopup(_mActivity, Constant.POPUP_TYPE_DEADLINE, deadline, this))
+                    .asCustom(new DateSelectPopup(_mActivity, PopupType.DEADLINE, deadline, this))
                     .show();
         } else if (id == R.id.btn_budget_price) {
             new XPopup.Builder(_mActivity)
@@ -281,14 +282,14 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
-        if (type == Constant.POPUP_TYPE_DEADLINE) {
+    public void onSelected(PopupType type, int id, Object extra) {
+        if (type == PopupType.DEADLINE) {
             deadline = (String) extra;
             tvDeadline.setText(deadline);
-        } else if (type == Constant.POPUP_TYPE_BUDGET_PRICE) {
+        } else if (type == PopupType.BUDGET_PRICE) {
             budgetPrice = (String) extra;
             tvBudgetPrice.setText(currencyTypeSign + budgetPrice);
-        } else if (type == Constant.POPUP_TYPE_ARTICLE_CATEGORY) {
+        } else if (type == PopupType.ARTICLE_CATEGORY) {
             selectedCategoryId = id;
             tvArticleCategory.setText(getCategoryName(selectedCategoryId));
         }

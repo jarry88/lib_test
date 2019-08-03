@@ -2,20 +2,39 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.lxj.xpopup.core.BottomPopupView;
 
+import java.io.IOException;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
+
+/**
+ * 申請添加好友Popup
+ * @author zwm
+ */
 public class InviteAddFriendPopup extends BottomPopupView implements View.OnClickListener {
+    Context context;
     EditText etRemark;
 
+    // 將要添加的好友的memberName
+    String memberName;
 
-    public InviteAddFriendPopup(@NonNull Context context) {
+    public InviteAddFriendPopup(@NonNull Context context, String memberName) {
         super(context);
+
+        this.context = context;
+        this.memberName = memberName;
     }
 
     @Override
@@ -27,7 +46,9 @@ public class InviteAddFriendPopup extends BottomPopupView implements View.OnClic
     protected void onCreate() {
         super.onCreate();
 
+        etRemark = findViewById(R.id.et_remark);
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
+        findViewById(R.id.btn_send_invitation).setOnClickListener(this);
     }
 
     @Override
@@ -48,8 +69,41 @@ public class InviteAddFriendPopup extends BottomPopupView implements View.OnClic
         } else if (id == R.id.btn_send_invitation) {
             dismiss();
 
-            String remark = etRemark.getText().toString();
+            String remark = etRemark.getText().toString().trim();
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "toMember", memberName,
+                    "notes", remark
+            );
 
+            SLog.info("params[%s]", params.toString());
+            Api.postUI(Api.PATH_ADD_FRIEND_APPLICATION, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(context, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(context, responseObj)) {
+                            return;
+                        }
+
+                        ToastUtil.success(context, "發送成功");
+                        dismiss();
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
         }
     }
 

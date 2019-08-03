@@ -22,6 +22,7 @@ import com.ftofs.twant.adapter.ConfirmOrderStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
@@ -212,7 +213,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
                 .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_pay_way),
-                        Constant.POPUP_TYPE_PAY_WAY, payWayItemList, payWayIndex, this))
+                        PopupType.PAY_WAY, payWayItemList, payWayIndex, this))
                 .show();
     }
 
@@ -222,7 +223,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
                 .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_shipping_time),
-                        Constant.POPUP_TYPE_SHIPPING_TIME, shippingItemList, storeItem.shipTimeType, this, position))
+                        PopupType.SHIPPING_TIME, shippingItemList, storeItem.shipTimeType, this, position))
                 .show();
     }
 
@@ -459,7 +460,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
-                            Constant.POPUP_TYPE_MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
+                            PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
         }
     }
@@ -727,8 +728,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
-        if (type == Constant.POPUP_TYPE_PAY_WAY) {
+    public void onSelected(PopupType type, int id, Object extra) {
+        if (type == PopupType.PAY_WAY) {
             payWayIndex = id;
             SLog.info("payWayIndex[%d]", payWayIndex);
             ConfirmOrderSummaryItem summaryItem = getSummaryItem();
@@ -746,12 +747,12 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 llSelfFetchInfoContainer.setVisibility(View.GONE);
                 updateAddrView();
             }
-        } else if (type == Constant.POPUP_TYPE_SHIPPING_TIME) {
+        } else if (type == PopupType.SHIPPING_TIME) {
             int position = (int) extra;
             ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
             storeItem.shipTimeType = id;
             adapter.notifyItemChanged(position);
-        } else if (type == Constant.POPUP_TYPE_MOBILE_ZONE) {
+        } else if (type == PopupType.MOBILE_ZONE) {
             SLog.info("selectedMobileZoneIndex[%d], id[%d]", selectedMobileZoneIndex, id);
             if (this.selectedMobileZoneIndex == id) {
                 return;

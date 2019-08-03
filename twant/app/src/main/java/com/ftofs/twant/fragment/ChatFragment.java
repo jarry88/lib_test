@@ -35,12 +35,14 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
@@ -57,6 +59,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AreaPopup;
+import com.ftofs.twant.widget.ImStoreOrderPopup;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
 import com.ftofs.twant.widget.SizeChangedRecyclerView;
 import com.ftofs.twant.widget.SmoothInputLayout;
@@ -87,7 +91,8 @@ import cn.snailpad.easyjson.EasyJSONObject;
  * @author zwm
  */
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
-        View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener, ViewSizeChangedListener {
+        View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener, ViewSizeChangedListener,
+        OnSelectedListener {
 
     /**
      * 定義發送按鈕的動作，是顯示工具菜單還是發送消息
@@ -364,7 +369,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 captureImageFile = CameraUtil.openCamera(_mActivity, this, Constant.CAMERA_ACTION_IMAGE);
                 break;
             case R.id.btn_send_goods:
+
+                break;
             case R.id.btn_send_order:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new ImStoreOrderPopup(_mActivity, PopupType.IM_CHAT_SEND_ORDER, yourMemberName,this))
+                        .show();
+                break;
             case R.id.btn_send_common_used_speech:
             case R.id.btn_send_location:
                 ToastUtil.info(_mActivity, "暫未實現");
@@ -920,5 +933,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }
             }
         }
+    }
+
+    @Override
+    public void onSelected(PopupType type, int id, Object extra) {
+
     }
 }

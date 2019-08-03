@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 
@@ -87,7 +88,7 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
                 notifyItemChanged(position);
 
                 if (onSelectedListener != null) {
-                    onSelectedListener.onSelected(Constant.POPUP_TYPE_DEFAULT, categoryMenu.categoryId, null);
+                    onSelectedListener.onSelected(PopupType.DEFAULT, categoryMenu.categoryId, null);
                 }
             }
         });

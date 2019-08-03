@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.FilterCategoryGroup;
 import com.ftofs.twant.entity.FilterCategoryItem;
 import com.ftofs.twant.entity.FilterCategoryMeta;
@@ -270,7 +271,7 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
             }
             SLog.info("params[%s]", params.toString());
 
-            onSelectedListener.onSelected(Constant.POPUP_TYPE_DEFAULT, 0, params);
+            onSelectedListener.onSelected(PopupType.DEFAULT, 0, params);
             dismiss();
         }
     }

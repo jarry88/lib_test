@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -86,7 +87,7 @@ public class BudgetPricePopup extends BottomPopupView implements View.OnClickLis
                 return;
             }
 
-            onSelectedListener.onSelected(Constant.POPUP_TYPE_BUDGET_PRICE, 0, budgetPrice);
+            onSelectedListener.onSelected(PopupType.BUDGET_PRICE, 0, budgetPrice);
             dismiss();
         }
     }

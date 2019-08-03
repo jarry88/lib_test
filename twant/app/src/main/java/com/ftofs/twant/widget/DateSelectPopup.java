@@ -15,6 +15,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -36,7 +37,7 @@ import okhttp3.Call;
  */
 public class DateSelectPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
     Context context;
-    int popupType;
+    PopupType popupType;
     OnSelectedListener onSelectedListener;
     String dateStr = "1992-01-01";
 
@@ -48,7 +49,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
      * @param dateStr 初始的日期，格式 2019-06-06，如果為null或空串，則默認為 1992-01-01
      * @param onSelectedListener
      */
-    public DateSelectPopup(@NonNull Context context, int popupType, String dateStr, OnSelectedListener onSelectedListener) {
+    public DateSelectPopup(@NonNull Context context, PopupType popupType, String dateStr, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
@@ -69,7 +70,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
         super.onCreate();
 
         TextView tvPopupTitle = findViewById(R.id.tv_popup_title);
-        if (popupType == Constant.POPUP_TYPE_BIRTH_DAY) {
+        if (popupType == PopupType.BIRTH_DAY) {
             tvPopupTitle.setText(context.getString(R.string.text_birthday));
         } else {
             tvPopupTitle.setText(context.getString(R.string.text_deadline));
@@ -96,7 +97,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
                 int day = date.getDate();
                 String dateStr = String.format("%04d-%02d-%02d", year, month, day);
                 SLog.info("dateStr[%s]", dateStr);
-                if (popupType == Constant.POPUP_TYPE_BIRTH_DAY) {
+                if (popupType == PopupType.BIRTH_DAY) {
                     setBirthday(year, month, day);
                 } else {
                     dismiss();
@@ -202,7 +203,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("onSelected, type[%d], id[%d], extra[%s]", type, id, extra);
 
         onSelectedListener.onSelected(type, id, extra);

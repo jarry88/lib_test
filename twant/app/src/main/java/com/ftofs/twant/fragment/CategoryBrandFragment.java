@@ -17,6 +17,7 @@ import com.ftofs.twant.adapter.CategoryMenuAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CategoryBrand;
 import com.ftofs.twant.entity.CategoryMenu;
@@ -176,7 +177,7 @@ public class CategoryBrandFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
         loadCategoryBrandData(id);
     }
 }

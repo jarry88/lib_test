@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.util.Util;
@@ -74,7 +75,7 @@ public class StoreLabelListAdapter extends BaseQuickAdapter<StoreLabel, BaseView
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onSelectedListener.onSelected(0, storeLabelId, null);
+                    onSelectedListener.onSelected(PopupType.DEFAULT, storeLabelId, null);
                 }
             });
 

@@ -16,6 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.WebSliderItem;
@@ -178,7 +179,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("onSelected, type[%d], id[%d], extra[%s]", type, id, extra);
     }
 

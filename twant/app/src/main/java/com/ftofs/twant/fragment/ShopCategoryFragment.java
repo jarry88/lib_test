@@ -16,6 +16,7 @@ import com.ftofs.twant.adapter.StoreLabelListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -182,7 +183,7 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onSelected(int type, int id, Object extra) {
+    public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("storeLabelId[%d]", id);
 
         EasyJSONObject params = EasyJSONObject.generate(

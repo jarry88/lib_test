@@ -635,10 +635,28 @@ public class Api {
      */
     public static final String PATH_PACKAGE_DELIVERY = "/member/logistics/delivery";
 
+
     /**
-     * 快遞查詢
+     * 發起好友申請
      */
-    public static final String PATH_PACKAGE_QUERY = "/member/logistics/search";
+    public static final String PATH_ADD_FRIEND_APPLICATION = "/member/friend/send_reqeust";
+
+
+    /**
+     * 刪除好友
+     */
+    public static final String PATH_DELETE_FRIEND = "/member/friend/delete";
+
+
+    /**
+     * IM店鋪商品列表【新】
+     */
+    public static final String PATH_IM_STORE_GOODS_LIST = "/member/im/goods/list";
+
+    /**
+     * 我在店鋪的訂單記錄【新】
+     */
+    public static final String PATH_IM_STORE_ORDER_LIST = "/member/im/orders/list";
 
 
     /**
@@ -1039,7 +1057,7 @@ public class Api {
                     String avatarUrl = responseObj.getString("datas.name");
                     SLog.info("avatarUrl[%s]", avatarUrl);
 
-                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPLOAD_AVATAR_SUCCESS, avatarUrl);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPLOAD_FILE_SUCCESS, avatarUrl);
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
                 }
