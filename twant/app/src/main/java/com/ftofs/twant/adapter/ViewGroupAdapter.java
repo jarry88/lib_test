@@ -137,6 +137,18 @@ public abstract class ViewGroupAdapter<T> {
     public abstract void bindView(int position, View itemView, T itemData);
 
     /**
+     * 獲取有多少項數據
+     * @return 返回項數；如果未綁定數據，返回-1
+     */
+    public int getItemCount() {
+        if (dataList == null) {
+            return -1;
+        }
+
+        return dataList.size();
+    }
+
+    /**
      * 點擊事件監聽器接口
      * itemView和childView都共用這個接口
      */

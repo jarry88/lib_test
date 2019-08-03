@@ -35,18 +35,16 @@ import okhttp3.Call;
 public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
 
-    PopupType popupType;
     OnSelectedListener onSelectedListener;
     String imName;
     int storeId;
 
     List<ImStoreOrderItem> imStoreOrderItemList = new ArrayList<>();
 
-    public ImStoreOrderPopup(@NonNull Context context, PopupType popupType, int storeId, String imName, OnSelectedListener onSelectedListener) {
+    public ImStoreOrderPopup(@NonNull Context context, int storeId, String imName, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
-        this.popupType = popupType;
         this.storeId = storeId;
         this.imName = imName;
         this.onSelectedListener = onSelectedListener;

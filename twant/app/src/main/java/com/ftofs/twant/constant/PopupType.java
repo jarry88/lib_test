@@ -64,4 +64,9 @@ public enum PopupType {
      * IM聊天選擇發送訂單
      */
     IM_CHAT_SEND_ORDER,
+
+    /**
+     * IM聊天常用語
+     */
+    IM_CHAT_COMMON_USED_SPEECH,
 }

@@ -59,6 +59,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.CommonUsedSpeechPopup;
 import com.ftofs.twant.widget.ImStoreGoodsPopup;
 import com.ftofs.twant.widget.ImStoreOrderPopup;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
@@ -387,17 +388,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new ImStoreGoodsPopup(_mActivity, PopupType.IM_CHAT_SEND_GOODS, storeId, yourMemberName,this))
+                        .asCustom(new ImStoreGoodsPopup(_mActivity, storeId, yourMemberName,this))
                         .show();
                 break;
             case R.id.btn_send_order:
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new ImStoreOrderPopup(_mActivity, PopupType.IM_CHAT_SEND_ORDER, storeId, yourMemberName,this))
+                        .asCustom(new ImStoreOrderPopup(_mActivity, storeId, yourMemberName,this))
                         .show();
                 break;
             case R.id.btn_send_common_used_speech:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new CommonUsedSpeechPopup(_mActivity,this))
+                        .show();
+                break;
             case R.id.btn_send_location:
                 ToastUtil.info(_mActivity, "暫未實現");
                 break;

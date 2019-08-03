@@ -78,6 +78,8 @@
     <string name="text_time_ship_order">完成發貨:</string>
     <string name="text_order_num">訂單編號</string>
 
+    <string name="text_common_used_speech_setting">常用語設置</string>
+
     <!-- 訂單詳情的按鈕 -->
     <string name="text_cancel_order">取消訂單</string>
     <string name="text_order_comment">訂單評論</string>
@@ -254,6 +256,7 @@
     <string name="text_image">圖片</string>
     <string name="text_take_photo">拍攝</string>
     <string name="text_common_used_speech">常用語</string>
+    <string name="text_common_used_template">常用版式</string>
     <string name="text_locate">定位</string>
 
     <string name="text_loading">正在加載</string>

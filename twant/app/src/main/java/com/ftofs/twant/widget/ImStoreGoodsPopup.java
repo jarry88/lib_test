@@ -6,12 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.ImStoreOrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ImStoreOrderItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -31,17 +28,15 @@ import okhttp3.Call;
 public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
 
-    PopupType popupType;
     int storeId;
     OnSelectedListener onSelectedListener;
     String imName;
 
     List<ImStoreOrderItem> imStoreOrderItemList = new ArrayList<>();
 
-    public ImStoreGoodsPopup(@NonNull Context context, PopupType popupType, int storeId, String imName, OnSelectedListener onSelectedListener) {
+    public ImStoreGoodsPopup(@NonNull Context context, int storeId, String imName, OnSelectedListener onSelectedListener) {
         super(context);
 
-        this.popupType = popupType;
         this.storeId = storeId;
         this.imName = imName;
         this.onSelectedListener = onSelectedListener;
