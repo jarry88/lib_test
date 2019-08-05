@@ -572,6 +572,9 @@
     <string name="text_logistics_state_desc_in_progress">進行中</string>
     <string name="text_logistics_state_desc_finished">已完成</string>
 
+    <string name="input_search_friend_hint">昵稱/用戶號</string>
+    <string name="text_taifung_pay">大豐支付</string>
+
 
     <!-- 貨幣種類標志 -->
     <string name="currency_type_sign">$</string>

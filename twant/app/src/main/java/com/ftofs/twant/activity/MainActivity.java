@@ -40,10 +40,15 @@ import okhttp3.Call;
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     long lastBackPressedTime;
     MainFragment mainFragment;
+
+    private static MainActivity instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        instance = this;
 
         EventBus.getDefault().register(this);
 
@@ -56,8 +61,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        instance = null;
 
         EventBus.getDefault().unregister(this);
+    }
+
+    public static MainActivity getInstance() {
+        return instance;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
