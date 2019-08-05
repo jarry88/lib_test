@@ -67,7 +67,8 @@ public class ChatUtil {
         String avatarUrl = User.getUserInfo(SPField.FIELD_AVATAR, "");
 
         message.setAttribute("nickName", nickname);
-        message.setAttribute("avatarUrl", avatarUrl);
-        message.setAttribute("role", role);
+        message.setAttribute("avatar", avatarUrl);
+        message.setAttribute("role", String.valueOf(role));
+        message.setAttribute("sendTime", String.valueOf(System.currentTimeMillis()));
     }
 }

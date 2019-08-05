@@ -660,7 +660,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         EMMessage message = EMMessage.createTxtSendMessage(content, yourMemberName);
         message.setAttribute("messageType", "txt");
         ChatUtil.setMessageCommonAttr(message, ChatUtil.ROLE_MEMBER);
-
+        SLog.info("message[%s], yourMemberName[%s]", message, yourMemberName);
 
         //发送消息
         EMClient.getInstance().chatManager().sendMessage(message);

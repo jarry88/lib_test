@@ -660,6 +660,12 @@ public class Api {
 
 
     /**
+     * 用戶搜索
+     */
+    public static final String PATH_SEARCH_USER = "/member/friend/search_user";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST
@@ -1243,16 +1249,18 @@ public class Api {
 
 
         EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
                 "to", to,
                 "messageType", messageType,
                 "targetType", "users",
-                "messageBody", messageBody.toString()
+                "messageBody", messageBody
         );
 
         SLog.info("params[%s]", params.toString());
 
-        Api.postIO(Api.PATH_IM_SEND_MESSAGE, params, new Callback() {
+        String path = Api.PATH_IM_SEND_MESSAGE + makeQueryString(EasyJSONObject.generate("token", token));
+
+        SLog.info("path[%s], params[%s]", path, params);
+        Api.postJsonIo(path, params.toString(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 SLog.info("Error!%s", e.getMessage());
@@ -1260,7 +1268,8 @@ public class Api {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                SLog.info("發送成功");
+                String responseStr = response.body().string();
+                SLog.info("發送成功, response[%s], responseStr[%s]", response, responseStr);
             }
         });
     }

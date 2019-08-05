@@ -5,17 +5,36 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.adapter.AddFriendSearchResultAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.AddFriendSearchResultItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.uuzuche.lib_zxing.activity.CodeUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 
 /**
@@ -23,6 +42,11 @@ import com.uuzuche.lib_zxing.activity.CodeUtils;
  * @author zwm
  */
 public class AddFriendFragment extends BaseFragment implements View.OnClickListener {
+    EditText etKeyword;
+
+    AddFriendSearchResultAdapter adapter;
+
+    List<AddFriendSearchResultItem> addFriendSearchResultItemList = new ArrayList<>();
     public static AddFriendFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -45,6 +69,95 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_my_qr_code, this);
         Util.setOnClickListener(view, R.id.btn_scan_qr_code, this);
+
+        etKeyword = view.findViewById(R.id.et_keyword);
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                SLog.info("onEditorAction");
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String keyword = etKeyword.getText().toString().trim();
+
+                    if (StringUtil.isEmpty(keyword)) {
+                        ToastUtil.error(_mActivity, "請輸入" + getString(R.string.input_search_friend_hint));
+                        return true;
+                    }
+
+                    hideSoftInput();
+                    doSearch(keyword);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        RecyclerView rvList = view.findViewById(R.id.rv_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        rvList.setLayoutManager(layoutManager);
+        adapter = new AddFriendSearchResultAdapter(R.layout.add_friend_search_result_item, addFriendSearchResultItemList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                AddFriendSearchResultItem item = addFriendSearchResultItemList.get(position);
+                start(MemberInfoFragment.newInstance(item.memberName));
+            }
+        });
+        rvList.setAdapter(adapter);
+    }
+
+    private void doSearch(String keyword) {
+        String token = User.getToken();
+
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "keyword", keyword);
+        SLog.info("params[%s]", params);
+
+        Api.postUI(Api.PATH_SEARCH_USER, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    addFriendSearchResultItemList.clear();
+                    EasyJSONArray memberList = responseObj.getArray("datas.memberList");
+                    for (Object object : memberList) {
+                        EasyJSONObject member = (EasyJSONObject) object;
+
+                        AddFriendSearchResultItem item = new AddFriendSearchResultItem();
+                        item.memberName = member.getString("memberName");
+                        item.avatar = member.getString("avatar");
+                        item.nickname = member.getString("nickName");
+                        item.memberSignature = member.getString("memberSignature");
+
+                        addFriendSearchResultItemList.add(item);
+                    }
+
+                    adapter.setNewData(addFriendSearchResultItemList);
+
+                    if (addFriendSearchResultItemList.size() == 0) {
+                        ToastUtil.error(_mActivity, "沒有符合條件的用戶");
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
+
     }
 
 
