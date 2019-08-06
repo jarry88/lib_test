@@ -53,12 +53,16 @@
                 />
 
             <EditText
+                android:id="@+id/et_keyword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:textColor="#BEBEBE"
+                android:textColor="@color/tw_black"
                 android:textSize="14sp"
                 android:hint="@string/text_search_store_goods"
+                android:singleLine="true"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
                 android:background="@null"
                 />
         </LinearLayout>

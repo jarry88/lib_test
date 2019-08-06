@@ -4,7 +4,11 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -17,6 +21,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -44,6 +49,8 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
     ImStoreGoodsListAdapter adapter;
     List<ImStoreGoodsItem> imStoreGoodsItemList = new ArrayList<>();
 
+    EditText etKeyword;
+
     public ImStoreGoodsPopup(@NonNull Context context, int storeId, String imName, String keyword, OnSelectedListener onSelectedListener) {
         super(context);
         this.context = context;
@@ -64,6 +71,20 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
         super.onCreate();
 
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
+
+        etKeyword = findViewById(R.id.et_keyword);
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    keyword = etKeyword.getText().toString().trim();
+                    Util.hideSoftInput(context, etKeyword);
+
+                    loadData();
+                }
+                return false;
+            }
+        });
 
         RecyclerView rvList = findViewById(R.id.rv_list);
         GridLayoutManager layoutManager = new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false);
@@ -95,7 +116,7 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
                 "imName", imName,
                 "storeId", storeId);
 
-        if (StringUtil.isEmpty(keyword)) {
+        if (!StringUtil.isEmpty(keyword)) {
             try {
                 params.set("keyword", keyword);
             } catch (EasyJSONException e) {
