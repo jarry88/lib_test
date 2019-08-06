@@ -64,6 +64,7 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
 
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_new_friend, this);
 
         RecyclerView rvContactList = view.findViewById(R.id.rv_contact_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -89,6 +90,8 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
 
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_new_friend) {
+            start(NewFriendFragment.newInstance());
         }
     }
 

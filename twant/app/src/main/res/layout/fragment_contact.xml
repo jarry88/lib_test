@@ -59,6 +59,7 @@
     <!--  END OF 工具欄 -->
 
     <RelativeLayout
+        android:id="@+id/btn_new_friend"
         android:layout_width="match_parent"
         android:layout_height="82dp"
         android:paddingLeft="15dp"

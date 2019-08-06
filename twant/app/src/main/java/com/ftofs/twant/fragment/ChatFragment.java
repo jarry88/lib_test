@@ -512,6 +512,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                 } else if (id == R.id.img_your_avatar) {
                     Util.startFragment(MemberInfoFragment.newInstance(yourMemberName));
+                } else if (id == R.id.img_my_avatar) {
+                    start(PersonalInfoFragment.newInstance());
                 }
             }
         });

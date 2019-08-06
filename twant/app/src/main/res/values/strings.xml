@@ -516,6 +516,9 @@
     <string name="text_shipping_to">配送至</string>
     <string name="text_set_as_default">設為默認</string>
 
+    <string name="text_accept">接受</string>
+    <string name="text_added">已添加</string>
+
     <string name="text_filter">篩選</string>
     <string name="text_goods_filter">商品篩選</string>
     <string name="text_price_room">價格區間</string>
