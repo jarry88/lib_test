@@ -2,14 +2,16 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.ImStoreGoodsListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.entity.ImStoreOrderItem;
+import com.ftofs.twant.entity.ImStoreGoodsItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -22,23 +24,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
+/**
+ * IM聊天發送商品選擇(暫時不做分類)
+ * @author zwm
+ */
 public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
 
     int storeId;
     OnSelectedListener onSelectedListener;
     String imName;
+    String keyword;
 
-    List<ImStoreOrderItem> imStoreOrderItemList = new ArrayList<>();
+    ImStoreGoodsListAdapter adapter;
+    List<ImStoreGoodsItem> imStoreGoodsItemList = new ArrayList<>();
 
-    public ImStoreGoodsPopup(@NonNull Context context, int storeId, String imName, OnSelectedListener onSelectedListener) {
+    public ImStoreGoodsPopup(@NonNull Context context, int storeId, String imName, String keyword, OnSelectedListener onSelectedListener) {
         super(context);
+        this.context = context;
 
         this.storeId = storeId;
         this.imName = imName;
+        this.keyword = keyword;
         this.onSelectedListener = onSelectedListener;
     }
 
@@ -54,9 +66,21 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
 
         RecyclerView rvList = findViewById(R.id.rv_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        GridLayoutManager layoutManager = new GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false);
         rvList.setLayoutManager(layoutManager);
-
+        adapter = new ImStoreGoodsListAdapter(imStoreGoodsItemList);
+        adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
+                ImStoreGoodsItem item = imStoreGoodsItemList.get(position);
+                if (item.getItemType() == ImStoreGoodsItem.ITEM_TYPE_HEADER) {
+                    return 4;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        rvList.setAdapter(adapter);
 
         loadData();
     }
@@ -70,6 +94,14 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
                 "token", token,
                 "imName", imName,
                 "storeId", storeId);
+
+        if (StringUtil.isEmpty(keyword)) {
+            try {
+                params.set("keyword", keyword);
+            } catch (EasyJSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         SLog.info("params[%s]", params);
         Api.getUI(Api.PATH_IM_STORE_GOODS_LIST, params, new UICallback() {
@@ -87,7 +119,35 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
                     return;
                 }
 
+                try {
+                    imStoreGoodsItemList.clear();
 
+                    EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
+
+                    for (Object object : goodsList) {
+                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+
+                        // 分兩類 1.分類名  2.商品列表
+                        ImStoreGoodsItem item = new ImStoreGoodsItem(ImStoreGoodsItem.ITEM_TYPE_HEADER);
+                        item.goodsName = easyJSONObject.getString("categoryName");
+                        imStoreGoodsItemList.add(item);
+
+                        EasyJSONArray goods = easyJSONObject.getArray("goods");
+                        for (Object object2 : goods) {
+                            EasyJSONObject easyJSONObject2 = (EasyJSONObject) object2;
+
+                            item = new ImStoreGoodsItem(ImStoreGoodsItem.ITEM_TYPE_ITEM);
+
+                            item.commonId = easyJSONObject2.getInt("commonId");
+                            item.goodsImg = easyJSONObject2.getString("goodsImg");
+                            item.goodsName = easyJSONObject2.getString("goodsName");
+                            imStoreGoodsItemList.add(item);
+                        }
+                    }
+                    adapter.setNewData(imStoreGoodsItemList);
+                } catch (Exception e) {
+
+                }
             }
         });
     }

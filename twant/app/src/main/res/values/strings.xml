@@ -164,7 +164,7 @@
     <string name="bottom_bar_title_message">消息</string>
     <string name="bottom_bar_title_circle">想要圈</string>
     <string name="bottom_bar_title_cart">購物車</string>
-    <string name="bottom_bar_title_my">專頁</string>
+    <string name="bottom_bar_title_my">我的</string>
 
     <!-- 店鋪的底部工具欄 -->
     <string name="shop_bottom_bar_title_home">首頁</string>
@@ -518,6 +518,7 @@
 
     <string name="text_accept">接受</string>
     <string name="text_added">已添加</string>
+    <string name="text_search_store_goods">搜索店鋪商品</string>
 
     <string name="text_filter">篩選</string>
     <string name="text_goods_filter">商品篩選</string>

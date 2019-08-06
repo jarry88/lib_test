@@ -389,7 +389,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new ImStoreGoodsPopup(_mActivity, storeId, yourMemberName,this))
+                        .asCustom(new ImStoreGoodsPopup(_mActivity, storeId, yourMemberName, "", this))
                         .show();
                 break;
             case R.id.btn_send_order:

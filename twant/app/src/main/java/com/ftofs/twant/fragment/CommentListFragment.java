@@ -188,6 +188,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                         currPage++;
                         adapter.setNewData(commentItemList);
                     } catch (Exception e) {
+                        e.printStackTrace();
                         SLog.info("Error!%s", e.getMessage());
                     }
                 }
