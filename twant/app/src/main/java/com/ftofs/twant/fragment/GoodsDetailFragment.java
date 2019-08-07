@@ -370,7 +370,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new StoreCustomerServicePopup(_mActivity, staffList))
+                        .asCustom(new StoreCustomerServicePopup(_mActivity, storeId, staffList))
                         .show();
                 break;
             default:

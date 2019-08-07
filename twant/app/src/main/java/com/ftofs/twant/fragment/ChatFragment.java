@@ -81,7 +81,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.LitePal;
-import org.litepal.util.Const;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -97,17 +96,6 @@ import cn.snailpad.easyjson.EasyJSONObject;
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
         View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener, ViewSizeChangedListener,
         OnSelectedListener {
-    /**
-     * 傳進來的附加參數
-     */
-    public static class Extra {
-        public Extra(int storeId) {
-            this.storeId = storeId;
-        }
-
-        public int storeId;
-    }
-
     /**
      * 自定義文本消息的類型
      */
@@ -160,15 +148,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
      */
     File captureImageFile;
 
-    public static ChatFragment newInstance(EMConversation conversation, Extra extra) {
+    public static ChatFragment newInstance(EMConversation conversation) {
         Bundle args = new Bundle();
 
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
         fragment.setConversation(conversation);
-        if (extra != null) {
-            fragment.setExtraData(extra);
-        }
 
         return fragment;
     }
@@ -292,18 +277,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         rvMessageList.scrollToPosition(chatMessageAdapter.getItemCount() - 1);
     }
 
+    /**
+     * 加載聊天對象的信息
+     * @return
+     */
     private boolean loadFriendInfo() {
         String memberName = yourMemberName;
 
-        if (yourRole == ChatUtil.ROLE_CS_AVAILABLE) {
-            ImNameMap map = ImNameMap.getByImName(yourMemberName);
-            if (map == null) {
-                return false;
-            }
-
+        // 如果是客服聊天，根據imName查找真正的memberName
+        ImNameMap map = ImNameMap.getByImName(yourMemberName);
+        if (map != null) {
+            SLog.info("map[%s]", map);
             memberName = map.memberName;
+            storeId = map.storeId;
         }
-
 
         friendInfo = LitePal.where("memberName = ?", memberName).findFirst(FriendInfo.class);
         if (friendInfo == null) {
@@ -1052,10 +1039,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     public void setConversation(EMConversation conversation) {
         this.conversation = conversation;
-    }
-
-    public void setExtraData(Extra extra) {
-        storeId = extra.storeId;
     }
 
     private void setShowTimestamp(List<ChatMessage> chatMessages) {

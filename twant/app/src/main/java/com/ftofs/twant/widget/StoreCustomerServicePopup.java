@@ -28,11 +28,13 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
 
     List<CustomerServiceStaff> staffList;
 
+    int storeId;
     StoreServiceStaffListAdapter adapter;
-    public StoreCustomerServicePopup(@NonNull Context context, List<CustomerServiceStaff> staffList) {
+    public StoreCustomerServicePopup(@NonNull Context context, int storeId, List<CustomerServiceStaff> staffList) {
         super(context);
 
         this.context = context;
+        this.storeId = storeId;
         this.staffList = staffList;
     }
 
@@ -60,11 +62,11 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
                 CustomerServiceStaff staff = staffList.get(position);
                 String memberName = staff.memberName;
                 String imName = staff.imName;
-                ImNameMap.saveMap(imName, memberName);
+                ImNameMap.saveMap(imName, memberName, storeId);
 
                 dismiss();
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                Util.startFragment(ChatFragment.newInstance(conversation, new ChatFragment.Extra(staff.storeId)));
+                Util.startFragment(ChatFragment.newInstance(conversation));
             }
         });
         rvStaffList.setAdapter(adapter);

@@ -25,7 +25,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  */
 public class ShopMainFragment extends BaseFragment implements View.OnClickListener {
     // 店鋪Id
-    int shopId;
+    int storeId;
 
     TextView tvShopTitle;
 
@@ -33,7 +33,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     ImageView imgBottomBarShopAvatar;
 
     // 店鋪名稱
-    String shopName = "";
+    String storeName = "";
 
     public static final int FRAGMENT_COUNT = 5;
 
@@ -86,7 +86,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
 
         Bundle args = getArguments();
-        shopId = args.getInt("shopId");
+        storeId = args.getInt("shopId");
 
         tvShopTitle = view.findViewById(R.id.tv_shop_title);
         imgBottomBarShopAvatar = view.findViewById(R.id.img_bottom_bar_shop_avatar);
@@ -115,7 +115,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         if (homeFragment == null) {
             mFragments[HOME_FRAGMENT] = ShopHomeFragment.newInstance();
-            mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", shopId).toString());
+            mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", storeId).toString());
             mFragments[CATEGORY_FRAGMENT] = ShopCategoryFragment.newInstance();
             mFragments[ACTIVITY_FRAGMENT] = ShopActivityFragment.newInstance();
             mFragments[CUSTOMER_SERVICE_FRAGMENT] = ShopCustomerServiceFragment.newInstance();
@@ -181,8 +181,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 }
 
                 if (index != CUSTOMER_SERVICE_FRAGMENT) {
-                    SLog.info("shopName[%s]", shopName);
-                    tvShopTitle.setText(shopName);
+                    SLog.info("storeName[%s]", storeName);
+                    tvShopTitle.setText(storeName);
                 }
 
                 showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
@@ -195,16 +195,16 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         Glide.with(this).load(url).into(imgBottomBarShopAvatar);
     }
 
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-        setFragmentTitle(shopName);
+    public void setShopName(String storeName) {
+        this.storeName = storeName;
+        setFragmentTitle(storeName);
     }
 
     public void setFragmentTitle(String title) {
         tvShopTitle.setText(title);
     }
 
-    public int getShopId() {
-        return shopId;
+    public int getStoreId() {
+        return storeId;
     }
 }

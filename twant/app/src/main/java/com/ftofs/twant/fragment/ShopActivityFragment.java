@@ -107,7 +107,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                 int id = view.getId();
                 if (id == R.id.btn_participate_activity) {
                     EasyJSONObject params = EasyJSONObject.generate(
-                            "storeId", parentFragment.getShopId(),
+                            "storeId", parentFragment.getStoreId(),
                             "conformId", storeConformList.get(position).conformId);
 
                     Util.startFragment(ShopCommodityFragment.newInstance(params.toString()));
@@ -123,7 +123,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                 int id = view.getId();
                 if (id == R.id.btn_participate_activity) {
                     EasyJSONObject params = EasyJSONObject.generate(
-                            "storeId", parentFragment.getShopId(),
+                            "storeId", parentFragment.getStoreId(),
                             "discountId", storeDiscountList.get(position).discountId);
 
                     Util.startFragment(ShopCommodityFragment.newInstance(params.toString()));
@@ -159,7 +159,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             }
 
             EasyJSONObject params = EasyJSONObject.generate(
-                    "storeId", parentFragment.getShopId(),
+                    "storeId", parentFragment.getStoreId(),
                     "token", token);
 
             SLog.info("params[%s]", params);

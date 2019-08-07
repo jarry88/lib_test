@@ -88,11 +88,11 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
                 String memberName = staff.memberName;
                 String imName = staff.imName;
-                ImNameMap.saveMap(imName, memberName);
+                ImNameMap.saveMap(imName, memberName, parentFragment.getStoreId());
                 SLog.info("memberName[%s], imName[%s]", memberName, imName);
 
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                Util.startFragment(ChatFragment.newInstance(conversation, new ChatFragment.Extra(parentFragment.getShopId())));
+                Util.startFragment(ChatFragment.newInstance(conversation));
             }
         });
         rvStaffList.setAdapter(adapter);
@@ -120,7 +120,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
         try {
             // 獲取店鋪首頁信息
-            String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getShopId();
+            String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getStoreId();
             String token = User.getToken();
             EasyJSONObject params = EasyJSONObject.generate();
             if (!StringUtil.isEmpty(token)) {

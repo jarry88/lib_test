@@ -180,7 +180,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         try {
             // 獲取店鋪首頁信息
-            String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getShopId();
+            String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getStoreId();
             String token = User.getToken();
             EasyJSONObject params = EasyJSONObject.generate();
             if (!StringUtil.isEmpty(token)) {

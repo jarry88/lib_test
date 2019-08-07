@@ -113,7 +113,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 } else {
                     EMConversation conversation = ChatUtil.getConversation(chatConversation.friendInfo.memberName,
                             chatConversation.friendInfo.nickname, chatConversation.friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
-                    Util.startFragment(ChatFragment.newInstance(conversation, null));
+                    Util.startFragment(ChatFragment.newInstance(conversation));
                 }
             }
         });
