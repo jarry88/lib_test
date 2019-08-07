@@ -57,6 +57,7 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
 
         LinearLayout llImageMessageContainer = helper.getView(R.id.ll_image_message_container);
         LinearLayout llGoodsMessageContainer = helper.getView(R.id.ll_goods_message_container);
+        LinearLayout llOrderMessageContainer = helper.getView(R.id.ll_order_message_container);
 
         if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
             // 設置頭像
@@ -84,12 +85,14 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             textView.setVisibility(View.VISIBLE);
             llImageMessageContainer.setVisibility(View.GONE);
             llGoodsMessageContainer.setVisibility(View.GONE);
+            llOrderMessageContainer.setVisibility(View.GONE);
 
             textView.setText(StringUtil.translateEmoji(mContext, item.content, (int) textView.getTextSize()));
         } else if (item.messageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
             textView.setVisibility(View.GONE);
             llImageMessageContainer.setVisibility(View.VISIBLE);
             llGoodsMessageContainer.setVisibility(View.GONE);
+            llOrderMessageContainer.setVisibility(View.GONE);
 
             ImageView imageView = helper.getView(R.id.img_message);
 
@@ -120,7 +123,8 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             textView.setVisibility(View.GONE);
             llImageMessageContainer.setVisibility(View.GONE);
             llGoodsMessageContainer.setVisibility(View.VISIBLE);
-            SLog.info("content[%s]", item.content);
+            llOrderMessageContainer.setVisibility(View.GONE);
+
             EasyJSONObject data = (EasyJSONObject) EasyJSONObject.parse(item.content);
 
             String imageUrl = null;
@@ -134,6 +138,35 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             ImageView goodsImage = helper.getView(R.id.goods_image);
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(imageUrl)).centerCrop().into(goodsImage);
 
+            helper.setText(R.id.tv_goods_name, goodsName);
+        } else if (item.messageType == Constant.CHAT_MESSAGE_TYPE_ORDER) {
+            textView.setVisibility(View.GONE);
+            llImageMessageContainer.setVisibility(View.GONE);
+            llGoodsMessageContainer.setVisibility(View.GONE);
+            llOrderMessageContainer.setVisibility(View.VISIBLE);
+
+            EasyJSONObject data = (EasyJSONObject) EasyJSONObject.parse(item.content);
+
+            /*
+            {"ordersId":3079,"ordersSn":"4530000000312700","goodsImage":"image\/0d\/14\/0d147b92feaa84dc658c7dd99d0897f0.jpg","goodsName":"test"}
+             */
+
+            String imageUrl = null;
+            String ordersSn = null;
+            String goodsName = null;
+            try {
+                imageUrl = data.getString("goodsImage");
+                ordersSn = data.getString("ordersSn");
+                goodsName = data.getString("goodsName");
+            } catch (Exception e) {
+            }
+
+            SLog.info("imageUrl[%s], ordersSn[%s], goodsName[%s]", imageUrl, ordersSn, goodsName);
+            ImageView goodsImage = helper.getView(R.id.order_goods_image);
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(imageUrl)).centerCrop().into(goodsImage);
+
+            String orderNum = mContext.getString(R.string.text_order_num) + ": " + ordersSn;
+            helper.setText(R.id.tv_order_num, orderNum);
             helper.setText(R.id.tv_goods_name, goodsName);
         }
 

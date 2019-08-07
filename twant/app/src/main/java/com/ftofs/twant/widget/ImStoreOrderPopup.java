@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -35,6 +36,7 @@ import okhttp3.Call;
 public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
 
+    ImStoreOrderListAdapter adapter;
     OnSelectedListener onSelectedListener;
     String imName;
     int storeId;
@@ -64,12 +66,14 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
         RecyclerView rvList = findViewById(R.id.rv_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvList.setLayoutManager(layoutManager);
-        ImStoreOrderListAdapter adapter = new ImStoreOrderListAdapter(R.layout.im_store_order_item, imStoreOrderItemList);
+        adapter = new ImStoreOrderListAdapter(R.layout.im_store_order_item, imStoreOrderItemList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ImStoreOrderItem item = imStoreOrderItemList.get(position);
 
+                onSelectedListener.onSelected(PopupType.IM_CHAT_SEND_ORDER, 0, item);
+                dismiss();
             }
         });
         rvList.setAdapter(adapter);
@@ -103,7 +107,25 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
                     return;
                 }
 
+                try {
+                    EasyJSONArray ordersList = responseObj.getArray("datas.ordersList");
 
+                    for (Object object : ordersList) {
+                        ImStoreOrderItem imStoreOrderItem = new ImStoreOrderItem();
+                        EasyJSONObject item = (EasyJSONObject) object;
+
+                        imStoreOrderItem.ordersId = item.getInt("ordersId");
+                        imStoreOrderItem.ordersSn = String.valueOf(item.getLong("ordersSn"));
+                        imStoreOrderItem.goodsImage = item.getString("goodsImg");
+                        imStoreOrderItem.goodsName = item.getString("goodsName");
+
+                        imStoreOrderItemList.add(imStoreOrderItem);
+                    }
+
+                    adapter.setNewData(imStoreOrderItemList);
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                }
             }
         });
     }

@@ -10,11 +10,12 @@
     android:orientation="horizontal">
 
     <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/goods_image"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/cs_avatar_160"
         app:riv_border_width="1dp"
         app:riv_corner_radius="1dp"
+        app:riv_border_color="#E5E5E5"
         />
 
     <LinearLayout
@@ -23,18 +24,20 @@
         android:layout_marginLeft="15dp"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/tv_order_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/tw_black"
-            android:text="訂單：365400000025800"
+            android:text=""
             />
         <TextView
+            android:id="@+id/tv_goods_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/tw_dark_grey"
-            android:text="Yueaeow香薰精油香氛淡薰香家用室內香薰精油香氛"
+            android:text=""
             />
     </LinearLayout>
 </LinearLayout>

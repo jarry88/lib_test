@@ -55,7 +55,7 @@ public class ChatConversationAdapter extends BaseMultiItemQuickAdapter<ChatConve
             } else if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_GOODS) {
                 tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_GOODS);
             } else if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_ORDER) {
-                tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_GOODS);
+                tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_ORDERS);
             } else if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
                 tvLastMessage.setText(StringUtil.getSpannableMessageText(mContext, chatConversation.lastMessage, (int) tvLastMessage.getTextSize()));
             }

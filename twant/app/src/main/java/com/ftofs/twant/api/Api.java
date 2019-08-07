@@ -653,6 +653,7 @@ public class Api {
      */
     public static final String PATH_IM_STORE_GOODS_LIST = "/member/im/goods/list";
 
+
     /**
      * 我在店鋪的訂單記錄【新】
      */

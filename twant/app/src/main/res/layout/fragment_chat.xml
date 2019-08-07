@@ -35,6 +35,7 @@
             />
 
         <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_menu"
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_marginRight="7dp"

@@ -42,6 +42,7 @@ import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.CommonUsedSpeech;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
+import com.ftofs.twant.entity.ImStoreOrderItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
@@ -80,6 +81,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.LitePal;
+import org.litepal.util.Const;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -221,6 +223,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         myMemberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_menu, this);
         Util.setOnClickListener(view, R.id.btn_send_image, this);
         Util.setOnClickListener(view, R.id.btn_capture_image, this);
         Util.setOnClickListener(view, R.id.btn_send_goods, this);
@@ -369,6 +372,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             String goodsName = emMessage.getStringAttribute("goodsName", "");
 
             chatMessage.content = EasyJSONObject.generate("goodsImage", goodsImage, "commonId", commonId, "goodsName", goodsName).toString();
+        } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ORDER) {
+            int ordersId = Integer.valueOf(emMessage.getStringAttribute("ordersId", ""));
+            String ordersSn = emMessage.getStringAttribute("ordersSn", "");
+            String goodsImage = emMessage.getStringAttribute("goodsImage", "");
+            String goodsName = emMessage.getStringAttribute("goodsName", "");
+
+            chatMessage.content = EasyJSONObject.generate("goodsImage", goodsImage, "goodsName", goodsName,
+                                                            "ordersId", ordersId, "ordersSn", ordersSn).toString();
         } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
             String imgUrl = emMessage.getStringAttribute("ossUrl", "");
             String absolutePath = emMessage.getStringAttribute("absolutePath", "");
@@ -394,6 +405,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         switch (id) {
             case R.id.btn_back:
                 pop();
+                break;
+            case R.id.btn_menu:
+                start(MemberInfoFragment.newInstance(yourMemberName));
                 break;
             case R.id.btn_send_image:
                 startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
@@ -534,6 +548,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     SLog.info("chatMessage.content[%s]", chatMessage.content);
                     EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(chatMessage.content);
+
                     try {
                         int commonId = easyJSONObject.getInt("commonId");
                         start(GoodsDetailFragment.newInstance(commonId));
@@ -698,13 +713,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
             EMMessage message = EMMessage.createTxtSendMessage(content, yourMemberName);
             message.setAttribute("messageType", messageType);
-            if ("goods".equals(messageType)) {
+            if (CUSTOM_MESSAGE_TYPE_GOODS.equals(messageType)) {
                 EasyJSONObject goodsInfo = (EasyJSONObject) extra;
+
                 message.setAttribute("goodsName", goodsInfo.getString("goodsName"));
                 message.setAttribute("commonId", goodsInfo.getInt("commonId"));
                 message.setAttribute("goodsImage", goodsInfo.getString("goodsImage"));
-            } else if ("orders".equals(messageType)) {
+            } else if (CUSTOM_MESSAGE_TYPE_ORDERS.equals(messageType)) {
+                ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
 
+                message.setAttribute("ordersId", String.valueOf(imStoreOrderItem.ordersId));
+                message.setAttribute("ordersSn", imStoreOrderItem.ordersSn);
+                message.setAttribute("goodsImage", imStoreOrderItem.goodsImage);
+                message.setAttribute("goodsName", imStoreOrderItem.goodsName);
             }
             ChatUtil.setMessageCommonAttr(message, ChatUtil.ROLE_MEMBER);
             SLog.info("message[%s], yourMemberName[%s]", message, yourMemberName);
@@ -717,13 +738,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     SLog.info("onSuccess, body[%s]", message.getBody());
 
                     try {
-                        if ("txt".equals(messageType)) {
+                        if (CUSTOM_MESSAGE_TYPE_TXT.equals(messageType)) {
                             Api.imSendMessage(yourMemberName, "txt", message.getMsgId(), message.getBody().toString(),
                                     null, null, 0, null, null, 0, null);
-                        } else if ("goods".equals(messageType)) {
+                        } else if (CUSTOM_MESSAGE_TYPE_GOODS.equals(messageType)) {
                             EasyJSONObject goods = (EasyJSONObject) extra;
                             Api.imSendMessage(yourMemberName, "txt", message.getMsgId(), message.getBody().toString(),
                                     null, null, goods.getInt("commonId"), goods.getString("goodsName"), goods.getString("goodsImage"), 0, null);
+                        } else if (CUSTOM_MESSAGE_TYPE_ORDERS.equals(messageType)) {
+                            ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
+                            Api.imSendMessage(yourMemberName, "txt", message.getMsgId(), message.getBody().toString(),
+                                    null, null, 0, imStoreOrderItem.goodsName, imStoreOrderItem.goodsImage, imStoreOrderItem.ordersId, imStoreOrderItem.ordersSn);
                         }
                     } catch (Exception e) {
 
@@ -752,7 +777,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 int commonId = easyJSONObject.getInt("commonId");
                 String goodsImage = easyJSONObject.getString("goodsImage");
                 chatMessage.content = EasyJSONObject.generate("goodsName", goodsName, "commonId", commonId, "goodsImage", goodsImage).toString();
+            } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ORDER) {
+                ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
+
+                chatMessage.content = EasyJSONObject.generate(
+                        "ordersId", imStoreOrderItem.ordersId, "ordersSn", imStoreOrderItem.ordersSn,
+                        "goodsImage", imStoreOrderItem.goodsImage, "goodsName", imStoreOrderItem.goodsName).toString();
             }
+
             chatMessage.origin = ChatMessage.MY_MESSAGE;
             chatMessage.timestamp = message.getMsgTime();
             chatMessageList.add(chatMessage);
@@ -1046,6 +1078,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         } else if (type == PopupType.IM_CHAT_SEND_GOODS) {
             sendTextMessage("[商品]", CUSTOM_MESSAGE_TYPE_GOODS, extra);
+        } else if (type == PopupType.IM_CHAT_SEND_ORDER) {
+            sendTextMessage("[訂單]", CUSTOM_MESSAGE_TYPE_ORDERS, extra);
         }
     }
 }
