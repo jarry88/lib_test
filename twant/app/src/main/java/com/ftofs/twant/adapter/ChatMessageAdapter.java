@@ -38,7 +38,8 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, ChatMessage item) {
-        helper.addOnClickListener(R.id.img_my_avatar, R.id.img_your_avatar, R.id.img_message, R.id.ll_goods_message_container);
+        helper.addOnClickListener(R.id.img_my_avatar, R.id.img_your_avatar, R.id.img_message,
+                R.id.ll_goods_message_container, R.id.ll_order_message_container);
         helper.addOnLongClickListener(R.id.tv_message, R.id.img_message);
 
         TextView tvMessageTime = helper.getView(R.id.tv_message_time);

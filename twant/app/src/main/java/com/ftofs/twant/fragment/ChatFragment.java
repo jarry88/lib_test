@@ -555,6 +555,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }
+                } else if (id == R.id.ll_order_message_container) {
+                    ChatMessage chatMessage = chatMessageList.get(position);
+
+                    SLog.info("chatMessage.content[%s]", chatMessage.content);
+                    EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(chatMessage.content);
+
+                    try {
+                        int ordersId = easyJSONObject.getInt("ordersId");
+                        start(OrderDetailFragment.newInstance(ordersId));
+                    } catch (EasyJSONException e) {
+
+                    }
                 }
             }
         });
