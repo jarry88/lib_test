@@ -272,7 +272,7 @@ public class StringUtil {
 
 
     /**
-     * 提取環信的文本消息，順序翻譯表情
+     * 提取環信的文本消息，同時翻譯表情
      * @param context
      * @param message
      * @param textSize
@@ -280,6 +280,7 @@ public class StringUtil {
      */
     public static Editable getMessageText(Context context, String message, int textSize) {
         // txt:"abc" 返回 abc
+        SLog.info("message[%s]", message);
         message = message.substring(5, message.length() - 1);
         return translateEmoji(context, message, textSize);
     }

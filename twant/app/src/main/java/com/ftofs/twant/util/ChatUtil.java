@@ -2,6 +2,7 @@ package com.ftofs.twant.util;
 
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.log.SLog;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -23,6 +24,10 @@ public class ChatUtil {
      */
     public static EMConversation getConversation(String yourMemberName, String nickname, String avatarUrl, int role) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName, EMConversation.EMConversationType.Chat, true);
+        if (conversation == null) {
+            SLog.info("Error!獲取或創建會話失敗");
+            return null;
+        }
 
         // 會話的擴展信息
         String ext = EasyJSONObject.generate(

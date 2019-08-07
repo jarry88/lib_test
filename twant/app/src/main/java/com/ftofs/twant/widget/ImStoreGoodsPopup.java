@@ -15,6 +15,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ImStoreGoodsListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ImStoreGoodsItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -98,6 +99,23 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
                     return 4;
                 } else {
                     return 1;
+                }
+            }
+        });
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ImStoreGoodsItem item = imStoreGoodsItemList.get(position);
+                if (item.getItemType() == ImStoreGoodsItem.ITEM_TYPE_ITEM) {
+
+                    EasyJSONObject goodsInfo = EasyJSONObject.generate(
+                            "goodsName", item.goodsName,
+                            "commonId", item.commonId,
+                            "goodsImage", item.goodsImg);
+
+                    SLog.info("goodsInfo[%s]", goodsInfo.toString());
+                    onSelectedListener.onSelected(PopupType.IM_CHAT_SEND_GOODS, 0, goodsInfo);
+                    dismiss();
                 }
             }
         });

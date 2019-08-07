@@ -75,6 +75,31 @@
                     android:src="@drawable/cs_avatar_160"
                     />
             </LinearLayout>
+            <!-- 商品消息 -->
+            <LinearLayout
+                android:id="@+id/ll_goods_message_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:background="@android:color/white"
+                android:padding="15dp">
+                <ImageView
+                    android:id="@+id/goods_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/cs_avatar_160"
+                    />
+                <TextView
+                    android:id="@+id/tv_goods_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_black"
+                    android:text="時尚簡約金色年華燈盞框北歐...風INS熱賣"
+                    />
+            </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>

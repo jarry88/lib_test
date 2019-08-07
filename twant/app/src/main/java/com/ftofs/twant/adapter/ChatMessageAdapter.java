@@ -38,7 +38,7 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, ChatMessage item) {
-        helper.addOnClickListener(R.id.img_my_avatar, R.id.img_your_avatar, R.id.img_message);
+        helper.addOnClickListener(R.id.img_my_avatar, R.id.img_your_avatar, R.id.img_message, R.id.ll_goods_message_container);
         helper.addOnLongClickListener(R.id.tv_message, R.id.img_message);
 
         TextView tvMessageTime = helper.getView(R.id.tv_message_time);
@@ -54,9 +54,9 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
         }
 
         TextView textView = helper.getView(R.id.tv_message);
-        textView.setText(StringUtil.getMessageText(mContext, item.content, (int) textView.getTextSize()));
 
         LinearLayout llImageMessageContainer = helper.getView(R.id.ll_image_message_container);
+        LinearLayout llGoodsMessageContainer = helper.getView(R.id.ll_goods_message_container);
 
         if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
             // 設置頭像
@@ -81,12 +81,15 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
 
         SLog.info("messageType[%s]", item.messageType);
         if (item.messageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
-            helper.setGone(R.id.tv_message, true);
+            textView.setVisibility(View.VISIBLE);
             llImageMessageContainer.setVisibility(View.GONE);
-        } else if (item.messageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
-            helper.setGone(R.id.tv_message, false);
-            llImageMessageContainer.setVisibility(View.VISIBLE);
+            llGoodsMessageContainer.setVisibility(View.GONE);
 
+            textView.setText(StringUtil.getMessageText(mContext, item.content, (int) textView.getTextSize()));
+        } else if (item.messageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
+            textView.setVisibility(View.GONE);
+            llImageMessageContainer.setVisibility(View.VISIBLE);
+            llGoodsMessageContainer.setVisibility(View.GONE);
 
             ImageView imageView = helper.getView(R.id.img_message);
 
@@ -113,8 +116,26 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
                 Glide.with(mContext).load(StringUtil.normalizeImageUrl(imgUrl)).centerCrop().into(imageView);
                 imgLoaded = true;
             }
-        }
+        } else if (item.messageType == Constant.CHAT_MESSAGE_TYPE_GOODS) {
+            textView.setVisibility(View.GONE);
+            llImageMessageContainer.setVisibility(View.GONE);
+            llGoodsMessageContainer.setVisibility(View.VISIBLE);
+            SLog.info("content[%s]", item.content);
+            EasyJSONObject data = (EasyJSONObject) EasyJSONObject.parse(item.content);
 
+            String imageUrl = null;
+            String goodsName = null;
+            try {
+                imageUrl = data.getString("goodsImage");
+                goodsName = data.getString("goodsName");
+            } catch (Exception e) {
+            }
+
+            ImageView goodsImage = helper.getView(R.id.goods_image);
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(imageUrl)).centerCrop().into(goodsImage);
+
+            helper.setText(R.id.tv_goods_name, goodsName);
+        }
 
         // 設置了background后，會重置Padding
         textView.setPadding(Util.dip2px(mContext, 15), Util.dip2px(mContext, 12),

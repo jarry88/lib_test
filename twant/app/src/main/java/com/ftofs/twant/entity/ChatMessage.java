@@ -14,5 +14,5 @@ public class ChatMessage {
     public String toMemberName;
     public String nickname;
     public String avatar;
-    public String content;
+    public String content;  // 如果是普通文本消息，則為消息內容；如果是商品，則為商品Id，商品名稱等結構數據
 }
