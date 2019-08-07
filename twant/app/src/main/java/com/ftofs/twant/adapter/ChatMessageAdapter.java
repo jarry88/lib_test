@@ -79,13 +79,13 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
             llImageMessageContainer.setGravity(Gravity.LEFT);
         }
 
-        SLog.info("messageType[%s]", item.messageType);
+        SLog.info("messageType[%s], content[%s]", item.messageType, item.content);
         if (item.messageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
             textView.setVisibility(View.VISIBLE);
             llImageMessageContainer.setVisibility(View.GONE);
             llGoodsMessageContainer.setVisibility(View.GONE);
 
-            textView.setText(StringUtil.getMessageText(mContext, item.content, (int) textView.getTextSize()));
+            textView.setText(StringUtil.translateEmoji(mContext, item.content, (int) textView.getTextSize()));
         } else if (item.messageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
             textView.setVisibility(View.GONE);
             llImageMessageContainer.setVisibility(View.VISIBLE);

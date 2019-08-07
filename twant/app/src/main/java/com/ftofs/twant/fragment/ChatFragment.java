@@ -361,7 +361,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         chatMessage.messageId = emMessage.getMsgId();
         SLog.info("chatMessage.messageType[%d]", chatMessage.messageType);
         if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
-            chatMessage.content = emMessage.getBody().toString();
+            // 去除 txt:" 前綴
+            chatMessage.content = StringUtil.getEMMessageText(emMessage.getBody().toString());
         } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_GOODS) {
             String goodsImage = emMessage.getStringAttribute("goodsImage", "");
             int commonId = emMessage.getIntAttribute("commonId", 0);

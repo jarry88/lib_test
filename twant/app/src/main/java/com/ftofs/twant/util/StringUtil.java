@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -272,17 +273,18 @@ public class StringUtil {
 
 
     /**
-     * 提取環信的文本消息，同時翻譯表情
-     * @param context
+     * 提取環信的文本消息，去掉前綴
      * @param message
-     * @param textSize
      * @return
      */
-    public static Editable getMessageText(Context context, String message, int textSize) {
+    public static String getEMMessageText(String message) {
         // txt:"abc" 返回 abc
         SLog.info("message[%s]", message);
-        message = message.substring(5, message.length() - 1);
-        return translateEmoji(context, message, textSize);
+        return message.substring(5, message.length() - 1);
+    }
+
+    public static Editable getSpannableMessageText(Context context, String text, int textSize) {
+        return translateEmoji(context, getEMMessageText(text), textSize);
     }
 
     /**
