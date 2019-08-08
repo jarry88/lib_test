@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -20,6 +21,7 @@ import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 import com.macau.pay.sdk.MPaySdk;
 import com.orhanobut.hawk.Hawk;
+import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.vivebest.taifung.api.PaymentHandler;
 import com.vivebest.taifung.api.TaifungSDK;
 
@@ -64,6 +66,7 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
         findViewById(R.id.btn_want_pay).setOnClickListener(this);
         findViewById(R.id.btn_mpay).setOnClickListener(this);
         findViewById(R.id.btn_taifung_pay).setOnClickListener(this);
+        findViewById(R.id.btn_weixin_pay).setOnClickListener(this);
     }
 
     //完全可见执行
@@ -166,6 +169,18 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                         SLog.info("code[%d], errorMsg[%s]", code, errorMsg);
                     } }
             });
+        } else if (id == R.id.btn_weixin_pay) {
+            PayReq req = new PayReq();
+            req.appId           = context.getString(R.string.weixin_app_id);//你的微信appid
+            req.partnerId       = "1900000109";//商户号
+            req.prepayId        = "WX1217752501201407033233368018";//预支付交易会话ID
+            req.nonceStr        = "5K8264ILTKCH16CQ2502SI8ZNMTM67VS";//随机字符串
+            req.timeStamp       = "1412000000";//时间戳
+            req.packageValue    = "Sign=WXPay"; // 扩展字段,这里固定填写Sign=WXPay
+            req.sign            = "C380BEC2BFD727A4B6845133519F3AD6"; //签名
+            //              req.extData         = "app data"; // optional
+            // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+            TwantApplication.wxApi.sendReq(req);
         }
     }
 }

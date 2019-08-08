@@ -155,6 +155,19 @@
             />
         <!-- END OF 大豐支付所需Activity -->
 
+
+        <!-- 微信支付頁面 -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="@string/weixin_app_id"/>
+            </intent-filter>
+        </activity>
+
         <provider
             android:name="com.umeng.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider339526026920454"

@@ -337,6 +337,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     SLog.info("PATH_NEW_ARRIVALS, responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
+                    SLog.info("responseObj[%s]", responseObj);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         SLog.info("Error!responseObj is invalid");
                         return;

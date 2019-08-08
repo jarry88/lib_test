@@ -478,9 +478,12 @@
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>
     <string name="umeng_app_key">5cee21bd4ca357016b00068d</string>
+    <string name="weixin_app_id">wx84188f248249aa37</string>
 
     <!--高德-->
     <string name="amap_key">1486f43a90e9fc41b0d555a355aeaaa6</string>
+
+
 
     <string name="text_goods_bill">商品訂單</string>
     <string name="text_bill_all">全部</string>
@@ -578,6 +581,7 @@
 
     <string name="input_search_friend_hint">昵稱/用戶號</string>
     <string name="text_taifung_pay">大豐支付</string>
+    <string name="text_weixin_pay">微信支付</string>
 
 
     <!-- 貨幣種類標志 -->

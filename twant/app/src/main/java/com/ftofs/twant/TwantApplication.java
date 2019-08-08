@@ -34,6 +34,8 @@ import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.litepal.LitePal;
@@ -61,6 +63,9 @@ public class TwantApplication extends Application {
     private static final int THREAD_POOL_SIZE = 12;
     // 線程池
     private static ExecutorService executorService;
+
+    // IWXAPI是第三方app和微信通信的openapi接口
+    public static IWXAPI wxApi;
 
     private static Context applicationContext = null;
 
@@ -176,6 +181,9 @@ public class TwantApplication extends Application {
         // MUST use app context to avoid memory leak!
         // or load with glide
         BigImageViewer.initialize(GlideImageLoader.with(this));
+
+        // 將應用注冊到微信
+        regToWx();
     }
 
     @Override
@@ -183,6 +191,13 @@ public class TwantApplication extends Application {
         super.onTerminate();
 
         SQLiteStudioService.instance().stop();
+    }
+
+    private void regToWx() {
+        // 通过WXAPIFactory工厂，获取IWXAPI的实例
+        wxApi = WXAPIFactory.createWXAPI(this, getString(R.string.weixin_app_id), true);
+        // 将应用的appId注册到微信
+        wxApi.registerApp(getString(R.string.weixin_app_id));
     }
 
     public static ExecutorService getThreadPool() {

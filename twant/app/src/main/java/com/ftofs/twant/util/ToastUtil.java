@@ -3,6 +3,9 @@ package com.ftofs.twant.util;
 import android.content.Context;
 
 import com.ftofs.twant.constant.ResponseCode;
+import com.ftofs.twant.log.SLog;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -81,10 +84,11 @@ public class ToastUtil {
      * @return
      */
     public static boolean isError(EasyJSONObject responseObj) {
-        if (responseObj == null) {
+        if (responseObj == null || JSONObject.NULL.equals(responseObj)) {
             return true;
         }
 
+        SLog.info("responseObj[%s]", responseObj);
         try {
             int code = responseObj.getInt("code");
             if (code != ResponseCode.SUCCESS) {

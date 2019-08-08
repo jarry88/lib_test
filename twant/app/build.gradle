@@ -127,6 +127,9 @@ dependencies {
     // support thumbnail and gif with Glide
     implementation 'com.github.piasy:GlideImageViewFactory:1.5.7'
 
+    // 微信SDK  別的包已經引入5.3.1版， 屏蔽目前版本
+    // implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.4.3'
+
 
     // For developers using the Android Support Library
     implementation 'pub.devrel:easypermissions:2.0.1'
