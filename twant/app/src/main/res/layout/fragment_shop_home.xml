@@ -121,7 +121,7 @@
         <RelativeLayout
             android:id="@+id/rl_shop_friend_container"
             android:layout_width="0dp"
-            android:layout_height="68dp"
+            android:layout_height="58dp"
             android:layout_marginLeft="@dimen/toolbar_margin_left"
             android:layout_marginRight="@dimen/toolbar_margin_right"
             app:layout_constraintTop_toBottomOf="@id/ll_shop_announcement_container"
@@ -129,6 +129,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:background="@drawable/bottom_separator_box">
             <TextView
+                android:id="@+id/tv_shop_friend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -137,13 +138,31 @@
                 android:textColor="@color/tw_dark_grey"
                 android:text="@string/text_shop_friend"
                 />
-            <ImageView
+
+            <LinearLayout
+                android:id="@+id/btn_show_all_store_friends"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/expand_button"
-                />
+                android:paddingLeft="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/expand_button"
+                    />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_store_friends_list"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@id/tv_shop_friend"
+                android:layout_toLeftOf="@id/btn_show_all_store_friends">
+            </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
 
         <!-- 用戶操作 -->

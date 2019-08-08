@@ -431,7 +431,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             int marginBottom = Util.dip2px(_mActivity, 20);
                             layoutParams.setMargins(0, marginTop, 0, marginBottom);
 
-
                             storeView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

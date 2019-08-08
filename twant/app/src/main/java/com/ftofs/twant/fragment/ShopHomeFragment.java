@@ -3,6 +3,8 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +14,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.adapter.StoreGoodsListAdapter;
+import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreAnnouncement;
+import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.entity.StoreMapInfo;
@@ -108,6 +114,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     Bundle savedInstanceState;
     String merchantIntroduction;
 
+    StoreFriendsAdapter adapter;
+    List<StoreFriendsItem> storeFriendsItemList = new ArrayList<>();
+
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -166,6 +175,20 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         Util.setOnClickListener(view, R.id.btn_shop_map, this);
         Util.setOnClickListener(view, R.id.btn_view_all_comment, this);
+
+
+        RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
+        rvStoreFriendsList.setLayoutManager(layoutManager);
+        adapter = new StoreFriendsAdapter(R.layout.store_friends_item, storeFriendsItemList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                StoreFriendsItem item = storeFriendsItemList.get(position);
+                Util.startFragment(MemberInfoFragment.newInstance(item.memberName));
+            }
+        });
+        rvStoreFriendsList.setAdapter(adapter);
 
         this.savedInstanceState = savedInstanceState;
 
@@ -241,6 +264,19 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                         updateThumbView();
                         updateFavoriteView();
+
+                        // 店友
+                        EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.friends");
+                        for (Object object : friends) {
+                            EasyJSONObject friend = (EasyJSONObject) object;
+
+                            String memberName = friend.getString("memberName");
+                            String avatar = friend.getString("avatar");
+                            StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
+
+                            storeFriendsItemList.add(storeFriendsItem);
+                        }
+                        adapter.setNewData(storeFriendsItemList);
 
                         // 店鋪電話
                         storePhone = storeInfo.getString("chainPhone");
