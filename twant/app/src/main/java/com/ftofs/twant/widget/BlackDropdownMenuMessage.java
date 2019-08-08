@@ -10,12 +10,13 @@ import com.ftofs.twant.fragment.AddFriendFragment;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.ContactFragment;
 import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.fragment.PersonalInfoFragment;
 import com.ftofs.twant.fragment.QrCodeCardFragment;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.AttachPopupView;
 
 /**
- * 黑色下拉菜单
+ * 消息的黑色下拉菜单
  * @author zwm
  */
 public class BlackDropdownMenuMessage extends AttachPopupView implements View.OnClickListener {
@@ -56,6 +57,8 @@ public class BlackDropdownMenuMessage extends AttachPopupView implements View.On
             baseFragment.startCaptureActivity();
         } else if (id == R.id.btn_item_3) {
             Util.startFragment(AddFriendFragment.newInstance());
+        } else if (id == R.id.btn_item_4) {
+            Util.startFragment(PersonalInfoFragment.newInstance());
         }
 
         dismiss();

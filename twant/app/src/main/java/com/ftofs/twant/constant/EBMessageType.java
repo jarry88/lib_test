@@ -55,4 +55,9 @@ public enum EBMessageType {
      * 重建MainFragment
      */
     MESSAGE_TYPE_RECREATE_MAIN_FRAGMENT,
+
+    /**
+     * 顯示某個Fragment
+     */
+    MESSAGE_TYPE_SHOW_FRAGMENT,
 }

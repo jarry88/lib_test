@@ -9,6 +9,7 @@ import org.litepal.crud.LitePalSupport;
 
 /**
  * imName與memberName的映射關系表(只有店鋪客服才用到這個表)
+ * 在點擊客服頭像時，如果沒有記錄關系，就保存記錄關系
  * @author zwm
  */
 public class ImNameMap extends LitePalSupport {
@@ -24,6 +25,12 @@ public class ImNameMap extends LitePalSupport {
         return LitePal.where("memberName = ?", memberName).findFirst(ImNameMap.class);
     }
 
+    /**
+     * 保存記錄關系
+     * @param imName
+     * @param memberName
+     * @param storeId
+     */
     public static void saveMap(String imName, String memberName, int storeId) {
         SLog.info("saveMap, imName[%s], memberName[%s], storeId[%d]", imName, memberName, storeId);
         ImNameMap map = getByImName(imName);

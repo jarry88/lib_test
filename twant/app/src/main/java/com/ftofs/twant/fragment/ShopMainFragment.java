@@ -149,7 +149,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
                     .hasShadowBg(false) // 去掉半透明背景
                     .atView(v)
-                    .asCustom(new BlackDropdownMenuStore(_mActivity))
+                    .asCustom(new BlackDropdownMenuStore(_mActivity, this))
                     .show();
         } else { // 點擊底部導航欄
             int len = bottomBarButtonIds.length;
@@ -164,31 +164,35 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             SLog.info("index[%d], selectedFragmentIndex[%d]", index, selectedFragmentIndex);
             // 如果index不等于-1，表示是按下BottomBar的按鈕
             if (index != -1) {
-                if (index == selectedFragmentIndex) {
-                    // 已經是當前Fragment，返回
-                    return;
-                }
-
-                // 切換底部工具欄圖標的選中狀態
-                if (selectedFragmentIndex != HOME_FRAGMENT) {
-                    ImageView imgIcon = bottomBarIcons[selectedFragmentIndex];
-                    imgIcon.setImageResource(bottomBarIconResources[selectedFragmentIndex]);
-                }
-
-                if (index != HOME_FRAGMENT) {
-                    ImageView imgIcon = bottomBarIcons[index];
-                    imgIcon.setImageResource(bottomBarSelIconResources[index]);
-                }
-
-                if (index != CUSTOMER_SERVICE_FRAGMENT) {
-                    SLog.info("storeName[%s]", storeName);
-                    tvShopTitle.setText(storeName);
-                }
-
-                showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
-                selectedFragmentIndex = index;
+                onBottomBarClick(index);
             }
         }
+    }
+
+    public void onBottomBarClick(int index) {
+        if (index == selectedFragmentIndex) {
+            // 已經是當前Fragment，返回
+            return;
+        }
+
+        // 切換底部工具欄圖標的選中狀態
+        if (selectedFragmentIndex != HOME_FRAGMENT) {
+            ImageView imgIcon = bottomBarIcons[selectedFragmentIndex];
+            imgIcon.setImageResource(bottomBarIconResources[selectedFragmentIndex]);
+        }
+
+        if (index != HOME_FRAGMENT) {
+            ImageView imgIcon = bottomBarIcons[index];
+            imgIcon.setImageResource(bottomBarSelIconResources[index]);
+        }
+
+        if (index != CUSTOMER_SERVICE_FRAGMENT) {
+            SLog.info("storeName[%s]", storeName);
+            tvShopTitle.setText(storeName);
+        }
+
+        showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
+        selectedFragmentIndex = index;
     }
 
     public void setImgBottomBarShopAvatar(String url) {

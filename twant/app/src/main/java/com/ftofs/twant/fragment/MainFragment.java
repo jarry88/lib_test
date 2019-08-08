@@ -189,6 +189,11 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         // 如果退出登錄，顯示主頁
         if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) {
             showHideFragment(HOME_FRAGMENT);
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT) {
+            int fragmentIndex = (int) message.data;
+            if (HOME_FRAGMENT <= fragmentIndex && fragmentIndex <= MY_FRAGMENT) {
+                showHideFragment(fragmentIndex);
+            }
         }
     }
 }
