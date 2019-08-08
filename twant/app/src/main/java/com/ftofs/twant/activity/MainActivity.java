@@ -32,6 +32,8 @@ import java.io.IOException;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * 主Activity
@@ -139,15 +141,16 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
                     SLog.info("params[%s]", params.toString());
 
-                    Api.postUI(Api.PATH_MPAY_ORDERS_QUERY, params, new UICallback() {
+                    Api.postIO(Api.PATH_MPAY_ORDERS_QUERY, params, new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             SLog.info("MPay支付成功，通知服務器失敗");
                         }
 
                         @Override
-                        public void onResponse(Call call, String responseStr) throws IOException {
+                        public void onResponse(Call call, Response response) throws IOException {
                             try {
+                                String responseStr = response.body().string();
                                 SLog.info("responseStr[%s]", responseStr);
 
                                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);

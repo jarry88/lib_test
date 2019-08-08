@@ -666,6 +666,17 @@ public class Api {
     public static final String PATH_SEARCH_USER = "/member/friend/search_user";
 
 
+    /**
+     * 大豐支付
+     */
+    public static final String PATH_TAIFUNG_PAY = "/member/buy/pay/app/tfpay";
+
+
+    /**
+     * 大豐支付完成
+     */
+    public static final String PATH_TAIFUNG_PAY_FINISH = "/member/tfpay/finish";
+
 
     /**
      * 發送Http請求
