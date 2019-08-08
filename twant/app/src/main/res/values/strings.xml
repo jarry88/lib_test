@@ -583,6 +583,8 @@
     <string name="text_taifung_pay">大豐支付</string>
     <string name="text_weixin_pay">微信支付</string>
 
+    <string name="text_store_friends_count_template">—· 當前店內%d名遊客 ·—</string>
+
 
     <!-- 貨幣種類標志 -->
     <string name="currency_type_sign">$</string>

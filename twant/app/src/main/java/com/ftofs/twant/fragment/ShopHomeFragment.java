@@ -86,7 +86,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     LinearLayout llFirstCommentContainer;
     LinearLayout llShopAnnouncementContainer;
 
-
     int storeId;
     double storeDistance;  // 我與店鋪的距離
     String storeName;
@@ -116,6 +115,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     StoreFriendsAdapter adapter;
     List<StoreFriendsItem> storeFriendsItemList = new ArrayList<>();
+
+    TextView tvVisitorCount;
 
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -163,6 +164,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvFavoriteCount = view.findViewById(R.id.tv_favorite_count);
         btnStoreFavorite = view.findViewById(R.id.btn_store_favorite);
         btnStoreFavorite.setOnClickListener(this);
+
+        tvVisitorCount = view.findViewById(R.id.tv_visitor_count);
 
         Util.setOnClickListener(view, R.id.ll_uo_share_container, this);
 
@@ -277,6 +280,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             storeFriendsItemList.add(storeFriendsItem);
                         }
                         adapter.setNewData(storeFriendsItemList);
+
+                        // 顯示店友數量
+                        int storeFriendsCount = responseObj.getInt("datas.visitorNum");
+                        String storeFriendsCountDesc = String.format(getString(R.string.text_store_friends_count_template), storeFriendsCount);
+                        tvVisitorCount.setText(storeFriendsCountDesc);
 
                         // 店鋪電話
                         storePhone = storeInfo.getString("chainPhone");
