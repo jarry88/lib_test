@@ -60,6 +60,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
 
     TextView btnFollow;
     TextView btnAddFriend;
+    TextView btnDeleteFriend;
 
     public static MemberInfoFragment newInstance(String memberName) {
         Bundle args = new Bundle();
@@ -99,6 +100,8 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
         btnFollow.setOnClickListener(this);
         btnAddFriend = view.findViewById(R.id.btn_add_friend);
         btnAddFriend.setOnClickListener(this);
+        btnDeleteFriend = view.findViewById(R.id.btn_delete_friend);
+        btnDeleteFriend.setOnClickListener(this);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_chat_with_him, this);
@@ -158,67 +161,64 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
                         .show();
             } else { // 訪問專頁
 
-
             }
-        } else if (id == R.id.img_avatar) {
-            if (Config.DEVELOPER_MODE) {
-                new XPopup.Builder(_mActivity)
-//                         .dismissOnTouchOutside(false)
-                        // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                        .setPopupCallback(new XPopupCallback() {
-                            @Override
-                            public void onShow() {
-                            }
-                            @Override
-                            public void onDismiss() {
-                            }
-                        }).asCustom(new TwConfirmPopup(_mActivity, "確認", "確定要刪除這個好友嗎？", new OnConfirmCallback() {
-                    @Override
-                    public void onYes() {
-                        SLog.info("onYes");
+        } else if (id == R.id.btn_delete_friend) {
+            new XPopup.Builder(_mActivity)
+//                     .dismissOnTouchOutside(false)
+                    // 设置弹窗显示和隐藏的回调监听
+//                     .autoDismiss(false)
+                    .setPopupCallback(new XPopupCallback() {
+                        @Override
+                        public void onShow() {
+                        }
+                        @Override
+                        public void onDismiss() {
+                        }
+                    }).asCustom(new TwConfirmPopup(_mActivity, "確認", "確定要刪除這個好友嗎？", new OnConfirmCallback() {
+                @Override
+                public void onYes() {
+                    SLog.info("onYes");
 
-                        String token = User.getToken();
-                        if (StringUtil.isEmpty(token)) {
-                            return;
+                    String token = User.getToken();
+                    if (StringUtil.isEmpty(token)) {
+                        return;
+                    }
+
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "token", token,
+                            "friendMemberName", memberName);
+
+                    SLog.info("params[%s]", params.toString());
+                    Api.postUI(Api.PATH_DELETE_FRIEND, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(_mActivity, e);
                         }
 
-                        EasyJSONObject params = EasyJSONObject.generate(
-                                "token", token,
-                                "friendMemberName", memberName);
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            try {
+                                SLog.info("responseStr[%s]", responseStr);
 
-                        SLog.info("params[%s]", params.toString());
-                        Api.postUI(Api.PATH_DELETE_FRIEND, params, new UICallback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                ToastUtil.showNetworkError(_mActivity, e);
-                            }
-
-                            @Override
-                            public void onResponse(Call call, String responseStr) throws IOException {
-                                try {
-                                    SLog.info("responseStr[%s]", responseStr);
-
-                                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                        return;
-                                    }
-
-                                    ToastUtil.success(_mActivity, "刪除成功");
-                                } catch (Exception e) {
-
+                                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                    return;
                                 }
-                            }
-                        });
-                    }
 
-                    @Override
-                    public void onNo() {
-                        SLog.info("onNo");
-                    }
-                }))
-                        .show();
-            }
+                                ToastUtil.success(_mActivity, "刪除成功");
+                            } catch (Exception e) {
+
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onNo() {
+                    SLog.info("onNo");
+                }
+            })).show();
+
         }
     }
 
@@ -259,6 +259,9 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
                     isFriend = responseObj.getInt("datas.isFriend");
                     if (isFriend == 1) {
                         btnAddFriend.setText(getString(R.string.text_visit_my_home));
+                        btnDeleteFriend.setVisibility(View.VISIBLE);
+                    } else {  // 如果不是好友，隱藏【刪除好友】按鈕
+                        btnDeleteFriend.setVisibility(View.GONE);
                     }
 
                     EasyJSONObject member = responseObj.getObject("datas.member");

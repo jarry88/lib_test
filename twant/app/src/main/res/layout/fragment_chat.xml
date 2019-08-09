@@ -252,6 +252,7 @@
                             android:textColor="@color/tw_black"
                             />
                     </LinearLayout>
+                    <!--
                     <LinearLayout
                         android:id="@+id/btn_send_common_used_speech"
                         android:layout_width="match_parent"
@@ -302,8 +303,10 @@
                             android:textColor="@color/tw_black"
                             />
                     </LinearLayout>
+                    -->
                 </com.ftofs.twant.widget.GridLayout>
 
+                <!--
                 <TextView
                     android:id="@+id/btn_send"
                     android:layout_width="69dp"
@@ -318,6 +321,7 @@
                     android:textSize="16sp"
                     android:gravity="center"
                     />
+                    -->
             </RelativeLayout>
         </FrameLayout>
     </com.ftofs.twant.widget.SmoothInputLayout>

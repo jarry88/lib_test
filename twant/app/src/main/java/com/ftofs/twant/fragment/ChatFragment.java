@@ -171,6 +171,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         EventBus.getDefault().register(this);
 
+        // 指定会话消息未读数清零(進入會話處)
+        conversation.markAllMessagesAsRead();
+
         String ext = conversation.getExtField();
         EasyJSONObject extObj = (EasyJSONObject) EasyJSONObject.parse(ext);
 
@@ -213,8 +216,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         Util.setOnClickListener(view, R.id.btn_capture_image, this);
         Util.setOnClickListener(view, R.id.btn_send_goods, this);
         Util.setOnClickListener(view, R.id.btn_send_order, this);
-        Util.setOnClickListener(view, R.id.btn_send_common_used_speech, this);
-        Util.setOnClickListener(view, R.id.btn_send_location, this);
+        // 常用語 暫時屏蔽 Util.setOnClickListener(view, R.id.btn_send_common_used_speech, this);
+        // 定位 暫時屏蔽 Util.setOnClickListener(view, R.id.btn_send_location, this);
 
         initEmojiPage(view);
         loadEmojiData();
@@ -239,7 +242,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
 
-        //指定会话消息未读数清零
+        // 指定会话消息未读数清零(離開會話處)
         conversation.markAllMessagesAsRead();
     }
 
@@ -416,6 +419,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         .asCustom(new ImStoreOrderPopup(_mActivity, storeId, yourMemberName,this))
                         .show();
                 break;
+                /* 常用語 和 定位 暫時屏蔽
             case R.id.btn_send_common_used_speech:
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -426,6 +430,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             case R.id.btn_send_location:
                 ToastUtil.info(_mActivity, "暫未實現");
                 break;
+                */
             case R.id.btn_emoji:
                 btnTool.setSelected(false);
                 if (btnEmoji.isSelected()) {
@@ -757,6 +762,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 @Override
                 public void onError(int i, String s) {
                     SLog.info("onError, i[%d], s[%s]", i, s);
+                    ToastUtil.error(_mActivity, s);
                 }
 
                 @Override

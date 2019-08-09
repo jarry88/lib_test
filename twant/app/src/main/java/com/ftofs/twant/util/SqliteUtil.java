@@ -65,6 +65,16 @@ public class SqliteUtil {
         ///////////////////////////
         // 登錄環信
         ///////////////////////////
+        imLogin();
+
+
+        return true;
+    }
+
+    /**
+     * 登錄環信
+     */
+    public static void imLogin() {
         EMClient emClient = EMClient.getInstance();
         String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
         String imToken = User.getUserInfo(SPField.FIELD_IM_TOKEN, null);
@@ -73,7 +83,6 @@ public class SqliteUtil {
             emClient.loginWithToken(memberName, imToken, new EMCallBack() {//回调
                 @Override
                 public void onSuccess() {
-                    SLog.info("threadId[%s]", Thread.currentThread().getId());
                     EMClient.getInstance().groupManager().loadAllGroups();
                     EMClient.getInstance().chatManager().loadAllConversations();
                     SLog.info("登录聊天服务器成功！");
@@ -93,9 +102,6 @@ public class SqliteUtil {
                 }
             });
         }
-
-
-        return true;
     }
 
 

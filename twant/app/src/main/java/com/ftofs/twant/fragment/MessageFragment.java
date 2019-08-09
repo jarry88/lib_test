@@ -24,6 +24,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.task.UpdateFriendInfoTask;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenuMessage;
@@ -281,6 +282,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+
+        // 每次顯示時，登錄一下環信
+        SqliteUtil.imLogin();
+
         loadData();
     }
 

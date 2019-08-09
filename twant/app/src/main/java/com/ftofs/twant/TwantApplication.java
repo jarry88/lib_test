@@ -18,6 +18,7 @@ import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.SqliteUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
@@ -302,7 +303,7 @@ public class TwantApplication extends Application {
                     EMMessageBody body = message.getBody();
                     String from = message.getFrom();
                     String to = message.getTo();
-                    SLog.info("msgId[%s], from[%s], to[%s], body[%s]", msgId, from, to, body.toString());
+                    SLog.info("msgId[%s], type[%s], from[%s], to[%s], body[%s]", msgId, type, from, to, body.toString());
 
                     if (type == EMMessage.Type.TXT) {
                         SLog.info("收到文本消息");
@@ -310,13 +311,15 @@ public class TwantApplication extends Application {
                         ChatMessage chatMessage = new ChatMessage();
                         chatMessage.timestamp = message.getMsgTime();
                         chatMessage.origin = ChatMessage.YOUR_MESSAGE;
-                        chatMessage.content = message.getBody().toString();
+                        chatMessage.content = StringUtil.getEMMessageText(message.getBody().toString());
                         chatMessage.avatar = "";
                         chatMessage.fromMemberName = message.getFrom();
                         chatMessage.toMemberName = message.getTo();
                         chatMessage.nickname = "";
                         chatMessage.messageType = ChatUtil.getIntMessageType(message);
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE, chatMessage);
+                    } else if (type == EMMessage.Type.IMAGE) {
+                        SLog.info("收到圖片消息");
                     }
                 }
             }
