@@ -167,10 +167,17 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         } else if (id == R.id.btn_thumb) {
             switchThumbState();
         } else if (id == R.id.btn_commit) {
+            String token = User.getToken();
+
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+
             EasyJSONObject params = EasyJSONObject.generate(
                     "commentChannel", commentItem.commentChannel,
                     "deep", 2,
-                    "content", etReplyContent.getText().toString().trim());
+                    "content", etReplyContent.getText().toString().trim(),
+                    "token", token);
 
             try {
                 if (commentItem.relateCommonId > 0) {
@@ -185,15 +192,16 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 if (commentItem.relatePostId > 0) {
                     params.set("relatePostId", commentItem.relatePostId);
                 }
-                if (commentItem.parentCommentId > 0) {
-                    params.set("parentCommentId", commentItem.parentCommentId);
+                if (commentItem.commentId > 0) {
+                    params.set("parentCommentId", commentItem.commentId);
                 }
             } catch (Exception e) {
 
             }
 
-            SLog.info("params[%s]", params.toString());
-            Api.postUI(Api.PATH_PUBLISH_COMMENT, params, new UICallback() {
+            String path = Api.PATH_PUBLISH_COMMENT + Api.makeQueryString(EasyJSONObject.generate("token", token));
+            SLog.info("path[%s], params[%s]", path, params.toString());
+            Api.postJsonUi(path, params.toString(), new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);

@@ -2,6 +2,7 @@ package com.ftofs.twant.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 public class CommentItem implements Parcelable {
     public int commentId;
@@ -21,11 +22,11 @@ public class CommentItem implements Parcelable {
     public String commentTime;
     public String imageUrl;
 
-    public int relateCommonId;
-    public int relateStoreId;
-    public int replyCommentId;
-    public int relatePostId;
-    public int parentCommentId;
+    public int relateCommonId;  // 相關的商品Id
+    public int relateStoreId;   // 相關的店鋪Id
+    public int replyCommentId;  // 回復評論Id
+    public int relatePostId;    // 相關的貼文Id
+    public int parentCommentId; // 一級評論ID
 
     public CommentItem() {
 
@@ -87,5 +88,12 @@ public class CommentItem implements Parcelable {
         dest.writeInt(replyCommentId);
         dest.writeInt(relatePostId);
         dest.writeInt(parentCommentId);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("commentId[%s], commentType[%s], commentChannel[%s], content[%s], isLike[%s], commentLike[%s], commentReply[%s], commenterAvatar[%s], nickname[%s], commentTime[%s], imageUrl[%s], relateCommonId[%s], relateStoreId[%s], replyCommentId[%s], relatePostId[%s], parentCommentId[%s]",
+                commentId, commentType, commentChannel, content, isLike, commentLike, commentReply, commenterAvatar, nickname, commentTime, imageUrl, relateCommonId, relateStoreId, replyCommentId, relatePostId, parentCommentId);
     }
 }

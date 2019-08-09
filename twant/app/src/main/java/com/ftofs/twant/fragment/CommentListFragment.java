@@ -38,6 +38,10 @@ import okhttp3.Call;
  */
 public class CommentListFragment extends BaseFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     int bindId;
+
+    /**
+     * 渠道 1全部 2店鋪 3商品 4貼文 5推文
+     */
     int commentChannel;
 
     // 當前第幾頁
@@ -48,6 +52,12 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
     List<CommentItem> commentItemList = new ArrayList<>();
     CommentListAdapter adapter;
 
+    /**
+     * 構造方法
+     * @param bindId 根據commentChannel來決定是店鋪評論、商品評論或是貼文評論
+     * @param commentChannel  渠道 1全部 2店鋪 3商品 4貼文 5推文
+     * @return
+     */
     public static CommentListFragment newInstance(int bindId, int commentChannel) {
         Bundle args = new Bundle();
 
@@ -170,6 +180,12 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                             item.commenterAvatar = comment.getString("memberVo.avatar");
                             item.nickname = comment.getString("memberVo.nickName");
                             item.commentTime = comment.getString("commentStartTime");
+
+                            if (commentChannel == Constant.COMMENT_CHANNEL_STORE) {
+                                item.relateStoreId = bindId;
+                            } else if (commentChannel == Constant.COMMENT_CHANNEL_GOODS) {
+                                item.relateCommonId = bindId;
+                            }
 
                             if (item.commentType != Constant.COMMENT_TYPE_TEXT) {
                                 EasyJSONArray images = comment.getArray("images");
