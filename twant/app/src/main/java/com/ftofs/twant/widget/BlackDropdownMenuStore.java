@@ -59,6 +59,7 @@ public class BlackDropdownMenuStore extends AttachPopupView implements View.OnCl
             case R.id.btn_item_1:
                 // 商城首頁
                 fragment.popTo(MainFragment.class, false);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.HOME_FRAGMENT);
                 dismiss();
                 break;
             case R.id.btn_item_2:

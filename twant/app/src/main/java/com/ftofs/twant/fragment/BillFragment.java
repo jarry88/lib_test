@@ -28,6 +28,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BlackDropdownMenuMessage;
+import com.ftofs.twant.widget.BlackDropdownMenuOrder;
 import com.ftofs.twant.widget.TwTabButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -96,6 +98,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         Util.setOnClickListener(view, R.id.tv_fragment_title, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_search, this);
+        Util.setOnClickListener(view, R.id.btn_menu, this);
 
         int index = 0;
         for (int id : orderStatusIds) {
@@ -164,6 +167,15 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
             }
         } else if (id == R.id.btn_search) {
             start(OrderSearchFragment.newInstance());
+        } else if (id == R.id.btn_menu) {
+            new XPopup.Builder(_mActivity)
+                    .offsetX(-Util.dip2px(_mActivity, 6))
+                    .offsetY(-Util.dip2px(_mActivity, 8))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                    .hasShadowBg(false) // 去掉半透明背景
+                    .atView(v)
+                    .asCustom(new BlackDropdownMenuOrder(_mActivity, this))
+                    .show();
         }
     }
 
