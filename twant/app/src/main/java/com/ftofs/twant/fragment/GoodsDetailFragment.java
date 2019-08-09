@@ -618,10 +618,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsMobileBodyVo.setWidth(easyJSONObject.getInt("width"));
                         goodsMobileBodyVo.setHeight(easyJSONObject.getInt("height"));
 
+                        String imageUrl = StringUtil.normalizeImageUrl(easyJSONObject.getString("value"));
+
                         ImageView imageView = new ImageView(_mActivity);
                         imageView.setAdjustViewBounds(true);
                         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                        Glide.with(llGoodsDetailImageContainer).load(easyJSONObject.getString("value")).into(imageView);
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                SLog.info("imageUrl[%s]", imageUrl);
+                                start(ImageViewerFragment.newInstance(imageUrl));
+                            }
+                        });
+                        Glide.with(llGoodsDetailImageContainer).load(imageUrl).into(imageView);
                         llGoodsDetailImageContainer.addView(imageView);
                     }
 
