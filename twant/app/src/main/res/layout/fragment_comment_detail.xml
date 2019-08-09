@@ -46,6 +46,7 @@
         app:silInputView="@+id/et_reply_content"
         app:silInputPane="@+id/fl_pane_container">
         <ScrollView
+            android:id="@+id/sv_comment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
