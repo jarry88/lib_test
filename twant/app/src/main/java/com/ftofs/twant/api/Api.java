@@ -679,6 +679,18 @@ public class Api {
 
 
     /**
+     * 好友請求列表
+     */
+    public static final String PATH_FRIEND_REQUEST_LIST = "/member/friend/request_list";
+
+
+    /**
+     * 處理好友請求
+     */
+    public static final String PATH_HANDLE_FRIEND_REQUEST = "/member/friend/handle_request";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

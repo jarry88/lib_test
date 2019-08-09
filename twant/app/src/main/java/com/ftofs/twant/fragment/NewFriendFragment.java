@@ -12,12 +12,23 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.NewFriendListAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.NewFriendItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 新的朋友Fragment
@@ -60,6 +71,11 @@ public class NewFriendFragment extends BaseFragment implements View.OnClickListe
                 int id = view.getId();
                 if (id == R.id.btn_accept) {
                     SLog.info("接受好友邀請");
+
+                    NewFriendItem newFriendItem = newFriendItemList.get(position);
+                    SLog.info("newFriendItem.memberName[%s]", newFriendItem.memberName);
+
+                    handleFriendRequest(newFriendItem.memberName, 1);
                 }
             }
         });
@@ -68,25 +84,90 @@ public class NewFriendFragment extends BaseFragment implements View.OnClickListe
         loadData();
     }
 
-    private void loadData() {
-        newFriendItemList.clear();
-        for (int i = 0; i < 10; i++) {
-            NewFriendItem newFriendItem = new NewFriendItem();
+    /**
+     * 處理好友請求
+     * @param action  1 同意   2 拒絕
+     */
+    private void handleFriendRequest(String memberName, int action) {
+        String token = User.getToken();
 
-            if (i % 2 == 0) {
-                newFriendItem.status = NewFriendItem.STATUS_INITIAL;
-            } else {
-                newFriendItem.status = NewFriendItem.STATUS_ACCEPTED;
-            }
-            newFriendItem.memberName = "test";
-            newFriendItem.avatarUrl = "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/f8/11/f8111bf7e5052421c991224a0042fc95.png";
-            newFriendItem.remark = "注" + i;
-            newFriendItem.nickname = "老" + i;
-
-            newFriendItemList.add(newFriendItem);
+        if (StringUtil.isEmpty(token)) {
+            return;
         }
 
-        adapter.setNewData(newFriendItemList);
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "friendMemberName", memberName,
+                "state", action);
+
+        Api.postUI(Api.PATH_HANDLE_FRIEND_REQUEST, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                loadData();
+            }
+        });
+    }
+
+    private void loadData() {
+        String token = User.getToken();
+
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token);
+        Api.postUI(Api.PATH_FRIEND_REQUEST_LIST, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    EasyJSONArray memberList = responseObj.getArray("datas.requestMemberList");
+
+                    newFriendItemList.clear();
+                    for (Object object : memberList) {
+                        EasyJSONObject member = (EasyJSONObject) object;
+
+                        NewFriendItem newFriendItem = new NewFriendItem();
+                        newFriendItem.memberName = member.getString("fromMember");
+                        newFriendItem.nickname = member.getString("memberInfo.nickName");
+                        newFriendItem.remark = member.getString("notes");
+                        newFriendItem.avatarUrl = member.getString("memberInfo.avatar");
+                        newFriendItem.status = member.getInt("state");
+
+                        newFriendItemList.add(newFriendItem);
+                    }
+
+                    adapter.setNewData(newFriendItemList);
+                } catch (EasyJSONException e) {
+                    e.printStackTrace();
+                    SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
