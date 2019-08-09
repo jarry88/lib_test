@@ -105,7 +105,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    doSearch(textView.getText().toString());
+                    doSearch(textView.getText().toString().trim());
                     return true;
                 }
                 return false;

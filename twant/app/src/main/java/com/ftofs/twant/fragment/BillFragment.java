@@ -17,6 +17,7 @@ import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
@@ -94,6 +95,8 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
         Util.setOnClickListener(view, R.id.tv_fragment_title, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_search, this);
+
         int index = 0;
         for (int id : orderStatusIds) {
             TwTabButton tvOrderStatus = view.findViewById(id);
@@ -156,7 +159,11 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.tv_fragment_title) {
-            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
+            if (Config.DEVELOPER_MODE) {
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
+            }
+        } else if (id == R.id.btn_search) {
+            start(OrderSearchFragment.newInstance());
         }
     }
 

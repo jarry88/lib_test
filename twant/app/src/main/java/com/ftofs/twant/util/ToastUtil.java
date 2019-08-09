@@ -57,7 +57,7 @@ public class ToastUtil {
         if (isError(responseObj)) {
             String errorMessage = defaultErrorMessage;
             if (StringUtil.isEmpty(errorMessage)) {
-                if (responseObj != null && responseObj.exists("datas.error")) {
+                if (!ToastUtil.isNull(responseObj) && responseObj.exists("datas.error")) {
                     try {
                         errorMessage = responseObj.getString("datas.error");
                     } catch (EasyJSONException e) {
@@ -84,11 +84,13 @@ public class ToastUtil {
      * @return
      */
     public static boolean isError(EasyJSONObject responseObj) {
-        if (responseObj == null || JSONObject.NULL.equals(responseObj)) {
+        if (isNull(responseObj)) {
             return true;
         }
 
-        SLog.info("responseObj[%s]", responseObj);
+        SLog.info("responseObj[%s]", responseObj.getClass());
+
+        SLog.info("responseObj[%s][%s]", responseObj, responseObj.toString());
         try {
             int code = responseObj.getInt("code");
             if (code != ResponseCode.SUCCESS) {
@@ -98,6 +100,19 @@ public class ToastUtil {
             e.printStackTrace();
             return true;
         }
+        return false;
+    }
+
+
+    public static boolean isNull(EasyJSONObject easyJSONObject) {
+        if (easyJSONObject == null) {
+            return true;
+        }
+
+        if ("null".equals(easyJSONObject.toString())) {
+            return true;
+        }
+
         return false;
     }
 
