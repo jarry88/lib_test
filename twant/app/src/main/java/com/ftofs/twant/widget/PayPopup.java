@@ -168,57 +168,61 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-
-                    if (ToastUtil.checkError(context, responseObj)) {
-                        return;
-                    }
-
-                    String uuid = null;
-                    String notifyUrl = null;
                     try {
-                        uuid = responseObj.getString("datas.tx_uuid");
-                        notifyUrl = responseObj.getString("datas.notify_url");
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                        if (ToastUtil.checkError(context, responseObj)) {
+                            return;
+                        }
+
+                        // 有些商品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
+                        if (responseObj.exists("datas.isPay")) {
+                            int isPay = responseObj.getInt("datas.isPay");
+                            if (isPay == 1) {
+                                // isPay為1 表示已經支付，無需請求大豐SDK
+                                onTaifungPaySuccess(false);
+                                dismiss();
+                                return;
+                            }
+                        }
+
+                        String uuid = responseObj.getString("datas.tx_uuid");
+                        String notifyUrl = responseObj.getString("datas.notify_url");
+
+                        ToastUtil.success(mainActivity, "提交訂單成功，正在打開支付界面，請稍候...");
+                        dismiss();
+
+                        SLog.info("uuid[%s], notifyUrl[%s]", uuid, notifyUrl);
+                        TaifungSDK.startPay(MainActivity.getInstance(), uuid, Config.TAIFUNG_PAY_MER_CUST_NO, Config.TAIFUNG_PAY_SECRET_KEY,
+                                null, Config.TAIFUNG_PAY_SERVER_URL, notifyUrl, new PaymentHandler() {
+                                    @Override
+                                    public void handlePaymentResult(Intent data) {
+                                        if (data != null) {
+                                            /*
+                                             * code：支付結果碼 -1：失敗、 0：取消、1：成功
+                                             * error_msg：支付結果信息
+                                             */
+                                            int code = data.getExtras().getInt("code", 0);
+                                            String errorMsg = data.getExtras().getString("result");
+                                            SLog.info("code[%d], errorMsg[%s]", code, errorMsg);
+
+                                            if (code == -1) {
+                                                ToastUtil.error(context, errorMsg);
+                                            } else if (code == 0) {
+                                                ToastUtil.info(context, errorMsg);
+                                            } else if (code == 1) {
+                                                ToastUtil.success(context, errorMsg);
+
+                                                onTaifungPaySuccess(true);
+                                            }
+                                        }
+                                    }
+                                });
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }
-
-                    ToastUtil.success(mainActivity, "提交訂單成功，正在打開支付界面，請稍候...");
-                    dismiss();
-
-                    SLog.info("uuid[%s], notifyUrl[%s]", uuid, notifyUrl);
-                    TaifungSDK.startPay(MainActivity.getInstance(), uuid, Config.TAIFUNG_PAY_MER_CUST_NO, Config.TAIFUNG_PAY_SECRET_KEY,
-                                            null, Config.TAIFUNG_PAY_SERVER_URL, notifyUrl, new PaymentHandler() {
-                        @Override
-                        public void handlePaymentResult(Intent data) {
-                            if (data != null) {
-                                /*
-                                 * code：支付結果碼 -1：失敗、 0：取消、1：成功
-                                 * error_msg：支付結果信息
-                                 */
-                                int code = data.getExtras().getInt("code", 0);
-                                String errorMsg = data.getExtras().getString("result");
-                                SLog.info("code[%d], errorMsg[%s]", code, errorMsg);
-
-                                if (code == -1) {
-                                    ToastUtil.error(context, errorMsg);
-                                } else if (code == 0) {
-                                    ToastUtil.info(context, errorMsg);
-                                } else if (code == 1) {
-                                    ToastUtil.success(context, errorMsg);
-
-                                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
-                                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
-
-                                    Util.startFragment(PaySuccessFragment.newInstance(""));
-
-                                    taifungPaySuccessNotify();
-                                }
-                            }
-                        }
-                    });
                 }
             });
 
@@ -236,6 +240,22 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
             TwantApplication.wxApi.sendReq(req);
         }
     }
+
+    /**
+     * 大豐支付成功處理
+     * @param notifyServer  是否通知服務器端
+     */
+    private void onTaifungPaySuccess(boolean notifyServer) {
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
+
+        Util.startFragment(PaySuccessFragment.newInstance(""));
+
+        if (notifyServer) {
+            taifungPaySuccessNotify();
+        }
+    }
+
 
     /**
      * 大豐支付成功通知服務器
