@@ -173,6 +173,15 @@
                     android:textColor="@color/tw_black"
                     android:background="@drawable/border_type_d"
                     />
+
+                <!-- 回復列表 -->
+                <LinearLayout
+                    android:id="@+id/ll_reply_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

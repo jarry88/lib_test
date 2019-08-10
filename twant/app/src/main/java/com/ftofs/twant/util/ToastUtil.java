@@ -88,7 +88,7 @@ public class ToastUtil {
             return true;
         }
 
-        SLog.info("responseObj[%s]", responseObj.getClass());
+        // SLog.info("responseObj[%s]", responseObj.getClass());
 
         SLog.info("responseObj[%s][%s]", responseObj, responseObj.toString());
         try {

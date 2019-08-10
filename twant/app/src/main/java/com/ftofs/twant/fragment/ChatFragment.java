@@ -703,7 +703,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     /**
      * 發送文本消息
-     * @param content
+     * @param content 如果是普通文本消息，是文本内容， 如果是商品或訂單，傳空即可，然后在方法體里面生成商品或訂單的信息JSON字符串
      * @param messageType 消息類型
      *                    txt -- 普通文本消息
      *                    goods -- 商品文本消息
@@ -715,6 +715,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         try {
             //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
+            if (CUSTOM_MESSAGE_TYPE_GOODS.equals(messageType)) {
+                EasyJSONObject goodsInfo = (EasyJSONObject) extra;
+                content = EasyJSONObject.generate(
+                        "goodsName", goodsInfo.getString("goodsName"),
+                        "commonId", goodsInfo.getInt("commonId"),
+                        "goodsImage", goodsInfo.getString("goodsImage")
+                ).toString();
+            } else if (CUSTOM_MESSAGE_TYPE_ORDERS.equals(messageType)) {
+                ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
+                content = EasyJSONObject.generate(
+                        "ordersId", String.valueOf(imStoreOrderItem.ordersId),
+                        "ordersSn", imStoreOrderItem.ordersSn,
+                        "goodsImage", imStoreOrderItem.goodsImage,
+                        "goodsName", imStoreOrderItem.goodsName
+                ).toString();
+            }
             EMMessage message = EMMessage.createTxtSendMessage(content, yourMemberName);
             message.setAttribute("messageType", messageType);
             if (CUSTOM_MESSAGE_TYPE_GOODS.equals(messageType)) {
@@ -999,7 +1015,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
                     EMMessage message = EMMessage.createImageSendMessage(absolutePath, false, yourMemberName);
                     chatMessage.messageId = message.getMsgId();
-                    message.setAttribute("messageType", "image");
+                    message.setAttribute("messageType", "img");
                     ChatUtil.setMessageCommonAttr(message, ChatUtil.ROLE_MEMBER);
 
                     message.setAttribute("ossUrl", result.first);
@@ -1015,7 +1031,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                             SLog.info("onSuccess, body[%s]", message.getBody().toString());
 
                             EMImageMessageBody imageMessageBody = (EMImageMessageBody) message.getBody();
-                            Api.imSendMessage(yourMemberName, "image", message.getMsgId(), message.getBody().toString(),
+                            Api.imSendMessage(yourMemberName, "img", message.getMsgId(), message.getBody().toString(),
                                     result.first, imageMessageBody.getRemoteUrl(), 0, null, null, 0, null);
                         }
 
@@ -1078,9 +1094,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 sendTextMessage(speech.content, CUSTOM_MESSAGE_TYPE_TXT, null);
             }
         } else if (type == PopupType.IM_CHAT_SEND_GOODS) {
-            sendTextMessage("[商品]", CUSTOM_MESSAGE_TYPE_GOODS, extra);
+            sendTextMessage("", CUSTOM_MESSAGE_TYPE_GOODS, extra);
         } else if (type == PopupType.IM_CHAT_SEND_ORDER) {
-            sendTextMessage("[訂單]", CUSTOM_MESSAGE_TYPE_ORDERS, extra);
+            sendTextMessage("", CUSTOM_MESSAGE_TYPE_ORDERS, extra);
         }
     }
 }

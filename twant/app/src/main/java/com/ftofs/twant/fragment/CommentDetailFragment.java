@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -27,12 +28,15 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.adapter.CommentReplyListAdapter;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CommentItem;
+import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
@@ -49,6 +53,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -78,6 +83,10 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     EmojiPageAdapter emojiPageAdapter;
     List<EmojiPage> emojiPageList = new ArrayList<>();
 
+    int replyCommentId;  // 當前要回復的主題Id或二級評論Id
+    CommentReplyListAdapter commentReplyListAdapter;
+    List<CommentReplyItem> commentReplyItemList = new ArrayList<>();
+
     public static CommentDetailFragment newInstance(CommentItem commentItem) {
         Bundle args = new Bundle();
 
@@ -103,6 +112,9 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         Bundle args = getArguments();
         commentItem = args.getParcelable("commentItem");
 
+        // 默認為當前主題的Id
+        replyCommentId = commentItem.commentId;
+
         silMainContainer = view.findViewById(R.id.sil_main_container);
 
         imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
@@ -117,6 +129,17 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         etReplyContent.setOnTouchListener(this);
         etReplyContent.setHint(getString(R.string.text_reply) + "：" + commentItem.nickname);
 
+        LinearLayout llReplyContainer = view.findViewById(R.id.ll_reply_container);
+        commentReplyListAdapter = new CommentReplyListAdapter(_mActivity, llReplyContainer, R.layout.comment_reply_item);
+        commentReplyListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                int id = view.getId();
+
+
+            }
+        });
+
         svCommentContainer = view.findViewById(R.id.sv_comment_container);
         svCommentContainer.setOnTouchListener(this);
 
@@ -126,6 +149,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_thumb, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
+
 
         loadCommentDetail();
 
@@ -177,7 +201,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                     "commentChannel", commentItem.commentChannel,
                     "deep", 2,
                     "content", etReplyContent.getText().toString().trim(),
-                    "token", token);
+                    "parentCommentId", commentItem.commentId,
+                    "replyCommentId", replyCommentId);
 
             try {
                 if (commentItem.relateCommonId > 0) {
@@ -186,14 +211,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 if (commentItem.relateStoreId > 0) {
                     params.set("relateStoreId", commentItem.relateStoreId);
                 }
-                if (commentItem.replyCommentId > 0) {
-                    params.set("replyCommentId", commentItem.replyCommentId);
-                }
                 if (commentItem.relatePostId > 0) {
                     params.set("relatePostId", commentItem.relatePostId);
-                }
-                if (commentItem.commentId > 0) {
-                    params.set("parentCommentId", commentItem.commentId);
                 }
             } catch (Exception e) {
 
@@ -264,7 +283,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                     "commentId", commentItem.commentId);
 
             String token = User.getToken();
-            if (StringUtil.isEmpty(token)) {
+            if (!StringUtil.isEmpty(token)) {
                 params.set("token", token);
             }
 
@@ -299,7 +318,28 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
                         updateThumbState();
                         tvReplyCount.setText(String.format("查看%d條回復", commentItem.commentReply));
+
+
+                        // 回復列表
+                        EasyJSONArray replyList = responseObj.getArray("datas.replyList");
+                        for (Object object : replyList) {
+                            EasyJSONObject reply = (EasyJSONObject) object;
+
+                            CommentReplyItem item = new CommentReplyItem();
+                            item.commentId = reply.getInt("commentId");
+                            item.avatarUrl = reply.getString("memberVo.avatar");
+                            item.nickname = reply.getString("memberVo.nickName");
+                            item.createTime = reply.getLong("createTime");
+                            item.content = reply.getString("content");
+                            item.commentLike = reply.getInt("commentLike");
+                            item.isLike = reply.getInt("isLike");
+
+                            commentReplyItemList.add(item);
+                        }
+                        commentReplyListAdapter.setData(commentReplyItemList);
+
                     } catch (Exception e) {
+                        e.printStackTrace();
                         SLog.info("Error!%s", e.getMessage());
                     }
                 }
