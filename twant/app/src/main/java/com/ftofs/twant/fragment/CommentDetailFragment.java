@@ -35,6 +35,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.entity.EmojiPage;
@@ -63,6 +64,14 @@ import okhttp3.Call;
  */
 public class CommentDetailFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener {
     CommentItem commentItem;
+
+    public static class QuoteReply {
+        public boolean isQuoteReply;  // 是否為引用回復，如果是引用回復時，下面的字段才有用
+        public String quoteNickname;  // 引用評論作者的昵稱
+        public String quoteContent;   // 引用評論的內容
+    }
+
+    QuoteReply quoteReply = new QuoteReply();
 
     ImageView imgCommenterAvatar;
     TextView tvCommenterNickname;
@@ -112,6 +121,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         Bundle args = getArguments();
         commentItem = args.getParcelable("commentItem");
 
+
         // 默認為當前主題的Id
         replyCommentId = commentItem.commentId;
 
@@ -147,6 +157,12 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 } else if (id == R.id.btn_reply_comment) {
                     replyCommentId = item.commentId;
                     setReplyContentHint(item.nickname);
+
+                    // 是引用回復
+                    quoteReply.isQuoteReply = true;
+                    quoteReply.quoteNickname = item.nickname;
+                    quoteReply.quoteContent = item.content;
+
                     showInput();
                 } else if (id == R.id.btn_thumb) {
                     switchThumbState(position);
@@ -224,6 +240,11 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 btnEmoji.setImageResource(R.drawable.icon_emoji);
                 silMainContainer.closeKeyboard(true);
                 silMainContainer.closeInputPane();
+
+                // 切換為回復當前的一級評論
+                replyCommentId = commentItem.commentId;
+                setReplyContentHint(commentItem.nickname);
+                quoteReply.isQuoteReply = false;
                 break;
             case R.id.et_reply_content:
                 // 如果點擊輸入區域，將圖標切換為表情輸入圖標
@@ -293,8 +314,37 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         }
 
                         ToastUtil.success(_mActivity, "回復成功");
-                    } catch (Exception e) {
 
+                        EasyJSONObject wantCommentVo = responseObj.getObject("datas.wantCommentVo");
+                        EasyJSONObject memberVo = wantCommentVo.getObject("memberVo");
+
+                        CommentReplyItem commentReplyItem = new CommentReplyItem();
+                        commentReplyItem.memberId = memberVo.getInt("memberId");
+                        commentReplyItem.memberName = memberVo.getString("memberName");
+                        commentReplyItem.commentId = wantCommentVo.getInt("commentId");
+                        commentReplyItem.avatarUrl = memberVo.getString("avatar");
+                        commentReplyItem.nickname = memberVo.getString("nickName");
+                        commentReplyItem.createTime = wantCommentVo.getLong("createTime");
+                        commentReplyItem.content = wantCommentVo.getString("content");
+                        commentReplyItem.isLike = wantCommentVo.getInt("isLike");
+                        commentReplyItem.commentLike = wantCommentVo.getInt("commentLike");
+
+                        if (quoteReply.isQuoteReply) {
+                            commentReplyItem.isQuoteReply = true;
+                            commentReplyItem.quoteNickname = quoteReply.quoteNickname;
+                            commentReplyItem.quoteContent = quoteReply.quoteContent;
+                        }
+
+                        commentReplyItemList.add(0, commentReplyItem);
+                        commentReplyListAdapter.notifyItemInserted(0);
+
+                        etReplyContent.setText("");
+                        silMainContainer.closeKeyboard(true);
+                        silMainContainer.closeInputPane();
+
+                        quoteReply.isQuoteReply = false;
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e);
                     }
                 }
             });
@@ -391,6 +441,13 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                             item.content = reply.getString("content");
                             item.commentLike = reply.getInt("commentLike");
                             item.isLike = reply.getInt("isLike");
+
+                            EasyJSONObject wantCommentReplyVo = reply.getObject("wantCommentReplyVo");
+                            if (wantCommentReplyVo != null) {
+                                item.isQuoteReply = true;
+                                item.quoteNickname = wantCommentReplyVo.getString("nickName");
+                                item.quoteContent = wantCommentReplyVo.getString("content");
+                            }
 
                             commentReplyItemList.add(item);
                         }

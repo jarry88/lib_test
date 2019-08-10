@@ -1,6 +1,11 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +23,7 @@ import com.ftofs.twant.util.StringUtil;
  */
 public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> {
     Context context;
+    int twBlue;
 
     /**
      * 構造方法
@@ -30,6 +36,7 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
         super(context, container, itemLayoutId);
 
         this.context = context;
+        twBlue = context.getResources().getColor(R.color.tw_blue, null);
         addClickableChildrenId(R.id.img_avatar, R.id.btn_reply_comment, R.id.btn_thumb);
     }
 
@@ -43,7 +50,18 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
         setText(itemView, R.id.tv_timestamp, new Jarbon(itemData.createTime).format("Y-m-d H:i:s"));
 
         TextView tvReplyContent = itemView.findViewById(R.id.tv_reply_content);
-        tvReplyContent.setText(StringUtil.translateEmoji(context, itemData.content, (int) tvReplyContent.getTextSize()));
+
+        Editable content = StringUtil.translateEmoji(context, itemData.content, (int) tvReplyContent.getTextSize());
+        if (itemData.isQuoteReply) {
+            SpannableString spannableString = new SpannableString(" //@" + itemData.quoteNickname + ":");
+            ForegroundColorSpan colorSpan = new ForegroundColorSpan(twBlue);
+            spannableString.setSpan(colorSpan, 1, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            content.append(spannableString);
+            content.append(StringUtil.translateEmoji(context, itemData.quoteContent, (int) tvReplyContent.getTextSize()));
+        }
+        tvReplyContent.setText(content);
+
         setText(itemView, R.id.tv_like_count, String.valueOf(itemData.commentLike));
 
         ImageView iconCommentThumb = itemView.findViewById(R.id.icon_comment_thumb);

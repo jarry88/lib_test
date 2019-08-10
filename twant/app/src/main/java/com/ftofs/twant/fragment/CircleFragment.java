@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.PostListAdapter;
 import com.ftofs.twant.api.Api;
@@ -69,6 +70,12 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         RecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
         adapter = new PostListAdapter(R.layout.post_list_item, postItemList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Util.startFragment(PostDetailFragment.newInstance());
+            }
+        });
         GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);
         layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
         rvPostList.setLayoutManager(layoutManagerCommodity);
