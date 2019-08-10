@@ -22,9 +22,6 @@ import com.ftofs.twant.widget.QuickClickButton;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
-    TextView textView;
-    QuickClickButton quickClickButton;
-
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -45,22 +42,12 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Util.setOnClickListener(view, R.id.btn_test, this);
-
-        textView = view.findViewById(R.id.text_view);
-        quickClickButton = view.findViewById(R.id.btn_quick_click);
-        quickClickButton.setOnQuickClickListener(new QuickClickButton.OnQuickClickListener() {
-            @Override
-            public void onQuickClick(View view) {
-                ToastUtil.info(_mActivity, "onQuickClick");
-            }
-        });
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            textView.setText(new Jarbon().toString());
         }
     }
 
