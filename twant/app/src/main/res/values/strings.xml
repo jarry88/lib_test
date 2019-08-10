@@ -333,6 +333,8 @@
     <string name="text_cover_image">封面圖</string>
     <string name="input_post_content_hint">想要說點什麼...</string>
     <string name="input_budget_price_hint">請輸入預算價格</string>
+    <string name="text_dead_line">截止</string>
+    <string name="text_budget">預算</string>
 
     <string name="text_store_service_staff">店鋪服務人員</string>
 
@@ -546,6 +548,7 @@
     <string name="text_my_comment_desc">我評論過的歷史紀錄</string>
     <string name="text_my_follow">我的關注</string>
     <string name="text_my_follow_desc">我關注過的相關信息</string>
+    <string name="text_my_friend">我的好友</string>
 
     <string name="text_conform_simplify">滿減</string>
     <string name="text_store_customer_service">店鋪客服</string>

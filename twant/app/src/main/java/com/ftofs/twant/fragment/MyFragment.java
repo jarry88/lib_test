@@ -166,7 +166,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 Util.startFragment(MallFragment.newInstance());
                 break;
             case R.id.btn_friends:
-                Util.startFragment(ContactFragment.newInstance());
+                Util.startFragment(MyFriendFragment.newInstance());
                 break;
             case R.id.btn_interactive:
                 Util.startFragment(InteractiveFragment.newInstance());
