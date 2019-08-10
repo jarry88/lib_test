@@ -127,7 +127,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         tvReplyCount = view.findViewById(R.id.tv_reply_count);
         etReplyContent = view.findViewById(R.id.et_reply_content);
         etReplyContent.setOnTouchListener(this);
-        etReplyContent.setHint(getString(R.string.text_reply) + "：" + commentItem.nickname);
+        setReplyContentHint(commentItem.nickname);
 
         LinearLayout llReplyContainer = view.findViewById(R.id.ll_reply_container);
         commentReplyListAdapter = new CommentReplyListAdapter(_mActivity, llReplyContainer, R.layout.comment_reply_item);
@@ -136,7 +136,22 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             public void onClick(ViewGroupAdapter adapter, View view, int position) {
                 int id = view.getId();
 
-
+                CommentReplyItem item = commentReplyItemList.get(position);
+                if (id == R.id.img_avatar) {
+                    int userId = User.getUserId();
+                    if (userId == item.memberId) { // 如果是自己頭像，顯示自己個人信息
+                        start(PersonalInfoFragment.newInstance());
+                    } else { // 如果是別人，顯示別人的會員信息
+                        start(MemberInfoFragment.newInstance(item.memberName));
+                    }
+                } else if (id == R.id.btn_reply_comment) {
+                    replyCommentId = item.commentId;
+                    setReplyContentHint(item.nickname);
+                    showInput();
+                } else if (id == R.id.btn_thumb) {
+                    switchThumbState(position);
+                }
+                SLog.info("");
             }
         });
 
@@ -150,14 +165,55 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         Util.setOnClickListener(view, R.id.btn_thumb, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
 
-
         loadCommentDetail();
 
         initEmojiPage(view);
         loadEmojiData();
     }
 
+    private void switchThumbState(int position) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
 
+        CommentReplyItem item = commentReplyItemList.get(position);
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "commentId", item.commentId,
+                "state", 1 - item.isLike
+        );
+        Api.postUI(Api.PATH_COMMENT_LIKE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    item.isLike = 1 - item.isLike;
+                    item.commentLike = responseObj.getInt("datas.likeCount");
+
+                    commentReplyListAdapter.notifyItemChanged(position);
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    private void setReplyContentHint(String nickname) {
+        etReplyContent.setHint(getString(R.string.text_reply) + "：" + nickname);
+    }
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
@@ -308,7 +364,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         Glide.with(_mActivity).load(Config.OSS_BASE_URL + "/" + commentItem.commenterAvatar).centerCrop().into(imgCommenterAvatar);
                         tvCommenterNickname.setText(commentItem.nickname);
                         tvCommentTime.setText(commentItem.commentTime);
-                        tvContent.setText(commentItem.content);
+                        tvContent.setText(StringUtil.translateEmoji(_mActivity, commentItem.content, (int) tvContent.getTextSize()));
                         if (commentItem.commentType == Constant.COMMENT_TYPE_TEXT || StringUtil.isEmpty(commentItem.imageUrl)) {
                             imageView.setVisibility(View.GONE);
                         } else {
@@ -326,6 +382,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                             EasyJSONObject reply = (EasyJSONObject) object;
 
                             CommentReplyItem item = new CommentReplyItem();
+                            item.memberId = reply.getInt("memberVo.memberId");
+                            item.memberName = reply.getString("memberVo.memberName");
                             item.commentId = reply.getInt("commentId");
                             item.avatarUrl = reply.getString("memberVo.avatar");
                             item.nickname = reply.getString("memberVo.nickName");

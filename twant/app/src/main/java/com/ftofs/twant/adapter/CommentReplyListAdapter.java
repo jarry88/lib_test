@@ -30,7 +30,7 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
         super(context, container, itemLayoutId);
 
         this.context = context;
-        addClickableChildrenId(R.id.img_avatar, R.id.btn_reply, R.id.btn_thumb);
+        addClickableChildrenId(R.id.img_avatar, R.id.btn_reply_comment, R.id.btn_thumb);
     }
 
     @Override

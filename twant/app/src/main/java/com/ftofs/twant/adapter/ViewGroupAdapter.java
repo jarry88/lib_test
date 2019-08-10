@@ -1,6 +1,7 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,12 @@ public abstract class ViewGroupAdapter<T> {
      * 數據列表
      */
     private List<T> dataList;
+
+    /**
+     * 每一項的View列表
+     */
+    private List<View> viewList = new ArrayList<>();
+
     /**
      * 容器
      */
@@ -76,6 +83,7 @@ public abstract class ViewGroupAdapter<T> {
         this.dataList = dataList;
 
         container.removeAllViews();
+        viewList.clear();
         for (int i = 0; i < dataList.size(); i++) {
             /*
             inflate(resource, root, attachToRoot) 方法的root參數設置為容器的參數，布局resource中的layout參數才
@@ -83,6 +91,7 @@ public abstract class ViewGroupAdapter<T> {
              */
             final View itemView = LayoutInflater.from(context).inflate(itemLayoutId, container, false);
             container.addView(itemView);
+            viewList.add(itemView);
             final int position = i;
             if (itemClickListener != null) {
                 itemView.setOnClickListener(new View.OnClickListener() {
@@ -169,5 +178,40 @@ public abstract class ViewGroupAdapter<T> {
         if (view != null) {
             view.setBackgroundResource(resid);
         }
+    }
+
+    public void notifyItemChanged(int position) {
+        bindView(position, viewList.get(position), dataList.get(position));
+    }
+
+    public void notifyItemInserted(int position) {
+        View itemView = LayoutInflater.from(context).inflate(itemLayoutId, container, false);
+        container.addView(itemView, position);
+        viewList.add(position, itemView);
+        if (itemClickListener != null) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onClick(ViewGroupAdapter.this, itemView, position);
+                }
+            });
+        }
+
+        if (childClickListener != null) {
+            for (int childViewId : clickableChildrenIds) {
+                View childView = itemView.findViewById(childViewId);
+                if (childView == null) {
+                    continue;
+                }
+                childView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        childClickListener.onClick(ViewGroupAdapter.this, childView, position);
+                    }
+                });
+            }
+        }
+
+        bindView(position, itemView, dataList.get(position));
     }
 }

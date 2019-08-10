@@ -249,7 +249,7 @@ public class StringUtil {
                 stopIndex = i;
                 if (startIndex >= 0) { // 符合表情標簽格式
                     String str = text.substring(startIndex, stopIndex + 1);
-                    SLog.info("str[%s]", str);
+                    // SLog.info("str[%s]", str);
                     String emojiAbsolutePath = emojiMap.get(str);
 
                     if (emojiAbsolutePath != null) { // 如果是有效的表情

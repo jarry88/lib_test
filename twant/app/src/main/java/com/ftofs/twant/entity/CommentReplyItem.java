@@ -1,6 +1,8 @@
 package com.ftofs.twant.entity;
 
 public class CommentReplyItem {
+    public int memberId;
+    public String memberName;
     public int commentId;
     public String avatarUrl;
     public String nickname;
