@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -214,10 +215,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         Util.setOnClickListener(view, R.id.btn_menu, this);
         Util.setOnClickListener(view, R.id.btn_send_image, this);
         Util.setOnClickListener(view, R.id.btn_capture_image, this);
-        Util.setOnClickListener(view, R.id.btn_send_goods, this);
-        Util.setOnClickListener(view, R.id.btn_send_order, this);
+        LinearLayout btnSendGoods = view.findViewById(R.id.btn_send_goods);
+        btnSendGoods.setOnClickListener(this);
+        LinearLayout btnSendOrder = view.findViewById(R.id.btn_send_order);
+        btnSendOrder.setOnClickListener(this);
         // 常用語 暫時屏蔽 Util.setOnClickListener(view, R.id.btn_send_common_used_speech, this);
         // 定位 暫時屏蔽 Util.setOnClickListener(view, R.id.btn_send_location, this);
+
+        // 檢測對方是否是客服，有s的表示是客服
+        if (yourMemberName.indexOf('s') == -1) {
+            // 如果不是客服，則隱藏發送【商品】、【訂單】按鈕
+            btnSendGoods.setVisibility(View.GONE);
+            btnSendOrder.setVisibility(View.GONE);
+        }
 
         initEmojiPage(view);
         loadEmojiData();

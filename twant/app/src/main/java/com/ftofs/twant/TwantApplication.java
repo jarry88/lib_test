@@ -367,7 +367,7 @@ public class TwantApplication extends Application {
             @Override
             public void onMessageChanged(EMMessage message, Object change) {
                 //消息状态变动
-                SLog.info("消息状态变动");
+                SLog.info("消息状态变动, message[%s], change[%s]", message, change);
             }
         };
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
