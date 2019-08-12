@@ -20,6 +20,7 @@ import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.log.SLog;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
@@ -277,12 +278,14 @@ public class Util {
 
     public static void handleQRCodeResult(Context context, Intent data) {
         //处理扫描结果（在界面上显示）
+        SLog.info("here");
         if (null != data) {
             Bundle bundle = data.getExtras();
             if (bundle == null) {
+                SLog.info("here");
                 return;
             }
-
+            SLog.info("here");
             if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                 String result = bundle.getString(CodeUtils.RESULT_STRING);
                 SLog.info("解析结果[%s]", result);
@@ -290,6 +293,8 @@ public class Util {
                     // 添加好友
                     String memberName = result.substring(10);
                     SLog.info("memberName[%s]", memberName);
+
+                    Util.startFragment(MemberInfoFragment.newInstance(memberName));
                 } else {
                     ToastUtil.error(context, "無效的二維碼");
                 }
