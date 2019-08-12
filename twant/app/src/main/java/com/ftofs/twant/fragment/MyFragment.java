@@ -22,6 +22,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.FollowMeListItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -49,8 +50,8 @@ import okhttp3.Call;
  * @author zwm
  */
 public class MyFragment extends BaseFragment implements View.OnClickListener {
-    // 關注我的頭像列表
-    List<String> followMeList = new ArrayList<>();
+    // 【關注我的】數據列表
+    List<FollowMeListItem> followMeList = new ArrayList<>();
 
     BaseQuickAdapter adapter;
 
@@ -136,6 +137,14 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
         rvFollowMeList.setLayoutManager(layoutManager);
         adapter = new FollowMeAvatarAdapter(R.layout.follow_me_avatar_item, followMeList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                FollowMeListItem item = followMeList.get(position);
+                String memberName = item.memberName;
+                Util.startFragment(MemberInfoFragment.newInstance(memberName));
+            }
+        });
         rvFollowMeList.setAdapter(adapter);
     }
 
@@ -245,13 +254,11 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     for (Object object : fansList) {
                         EasyJSONObject fans = (EasyJSONObject) object;
                         String avatar = fans.getString("avatar");
-                        followMeList.add(avatar);
-                    }
+                        String memberName = fans.getString("memberName");
 
-                    for (int i = 0; i < 20; i++) {
-                        // followMeList.add("https://www.snailpad.cn/tmp/timg.jpg");
+                        FollowMeListItem item = new FollowMeListItem(memberName, avatar);
+                        followMeList.add(item);
                     }
-
 
                     adapter.setNewData(followMeList);
 

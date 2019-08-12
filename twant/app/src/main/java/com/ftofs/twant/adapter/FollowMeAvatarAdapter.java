@@ -7,22 +7,23 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.entity.FollowMeListItem;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
-public class FollowMeAvatarAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
-    public FollowMeAvatarAdapter(int layoutResId, @Nullable List<String> data) {
+public class FollowMeAvatarAdapter extends BaseQuickAdapter<FollowMeListItem, BaseViewHolder> {
+    public FollowMeAvatarAdapter(int layoutResId, @Nullable List<FollowMeListItem> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, String item) {
+    protected void convert(BaseViewHolder helper, FollowMeListItem item) {
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
-        if (StringUtil.isEmpty(item)) {
-            Glide.with(mContext).load(R.drawable.avatar_male).centerCrop().into(imgAvatar);
+        if (StringUtil.isEmpty(item.avatar)) {
+            Glide.with(mContext).load(R.drawable.icon_default_avatar).centerCrop().into(imgAvatar);
         } else {
-            Glide.with(mContext).load(item).centerCrop().into(imgAvatar);
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatar)).centerCrop().into(imgAvatar);
         }
     }
 }
