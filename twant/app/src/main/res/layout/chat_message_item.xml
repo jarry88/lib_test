@@ -27,7 +27,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/avatar_male"
+            android:src="@drawable/icon_default_avatar"
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -37,7 +37,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/avatar_female"
+            android:src="@drawable/icon_default_avatar"
             />
 
         <!-- 消息內容容器 -->
@@ -72,7 +72,7 @@
                     android:id="@+id/img_message"
                     android:layout_width="135dp"
                     android:layout_height="135dp"
-                    android:src="@drawable/cs_avatar_160"
+                    android:src="@drawable/icon_default_avatar"
                     />
             </LinearLayout>
             <!-- 商品消息 -->
@@ -88,7 +88,7 @@
                     android:id="@+id/goods_image"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:src="@drawable/cs_avatar_160"
+                    android:src="@drawable/icon_default_avatar"
                     />
                 <TextView
                     android:id="@+id/tv_goods_name"
@@ -97,7 +97,7 @@
                     android:layout_marginLeft="15dp"
                     android:textSize="13sp"
                     android:textColor="@color/tw_black"
-                    android:text="時尚簡約金色年華燈盞框北歐...風INS熱賣"
+                    android:text=""
                     />
             </LinearLayout>
             <!-- 訂單信息 -->
@@ -112,7 +112,7 @@
                     android:id="@+id/tv_order_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="訂單編號：365400000025800"
+                    android:text=""
                     android:textColor="@color/tw_black"
                     android:textSize="14sp"
                     />
@@ -127,14 +127,14 @@
                         android:id="@+id/order_goods_image"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:src="@drawable/cs_avatar_160"
+                        android:src="@drawable/icon_default_avatar"
                         />
                     <TextView
                         android:id="@+id/tv_order_goods_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:text="Yueaeow香薰精油香氛淡薰香家用室內臥室空氣清新留香"
+                        android:text=""
                         android:textSize="13sp"
                         android:textColor="@color/tw_black"
                         />

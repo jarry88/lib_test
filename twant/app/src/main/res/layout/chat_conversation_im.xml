@@ -13,7 +13,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/avatar_male"
+        android:src="@drawable/icon_default_avatar"
         />
 
     <LinearLayout
@@ -36,7 +36,7 @@
 
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
-                android:text="齊天大聖孫悟空"
+                android:text=""
                 android:textSize="16sp"
                 android:textColor="@color/tw_black"
                 android:singleLine="true"
@@ -46,7 +46,7 @@
                 android:id="@+id/tv_message_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="昨天"
+                android:text=""
                 android:textSize="12sp"
                 android:textColor="@color/tw_dark_grey"
                 />
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
-                android:text="在的, 有什麼能幫您的嗎?"
+                android:text=""
                 android:textColor="@color/tw_dark_grey"
                 android:textSize="14sp"
                 android:singleLine="true"
@@ -81,7 +81,7 @@
                 android:gravity="center"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:text="211"
+                android:text="0"
                 android:background="@drawable/unread_count_bg"
                 />
             <ImageView

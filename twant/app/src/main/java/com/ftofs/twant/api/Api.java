@@ -637,7 +637,7 @@ public class Api {
 
 
     /**
-     * 發起好友申請
+     * 發起好友申請 send_request服務器拼寫錯誤，將錯就錯
      */
     public static final String PATH_ADD_FRIEND_APPLICATION = "/member/friend/send_reqeust";
 

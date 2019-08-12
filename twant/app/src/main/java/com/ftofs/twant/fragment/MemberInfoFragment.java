@@ -121,38 +121,43 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
             if (StringUtil.isEmpty(token)) {
                 return;
             }
-            if (isFollow == 0) {
-                // 加關注
-                EasyJSONObject params = EasyJSONObject.generate(
-                        "memberName", memberName,
-                        "state", 1,
-                        "token", token
-                );
-                Api.postUI(Api.PATH_MEMBER_FOLLOW, params, new UICallback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        ToastUtil.showNetworkError(_mActivity, e);
-                    }
 
-                    @Override
-                    public void onResponse(Call call, String responseStr) throws IOException {
-                        try {
-                            SLog.info("responseStr[%s]", responseStr);
+            // 加關注或取消關注
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "memberName", memberName,
+                    "state", 1 - isFollow,
+                    "token", token
+            );
+            Api.postUI(Api.PATH_MEMBER_FOLLOW, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
 
-                            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                            if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                return;
-                            }
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
 
-                            ToastUtil.success(_mActivity, "關注成功");
-                            isFollow = 1;
-                            btnFollow.setText(getString(R.string.text_followed));
-                        } catch (Exception e) {
-
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
                         }
+
+                        isFollow = 1 - isFollow;
+                        if (isFollow == 1) {
+                            ToastUtil.success(_mActivity, "關注成功");
+                            btnFollow.setText(getString(R.string.text_followed));
+                        } else {
+                            ToastUtil.success(_mActivity, "取消關注成功");
+                            btnFollow.setText(getString(R.string.text_follow));
+                        }
+                    } catch (Exception e) {
+
                     }
-                });
-            }
+                }
+            });
+
         } else if (id == R.id.btn_add_friend) {
             if (isFriend == 0) { // 添加好友
                 new XPopup.Builder(_mActivity)

@@ -28,6 +28,7 @@ import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMOptions;
@@ -50,6 +51,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.Fragmentation;
 import pl.com.salsoft.sqlitestudioremote.SQLiteStudioService;
 
@@ -305,22 +307,36 @@ public class TwantApplication extends Application {
                     String to = message.getTo();
                     SLog.info("msgId[%s], type[%s], from[%s], to[%s], body[%s]", msgId, type, from, to, body.toString());
 
+
+                    ChatMessage chatMessage = new ChatMessage();
+
+                    chatMessage.timestamp = message.getMsgTime();
+                    chatMessage.origin = ChatMessage.YOUR_MESSAGE;
+                    chatMessage.avatar = "";
+                    chatMessage.fromMemberName = message.getFrom();
+                    chatMessage.toMemberName = message.getTo();
+                    chatMessage.nickname = "";
+                    chatMessage.messageType = ChatUtil.getIntMessageType(message);
                     if (type == EMMessage.Type.TXT) {
                         SLog.info("收到文本消息");
-
-                        ChatMessage chatMessage = new ChatMessage();
-                        chatMessage.timestamp = message.getMsgTime();
-                        chatMessage.origin = ChatMessage.YOUR_MESSAGE;
                         chatMessage.content = StringUtil.getEMMessageText(message.getBody().toString());
-                        chatMessage.avatar = "";
-                        chatMessage.fromMemberName = message.getFrom();
-                        chatMessage.toMemberName = message.getTo();
-                        chatMessage.nickname = "";
-                        chatMessage.messageType = ChatUtil.getIntMessageType(message);
-                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE, chatMessage);
+
+
                     } else if (type == EMMessage.Type.IMAGE) {
                         SLog.info("收到圖片消息");
+                        EMImageMessageBody imageMessageBody = (EMImageMessageBody) message.getBody();
+                        String localUrl = imageMessageBody.getLocalUrl();
+                        String remoteUrl = imageMessageBody.getRemoteUrl();
+
+                        chatMessage.content = EasyJSONObject.generate("absolutePath", localUrl, "imgUrl", remoteUrl).toString();
+                        SLog.info("chatMessage.content[%s]", chatMessage.content);
+                    } else {
+                        SLog.info("收到不支持的消息");
                     }
+
+                    SLog.info("chatMessage[%s]", chatMessage);
+
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE, chatMessage);
                 }
             }
 
