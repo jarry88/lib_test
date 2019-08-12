@@ -115,6 +115,7 @@ public class NewFriendFragment extends BaseFragment implements View.OnClickListe
                     return;
                 }
 
+                // 處理好友請求成功后，重新刷新數據
                 loadData();
             }
         });

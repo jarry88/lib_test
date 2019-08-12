@@ -689,6 +689,12 @@ public class Api {
      */
     public static final String PATH_HANDLE_FRIEND_REQUEST = "/member/friend/handle_request";
 
+    /**
+     * 【個人專頁】-》【好友列表】
+     */
+    public static final String PATH_MY_FRIEND_LIST = "/memberpage/friend/list";
+
+
 
     /**
      * 發送Http請求

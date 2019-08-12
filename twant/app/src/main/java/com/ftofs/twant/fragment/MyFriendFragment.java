@@ -9,15 +9,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.MyFriendListAdapter;
-import com.ftofs.twant.adapter.TrustValueListAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.MyFriendListItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 
 /**
@@ -54,16 +65,71 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvList.setLayoutManager(layoutManager);
         adapter = new MyFriendListAdapter(R.layout.my_friend_list_item, myFriendListItems);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String memberName = myFriendListItems.get(position).memberName;
+                start(MemberInfoFragment.newInstance(memberName));
+            }
+        });
         rvList.setAdapter(adapter);
 
         loadData();
     }
 
     private void loadData() {
-        myFriendListItems.add(new MyFriendListItem());
-        myFriendListItems.add(new MyFriendListItem());
-        myFriendListItems.add(new MyFriendListItem());
-        myFriendListItems.add(new MyFriendListItem());
+        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
+        String token = User.getToken();
+
+        if (StringUtil.isEmpty(token) || StringUtil.isEmpty(memberName)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "memberName", memberName,
+                "token", token);
+
+        Api.postUI(Api.PATH_MY_FRIEND_LIST, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONArray friendsList = responseObj.getArray("datas.friendsList");
+
+                    for (Object object : friendsList) {
+                        EasyJSONObject friend = (EasyJSONObject) object;
+
+                        MyFriendListItem item = new MyFriendListItem(
+                                friend.getString("memberName"),
+                                friend.getString("avatar"),
+                                friend.getString("nickName"),
+                                friend.getInt("currGrade.gradeLevel"),
+                                friend.getString("memberSignature"));
+
+                        myFriendListItems.add(item);
+                    }
+
+                    adapter.setNewData(myFriendListItems);
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                }
+
+
+            }
+        });
+
 
         adapter.setNewData(myFriendListItems);
     }
