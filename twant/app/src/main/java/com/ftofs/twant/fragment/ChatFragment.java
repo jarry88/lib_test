@@ -53,7 +53,6 @@ import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
-import com.ftofs.twant.task.UpdateFriendInfoTask;
 import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
@@ -301,21 +300,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         ImNameMap map = ImNameMap.getByImName(yourMemberName);
         if (map != null) {
             SLog.info("map[%s]", map);
-            memberName = map.memberName;
             storeId = map.storeId;
         }
 
-        friendInfo = LitePal.where("memberName = ?", memberName).findFirst(FriendInfo.class);
+        friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
         if (friendInfo == null) {
-            SLog.info("好友信息[%s]為空，更新好友信息", memberName);
-            TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(memberName));
+            SLog.info("好友信息[%s]為空", memberName);
 
             return false;
         } else {
-            if (friendInfo.avatarImg == null) {
-                SLog.info("friendInfo.avatarImg is null");
+            if (StringUtil.isEmpty(friendInfo.avatarUrl)) {
+                SLog.info("friendInfo.avatarUrl is null");
             } else {
-                SLog.info("friendInfo.avatarImg size[%d]", friendInfo.avatarImg.length);
+                SLog.info("friendInfo.avatarUrl[%s]", friendInfo.avatarUrl);
             }
 
             return true;
@@ -491,11 +488,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvMessageList.setLayoutManager(layoutManager);
 
-        byte[] yourAvatarData = null;
+
         if (friendInfo != null) {
-            yourAvatarData = friendInfo.avatarImg;
+            yourAvatarUrl = friendInfo.avatarUrl;
         }
-        chatMessageAdapter = new ChatMessageAdapter(R.layout.chat_message_item, chatMessageList, yourAvatarData);
+        chatMessageAdapter = new ChatMessageAdapter(R.layout.chat_message_item, chatMessageList, yourAvatarUrl);
         chatMessageAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {

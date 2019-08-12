@@ -25,7 +25,8 @@ public class ChatUtil {
     public static EMConversation getConversation(String yourMemberName, String nickname, String avatarUrl, int role) {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName, EMConversation.EMConversationType.Chat, true);
         if (conversation == null) {
-            SLog.info("Error!獲取或創建會話失敗");
+            SLog.info("Error!獲取或創建會話失敗, yourMemberName[%s], nickname[%s], avatarUrl[%s], role[%d]",
+                    yourMemberName, nickname, avatarUrl, role);
             return null;
         }
 

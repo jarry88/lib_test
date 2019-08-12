@@ -16,6 +16,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -115,6 +116,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_chat_with_him) {
+            FriendInfo.upsertFriendInfo(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER);
             Util.startFragment(ChatFragment.newInstance(ChatUtil.getConversation(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER)));
         } else if (id == R.id.btn_follow) {
             String token = User.getToken();

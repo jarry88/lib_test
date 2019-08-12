@@ -22,7 +22,6 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
-import com.ftofs.twant.task.UpdateFriendInfoTask;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.Time;
@@ -220,12 +219,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             ChatConversation chatConversation = new ChatConversation(ChatConversation.ITEM_TYPE_IM);
 
             FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
+
             if (friendInfo == null) {
-                // 如果FriendInfo為空，更新FriendInfo
-                TwantApplication.getThreadPool().execute(new UpdateFriendInfoTask(memberName));
-            } else {
-                chatConversation.friendInfo = friendInfo;
+                continue;
             }
+
+            chatConversation.friendInfo = friendInfo;
+
             chatConversation.unreadCount = conversation.getUnreadMsgCount();
             chatConversation.lastMessageType = ChatUtil.getIntMessageType(lastMessage);
             chatConversation.lastMessage = lastMessage.getBody().toString();

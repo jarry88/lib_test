@@ -136,10 +136,8 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
                     for (Object object : friendList) {
                         EasyJSONObject friend = (EasyJSONObject) object;
                         FriendInfo friendInfo = new FriendInfo();
-                        friendInfo.userId = friend.getInt("memberId");
                         friendInfo.memberName = friend.getString("memberName");
                         friendInfo.avatarUrl = friend.getString("avatar");
-                        friendInfo.gender = friend.getInt("memberSex");
                         friendInfo.nickname = friend.getString("nickName");
 
                         friendInfoList.add(friendInfo);

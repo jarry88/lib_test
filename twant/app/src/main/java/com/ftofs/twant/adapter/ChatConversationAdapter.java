@@ -43,9 +43,9 @@ public class ChatConversationAdapter extends BaseMultiItemQuickAdapter<ChatConve
     protected void convert(BaseViewHolder helper, ChatConversation chatConversation) {
         int itemViewType = helper.getItemViewType();
         if (itemViewType == ChatConversation.ITEM_TYPE_IM) {
-            if (chatConversation.friendInfo.avatarImg != null) {
+            if (!StringUtil.isEmpty(chatConversation.friendInfo.avatarUrl)) {
                 ImageView imgAvatar = helper.getView(R.id.img_avatar);
-                Glide.with(mContext).load(chatConversation.friendInfo.avatarImg).centerCrop().into(imgAvatar);
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(chatConversation.friendInfo.avatarUrl)).centerCrop().into(imgAvatar);
             }
 
             helper.setText(R.id.tv_nickname, chatConversation.friendInfo.nickname);

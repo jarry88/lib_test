@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.yanzhenjie.permission.runtime.Permission;
 
@@ -46,6 +48,9 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
         TextView tvEnvironment = view.findViewById(R.id.tv_environment);
         String environmentInfo = "開發模式:" + Config.DEVELOPER_MODE + "\n" + "Api環境:" + Config.API_BASE_URL;
         tvEnvironment.setText(environmentInfo);
+
+        TextView tvMemberName = view.findViewById(R.id.tv_member_name);
+        tvMemberName.setText("memberName:" + User.getUserInfo(SPField.FIELD_MEMBER_NAME, ""));
 
         Util.setOnClickListener(view, R.id.btn_has_storage_permission, this);
         Util.setOnClickListener(view, R.id.btn_has_camera_permission, this);

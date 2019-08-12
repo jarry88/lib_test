@@ -307,7 +307,14 @@ public class TwantApplication extends Application {
                     String to = message.getTo();
                     SLog.info("msgId[%s], type[%s], from[%s], to[%s], body[%s]", msgId, type, from, to, body.toString());
 
+                    // 獲取拓展字段
+                    String extNickname = message.getStringAttribute("nickName", "");
+                    String extAvatar = message.getStringAttribute("avatar", "");
+                    int extRole = Integer.valueOf(message.getStringAttribute("role", "-1"));
+                    long extSendTime = Long.valueOf(message.getStringAttribute("sendTime", "-1"));
+                    SLog.info("拓展字段, extNickname[%s], extAvatar[%s], extRole[%s], extSendTime[%s]", extNickname, extAvatar, extRole, extSendTime);
 
+                    FriendInfo.upsertFriendInfo(from, extNickname, extAvatar, extRole);
                     ChatMessage chatMessage = new ChatMessage();
 
                     chatMessage.timestamp = message.getMsgTime();
