@@ -44,6 +44,7 @@ import com.ftofs.twant.entity.CommonUsedSpeech;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.entity.ImStoreOrderItem;
+import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
@@ -57,6 +58,7 @@ import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
+import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -76,6 +78,7 @@ import com.hyphenate.chat.EMMessage;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -407,10 +410,39 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 start(MemberInfoFragment.newInstance(yourMemberName));
                 break;
             case R.id.btn_send_image:
-                startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+                PermissionUtil.actionWithPermission(_mActivity, new String[]{
+                        Permission.READ_EXTERNAL_STORAGE}, "訪問相冊需要授予", new CommonCallback() {
+                    @Override
+                    public String onSuccess(@Nullable String data) {
+                        startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+                        return null;
+                    }
+
+                    @Override
+                    public String onFailure(@Nullable String data) {
+                        ToastUtil.error(_mActivity, "您拒絕了授權");
+                        return null;
+                    }
+                });
+
                 break;
             case R.id.btn_capture_image:
-                captureImageFile = CameraUtil.openCamera(_mActivity, this, Constant.CAMERA_ACTION_IMAGE);
+                PermissionUtil.actionWithPermission(_mActivity, new String[] {
+                        Permission.CAMERA, Permission.WRITE_EXTERNAL_STORAGE
+                }, "拍攝照片/視頻需要授予", new CommonCallback() {
+                    @Override
+                    public String onSuccess(@Nullable String data) {
+                        captureImageFile = CameraUtil.openCamera(_mActivity, ChatFragment.this, Constant.CAMERA_ACTION_IMAGE);
+                        return null;
+                    }
+
+                    @Override
+                    public String onFailure(@Nullable String data) {
+                        ToastUtil.error(_mActivity, "您拒絕了授權");
+                        return null;
+                    }
+                });
+
                 break;
             case R.id.btn_send_goods:
                 new XPopup.Builder(_mActivity)
