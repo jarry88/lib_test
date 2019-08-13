@@ -40,14 +40,30 @@ import okhttp3.Call;
  * @author zwm
  */
 public class SharePopup extends BottomPopupView implements View.OnClickListener {
-    Context context;
-    int storeId;
+    /**
+     * 分享店鋪
+     */
+    public static final int SHARE_TYPE_STORE = 1;
+    /**
+     * 分享商品
+     */
+    public static final int SHARE_TYPE_GOODS = 2;
+    /**
+     * 分享貼文
+     */
+    public static final int SHARE_TYPE_POST = 3;
 
-    public SharePopup(@NonNull Context context, int storeId) {
+
+    Context context;
+    int shareType;
+    int id;
+
+    public SharePopup(@NonNull Context context, int shareType, int id) {
         super(context);
 
         this.context = context;
-        this.storeId = storeId;
+        this.shareType = shareType;
+        this.id = id;
     }
 
     @Override
@@ -94,7 +110,14 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         } else if (id == R.id.btn_share_to_timeline) {
             ToastUtil.info(context, "暫未實現");
         } else if (id == R.id.btn_copy_link) {
-            String url = Config.WEB_BASE_URL + "/store/" + storeId;
+            String url = null;
+            if (shareType == SHARE_TYPE_STORE) {
+                url = Config.WEB_BASE_URL + "/store/" + id;
+            } else if (shareType == SHARE_TYPE_POST) {
+                url = Config.WEB_BASE_URL + "/wantpost/detail/" + id;
+            }
+
+
             ClipboardUtils.copyText(context, url);
             new XPopup.Builder(context)
 //                         .dismissOnTouchOutside(false)

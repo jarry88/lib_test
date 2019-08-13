@@ -423,7 +423,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         }
 
                         updateThumbState();
-                        tvReplyCount.setText(String.format("查看%d條回復", commentItem.commentReply));
+                        tvReplyCount.setText(String.format(getString(R.string.text_view_reply_count), commentItem.commentReply));
 
 
                         // 回復列表

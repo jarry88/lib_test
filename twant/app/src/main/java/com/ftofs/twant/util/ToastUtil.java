@@ -90,7 +90,7 @@ public class ToastUtil {
 
         // SLog.info("responseObj[%s]", responseObj.getClass());
 
-        SLog.info("responseObj[%s][%s]", responseObj, responseObj.toString());
+        // SLog.info("responseObj[%s][%s]", responseObj, responseObj.toString());
         try {
             int code = responseObj.getInt("code");
             if (code != ResponseCode.SUCCESS) {

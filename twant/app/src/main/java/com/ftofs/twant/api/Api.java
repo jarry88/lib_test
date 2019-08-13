@@ -700,6 +700,15 @@ public class Api {
      */
     public static final String PATH_POST_DETAIL = "/want_post/info";
 
+    /**
+     * 貼文點贊/取消點贊
+     */
+    public static final String PATH_POST_THUMB = "/want_post/like";
+
+    /**
+     * 貼文關注/取消關注
+     */
+    public static final String PATH_POST_LIKE = "/want_post/favorite";
 
 
     /**

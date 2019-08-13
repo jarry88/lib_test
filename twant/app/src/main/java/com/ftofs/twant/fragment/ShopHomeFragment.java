@@ -536,7 +536,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new SharePopup(_mActivity, storeId))
+                        .asCustom(new SharePopup(_mActivity, SharePopup.SHARE_TYPE_STORE, storeId))
                         .show();
                 break;
             case R.id.btn_view_all_comment:
