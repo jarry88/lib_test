@@ -73,7 +73,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Util.startFragment(PostDetailFragment.newInstance());
+                PostItem postItem = postItemList.get(position);
+                Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
             }
         });
         GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);

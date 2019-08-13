@@ -695,6 +695,12 @@ public class Api {
     public static final String PATH_MY_FRIEND_LIST = "/memberpage/friend/list";
 
 
+    /**
+     * 貼文詳情
+     */
+    public static final String PATH_POST_DETAIL = "/want_post/info";
+
+
 
     /**
      * 發送Http請求
