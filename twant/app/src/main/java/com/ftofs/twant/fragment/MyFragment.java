@@ -146,6 +146,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         rvFollowMeList.setAdapter(adapter);
+
+        loadPostList();
     }
 
     @Override
@@ -263,6 +265,46 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     adapter.setNewData(followMeList);
 
                     userDataLoaded = true;
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 加載貼文列表
+     */
+    private void loadPostList() {
+        String token = User.getToken();
+        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+
+        if (StringUtil.isEmpty(token) || StringUtil.isEmpty(memberName)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "memberName", memberName);
+
+        Api.postUI(Api.PATH_MEMBER_PAGE_POST_LIST, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+
                 } catch (Exception e) {
 
                 }
