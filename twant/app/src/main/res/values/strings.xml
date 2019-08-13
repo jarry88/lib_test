@@ -592,6 +592,7 @@
 
     <string name="text_store_friends_count_template">—· 當前店內%d名遊客 ·—</string>
     <string name="input_order_search_hint">請輸入商品標題或訂單號進行搜索</string>
+    <string name="input_post_comment_hint">想要說點什麼...</string>
 
 
     <!-- 貨幣種類標志 -->

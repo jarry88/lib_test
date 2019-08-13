@@ -181,6 +181,8 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
 
         if (StringUtil.isEmpty(receiverName) || receiverAreaId1 == 0 || receiverAreaId == 0 || StringUtil.isEmpty(receiverAreaInfo) ||
                 StringUtil.isEmpty(receiverAddress) || StringUtil.isEmpty(receiverMobile) || StringUtil.isEmpty(receiverMobileAreaCode)) {
+            SLog.info("receiverName[%s], receiverAreaId1[%d], receiverAreaId[%d], receiverAreaInfo[%s], receiverAddress[%s], receiverMobile[%s], receiverMobileAreaCode[%s]",
+                    receiverName, receiverAreaId1, receiverAreaId, receiverAreaInfo, receiverAddress, receiverMobile, receiverMobileAreaCode);
             ToastUtil.error(_mActivity, "請填寫有效的收貨信息");
             return;
         }
@@ -328,6 +330,9 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
             btnInputSenderInfo.setText(mergeAddress(senderAreaInfo, senderAddress));
         } else if (requestCode == RequestCode.SELECT_RECEIVER_ADDR.ordinal()) {
             AddrItem addrItem = data.getParcelable("addrItem");
+            if (addrItem == null) {
+                return;
+            }
             SLog.info("addrItem[%s]", addrItem.toString());
 
             receiverName = addrItem.realName;
