@@ -8,5 +8,9 @@ public class PostItem {
 
     public String authorAvatar;
     public String authorNickname;
+    public String createTime;
+
+    public int postThumb;  // 點贊數
+    public int postReply; // 回復/評論數
     public int postLike;
 }

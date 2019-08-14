@@ -10,19 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FollowMeAvatarAdapter;
+import com.ftofs.twant.adapter.MemberPostListAdapter;
 import com.ftofs.twant.adapter.OrderListAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.FollowMeListItem;
+import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -52,10 +56,12 @@ import okhttp3.Call;
 public class MyFragment extends BaseFragment implements View.OnClickListener {
     // 【關注我的】數據列表
     List<FollowMeListItem> followMeList = new ArrayList<>();
+    List<PostItem> postItemList = new ArrayList<>();
 
     BaseQuickAdapter adapter;
 
     ImageView imgAvatar;
+    ImageView imgAuthorAvatar;
     TextView tvNickname;
     TextView tvMemberLevel;
     TextView tvCartItemCount;
@@ -69,6 +75,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
     String personalProfile;
     String inputPersonalProfileHint;
+
+    MemberPostListAdapter memberPostListAdapter;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -96,11 +104,15 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
         imgAvatar = view.findViewById(R.id.img_avatar);
         imgAvatar.setOnClickListener(this);
+        imgAuthorAvatar = view.findViewById(R.id.img_author_avatar);
+
         Util.setOnClickListener(view, R.id.btn_setting, this);
 
         Util.setOnClickListener(view, R.id.btn_mall, this);
         Util.setOnClickListener(view, R.id.btn_friends, this);
         Util.setOnClickListener(view, R.id.btn_interactive, this);
+
+        Util.setOnClickListener(view, R.id.btn_publish_post, this);
 
         QuickClickButton btnQuickClick = view.findViewById(R.id.btn_quick_click);
         btnQuickClick.setOnQuickClickListener(new QuickClickButton.OnQuickClickListener() {
@@ -147,7 +159,15 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         });
         rvFollowMeList.setAdapter(adapter);
 
-        loadPostList();
+        LinearLayout llPostList = view.findViewById(R.id.ll_post_list);
+        memberPostListAdapter = new MemberPostListAdapter(_mActivity, llPostList, R.layout.member_post_list_item);
+        memberPostListAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                PostItem postItem = postItemList.get(position);
+                Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
+            }
+        });
     }
 
     @Override
@@ -192,6 +212,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 }
                 Util.startFragment(PersonalProfileFragment.newInstance(profile));
                 break;
+            case R.id.btn_publish_post:
+                Util.startFragment(AddPostFragment.newInstance());
+                break;
             default:
                 break;
         }
@@ -231,7 +254,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
                     String avatarUrl = responseObj.getString("datas.memberVo.avatarUrl");
                     if (!StringUtil.isEmpty(avatarUrl)) {
-                        Glide.with(_mActivity).load(avatarUrl).centerCrop().into(imgAvatar);
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAvatar);
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAuthorAvatar);
                     }
 
                     String nickname = responseObj.getString("datas.memberVo.nickName");
@@ -265,45 +289,31 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     adapter.setNewData(followMeList);
 
                     userDataLoaded = true;
-                } catch (Exception e) {
 
-                }
-            }
-        });
-    }
 
-    /**
-     * 加載貼文列表
-     */
-    private void loadPostList() {
-        String token = User.getToken();
-        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+                    EasyJSONArray wantPostVoList = responseObj.getArray("datas.wantPostVoList");
+                    for (Object object : wantPostVoList) {
+                        EasyJSONObject wantPostVo = (EasyJSONObject) object;
 
-        if (StringUtil.isEmpty(token) || StringUtil.isEmpty(memberName)) {
-            return;
-        }
+                        PostItem postItem = new PostItem();
+                        postItem.postId = wantPostVo.getInt("postId");
+                        postItem.coverImage = wantPostVo.getString("coverImage");
+                        postItem.title = wantPostVo.getString("postCategory") + " | " + wantPostVo.getString("title");
 
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "memberName", memberName);
+                        EasyJSONObject memberVo = wantPostVo.getObject("memberVo");
+                        postItem.authorAvatar = memberVo.getString("avatar");
+                        postItem.authorNickname = memberVo.getString("nickName");
+                        postItem.createTime = wantPostVo.getString("createTime");
+                        postItem.postThumb = wantPostVo.getInt("postLike");
+                        postItem.postLike = wantPostVo.getInt("postFavor");
+                        postItem.postReply = wantPostVo.getInt("postReply");
 
-        Api.postUI(Api.PATH_MEMBER_PAGE_POST_LIST, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(_mActivity, e);
-            }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        return;
+                        postItemList.add(postItem);
                     }
 
+                    SLog.info("postItemList.size[%d]", postItemList.size());
+                    memberPostListAdapter.setData(postItemList);
+
 
                 } catch (Exception e) {
 
@@ -311,6 +321,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             }
         });
     }
+
 
     @Override
     public void onSupportVisible() {
