@@ -710,11 +710,6 @@ public class Api {
      */
     public static final String PATH_POST_LIKE = "/want_post/favorite";
 
-    /**
-     * 個人專頁-文章(貼文列表)
-     */
-    public static final String PATH_MEMBER_PAGE_POST_LIST = "/memberpage/want_post/list";
-
 
     /**
      * 發送Http請求

@@ -34,10 +34,12 @@ public class PostListAdapter extends BaseQuickAdapter<PostItem, BaseViewHolder> 
         int itemCount = getItemCount();
         int position = helper.getAdapterPosition();
         // 最后一項，設置大一點的bottomMargin
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
         if ((itemCount % 2 == 0 && position == itemCount - 2) ||  // 如果偶數項，后面兩項都要設置大一點的bottomMargin
                 position == itemCount - 1) {
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
             layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
+        } else {
+            layoutParams.bottomMargin = 0;
         }
     }
 }

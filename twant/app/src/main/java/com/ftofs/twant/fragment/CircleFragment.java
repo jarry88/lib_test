@@ -18,6 +18,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.PostCategory;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -50,6 +51,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     LinearLayout llTabButtonContainer;
 
     PostListAdapter adapter;
+    SearchPostParams searchPostParams = new SearchPostParams();
     public static CircleFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -90,18 +92,13 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         rvPostList.setAdapter(adapter);
 
 
-        // 添加前兩個固定的Item
+        // 添加前面固定的Item
         PostCategory item = new PostCategory();
         item.categoryId = -1;
         item.categoryName = "全部";
         postCategoryList.add(item);
 
-        item = new PostCategory();
-        item.categoryId = -2;
-        item.categoryName = "關注";
-        postCategoryList.add(item);
-
-        loadPostData(1);
+        loadPostData();
     }
 
     @Override
@@ -119,11 +116,24 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void loadPostData(int page) {
-        EasyJSONObject params = EasyJSONObject.generate(
-                "page", page
-        );
+    private void loadPostData() {
+        EasyJSONObject params = EasyJSONObject.generate();
 
+        try {
+            if (searchPostParams.page > 0) {
+                params.set("page", searchPostParams.page);
+            }
+            if (!StringUtil.isEmpty(searchPostParams.category)) {
+                params.set("category", searchPostParams.category);
+            }
+            if (!StringUtil.isEmpty(searchPostParams.sort)) {
+                params.set("sort", searchPostParams.sort);
+            }
+        } catch (Exception e) {
+
+        }
+
+        SLog.info("params[%s]", params);
         Api.postUI(Api.PATH_SEARCH_POST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -143,11 +153,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     }
 
                     // 如果未初始化，則初始化分類菜單
-                    if (postCategoryList.size() <= 2) {
+                    if (postCategoryList.size() <= 1) {
                         int twBlue = getResources().getColor(R.color.tw_blue, null);
                         EasyJSONArray wantPostCategoryList = responseObj.getArray("datas.wantPostCategoryList");
-
-
 
                         for (Object object : wantPostCategoryList) {
                             PostCategory postCategory = (PostCategory) EasyJSONBase.jsonDecode(PostCategory.class, object.toString());
@@ -160,8 +168,19 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                 boolean isRepeat = onSelect(v);
                                 int id = v.getId();
                                 SLog.info("id[%d]", id);
+                                if (isRepeat) {
+                                    return;
+                                }
 
+                                if (id == -1) { // 點擊全部
+                                    searchPostParams.category = null;
+                                } else {
+                                    searchPostParams.category = getCategoryName(id);
+                                }
 
+                                SLog.info("category[%s]", searchPostParams.category);
+
+                                loadPostData();
                             }
                         };
                         for (PostCategory postCategory : postCategoryList) {
@@ -175,11 +194,11 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                             layoutParams.rightMargin = Util.dip2px(_mActivity, 10);
                             llTabButtonContainer.addView(button, layoutParams);
 
-
                             tabManager.add(button);
                         }
                     }
 
+                    postItemList.clear();
                     EasyJSONArray wantPostList = responseObj.getArray("datas.wantPostList");
                     for (Object object : wantPostList) {
                         EasyJSONObject post = (EasyJSONObject) object;
@@ -196,8 +215,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
                         postItemList.add(item);
                     }
-
-
+                    adapter.setNewData(postItemList);
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                 }
@@ -208,5 +226,16 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
 
+    }
+
+
+    private String getCategoryName(int id) {
+        for (PostCategory postCategory : postCategoryList) {
+            if (postCategory.categoryId == id) {
+                return postCategory.categoryName;
+            }
+        }
+
+        return null;
     }
 }
