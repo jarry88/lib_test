@@ -15,14 +15,20 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.PostListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.PostCategory;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
+import com.ftofs.twant.widget.PostFilterDrawerPopupView;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.enums.PopupPosition;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +43,7 @@ import okhttp3.Call;
  * 想要圈
  * @author zwm
  */
-public class CircleFragment extends BaseFragment implements View.OnClickListener {
+public class CircleFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     List<PostCategory> postCategoryList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
 
@@ -67,6 +73,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
 
         Util.setOnClickListener(view, R.id.btn_add_post, this);
+        Util.setOnClickListener(view, R.id.btn_post_filter, this);
 
         RecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
         adapter = new PostListAdapter(R.layout.post_list_item, postItemList);
@@ -103,6 +110,12 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         if (id == R.id.btn_add_post) {
             Util.startFragment(AddPostFragment.newInstance());
+        } else if (id == R.id.btn_post_filter) {
+            new XPopup.Builder(_mActivity)
+                    .popupPosition(PopupPosition.Right)//右边
+                    .hasStatusBarShadow(true) //启用状态栏阴影
+                    .asCustom(new PostFilterDrawerPopupView(_mActivity, this))
+                    .show();
         }
     }
 
@@ -190,5 +203,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 }
             }
         });
+    }
+
+    @Override
+    public void onSelected(PopupType type, int id, Object extra) {
+
     }
 }

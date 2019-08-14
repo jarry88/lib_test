@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_popup_content_view"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:layout_marginLeft="15dp"
+        android:text="@string/text_condition"
+        android:textColor="@color/tw_dark_grey"
+        android:textSize="13sp"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="123dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:background="@drawable/post_filter_button_bg_blue"
+                android:text="@string/text_viewed_most"
+                android:textColor="@color/tw_blue"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:layout_width="123dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:background="@drawable/post_filter_button_bg_grey"
+                android:text="@string/text_commented_post"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="123dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:background="@drawable/post_filter_button_bg_grey"
+                android:text="@string/text_focused_most"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:layout_width="123dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:background="@drawable/post_filter_button_bg_grey"
+                android:text="@string/text_commented_post"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="@string/text_date"
+        android:textColor="@color/tw_dark_grey"
+        android:textSize="13sp"
+        />
+
+
+    <TextView
+        android:layout_width="123dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:gravity="center"
+        android:background="@drawable/post_filter_button_bg_grey"
+        android:text="@string/text_deadline"
+        android:textColor="@color/tw_black"
+        android:textSize="14sp"
+        />
+</LinearLayout>
