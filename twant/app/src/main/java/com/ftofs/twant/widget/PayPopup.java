@@ -17,6 +17,8 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Guid;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -229,13 +231,17 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
         } else if (id == R.id.btn_weixin_pay) {
             PayReq req = new PayReq();
             req.appId           = context.getString(R.string.weixin_app_id);//你的微信appid
-            req.partnerId       = "1900000109";//商户号
-            req.prepayId        = "WX1217752501201407033233368018";//预支付交易会话ID
-            req.nonceStr        = "5K8264ILTKCH16CQ2502SI8ZNMTM67VS";//随机字符串
-            req.timeStamp       = "1412000000";//时间戳
+            req.partnerId       = context.getString(R.string.weixin_partner_id);//商户号
+            req.prepayId        = "wx14132045169523779c29428d1802770600";//预支付交易会话ID
+            // req.nonceStr        = Guid.getSpUuid();//随机字符串
+            req.nonceStr = "mU9eYSzBH43Jz8dY";
+            // req.timeStamp       = String.valueOf(new Jarbon().getTimestamp());//时间戳
+            req.timeStamp = "1565693910";
             req.packageValue    = "Sign=WXPay"; // 扩展字段,这里固定填写Sign=WXPay
-            req.sign            = "C380BEC2BFD727A4B6845133519F3AD6"; //签名
+            req.sign            = "7792752BD09F72975ADD87CAAD0CC118E5DDFB43774F80702BA5AB0ADD1C5235"; //签名
             //              req.extData         = "app data"; // optional
+
+            SLog.info("nonceStr[%s], timeStamp[%s]", req.nonceStr, req.timeStamp);
             // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
             TwantApplication.wxApi.sendReq(req);
         }
