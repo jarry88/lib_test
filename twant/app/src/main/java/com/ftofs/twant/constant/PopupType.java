@@ -69,4 +69,9 @@ public enum PopupType {
      * IM聊天常用語
      */
     IM_CHAT_COMMON_USED_SPEECH,
+
+    /**
+     * 篩選貼文
+     */
+    POST_FILTER,
 }

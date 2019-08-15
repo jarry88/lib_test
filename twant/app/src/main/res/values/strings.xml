@@ -545,9 +545,9 @@
     <string name="text_condition">條件</string>
     <string name="text_date">日期</string>
     <string name="text_viewed_most">查看最多</string>
-    <string name="text_focused_most">最愛關注</string>
+    <string name="text_focused_most">最受關注</string>
     <string name="text_thumbed_most">點贊最多</string>
-    <string name="text_commented_post">評論最多</string>
+    <string name="text_commented_most">評論最多</string>
 
     <string name="text_member">會員</string>
     <string name="text_my_like">我的點贊</string>

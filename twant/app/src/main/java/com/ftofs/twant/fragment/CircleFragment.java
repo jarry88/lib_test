@@ -23,6 +23,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
 import com.ftofs.twant.widget.PostFilterDrawerPopupView;
@@ -52,6 +53,13 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     PostListAdapter adapter;
     SearchPostParams searchPostParams = new SearchPostParams();
+
+    /**
+     * 選中的過濾索引
+     * -1表示未選中，從0開始
+     */
+    int filterSelectedIndex = -1;
+
     public static CircleFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -91,7 +99,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         rvPostList.setLayoutManager(layoutManagerCommodity);
         rvPostList.setAdapter(adapter);
 
-
         // 添加前面固定的Item
         PostCategory item = new PostCategory();
         item.categoryId = -1;
@@ -111,7 +118,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             new XPopup.Builder(_mActivity)
                     .popupPosition(PopupPosition.Right)//右边
                     .hasStatusBarShadow(true) //启用状态栏阴影
-                    .asCustom(new PostFilterDrawerPopupView(_mActivity, this))
+                    .asCustom(new PostFilterDrawerPopupView(_mActivity, this, filterSelectedIndex))
                     .show();
         }
     }
@@ -129,6 +136,11 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             if (!StringUtil.isEmpty(searchPostParams.sort)) {
                 params.set("sort", searchPostParams.sort);
             }
+
+            String token = User.getToken();
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
         } catch (Exception e) {
 
         }
@@ -142,6 +154,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
                 try {
                     if (StringUtil.isEmpty(responseStr)) {
                         return;
@@ -225,7 +238,12 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
-
+        SLog.info("type[%s], id[%d], extra[%s]", type, id, extra);
+        if (type == PopupType.POST_FILTER) {
+            filterSelectedIndex = id;
+            searchPostParams.sort = (String) extra;
+            loadPostData();
+        }
     }
 
 

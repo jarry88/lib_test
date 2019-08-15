@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/btn_viewed_most"
                 android:layout_width="123dp"
                 android:layout_height="40dp"
                 android:gravity="center"
@@ -37,12 +38,13 @@
                 />
 
             <TextView
+                android:id="@+id/btn_thumbed_most"
                 android:layout_width="123dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:background="@drawable/post_filter_button_bg_grey"
-                android:text="@string/text_commented_post"
+                android:text="@string/text_thumbed_most"
                 android:textColor="@color/tw_black"
                 android:textSize="14sp"
                 />
@@ -53,6 +55,7 @@
             android:layout_alignParentRight="true"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/btn_focused_most"
                 android:layout_width="123dp"
                 android:layout_height="40dp"
                 android:gravity="center"
@@ -63,12 +66,13 @@
                 />
 
             <TextView
+                android:id="@+id/btn_commented_most"
                 android:layout_width="123dp"
                 android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:background="@drawable/post_filter_button_bg_grey"
-                android:text="@string/text_commented_post"
+                android:text="@string/text_commented_most"
                 android:textColor="@color/tw_black"
                 android:textSize="14sp"
                 />
@@ -87,6 +91,7 @@
 
 
     <TextView
+        android:id="@+id/btn_deadline"
         android:layout_width="123dp"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
