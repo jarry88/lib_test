@@ -710,6 +710,11 @@ public class Api {
      */
     public static final String PATH_POST_LIKE = "/want_post/favorite";
 
+    /**
+     * 猜你喜欢的商品
+     */
+    public static final String PATH_GUESS_YOUR_LIKE = "/goods/guess/like";
+
 
     /**
      * 發送Http請求

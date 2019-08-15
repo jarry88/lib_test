@@ -278,6 +278,13 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(imageUrl)).centerCrop().into(imageView);
 
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                start(ImageViewerFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                            }
+                        });
+
                         sglImageContainer.addView(imageView, layoutParams);
                     }
 

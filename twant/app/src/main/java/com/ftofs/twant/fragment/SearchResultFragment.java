@@ -176,7 +176,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         rvSearchResultList = view.findViewById(R.id.rv_search_result_list);
 
-        if (searchType == SearchType.GOODS) {
+        if (searchType == SearchType.GOODS) { // 商品搜索
             GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, GridLayoutManager.VERTICAL, false);
             rvSearchResultList.setLayoutManager(layoutManager);
             mGoodsAdapter = new GoodsSearchResultAdapter(_mActivity, R.layout.goods_search_item, goodsItemList);
@@ -207,7 +207,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     }
                 }
             });
-        } else if (searchType == SearchType.STORE) {
+        } else if (searchType == SearchType.STORE) { // 店鋪搜索
             LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity);
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             rvSearchResultList.setLayoutManager(layoutManager);

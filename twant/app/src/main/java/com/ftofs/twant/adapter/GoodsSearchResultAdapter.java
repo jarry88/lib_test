@@ -32,14 +32,14 @@ public class GoodsSearchResultAdapter extends BaseQuickAdapter<GoodsSearchItem, 
     @Override
     protected void convert(BaseViewHolder helper, GoodsSearchItem item) {
         ImageView goodsImage = helper.getView(R.id.goods_image);
-        Glide.with(context).load(item.imageSrc).centerCrop().into(goodsImage);
+        Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
 
         ImageView imgStoreAvatar = helper.getView(R.id.img_store_avatar);
-        Glide.with(context).load(item.storeAvatarUrl).centerCrop().into(imgStoreAvatar);
+        Glide.with(context).load(StringUtil.normalizeImageUrl(item.storeAvatarUrl)).centerCrop().into(imgStoreAvatar);
 
         if (!StringUtil.isEmpty(item.nationalFlag)) {
             ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag);
-            Glide.with(context).load(item.nationalFlag).centerCrop().into(imgGoodsNationalFlag);
+            Glide.with(context).load(StringUtil.normalizeImageUrl(item.nationalFlag)).centerCrop().into(imgGoodsNationalFlag);
             imgGoodsNationalFlag.setVisibility(View.VISIBLE);
         }
 
