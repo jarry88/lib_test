@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="tw_green">#FF07C504</color>
+    <color name="tw_orange">#FFF58500</color>
     <color name="tw_red">#F50057</color>
     <color name="tw_blue">#00B0FF</color>
     <color name="tw_black">#2A292A</color>

@@ -480,6 +480,8 @@
     <string name="express_query_fragment_title">快遞信息查詢</string>
     <string name="input_express_no_hint">請輸入快遞單號</string>
 
+    <string name="text_my_article">我的文章</string>
+
     
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>

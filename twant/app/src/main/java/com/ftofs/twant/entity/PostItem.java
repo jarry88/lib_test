@@ -13,4 +13,6 @@ public class PostItem {
     public int postThumb;  // 點贊數
     public int postReply; // 回復/評論數
     public int postLike;
+
+    public String deadline;
 }

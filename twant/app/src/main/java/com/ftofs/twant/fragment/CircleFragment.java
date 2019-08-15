@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,9 +95,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
             }
         });
-        GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);
-        layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
-        rvPostList.setLayoutManager(layoutManagerCommodity);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        rvPostList.setLayoutManager(layoutManager);
         rvPostList.setAdapter(adapter);
 
         // 添加前面固定的Item
@@ -221,15 +222,23 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         item.coverImage = post.getString("coverImage");
                         item.postCategory = post.getString("postCategory");
                         item.title = post.getString("title");
+                        item.postReply = post.getInt("postReply");
+                        item.postLike = post.getInt("postLike");
+                        item.deadline = post.getString("expiresDate");
 
-                        item.authorAvatar = post.getString("memberVo.avatar");
-                        item.authorNickname = post.getString("memberVo.nickName");
+                        EasyJSONObject memberVo = post.getObject("memberVo");
+                        // SLog.info("memberVo[%s]", memberVo);
+                        if (memberVo != null) {
+                            item.authorAvatar = memberVo.getString("avatar");
+                            item.authorNickname = memberVo.getString("nickName");
+                        }
                         item.postLike = post.getInt("postLike");
 
                         postItemList.add(item);
                     }
                     adapter.setNewData(postItemList);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     SLog.info("Error!%s", e.getMessage());
                 }
             }
