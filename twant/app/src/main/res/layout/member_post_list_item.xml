@@ -50,7 +50,7 @@
                 android:layout_width="27dp"
                 android:layout_height="27dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/avatar_female"
+                android:src="@drawable/icon_default_avatar"
                 />
             
             <TextView

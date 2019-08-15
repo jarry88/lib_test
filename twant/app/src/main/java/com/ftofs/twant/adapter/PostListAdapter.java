@@ -44,7 +44,7 @@ public class PostListAdapter extends BaseQuickAdapter<PostItem, BaseViewHolder> 
             int diffInDays = now.diffInDays(jarbonDeadline);
             if (diffInDays < 3) {
                 progressBar.setColor(TwProgressBar.COLOR_RED);
-            } else if (3 <= diffInDays && diffInDays <= 7){
+            } else if (3 <= diffInDays && diffInDays <= 7) {
                 progressBar.setColor(TwProgressBar.COLOR_ORANGE);
             } else {
                 progressBar.setColor(TwProgressBar.COLOR_GREEN);

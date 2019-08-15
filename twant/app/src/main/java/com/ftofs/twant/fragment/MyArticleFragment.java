@@ -3,12 +3,17 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.PostListAdapter;
+import com.ftofs.twant.adapter.RvMemberPostListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SPField;
@@ -33,7 +38,7 @@ import okhttp3.Call;
  */
 public class MyArticleFragment extends BaseFragment implements View.OnClickListener {
     List<PostItem> postItemList = new ArrayList<>();
-    PostListAdapter adapter;
+    RvMemberPostListAdapter adapter;
 
     public static MyArticleFragment newInstance() {
         Bundle args = new Bundle();
@@ -57,7 +62,18 @@ public class MyArticleFragment extends BaseFragment implements View.OnClickListe
 
         Util.setOnClickListener(view, R.id.btn_back, this);
 
-        adapter = new PostListAdapter(R.layout.post_list_item, postItemList);
+        RecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
+        adapter = new RvMemberPostListAdapter(R.layout.member_post_list_item, postItemList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                PostItem postItem = postItemList.get(position);
+                Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
+            }
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        rvPostList.setLayoutManager(layoutManager);
+        rvPostList.setAdapter(adapter);
 
         loadData();
     }
@@ -107,13 +123,15 @@ public class MyArticleFragment extends BaseFragment implements View.OnClickListe
                             item.authorAvatar = memberVo.getString("avatar");
                             item.authorNickname = memberVo.getString("nickName");
                         }
-                        item.postLike = post.getInt("postLike");
+                        item.postThumb = post.getInt("postLike");
+                        item.postReply = post.getInt("postReply");
+                        item.postLike = post.getInt("postFavor");
 
                         postItemList.add(item);
                     }
                     adapter.setNewData(postItemList);
                 } catch (Exception e) {
-
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });

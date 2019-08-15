@@ -96,7 +96,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             }
         });
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
-        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
         rvPostList.setLayoutManager(layoutManager);
         rvPostList.setAdapter(adapter);
 
