@@ -125,7 +125,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                 pop();
                 break;
             case R.id.btn_set_avatar:
-                openAlbum();
+                openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
                 break;
             case R.id.btn_modify_nickname:
                 Util.startFragment(ModifyNicknameFragment.newInstance(nickname));
@@ -272,10 +272,6 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             String location = (String) extra;
             tvMemberLocation.setText(location);
         }
-    }
-
-    private void openAlbum() {
-        startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
     }
 
     @Override

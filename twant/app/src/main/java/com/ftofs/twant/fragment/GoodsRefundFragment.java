@@ -226,7 +226,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                             PopupType.DEFAULT, reasonItemList, reasonIndex != -1 ? reasonIndex : 0, this))
                     .show();
         } else if (id == R.id.btn_add_image) {
-            startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+            openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
         } else if (id == R.id.btn_commit) {
             commitRefundRequest();
         }

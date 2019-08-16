@@ -177,12 +177,12 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
         } else if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_add_post_content_image) {
-            startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+            openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
         } else if (id == R.id.btn_remove_cover_image) {
             rlPostCoverImageContainer.setVisibility(View.GONE);
             btnAddPostCoverImage.setVisibility(View.VISIBLE);
         } else if (id == R.id.btn_add_post_cover_image) {
-            startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.PICK_POST_COVER.ordinal()); // 打开相册
+            openSystemAlbumIntent(RequestCode.PICK_POST_COVER.ordinal()); // 打开相册
         } else if (id == R.id.btn_input_title) {
             startForResult(PostTitleEditorFragment.newInstance(PostTitleEditorFragment.FOR_TITLE, title), RequestCode.EDIT_TITLE.ordinal());
         } else if (id == R.id.btn_input_keyword) {

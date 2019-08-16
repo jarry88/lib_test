@@ -410,21 +410,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 start(MemberInfoFragment.newInstance(yourMemberName));
                 break;
             case R.id.btn_send_image:
-                PermissionUtil.actionWithPermission(_mActivity, new String[]{
-                        Permission.READ_EXTERNAL_STORAGE}, "訪問相冊需要授予", new CommonCallback() {
-                    @Override
-                    public String onSuccess(@Nullable String data) {
-                        startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
-                        return null;
-                    }
-
-                    @Override
-                    public String onFailure(@Nullable String data) {
-                        ToastUtil.error(_mActivity, "您拒絕了授權");
-                        return null;
-                    }
-                });
-
+                openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal());
                 break;
             case R.id.btn_capture_image:
                 PermissionUtil.actionWithPermission(_mActivity, new String[] {

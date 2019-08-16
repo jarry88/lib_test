@@ -122,7 +122,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_add_image) {
-            startActivityForResult(IntentUtil.makeOpenSystemAlbumIntent(), RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+            openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
         } else if (id == R.id.btn_remove_image) {
             commentImageContainer.setVisibility(View.GONE);
             btnAddImage.setVisibility(View.VISIBLE);
