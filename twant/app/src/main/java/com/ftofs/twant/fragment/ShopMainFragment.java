@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.BlackDropdownMenuStore;
+import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.lxj.xpopup.XPopup;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -149,7 +149,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
                     .hasShadowBg(false) // 去掉半透明背景
                     .atView(v)
-                    .asCustom(new BlackDropdownMenuStore(_mActivity, this))
+                    .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_STORE))
                     .show();
         } else { // 點擊底部導航欄
             int len = bottomBarButtonIds.length;

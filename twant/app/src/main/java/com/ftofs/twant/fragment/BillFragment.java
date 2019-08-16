@@ -3,17 +3,14 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.AreaPopupAdapter;
 import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -28,7 +25,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.BlackDropdownMenuOrder;
+import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.TwTabButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -45,7 +42,6 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 訂單頁面
@@ -173,7 +169,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
                     .hasShadowBg(false) // 去掉半透明背景
                     .atView(v)
-                    .asCustom(new BlackDropdownMenuOrder(_mActivity, this))
+                    .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_ORDER))
                     .show();
         }
     }
