@@ -26,7 +26,7 @@ import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.BlackDropdownMenuMessage;
+import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.chat.EMClient;
@@ -251,7 +251,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
                     .hasShadowBg(false) // 去掉半透明背景
                     .atView(v)
-                    .asCustom(new BlackDropdownMenuMessage(_mActivity, this))
+                    .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_MESSAGE))
                     .show();
         }
     }

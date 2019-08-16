@@ -28,7 +28,6 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.BlackDropdownMenuMessage;
 import com.ftofs.twant.widget.BlackDropdownMenuOrder;
 import com.ftofs.twant.widget.TwTabButton;
 import com.lxj.xpopup.XPopup;

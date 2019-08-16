@@ -21,18 +21,19 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <ImageView
+                android:id="@+id/icon_item_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_contact_white"
                 />
 
             <TextView
+                android:id="@+id/tv_item_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="9dp"
                 android:textColor="#fff"
                 android:textSize="16sp"
-                android:text="@string/text_contact"
+                android:text=""
                 />
         </LinearLayout>
     </LinearLayout>
@@ -51,18 +52,19 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <ImageView
+                android:id="@+id/icon_item_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_scan_qr_code"
                 />
 
             <TextView
+                android:id="@+id/tv_item_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="9dp"
                 android:textColor="#fff"
                 android:textSize="16sp"
-                android:text="@string/text_scan_qr_code"
+                android:text=""
                 />
         </LinearLayout>
     </LinearLayout>
@@ -81,18 +83,19 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <ImageView
+                android:id="@+id/icon_item_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_add_friend"
                 />
 
             <TextView
+                android:id="@+id/tv_item_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="9dp"
                 android:textColor="#fff"
                 android:textSize="16sp"
-                android:text="@string/text_add_friend"
+                android:text=""
                 />
         </LinearLayout>
     </LinearLayout>
@@ -111,20 +114,20 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <ImageView
+                android:id="@+id/icon_item_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_setting_white"
                 />
 
             <TextView
+                android:id="@+id/tv_item_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="9dp"
                 android:textColor="#fff"
                 android:textSize="16sp"
-                android:text="@string/text_setting"
+                android:text=""
                 />
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>
