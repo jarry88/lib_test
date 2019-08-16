@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,11 +25,13 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.entity.StoreMapInfo;
+import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -39,6 +42,7 @@ import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
+import com.ftofs.twant.widget.StoreWantedPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -118,6 +122,16 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     TextView tvVisitorCount;
 
+    List<WantedPostItem> wantedPostItemList = new ArrayList<>();
+    LinearLayout llStoreWantedContainer;
+    View vwSeparatorStoreWanted;
+
+    RelativeLayout rl2ndStoreWanted;
+    TextView tvJobTitle1;
+    TextView tvJobSalary1;
+    TextView tvJobTitle2;
+    TextView tvJobSalary2;
+
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -176,8 +190,18 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         tvVerticalScroll = view.findViewById(R.id.tv_vertical_scroll);
 
+        llStoreWantedContainer = view.findViewById(R.id.ll_store_wanted_container);
+        vwSeparatorStoreWanted = view.findViewById(R.id.vw_separator_store_wanted);
+        rl2ndStoreWanted = view.findViewById(R.id.rl_2nd_store_wanted);
+
+        tvJobTitle1 = view.findViewById(R.id.tv_job_title1);
+        tvJobSalary1 = view.findViewById(R.id.tv_job_salary1);
+        tvJobTitle2 = view.findViewById(R.id.tv_job_title2);
+        tvJobSalary2 = view.findViewById(R.id.tv_job_salary2);
+
         Util.setOnClickListener(view, R.id.btn_shop_map, this);
         Util.setOnClickListener(view, R.id.btn_view_all_comment, this);
+        Util.setOnClickListener(view, R.id.btn_view_all_wanted, this);
 
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
@@ -367,6 +391,47 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             llFirstCommentContainer.setVisibility(View.GONE);
                         }
 
+                        // 店鋪招聘
+                        EasyJSONArray hrPostList = responseObj.getArray("datas.hrPostList");
+                        if (hrPostList != null && hrPostList.length() > 0) {
+                            SLog.info("hrPostList.length[%d]", hrPostList.length());
+                            int index = 0;
+                            for (Object object : hrPostList) {
+                                EasyJSONObject hrPost = (EasyJSONObject) object;
+
+                                WantedPostItem item = new WantedPostItem();
+                                item.postId = hrPost.getInt("postId");
+                                item.postTitle = hrPost.getString("postTitle");
+                                item.postType = hrPost.getString("postType");
+                                item.postArea = hrPost.getString("postArea");
+                                item.salaryType = hrPost.getString("salaryType");
+                                item.salaryRange = hrPost.getString("salaryRange");
+                                item.currency = hrPost.getString("currency");
+                                item.postDescription = hrPost.getString("postDescription");
+                                item.mailbox = hrPost.getString("mailbox");
+                                item.isFavor = hrPost.getInt("isFavor");
+
+                                // 首頁最多顯示2條招聘信息
+                                if (index == 0) {
+                                    tvJobTitle1.setText(item.postTitle);
+                                    tvJobSalary1.setText(item.salaryRange + "/" + item.salaryType);
+                                } else if (index == 1) {
+                                    tvJobTitle2.setText(item.postTitle);
+                                    tvJobSalary2.setText(item.salaryRange + "/" + item.salaryType);
+                                    rl2ndStoreWanted.setVisibility(View.VISIBLE);
+                                }
+
+                                wantedPostItemList.add(item);
+                                index++;
+                            }
+                        } else {
+                            // 如果沒有招聘數據，則隱藏【店鋪招聘】欄
+                            SLog.info("如果沒有招聘數據，則隱藏【店鋪招聘】欄");
+                            llStoreWantedContainer.setVisibility(View.GONE);
+                            vwSeparatorStoreWanted.setVisibility(View.GONE);
+                        }
+
+
                         // 最新商品
                         EasyJSONArray newGoodsVoList = responseObj.getArray("datas.newGoodsVoList");
                         int index = 0;
@@ -541,6 +606,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_view_all_comment:
                 Util.startFragment(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
+                break;
+            case R.id.btn_view_all_wanted:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new StoreWantedPopup(_mActivity, wantedPostItemList))
+                        .show();
                 break;
             default:
                 break;

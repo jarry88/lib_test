@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="575dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/list_popup_bg"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="@drawable/bottom_separator_box">
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginLeft="12dp"
+            app:icon_src="@drawable/icon_back"
+            android:visibility="gone"
+            />
+        
+        <TextView
+            android:id="@+id/tv_popup_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:textColor="@color/tw_black"
+            android:text="@string/text_wanted_job"
+            />
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_dismiss"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="19dp"
+            android:layout_marginRight="12dp"
+            android:layout_alignParentRight="true"
+            app:icon_src="@drawable/btn_close"
+            />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/sv_job_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_job_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="全職 | 行政專員"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:id="@+id/tv_salary_range"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="6000-8000"
+                    android:textColor="@color/tw_red"
+                    android:textSize="16sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_salary_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/tv_salary_range"
+                    android:layout_centerVertical="true"
+                    android:text="澳門元/月"
+                    android:textColor="@color/tw_red"
+                    android:textSize="11sp"
+                    />
+
+                <TextView
+                    android:id="@+id/btn_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:background="@drawable/mini_red_button"
+                    android:text="@string/text_follow"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+                <TextView
+                    android:id="@+id/tv_post_area"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="澳門 氹仔"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_dark_grey"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="@string/text_mail_box"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_dark_grey"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="："
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_dark_grey"
+                    />
+                <TextView
+                    android:id="@+id/tv_mail_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hr@ftofs.net"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_dark_grey"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:padding="15dp"
+                android:background="#F6F6F6"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="15dp"
+                        android:background="@color/tw_black"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/text_job_desc"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_job_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_wanted_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
+

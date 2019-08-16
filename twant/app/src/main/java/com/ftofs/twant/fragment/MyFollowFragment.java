@@ -329,9 +329,71 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadMyFollowMember() {
-        memberDataLoaded = true;
-        if (currTabIndex == TAB_INDEX_MEMBER) {
-            rvMyFollowList.setAdapter(myFollowMemberAdapter);
+        try {
+            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+            if (StringUtil.isEmpty(memberName)) {
+                return;
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate("memberName", memberName);
+            String token = User.getToken();
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
+
+
+            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
+                    .asLoading(getString(R.string.text_loading))
+                    .show();
+
+            Api.postUI(Api.PATH_MY_FOLLOW_GOODS, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                    loadingPopup.dismiss();
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    loadingPopup.dismiss();
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
+                        for (Object object : goodsList) {
+                            EasyJSONObject goods = (EasyJSONObject) object;
+                            EasyJSONObject goodsCommon = goods.getObject("goodsCommon");
+
+                            MyFollowGoodsItem myFollowGoodsItem = new MyFollowGoodsItem();
+                            myFollowGoodsItem.commonId = goods.getInt("commonId");
+                            myFollowGoodsItem.goodsName = goods.getString("goodsName");
+                            myFollowGoodsItem.storeId = goods.getInt("storeVo.storeId");
+                            myFollowGoodsItem.storeName = goods.getString("storeVo.storeName");
+                            myFollowGoodsItem.imageSrc = goodsCommon.getString("imageSrc");
+                            myFollowGoodsItem.jingle = goodsCommon.getString("jingle");
+                            myFollowGoodsItem.goodsFavorite = goodsCommon.getInt("goodsFavorite");
+                            myFollowGoodsItem.price = Util.getGoodsPrice(goodsCommon);
+
+                            myFollowGoodsItemList.add(myFollowGoodsItem);
+                        }
+                        SLog.info("ITEM_COUNT[%d]", myFollowGoodsItemList.size());
+                        memberDataLoaded = true;
+                        if (currTabIndex == TAB_INDEX_MEMBER) {
+                            rvMyFollowList.setAdapter(myFollowMemberAdapter);
+                        }
+                        myFollowMemberAdapter.setNewData(myFollowMemberItemList);
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
+        } catch (Exception e) {
+
         }
     }
 }

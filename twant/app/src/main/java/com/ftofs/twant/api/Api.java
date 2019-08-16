@@ -720,6 +720,11 @@ public class Api {
      */
     public static final String PATH_POST_LIST = "/memberpage/want_post/list";
 
+    /**
+     * 個人專頁-我的關注-會員
+     */
+    public static final String PATH_MY_FOLLOW_MEMBER = "/memberpage/favor/member";
+
 
     /**
      * 發送Http請求
@@ -1329,4 +1334,6 @@ public class Api {
             }
         });
     }
+
+
 }

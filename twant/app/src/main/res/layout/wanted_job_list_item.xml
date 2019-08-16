@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="71dp"
+    android:layout_marginLeft="@dimen/toolbar_margin_left"
+    android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:background="@drawable/border_type_d">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            />
+        <TextView
+            android:id="@+id/tv_salary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="@color/tw_red"
+            />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="3dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/expand_button_big"
+        />
+</RelativeLayout>

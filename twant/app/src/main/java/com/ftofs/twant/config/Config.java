@@ -26,11 +26,11 @@ public class Config {
             : "https://img.twant.com";
 
     public static final String API_BASE_URL = DEVELOPER_MODE ?
-            "http://192.168.5.29/api"
+            "http://192.168.5.28/api"
             : "https://www.twant.com/api";
 
     public static final String WEB_BASE_URL = DEVELOPER_MODE ?
-            "http://192.168.5.29/web"
+            "http://192.168.5.28/web"
             : "http://www.twant.com/web";
 
 
