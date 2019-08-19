@@ -26,6 +26,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.entity.InStorePersonItem;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreGoodsItem;
@@ -38,6 +39,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AmapPopup;
+import com.ftofs.twant.widget.InStorePersonPopup;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.SharePopup;
@@ -132,6 +134,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     TextView tvJobTitle2;
     TextView tvJobSalary2;
 
+    List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
+
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -203,6 +207,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         Util.setOnClickListener(view, R.id.btn_shop_map, this);
         Util.setOnClickListener(view, R.id.btn_view_all_comment, this);
         Util.setOnClickListener(view, R.id.btn_view_all_wanted, this);
+        Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
 
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
@@ -278,7 +283,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         merchantIntroduction = storeInfo.getString("storeIntroduce");
 
                         // 開店天數
-                        tvShopOpenDay.setText(getString(R.string.text_shop_open_day_prefix) + storeInfo.getString("shopDay"));
+                        tvShopOpenDay.setText(getString(R.string.text_store_open_day_prefix) + storeInfo.getString("shopDay"));
 
                         // 店鋪形象圖
                         String shopFigureUrl = Config.OSS_BASE_URL + "/" + storeInfo.getString("storeFigureImage");
@@ -293,18 +298,39 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         updateThumbView();
                         updateFavoriteView();
 
+
+
                         // 店友
-                        EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.friends");
+                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
+                        EasyJSONArray members = responseObj.getArray("datas.memberAccessStatVo.members");
+                        for (Object object : members) {
+                            EasyJSONObject friend = (EasyJSONObject) object;
+
+                            String memberName = friend.getString("memberName");
+                            String avatar = friend.getString("avatar");
+                            String nickname = friend.getString("nickName");
+
+                            StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
+                            storeFriendsItemList.add(storeFriendsItem);
+
+                            InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                            inStorePersonItemList.add(inStorePersonItem);
+                        }
+                        adapter.setNewData(storeFriendsItemList);
+
+                        // 好友
+                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
+                        EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.members");
                         for (Object object : friends) {
                             EasyJSONObject friend = (EasyJSONObject) object;
 
                             String memberName = friend.getString("memberName");
                             String avatar = friend.getString("avatar");
-                            StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
+                            String nickname = friend.getString("nickName");
 
-                            storeFriendsItemList.add(storeFriendsItem);
+                            InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                            inStorePersonItemList.add(inStorePersonItem);
                         }
-                        adapter.setNewData(storeFriendsItemList);
 
                         // 顯示店友數量
                         int storeFriendsCount = responseObj.getInt("datas.visitorNum");
@@ -617,6 +643,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.ll_shop_announcement_container:
                 showAnnouncementPopup();
+                break;
+            case R.id.btn_show_all_store_friends:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new InStorePersonPopup(_mActivity, inStorePersonItemList))
+                        .show();
                 break;
             default:
                 break;

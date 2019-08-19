@@ -703,7 +703,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/text_shop_friend"
+                    android:text="@string/text_store_friend"
                     android:textSize="16sp"
                     android:textColor="@color/tw_dark_grey"
                     />

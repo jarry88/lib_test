@@ -272,8 +272,8 @@
     <string name="text_history_search">歷史搜索</string>
     <string name="text_hot_search">熱門搜索</string>
 
-    <string name="text_shop_open_day_prefix">開店</string>
-    <string name="text_shop_friend">店友</string>
+    <string name="text_store_open_day_prefix">開店</string>
+    <string name="text_store_friend">店友</string>
     <string name="text_share">分享</string>
     <string name="text_map">地圖</string>
     <string name="text_shop_comment">店鋪評論</string>
@@ -613,6 +613,7 @@
     <string name="text_wanted_job">招聘崗位</string>
     <string name="text_job_desc">崗位描述</string>
     <string name="text_mail_box">郵箱</string>
+    <string name="text_in_store_person_list">進店人員列表</string>
 
 
     <!-- 貨幣種類標志 -->
