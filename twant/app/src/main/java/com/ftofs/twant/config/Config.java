@@ -17,21 +17,24 @@ public class Config {
     public static final int LOGIN_VALID_TIME = 10 * 24 * 3600;
 
     /**
-     * 開發模式
+     * 是否為開發模式
      */
     public static final boolean DEVELOPER_MODE = true;
+    public static final boolean USE_28 = false;   // 開發模式下: true -- 使用28服務器  false -- 使用29服務器
+    public static final boolean USE_F2 = false;  // 生產模式下: true -- 使用F2服務器  false -- 使用www服務器
+
 
     public static final String OSS_BASE_URL = DEVELOPER_MODE ?
             "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com"
             : "https://img.twant.com";
 
     public static final String API_BASE_URL = DEVELOPER_MODE ?
-            "http://192.168.5.28/api"
-            : "https://www.twant.com/api";
+            (USE_28 ? "http://192.168.5.28/api" : "https://192.168.5.29/api")
+            : (USE_F2 ? "http://f2.twant.com/api" : "https://www.twant.com/api");
 
     public static final String WEB_BASE_URL = DEVELOPER_MODE ?
-            "http://192.168.5.28/web"
-            : "http://www.twant.com/web";
+            (USE_28 ? "http://192.168.5.28/web" : "https://192.168.5.29/web")
+            : (USE_F2 ? "http://f2.twant.com/web" : "https://www.twant.com/web");
 
 
     /**

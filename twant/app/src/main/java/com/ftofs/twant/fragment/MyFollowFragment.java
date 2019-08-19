@@ -346,7 +346,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                     .asLoading(getString(R.string.text_loading))
                     .show();
 
-            Api.postUI(Api.PATH_MY_FOLLOW_GOODS, params, new UICallback() {
+            Api.postUI(Api.PATH_MY_FOLLOW_MEMBER, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);

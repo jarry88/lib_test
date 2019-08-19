@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
+import cn.snailpad.easyjson.json.JSONObject;
 import me.yokeyword.fragmentation.ISupportFragment;
 
 
@@ -355,5 +356,18 @@ public class Util {
         } else {
             return "";
         }
+    }
+
+    /**
+     * 判斷一個JSON值是否為null
+     * @param value
+     * @return
+     */
+    public static boolean isJsonNull(Object value) {
+        if (value == null) {
+            return true;
+        }
+
+        return value.equals(JSONObject.NULL);
     }
 }

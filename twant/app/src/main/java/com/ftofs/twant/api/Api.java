@@ -25,9 +25,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
@@ -395,6 +405,12 @@ public class Api {
     public static final String PATH_MY_LIKE_GOODS = "/memberpage/like/goods";
 
     /**
+     * 個人專頁-互動-我的點贊-文章
+     */
+    public static final String PATH_MY_LIKE_POST = "/memberpage/like/want_post";
+
+
+    /**
      * 個人專頁-我的關注-店鋪
      */
     public static final String PATH_MY_FOLLOW_STORE = "/memberpage/favor/store";
@@ -725,6 +741,16 @@ public class Api {
      */
     public static final String PATH_MY_FOLLOW_MEMBER = "/memberpage/favor/member";
 
+    /**
+     * 微信支付
+     */
+    public static final String PATH_WXPAY = "/member/buy/pay/new/wxpay";
+
+    /**
+     * 微信支付完成
+     */
+    public static final String PATH_WXPAY_FINISH = "/member/wxpay/finish";
+
 
     /**
      * 發送Http請求
@@ -738,7 +764,7 @@ public class Api {
      */
     private static String httpRequest(int method, String path, EasyJSONObject params,
                                       Callback ioCallback, final UICallback uiCallback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getOkHttpClient();
         String url = API_BASE_URL + path;
         Request request = null;
 
@@ -884,7 +910,7 @@ public class Api {
         FileOutputStream fos = null;
         InputStream is = null;
         try {
-            OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = getOkHttpClient();
             Request request = new Request.Builder().url(url).build();
 
             Response response = client.newCall(request).execute();
@@ -949,7 +975,7 @@ public class Api {
 
             String url = API_BASE_URL + path;
 
-            OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = getOkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
                     .build();
@@ -1085,7 +1111,7 @@ public class Api {
             return;
         }
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getOkHttpClient();
 
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
@@ -1145,7 +1171,7 @@ public class Api {
             return null;
         }
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getOkHttpClient();
 
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
@@ -1225,7 +1251,7 @@ public class Api {
     public static String postJson(String path, String json, Callback ioCallback, final UICallback uiCallback) {
         String url = API_BASE_URL + path;
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = getOkHttpClient();
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder().url(url).post(body).build();
 
@@ -1336,4 +1362,49 @@ public class Api {
     }
 
 
+    public static OkHttpClient getOkHttpClient() {
+        // 如果是生產模式，則使用正常的OkHttpClient
+        if (!Config.DEVELOPER_MODE) {
+            return new OkHttpClient();
+        }
+
+        // 如果是開發模式，設置OkHttpClient忽略ssl驗證
+        X509TrustManager xtm = new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                X509Certificate[] x509Certificates = new X509Certificate[0];
+                return x509Certificates;
+            }
+        };
+
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, new TrustManager[]{xtm}, new SecureRandom());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                // .addInterceptor(interceptor)
+                .sslSocketFactory(sslContext.getSocketFactory(), xtm)
+                .hostnameVerifier(DO_NOT_VERIFY)
+                .build();
+        return okHttpClient;
+    }
 }

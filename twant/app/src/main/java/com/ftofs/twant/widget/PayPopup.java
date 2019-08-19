@@ -28,6 +28,7 @@ import com.lxj.xpopup.util.XPopupUtils;
 import com.macau.pay.sdk.MPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.umeng.commonsdk.debug.E;
 import com.vivebest.taifung.api.PaymentHandler;
 import com.vivebest.taifung.api.TaifungSDK;
 
@@ -229,21 +230,76 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
             });
 
         } else if (id == R.id.btn_weixin_pay) {
-            PayReq req = new PayReq();
-            req.appId           = context.getString(R.string.weixin_app_id);//你的微信appid
-            req.partnerId       = context.getString(R.string.weixin_partner_id);//商户号
-            req.prepayId        = "wx14132045169523779c29428d1802770600";//预支付交易会话ID
-            // req.nonceStr        = Guid.getSpUuid();//随机字符串
-            req.nonceStr = "mU9eYSzBH43Jz8dY";
-            // req.timeStamp       = String.valueOf(new Jarbon().getTimestamp());//时间戳
-            req.timeStamp = "1565693910";
-            req.packageValue    = "Sign=WXPay"; // 扩展字段,这里固定填写Sign=WXPay
-            req.sign            = "7792752BD09F72975ADD87CAAD0CC118E5DDFB43774F80702BA5AB0ADD1C5235"; //签名
-            //              req.extData         = "app data"; // optional
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
 
-            SLog.info("nonceStr[%s], timeStamp[%s]", req.nonceStr, req.timeStamp);
-            // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
-            TwantApplication.wxApi.sendReq(req);
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "payId", payId);
+
+            SLog.info("params[%s]", params);
+            Api.getUI(Api.PATH_WXPAY, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(context, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                        if (ToastUtil.checkError(context, responseObj)) {
+                            return;
+                        }
+
+                        // 有些商品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
+                        if (responseObj.exists("datas.isPayed")) {
+                            int isPay = responseObj.getInt("datas.isPayed");
+                            if (isPay == 1) {
+                                // isPay為1 表示已經支付，無需請求微信SDK
+                                onWXPaySuccess(false, payId);
+                                dismiss();
+                                return;
+                            }
+                        }
+
+                        ToastUtil.success(mainActivity, "提交訂單成功，正在打開支付界面，請稍候...");
+                        dismiss();
+                        EasyJSONObject payData = responseObj.getObject("datas.payData");
+
+                        PayReq req = new PayReq();
+                        req.appId           = context.getString(R.string.weixin_app_id);//你的微信appid
+                        req.partnerId       = context.getString(R.string.weixin_partner_id);//商户号
+                        req.prepayId        = payData.getString("prepayid");//预支付交易会话ID
+                        req.nonceStr        = payData.getString("noncestr");//随机字符串
+                        req.timeStamp       = payData.getString("timestamp");//时间戳
+                        req.packageValue    = "Sign=WXPay"; // 扩展字段,这里固定填写Sign=WXPay
+                        req.sign            = payData.getString("sign"); //签名
+                        // req.extData         = "app data"; // optional
+
+                        SLog.info("req.prepayId[%s], req.sign[%s], nonceStr[%s], timeStamp[%s]",
+                                req.prepayId, req.sign, req.nonceStr, req.timeStamp);
+                        // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+
+                        TwantApplication.wxApi.sendReq(req);
+
+                        int userId = User.getUserId();
+                        if (userId > 0) {
+                            String key = String.format(SPField.FIELD_WX_PAY_ID, userId);
+                            SLog.info("key[%s]", key);
+                            Hawk.put(key, EasyJSONObject.generate("payId", payId, "timestampMillis", System.currentTimeMillis()).toString());
+                        }
+
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
         }
     }
 
@@ -294,6 +350,60 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                     }
 
                     SLog.info("大豐支付成功，通知服務器成功");
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 微信支付成功處理
+     * @param notifyServer  是否通知服務器端
+     */
+    public static void onWXPaySuccess(boolean notifyServer, int payId) {
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
+
+        Util.startFragment(PaySuccessFragment.newInstance(""));
+
+        if (notifyServer) {
+            wxPaySuccessNotify(payId);
+        }
+    }
+
+
+    /**
+     * 微信支付成功通知服務器
+     */
+    public static void wxPaySuccessNotify(int payId) {
+        String token = User.getToken();
+
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate("token", token, "payId", payId);
+
+        Api.getIO(Api.PATH_WXPAY_FINISH, params, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                SLog.info("微信支付成功，通知服務器失敗");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    String responseStr = response.body().string();
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.isError(responseObj)) {
+                        SLog.info("微信支付成功，通知服務器失敗");
+                        return;
+                    }
+
+                    SLog.info("微信支付成功，通知服務器成功");
                 } catch (Exception e) {
 
                 }
