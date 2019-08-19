@@ -146,6 +146,7 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
 
     implementation(name:'taifung-release-v20180615', ext:'aar')
+    implementation(name:'alipaySdk-15.6.5-20190718211148', ext:'aar')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation 'junit:junit:4.12'

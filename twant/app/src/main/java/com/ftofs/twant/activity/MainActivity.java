@@ -1,16 +1,20 @@
 package com.ftofs.twant.activity;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 
+import com.alipay.sdk.app.PayTask;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.entity.AliPayResult;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.fragment.BillFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.log.SLog;
@@ -28,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -44,6 +49,30 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     MainFragment mainFragment;
 
     private static MainActivity instance;
+
+    // TODO: 2019/8/19 處理HandlerLeak
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == RequestCode.ALI_PAY.ordinal()) {
+                AliPayResult payResult = new AliPayResult((Map<String, String>) msg.obj);
+                /**
+                 * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                 */
+                String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                String resultStatus = payResult.getResultStatus();
+                // 判断resultStatus 为9000则代表支付成功
+                if (TextUtils.equals(resultStatus, "9000")) {
+                    // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                    ToastUtil.success(MainActivity.this, "支付成功" + payResult);
+                } else {
+                    // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                    ToastUtil.error(MainActivity.this, "支付失敗" + payResult);
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,5 +211,29 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     @Override
     public void AliPayInterfaces(PayResult payResult) {
         SLog.info("payResult[%s]", payResult);
+    }
+
+
+    /**
+     * 調用支付寶支付
+     */
+    public void startAliPay() {
+        final String orderInfo = "";   // 订单信息
+
+        Runnable payRunnable = new Runnable() {
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(MainActivity.this);
+                Map<String,String> result = alipay.payV2(orderInfo,true);
+
+                Message msg = new Message();
+                msg.what = RequestCode.ALI_PAY.ordinal();
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
     }
 }

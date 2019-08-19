@@ -88,4 +88,9 @@ public enum RequestCode {
      * 添加、編輯常用語、常用版式
      */
     UPDATE_COMMON_USED_SPEECH,
+
+    /**
+     * 支付寶支付
+     */
+    ALI_PAY,
 }

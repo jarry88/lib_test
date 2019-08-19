@@ -300,6 +300,8 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                     }
                 }
             });
+        } else if (id == R.id.btn_ali_pay) {
+
         }
     }
 

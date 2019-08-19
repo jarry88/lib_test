@@ -599,6 +599,7 @@
     <string name="input_search_friend_hint">昵稱/用戶號</string>
     <string name="text_taifung_pay">大豐銀行電子支付</string>
     <string name="text_weixin_pay">微信支付</string>
+    <string name="text_ali_pay">支付寶</string>
 
     <string name="text_store_friends_count_template">—· 當前店內%d名遊客 ·—</string>
     <string name="input_order_search_hint">請輸入商品標題或訂單號進行搜索</string>
