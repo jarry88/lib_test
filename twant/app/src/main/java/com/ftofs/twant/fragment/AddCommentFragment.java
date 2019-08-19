@@ -19,6 +19,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.FileUtil;
@@ -55,14 +56,16 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
 
     String imageAbsolutePath;
 
-    int storeId;
+    int bindId;
+    int commentChannel;
     // 評論內容
     String content;
 
-    public static AddCommentFragment newInstance(int storeId) {
+    public static AddCommentFragment newInstance(int bindId, int commentChannel) {
         Bundle args = new Bundle();
 
-        args.putInt("storeId", storeId);
+        args.putInt("bindId", bindId);
+        args.putInt("commentChannel", commentChannel);
 
         AddCommentFragment fragment = new AddCommentFragment();
         fragment.setArguments(args);
@@ -84,7 +87,8 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         EventBus.getDefault().register(this);
 
         Bundle args = getArguments();
-        storeId = args.getInt("storeId");
+        bindId = args.getInt("bindId");
+        commentChannel = args.getInt("commentChannel");
 
         btnAddImage = view.findViewById(R.id.btn_add_image);
         btnAddImage.setOnClickListener(this);
@@ -192,12 +196,25 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         }
 
         EasyJSONObject params = EasyJSONObject.generate(
-                "commentChannel", Constant.COMMENT_CHANNEL_STORE,
+                "commentChannel", commentChannel,
                 "deep", 1,
                 "content", content,
-                "relateStoreId", storeId,
                 "images", images
         );
+
+        try {
+            if (commentChannel == Constant.COMMENT_CHANNEL_GOODS) {
+                params.set("relateCommonId", bindId);
+            }
+            if (commentChannel == Constant.COMMENT_CHANNEL_STORE) {
+                params.set("relateStoreId", bindId);
+            }
+            if (commentChannel == Constant.COMMENT_CHANNEL_POST) {
+                params.set("relatePostId", bindId);
+            }
+        } catch (Exception e) {
+
+        }
         SLog.info("params[%s]", params.toString());
 
         Api.postJsonUi(path, params.toString(), new UICallback() {
@@ -219,10 +236,48 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                         return;
                     }
 
+                    EasyJSONObject wantCommentVo = responseObj.getObject("datas.wantCommentVo");
+                    EasyJSONObject memberVo = wantCommentVo.getObject("memberVo");
+
+
+                    CommentItem commentItem = new CommentItem();
+                    commentItem.commentId = wantCommentVo.getInt("commentId");
+                    commentItem.commentType = wantCommentVo.getInt("commentType");
+                    commentItem.commentChannel = commentChannel;
+                    commentItem.content = content;
+                    commentItem.isLike = 0;
+                    commentItem.commentLike = 0;
+                    commentItem.commentReply = 0;
+                    commentItem.commenterAvatar = memberVo.getString("avatar");
+                    commentItem.nickname = memberVo.getString("nickName");
+                    commentItem.commentTime = wantCommentVo.getString("commentStartTime");
+
+                    EasyJSONArray images = wantCommentVo.getArray("images");
+                    if (!Util.isJsonNull(images) && images.length() > 0) {
+                        commentItem.imageUrl = images.getObject(0).getString("imageUrl");
+                    }
+
+                    if (commentChannel == Constant.COMMENT_CHANNEL_GOODS) {
+                        commentItem.relateCommonId = bindId;
+                    }
+                    if (commentChannel == Constant.COMMENT_CHANNEL_STORE) {
+                        commentItem.relateStoreId = bindId;
+                    }
+                    commentItem.replyCommentId = 0;
+                    if (commentChannel == Constant.COMMENT_CHANNEL_POST) {
+                        commentItem.relatePostId = bindId;
+                    }
+                    commentItem.parentCommentId = 0;
+
                     ToastUtil.success(_mActivity, "發表成功");
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("commentItem", commentItem);
+                    setFragmentResult(RESULT_OK, bundle);
+
+                    hideSoftInput();
                     pop();
                 } catch (Exception e) {
-
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });

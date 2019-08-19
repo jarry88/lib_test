@@ -221,7 +221,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
-        SLog.info("onFragmentResult");
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
         super.onFragmentResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK) {

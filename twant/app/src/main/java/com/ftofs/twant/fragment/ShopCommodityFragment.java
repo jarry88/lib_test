@@ -225,7 +225,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             // 賣點
                             String jingle = goodsObject.getString("jingle");
                             // 獲取價格
-                            double price = Util.getGoodsPrice(goodsObject);
+                            double price = Util.getSpuPrice(goodsObject);
 
                             Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
                             goodsList.add(goods);

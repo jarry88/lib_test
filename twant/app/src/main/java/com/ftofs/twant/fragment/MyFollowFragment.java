@@ -294,7 +294,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                             myFollowGoodsItem.imageSrc = goodsCommon.getString("imageSrc");
                             myFollowGoodsItem.jingle = goodsCommon.getString("jingle");
                             myFollowGoodsItem.goodsFavorite = goodsCommon.getInt("goodsFavorite");
-                            myFollowGoodsItem.price = Util.getGoodsPrice(goodsCommon);
+                            myFollowGoodsItem.price = Util.getSpuPrice(goodsCommon);
 
                             myFollowGoodsItemList.add(myFollowGoodsItem);
                         }
@@ -377,7 +377,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                             myFollowGoodsItem.imageSrc = goodsCommon.getString("imageSrc");
                             myFollowGoodsItem.jingle = goodsCommon.getString("jingle");
                             myFollowGoodsItem.goodsFavorite = goodsCommon.getInt("goodsFavorite");
-                            myFollowGoodsItem.price = Util.getGoodsPrice(goodsCommon);
+                            myFollowGoodsItem.price = Util.getSpuPrice(goodsCommon);
 
                             myFollowGoodsItemList.add(myFollowGoodsItem);
                         }

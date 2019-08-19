@@ -193,7 +193,12 @@ public class Util {
         return sb.toString();
     }
 
-    public static float getGoodsPrice(EasyJSONObject goods) {
+    /**
+     * 獲取SPU的價格
+     * @param goods
+     * @return
+     */
+    public static float getSpuPrice(EasyJSONObject goods) {
         float price = 0;
         try {
             int appUsable = goods.getInt("appUsable");
@@ -201,6 +206,26 @@ public class Util {
                 price = (float) goods.getDouble("appPrice0");
             } else {
                 price = (float) goods.getDouble("batchPrice2");
+            }
+        } catch (Exception e) {
+
+        }
+        return price;
+    }
+
+    /**
+     * 獲取SKU的價格
+     * @param goods
+     * @return
+     */
+    public static float getSkuPrice(EasyJSONObject goods) {
+        float price = 0;
+        try {
+            int appUsable = goods.getInt("appUsable");
+            if (appUsable > 0) {
+                price = (float) goods.getDouble("appPrice0");
+            } else {
+                price = (float) goods.getDouble("goodsPrice0");
             }
         } catch (Exception e) {
 

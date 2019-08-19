@@ -187,6 +187,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         llHotItemList = view.findViewById(R.id.ll_hot_item_list);
         llNewInItemList = view.findViewById(R.id.ll_new_in_item_list);
         llShopAnnouncementContainer = view.findViewById(R.id.ll_shop_announcement_container);
+        llShopAnnouncementContainer.setOnClickListener(this);
 
         tvVerticalScroll = view.findViewById(R.id.tv_vertical_scroll);
 
@@ -386,7 +387,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                             Glide.with(ShopHomeFragment.this).load(authorAvatarUrl).into(imgAuthorAvatar);
                             tvAuthorNickname.setText(authorNickname);
-                            tvCommentContent.setText(content);
+                            tvCommentContent.setText(StringUtil.translateEmoji(_mActivity, content, (int) tvCommentContent.getTextSize()));
                         } else { // 如果沒有評論，則隱藏相應的控件
                             llFirstCommentContainer.setVisibility(View.GONE);
                         }
@@ -444,7 +445,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             storeGoodsItem.imageSrc = easyJSONObject.getString("imageSrc");
                             storeGoodsItem.goodsName = easyJSONObject.getString("goodsName");
                             storeGoodsItem.jingle = easyJSONObject.getString("jingle");
-                            storeGoodsItem.price = Util.getGoodsPrice(easyJSONObject);
+                            storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
 
                             if (index % 2 == 0) {
                                 storeGoodsPair = new StoreGoodsPair();
@@ -496,7 +497,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             storeGoodsItem.imageSrc = easyJSONObject.getString("imageSrc");
                             storeGoodsItem.goodsName = easyJSONObject.getString("goodsName");
                             storeGoodsItem.jingle = easyJSONObject.getString("jingle");
-                            storeGoodsItem.price = Util.getGoodsPrice(easyJSONObject);
+                            storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
 
                             if (index % 2 == 0) {
                                 storeGoodsPair = new StoreGoodsPair();
@@ -613,6 +614,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         .moveUpToKeyboard(false)
                         .asCustom(new StoreWantedPopup(_mActivity, wantedPostItemList))
                         .show();
+                break;
+            case R.id.ll_shop_announcement_container:
+                showAnnouncementPopup();
                 break;
             default:
                 break;
@@ -756,6 +760,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onMyClickListener(int i, CharSequence charSequence) {
+        showAnnouncementPopup();
+    }
+
+    private void showAnnouncementPopup() {
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)

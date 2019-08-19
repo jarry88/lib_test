@@ -93,4 +93,9 @@ public enum RequestCode {
      * 支付寶支付
      */
     ALI_PAY,
+
+    /**
+     * 添加評論
+     */
+    ADD_COMMENT,
 }

@@ -135,6 +135,7 @@
                 />
         </LinearLayout>
 
+        <!-- 支付寶
         <LinearLayout
             android:id="@+id/btn_ali_pay"
             android:layout_width="match_parent"
@@ -156,6 +157,7 @@
                 android:textSize="16sp"
                 />
         </LinearLayout>
+        -->
     </LinearLayout>
 </LinearLayout>
 

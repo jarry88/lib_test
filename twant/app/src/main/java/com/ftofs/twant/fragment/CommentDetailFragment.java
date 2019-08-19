@@ -96,6 +96,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     CommentReplyListAdapter commentReplyListAdapter;
     List<CommentReplyItem> commentReplyItemList = new ArrayList<>();
 
+    String commentImageUrl; // 評論圖片的URL
+
     public static CommentDetailFragment newInstance(CommentItem commentItem) {
         Bundle args = new Bundle();
 
@@ -132,6 +134,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         tvCommentTime = view.findViewById(R.id.tv_comment_time);
         tvContent = view.findViewById(R.id.tv_content);
         imageView = view.findViewById(R.id.image_view);
+        imageView.setOnClickListener(this);
         iconThumb = view.findViewById(R.id.icon_thumb);
         tvThumbCount = view.findViewById(R.id.tv_thumb_count);
         tvReplyCount = view.findViewById(R.id.tv_reply_count);
@@ -356,6 +359,10 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 btnEmoji.setSelected(true);
                 showEmoji();
             }
+        } else if (id == R.id.image_view) {
+            if (!StringUtil.isEmpty(commentImageUrl)) {
+                start(ImageViewerFragment.newInstance(commentImageUrl));
+            }
         }
     }
 
@@ -418,7 +425,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         if (commentItem.commentType == Constant.COMMENT_TYPE_TEXT || StringUtil.isEmpty(commentItem.imageUrl)) {
                             imageView.setVisibility(View.GONE);
                         } else {
-                            Glide.with(_mActivity).load(Config.OSS_BASE_URL + "/" + commentItem.imageUrl).centerCrop().into(imageView);
+                            commentImageUrl = StringUtil.normalizeImageUrl(commentItem.imageUrl);
+                            Glide.with(_mActivity).load(commentImageUrl).centerCrop().into(imageView);
                             imageView.setVisibility(View.VISIBLE);
                         }
 

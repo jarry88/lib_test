@@ -224,7 +224,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                                 goodsLiteVo.getInt("commonId"),
                                 goodsLiteVo.getString("goodsName"),
                                 goodsLiteVo.getString("jingle"),
-                                Util.getGoodsPrice(goodsLiteVo),
+                                Util.getSpuPrice(goodsLiteVo),
                                 goodsLiteVo.getString("adminCountry.nationalFlag"));
 
                         goodsItemList.add(item);

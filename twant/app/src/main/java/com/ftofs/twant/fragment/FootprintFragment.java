@@ -309,7 +309,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                                 goodsCommon.getString("imageSrc"),
                                 goodsCommon.getString("goodsName"),
                                 goodsCommon.getString("jingle"),
-                                Util.getGoodsPrice(goodsCommon)
+                                Util.getSpuPrice(goodsCommon)
                         ));
 
 

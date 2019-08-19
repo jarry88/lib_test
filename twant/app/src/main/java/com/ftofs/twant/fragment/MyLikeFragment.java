@@ -256,7 +256,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                                 myLikeGoodsItem.imageSrc = goods.getString("imageSrc");
                                 myLikeGoodsItem.jingle = goods.getString("jingle");
                                 myLikeGoodsItem.likeCount = goods.getInt("goodsLike");
-                                myLikeGoodsItem.price = Util.getGoodsPrice(goods);
+                                myLikeGoodsItem.price = Util.getSpuPrice(goods);
 
                                 myLikeGoodsItemList.add(myLikeGoodsItem);
                             }

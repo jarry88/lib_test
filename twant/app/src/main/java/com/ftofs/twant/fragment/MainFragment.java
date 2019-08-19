@@ -174,7 +174,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
-        SLog.info("onFragmentResult");
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
         super.onFragmentResult(requestCode, resultCode, data);
     }
 

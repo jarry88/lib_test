@@ -15,6 +15,7 @@ import com.ftofs.twant.adapter.CommentListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -49,6 +50,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
     // 是否還有數據
     boolean hasMore = false;
 
+    RecyclerView rvCommentList;
     List<CommentItem> commentItemList = new ArrayList<>();
     CommentListAdapter adapter;
 
@@ -87,7 +89,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_publish, this);
 
-        RecyclerView rvCommentList = view.findViewById(R.id.rv_comment_list);
+        rvCommentList = view.findViewById(R.id.rv_comment_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvCommentList.setLayoutManager(layoutManager);
         adapter = new CommentListAdapter(R.layout.comment_item, commentItemList);
@@ -123,7 +125,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_publish) {
-            Util.startFragment(AddCommentFragment.newInstance(bindId));
+            startForResult(AddCommentFragment.newInstance(bindId, commentChannel), RequestCode.ADD_COMMENT.ordinal());
         }
     }
 
@@ -165,6 +167,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                             adapter.setEnableLoadMore(false);
                         }
 
+                        commentItemList.clear();
                         EasyJSONArray comments = responseObj.getArray("datas.comments");
                         for (Object object : comments) {
                             EasyJSONObject comment = (EasyJSONObject) object;
@@ -174,6 +177,9 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                             item.commentType = comment.getInt("commentType");
                             item.commentLike = comment.getInt("commentLike");
                             item.content = comment.getString("content");
+                            if (item.content == null) { // 兼容店鋪評論有些內容為null的問題
+                                item.content = "";
+                            }
                             item.isLike = comment.getInt("isLike");
                             item.commentReply = comment.getInt("commentReply");
 
@@ -230,6 +236,28 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             return;
         }
         loadCommentData(currPage + 1);
+    }
+
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        SLog.info("HERE");
+        if (requestCode == RequestCode.ADD_COMMENT.ordinal()) {
+            SLog.info("HERE");
+
+            CommentItem commentItem = data.getParcelable("commentItem");
+            SLog.info("commentItem[%s]", commentItem);
+            commentItemList.add(0, commentItem);
+            adapter.setNewData(commentItemList);
+            rvCommentList.scrollToPosition(0);
+        }
     }
 
     private void switchThumbState(final int position) {

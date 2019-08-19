@@ -540,7 +540,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
 
-                    float goodsPrice = Util.getGoodsPrice(goodsDetail);
+                    float goodsPrice = Util.getSpuPrice(goodsDetail);
                     tvGoodsPrice.setText(String.format("%.2f", goodsPrice));
 
                     // 是否点赞
@@ -695,7 +695,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.goodsFullSpecs = goodsInfoVo.getString("goodsFullSpecs");
                         goodsInfo.specValueIds = goodsInfoVo.getString("specValueIds");
                         goodsInfo.goodsPrice0 = (float) goodsInfoVo.getDouble("goodsPrice0");
-                        goodsInfo.price = Util.getGoodsPrice(goodsInfoVo);
+                        goodsInfo.price = Util.getSkuPrice(goodsInfoVo);
+                        SLog.info("__goodsInfo.price[%s], goodsInfoVo[%s]", goodsInfo.price, goodsInfoVo.toString());
                         goodsInfo.imageSrc = goodsInfoVo.getString("imageSrc");
                         goodsInfo.goodsStorage = goodsInfoVo.getInt("goodsStorage");
                         goodsInfo.limitAmount = goodsInfoVo.getInt("limitAmount");
@@ -753,22 +754,25 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         String commenterAvatarUrl = Config.OSS_BASE_URL + "/" + wantCommentVoInfo.getString("memberVo.avatar");
                         Glide.with(_mActivity).load(commenterAvatarUrl).centerCrop().into(imgCommenterAvatar);
                         tvCommenterNickname.setText(wantCommentVoInfo.getString("memberVo.nickName"));
-                        tvComment.setText(wantCommentVoInfo.getString("content"));
+                        String comment = wantCommentVoInfo.getString("content");
+                        tvComment.setText(StringUtil.translateEmoji(_mActivity, comment, (int) tvComment.getTextSize()));
                     } else {
                         // 如果沒有評論，隱藏相應的控件
                         btnViewAllComment.setVisibility(GONE);
                         llFirstCommentContainer.setVisibility(GONE);
                     }
 
-                    // 獲取店鋪客服人員數據
-                    EasyJSONArray storeServiceStaffList = responseObj.getArray("datas.storeServiceStaffList");
-                    for (Object object : storeServiceStaffList) {
-                        EasyJSONObject storeServiceStaff = (EasyJSONObject) object;
+                    if (responseObj.exists("datas.storeServiceStaffList")) {
+                        // 獲取店鋪客服人員數據
+                        EasyJSONArray storeServiceStaffList = responseObj.getArray("datas.storeServiceStaffList");
+                        for (Object object : storeServiceStaffList) {
+                            EasyJSONObject storeServiceStaff = (EasyJSONObject) object;
 
-                        CustomerServiceStaff staff = new CustomerServiceStaff();
-                        Util.packStaffInfo(staff, storeServiceStaff);
+                            CustomerServiceStaff staff = new CustomerServiceStaff();
+                            Util.packStaffInfo(staff, storeServiceStaff);
 
-                        staffList.add(staff);
+                            staffList.add(staff);
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

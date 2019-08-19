@@ -403,6 +403,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             Glide.with(context).load(imageSrc).centerCrop().into(skuImage);
         }
 
+        SLog.info("goodsInfo.price[%s]", goodsInfo.price);
         tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
         tvGoodsStorage.setText("( 庫存: " + goodsInfo.goodsStorage + goodsInfo.unitName + " )");
 
