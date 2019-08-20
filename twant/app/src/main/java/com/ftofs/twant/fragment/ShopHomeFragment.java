@@ -272,7 +272,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         String shopAvatarUrl = Config.OSS_BASE_URL + "/" + storeInfo.getString("storeAvatar");
                         SLog.info("storeAvatar__[%s]", shopAvatarUrl);
                         // 店鋪頭像
-                        Glide.with(ShopHomeFragment.this).load(shopAvatarUrl).into(imgShopAvatar);
+                        Glide.with(ShopHomeFragment.this).load(shopAvatarUrl).centerCrop().into(imgShopAvatar);
                         // 將店鋪頭像設置到工具欄按鈕
                         parentFragment.setImgBottomBarShopAvatar(shopAvatarUrl);
 
@@ -297,8 +297,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                         updateThumbView();
                         updateFavoriteView();
-
-
 
                         // 店友
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
@@ -410,6 +408,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             String authorNickname = firstComment.getString("memberVo.nickName");
                             // 評論內容
                             String content = firstComment.getString("content");
+                            if (content == null) {
+                                content = "";
+                            }
 
                             Glide.with(ShopHomeFragment.this).load(authorAvatarUrl).into(imgAuthorAvatar);
                             tvAuthorNickname.setText(authorNickname);

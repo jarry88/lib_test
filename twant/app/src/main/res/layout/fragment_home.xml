@@ -44,14 +44,33 @@
             android:layout_marginLeft="@dimen/toolbar_margin_left"
             android:layout_marginRight="@dimen/toolbar_margin_right">
 
-            <com.ftofs.twant.widget.ScaledButton
+            <LinearLayout
                 android:id="@+id/btn_category"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                app:icon_src="@drawable/icon_category"
-                />
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_category"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_category"
+                    android:textColor="@color/tw_black"
+                    android:textSize="10sp"
+                    />
+            </LinearLayout>
+
+
             <LinearLayout
                 android:id="@+id/ll_search_box"
                 android:layout_width="match_parent"

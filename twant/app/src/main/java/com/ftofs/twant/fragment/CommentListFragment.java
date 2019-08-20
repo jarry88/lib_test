@@ -167,7 +167,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                             adapter.setEnableLoadMore(false);
                         }
 
-                        commentItemList.clear();
+                        // commentItemList.clear();
                         EasyJSONArray comments = responseObj.getArray("datas.comments");
                         for (Object object : comments) {
                             EasyJSONObject comment = (EasyJSONObject) object;

@@ -47,6 +47,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
 
         paramsObj = (EasyJSONObject) EasyJSONObject.parse(paramsStr);
 
+        Util.setOnClickListener(view, R.id.btn_goto_home, this);
         Util.setOnClickListener(view, R.id.btn_view_order, this);
     }
 
@@ -61,9 +62,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
 
-        SLog.info("here");
         if (id == R.id.btn_view_order) {
-            SLog.info("here");
             pop();
             // 轉去訂單列表，已跟進能確認過
             Util.startFragment(BillFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED));

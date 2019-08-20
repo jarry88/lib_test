@@ -16,6 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.AddrItem;
+import com.ftofs.twant.entity.EntityReplace;
 import com.ftofs.twant.entity.Mobile;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -221,6 +223,60 @@ public class StringUtil {
     }
 
     /**
+     * 將[空格]替換為真正的空格，將[換行]替換為\n
+     * @param text
+     * @return
+     */
+    public static String escapeEntity(String text) {
+        if (text == null) {
+            return null;
+        }
+
+        List<EntityReplace> entityReplaceList = new ArrayList<>();
+
+        Map<String, String> entityMap = new HashMap<>();
+        entityMap.put("[換行]", "\n");
+        entityMap.put("[空格]", " ");
+
+        StringBuilder sb = new StringBuilder(text);
+        int len = text.length();
+        int startIndex = -1; // -1表示位置無效
+        int stopIndex = -1; // -1表示位置無效
+
+        for (int i = 0; i < len; i++) {
+            char ch = text.charAt(i);
+
+            if (ch == '[') {
+                startIndex = i;
+                stopIndex = -1;
+            } else if (ch == ']') {
+                stopIndex = i;
+                if (startIndex >= 0) { // 符合表情標簽格式
+                    String str = text.substring(startIndex, stopIndex + 1);
+                    SLog.info("str[%s]", str);
+                    String replacement = entityMap.get(str);
+                    SLog.info("replacement[%s]", replacement);
+                    if (replacement != null) { // 如果是有效的表情
+                        entityReplaceList.add(new EntityReplace(startIndex, stopIndex, replacement));
+                    }
+                }
+
+                startIndex = -1;
+                stopIndex = -1;
+            }
+        }
+
+        // 從后往前替換
+        for (int i = entityReplaceList.size() - 1; i >= 0; i--) {
+            EntityReplace entityReplace = entityReplaceList.get(i);
+
+            sb.replace(entityReplace.startIndex, entityReplace.stopIndex + 1, entityReplace.replacement);
+        }
+
+        return sb.toString();
+    }
+
+    /**
      * 替換text文本中的表情占位符為圖片
      * @param context
      * @param text
@@ -228,6 +284,9 @@ public class StringUtil {
      * @return
      */
     public static Editable translateEmoji(Context context, String text, int textSize) {
+        SLog.info("text[%s]", text);
+        text = escapeEntity(text);
+        SLog.info("text[%s]", text);
         SpannableStringBuilder spannableString = new SpannableStringBuilder(text);
 
         List<Emoji> emojiList = LitePal.findAll(Emoji.class);
@@ -237,8 +296,8 @@ public class StringUtil {
         }
 
         int len = text.length();
-        int startIndex = -1;
-        int stopIndex = -1;
+        int startIndex = -1; // -1表示位置無效
+        int stopIndex = -1; // -1表示位置無效
         for (int i = 0; i < len; i++) {
             char ch = text.charAt(i);
 

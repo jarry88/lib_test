@@ -50,6 +50,12 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
     MainActivity mainActivity; // 主Activity
     int payId;
 
+    /*
+    防止快速重復點擊
+     */
+    long lastClickTime; // 上一次點擊的時間
+    public static final long CLICKABLE_INTERVAL = 1500; // 兩次點擊之間最小的間隔時間(毫秒)
+
     public PayPopup(@NonNull Context context, MainActivity mainActivity, int payId) {
         super(context);
 
@@ -77,6 +83,7 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
         findViewById(R.id.btn_mpay).setOnClickListener(this);
         findViewById(R.id.btn_taifung_pay).setOnClickListener(this);
         findViewById(R.id.btn_weixin_pay).setOnClickListener(this);
+        findViewById(R.id.btn_ali_pay).setOnClickListener(this);
     }
 
     //完全可见执行
@@ -99,6 +106,17 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
+
+        // 防止支付快速點擊處理
+        if (id == R.id.btn_want_pay || id == R.id.btn_mpay || id == R.id.btn_taifung_pay ||
+                id == R.id.btn_weixin_pay || id == R.id.btn_ali_pay) {
+            long now = System.currentTimeMillis();
+            if (now - lastClickTime < CLICKABLE_INTERVAL) {
+                return;
+            }
+
+            lastClickTime = now;
+        }
 
         if (id == R.id.btn_dismiss) {
             dismiss();
@@ -297,6 +315,40 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
 
                     } catch (Exception e) {
                         SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
+        } else if (id == R.id.btn_ali_pay) {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "payId", payId);
+
+            SLog.info("params[%s]", params);
+            Api.getUI(Api.PATH_ALIPAY, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(context, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                        if (ToastUtil.checkError(context, responseObj)) {
+                            return;
+                        }
+
+
+                    } catch (Exception e) {
+
                     }
                 }
             });

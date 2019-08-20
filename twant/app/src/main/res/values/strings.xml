@@ -229,6 +229,7 @@
 
     <string name="text_pay_success">訂單支付成功</string>
     <string name="text_view_order">查看訂單</string>
+    <string name="text_goto_home">返回首頁</string>
     <string name="text_continue_shopping">繼續逛逛</string>
     <string name="text_pay_type">支付類型</string>
     <string name="text_want_pay_purse">想付錢包</string>
@@ -272,7 +273,7 @@
     <string name="text_history_search">歷史搜索</string>
     <string name="text_hot_search">熱門搜索</string>
 
-    <string name="text_store_open_day_prefix">開店</string>
+    <string name="text_store_open_day_prefix">開業時長</string>
     <string name="text_store_friend">店友</string>
     <string name="text_share">分享</string>
     <string name="text_map">地圖</string>
@@ -335,6 +336,7 @@
     <string name="input_budget_price_hint">請輸入預算價格</string>
     <string name="text_dead_line">截止</string>
     <string name="text_budget">預算</string>
+    <string name="text_category">分類</string>
 
     <string name="text_store_service_staff">店鋪服務人員</string>
 
