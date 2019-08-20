@@ -242,7 +242,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 android:padding="15dp"
-                android:background="@drawable/bottom_separator_box"
+                android:background="@drawable/border_type_d"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tv_goods_name"
@@ -492,7 +492,7 @@
                 android:layout_height="@dimen/toolbar_height"
                 android:layout_marginLeft="@dimen/toolbar_margin_left"
                 android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:background="@drawable/bottom_separator_box"
+                android:background="@drawable/border_type_d"
                 android:orientation="horizontal"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -549,8 +549,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_spec_container"
-                android:background="@drawable/bottom_separator_box"
-                android:orientation="horizontal">
+                android:background="@drawable/border_type_d">
                 <TextView
                     android:id="@+id/text_send_to"
                     android:layout_width="wrap_content"
@@ -560,36 +559,43 @@
                     android:textSize="16sp"
                     android:textColor="@color/tw_dark_grey"
                     />
-                <TextView
-                    android:id="@+id/tv_ship_to"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/btn_select_addr"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="30dp"
                     android:layout_toRightOf="@id/text_send_to"
-                    android:layout_centerVertical="true"
-                    android:text=""
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    />
-                <ImageView
-                    android:id="@+id/img_expand"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/expand_button"
-                    />
-                <TextView
-                    android:id="@+id/tv_freight_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@id/img_expand"
-                    android:layout_centerVertical="true"
-                    android:text="運費15.00"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    />
+                    android:layout_alignParentRight="true">
+                    <TextView
+                        android:id="@+id/tv_ship_to"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text=""
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_black"
+                        />
+
+                    <ImageView
+                        android:id="@+id/img_expand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/expand_button"
+                        />
+                    <TextView
+                        android:id="@+id/tv_freight_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@id/img_expand"
+                        android:layout_centerVertical="true"
+                        android:text="運費15.00"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_black"
+                        />
+                </RelativeLayout>
             </RelativeLayout>
 
             <!-- 評論 -->
@@ -604,7 +610,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_send_to_container"
                 android:paddingBottom="15dp"
-                android:background="@drawable/bottom_separator_box"
+                android:background="@drawable/border_type_d"
                 android:orientation="vertical">
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -696,7 +702,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ll_comment_container"
-                android:background="@drawable/bottom_separator_box"
+                android:background="@drawable/border_type_d"
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/text_shop_friend"

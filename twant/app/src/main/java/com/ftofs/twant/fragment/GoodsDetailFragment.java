@@ -275,7 +275,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
         Util.setOnClickListener(view, R.id.btn_buy, this);
         Util.setOnClickListener(view, R.id.btn_select_spec, this);
-        Util.setOnClickListener(view, R.id.tv_ship_to, this);
+        Util.setOnClickListener(view, R.id.btn_select_addr, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_follow, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_shop, this);
         Util.setOnClickListener(view, R.id.btn_goto_cart, this);
@@ -319,7 +319,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_select_spec:
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
                 break;
-            case R.id.tv_ship_to:
+            case R.id.btn_select_addr:
                 if (userId > 0) {
                     startForResult(AddrManageFragment.newInstance(), RequestCode.CHANGE_ADDRESS.ordinal());
                 } else {
@@ -637,7 +637,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     boolean first;
                     // 【領券】優惠
-                    EasyJSONArray voucherList = responseObj.getArray("datas.goodsDetail.goodsDetailCouponVoList");
+                    EasyJSONArray voucherList = goodsDetail.getArray("goodsDetailCouponVoList");
                     if (voucherList.length() > 0) {
                         first = true;
                         StringBuilder voucherText = new StringBuilder();

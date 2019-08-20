@@ -178,7 +178,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
                     loadingPopup.dismiss();
-                    SLog.info("responseStr[%s]", responseStr);
+                    SLog.info("loadStoreActivityData.responseStr[%s]", responseStr);
 
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {

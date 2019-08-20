@@ -1,5 +1,7 @@
 package com.ftofs.twant.entity;
 
+import android.support.annotation.NonNull;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 public class SearchItem implements MultiItemEntity {
@@ -36,5 +38,12 @@ public class SearchItem implements MultiItemEntity {
     @Override
     public int getItemType() {
         return itemType;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("itemType[%d], id[%d], name[%s], storeId[%d], action[%d]",
+                itemType, id, name, storeId, action);
     }
 }

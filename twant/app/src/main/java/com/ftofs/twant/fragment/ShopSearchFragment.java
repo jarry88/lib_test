@@ -18,7 +18,6 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreSearchItemAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.SearchItem;
 import com.ftofs.twant.log.SLog;
@@ -124,7 +123,6 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
         });
         rvList.setAdapter(adapter);
 
-
         if (!StringUtil.isEmpty(extraData)) {
             populateData(extraData);
         } else {
@@ -157,6 +155,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
             ToastUtil.error(_mActivity, "請輸入搜索關鍵字");
             return;
         }
+        hideSoftInput();
         Util.startFragment(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", storeId, "keyword", keyword).toString()));
     }
 

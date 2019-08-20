@@ -167,6 +167,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
 
             String fullMobile = mobileZone.areaCode + "," + mobile;
             String captchaText = etCaptcha.getText().toString().trim();
+            SLog.info("captchaText[%s]", captchaText);
             if (StringUtil.isEmpty(captchaText)) {
                 ToastUtil.error(_mActivity, getString(R.string.input_captcha_hint));
                 return;
@@ -213,8 +214,30 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
 
             String mobile = etMobile.getText().toString().trim();
+            if (StringUtil.isEmpty(mobile)) {
+                ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
+                return;
+            }
+
+            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
+                String[] areaArray = new String[] {
+                        "",
+                        getString(R.string.text_hongkong),
+                        getString(R.string.text_mainland),
+                        getString(R.string.text_macao)
+                };
+
+                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
+                ToastUtil.error(_mActivity, msg);
+                return;
+            }
+
             String fullMobile = mobileZone.areaCode + "," + mobile;
             String smsCode = etSmsCode.getText().toString().trim();
+            if (StringUtil.isEmpty(smsCode)) {
+                ToastUtil.error(_mActivity, getString(R.string.input_sms_code_hint));
+                return;
+            }
             EasyJSONObject params = EasyJSONObject.generate(
                     "mobile", fullMobile,
                     "smsAuthCode", smsCode,
