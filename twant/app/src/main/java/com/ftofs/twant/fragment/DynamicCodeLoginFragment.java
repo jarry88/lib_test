@@ -6,9 +6,11 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -123,6 +125,16 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         etMobile = view.findViewById(R.id.et_mobile);
         etCaptcha = view.findViewById(R.id.et_captcha);
         etSmsCode = view.findViewById(R.id.et_sms_code);
+        etSmsCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                SLog.info("here");
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    doLogin();
+                }
+                return false;
+            }
+        });
         tvAreaName = view.findViewById(R.id.tv_area_name);
 
         refreshCaptcha();
@@ -208,76 +220,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 }
             });
         } else if (id == R.id.btn_login) {
-            if (mobileZoneList.size() <= selectedMobileZoneIndex) {
-                return;
-            }
-            MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
-
-            String mobile = etMobile.getText().toString().trim();
-            if (StringUtil.isEmpty(mobile)) {
-                ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
-                return;
-            }
-
-            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
-                String[] areaArray = new String[] {
-                        "",
-                        getString(R.string.text_hongkong),
-                        getString(R.string.text_mainland),
-                        getString(R.string.text_macao)
-                };
-
-                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-                ToastUtil.error(_mActivity, msg);
-                return;
-            }
-
-            String fullMobile = mobileZone.areaCode + "," + mobile;
-            String smsCode = etSmsCode.getText().toString().trim();
-            if (StringUtil.isEmpty(smsCode)) {
-                ToastUtil.error(_mActivity, getString(R.string.input_sms_code_hint));
-                return;
-            }
-            EasyJSONObject params = EasyJSONObject.generate(
-                    "mobile", fullMobile,
-                    "smsAuthCode", smsCode,
-                    "clientType", Constant.CLIENT_TYPE_ANDROID
-            );
-            Api.postUI(Api.PATH_MOBILE_LOGIN, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(_mActivity, e);
-                }
-
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    try {
-                        int code = responseObj.getInt("code");
-                        if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
-                            // 如果出錯，刷新驗證碼
-                            refreshCaptcha();
-                            return;
-                        }
-
-                        ToastUtil.success(_mActivity, "登入成功");
-                        int userId = responseObj.getInt("datas.memberId");
-                        SharedPreferenceUtil.saveUserInfo(responseObj);
-                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
-                        hideSoftInput();
-                        SqliteUtil.switchUserDB(userId);
-
-                        if (commonCallback != null) {
-                            SLog.info("Fragment出棧");
-                            commonCallback.onSuccess(null);
-                        }
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+            doLogin();
         } else if (id == R.id.btn_mobile_zone) {
             List<ListPopupItem> itemList = new ArrayList<>();
             for (MobileZone mobileZone : mobileZoneList) {
@@ -295,6 +238,80 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         } else if (id == R.id.btn_forget_password) {
             Util.startFragment(ResetPasswordFragment.newInstance());
         }
+    }
+
+
+    private void doLogin() {
+        if (mobileZoneList.size() <= selectedMobileZoneIndex) {
+            return;
+        }
+        MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+
+        String mobile = etMobile.getText().toString().trim();
+        if (StringUtil.isEmpty(mobile)) {
+            ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
+            return;
+        }
+
+        if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
+            String[] areaArray = new String[] {
+                    "",
+                    getString(R.string.text_hongkong),
+                    getString(R.string.text_mainland),
+                    getString(R.string.text_macao)
+            };
+
+            String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
+            ToastUtil.error(_mActivity, msg);
+            return;
+        }
+
+        String fullMobile = mobileZone.areaCode + "," + mobile;
+        String smsCode = etSmsCode.getText().toString().trim();
+        if (StringUtil.isEmpty(smsCode)) {
+            ToastUtil.error(_mActivity, getString(R.string.input_sms_code_hint));
+            return;
+        }
+        EasyJSONObject params = EasyJSONObject.generate(
+                "mobile", fullMobile,
+                "smsAuthCode", smsCode,
+                "clientType", Constant.CLIENT_TYPE_ANDROID
+        );
+        Api.postUI(Api.PATH_MOBILE_LOGIN, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                try {
+                    int code = responseObj.getInt("code");
+                    if (code != ResponseCode.SUCCESS) {
+                        ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
+                        // 如果出錯，刷新驗證碼
+                        refreshCaptcha();
+                        return;
+                    }
+
+                    ToastUtil.success(_mActivity, "登入成功");
+                    int userId = responseObj.getInt("datas.memberId");
+                    SharedPreferenceUtil.saveUserInfo(responseObj);
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                    hideSoftInput();
+                    SqliteUtil.switchUserDB(userId);
+
+                    if (commonCallback != null) {
+                        SLog.info("Fragment出棧");
+                        commonCallback.onSuccess(null);
+                    }
+                } catch (EasyJSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
