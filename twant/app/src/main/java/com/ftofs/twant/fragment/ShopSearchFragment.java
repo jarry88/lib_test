@@ -3,22 +3,32 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.StoreSearchItemAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.domain.store.StoreLabel;
+import com.ftofs.twant.entity.SearchItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
-import com.nex3z.flowlayout.FlowLayout;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -35,8 +45,8 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
     String extraData;
 
     EditText etKeyword;
-    FlowLayout flNewGoodsContainer;
-    FlowLayout flHotGoodsContainer;
+    StoreSearchItemAdapter adapter;
+    List<SearchItem> searchItemList = new ArrayList<>();
 
     /**
      * 新建新實例
@@ -71,13 +81,49 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
         extraData = args.getString("extraData");
 
         etKeyword = view.findViewById(R.id.et_keyword);
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    doSearch();
+                }
+                return false;
+            }
+        });
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_search, this);
         Util.setOnClickListener(view, R.id.btn_clear_all, this);
 
-        flNewGoodsContainer = view.findViewById(R.id.fl_new_goods_container);
-        flHotGoodsContainer = view.findViewById(R.id.fl_hot_goods_container);
+        RecyclerView rvList = view.findViewById(R.id.rv_list);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(_mActivity, 2);
+        rvList.setLayoutManager(gridLayoutManager);
+        adapter = new StoreSearchItemAdapter(searchItemList);
+        adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
+                SearchItem item = searchItemList.get(position);
+                if (item.getItemType() == SearchItem.ITEM_TYPE_CATEGORY) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            }
+        });
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SearchItem item = searchItemList.get(position);
+                // Label忽略點擊
+                if (item.getItemType() == SearchItem.ITEM_TYPE_CATEGORY) { // 商品分類搜索
+
+                } else { // 具體的商品，跳到商品詳情
+                    redirectToGoodsDetailFragment(item.id);
+                }
+            }
+        });
+        rvList.setAdapter(adapter);
+
 
         if (!StringUtil.isEmpty(extraData)) {
             populateData(extraData);
@@ -94,13 +140,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
                 pop();
                 break;
             case R.id.btn_search:
-                // 顯示搜索結果頁面
-                String keyword = etKeyword.getText().toString().trim();
-                if (keyword.length() < 1) {
-                    ToastUtil.error(_mActivity, "請輸入搜索關鍵字");
-                    return;
-                }
-                Util.startFragment(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", storeId, "keyword", keyword).toString()));
+                doSearch();
                 break;
             case R.id.btn_clear_all:
                 etKeyword.setText("");
@@ -108,6 +148,16 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
             default:
                 break;
         }
+    }
+
+    private void doSearch() {
+        // 顯示搜索結果頁面
+        String keyword = etKeyword.getText().toString().trim();
+        if (keyword.length() < 1) {
+            ToastUtil.error(_mActivity, "請輸入搜索關鍵字");
+            return;
+        }
+        Util.startFragment(ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", storeId, "keyword", keyword).toString()));
     }
 
     /**
@@ -121,60 +171,67 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
         }
 
         try {
+            // 最新商品
+            searchItemList.add(new SearchItem(SearchItem.ITEM_TYPE_CATEGORY, SearchItem.CATEGORY_ID_NEW, getString(R.string.text_new_in_chinese)));
             EasyJSONArray newGoodsVoList = responseObj.getArray("datas.newGoodsVoList");
             for (Object object : newGoodsVoList) {
                 EasyJSONObject newGoodsVo = (EasyJSONObject) object;
 
-                TextView textView = new TextView(_mActivity);
+                int commonId = newGoodsVo.getInt("commonId");
+                String goodsName = newGoodsVo.getString("goodsName");
 
-                textView.setPadding(Util.dip2px(_mActivity, 16), Util.dip2px(_mActivity, 6),
-                        Util.dip2px(_mActivity, 16), Util.dip2px(_mActivity, 6));
-                textView.setTag(newGoodsVo.getInt("commonId"));
-                textView.setText(newGoodsVo.getString("goodsName"));
-                textView.setTextSize(14);
-                textView.setTextColor(getResources().getColor(R.color.tw_black, null));
-                textView.setBackgroundResource(R.drawable.search_item_bg);
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TextView tv = (TextView) v;
-                        String goodsName = tv.getText().toString();
-                        int commonId = (int) tv.getTag();
-                        redirectToGoodsDetailFragment(commonId);
-                    }
-                });
-
-                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                flNewGoodsContainer.addView(textView, layoutParams);
+                SearchItem searchItem = new SearchItem(SearchItem.ITEM_TYPE_GOODS, commonId, goodsName);
+                searchItem.action = SearchItem.ACTION_GOTO_CATEGORY;
+                searchItemList.add(searchItem);
             }
 
+            // 店鋪熱賣
+            searchItemList.add(new SearchItem(SearchItem.ITEM_TYPE_CATEGORY, SearchItem.CATEGORY_ID_HOT, getString(R.string.text_store_hot_item_chinese)));
             EasyJSONArray commendGoodsVoList = responseObj.getArray("datas.commendGoodsVoList");
             for (Object object : commendGoodsVoList) {
                 EasyJSONObject commendGoodsVo = (EasyJSONObject) object;
 
-                TextView textView = new TextView(_mActivity);
+                int commonId = commendGoodsVo.getInt("commonId");
+                String goodsName = commendGoodsVo.getString("goodsName");
 
-                textView.setPadding(Util.dip2px(_mActivity, 16), Util.dip2px(_mActivity, 6),
-                        Util.dip2px(_mActivity, 16), Util.dip2px(_mActivity, 6));
-                textView.setTag(commendGoodsVo.getInt("commonId"));
-                textView.setText(commendGoodsVo.getString("goodsName"));
-                textView.setTextSize(14);
-                textView.setTextColor(getResources().getColor(R.color.tw_black, null));
-                textView.setBackgroundResource(R.drawable.search_item_bg);
-                textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TextView tv = (TextView) v;
-                        String goodsName = tv.getText().toString();
-                        int commonId = (int) tv.getTag();
-                        redirectToGoodsDetailFragment(commonId);
-                    }
-                });
-
-                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                flHotGoodsContainer.addView(textView, layoutParams);
+                SearchItem searchItem = new SearchItem(SearchItem.ITEM_TYPE_GOODS, commonId, goodsName);
+                searchItem.action = SearchItem.ACTION_GOTO_GOODS;  // 跳轉到具體商品
+                searchItemList.add(searchItem);
             }
 
+
+            // 其它分類
+            EasyJSONArray storeCategoryList = responseObj.getArray("datas.storeCategoryList");
+            for (Object object : storeCategoryList) {
+                EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+
+                SearchItem searchItem = new SearchItem(SearchItem.ITEM_TYPE_CATEGORY,
+                        easyJSONObject.getInt("storeLabelId"), easyJSONObject.getString("storeLabelName"));
+                searchItem.storeId = easyJSONObject.getInt("storeId");
+                searchItem.action = SearchItem.ACTION_GOTO_CATEGORY;
+                searchItemList.add(searchItem);
+
+                EasyJSONArray storeLabelList = easyJSONObject.getArray("storeLabelList");
+                if (storeLabelList != null && storeLabelList.length() > 0) {
+                    for (Object object2 : storeLabelList) {
+                        EasyJSONObject easyJSONObject2 = (EasyJSONObject) object2;
+                        StoreLabel storeLabel2 = new StoreLabel();
+                        storeLabel2.setStoreLabelId(easyJSONObject2.getInt("storeLabelId"));
+                        storeLabel2.setStoreLabelName(easyJSONObject2.getString("storeLabelName"));
+                        storeLabel2.setParentId(easyJSONObject2.getInt("parentId"));
+                        storeLabel2.setStoreId(easyJSONObject2.getInt("storeId"));
+
+                        // 2級Item
+                        SearchItem searchItem2 = new SearchItem(SearchItem.ITEM_TYPE_GOODS,
+                                easyJSONObject2.getInt("storeLabelId"), easyJSONObject2.getString("storeLabelName"));
+                        searchItem2.storeId = easyJSONObject2.getInt("storeId");
+                        searchItem.action = SearchItem.ACTION_GOTO_CATEGORY;
+                        searchItemList.add(searchItem2);
+                    }
+                }
+            }
+
+            adapter.setNewData(searchItemList);
         } catch (EasyJSONException e) {
             e.printStackTrace();
         }

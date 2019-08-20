@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/tv_goods_name"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:layout_marginLeft="7.5dp"
+    android:layout_marginRight="7.5dp"
+    android:layout_marginTop="10dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:gravity="center_vertical"
+    android:singleLine="true"
+    android:ellipsize="end"
+    android:textSize="14sp"
+    android:textColor="@color/tw_black"
+    android:background="@drawable/shop_category_goods_item_bg">
+</TextView>

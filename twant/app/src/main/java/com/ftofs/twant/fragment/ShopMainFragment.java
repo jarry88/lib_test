@@ -104,6 +104,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
 
         Util.setOnClickListener(view, R.id.btn_menu, this);
+        Util.setOnClickListener(view, R.id.btn_search, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
     }
 
@@ -141,7 +142,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         int id = v.getId();
         if (id == R.id.btn_back) {
             pop();
-        } if (id == R.id.btn_menu) {
+        } else if (id == R.id.btn_menu) {
             SLog.info("here");
             new XPopup.Builder(_mActivity)
                     .offsetX(-Util.dip2px(_mActivity, 15))
@@ -151,6 +152,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     .atView(v)
                     .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_STORE))
                     .show();
+        } else if (id == R.id.btn_search) {
+            start(ShopSearchFragment.newInstance(storeId, null));
         } else { // 點擊底部導航欄
             int len = bottomBarButtonIds.length;
             // 想要选中的Fragment的下标
