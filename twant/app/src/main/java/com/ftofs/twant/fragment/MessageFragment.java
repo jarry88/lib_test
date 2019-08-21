@@ -85,6 +85,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         Bundle args = getArguments();
         isStandalone = args.getBoolean("isStandalone");
 
+        Util.setOnClickListener(view, R.id.btn_contact, this);
         Util.setOnClickListener(view, R.id.btn_message_menu, this);
         Util.setOnClickListener(view, R.id.btn_view_logistics_message, this);
         Util.setOnClickListener(view, R.id.btn_view_refund_message, this);
@@ -253,6 +254,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     .atView(v)
                     .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_MESSAGE))
                     .show();
+        } else if (id == R.id.btn_contact) {
+            Util.startFragment(ContactFragment.newInstance());
         }
     }
 

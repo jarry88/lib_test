@@ -759,7 +759,7 @@ public class Api {
     /**
      * 支付寶支付完成
      */
-    public static final String PATH_ALIPAY_FINISH = "/alipay/finish";
+    public static final String PATH_ALIPAY_FINISH = "/member/alipay/finish";
 
 
     /**
