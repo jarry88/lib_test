@@ -116,7 +116,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         if (homeFragment == null) {
             mFragments[HOME_FRAGMENT] = ShopHomeFragment.newInstance();
-            mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance(EasyJSONObject.generate("storeId", storeId).toString());
+            mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance(false, EasyJSONObject.generate("storeId", storeId).toString());
             mFragments[CATEGORY_FRAGMENT] = ShopCategoryFragment.newInstance();
             mFragments[ACTIVITY_FRAGMENT] = ShopActivityFragment.newInstance();
             mFragments[CUSTOMER_SERVICE_FRAGMENT] = ShopCustomerServiceFragment.newInstance();

@@ -229,7 +229,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
 
                             ++i;
                         }
-                        SLog.info("i__=%d", i);
+                        // SLog.info("i__=%d", i);
                         categoryCommodityList.list = categoryCommodityRows;
                         if (first) {
                             categoryCommodityRowList = categoryCommodityRows;

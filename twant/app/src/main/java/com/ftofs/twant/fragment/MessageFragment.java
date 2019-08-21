@@ -55,6 +55,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
      */
     boolean isStandalone;
     ScaledButton btnBack;
+    ScaledButton btnContact;
     ChatConversationAdapter adapter;
 
     List<ChatConversation> chatConversationList = new ArrayList<>();
@@ -85,16 +86,22 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         Bundle args = getArguments();
         isStandalone = args.getBoolean("isStandalone");
 
-        Util.setOnClickListener(view, R.id.btn_contact, this);
+
         Util.setOnClickListener(view, R.id.btn_message_menu, this);
         Util.setOnClickListener(view, R.id.btn_view_logistics_message, this);
         Util.setOnClickListener(view, R.id.btn_view_refund_message, this);
 
         btnBack = view.findViewById(R.id.btn_back);
+        btnContact = view.findViewById(R.id.btn_contact);
 
         if (isStandalone) {
             btnBack.setOnClickListener(this);
             btnBack.setVisibility(View.VISIBLE);
+            btnContact.setVisibility(View.GONE);
+        } else {
+            btnContact.setOnClickListener(this);
+            btnBack.setVisibility(View.GONE);
+            btnContact.setVisibility(View.VISIBLE);
         }
 
         RecyclerView rvChatConversationList = view.findViewById(R.id.rv_chat_conversation_list);

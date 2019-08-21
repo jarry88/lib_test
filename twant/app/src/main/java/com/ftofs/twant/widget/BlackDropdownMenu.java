@@ -15,6 +15,7 @@ import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.CartFragment;
 import com.ftofs.twant.fragment.ContactFragment;
 import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.fragment.PersonalInfoFragment;
 import com.ftofs.twant.fragment.SearchFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
@@ -183,13 +184,11 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 break;
             case TYPE_STORE:
                 // 消息
-                baseFragment.popTo(MainFragment.class, false);
-                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.MESSAGE_FRAGMENT);
+                Util.startFragment(MessageFragment.newInstance(true));
                 break;
             case TYPE_ORDER:
                 // 消息
-                baseFragment.popTo(MainFragment.class, false);
-                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.MESSAGE_FRAGMENT);
+                Util.startFragment(MessageFragment.newInstance(true));
                 break;
             default:
                 break;

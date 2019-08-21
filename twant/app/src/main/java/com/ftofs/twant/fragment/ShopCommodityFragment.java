@@ -32,6 +32,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 
+
 /**
  * 店鋪商品Fragment
  * @author zwm
@@ -45,20 +46,22 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
     List<Goods> goodsList = new ArrayList<>();
 
+    boolean isStandalone;
     int storeId;
     EasyJSONObject paramsOriginal;
     boolean priceAsc;
 
 
-
     /**
      * 新建一個實例
+     * @param isStandalone
      * @param paramsStr JSON字符串格式參數  必傳，最少要傳一個storeId
      * @return
      */
-    public static ShopCommodityFragment newInstance(String paramsStr) {
+    public static ShopCommodityFragment newInstance(boolean isStandalone, String paramsStr) {
         Bundle args = new Bundle();
 
+        args.putBoolean("isStandalone", isStandalone);
         args.putString("paramsStr", paramsStr);
         SLog.info("paramsStr[%s]", paramsStr);
 
@@ -81,12 +84,22 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         parentFragment = (ShopMainFragment) getParentFragment();
 
         Bundle args = getArguments();
+        isStandalone = args.getBoolean("isStandalone");
         String paramsStr = args.getString("paramsStr");
         paramsOriginal = (EasyJSONObject) EasyJSONObject.parse(paramsStr);
         try {
             storeId = paramsOriginal.getInt("storeId");
         } catch (EasyJSONException e) {
             e.printStackTrace();
+        }
+
+
+        if (isStandalone) {
+            view.findViewById(R.id.tool_bar).setVisibility(View.VISIBLE);
+            Util.setOnClickListener(view, R.id.btn_search_goods, this);
+            Util.setOnClickListener(view, R.id.btn_back, this);
+        } else {
+            view.findViewById(R.id.tool_bar).setVisibility(View.GONE);
         }
 
 
@@ -245,7 +258,12 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-
+        int id = v.getId();
+        if (id == R.id.btn_back) {
+            pop();
+        } else if (id == R.id.btn_search_goods) {
+            Util.startFragment(ShopSearchFragment.newInstance(storeId, null));
+        }
     }
 
     @Override

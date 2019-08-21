@@ -110,7 +110,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             "storeId", parentFragment.getStoreId(),
                             "conformId", storeConformList.get(position).conformId);
 
-                    Util.startFragment(ShopCommodityFragment.newInstance(params.toString()));
+                    Util.startFragment(ShopCommodityFragment.newInstance(true, params.toString()));
                 }
             }
         });
@@ -126,7 +126,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             "storeId", parentFragment.getStoreId(),
                             "discountId", storeDiscountList.get(position).discountId);
 
-                    Util.startFragment(ShopCommodityFragment.newInstance(params.toString()));
+                    Util.startFragment(ShopCommodityFragment.newInstance(true, params.toString()));
                 }
             }
         });
