@@ -617,6 +617,7 @@
     <string name="text_job_desc">崗位描述</string>
     <string name="text_mail_box">郵箱</string>
     <string name="text_in_store_person_list">進店人員列表</string>
+    <string name="text_open_pay_ui">提交訂單成功，正在打開支付界面，請稍候...</string>
 
 
     <!-- 貨幣種類標志 -->

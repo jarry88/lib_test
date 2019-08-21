@@ -751,11 +751,15 @@ public class Api {
      */
     public static final String PATH_WXPAY_FINISH = "/member/wxpay/finish";
 
-
     /**
      * 支付寶支付
      */
     public static final String PATH_ALIPAY = "/member/buy/pay/new/alipay";
+
+    /**
+     * 支付寶支付完成
+     */
+    public static final String PATH_ALIPAY_FINISH = "/alipay/finish";
 
 
     /**

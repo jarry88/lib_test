@@ -9,6 +9,7 @@ import android.text.TextUtils;
 
 import com.alipay.sdk.app.PayTask;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
@@ -18,6 +19,7 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
@@ -65,10 +67,37 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 // 判断resultStatus 为9000则代表支付成功
                 if (TextUtils.equals(resultStatus, "9000")) {
                     // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                    ToastUtil.success(MainActivity.this, "支付成功" + payResult);
+                    ToastUtil.success(MainActivity.this, "支付寶支付成功");
+                    SLog.info("支付寶支付成功[%s]", payResult);
+
+                    int userId = User.getUserId();
+                    String key = String.format(SPField.FIELD_ALI_PAY_ID, userId);
+                    SLog.info("key[%s]", key);
+                    String payData = Hawk.get(key, "");
+                    SLog.info("payData[%s]", payData);
+                    EasyJSONObject payDataObj = (EasyJSONObject) EasyJSONObject.parse(payData);
+                    if (payDataObj == null) {
+                        return;
+                    }
+
+                    try {
+                        long timestampMillis = payDataObj.getLong("timestampMillis");
+                        int payId = payDataObj.getInt("payId");
+                        long now = System.currentTimeMillis();
+
+                        if (now - timestampMillis > 60 * 1000) { // 如果超過1分鐘不通知
+                            return;
+                        }
+
+                        // 來到這里，有付款，就肯定要通知服務器,true
+                        PayUtil.onPaySuccess(true, payId, PayUtil.VENDOR_ALI);
+                    } catch (Exception e) {
+
+                    }
                 } else {
                     // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                    ToastUtil.error(MainActivity.this, "支付失敗" + payResult);
+                    ToastUtil.error(MainActivity.this, "支付寶支付失敗" + payResult);
+                    SLog.info("支付寶支付失敗[%s]", payResult);
                 }
             }
         }
@@ -216,16 +245,17 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
     /**
      * 調用支付寶支付
+     * @param orderInfo  订单信息
      */
-    public void startAliPay() {
-        final String orderInfo = "";   // 订单信息
-
+    public void startAliPay(String orderInfo) {
         Runnable payRunnable = new Runnable() {
             @Override
             public void run() {
+                SLog.info("調用支付寶支付");
                 PayTask alipay = new PayTask(MainActivity.this);
                 Map<String,String> result = alipay.payV2(orderInfo,true);
 
+                SLog.info("支付寶支付結果[%s]", result);
                 Message msg = new Message();
                 msg.what = RequestCode.ALI_PAY.ordinal();
                 msg.obj = result;
@@ -233,7 +263,6 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             }
         };
         // 必须异步调用
-        Thread payThread = new Thread(payRunnable);
-        payThread.start();
+        TwantApplication.getThreadPool().execute(payRunnable);
     }
 }

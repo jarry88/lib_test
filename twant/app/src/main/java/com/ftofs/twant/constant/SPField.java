@@ -29,4 +29,9 @@ public class SPField {
      * 微信支付訂單的PayId
      */
     public static final String FIELD_WX_PAY_ID = "wx_pay_id_%d";
+
+    /**
+     * 支付寶支付訂單的PayId
+     */
+    public static final String FIELD_ALI_PAY_ID = "ali_pay_id_%d";
 }

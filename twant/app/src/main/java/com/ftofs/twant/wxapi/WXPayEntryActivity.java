@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.widget.PayPopup;
@@ -89,7 +90,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
             }
 
             // 來到這里，有付款，就肯定要通知服務器,true
-            PayPopup.onWXPaySuccess(true, payId);
+            PayUtil.onPaySuccess(true, payId, PayUtil.VENDOR_WEIXIN);
         } catch (Exception e) {
 
         }

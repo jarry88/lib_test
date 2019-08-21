@@ -19,6 +19,7 @@ import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Guid;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -151,18 +152,13 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                             return;
                         }
 
-                        ToastUtil.success(mainActivity, "提交訂單成功，正在打開支付界面，請稍候...");
+                        ToastUtil.success(mainActivity, context.getString(R.string.text_open_pay_ui));
                         dismiss();
 
                         EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
                         MPaySdk.mPay(mainActivity, datas.toString(), mainActivity);
 
-                        int userId = User.getUserId();
-                        if (userId > 0) {
-                            String key = String.format(SPField.FIELD_MPAY_PAY_ID, userId);
-                            SLog.info("key[%s]", key);
-                            Hawk.put(key, EasyJSONObject.generate("payId", payId, "timestampMillis", System.currentTimeMillis()).toString());
-                        }
+                        markPayId(SPField.FIELD_MPAY_PAY_ID);
                     } catch (Exception e) {
 
                     }
@@ -203,7 +199,7 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                             int isPay = responseObj.getInt("datas.isPay");
                             if (isPay == 1) {
                                 // isPay為1 表示已經支付，無需請求大豐SDK
-                                onTaifungPaySuccess(false);
+                                PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_TAIFUNG);
                                 dismiss();
                                 return;
                             }
@@ -212,7 +208,7 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                         String uuid = responseObj.getString("datas.tx_uuid");
                         String notifyUrl = responseObj.getString("datas.notify_url");
 
-                        ToastUtil.success(mainActivity, "提交訂單成功，正在打開支付界面，請稍候...");
+                        ToastUtil.success(mainActivity, context.getString(R.string.text_open_pay_ui));
                         dismiss();
 
                         SLog.info("uuid[%s], notifyUrl[%s]", uuid, notifyUrl);
@@ -236,7 +232,7 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                                             } else if (code == 1) {
                                                 ToastUtil.success(context, errorMsg);
 
-                                                onTaifungPaySuccess(true);
+                                                PayUtil.onPaySuccess(true, payId, PayUtil.VENDOR_TAIFUNG);
                                             }
                                         }
                                     }
@@ -280,13 +276,13 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                             int isPay = responseObj.getInt("datas.isPayed");
                             if (isPay == 1) {
                                 // isPay為1 表示已經支付，無需請求微信SDK
-                                onWXPaySuccess(false, payId);
+                                PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_WEIXIN);
                                 dismiss();
                                 return;
                             }
                         }
 
-                        ToastUtil.success(mainActivity, "提交訂單成功，正在打開支付界面，請稍候...");
+                        ToastUtil.success(mainActivity, context.getString(R.string.text_open_pay_ui));
                         dismiss();
                         EasyJSONObject payData = responseObj.getObject("datas.payData");
 
@@ -306,13 +302,7 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
 
                         TwantApplication.wxApi.sendReq(req);
 
-                        int userId = User.getUserId();
-                        if (userId > 0) {
-                            String key = String.format(SPField.FIELD_WX_PAY_ID, userId);
-                            SLog.info("key[%s]", key);
-                            Hawk.put(key, EasyJSONObject.generate("payId", payId, "timestampMillis", System.currentTimeMillis()).toString());
-                        }
-
+                        markPayId(SPField.FIELD_WX_PAY_ID);
                     } catch (Exception e) {
                         SLog.info("Error!%s", e.getMessage());
                     }
@@ -346,7 +336,23 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
                             return;
                         }
 
+                        // 有些商品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
+                        if (responseObj.exists("datas.isPayed")) {
+                            int isPay = responseObj.getInt("datas.isPayed");
+                            if (isPay == 1) {
+                                // isPay為1 表示已經支付，無需請求支付寶SDK
+                                PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_ALI);
+                                dismiss();
+                                return;
+                            }
+                        }
 
+                        ToastUtil.success(mainActivity, context.getString(R.string.text_open_pay_ui));
+
+                        String orderInfo = responseObj.getString("datas.payData");
+                        mainActivity.startAliPay(orderInfo);
+                        markPayId(SPField.FIELD_ALI_PAY_ID);
+                        dismiss();
                     } catch (Exception e) {
 
                     }
@@ -356,110 +362,15 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
     }
 
     /**
-     * 大豐支付成功處理
-     * @param notifyServer  是否通知服務器端
+     * 記錄payId
+     * @param field
      */
-    private void onTaifungPaySuccess(boolean notifyServer) {
-        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
-        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
-
-        Util.startFragment(PaySuccessFragment.newInstance(""));
-
-        if (notifyServer) {
-            taifungPaySuccessNotify();
+    private void markPayId(String field) {
+        int userId = User.getUserId();
+        if (userId > 0) {
+            String key = String.format(field, userId);
+            SLog.info("key[%s]", key);
+            Hawk.put(key, EasyJSONObject.generate("payId", payId, "timestampMillis", System.currentTimeMillis()).toString());
         }
-    }
-
-
-    /**
-     * 大豐支付成功通知服務器
-     */
-    private void taifungPaySuccessNotify() {
-        String token = User.getToken();
-
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
-
-        EasyJSONObject params = EasyJSONObject.generate("token", token, "payId", payId);
-
-        Api.getIO(Api.PATH_TAIFUNG_PAY_FINISH, params, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                SLog.info("大豐支付成功，通知服務器失敗");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String responseStr = response.body().string();
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.isError(responseObj)) {
-                        SLog.info("大豐支付成功，通知服務器失敗");
-                        return;
-                    }
-
-                    SLog.info("大豐支付成功，通知服務器成功");
-                } catch (Exception e) {
-
-                }
-            }
-        });
-    }
-
-    /**
-     * 微信支付成功處理
-     * @param notifyServer  是否通知服務器端
-     */
-    public static void onWXPaySuccess(boolean notifyServer, int payId) {
-        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
-        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
-
-        Util.startFragment(PaySuccessFragment.newInstance(""));
-
-        if (notifyServer) {
-            wxPaySuccessNotify(payId);
-        }
-    }
-
-
-    /**
-     * 微信支付成功通知服務器
-     */
-    public static void wxPaySuccessNotify(int payId) {
-        String token = User.getToken();
-
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
-
-        EasyJSONObject params = EasyJSONObject.generate("token", token, "payId", payId);
-
-        Api.getIO(Api.PATH_WXPAY_FINISH, params, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                SLog.info("微信支付成功，通知服務器失敗");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    String responseStr = response.body().string();
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.isError(responseObj)) {
-                        SLog.info("微信支付成功，通知服務器失敗");
-                        return;
-                    }
-
-                    SLog.info("微信支付成功，通知服務器成功");
-                } catch (Exception e) {
-
-                }
-            }
-        });
     }
 }
