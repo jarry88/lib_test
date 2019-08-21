@@ -15,6 +15,11 @@ import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
+
+/**
+ * 評論列表Adapter
+ * @author zwm
+ */
 public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHolder> {
 
     public CommentListAdapter(int layoutResId, @Nullable List<CommentItem> data) {
@@ -24,7 +29,7 @@ public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHo
     @Override
     protected void convert(BaseViewHolder helper, CommentItem item) {
         ImageView imgCommenterAvatar = helper.getView(R.id.img_commenter_avatar);
-        Glide.with(mContext).load(Config.OSS_BASE_URL + "/" + item.commenterAvatar).centerCrop().into(imgCommenterAvatar);
+        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.commenterAvatar)).centerCrop().into(imgCommenterAvatar);
 
         TextView tvContent = helper.getView(R.id.tv_content);
         tvContent.setText(StringUtil.translateEmoji(mContext, item.content, (int) tvContent.getTextSize()));
@@ -33,14 +38,14 @@ public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHo
                 .setText(R.id.tv_comment_time, item.commentTime)
                 .setText(R.id.btn_reply, mContext.getString(R.string.text_reply) + " " + item.commentReply)
                 .setText(R.id.tv_thumb_count, String.valueOf(item.commentLike))
-                .addOnClickListener(R.id.btn_reply, R.id.btn_thumb);
+                .addOnClickListener(R.id.btn_reply, R.id.btn_thumb, R.id.img_commenter_avatar);
 
 
         if (item.commentType == Constant.COMMENT_TYPE_TEXT || StringUtil.isEmpty(item.imageUrl)) {
             helper.setGone(R.id.image_view, false);
         } else {
             ImageView imageView = helper.getView(R.id.image_view);
-            Glide.with(mContext).load(Config.OSS_BASE_URL + "/" + item.imageUrl).centerCrop().into(imageView);
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.imageUrl)).centerCrop().into(imageView);
             helper.setVisible(R.id.image_view, true);
         }
 

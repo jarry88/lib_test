@@ -19,6 +19,7 @@ import com.ftofs.twant.entity.CategoryBrand;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class CategoryBrandAdapter extends BaseQuickAdapter<CategoryBrand, BaseVi
             showLeft = false;
         }
 
-        String imageUrl = Config.OSS_BASE_URL + "/" + categoryBrand.imageUrl;
+        String imageUrl = StringUtil.normalizeImageUrl(categoryBrand.imageUrl);
         SLog.info("imageUrl[%s]", imageUrl);
 
         if (showLeft) {

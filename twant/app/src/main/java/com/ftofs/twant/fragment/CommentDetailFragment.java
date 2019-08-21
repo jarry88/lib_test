@@ -130,6 +130,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         silMainContainer = view.findViewById(R.id.sil_main_container);
 
         imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
+        imgCommenterAvatar.setOnClickListener(this);
         tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
         tvCommentTime = view.findViewById(R.id.tv_comment_time);
         tvContent = view.findViewById(R.id.tv_content);
@@ -363,6 +364,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             if (!StringUtil.isEmpty(commentImageUrl)) {
                 start(ImageViewerFragment.newInstance(commentImageUrl));
             }
+        } else if (id == R.id.img_commenter_avatar) {
+            start(MemberInfoFragment.newInstance(commentItem.memberName));
         }
     }
 
@@ -418,7 +421,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                             return;
                         }
 
-                        Glide.with(_mActivity).load(Config.OSS_BASE_URL + "/" + commentItem.commenterAvatar).centerCrop().into(imgCommenterAvatar);
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(commentItem.commenterAvatar)).centerCrop().into(imgCommenterAvatar);
                         tvCommenterNickname.setText(commentItem.nickname);
                         tvCommentTime.setText(commentItem.commentTime);
                         tvContent.setText(StringUtil.translateEmoji(_mActivity, commentItem.content, (int) tvContent.getTextSize()));

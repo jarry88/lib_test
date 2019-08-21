@@ -30,6 +30,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
@@ -301,7 +302,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 } else {
                                     price = (float) goods.getDouble("batchPrice2");
                                 }
-                                String nationalFlag = Config.OSS_BASE_URL + "/" + goods.getString("adminCountry.nationalFlag");
+                                String nationalFlag = StringUtil.normalizeImageUrl(goods.getString("adminCountry.nationalFlag"));
                                 goodsItemList.add(new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
                                         storeName, commonId, goodsName, jingle, price, nationalFlag));
                             }

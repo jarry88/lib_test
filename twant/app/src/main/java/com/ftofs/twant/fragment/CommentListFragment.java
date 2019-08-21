@@ -16,6 +16,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.domain.member.Member;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -102,7 +103,9 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                 if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 } else if (id == R.id.btn_reply) {
-                    Util.startFragment(CommentDetailFragment.newInstance(commentItem));
+                    start(CommentDetailFragment.newInstance(commentItem));
+                } else if (id == R.id.img_commenter_avatar) {
+                    start(MemberInfoFragment.newInstance(commentItem.memberName));
                 }
             }
         });
@@ -171,6 +174,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                         EasyJSONArray comments = responseObj.getArray("datas.comments");
                         for (Object object : comments) {
                             EasyJSONObject comment = (EasyJSONObject) object;
+                            EasyJSONObject memberVo = comment.getObject("memberVo");
                             CommentItem item = new CommentItem();
                             item.commentId = comment.getInt("commentId");
                             item.commentChannel = comment.getInt("commentChannel");
@@ -183,8 +187,9 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                             item.isLike = comment.getInt("isLike");
                             item.commentReply = comment.getInt("commentReply");
 
-                            item.commenterAvatar = comment.getString("memberVo.avatar");
-                            item.nickname = comment.getString("memberVo.nickName");
+                            item.commenterAvatar = memberVo.getString("avatar");
+                            item.memberName = memberVo.getString("memberName");
+                            item.nickname = memberVo.getString("nickName");
                             item.commentTime = comment.getString("commentStartTime");
 
                             if (commentChannel == Constant.COMMENT_CHANNEL_STORE) {

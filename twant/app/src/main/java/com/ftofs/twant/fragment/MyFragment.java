@@ -18,15 +18,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FollowMeAvatarAdapter;
 import com.ftofs.twant.adapter.MemberPostListAdapter;
-import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
-import com.ftofs.twant.entity.FollowMeListItem;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.entity.UniversalMemberItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -55,7 +54,7 @@ import okhttp3.Call;
  */
 public class MyFragment extends BaseFragment implements View.OnClickListener {
     // 【關注我的】數據列表
-    List<FollowMeListItem> followMeList = new ArrayList<>();
+    List<UniversalMemberItem> followMeList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
 
     BaseQuickAdapter adapter;
@@ -114,6 +113,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_interactive, this);
 
         Util.setOnClickListener(view, R.id.btn_publish_post, this);
+        Util.setOnClickListener(view, R.id.btn_show_more, this);
+        Util.setOnClickListener(view, R.id.icon_expand, this);
 
         QuickClickButton btnQuickClick = view.findViewById(R.id.btn_quick_click);
         btnQuickClick.setOnQuickClickListener(new QuickClickButton.OnQuickClickListener() {
@@ -153,7 +154,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                FollowMeListItem item = followMeList.get(position);
+                UniversalMemberItem item = followMeList.get(position);
                 String memberName = item.memberName;
                 Util.startFragment(MemberInfoFragment.newInstance(memberName));
             }
@@ -219,6 +220,11 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             case R.id.btn_publish_post:
                 Util.startFragment(AddPostFragment.newInstance());
                 break;
+            // 點擊兩個地方都顯示【關注我的】Fragment
+            case R.id.btn_show_more:
+            case R.id.icon_expand:
+                Util.startFragment(FollowMeFragment.newInstance(followMeList));
+                break;
             default:
                 break;
         }
@@ -283,10 +289,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     EasyJSONArray fansList = responseObj.getArray("datas.fansList");
                     for (Object object : fansList) {
                         EasyJSONObject fans = (EasyJSONObject) object;
-                        String avatar = fans.getString("avatar");
-                        String memberName = fans.getString("memberName");
 
-                        FollowMeListItem item = new FollowMeListItem(memberName, avatar);
+                        UniversalMemberItem item = new UniversalMemberItem();
+                        item.avatarUrl = fans.getString("avatar");
+                        item.memberName = fans.getString("memberName");
+                        item.nickname = fans.getString("nickName");
+                        item.memberSignature = fans.getString("memberSignature");
                         followMeList.add(item);
                     }
 

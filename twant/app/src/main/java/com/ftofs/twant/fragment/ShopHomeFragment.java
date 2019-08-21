@@ -87,7 +87,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     TextView tvCommentContent;
 
     TextView tvLikeCount;
+    int likeCount;
     TextView tvFavoriteCount;
+    int favoriteCount;
 
     LinearLayout llFirstCommentContainer;
     LinearLayout llShopAnnouncementContainer;
@@ -205,7 +207,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvJobSalary2 = view.findViewById(R.id.tv_job_salary2);
 
         Util.setOnClickListener(view, R.id.btn_shop_map, this);
-        Util.setOnClickListener(view, R.id.btn_view_all_comment, this);
+        Util.setOnClickListener(view, R.id.rl_shop_comment_container, this);
         Util.setOnClickListener(view, R.id.btn_view_all_wanted, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
 
@@ -269,8 +271,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         storeName = storeInfo.getString("storeName");
                         parentFragment.setShopName(storeName);
 
-                        String shopAvatarUrl = Config.OSS_BASE_URL + "/" + storeInfo.getString("storeAvatar");
-                        SLog.info("storeAvatar__[%s]", shopAvatarUrl);
+                        String shopAvatarUrl = StringUtil.normalizeImageUrl(storeInfo.getString("storeAvatar"));
                         // 店鋪頭像
                         Glide.with(ShopHomeFragment.this).load(shopAvatarUrl).centerCrop().into(imgShopAvatar);
                         // 將店鋪頭像設置到工具欄按鈕
@@ -286,11 +287,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         tvShopOpenDay.setText(getString(R.string.text_store_open_day_prefix) + storeInfo.getString("shopDay"));
 
                         // 店鋪形象圖
-                        String shopFigureUrl = Config.OSS_BASE_URL + "/" + storeInfo.getString("storeFigureImage");
+                        String shopFigureUrl = StringUtil.normalizeImageUrl(storeInfo.getString("storeFigureImage"));
                         Glide.with(ShopHomeFragment.this).load(shopFigureUrl).into(imgShopFigure);
 
-                        tvLikeCount.setText(String.valueOf(storeInfo.getInt("likeCount")));
-                        tvFavoriteCount.setText(String.valueOf(storeInfo.getInt("collectCount")));
+                        likeCount = storeInfo.getInt("likeCount");
+                        tvLikeCount.setText(String.valueOf(likeCount));
+                        favoriteCount = storeInfo.getInt("collectCount");
+                        tvFavoriteCount.setText(String.valueOf(favoriteCount));
+
                         isLike = storeInfo.getInt("isLike");
                         isFavorite = storeInfo.getInt("isFavorite");
                         SLog.info("isLike[%d], isFavorite[%d]", isLike, isFavorite);
@@ -365,8 +369,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         EasyJSONArray snsArray = responseObj.getArray("datas.socialList");
                         for (Object object : snsArray) {
                             EasyJSONObject snsObject = (EasyJSONObject) object;
-                            String snsImageUrl = Config.OSS_BASE_URL + "/" + snsObject.getString("socialLogoChecked");
-                            // SLog.info("snsImageUrl[%s]", snsImageUrl);
+                            String snsImageUrl = StringUtil.normalizeImageUrl(snsObject.getString("socialLogoChecked"));
                             ImageView snsImage = new ImageView(_mActivity);
 
                             LinearLayout.LayoutParams layoutParams =
@@ -380,7 +383,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         EasyJSONArray paymentArray = responseObj.getArray("datas.storePaymentList");
                         for (Object object : paymentArray) {
                             EasyJSONObject paymentObject = (EasyJSONObject) object;
-                            String payWayImageUrl = Config.OSS_BASE_URL + "/" + paymentObject.getString("paymentLogo");
+                            String payWayImageUrl = StringUtil.normalizeImageUrl(paymentObject.getString("paymentLogo"));
                             // SLog.info("payWayImageUrl[%s]", payWayImageUrl);
                             ImageView payWayImage = new ImageView(_mActivity);
 
@@ -402,7 +405,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             SLog.info("firstComment[%s]", firstComment);
 
                             // 評論者的頭像
-                            String authorAvatarUrl = Config.OSS_BASE_URL + "/" + firstComment.getString("memberVo.avatar");
+                            String authorAvatarUrl = StringUtil.normalizeImageUrl(firstComment.getString("memberVo.avatar"));
                             SLog.info("authorAvatarUrl[%s]", authorAvatarUrl);
                             // 評論者的昵稱
                             String authorNickname = firstComment.getString("memberVo.nickName");
@@ -632,7 +635,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         .asCustom(new SharePopup(_mActivity, SharePopup.SHARE_TYPE_STORE, storeId))
                         .show();
                 break;
-            case R.id.btn_view_all_comment:
+            case R.id.rl_shop_comment_container:
                 Util.startFragment(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
                 break;
             case R.id.btn_view_all_wanted:
@@ -688,12 +691,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     }
 
                     isLike = 1 - isLike;
+                    if (isLike == 1) {
+                        likeCount++;
+                    } else {
+                        likeCount--;
+                    }
                     updateThumbView();
-
-                    int likeCount = responseObj.getInt("datas.likeCount");
-                    tvLikeCount.setText(String.valueOf(likeCount));
                 } catch (Exception e) {
-
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });
@@ -736,8 +741,12 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     }
 
                     isFavorite = 1 - isFavorite;
+                    if (isFavorite == 1) {
+                        favoriteCount++;
+                    } else {
+                        favoriteCount--;
+                    }
                     updateFavoriteView();
-
                 } catch (Exception e) {
 
                 }
@@ -751,6 +760,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         } else {
             btnStoreThumb.setImageResource(R.drawable.icon_store_thumb_grey);
         }
+        tvLikeCount.setText(String.valueOf(likeCount));
     }
 
     private void updateFavoriteView() {
@@ -759,6 +769,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         } else {
             btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_grey);
         }
+        tvFavoriteCount.setText(String.valueOf(favoriteCount));
     }
 
 

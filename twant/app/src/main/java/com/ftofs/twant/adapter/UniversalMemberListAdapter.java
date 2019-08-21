@@ -12,18 +12,17 @@ import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
-public class FollowMeAvatarAdapter extends BaseQuickAdapter<UniversalMemberItem, BaseViewHolder> {
-    public FollowMeAvatarAdapter(int layoutResId, @Nullable List<UniversalMemberItem> data) {
+public class UniversalMemberListAdapter extends BaseQuickAdapter<UniversalMemberItem, BaseViewHolder> {
+    public UniversalMemberListAdapter(int layoutResId, @Nullable List<UniversalMemberItem> data) {
         super(layoutResId, data);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, UniversalMemberItem item) {
-        ImageView imgAvatar = helper.getView(R.id.img_avatar);
-        if (StringUtil.isEmpty(item.avatarUrl)) {
-            Glide.with(mContext).load(R.drawable.icon_default_avatar).centerCrop().into(imgAvatar);
-        } else {
-            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatarUrl)).centerCrop().into(imgAvatar);
-        }
+        ImageView imageAvatar = helper.getView(R.id.img_avatar);
+        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatarUrl)).centerCrop().into(imageAvatar);
+
+        helper.setText(R.id.tv_nickname, item.nickname)
+            .setText(R.id.tv_member_signature, item.memberSignature);
     }
 }

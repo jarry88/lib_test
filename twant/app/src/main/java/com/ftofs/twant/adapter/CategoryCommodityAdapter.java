@@ -12,6 +12,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.CategoryCommodityRow;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class CategoryCommodityAdapter extends BaseQuickAdapter<CategoryCommodity
         List<CategoryCommodity> categoryCommodityList = categoryCommodityRow.categoryCommodityList;
         int index = 0;
         for (CategoryCommodity categoryCommodity : categoryCommodityList) {
-            String imageUrl = Config.OSS_BASE_URL + "/" + categoryCommodity.imageUrl;
+            String imageUrl = StringUtil.normalizeImageUrl(categoryCommodity.imageUrl);
 
             if (index == 0) {
                 ImageView goodsImage1 = helper.getView(R.id.category_image1);

@@ -529,7 +529,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tvGoodsName.setText(goodsDetail.getString("goodsName"));
                     tvGoodsJingle.setText(goodsDetail.getString("jingle"));
 
-                    String goodsNationalFlagUrl = Config.OSS_BASE_URL + "/" + responseObj.getString("datas.goodsCountry.nationalFlag");
+                    String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(responseObj.getString("datas.goodsCountry.nationalFlag"));
                     Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
 
                     tvGoodsCountryName.setText(responseObj.getString("datas.goodsCountry.countryCn"));
@@ -751,7 +751,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         // 如果有評論，顯示首條評論
                         EasyJSONObject wantCommentVoInfo = responseObj.getObject("datas.wantCommentVoInfoList[0]");
 
-                        String commenterAvatarUrl = Config.OSS_BASE_URL + "/" + wantCommentVoInfo.getString("memberVo.avatar");
+                        String commenterAvatarUrl = StringUtil.normalizeImageUrl(wantCommentVoInfo.getString("memberVo.avatar"));
                         Glide.with(_mActivity).load(commenterAvatarUrl).centerCrop().into(imgCommenterAvatar);
                         tvCommenterNickname.setText(wantCommentVoInfo.getString("memberVo.nickName"));
                         String comment = wantCommentVoInfo.getString("content");

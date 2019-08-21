@@ -229,8 +229,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         public void onBind(Context context, int position, WebSliderItem webSliderItem) {
             try {
                 // 数据绑定
-                String imageUrl = Config.OSS_BASE_URL + "/" + webSliderItem.image;
-                // SLog.info("imageUrl[%s]", imageUrl);
+                String imageUrl = StringUtil.normalizeImageUrl(webSliderItem.image);
                 Glide.with(context).load(imageUrl).centerCrop().into(mImageView);
 
                 if (webSliderItem.linkType.equals("store")) {
@@ -369,8 +368,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
 
                             // 店鋪形象圖
-                            String storeFigureImageUrl = Config.OSS_BASE_URL + "/" + store.getString("storeVo.storeFigureImage");
-                            // SLog.info("storeFigureImageUrl[%s]", storeFigureImageUrl);
+                            String storeFigureImageUrl = StringUtil.normalizeImageUrl(store.getString("storeVo.storeFigureImage"));
                             ImageView imgStoreFigure = storeView.findViewById(R.id.img_store_figure);
                             Glide.with(_mActivity).load(storeFigureImageUrl).centerCrop().into(imgStoreFigure);
 

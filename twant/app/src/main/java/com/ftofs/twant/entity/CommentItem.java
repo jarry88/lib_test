@@ -18,6 +18,7 @@ public class CommentItem implements Parcelable {
     public int commentReply; // 回復數
 
     public String commenterAvatar;
+    public String memberName;
     public String nickname;
     public String commentTime;
     public String imageUrl;
@@ -41,6 +42,7 @@ public class CommentItem implements Parcelable {
         commentLike = in.readInt();
         commentReply = in.readInt();
         commenterAvatar = in.readString();
+        memberName = in.readString();
         nickname = in.readString();
         commentTime = in.readString();
         imageUrl = in.readString();
@@ -79,6 +81,7 @@ public class CommentItem implements Parcelable {
         dest.writeInt(commentLike);
         dest.writeInt(commentReply);
         dest.writeString(commenterAvatar);
+        dest.writeString(memberName);
         dest.writeString(nickname);
         dest.writeString(commentTime);
         dest.writeString(imageUrl);
@@ -93,7 +96,7 @@ public class CommentItem implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return String.format("commentId[%s], commentType[%s], commentChannel[%s], content[%s], isLike[%s], commentLike[%s], commentReply[%s], commenterAvatar[%s], nickname[%s], commentTime[%s], imageUrl[%s], relateCommonId[%s], relateStoreId[%s], replyCommentId[%s], relatePostId[%s], parentCommentId[%s]",
-                commentId, commentType, commentChannel, content, isLike, commentLike, commentReply, commenterAvatar, nickname, commentTime, imageUrl, relateCommonId, relateStoreId, replyCommentId, relatePostId, parentCommentId);
+        return String.format("commentId[%s], commentType[%s], commentChannel[%s], content[%s], isLike[%s], commentLike[%s], commentReply[%s], commenterAvatar[%s], memberName[%s], nickname[%s], commentTime[%s], imageUrl[%s], relateCommonId[%s], relateStoreId[%s], replyCommentId[%s], relatePostId[%s], parentCommentId[%s]",
+                commentId, commentType, commentChannel, content, isLike, commentLike, commentReply, commenterAvatar, memberName, nickname, commentTime, imageUrl, relateCommonId, relateStoreId, replyCommentId, relatePostId, parentCommentId);
     }
 }

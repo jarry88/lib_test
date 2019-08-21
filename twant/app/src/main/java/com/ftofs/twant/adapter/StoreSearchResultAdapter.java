@@ -33,8 +33,7 @@ public class StoreSearchResultAdapter extends BaseQuickAdapter<StoreSearchItem, 
 
 
         ImageView imgStoreFigure = helper.getView(R.id.img_store_figure);
-        // SLog.info("uuuurl[%s]", Config.OSS_BASE_URL + item.storeFigureImage);
-        Glide.with(mContext).load(Config.OSS_BASE_URL + "/" + item.storeFigureImage).centerCrop().into(imgStoreFigure);
+        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.storeFigureImage)).centerCrop().into(imgStoreFigure);
 
         TextView tvDistance = helper.getView(R.id.tv_distance);
         if (item.distance < Constant.STORE_DISTANCE_THRESHOLD) {

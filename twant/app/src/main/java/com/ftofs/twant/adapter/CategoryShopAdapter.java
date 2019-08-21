@@ -18,6 +18,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class CategoryShopAdapter extends BaseQuickAdapter<CategoryShop, BaseView
 
     @Override
     protected void convert(BaseViewHolder helper, CategoryShop categoryShop) {
-        String coverUrl = Config.OSS_BASE_URL + "/" + categoryShop.coverUrl;
+        String coverUrl = StringUtil.normalizeImageUrl(categoryShop.coverUrl);
         SLog.info("coverUrl[%s]", coverUrl);
         ImageView coverImage = helper.getView(R.id.img_cover);
         Glide.with(context).load(coverUrl).centerCrop().into(coverImage);

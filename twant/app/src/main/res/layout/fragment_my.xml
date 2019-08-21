@@ -294,7 +294,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp">
+                android:layout_marginRight="7dp">
                 <TextView
                     android:id="@+id/tv_follow_me"
                     android:layout_width="wrap_content"
@@ -305,13 +305,13 @@
                     android:textSize="12sp"
                     />
 
-                <ImageView
+                <com.ftofs.twant.widget.ScaledButton
                     android:id="@+id/icon_expand"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/expand_button"
+                    app:icon_src="@drawable/expand_button"
                     />
 
                 <!-- 【關注我的】頭像列表 -->
@@ -320,16 +320,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
                     android:layout_toRightOf="@id/tv_follow_me"
                     android:layout_toLeftOf="@id/icon_expand"
                     android:layout_centerVertical="true">
                 </android.support.v7.widget.RecyclerView>
 
                 <ImageView
+                    android:id="@+id/btn_show_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="15dp"
                     android:layout_toLeftOf="@id/icon_expand"
                     android:layout_centerVertical="true"
                     android:src="@drawable/avatar_transparent_gradient"

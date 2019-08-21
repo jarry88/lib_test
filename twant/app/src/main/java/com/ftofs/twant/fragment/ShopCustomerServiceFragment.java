@@ -150,7 +150,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                         }
 
                         EasyJSONObject storeInfo = responseObj.getObject("datas.storeInfo");
-                        String storeFigureImage = Config.OSS_BASE_URL + "/" + storeInfo.getString("storeFigureImage");
+                        String storeFigureImage = StringUtil.normalizeImageUrl(storeInfo.getString("storeFigureImage"));
                         Glide.with(_mActivity).load(storeFigureImage).centerCrop().into(imgBackground);
 
                         EasyJSONArray storeServiceStaffVoList = storeInfo.getArray("storeServiceStaffVoList");
