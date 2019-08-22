@@ -9,12 +9,16 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 
+import com.ftofs.twant.log.SLog;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import top.zibin.luban.Luban;
 
 /**
  * 文件操作
@@ -51,6 +55,26 @@ public class FileUtil {
 
         String filename = PathUtil.getFilename(path);
         return new File(cacheDir, filename);
+    }
+
+    /**
+     * 獲取壓縮后的圖片文件(同步方式)
+     * @param context
+     * @param file
+     * @return
+     */
+    public static File getCompressedImageFile(Context context, File file) {
+        try {
+            List<File> fileList = Luban.with(context).load(file).get();
+
+            if (fileList != null && fileList.size() > 0) {
+                return fileList.get(0);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 

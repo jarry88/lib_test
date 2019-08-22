@@ -125,6 +125,8 @@ dependencies {
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
     implementation 'com.yanzhenjie.permission:support:2.0.1'
 
+    implementation 'top.zibin:Luban:1.1.8'
+
 
     implementation 'com.github.piasy:BigImageViewer:1.5.7'
     // load with glide

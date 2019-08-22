@@ -16,6 +16,7 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.AliPayResult;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.log.SLog;
@@ -134,6 +135,15 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_RECREATE_MAIN_FRAGMENT) {
             loadMainFragment();
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_SHOW_TOAST) {
+            ToastData toastData = (ToastData) message.data;
+            if (toastData.type == ToastData.TYPE_SUCCESS) {
+                ToastUtil.success(this, toastData.text);
+            } else if (toastData.type == ToastData.TYPE_ERROR) {
+                ToastUtil.error(this, toastData.text);
+            } else if (toastData.type == ToastData.TYPE_INFO) {
+                ToastUtil.info(this, toastData.text);
+            }
         }
     }
 

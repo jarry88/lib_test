@@ -1,5 +1,6 @@
 package com.ftofs.twant.api;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -7,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
 
+import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
@@ -14,9 +16,11 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -1121,48 +1125,13 @@ public class Api {
             return;
         }
 
-        OkHttpClient client = getOkHttpClient();
 
-        MultipartBody.Builder builder = new MultipartBody.Builder();
-        builder.setType(MultipartBody.FORM);
-
-        builder.addFormDataPart("token", token);
-        // 拼装文件参数
-        builder.addFormDataPart("file", file.getName(), RequestBody.create(STREAM, file));
-
-        RequestBody requestBody = builder.build();
-
-        String url = Config.API_BASE_URL + Api.PATH_UPLOAD_FILE;
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build();
-        client.newCall(request).enqueue(new Callback() {
+        TwantApplication.getThreadPool().execute(new Runnable() {
             @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    long threadId = Thread.currentThread().getId();
-
-                    String responseStr = response.body().string();
-                    SLog.info("threadId[%d], responseStr[%s]", threadId, responseStr);
-
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.isError(responseObj)) {
-                        return;
-                    }
-
-                    String avatarUrl = responseObj.getString("datas.name");
-                    SLog.info("avatarUrl[%s]", avatarUrl);
-
+            public void run() {
+                String avatarUrl = syncUploadFile(file);
+                if (avatarUrl != null) {
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPLOAD_FILE_SUCCESS, avatarUrl);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
                 }
             }
         });
@@ -1175,9 +1144,29 @@ public class Api {
      */
     public static String syncUploadFile(File file) {
         long threadId = Thread.currentThread().getId();
+        Context context = TwantApplication.getContext();
 
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
+            return null;
+        }
+
+        // 檢查文件大小, 如果待上傳文件大小超過上限，則嘗試壓縮
+        if (file.length() > Config.UPLOAD_FILE_SIZE_LIMIT) {
+            file = FileUtil.getCompressedImageFile(context, file);
+
+            SLog.info("path[%s], size[%d]", file.getAbsolutePath(), file.length());
+
+            // 壓縮失敗
+            if (file == null) {
+                return null;
+            }
+        }
+
+        // 如果壓縮后，文件還是太大，則報錯
+        if (file.length() > Config.UPLOAD_FILE_SIZE_LIMIT) {
+            EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_TOAST,
+                    new ToastData(ToastData.TYPE_ERROR, context.getString(R.string.text_upload_file_too_large)));
             return null;
         }
 

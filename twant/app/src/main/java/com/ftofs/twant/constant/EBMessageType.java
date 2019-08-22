@@ -60,4 +60,9 @@ public enum EBMessageType {
      * 顯示某個Fragment
      */
     MESSAGE_TYPE_SHOW_FRAGMENT,
+
+    /**
+     * (通知MainActivity)顯示Toast
+     */
+    MESSAGE_TYPE_SHOW_TOAST,
 }

@@ -17,6 +17,11 @@ public class Config {
     public static final int LOGIN_VALID_TIME = 10 * 24 * 3600;
 
     /**
+     * 上傳文件最大為4MB
+     */
+    public static final int UPLOAD_FILE_SIZE_LIMIT = 4 * 1024 * 1024;
+
+    /**
      * 是否為開發模式
      */
     public static final boolean DEVELOPER_MODE = true;

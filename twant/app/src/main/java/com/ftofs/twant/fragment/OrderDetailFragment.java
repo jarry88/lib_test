@@ -35,6 +35,7 @@ import com.ftofs.twant.widget.PayPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import org.greenrobot.eventbus.EventBus;
@@ -349,6 +350,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_dial_store_phone:
                 SLog.info("storePhone[%s]", storePhone);
+                if (StringUtil.isEmpty(storePhone)) {
+                    ToastUtil.error(_mActivity, getString(R.string.text_seller_phone_not_set));
+                    return;
+                }
                 Util.dialPhone(_mActivity, storePhone);
                 break;
             case R.id.btn_advisory_service:
@@ -474,15 +479,20 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 "token", token,
                 "ordersId", ordersId);
 
+        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
+                .asLoading(getString(R.string.text_loading))
+                .show();
         SLog.info("params[%s]", params);
         Api.postUI(Api.PATH_ORDER_DETAIL, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
@@ -531,7 +541,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String paymentTime = ordersVo.getString("paymentTime");
                     String sendTime = ordersVo.getString("sendTime");
 
-                    storePhone = ordersVo.getString("storePhone");
+                    storePhone = responseObj.getString("datas.sellerMobile");
 
                     tvReceiverName.setText(getString(R.string.text_receiver) + ":  " + receiverName);
                     tvMobile.setText(mobile);
