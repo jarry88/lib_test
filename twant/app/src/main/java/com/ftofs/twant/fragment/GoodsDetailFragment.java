@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -28,9 +32,11 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsConformItem;
 import com.ftofs.twant.entity.GoodsInfo;
+import com.ftofs.twant.entity.InStorePersonItem;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.entity.SpecValue;
+import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -39,6 +45,8 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
+import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.InStorePersonPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
@@ -144,6 +152,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     RelativeLayout rlDiscountInfoContainer;
     RelativeLayout rlPriceTag;
 
+    StoreFriendsAdapter adapter;
+    List<StoreFriendsItem> storeFriendsItemList = new ArrayList<>();
+
     // 商品評論條數
     int commentCount = 0;
     TextView tvCommentCount;
@@ -180,7 +191,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-
+    List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
     CountDownHandler countDownHandler;
 
     public static GoodsDetailFragment newInstance(int commonId) {
@@ -271,7 +282,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
         tvComment = view.findViewById(R.id.tv_comment);
 
+
         Util.setOnClickListener(view, R.id.btn_back_round, this);
+        Util.setOnClickListener(view, R.id.btn_search_round, this);
+        Util.setOnClickListener(view, R.id.btn_menu_round, this);
+        Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
         Util.setOnClickListener(view, R.id.btn_buy, this);
         Util.setOnClickListener(view, R.id.btn_select_spec, this);
@@ -280,6 +295,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_bottom_bar_shop, this);
         Util.setOnClickListener(view, R.id.btn_goto_cart, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_customer_service, this);
+
+        RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
+        rvStoreFriendsList.setLayoutManager(layoutManager);
+        adapter = new StoreFriendsAdapter(R.layout.store_friends_item, storeFriendsItemList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                StoreFriendsItem item = storeFriendsItemList.get(position);
+                Util.startFragment(MemberInfoFragment.newInstance(item.memberName));
+            }
+        });
+        rvStoreFriendsList.setAdapter(adapter);
 
         String token = User.getToken();
         loadGoodsDetail(commonId, token);
@@ -294,6 +322,27 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         switch (id) {
             case R.id.btn_back_round:
                 pop();
+                break;
+            case R.id.btn_search_round:
+                start(ShopSearchFragment.newInstance(storeId, null));
+                break;
+            case R.id.btn_menu_round:
+                SLog.info("here");
+                new XPopup.Builder(_mActivity)
+                        .offsetX(-Util.dip2px(_mActivity, 11))
+                        .offsetY(-Util.dip2px(_mActivity, 1))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                        .hasShadowBg(false) // 去掉半透明背景
+                        .atView(v)
+                        .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_GOODS))
+                        .show();
+                break;
+            case R.id.btn_show_all_store_friends:
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new InStorePersonPopup(_mActivity, inStorePersonItemList))
+                        .show();
                 break;
             case R.id.btn_add_to_cart:
                 if (userId > 0) {
@@ -761,6 +810,44 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         btnViewAllComment.setVisibility(GONE);
                         llFirstCommentContainer.setVisibility(GONE);
                     }
+
+                    // 好友
+                    inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_friend)));
+                    EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.friends");
+                    if (!Util.isJsonNull(friends)) {
+                        for (Object object : friends) {
+                            EasyJSONObject friend = (EasyJSONObject) object;
+
+                            String memberName = friend.getString("memberName");
+                            String avatar = friend.getString("avatar");
+                            String nickname = friend.getString("nickName");
+
+                            InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                            inStorePersonItemList.add(inStorePersonItem);
+                        }
+                    }
+
+
+                    // 店友
+                    inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
+                    EasyJSONArray members = responseObj.getArray("datas.memberAccessStatVo.members");
+                    if (!Util.isJsonNull(members)) {
+                        for (Object object : members) {
+                            EasyJSONObject friend = (EasyJSONObject) object;
+
+                            String memberName = friend.getString("memberName");
+                            String avatar = friend.getString("avatar");
+                            String nickname = friend.getString("nickName");
+
+                            StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
+                            storeFriendsItemList.add(storeFriendsItem);
+
+                            InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                            inStorePersonItemList.add(inStorePersonItem);
+                        }
+                    }
+
+                    adapter.setNewData(storeFriendsItemList);
 
                     if (responseObj.exists("datas.storeServiceStaffList")) {
                         // 獲取店鋪客服人員數據

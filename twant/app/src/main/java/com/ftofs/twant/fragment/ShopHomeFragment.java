@@ -302,37 +302,45 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         updateThumbView();
                         updateFavoriteView();
 
+
+                        // 好友
+                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_friend)));
+                        EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.friends");
+                        if (!Util.isJsonNull(friends)) {
+                            for (Object object : friends) {
+                                EasyJSONObject friend = (EasyJSONObject) object;
+
+                                String memberName = friend.getString("memberName");
+                                String avatar = friend.getString("avatar");
+                                String nickname = friend.getString("nickName");
+
+                                InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                                inStorePersonItemList.add(inStorePersonItem);
+                            }
+                        }
+
+
                         // 店友
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
                         EasyJSONArray members = responseObj.getArray("datas.memberAccessStatVo.members");
-                        for (Object object : members) {
-                            EasyJSONObject friend = (EasyJSONObject) object;
+                        if (!Util.isJsonNull(members)) {
+                            for (Object object : members) {
+                                EasyJSONObject friend = (EasyJSONObject) object;
 
-                            String memberName = friend.getString("memberName");
-                            String avatar = friend.getString("avatar");
-                            String nickname = friend.getString("nickName");
+                                String memberName = friend.getString("memberName");
+                                String avatar = friend.getString("avatar");
+                                String nickname = friend.getString("nickName");
 
-                            StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
-                            storeFriendsItemList.add(storeFriendsItem);
+                                StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
+                                storeFriendsItemList.add(storeFriendsItem);
 
-                            InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
-                            inStorePersonItemList.add(inStorePersonItem);
+                                InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                                inStorePersonItemList.add(inStorePersonItem);
+                            }
                         }
+
                         adapter.setNewData(storeFriendsItemList);
 
-                        // 好友
-                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
-                        EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.members");
-                        for (Object object : friends) {
-                            EasyJSONObject friend = (EasyJSONObject) object;
-
-                            String memberName = friend.getString("memberName");
-                            String avatar = friend.getString("avatar");
-                            String nickname = friend.getString("nickName");
-
-                            InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
-                            inStorePersonItemList.add(inStorePersonItem);
-                        }
 
                         // 顯示店友數量
                         int storeFriendsCount = responseObj.getInt("datas.visitorNum");

@@ -128,6 +128,11 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_publish) {
+            int userId = User.getUserId();
+            if (userId == 0) {
+                Util.showLoginFragment();
+                return;
+            }
             startForResult(AddCommentFragment.newInstance(bindId, commentChannel), RequestCode.ADD_COMMENT.ordinal());
         }
     }

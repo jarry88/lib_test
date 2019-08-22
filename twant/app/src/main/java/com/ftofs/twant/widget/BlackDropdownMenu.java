@@ -38,9 +38,14 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     public static final int TYPE_STORE = 2;
 
     /**
+     * 商品詳情菜單
+     */
+    public static final int TYPE_GOODS = 3;
+
+    /**
      * 訂單菜單
      */
-    public static final int TYPE_ORDER = 3;
+    public static final int TYPE_ORDER = 4;
 
 
     BaseFragment baseFragment;
@@ -69,7 +74,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_add_friend);
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_setting_white);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_setting);
-        } else if (type == TYPE_STORE) {
+        } else if (type == TYPE_STORE || type == TYPE_GOODS) {
             ((ImageView) findViewById(R.id.icon_item_1)).setImageResource(R.drawable.icon_black_menu_home);
             ((TextView) findViewById(R.id.tv_item_1)).setText(R.string.menu_item_shop_home_home);
             ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_black_menu_search);
@@ -124,6 +129,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 Util.startFragment(ContactFragment.newInstance());
                 break;
             case TYPE_STORE:
+            case TYPE_GOODS:
                 // 商城首頁
                 baseFragment.popTo(MainFragment.class, false);
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.HOME_FRAGMENT);
@@ -144,6 +150,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 baseFragment.startCaptureActivity();
                 break;
             case TYPE_STORE:
+            case TYPE_GOODS:
                 // 全站搜索
                 baseFragment.start(SearchFragment.newInstance());
                 break;
@@ -163,6 +170,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 Util.startFragment(AddFriendFragment.newInstance());
                 break;
             case TYPE_STORE:
+            case TYPE_GOODS:
                 // 咨詢客服
                 ((ShopMainFragment) baseFragment).onBottomBarClick(ShopMainFragment.CUSTOMER_SERVICE_FRAGMENT);
                 break;
@@ -183,6 +191,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 Util.startFragment(PersonalInfoFragment.newInstance());
                 break;
             case TYPE_STORE:
+            case TYPE_GOODS:
                 // 消息
                 Util.startFragment(MessageFragment.newInstance(true));
                 break;
