@@ -2,15 +2,20 @@ package com.ftofs.twant.activity;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.alipay.sdk.app.PayTask;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
@@ -50,6 +55,8 @@ import okhttp3.Response;
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     long lastBackPressedTime;
     MainFragment mainFragment;
+
+    private int keyboardState = Constant.KEYBOARD_HIDDEN;
 
     private static MainActivity instance;
 
@@ -115,6 +122,38 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         int color = getResources().getColor(R.color.tw_red, null);
         Util.setWindowStatusBarColor(this, color);
+
+        // 監聽DecorView的變化
+        View activityRoot = getWindow().getDecorView();
+        if (activityRoot == null) {
+            return;
+        }
+        ViewTreeObserver.OnGlobalLayoutListener layoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            private final Rect r = new Rect();
+            private final int visibleThreshold = Math.round(Util.dip2px(MainActivity.this, Config.KEYBOARD_MIN_HEIGHT));
+
+            @Override
+            public void onGlobalLayout() {
+                activityRoot.getWindowVisibleDisplayFrame(r);
+                int rootViewHeight = activityRoot.getRootView().getHeight();
+                int visibleHeight = r.height();
+                int heightDiff = rootViewHeight - visibleHeight;
+                //键盘是否弹出
+                boolean isOpen = heightDiff > visibleThreshold;
+                int keyboardNewState = isOpen ? Constant.KEYBOARD_SHOWN : Constant.KEYBOARD_HIDDEN;
+                SLog.info("rootViewHeight[%d], visibleHeight[%d], heightDiff[%d], visibleThreshold[%d], keyboardState[%d], keyboardNewState[%d]",
+                        rootViewHeight, visibleHeight, heightDiff, visibleThreshold, keyboardState, keyboardNewState);
+
+                // 鍵盤狀態變化
+                SLog.info("鍵盤狀態變化, keyboardNewState[%d]", keyboardNewState);
+
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_KEYBOARD_STATE_CHANGED, keyboardNewState);
+
+                keyboardState = keyboardNewState;
+            }
+        };
+        activityRoot.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
 
         loadMainFragment();
     }

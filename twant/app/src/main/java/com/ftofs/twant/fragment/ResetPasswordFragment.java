@@ -139,6 +139,8 @@ public class ResetPasswordFragment extends BaseFragment implements
                             return;
                         }
 
+                        hideSoftInput();
+
                         ToastUtil.success(_mActivity, "動態碼已發送");
 
                         int smsCodeValidTime = responseObj.getInt("datas.authCodeValidTime");

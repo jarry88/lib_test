@@ -158,8 +158,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     // 商品評論條數
     int commentCount = 0;
     TextView tvCommentCount;
-    LinearLayout btnViewAllComment;
-    LinearLayout llFirstCommentContainer;
+    LinearLayout llCommentContainer;
     ImageView imgCommenterAvatar;
     TextView tvCommenterNickname;
     TextView tvComment;
@@ -273,11 +272,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvGiftText = view.findViewById(R.id.tv_gift_text);
 
         tvCommentCount = view.findViewById(R.id.tv_comment_count);
-        btnViewAllComment = view.findViewById(R.id.btn_view_all_comment);
-        btnViewAllComment.setOnClickListener(this);
         Util.setOnClickListener(view, R.id.btn_goods_comment, this);
 
-        llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
+        llCommentContainer = view.findViewById(R.id.ll_comment_container);
+        llCommentContainer.setOnClickListener(this);
         imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
         tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
         tvComment = view.findViewById(R.id.tv_comment);
@@ -411,7 +409,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .asCustom(new SharePopup(_mActivity, SharePopup.SHARE_TYPE_GOODS, commonId))
                         .show();
                 break;
-            case R.id.btn_view_all_comment:
+            case R.id.ll_comment_container:
             case R.id.btn_goods_comment:
                 Util.startFragment(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
                 break;
@@ -807,8 +805,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         tvComment.setText(StringUtil.translateEmoji(_mActivity, comment, (int) tvComment.getTextSize()));
                     } else {
                         // 如果沒有評論，隱藏相應的控件
-                        btnViewAllComment.setVisibility(GONE);
-                        llFirstCommentContainer.setVisibility(GONE);
+                        llCommentContainer.setVisibility(GONE);
                     }
 
                     // 好友

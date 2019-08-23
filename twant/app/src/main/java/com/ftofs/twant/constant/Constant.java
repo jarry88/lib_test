@@ -129,6 +129,13 @@ public class Constant {
 
 
     /**
+     * Android 鍵盤狀態
+     */
+    public static final int KEYBOARD_HIDDEN = 0;
+    public static final int KEYBOARD_SHOWN = 1;
+
+
+    /**
      * 選中狀態
      */
     public static final int STATUS_SELECTED = 1;

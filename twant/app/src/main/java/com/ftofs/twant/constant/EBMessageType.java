@@ -65,4 +65,12 @@ public enum EBMessageType {
      * (通知MainActivity)顯示Toast
      */
     MESSAGE_TYPE_SHOW_TOAST,
+
+    /**
+     * 鍵盤狀態變化
+     */
+    MESSAGE_TYPE_KEYBOARD_STATE_CHANGED,
 }
+
+
+

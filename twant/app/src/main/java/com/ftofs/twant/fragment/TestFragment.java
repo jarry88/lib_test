@@ -61,21 +61,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            SLog.info("path[%s]", Environment.getExternalStorageDirectory().getAbsolutePath());
-
-            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                    "/DCIM/Camera/IMG_20190813_104425.jpg";
-            File file = new File(filePath);
-            SLog.info("fileSize[%d]", file.length());
-
-            try {
-                List<File> fileList = Luban.with(_mActivity).load(file).get();
-                for (File item : fileList) {
-                    SLog.info("item[%s][%d]", item.getAbsolutePath(), item.length());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            start(ResetPasswordConfirmFragment.newInstance("00853", "13417785707", 10));
         }
     }
 

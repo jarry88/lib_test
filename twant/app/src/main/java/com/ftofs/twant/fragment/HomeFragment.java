@@ -373,20 +373,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             Glide.with(_mActivity).load(storeFigureImageUrl).centerCrop().into(imgStoreFigure);
 
 
-                            // 設置點贊數據
-                            int likeCount = store.getInt("storeVo.likeCount");
-                            TextView tvLikeData = storeView.findViewById(R.id.tv_like_data);
-                            String likeDataStr = getResources().getString(R.string.text_like) + " " + likeCount;
-                            tvLikeData.setText(likeDataStr);
-
-
-                            // 設置關注數據
-                            int followCount = store.getInt("storeVo.collectCount");
-                            TextView tvFollowData = storeView.findViewById(R.id.tv_follow_data);
-                            String followDataStr = getResources().getString(R.string.text_follow) + " " + followCount;
-                            tvFollowData.setText(followDataStr);
-
-
                             int index = 0;
                             // 店鋪的3個商品展示
                             for (Object object2 : store.getArray("goodsList")) {

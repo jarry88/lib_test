@@ -626,7 +626,6 @@
                         />
 
                     <LinearLayout
-                        android:id="@+id/btn_view_all_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"

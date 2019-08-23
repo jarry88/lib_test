@@ -22,6 +22,11 @@ public class Config {
     public static final int UPLOAD_FILE_SIZE_LIMIT = 4 * 1024 * 1024;
 
     /**
+     * Android 鍵盤最小的高度（單位dp）
+     */
+    public static final int KEYBOARD_MIN_HEIGHT = 150;
+
+    /**
      * 是否為開發模式
      */
     public static final boolean DEVELOPER_MODE = true;
