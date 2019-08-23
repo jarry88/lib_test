@@ -824,7 +824,7 @@
                 android:paddingRight="20dp"
                 android:textSize="14sp"
                 android:textColor="#FFF"
-                android:text="@string/text_add_to_cart"
+                android:text="@string/text_want_to_add_to_cart"
                 />
             <TextView
                 android:id="@+id/btn_buy"
@@ -837,7 +837,7 @@
                 android:paddingRight="26dp"
                 android:textSize="14sp"
                 android:textColor="#FFF"
-                android:text="@string/text_buy"
+                android:text="@string/text_want_to_buy"
                 />
         </LinearLayout>
         <android.support.constraint.ConstraintLayout

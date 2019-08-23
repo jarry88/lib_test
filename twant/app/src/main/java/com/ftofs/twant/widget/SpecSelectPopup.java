@@ -54,6 +54,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     TextView tvPrice;
     TextView tvGoodsStorage;
 
+    TextView btnOk;
+
     Map<String, Integer> specValueIdMap;
     Map<Integer, GoodsInfo> goodsInfoMap;
 
@@ -129,7 +131,15 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         findViewById(R.id.btn_close).setOnClickListener(this);
 
         // 加入購物車
-        findViewById(R.id.btn_ok).setOnClickListener(this);
+        btnOk = findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(this);
+        if (action == Constant.ACTION_ADD_TO_CART) {
+            btnOk.setText(R.string.text_want_to_add_to_cart);
+        } else if (action == Constant.ACTION_BUY) {
+            btnOk.setText(R.string.text_want_to_buy);
+        } else if (action == Constant.ACTION_SELECT_SPEC) {
+            btnOk.setText(R.string.ok);
+        }
 
         skuImage = findViewById(R.id.sku_image);
         tvPrice = findViewById(R.id.tv_price);
