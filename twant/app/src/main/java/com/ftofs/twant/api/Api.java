@@ -765,6 +765,16 @@ public class Api {
      */
     public static final String PATH_ALIPAY_FINISH = "/member/alipay/finish";
 
+    /**
+     * 關注職位
+     */
+    public static final String PATH_FOLLOW_JOB = "/app/store/hr/follow";
+
+    /**
+     * 取消關注店鋪職位
+     */
+    public static final String PATH_UNFOLLOW_JOB = "/app/store/hr/unfollow";
+
 
     /**
      * 發送Http請求

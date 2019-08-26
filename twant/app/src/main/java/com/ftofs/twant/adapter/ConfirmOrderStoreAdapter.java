@@ -49,8 +49,9 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
 
         if (itemViewType == Constant.ITEM_VIEW_TYPE_COMMON) {
             final ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) multiItemEntity;
-            helper.addOnClickListener(R.id.btn_receipt);  // 變更發票信息
-            helper.addOnClickListener(R.id.btn_change_shipping_time);  // 修改配送時間
+            helper.addOnClickListener(R.id.btn_receipt)  // 變更發票信息
+                    .addOnClickListener(R.id.btn_change_shipping_time)  // 修改配送時間
+                    .addOnClickListener(R.id.ll_store_info_container);
             helper.setText(R.id.tv_store_name, item.storeName);
             helper.setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0));
 

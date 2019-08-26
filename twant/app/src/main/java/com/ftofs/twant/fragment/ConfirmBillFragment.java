@@ -177,10 +177,10 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
-
+                ConfirmOrderStoreItem storeItem;
                 switch (id) {
                     case R.id.btn_receipt:
-                        ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
+                        storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
                         startForResult(ReceiptInfoFragment.newInstance(position, storeItem.receipt), RequestCode.EDIT_RECEIPT.ordinal());
                         break;
                     case R.id.btn_change_shipping_time:
@@ -188,6 +188,10 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         break;
                     case R.id.btn_change_pay_way:
                         payWayPopup();
+                        break;
+                    case R.id.ll_store_info_container:
+                        storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
+                        start(ShopMainFragment.newInstance(storeItem.storeId));
                         break;
                     default:
                         break;

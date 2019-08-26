@@ -72,6 +72,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     ImageView btnGotoTop;
     ImageView btnGotoCart;
 
+    /**
+     * 標記分類篩選數據是否已經加載
+     */
+    boolean isFilterCategoryLoaded;
     List<FilterCategoryGroup> filterCategoryGroupList = new ArrayList<>();
 
     ImageView iconPriceOrder;
@@ -263,7 +267,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             SLog.info("params[%s]", params);
 
             if (searchType == SearchType.GOODS) {
-                Api.getUI(Api.PATH_SEARCH_GOODS, paramsObj, new UICallback() {
+                Api.getUI(Api.PATH_SEARCH_GOODS, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         ToastUtil.showNetworkError(_mActivity, e);
@@ -282,7 +286,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             }
 
                             goodsItemList.clear();
-                            filterCategoryGroupList.clear();
+                            // filterCategoryGroupList.clear();
 
                             EasyJSONArray easyJSONArray = responseObj.getArray("datas.goodsList");
                             for (Object object : easyJSONArray) {
@@ -310,28 +314,33 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             SLog.info("goodsItemList.size[%d]", goodsItemList.size());
                             mGoodsAdapter.setNewData(goodsItemList);
 
-                            // 讀取過濾條件數據
-                            EasyJSONArray categoryNavVoList = responseObj.getArray("datas.filter.categoryNavVoList");
-                            for (Object object : categoryNavVoList) {
-                                EasyJSONObject categoryNavVo = (EasyJSONObject) object;
-                                int headId = categoryNavVo.getInt("categoryId");
-                                String headName = categoryNavVo.getString("categoryName");
-                                FilterCategoryItem head = new FilterCategoryItem(headId, headName);
+                            if (!isFilterCategoryLoaded) {
+                                isFilterCategoryLoaded = true;
 
-                                FilterCategoryGroup group = new FilterCategoryGroup();
-                                group.head = head;
-                                EasyJSONArray categoryList = categoryNavVo.getArray("categoryList");
-                                for (Object object2 : categoryList) {
-                                    EasyJSONObject category = (EasyJSONObject) object2;
+                                // 讀取過濾條件數據
+                                EasyJSONArray categoryNavVoList = responseObj.getArray("datas.filter.categoryNavVoList");
+                                for (Object object : categoryNavVoList) {
+                                    EasyJSONObject categoryNavVo = (EasyJSONObject) object;
+                                    int headId = categoryNavVo.getInt("categoryId");
+                                    String headName = categoryNavVo.getString("categoryName");
+                                    FilterCategoryItem head = new FilterCategoryItem(headId, headName);
 
-                                    int categoryId = category.getInt("categoryId");
-                                    String categoryName = category.getString("categoryName");
+                                    FilterCategoryGroup group = new FilterCategoryGroup();
+                                    group.head = head;
+                                    EasyJSONArray categoryList = categoryNavVo.getArray("categoryList");
+                                    for (Object object2 : categoryList) {
+                                        EasyJSONObject category = (EasyJSONObject) object2;
 
-                                    FilterCategoryItem item = new FilterCategoryItem(categoryId, categoryName);
-                                    group.list.add(item);
+                                        int categoryId = category.getInt("categoryId");
+                                        String categoryName = category.getString("categoryName");
+
+                                        FilterCategoryItem item = new FilterCategoryItem(categoryId, categoryName);
+                                        group.list.add(item);
+                                    }
+                                    filterCategoryGroupList.add(group);
                                 }
-                                filterCategoryGroupList.add(group);
                             }
+
                         } catch (Exception e) {
                             SLog.info("Error!%s", e.getMessage());
                         }
@@ -462,14 +471,19 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.btn_sort_goods_price:
                 if (goodsSortButtonIndex == GOODS_SEARCH_SORT_PRICE) { // 再次點擊價格排序的話，切換升降序
+                    SLog.info("HERE");
                     sortPriceAsc = !sortPriceAsc;
                 } else {
+                    SLog.info("HERE");
                     sortPriceAsc = true;
                 }
+
+                SLog.info("sortPriceAsc[%s]", sortPriceAsc);
                 String priceSortStr = "price_desc";
                 if (sortPriceAsc) {
                     priceSortStr = "price_asc";
                 }
+
                 doSearch(searchType, keyword, EasyJSONObject.generate("sort", priceSortStr));
                 switchGoodsSortIndicator(id);
                 break;

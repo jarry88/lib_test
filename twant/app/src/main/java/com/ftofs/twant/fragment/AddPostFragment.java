@@ -412,16 +412,16 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
                     SLog.info("上傳圖片完成");
 
 
-                    // token要附在url中
+                    // token要附在path中
                     String path = Api.PATH_COMMIT_POST + Api.makeQueryString(EasyJSONObject.generate("token", token));
-                    SLog.info("url[%s]", url);
+                    SLog.info("path[%s]", path);
 
                     EasyJSONObject params = EasyJSONObject.generate(
                             "title", title,
                             "content", content,
                             "postCategory", getCategoryName(selectedCategoryId),
                             "coverImage", coverImageUrl,
-                            "postType", Constant.POST_TYPE_COMMON,
+                            "postType", Constant.POST_TYPE_WANTED,
                             "keyWord", keyword,
                             "isPublish", 1,
                             "expiresDate", deadline,
