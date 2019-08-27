@@ -751,6 +751,11 @@ public class Api {
     public static final String PATH_MY_FOLLOW_POST = "/memberpage/favor/want_post";
 
     /**
+     * 個人專頁-我的關注-招聘
+     */
+    public static final String PATH_MY_FOLLOW_RECRUITMENT = "/memberpage/favor/hr_post";
+
+    /**
      * 微信支付
      */
     public static final String PATH_WXPAY = "/member/buy/pay/new/wxpay";

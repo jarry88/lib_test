@@ -14,4 +14,5 @@ public class WantedPostItem {
     public String postDescription;
     public String mailbox;
     public int isFavor;
+    public boolean isJobDescExpanded;  // 職位詳情是否已經展開
 }

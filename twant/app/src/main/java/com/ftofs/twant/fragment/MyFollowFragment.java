@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -21,9 +22,9 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.MyFollowGoodsItem;
 import com.ftofs.twant.entity.MyFollowMemberItem;
-import com.ftofs.twant.entity.MyFollowRecruitmentItem;
 import com.ftofs.twant.entity.MyFollowStoreItem;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -56,7 +57,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     List<MyFollowStoreItem> myFollowStoreItemList = new ArrayList<>();
     List<MyFollowGoodsItem> myFollowGoodsItemList = new ArrayList<>();
     List<PostItem> myFollowArticleItemList = new ArrayList<>();
-    List<MyFollowRecruitmentItem> myFollowRecruitmentItemList = new ArrayList<>();
+    List<WantedPostItem> myFollowRecruitmentItemList = new ArrayList<>();
     List<MyFollowMemberItem> myFollowMemberItemList = new ArrayList<>();
 
     int currTabIndex = TAB_INDEX_STORE;
@@ -109,7 +110,21 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                 start(PostDetailFragment.newInstance(item.postId));
             }
         });
+
         myFollowRecruitmentAdapter = new MyFollowRecruitmentAdapter(R.layout.my_follow_recruitment_item, myFollowRecruitmentItemList);
+        myFollowRecruitmentAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_expand) {
+                    WantedPostItem wantedPostItem = myFollowRecruitmentItemList.get(position);
+                    wantedPostItem.isJobDescExpanded = !wantedPostItem.isJobDescExpanded;
+
+                    adapter.notifyItemChanged(position);
+                }
+            }
+        });
+
         myFollowMemberAdapter = new MyFollowMemberAdapter(R.layout.my_follow_member_item, myFollowMemberItemList);
         myFollowMemberAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -396,9 +411,73 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadMyFollowRecruitment() {
-        recruitmentDataLoaded = true;
-        if (currTabIndex == TAB_INDEX_RECRUITMENT) {
-            rvMyFollowList.setAdapter(myFollowRecruitmentAdapter);
+        try {
+            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+            if (StringUtil.isEmpty(memberName)) {
+                return;
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate("memberName", memberName);
+            String token = User.getToken();
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
+
+
+            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
+                    .asLoading(getString(R.string.text_loading))
+                    .show();
+
+            SLog.info("params[%s]", params);
+
+            Api.postUI(Api.PATH_MY_FOLLOW_RECRUITMENT, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                    loadingPopup.dismiss();
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    loadingPopup.dismiss();
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        EasyJSONArray hrPostVoList = responseObj.getArray("datas.hrPostVoList");
+                        for (Object object : hrPostVoList) {
+                            EasyJSONObject hrPostVo = (EasyJSONObject) object;
+
+                            WantedPostItem wantedPostItem = new WantedPostItem();
+                            wantedPostItem.postId = hrPostVo.getInt("postId");
+                            wantedPostItem.postTitle = hrPostVo.getString("postTitle");
+                            wantedPostItem.postType = hrPostVo.getString("postType");
+                            wantedPostItem.postArea = hrPostVo.getString("postArea");
+                            wantedPostItem.salaryType = hrPostVo.getString("salaryType");
+                            wantedPostItem.salaryRange = hrPostVo.getString("salaryRange");
+                            wantedPostItem.currency = hrPostVo.getString("currency");
+                            wantedPostItem.mailbox = hrPostVo.getString("mailbox");
+                            wantedPostItem.postDescription = hrPostVo.getString("postDescription");
+
+                            myFollowRecruitmentItemList.add(wantedPostItem);
+                        }
+                        SLog.info("ITEM_COUNT[%d]", myFollowMemberItemList.size());
+                        recruitmentDataLoaded = true;
+                        if (currTabIndex == TAB_INDEX_RECRUITMENT) {
+                            rvMyFollowList.setAdapter(myFollowRecruitmentAdapter);
+                        }
+                        myFollowRecruitmentAdapter.setNewData(myFollowRecruitmentItemList);
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
+        } catch (Exception e) {
+
         }
     }
 

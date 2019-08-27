@@ -198,6 +198,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvVerticalScroll = view.findViewById(R.id.tv_vertical_scroll);
 
         llStoreWantedContainer = view.findViewById(R.id.ll_store_wanted_container);
+        llStoreWantedContainer.setOnClickListener(this);
         vwSeparatorStoreWanted = view.findViewById(R.id.vw_separator_store_wanted);
         rl2ndStoreWanted = view.findViewById(R.id.rl_2nd_store_wanted);
 
@@ -208,7 +209,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         Util.setOnClickListener(view, R.id.btn_shop_map, this);
         Util.setOnClickListener(view, R.id.rl_shop_comment_container, this);
-        Util.setOnClickListener(view, R.id.btn_view_all_wanted, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
 
 
@@ -646,7 +646,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             case R.id.rl_shop_comment_container:
                 Util.startFragment(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
                 break;
-            case R.id.btn_view_all_wanted:
+            case R.id.ll_store_wanted_container:
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)

@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="全職 | 行政專員"
+                android:text=""
                 android:textSize="16sp"
                 android:textColor="@color/tw_black"
                 />
@@ -71,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="6000-8000"
+                    android:text=""
                     android:textColor="@color/tw_red"
                     android:textSize="16sp"
                     />
@@ -82,7 +82,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@id/tv_salary_range"
                     android:layout_centerVertical="true"
-                    android:text="澳門元/月"
+                    android:text=""
                     android:textColor="@color/tw_red"
                     android:textSize="11sp"
                     />
@@ -109,7 +109,7 @@
                     android:id="@+id/tv_post_area"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="澳門 氹仔"
+                    android:text=""
                     android:textSize="13sp"
                     android:textColor="@color/tw_dark_grey"
                     />
@@ -133,7 +133,7 @@
                     android:id="@+id/tv_mail_box"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="hr@ftofs.net"
+                    android:text=""
                     android:textSize="13sp"
                     android:textColor="@color/tw_dark_grey"
                     />
