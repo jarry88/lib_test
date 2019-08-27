@@ -785,6 +785,11 @@ public class Api {
      */
     public static final String PATH_UNFOLLOW_JOB = "/app/store/hr/unfollow";
 
+    /**
+     * 個人專頁-我的評論
+     */
+    public static final String PATH_MEMBER_PAGE_ALL_COMMENT = "/memberpage/all/comment";
+
 
     /**
      * 發送Http請求

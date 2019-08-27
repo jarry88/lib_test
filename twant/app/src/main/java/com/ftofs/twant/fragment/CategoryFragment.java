@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -82,7 +83,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
                 pop();
                 break;
             case R.id.btn_search:
-                Util.startFragment(SearchFragment.newInstance());
+                Util.startFragment(SearchFragment.newInstance(SearchType.ALL));
                 break;
             case R.id.btn_message:
                 if (User.getUserId() > 0) {

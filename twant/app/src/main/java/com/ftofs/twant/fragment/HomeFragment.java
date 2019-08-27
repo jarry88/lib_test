@@ -169,7 +169,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         if (id == R.id.btn_category) {
             Util.startFragment(CategoryFragment.newInstance());
         } else if (id == R.id.ll_search_box) {
-            Util.startFragment(SearchFragment.newInstance());
+            Util.startFragment(SearchFragment.newInstance(SearchType.ALL));
         } else if (id == R.id.btn_test) {
             if (Config.DEVELOPER_MODE) {
                 // Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));

@@ -8,4 +8,5 @@ public class SearchPostParams {
     public int page;
     public String category;
     public String sort;
+    public String keyword;
 }

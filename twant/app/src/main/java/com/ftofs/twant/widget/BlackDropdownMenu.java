@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.AddFriendFragment;
 import com.ftofs.twant.fragment.BaseFragment;
@@ -152,7 +153,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             case TYPE_STORE:
             case TYPE_GOODS:
                 // 全站搜索
-                baseFragment.start(SearchFragment.newInstance());
+                baseFragment.start(SearchFragment.newInstance(SearchType.ALL));
                 break;
             case TYPE_ORDER:
                 // 購物車

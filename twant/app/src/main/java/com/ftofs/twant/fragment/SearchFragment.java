@@ -19,6 +19,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
@@ -45,6 +46,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     String defaultKeyword; // 默認搜索詞
     SearchType searchType = SearchType.GOODS;
 
+    TabLayout searchTabLayout;
+
     LinearLayout llHistorySearchPane;
     FlowLayout flSearchHistoryContainer;
     LinearLayout llHotSearchPane;
@@ -53,11 +56,12 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     LinearLayout llSearchSuggestionContainer;
     LinearLayout llSuggestionList;
 
-    public static SearchFragment newInstance() {
+    public static SearchFragment newInstance(SearchType searchType) {
         Bundle args = new Bundle();
 
         SearchFragment fragment = new SearchFragment();
         fragment.setArguments(args);
+        fragment.setSearchType(searchType);
 
         return fragment;
     }
@@ -96,9 +100,12 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
             @Override
             public void afterTextChanged(Editable s) {
-                String term = s.toString();
-                SLog.info("afterTextChanged, term[%s]", term);
-                loadSearchSuggestionData(term);
+                // 如果在搜索商品時，才提供搜索建議
+                if (searchType == SearchType.GOODS) {
+                    String term = s.toString();
+                    SLog.info("afterTextChanged, term[%s]", term);
+                    loadSearchSuggestionData(term);
+                }
             }
         });
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -118,32 +125,50 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         llHotSearchPane = view.findViewById(R.id.ll_hot_search_pane);
         flHotSearchContainer = view.findViewById(R.id.fl_hot_search_container);
 
-        TabLayout tabLayout = view.findViewById(R.id.search_tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_goods)).setTag(SearchType.GOODS));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_store)).setTag(SearchType.STORE));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.text_post)).setTag(SearchType.ARTICLE));
+        // 如果SearchType為ALL才支持切換搜索類型
+        searchTabLayout = view.findViewById(R.id.search_tab_layout);
+        if (searchType == SearchType.ALL) {
+            searchTabLayout.addTab(searchTabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_goods)).setTag(SearchType.GOODS));
+            searchTabLayout.addTab(searchTabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_store)).setTag(SearchType.STORE));
+            searchTabLayout.addTab(searchTabLayout.newTab().setText(getResources().getText(R.string.text_post)).setTag(SearchType.ARTICLE));
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                searchType = (SearchType) tab.getTag();
-                SLog.info("searchType[%s]", searchType);
-                loadSearchHistory();
-            }
+            searchTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    searchType = (SearchType) tab.getTag();
+                    SLog.info("searchType[%s]", searchType);
+                    loadSearchHistory();
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+                    if (searchType == SearchType.GOODS) {  // 只有商品搜索才顯示熱門搜索詞框
+                        llHotSearchPane.setVisibility(View.VISIBLE);
+                    } else {
+                        llHotSearchPane.setVisibility(View.GONE);
+                    }
+                }
 
-            }
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+                }
 
-            }
-        });
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
 
-        loadHotKeyword();
-        loadDefaultKeyword();
+                }
+            });
+
+            // 如果SearchType為ALL，默認搜索商品
+            searchType = SearchType.GOODS;
+        } else { // 如果SearchType不為ALL，則隱藏切換Tab
+            searchTabLayout.setVisibility(View.GONE);
+        }
+
+        if (searchType == SearchType.GOODS) { // 如果是搜索商品，才需要加載熱門搜索和默認搜索詞
+            loadHotKeyword();
+            loadDefaultKeyword();
+        } else {
+            llHotSearchPane.setVisibility(View.GONE);
+        }
     }
 
     private void loadSearchSuggestionData(String term) {
@@ -234,14 +259,27 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         EditTextUtil.cursorSeekToEnd(etKeyword);
 
         // 如果為空，用默認關鍵詞搜索
-        if (StringUtil.isEmpty(currentKeyword)) {
+        if (searchType == SearchType.GOODS && StringUtil.isEmpty(currentKeyword)) {
             currentKeyword = defaultKeyword;
+        }
+
+        if (StringUtil.isEmpty(currentKeyword)) {
+            ToastUtil.error(_mActivity, getString(R.string.input_search_keyword_hint));
+            return;
         }
 
         hideSoftInput();
 
-        Util.startFragment(SearchResultFragment.newInstance(searchType.name(),
-                EasyJSONObject.generate("keyword", currentKeyword).toString()));
+        SLog.info("searchType[%s]", searchType.name());
+        if (searchType == SearchType.GOODS || searchType == SearchType.STORE) {
+            start(SearchResultFragment.newInstance(searchType.name(),
+                    EasyJSONObject.generate("keyword", currentKeyword).toString()));
+        } else if (searchType == SearchType.ARTICLE) {
+            SearchPostParams searchPostParams = new SearchPostParams();
+            searchPostParams.keyword = currentKeyword;
+            start(CircleFragment.newInstance(true, searchPostParams));
+        }
+
     }
 
     /**
@@ -390,5 +428,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         SLog.info("onBackPressedSupport");
         pop();
         return true;
+    }
+
+    public void setSearchType(SearchType searchType) {
+        this.searchType = searchType;
     }
 }

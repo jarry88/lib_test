@@ -41,7 +41,8 @@
         android:layout_marginLeft="@dimen/toolbar_margin_left"
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp">
+        android:paddingBottom="15dp"
+        android:background="@drawable/border_type_d">
         <ImageView
             android:id="@+id/icon_my_like"
             android:layout_width="wrap_content"
@@ -87,7 +88,8 @@
         android:layout_marginLeft="@dimen/toolbar_margin_left"
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp">
+        android:paddingBottom="15dp"
+        android:background="@drawable/border_type_d">
         <ImageView
             android:id="@+id/icon_my_comment"
             android:layout_width="wrap_content"
@@ -133,7 +135,8 @@
         android:layout_marginLeft="@dimen/toolbar_margin_left"
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp">
+        android:paddingBottom="15dp"
+        android:background="@drawable/border_type_d">
         <ImageView
             android:id="@+id/icon_my_follow"
             android:layout_width="wrap_content"

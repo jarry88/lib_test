@@ -6,15 +6,19 @@ package com.ftofs.twant.constant;
  */
 public enum SearchType {
     /**
-     * 搜索商品
+     * 能夠搜索所有類別
+     */
+    ALL,
+    /**
+     * 僅能搜索商品
      */
     GOODS,
     /**
-     * 搜索店鋪
+     * 僅能搜索店鋪
      */
     STORE,
     /**
-     * 搜索文章
+     * 僅能搜索文章
      */
     ARTICLE
 }

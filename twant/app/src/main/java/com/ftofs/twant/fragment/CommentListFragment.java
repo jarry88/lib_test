@@ -192,9 +192,11 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                             item.isLike = comment.getInt("isLike");
                             item.commentReply = comment.getInt("commentReply");
 
-                            item.commenterAvatar = memberVo.getString("avatar");
-                            item.memberName = memberVo.getString("memberName");
-                            item.nickname = memberVo.getString("nickName");
+                            if (memberVo != null) {
+                                item.commenterAvatar = memberVo.getString("avatar");
+                                item.memberName = memberVo.getString("memberName");
+                                item.nickname = memberVo.getString("nickName");
+                            }
                             item.commentTime = comment.getString("commentStartTime");
 
                             if (commentChannel == Constant.COMMENT_CHANNEL_STORE) {

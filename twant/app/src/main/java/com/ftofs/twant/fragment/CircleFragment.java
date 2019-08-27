@@ -21,6 +21,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PostCategory;
 import com.ftofs.twant.entity.PostItem;
@@ -65,6 +66,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     PostListAdapter adapter;
     SearchPostParams searchPostParams = new SearchPostParams();
 
+    /**
+     * 是否獨立的Fragment，還是依附于MainFragment
+     */
+    boolean isStandalone;
     boolean isPostDataLoaded;
 
     /**
@@ -73,11 +78,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
      */
     int filterSelectedIndex = -1;
 
-    public static CircleFragment newInstance() {
+    public static CircleFragment newInstance(boolean isStandalone, SearchPostParams searchPostParams) {
         Bundle args = new Bundle();
 
         CircleFragment fragment = new CircleFragment();
         fragment.setArguments(args);
+
+        fragment.setStandalone(isStandalone);
+        fragment.setSearchPostParams(searchPostParams);
 
         return fragment;
     }
@@ -97,7 +105,20 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
 
-        Util.setOnClickListener(view, R.id.btn_add_post, this);
+        if (isStandalone) { // 獨立的頁面
+            view.findViewById(R.id.tool_bar).setVisibility(View.GONE);
+            view.findViewById(R.id.tool_bar_standalone).setVisibility(View.VISIBLE);
+
+            Util.setOnClickListener(view, R.id.btn_back, this);
+        } else { // 附加在MainFragment上的頁面
+            view.findViewById(R.id.tool_bar).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.tool_bar_standalone).setVisibility(View.GONE);
+
+            Util.setOnClickListener(view, R.id.btn_search_post, this);
+            Util.setOnClickListener(view, R.id.btn_add_post, this);
+        }
+
+
         Util.setOnClickListener(view, R.id.btn_post_filter, this);
 
         RecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
@@ -142,7 +163,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.btn_add_post) {
+        if (id == R.id.btn_back) {
+            pop();
+        } else if (id == R.id.btn_add_post) {
             Util.startFragment(AddPostFragment.newInstance());
         } else if (id == R.id.btn_post_filter) {
             new XPopup.Builder(_mActivity)
@@ -150,6 +173,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     .hasStatusBarShadow(true) //启用状态栏阴影
                     .asCustom(new PostFilterDrawerPopupView(_mActivity, this, filterSelectedIndex))
                     .show();
+        } else if (id == R.id.btn_search_post) {
+            Util.startFragment(SearchFragment.newInstance(SearchType.ARTICLE));
         }
     }
 
@@ -165,6 +190,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             }
             if (!StringUtil.isEmpty(searchPostParams.sort)) {
                 params.set("sort", searchPostParams.sort);
+            }
+            if (!StringUtil.isEmpty(searchPostParams.keyword)) {
+                params.set("keyword", searchPostParams.keyword);
             }
 
             String token = User.getToken();
@@ -315,5 +343,28 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+    public void setSearchPostParams(SearchPostParams searchPostParams) {
+        this.searchPostParams = searchPostParams;
+
+        // 保證不為null
+        if (this.searchPostParams == null) {
+            this.searchPostParams = new SearchPostParams();
+        }
+    }
+
+    public void setStandalone(boolean standalone) {
+        isStandalone = standalone;
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        if (isStandalone) {
+            pop();
+            return true;
+        }
+        return false;
     }
 }
