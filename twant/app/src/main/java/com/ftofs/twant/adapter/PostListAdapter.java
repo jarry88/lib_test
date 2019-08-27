@@ -32,7 +32,7 @@ public class PostListAdapter extends BaseQuickAdapter<PostItem, BaseViewHolder> 
 
         helper.setText(R.id.tv_title, String.format("%s | %s", item.postCategory, item.title))
                 .setText(R.id.tv_author_nickname, item.authorNickname)
-                .setText(R.id.tv_like_count, String.valueOf(item.postLike))
+                .setText(R.id.tv_like_count, String.valueOf(item.postFollow))
                 .setText(R.id.tv_comment_count, String.valueOf(item.postReply))
                 .setText(R.id.tv_category_name, item.postCategory);
 

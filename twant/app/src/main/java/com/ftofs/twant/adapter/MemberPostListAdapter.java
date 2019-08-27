@@ -36,6 +36,6 @@ public class MemberPostListAdapter extends ViewGroupAdapter<PostItem> {
         setText(itemView, R.id.tv_create_time, itemData.createTime);
         setText(itemView, R.id.tv_thumb_count, String.valueOf(itemData.postThumb));
         setText(itemView, R.id.tv_reply_count, String.valueOf(itemData.postReply));
-        setText(itemView, R.id.tv_like_count, String.valueOf(itemData.postLike));
+        setText(itemView, R.id.tv_like_count, String.valueOf(itemData.postFollow));
     }
 }

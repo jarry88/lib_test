@@ -16,16 +16,14 @@ import com.ftofs.twant.adapter.MyFollowGoodsAdapter;
 import com.ftofs.twant.adapter.MyFollowMemberAdapter;
 import com.ftofs.twant.adapter.MyFollowRecruitmentAdapter;
 import com.ftofs.twant.adapter.MyFollowStoreAdapter;
-import com.ftofs.twant.adapter.TrustValueListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.entity.MyFollowArticleItem;
 import com.ftofs.twant.entity.MyFollowGoodsItem;
 import com.ftofs.twant.entity.MyFollowMemberItem;
 import com.ftofs.twant.entity.MyFollowRecruitmentItem;
 import com.ftofs.twant.entity.MyFollowStoreItem;
-import com.ftofs.twant.entity.MyLikeStoreItem;
+import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -57,7 +55,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
     List<MyFollowStoreItem> myFollowStoreItemList = new ArrayList<>();
     List<MyFollowGoodsItem> myFollowGoodsItemList = new ArrayList<>();
-    List<MyFollowArticleItem> myFollowArticleItemList = new ArrayList<>();
+    List<PostItem> myFollowArticleItemList = new ArrayList<>();
     List<MyFollowRecruitmentItem> myFollowRecruitmentItemList = new ArrayList<>();
     List<MyFollowMemberItem> myFollowMemberItemList = new ArrayList<>();
 
@@ -104,6 +102,13 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
         myFollowStoreAdapter = new MyFollowStoreAdapter(R.layout.my_follow_store_item, myFollowStoreItemList);
         myFollowGoodsAdapter = new MyFollowGoodsAdapter(R.layout.my_follow_goods_item, myFollowGoodsItemList);
         myFollowArticleAdapter = new MyFollowArticleAdapter(R.layout.my_follow_article_item, myFollowArticleItemList);
+        myFollowArticleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                PostItem item = myFollowArticleItemList.get(position);
+                start(PostDetailFragment.newInstance(item.postId));
+            }
+        });
         myFollowRecruitmentAdapter = new MyFollowRecruitmentAdapter(R.layout.my_follow_recruitment_item, myFollowRecruitmentItemList);
         myFollowMemberAdapter = new MyFollowMemberAdapter(R.layout.my_follow_member_item, myFollowMemberItemList);
         myFollowMemberAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -322,9 +327,71 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadMyFollowArticle() {
-        articleDataLoaded = true;
-        if (currTabIndex == TAB_INDEX_ARTICLE) {
-            rvMyFollowList.setAdapter(myFollowArticleAdapter);
+        try {
+            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+            if (StringUtil.isEmpty(memberName)) {
+                return;
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate("memberName", memberName);
+            String token = User.getToken();
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
+
+
+            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
+                    .asLoading(getString(R.string.text_loading))
+                    .show();
+
+            SLog.info("params[%s]", params);
+
+            Api.postUI(Api.PATH_MY_FOLLOW_POST, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                    loadingPopup.dismiss();
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    loadingPopup.dismiss();
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        EasyJSONArray wantPostList = responseObj.getArray("datas.wantPostList");
+                        for (Object object : wantPostList) {
+                            EasyJSONObject wantPost = (EasyJSONObject) object;
+
+                            PostItem postItem = new PostItem();
+                            postItem.postId = wantPost.getInt("postId");
+                            postItem.coverImage = wantPost.getString("coverImage");
+                            postItem.postCategory = wantPost.getString("postCategory");
+                            postItem.title = wantPost.getString("title");
+                            postItem.authorAvatar = wantPost.getString("memberVo.avatar");
+                            postItem.authorNickname = wantPost.getString("memberVo.nickName");
+                            postItem.postFollow = wantPost.getInt("postFavor");
+
+                            myFollowArticleItemList.add(postItem);
+                        }
+                        SLog.info("ITEM_COUNT[%d]", myFollowMemberItemList.size());
+                        articleDataLoaded = true;
+                        if (currTabIndex == TAB_INDEX_ARTICLE) {
+                            rvMyFollowList.setAdapter(myFollowArticleAdapter);
+                        }
+                        myFollowArticleAdapter.setNewData(myFollowArticleItemList);
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
+        } catch (Exception e) {
+
         }
     }
 

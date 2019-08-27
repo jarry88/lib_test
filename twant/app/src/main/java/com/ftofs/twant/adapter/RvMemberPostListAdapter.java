@@ -35,7 +35,7 @@ public class RvMemberPostListAdapter extends BaseQuickAdapter<PostItem, BaseView
             .setText(R.id.tv_create_time, item.createTime)
             .setText(R.id.tv_thumb_count, String.valueOf(item.postThumb))
             .setText(R.id.tv_reply_count, String.valueOf(item.postReply))
-            .setText(R.id.tv_like_count, String.valueOf(item.postLike));
+            .setText(R.id.tv_like_count, String.valueOf(item.postFollow));
 
     }
 }

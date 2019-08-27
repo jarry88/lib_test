@@ -125,7 +125,7 @@ public class MyArticleFragment extends BaseFragment implements View.OnClickListe
                         }
                         item.postThumb = post.getInt("postLike");
                         item.postReply = post.getInt("postReply");
-                        item.postLike = post.getInt("postFavor");
+                        item.postFollow = post.getInt("postFavor");
 
                         postItemList.add(item);
                     }

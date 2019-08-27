@@ -252,7 +252,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         item.postCategory = post.getString("postCategory");
                         item.title = post.getString("title");
                         item.postReply = post.getInt("postReply");
-                        item.postLike = post.getInt("postLike");
+                        item.postFollow = post.getInt("postLike");
                         item.deadline = post.getString("expiresDate");
 
                         EasyJSONObject memberVo = post.getObject("memberVo");
@@ -261,7 +261,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                             item.authorAvatar = memberVo.getString("avatar");
                             item.authorNickname = memberVo.getString("nickName");
                         }
-                        item.postLike = post.getInt("postLike");
+                        item.postFollow = post.getInt("postLike");
 
                         postItemList.add(item);
                     }

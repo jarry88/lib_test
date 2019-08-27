@@ -342,7 +342,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                                 postItem.title = post.getString("title");
                                 postItem.authorAvatar = post.getString("memberVo.avatar");
                                 postItem.authorNickname = post.getString("memberVo.nickName");
-                                postItem.postLike = post.getInt("postLike");
+                                postItem.postThumb = post.getInt("postLike");
 
                                 myLikeArticleItemList.add(postItem);
                             }

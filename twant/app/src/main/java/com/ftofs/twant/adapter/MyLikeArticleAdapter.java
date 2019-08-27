@@ -27,6 +27,6 @@ public class MyLikeArticleAdapter extends BaseQuickAdapter<PostItem, BaseViewHol
 
         helper.setText(R.id.tv_title, item.title)
                 .setText(R.id.tv_author_nickname, item.authorNickname)
-                .setText(R.id.tv_thumb_count, String.valueOf(item.postLike));
+                .setText(R.id.tv_thumb_count, String.valueOf(item.postThumb));
     }
 }

@@ -317,7 +317,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                         postItem.authorNickname = memberVo.getString("nickName");
                         postItem.createTime = wantPostVo.getString("createTime");
                         postItem.postThumb = wantPostVo.getInt("postLike");
-                        postItem.postLike = wantPostVo.getInt("postFavor");
+                        postItem.postFollow = wantPostVo.getInt("postFavor");
                         postItem.postReply = wantPostVo.getInt("postReply");
 
                         postItemList.add(postItem);
@@ -325,8 +325,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
 
                     SLog.info("postItemList.size[%d]", postItemList.size());
                     memberPostListAdapter.setData(postItemList);
-
-
                 } catch (Exception e) {
 
                 }
