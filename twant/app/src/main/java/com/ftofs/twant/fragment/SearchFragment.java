@@ -121,7 +121,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         TabLayout tabLayout = view.findViewById(R.id.search_tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_goods)).setTag(SearchType.GOODS));
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_store)).setTag(SearchType.STORE));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_article)).setTag(SearchType.ARTICLE));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getText(R.string.text_post)).setTag(SearchType.ARTICLE));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

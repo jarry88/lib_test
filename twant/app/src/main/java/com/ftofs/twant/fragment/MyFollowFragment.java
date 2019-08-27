@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.MyFollowArticleAdapter;
 import com.ftofs.twant.adapter.MyFollowGoodsAdapter;
@@ -105,6 +106,13 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
         myFollowArticleAdapter = new MyFollowArticleAdapter(R.layout.my_follow_article_item, myFollowArticleItemList);
         myFollowRecruitmentAdapter = new MyFollowRecruitmentAdapter(R.layout.my_follow_recruitment_item, myFollowRecruitmentItemList);
         myFollowMemberAdapter = new MyFollowMemberAdapter(R.layout.my_follow_member_item, myFollowMemberItemList);
+        myFollowMemberAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MyFollowMemberItem item = myFollowMemberItemList.get(position);
+                start(MemberInfoFragment.newInstance(item.memberName));
+            }
+        });
 
         SimpleTabManager simpleTabManager = new SimpleTabManager(TAB_INDEX_STORE) {
             @Override
@@ -146,7 +154,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                 } else if (id == R.id.btn_member) {
                     currTabIndex = TAB_INDEX_MEMBER;
                     if (memberDataLoaded) {
-                        rvMyFollowList.setAdapter(myFollowRecruitmentAdapter);
+                        rvMyFollowList.setAdapter(myFollowMemberAdapter);
                     } else {
                         loadMyFollowMember();
                     }
@@ -191,7 +199,6 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
             if (!StringUtil.isEmpty(token)) {
                 params.set("token", token);
             }
-
 
             final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                     .asLoading(getString(R.string.text_loading))
@@ -346,6 +353,8 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                     .asLoading(getString(R.string.text_loading))
                     .show();
 
+            SLog.info("params[%s]", params);
+
             Api.postUI(Api.PATH_MY_FOLLOW_MEMBER, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -364,24 +373,20 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                             return;
                         }
 
-                        EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
-                        for (Object object : goodsList) {
-                            EasyJSONObject goods = (EasyJSONObject) object;
-                            EasyJSONObject goodsCommon = goods.getObject("goodsCommon");
+                        EasyJSONArray memberVoList = responseObj.getArray("datas.memberVoList");
+                        for (Object object : memberVoList) {
+                            EasyJSONObject memberVo = (EasyJSONObject) object;
 
-                            MyFollowGoodsItem myFollowGoodsItem = new MyFollowGoodsItem();
-                            myFollowGoodsItem.commonId = goods.getInt("commonId");
-                            myFollowGoodsItem.goodsName = goods.getString("goodsName");
-                            myFollowGoodsItem.storeId = goods.getInt("storeVo.storeId");
-                            myFollowGoodsItem.storeName = goods.getString("storeVo.storeName");
-                            myFollowGoodsItem.imageSrc = goodsCommon.getString("imageSrc");
-                            myFollowGoodsItem.jingle = goodsCommon.getString("jingle");
-                            myFollowGoodsItem.goodsFavorite = goodsCommon.getInt("goodsFavorite");
-                            myFollowGoodsItem.price = Util.getSpuPrice(goodsCommon);
+                            MyFollowMemberItem myFollowMemberItem = new MyFollowMemberItem();
+                            myFollowMemberItem.memberName = memberVo.getString("memberName");
+                            myFollowMemberItem.nickname = memberVo.getString("nickName");
+                            myFollowMemberItem.avatarUrl = memberVo.getString("avatar");
+                            myFollowMemberItem.memberSignature = memberVo.getString("memberSignature");
+                            myFollowMemberItem.level = memberVo.getString("currGrade.gradeName");
 
-                            myFollowGoodsItemList.add(myFollowGoodsItem);
+                            myFollowMemberItemList.add(myFollowMemberItem);
                         }
-                        SLog.info("ITEM_COUNT[%d]", myFollowGoodsItemList.size());
+                        SLog.info("ITEM_COUNT[%d]", myFollowMemberItemList.size());
                         memberDataLoaded = true;
                         if (currTabIndex == TAB_INDEX_MEMBER) {
                             rvMyFollowList.setAdapter(myFollowMemberAdapter);

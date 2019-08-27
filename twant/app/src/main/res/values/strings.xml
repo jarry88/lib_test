@@ -47,6 +47,7 @@
     <string name="text_comment_detail">評論詳情</string>
     <string name="text_create_comment">發表評論</string>
     <string name="text_post_detail">貼文詳情</string>
+    <string name="text_post">貼文</string>
 
     <string name="text_message">消息</string>
     <string name="text_logistics_message">交易物流消息</string>
@@ -268,6 +269,7 @@
     <string name="text_locate">定位</string>
 
     <string name="text_loading">正在加載</string>
+    <string name="text_committing">正在提交</string>
     <string name="text_visit_my_home">訪問專頁</string>
 
     <string name="text_history_search">歷史搜索</string>

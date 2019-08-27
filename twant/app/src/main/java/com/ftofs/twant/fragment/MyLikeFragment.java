@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.MyLikeArticleAdapter;
 import com.ftofs.twant.adapter.MyLikeGoodsAdapter;
@@ -98,6 +100,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                     } else {
                         loadMyLikeStore();
                     }
+                    rvMyLikeList.setBackgroundColor(_mActivity.getColor(android.R.color.white));
                 } else if (id == R.id.btn_goods) {
                     currTabIndex = TAB_INDEX_GOODS;
                     if (goodsDataLoaded) {
@@ -105,6 +108,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                     } else {
                         loadMyLikeGoods();
                     }
+                    rvMyLikeList.setBackgroundColor(_mActivity.getColor(android.R.color.white));
                 } else if (id == R.id.btn_article) {
                     currTabIndex = TAB_INDEX_ARTICLE;
                     if (articleDataLoaded) {
@@ -112,6 +116,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                     } else {
                         loadMyLikeArticle();
                     }
+                    rvMyLikeList.setBackgroundColor(_mActivity.getColor(R.color.tw_slight_grey));
                 }
             }
         };
@@ -123,8 +128,22 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvMyLikeList.setLayoutManager(layoutManager);
         myLikeStoreAdapter = new MyLikeStoreAdapter(R.layout.my_like_store_item, myLikeStoreItemList);
+        myLikeStoreAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MyLikeStoreItem myLikeStoreItem = myLikeStoreItemList.get(position);
+                start(ShopMainFragment.newInstance(myLikeStoreItem.storeId));
+            }
+        });
         myLikeGoodsAdapter = new MyLikeGoodsAdapter(R.layout.my_like_goods_item, myLikeGoodsItemList);
         myLikeArticleAdapter = new MyLikeArticleAdapter(R.layout.my_like_article_item, myLikeArticleItemList);
+        myLikeArticleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                PostItem postItem = myLikeArticleItemList.get(position);
+                start(PostDetailFragment.newInstance(postItem.postId));
+            }
+        });
 
         rvMyLikeList.setAdapter(myLikeStoreAdapter);
 
@@ -225,6 +244,7 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                     .asLoading(getString(R.string.text_loading))
                     .show();
 
+            SLog.info("params[%s]", params);
             Api.postUI(Api.PATH_MY_LIKE_GOODS, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -316,7 +336,13 @@ public class MyLikeFragment extends BaseFragment implements View.OnClickListener
                                 EasyJSONObject post = (EasyJSONObject) object;
 
                                 PostItem postItem = new PostItem();
-
+                                postItem.postId = post.getInt("postId");
+                                postItem.coverImage = post.getString("coverImage");
+                                postItem.postCategory = post.getString("postCategory");
+                                postItem.title = post.getString("title");
+                                postItem.authorAvatar = post.getString("memberVo.avatar");
+                                postItem.authorNickname = post.getString("memberVo.nickName");
+                                postItem.postLike = post.getInt("postLike");
 
                                 myLikeArticleItemList.add(postItem);
                             }

@@ -70,6 +70,11 @@ public enum EBMessageType {
      * 鍵盤狀態變化
      */
     MESSAGE_TYPE_KEYBOARD_STATE_CHANGED,
+
+    /**
+     * 添加新貼文
+     */
+    MESSAGE_TYPE_ADD_POST,
 }
 
 

@@ -7,7 +7,8 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:padding="10dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@android:color/white">
 
     <ImageView
         android:id="@+id/img_post_cover"
@@ -23,6 +24,7 @@
         android:layout_weight="1"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="市場 | 想要帶你去浪漫的土耳其去看日暮寧靜後的... "
@@ -35,10 +37,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp">
+
+
+            <LinearLayout
+                android:id="@+id/ll_thumb_data_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_comment_thumb_grey"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_thumb_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="23"
+                    android:textColor="#666"
+                    android:textSize="14sp"
+                    />
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/ll_thumb_data_container"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -53,32 +85,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textSize="13sp"
                     android:textColor="@color/tw_black"
                     android:text="說走就走"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_comment_thumb_grey"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="23"
-                    android:textColor="#666"
-                    android:textSize="14sp"
                     />
             </LinearLayout>
         </RelativeLayout>

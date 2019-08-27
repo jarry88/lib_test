@@ -112,6 +112,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
         Util.setOnClickListener(view, R.id.btn_back, this);
 
+        Util.setOnClickListener(view, R.id.btn_add_post_comment, this);
         Util.setOnClickListener(view, R.id.btn_thumb, this);
         Util.setOnClickListener(view, R.id.btn_like, this);
         Util.setOnClickListener(view, R.id.btn_share, this);
@@ -132,6 +133,8 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         int id = v.getId();
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_add_post_comment) {
+            start(AddCommentFragment.newInstance(postId, Constant.COMMENT_CHANNEL_POST));
         } else if (id == R.id.btn_thumb) {
             switchInteractiveState(STATE_TYPE_THUMB);
         } else if (id == R.id.btn_like) {
@@ -165,8 +168,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "postId", postId,
-                "state", newState
-        );
+                "state", newState);
 
         SLog.info("path[%s], params[%s]", path, params);
         Api.postUI(path, params, new UICallback() {

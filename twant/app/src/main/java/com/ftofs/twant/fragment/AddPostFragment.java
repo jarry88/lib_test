@@ -23,9 +23,11 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ArticleCategory;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -43,6 +45,7 @@ import com.ftofs.twant.widget.DateSelectPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +68,6 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
     BaseQuickAdapter adapter;
 
     String coverImage;
-    List<String> postImageList = new ArrayList<>();
 
     List<ArticleCategory> articleCategoryList = new ArrayList<>();
     int selectedCategoryId = -1;
@@ -91,6 +93,8 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
     ImageView btnAddPostCoverImage;
     ImageView postCoverImage;
 
+    BasePopupView inProgressPopup;
+
     public static AddPostFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -112,6 +116,8 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
 
         currencyTypeSign = getString(R.string.currency_type_sign);
+        inProgressPopup = new XPopup.Builder(_mActivity)
+                .asLoading(getString(R.string.text_committing));
 
         tvTitle = view.findViewById(R.id.tv_title);
         tvWordCount = view.findViewById(R.id.tv_word_count);
@@ -256,6 +262,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
             final View itemView = LayoutInflater.from(_mActivity).inflate(R.layout.post_content_image_widget, postContentImageContainer, false);
             ImageView postImage = itemView.findViewById(R.id.post_image);
             Glide.with(_mActivity).load(absolutePath).centerCrop().into(postImage);
+            itemView.setTag(absolutePath);
 
             ScaledButton btnRemoveImage = itemView.findViewById(R.id.btn_remove_image);
             btnRemoveImage.setOnClickListener(new View.OnClickListener() {
@@ -378,6 +385,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
         TaskObserver taskObserver = new TaskObserver() {
             @Override
             public void onMessage() {
+                inProgressPopup.dismiss();
                 boolean success = (boolean) message;
 
                 if (success) {
@@ -389,6 +397,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
             }
         };
 
+        inProgressPopup.show();
         TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
@@ -402,14 +411,22 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
                     String coverImageUrl = url;
 
                     EasyJSONArray wantPostImages = EasyJSONArray.generate();
-                    for (String absolutePath : postImageList) {
-                        url = Api.syncUploadFile(new File(absolutePath));
-                        if (StringUtil.isEmpty(url)) {
-                            return null;
+
+                    int childCount = postContentImageContainer.getChildCount();
+                    for (int i = 0; i < childCount; i++) {
+                        View childView = postContentImageContainer.getChildAt(i);
+
+                        if (childView instanceof RelativeLayout) {
+                            String absolutePath = (String) childView.getTag();
+                            url = Api.syncUploadFile(new File(absolutePath));
+                            SLog.info("url[%s]", url);
+                            if (StringUtil.isEmpty(url)) {
+                                return null;
+                            }
+                            wantPostImages.append(EasyJSONObject.generate("imageUrl", url));
                         }
-                        wantPostImages.append(url);
                     }
-                    SLog.info("上傳圖片完成");
+                    SLog.info("上傳圖片完成, wantPostImages[%s]", wantPostImages);
 
 
                     // token要附在path中
@@ -438,6 +455,8 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
                     if (ToastUtil.isError(responseObj)) {
                         return false;
                     }
+
+                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_ADD_POST, null);
 
                     return true;
                 } catch (Exception e) {

@@ -281,7 +281,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             EasyJSONObject params = EasyJSONObject.generate(
                     "commentChannel", commentItem.commentChannel,
                     "deep", 2,
-                    "content", etReplyContent.getText().toString().trim(),
+                    "content", StringUtil.filterCommentContent(etReplyContent.getText().toString().trim()),
                     "parentCommentId", commentItem.commentId,
                     "replyCommentId", replyCommentId);
 

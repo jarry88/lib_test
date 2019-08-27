@@ -142,11 +142,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 //键盘是否弹出
                 boolean isOpen = heightDiff > visibleThreshold;
                 int keyboardNewState = isOpen ? Constant.KEYBOARD_SHOWN : Constant.KEYBOARD_HIDDEN;
+                /*
                 SLog.info("rootViewHeight[%d], visibleHeight[%d], heightDiff[%d], visibleThreshold[%d], keyboardState[%d], keyboardNewState[%d]",
                         rootViewHeight, visibleHeight, heightDiff, visibleThreshold, keyboardState, keyboardNewState);
+                        */
 
                 // 鍵盤狀態變化
-                SLog.info("鍵盤狀態變化, keyboardNewState[%d]", keyboardNewState);
+                // SLog.info("鍵盤狀態變化, keyboardNewState[%d]", keyboardNewState);
 
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_KEYBOARD_STATE_CHANGED, keyboardNewState);
 

@@ -38,7 +38,7 @@ import com.ftofs.twant.util.Util;
 @SuppressWarnings("unused")
 public class SmoothInputLayout extends LinearLayout {
     public static final int DEFAULT_KEYBOARD_HEIGHT = 387;
-    public static final int MIN_KEYBOARD_HEIGHT = 20;
+    public static final int MIN_KEYBOARD_HEIGHT = 150;
     private static final String SP_KEYBOARD = "keyboard";
     private static final String KEY_HEIGHT = "height";
     private int mMaxKeyboardHeight = Integer.MIN_VALUE;

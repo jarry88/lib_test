@@ -198,7 +198,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         EasyJSONObject params = EasyJSONObject.generate(
                 "commentChannel", commentChannel,
                 "deep", 1,
-                "content", content,
+                "content", StringUtil.filterCommentContent(content),
                 "images", images
         );
 

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,11 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.PostListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PostCategory;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.SearchPostParams;
@@ -33,12 +38,17 @@ import com.ftofs.twant.widget.SimpleTabManager;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.enums.PopupPosition;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -54,6 +64,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     PostListAdapter adapter;
     SearchPostParams searchPostParams = new SearchPostParams();
+
+    boolean isPostDataLoaded;
 
     /**
      * 選中的過濾索引
@@ -81,6 +93,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
 
         Util.setOnClickListener(view, R.id.btn_add_post, this);
@@ -106,6 +120,22 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         postCategoryList.add(item);
 
         loadPostData();
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        SLog.info("onEBMessage, messageType[%s]", message.messageType);
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_POST) {
+            isPostDataLoaded = false;
+        }
     }
 
     @Override
@@ -235,6 +265,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
                         postItemList.add(item);
                     }
+
+                    isPostDataLoaded = true;
                     adapter.setNewData(postItemList);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -263,5 +295,25 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         }
 
         return null;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        if (!isPostDataLoaded) {
+            llTabButtonContainer.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadPostData();
+                }
+            }, 500);
+
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

@@ -368,4 +368,27 @@ public class StringUtil {
         SLog.info("matches[%s]", result);
         return result;
     }
+
+    /**
+     * 發表評論替換空格和換行符
+     * @param content
+     * @return
+     */
+    public static String filterCommentContent(String content) {
+        StringBuilder sb = new StringBuilder();
+        int len = content.length();
+        for (int i = 0; i < len; i++) {
+            char ch = content.charAt(i);
+
+            if (ch == ' ') {
+                sb.append("[空格]");
+            } else if (ch == '\n') {
+                sb.append("[換行]");
+            } else {
+                sb.append(ch);
+            }
+        }
+
+        return sb.toString();
+    }
 }
