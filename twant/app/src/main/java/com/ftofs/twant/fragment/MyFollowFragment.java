@@ -100,8 +100,37 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvMyFollowList.setLayoutManager(layoutManager);
+
         myFollowStoreAdapter = new MyFollowStoreAdapter(R.layout.my_follow_store_item, myFollowStoreItemList);
+        myFollowStoreAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MyFollowStoreItem myFollowStoreItem = myFollowStoreItemList.get(position);
+                start(ShopMainFragment.newInstance(myFollowStoreItem.storeId));
+            }
+        });
+
         myFollowGoodsAdapter = new MyFollowGoodsAdapter(R.layout.my_follow_goods_item, myFollowGoodsItemList);
+        myFollowGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("HERE");
+                MyFollowGoodsItem myFollowGoodsItem = myFollowGoodsItemList.get(position);
+                start(GoodsDetailFragment.newInstance(myFollowGoodsItem.commonId));
+            }
+        });
+        myFollowGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("HERE");
+                int id = view.getId();
+                if (id == R.id.btn_goto_store) {
+                    MyFollowGoodsItem myFollowGoodsItem = myFollowGoodsItemList.get(position);
+                    start(ShopMainFragment.newInstance(myFollowGoodsItem.storeId));
+                }
+            }
+        });
+
         myFollowArticleAdapter = new MyFollowArticleAdapter(R.layout.my_follow_article_item, myFollowArticleItemList);
         myFollowArticleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override

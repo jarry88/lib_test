@@ -10,8 +10,13 @@
     android:orientation="vertical"
     android:background="@drawable/border_type_d">
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/btn_goto_store"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="30dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
         <ImageView
             android:layout_width="wrap_content"

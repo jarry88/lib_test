@@ -19,6 +19,8 @@ public class MyFollowGoodsAdapter extends BaseQuickAdapter<MyFollowGoodsItem, Ba
 
     @Override
     protected void convert(BaseViewHolder helper, MyFollowGoodsItem item) {
+        helper.addOnClickListener(R.id.btn_goto_store);
+
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(mContext).load(item.imageSrc).centerCrop().into(goodsImage);
 
