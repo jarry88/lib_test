@@ -22,7 +22,9 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.hyphenate.chat.EMConversation;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,6 +67,7 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_new_friend, this);
+        Util.setOnClickListener(view, R.id.btn_contact_menu, this);
 
         RecyclerView rvContactList = view.findViewById(R.id.rv_contact_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -92,6 +95,15 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
             pop();
         } else if (id == R.id.btn_new_friend) {
             start(NewFriendFragment.newInstance());
+        } else if (id == R.id.btn_contact_menu) {
+            new XPopup.Builder(_mActivity)
+                    .offsetX(-Util.dip2px(_mActivity, 11))
+                    .offsetY(-Util.dip2px(_mActivity, 8))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                    .hasShadowBg(false) // 去掉半透明背景
+                    .atView(v)
+                    .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_CONTACT))
+                    .show();
         }
     }
 

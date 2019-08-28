@@ -74,7 +74,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     ImageView imgShopFigure;
 
     TextView tvPhoneNumber;
-    TextView tvBusinessTime;
+    TextView tvBusinessTimeWorkingDay;
+    TextView tvBusinessTimeWeekend;
     TextView tvShopAddress;
 
     LinearLayout llSnsContainer;
@@ -166,7 +167,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         imgShopFigure = view.findViewById(R.id.img_shop_figure);
 
         tvPhoneNumber = view.findViewById(R.id.tv_phone_number);
-        tvBusinessTime = view.findViewById(R.id.tv_business_time);
+        tvBusinessTimeWorkingDay = view.findViewById(R.id.tv_business_time_working_day);
+        tvBusinessTimeWeekend = view.findViewById(R.id.tv_business_time_weekend);
         tvShopAddress = view.findViewById(R.id.tv_shop_address);
 
         llSnsContainer = view.findViewById(R.id.ll_sns_container);
@@ -319,7 +321,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             }
                         }
 
-
                         // 店友
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
                         EasyJSONArray members = responseObj.getArray("datas.memberAccessStatVo.members");
@@ -338,7 +339,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                 inStorePersonItemList.add(inStorePersonItem);
                             }
                         }
-
                         adapter.setNewData(storeFriendsItemList);
 
 
@@ -350,17 +350,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         // 店鋪電話
                         storePhone = storeInfo.getString("chainPhone");
                         tvPhoneNumber.setText(storePhone);
-                        // 營業時間
-                        String businessTimeTemplate = getResources().getString(R.string.business_time_template);
 
+                        // 營業時間
                         String weekDayStart = getStoreBusinessTime(storeInfo, "weekDayStart");
                         String weekDayEnd = getStoreBusinessTime(storeInfo, "weekDayEnd");
                         String restDayStart = getStoreBusinessTime(storeInfo, "restDayStart");
                         String restDayEnd = getStoreBusinessTime(storeInfo, "restDayEnd");
 
-                        String businessTime = String.format(businessTimeTemplate,
-                                weekDayStart, weekDayEnd, restDayStart, restDayEnd);
-                        tvBusinessTime.setText(businessTime);
+                        tvBusinessTimeWorkingDay.setText(weekDayStart + " - " + weekDayEnd);
+                        tvBusinessTimeWeekend.setText(restDayStart + " - " + restDayEnd);
 
                         // 店鋪地址
                         storeAddress = storeInfo.getString("chainAreaInfo") + storeInfo.getString("chainAddress");

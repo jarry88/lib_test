@@ -54,6 +54,11 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
      */
     public static final int TYPE_HOME_AND_MY = 5;
 
+    /**
+     * 通訊錄菜單
+     */
+    public static final int TYPE_CONTACT = 6;
+
 
     Context context;
     BaseFragment baseFragment;
@@ -107,10 +112,15 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.menu_item_shop_home_home);
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_black_menu_my);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_my_page);
+        } else if (type == TYPE_CONTACT) {
+            ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_scan_qr_code);
+            ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_scan_qr_code);
+            ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_add_friend);
+            ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_add_friend);
         }
 
         // 在這里可以做一些findViewById等查找控件，進行自定義操作
-        if (type == TYPE_HOME_AND_MY) {
+        if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT) {
             // 只有2項，不需要對前2項設置事件處理
             findViewById(R.id.btn_item_1).setVisibility(GONE);
             findViewById(R.id.btn_item_2).setVisibility(GONE);
@@ -130,7 +140,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     // 如果要自定义弹窗的背景，不要给布局设置背景图片，重写这个方法返回一个Drawable即可
     @Override
     protected Drawable getPopupBackground() {
-        if (type == TYPE_HOME_AND_MY) {
+        if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT) {
             return getResources().getDrawable(R.drawable.black_menu_bg_small, null);
         } else {
             return getResources().getDrawable(R.drawable.black_menu_bg, null);
@@ -156,6 +166,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     private void handleItem1Clicked() {
         switch (type) {
             case TYPE_MESSAGE:
+                // 通訊錄
                 Util.startFragment(ContactFragment.newInstance());
                 break;
             case TYPE_STORE:
@@ -177,6 +188,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     private void handleItem2Clicked() {
         switch (type) {
             case TYPE_MESSAGE:
+                // 掃一掃
                 baseFragment.startCaptureActivity();
                 break;
             case TYPE_STORE:
@@ -197,6 +209,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     private void handleItem3Clicked() {
         switch (type) {
             case TYPE_MESSAGE:
+                // 添加朋友
                 Util.startFragment(AddFriendFragment.newInstance());
                 break;
             case TYPE_STORE:
@@ -213,6 +226,10 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 // 商城首頁
                 baseFragment.popTo(MainFragment.class, false);
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.HOME_FRAGMENT);
+                break;
+            case TYPE_CONTACT:
+                // 掃一掃
+                baseFragment.startCaptureActivity();
                 break;
             default:
                 break;
@@ -238,6 +255,10 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 // 個人專頁
                 baseFragment.popTo(MainFragment.class, false);
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.MY_FRAGMENT);
+                break;
+            case TYPE_CONTACT:
+                // 添加朋友
+                Util.startFragment(AddFriendFragment.newInstance());
                 break;
             default:
                 break;

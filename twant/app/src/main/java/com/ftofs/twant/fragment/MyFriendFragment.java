@@ -21,6 +21,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,6 +62,7 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_menu, this);
 
         RecyclerView rvList = view.findViewById(R.id.rv_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
@@ -148,6 +151,15 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
         int id = v.getId();
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_menu) {
+            new XPopup.Builder(_mActivity)
+                    .offsetX(-Util.dip2px(_mActivity, 11))
+                    .offsetY(-Util.dip2px(_mActivity, 8))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                    .hasShadowBg(false) // 去掉半透明背景
+                    .atView(v)
+                    .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_HOME_AND_MY))
+                    .show();
         }
     }
 }

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.lxj.xpopup.XPopup;
 
 /**
  * 互動Fragment
@@ -40,6 +42,7 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_my_like, this);
         Util.setOnClickListener(view, R.id.btn_my_comment, this);
         Util.setOnClickListener(view, R.id.btn_my_follow, this);
+        Util.setOnClickListener(view, R.id.btn_menu, this);
     }
 
     @Override
@@ -57,6 +60,16 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_my_follow:
                 Util.startFragment(MyFollowFragment.newInstance());
+                break;
+            case R.id.btn_menu:
+                new XPopup.Builder(_mActivity)
+                        .offsetX(-Util.dip2px(_mActivity, 11))
+                        .offsetY(-Util.dip2px(_mActivity, 8))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                        .hasShadowBg(false) // 去掉半透明背景
+                        .atView(v)
+                        .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_HOME_AND_MY))
+                        .show();
                 break;
             default:
                 break;
