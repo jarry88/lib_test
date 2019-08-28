@@ -37,8 +37,12 @@
 
     <string name="text_security_setting">安全設置</string>
     <string name="text_about_takewant">關于Takewant</string>
+
+    <string name="text_takewant_introduction">Takewant介紹</string>
     <string name="text_check_update">檢測更新</string>
-    <string name="text_goto_rank">去評分</string>
+    <string name="text_secret_terms">私隱條款</string>
+    <string name="text_service_contract">服務協議</string>
+    <string name="text_goto_rate">去評分</string>
 
     <string name="text_phone">電話</string>
     <string name="text_distance">距離</string>
@@ -555,6 +559,8 @@
     <string name="text_focused_most">最受關注</string>
     <string name="text_thumbed_most">點贊最多</string>
     <string name="text_commented_most">評論最多</string>
+
+    <string name="no_post_hint">暫無符合條件的貼文數據！</string>
 
     <string name="text_member">會員</string>
     <string name="text_my_like">我的點贊</string>

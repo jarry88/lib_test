@@ -1,11 +1,13 @@
 package com.ftofs.twant.fragment;
 
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -24,12 +26,15 @@ import com.lxj.xpopup.core.BasePopupView;
 public class ExplorerFragment extends BaseFragment implements View.OnClickListener {
     BasePopupView loadingPopup;
     String url;
+    boolean ignoreSslError;
+
     TextView tvTitle;
     WebView webView;
-    public static ExplorerFragment newInstance(String url) {
+    public static ExplorerFragment newInstance(String url, boolean ignoreSslError) {
         Bundle args = new Bundle();
 
         args.putString("url", url);
+        args.putBoolean("ignoreSslError", ignoreSslError);
         ExplorerFragment fragment = new ExplorerFragment();
         fragment.setArguments(args);
 
@@ -49,7 +54,8 @@ public class ExplorerFragment extends BaseFragment implements View.OnClickListen
 
         Bundle args = getArguments();
         url = args.getString("url");
-        SLog.info("url[%s]", url);
+        ignoreSslError = args.getBoolean("ignoreSslError");
+        SLog.info("url[%s], ignoreSslError[%s]", url, ignoreSslError);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
 
@@ -68,6 +74,18 @@ public class ExplorerFragment extends BaseFragment implements View.OnClickListen
                 if (!StringUtil.isEmpty(title)) {
                     // 设置标题
                     tvTitle.setText(title);
+                }
+            }
+
+            // 如果忽略Ssl校驗錯誤
+            // 一個提示不安全的網址   https://inv-veri.chinatax.gov.cn/
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                if (ignoreSslError) {
+                    handler.proceed();//忽略证书的错误继续加载页面内容，不会变成空白页面
+                } else {
+                    //handler.cancel();// super中默认的处理方式，WebView变成空白页
+                    super.onReceivedSslError(view, handler, error);
                 }
             }
         });

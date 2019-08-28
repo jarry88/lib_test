@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -130,6 +131,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
             }
         });
+
+        // 設置空頁面
+        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
+        // 設置空頁面的提示語
+        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
+        tvEmptyHint.setText(R.string.no_post_hint);
+        adapter.setEmptyView(emptyView);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvPostList.setLayoutManager(layoutManager);
         rvPostList.setAdapter(adapter);

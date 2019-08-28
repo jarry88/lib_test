@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -394,5 +395,32 @@ public class Util {
         }
 
         return value.equals(JSONObject.NULL);
+    }
+
+    /**
+     * 參考
+     * APP内部跳转Google Play
+     * https://www.jianshu.com/p/050dcda2603d
+     * @param activity
+     */
+    public static void gotoGooglePlay(Activity activity) {
+        SLog.info("PackageName[%s]", activity.getPackageName());
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=" + activity.getPackageName()));
+            intent.setPackage("com.android.vending"); //这里对应的是谷歌商店，跳转别的商店改成对应的即可  (如果不設置package，會調用默認的應用商店，例如 應用寶等？？？)
+            if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                activity.startActivity(intent);
+            } else {//没有应用市场，通过浏览器跳转到Google Play
+                Intent intent2 = new Intent(Intent.ACTION_VIEW);
+                intent2.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName()));
+                if (intent2.resolveActivity(activity.getPackageManager()) != null) {
+                    activity.startActivity(intent2);
+                } else {
+                    //没有Google Play 也没有浏览器
+                }
+            }
+        } catch (ActivityNotFoundException activityNotFoundException1) {
+        }
     }
 }

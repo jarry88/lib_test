@@ -101,7 +101,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         // 外部鏈接
                         // String url = "https://www.jianshu.com/p/596a168c33d7";
                         String url = webSliderItem.linkValue;
-                        Util.startFragment(ExplorerFragment.newInstance(url));
+                        Util.startFragment(ExplorerFragment.newInstance(url, false));
                         break;
                     case "keyword":
                         // 关键字

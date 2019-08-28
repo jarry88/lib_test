@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/toolbar_margin_left"
             android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:paddingBottom="40dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -58,55 +59,116 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="23dp"
                 android:textColor="@color/tw_black"
-                android:textSize="12sp"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="@dimen/toolbar_margin_left"
+        android:paddingRight="@dimen/toolbar_margin_right"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/btn_view_takewant_introduction"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/border_type_d">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:text="@string/text_takewant_introduction"
                 />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="31dp"
-                android:background="@drawable/border_type_e">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="@string/text_check_update"
-                    />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/btn_view_secret_terms"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/border_type_d">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:text="@string/text_secret_terms"
+                />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/expand_button_big"
-                    />
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:background="@drawable/border_type_e">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="@string/text_goto_rank"
-                    />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/btn_view_service_contract"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:text="@string/text_service_contract"
+                />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/expand_button_big"
-                    />
-            </RelativeLayout>
-        </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="@dimen/toolbar_margin_left"
+        android:paddingRight="@dimen/toolbar_margin_right"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/btn_goto_rate"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:text="@string/text_goto_rate"
+                />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>
