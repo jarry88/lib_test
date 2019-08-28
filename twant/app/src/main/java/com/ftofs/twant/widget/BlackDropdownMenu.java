@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,11 +49,19 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
      */
     public static final int TYPE_ORDER = 4;
 
+    /**
+     * 商城首頁+個人專頁
+     */
+    public static final int TYPE_HOME_AND_MY = 5;
 
+
+    Context context;
     BaseFragment baseFragment;
     int type;
     public BlackDropdownMenu(@NonNull Context context, BaseFragment baseFragment, int type) {
         super(context);
+
+        this.context = context;
         this.baseFragment = baseFragment;
         this.type = type;
     }
@@ -93,11 +102,27 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_my_page);
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_black_menu_message);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.menu_item_shop_home_message);
+        } else if (type == TYPE_HOME_AND_MY) { // 只有2項，商城首頁 + 個人專頁
+            ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_black_menu_home);
+            ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.menu_item_shop_home_home);
+            ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_black_menu_my);
+            ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_my_page);
         }
 
         // 在這里可以做一些findViewById等查找控件，進行自定義操作
-        findViewById(R.id.btn_item_1).setOnClickListener(this);
-        findViewById(R.id.btn_item_2).setOnClickListener(this);
+        if (type == TYPE_HOME_AND_MY) {
+            // 只有2項，不需要對前2項設置事件處理
+            findViewById(R.id.btn_item_1).setVisibility(GONE);
+            findViewById(R.id.btn_item_2).setVisibility(GONE);
+
+            View btnItem3 = findViewById(R.id.btn_item_3);
+            ViewGroup.MarginLayoutParams layoutParams = (MarginLayoutParams) btnItem3.getLayoutParams();
+            layoutParams.topMargin = Util.dip2px(context, 15);
+        } else {
+            findViewById(R.id.btn_item_1).setOnClickListener(this);
+            findViewById(R.id.btn_item_2).setOnClickListener(this);
+        }
+
         findViewById(R.id.btn_item_3).setOnClickListener(this);
         findViewById(R.id.btn_item_4).setOnClickListener(this);
     }
@@ -105,7 +130,11 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     // 如果要自定义弹窗的背景，不要给布局设置背景图片，重写这个方法返回一个Drawable即可
     @Override
     protected Drawable getPopupBackground() {
-        return getResources().getDrawable(R.drawable.black_menu_bg, null);
+        if (type == TYPE_HOME_AND_MY) {
+            return getResources().getDrawable(R.drawable.black_menu_bg_small, null);
+        } else {
+            return getResources().getDrawable(R.drawable.black_menu_bg, null);
+        }
     }
 
     @Override
@@ -180,6 +209,11 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 baseFragment.popTo(MainFragment.class, false);
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.MY_FRAGMENT);
                 break;
+            case TYPE_HOME_AND_MY:
+                // 商城首頁
+                baseFragment.popTo(MainFragment.class, false);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.HOME_FRAGMENT);
+                break;
             default:
                 break;
         }
@@ -199,6 +233,11 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             case TYPE_ORDER:
                 // 消息
                 Util.startFragment(MessageFragment.newInstance(true));
+                break;
+            case TYPE_HOME_AND_MY:
+                // 個人專頁
+                baseFragment.popTo(MainFragment.class, false);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT, MainFragment.MY_FRAGMENT);
                 break;
             default:
                 break;

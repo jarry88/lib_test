@@ -61,6 +61,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     ImageView imgLike;
     TextView tvLikeCount;
 
+    String authorMemberName;
     int isLike;
     int isFavor;
 
@@ -93,6 +94,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
         tvPostTitle = view.findViewById(R.id.tv_post_title);
         imgAuthorAvatar = view.findViewById(R.id.img_author_avatar);
+        imgAuthorAvatar.setOnClickListener(this);
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvCreatetime = view.findViewById(R.id.tv_create_time);
         tvDeadline = view.findViewById(R.id.tv_deadline);
@@ -145,6 +147,10 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     .moveUpToKeyboard(false)
                     .asCustom(new SharePopup(_mActivity, SharePopup.SHARE_TYPE_POST, postId))
                     .show();
+        } else if (id == R.id.img_author_avatar) {
+            if (!StringUtil.isEmpty(authorMemberName)) {
+                start(MemberInfoFragment.newInstance(authorMemberName));
+            }
         }
     }
 
@@ -249,6 +255,8 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
                     String nickname = memberVo.getString("nickName");
                     tvNickname.setText(nickname);
+
+                    authorMemberName = memberVo.getString("memberName");
 
                     String createTime = wantPostVoInfo.getString("createTime");
                     tvCreatetime.setText(createTime);

@@ -55,7 +55,7 @@ public class StoreAnnouncementPopup extends BottomPopupView implements View.OnCl
                 String url = Config.WEB_BASE_URL + "/store/announcement/" + storeAnnouncement.id;
 
                 // 使用瀏覽器顯示店鋪公告
-                Util.startFragment(ExplorerFragment.newInstance(url, false));
+                Util.startFragment(ExplorerFragment.newInstance(url, true));
 
                 dismiss();
             }

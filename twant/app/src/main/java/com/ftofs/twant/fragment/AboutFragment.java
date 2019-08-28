@@ -72,11 +72,11 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         } else if (id == R.id.btn_view_takewant_introduction || id == R.id.btn_view_secret_terms || id == R.id.btn_view_service_contract) {
             String url;
 
-            if (id == R.id.btn_view_takewant_introduction) {
+            if (id == R.id.btn_view_takewant_introduction) { // Takewant介紹
                 url = "/introduce";
-            } else if (id == R.id.btn_view_secret_terms) {
+            } else if (id == R.id.btn_view_secret_terms) {  // 私隱條款
                 url = "/article/info_h5/%E7%A7%81%E9%9A%B1%E6%A2%9D%E6%AC%BE";
-            } else {
+            } else { // 服務協議
                 url = "/article/info_h5/%E6%9C%8D%E5%8B%99%E5%8D%94%E8%AD%B0";
             }
             start(ExplorerFragment.newInstance(Config.WEB_BASE_URL + url, true));
