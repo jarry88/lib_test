@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreConformListAdapter;
@@ -50,15 +51,20 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
      */
     ShopMainFragment parentFragment;
 
+    LinearLayout llOuterContainer;
+
     List<StoreVoucher> storeVoucherList = new ArrayList<>();
+    LinearLayout llVoucherWrapper;
     LinearLayout llVoucherContainer;
     StoreVoucherListAdapter voucherListAdapter;
 
     List<StoreConform> storeConformList = new ArrayList<>();
+    LinearLayout llConformWrapper;
     LinearLayout llConformContainer;
     StoreConformListAdapter conformListAdapter;
 
     List<StoreDiscount> storeDiscountList = new ArrayList<>();
+    LinearLayout llDiscountWrapper;
     LinearLayout llDiscountContainer;
     StoreDiscountListAdapter discountListAdapter;
 
@@ -83,6 +89,9 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
 
+        llOuterContainer = view.findViewById(R.id.ll_outer_container);
+
+        llVoucherWrapper = view.findViewById(R.id.ll_voucher_wrapper);
         llVoucherContainer = view.findViewById(R.id.ll_voucher_container);
         voucherListAdapter = new StoreVoucherListAdapter(_mActivity, llVoucherContainer, R.layout.store_voucher_item);
         voucherListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
@@ -99,6 +108,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
+        llConformWrapper = view.findViewById(R.id.ll_conform_wrapper);
         llConformContainer = view.findViewById(R.id.ll_conform_container);
         conformListAdapter = new StoreConformListAdapter(_mActivity, llConformContainer, R.layout.store_conform_item);
         conformListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
@@ -115,6 +125,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
+        llDiscountWrapper = view.findViewById(R.id.ll_discount_wrapper);
         llDiscountContainer = view.findViewById(R.id.ll_discount_container);
         discountListAdapter = new StoreDiscountListAdapter(_mActivity, llDiscountContainer, R.layout.store_discount_item);
         discountListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
@@ -185,53 +196,80 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                         return;
                     }
 
+                    // 記錄有多少種空數據
+                    int emptyDataCount = 0;
                     try {
                         EasyJSONArray voucherList = responseObj.getArray("datas.voucherList");
-                        for (Object object : voucherList) { // PayObject
-                            EasyJSONObject voucher = (EasyJSONObject) object;
+                        if (voucherList.length() > 0) {
+                            for (Object object : voucherList) {
+                                EasyJSONObject voucher = (EasyJSONObject) object;
 
-                            StoreVoucher storeVoucher = new StoreVoucher(
-                                    voucher.getInt("storeId"),
-                                    voucher.getInt("templateId"),
-                                    voucher.getString("storeName"),
-                                    voucher.getInt("templatePrice"),
-                                    voucher.getString("limitAmountText"),
-                                    voucher.getString("usableClientTypeText"),
-                                    voucher.getString("useStartTime"),
-                                    voucher.getString("useEndTime"),
-                                    voucher.getInt("memberIsReceive"));
-                            storeVoucherList.add(storeVoucher);
+                                StoreVoucher storeVoucher = new StoreVoucher(
+                                        voucher.getInt("storeId"),
+                                        voucher.getInt("templateId"),
+                                        voucher.getString("storeName"),
+                                        voucher.getInt("templatePrice"),
+                                        voucher.getString("limitAmountText"),
+                                        voucher.getString("usableClientTypeText"),
+                                        voucher.getString("useStartTime"),
+                                        voucher.getString("useEndTime"),
+                                        voucher.getInt("memberIsReceive"));
+                                storeVoucherList.add(storeVoucher);
+                            }
+                            voucherListAdapter.setData(storeVoucherList);
+                        } else {
+                            llVoucherWrapper.setVisibility(View.GONE);
+                            emptyDataCount++;
                         }
-                        voucherListAdapter.setData(storeVoucherList);
+
 
                         EasyJSONArray conformList = responseObj.getArray("datas.conformList");
-                        for (Object object : conformList) {
-                            EasyJSONObject conform = (EasyJSONObject) object;
+                        if (conformList.length() > 0) {
+                            for (Object object : conformList) {
+                                EasyJSONObject conform = (EasyJSONObject) object;
 
-                            StoreConform storeConform = new StoreConform(
-                                    conform.getInt("storeId"),
-                                    conform.getInt("conformId"),
-                                    conform.getInt("limitAmount"),
-                                    conform.getInt("conformPrice"),
-                                    conform.getString("startTime"),
-                                    conform.getString("endTime"));
-                            storeConformList.add(storeConform);
+                                StoreConform storeConform = new StoreConform(
+                                        conform.getInt("storeId"),
+                                        conform.getInt("conformId"),
+                                        conform.getInt("limitAmount"),
+                                        conform.getInt("conformPrice"),
+                                        conform.getString("startTime"),
+                                        conform.getString("endTime"));
+                                storeConformList.add(storeConform);
+                            }
+                            conformListAdapter.setData(storeConformList);
+                        } else {
+                            llConformWrapper.setVisibility(View.GONE);
+                            emptyDataCount++;
                         }
-                        conformListAdapter.setData(storeConformList);
+
 
                         EasyJSONArray discountList = responseObj.getArray("datas.discountList");
-                        for (Object object : discountList) {
-                            EasyJSONObject discount = (EasyJSONObject) object;
+                        if (discountList.length() > 0) {
+                            for (Object object : discountList) {
+                                EasyJSONObject discount = (EasyJSONObject) object;
 
-                            StoreDiscount storeDiscount = new StoreDiscount(
-                                    discount.getInt("storeId"),
-                                    discount.getInt("discountId"),
-                                    (float) discount.getDouble("discountRate"),
-                                    discount.getInt("goodsCount"));
-                            storeDiscountList.add(storeDiscount);
+                                StoreDiscount storeDiscount = new StoreDiscount(
+                                        discount.getInt("storeId"),
+                                        discount.getInt("discountId"),
+                                        (float) discount.getDouble("discountRate"),
+                                        discount.getInt("goodsCount"));
+                                storeDiscountList.add(storeDiscount);
+                            }
+                            discountListAdapter.setData(storeDiscountList);
+                        } else {
+                            llDiscountWrapper.setVisibility(View.GONE);
+                            emptyDataCount++;
                         }
-                        discountListAdapter.setData(storeDiscountList);
 
+                        // 如果3種數據都為空，顯示沒有數據的提示
+                        if (emptyDataCount == 3) {
+                            llOuterContainer.removeAllViews();
+
+                            View root = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, llOuterContainer, true);
+                            TextView tvEmptyHint = root.findViewById(R.id.tv_empty_hint);
+                            tvEmptyHint.setText(R.string.no_store_activity_hint);
+                        }
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                         SLog.info("Error!loadStoreActivityData failed");

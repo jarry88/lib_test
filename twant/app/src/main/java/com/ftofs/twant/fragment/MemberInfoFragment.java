@@ -276,7 +276,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
 
                     avatarUrl = StringUtil.normalizeImageUrl(member.getString("avatarUrl"));
 
-                    Glide.with(_mActivity).load(avatarUrl).centerCrop().into(imageAvatar);
+                    Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imageAvatar);
                     nickname = member.getString("nickName");
                     tvNickname.setText(nickname);
                     tvLocation.setText(member.getString("addressAreaInfo"));

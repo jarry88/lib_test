@@ -221,6 +221,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             SLog.info("extField[%s]", extField);
 
             EMMessage lastMessage = conversation.getLastMessage();
+            if (lastMessage == null) {
+                continue;
+            }
             long timestamp = lastMessage.getMsgTime();
             SLog.info("memberName[%s], lastMessage[%s], timestamp[%s]",
                     memberName, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"));

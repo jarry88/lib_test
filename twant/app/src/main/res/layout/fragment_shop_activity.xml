@@ -6,49 +6,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
+        android:id="@+id/ll_outer_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/bottom_toolbar_max_height"
         android:orientation="vertical">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp">
-            <TextView
-                android:id="@+id/text_voucher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
-                android:layout_centerInParent="true"
-                android:text="@string/text_voucher"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
-            <View
-                android:layout_width="60dp"
-                android:layout_height="1dp"
-                android:layout_toLeftOf="@id/text_voucher"
-                android:layout_centerVertical="true"
-                android:background="@color/tw_black"
-                />
-            <View
-                android:layout_width="60dp"
-                android:layout_height="1dp"
-                android:layout_toRightOf="@id/text_voucher"
-                android:layout_centerVertical="true"
-                android:background="@color/tw_black"
-                />
-        </RelativeLayout>
-
-        <!-- 優惠券列表 -->
         <LinearLayout
-            android:id="@+id/ll_voucher_container"
+            android:id="@+id/ll_voucher_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
+                <TextView
+                    android:id="@+id/text_voucher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="13dp"
+                    android:layout_centerInParent="true"
+                    android:text="@string/text_voucher"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    />
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="1dp"
+                    android:layout_toLeftOf="@id/text_voucher"
+                    android:layout_centerVertical="true"
+                    android:background="@color/tw_black"
+                    />
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="1dp"
+                    android:layout_toRightOf="@id/text_voucher"
+                    android:layout_centerVertical="true"
+                    android:background="@color/tw_black"
+                    />
+            </RelativeLayout>
+
+            <!-- 優惠券列表 -->
+            <LinearLayout
+                android:id="@+id/ll_voucher_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+        android:id="@+id/ll_conform_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,44 +99,51 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
         </LinearLayout>
+    </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp">
-            <TextView
-                android:id="@+id/text_discount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
-                android:layout_centerInParent="true"
-                android:text="@string/text_time_limited_discount"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
-            <View
-                android:layout_width="60dp"
-                android:layout_height="1dp"
-                android:layout_toLeftOf="@id/text_discount"
-                android:layout_centerVertical="true"
-                android:background="@color/tw_black"
-                />
-            <View
-                android:layout_width="60dp"
-                android:layout_height="1dp"
-                android:layout_toRightOf="@id/text_discount"
-                android:layout_centerVertical="true"
-                android:background="@color/tw_black"
-                />
-        </RelativeLayout>
-
-        <!-- 限時折扣 -->
         <LinearLayout
-            android:id="@+id/ll_discount_container"
+            android:id="@+id/ll_discount_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
+                <TextView
+                    android:id="@+id/text_discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="13dp"
+                    android:layout_centerInParent="true"
+                    android:text="@string/text_time_limited_discount"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    />
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="1dp"
+                    android:layout_toLeftOf="@id/text_discount"
+                    android:layout_centerVertical="true"
+                    android:background="@color/tw_black"
+                    />
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="1dp"
+                    android:layout_toRightOf="@id/text_discount"
+                    android:layout_centerVertical="true"
+                    android:background="@color/tw_black"
+                    />
+            </RelativeLayout>
+
+            <!-- 限時折扣 -->
+            <LinearLayout
+                android:id="@+id/ll_discount_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/toolbar_margin_left"
     android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:layout_marginBottom="15dp"
     android:background="@drawable/store_conform_item_bg"
     android:orientation="vertical">
 

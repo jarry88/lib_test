@@ -561,6 +561,7 @@
     <string name="text_commented_most">評論最多</string>
 
     <string name="no_post_hint">暫無符合條件的貼文數據！</string>
+    <string name="no_store_activity_hint">店鋪沒有設置活動，逛逛別的吧</string>
 
     <string name="text_member">會員</string>
     <string name="text_my_like">我的點贊</string>
