@@ -38,15 +38,7 @@ public class StoreLabelListAdapter extends BaseQuickAdapter<StoreLabel, BaseView
     @Override
     protected void convert(BaseViewHolder helper, StoreLabel item) {
         LinearLayout llInnerItemContainer = helper.getView(R.id.ll_inner_item_container);
-        helper.setText(R.id.tv_outer_title, item.getStoreLabelName() + "(" + item.getStoreLabelList().size() + ")");
-
-        if (item.getIsFold() == Constant.ONE) {
-            llInnerItemContainer.setVisibility(View.GONE);
-            helper.setImageResource(R.id.img_folding_status, R.drawable.expand_button);
-        } else {
-            llInnerItemContainer.setVisibility(View.VISIBLE);
-            helper.setImageResource(R.id.img_folding_status, R.drawable.btn_expanded);
-        }
+        helper.setText(R.id.tv_outer_title, item.getStoreLabelName());
 
         llInnerItemContainer.removeAllViews();
         List<StoreLabel> storeLabelList = item.getStoreLabelList();

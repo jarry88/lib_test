@@ -77,17 +77,14 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 StoreLabel storeLabel = shopStoreLabelList.get(position);
-                SLog.info("storeLabel.getIsFold[%d]", storeLabel.getIsFold());
-                View parentView = (View) view.getParent();
 
-                if (storeLabel.getIsFold() == Constant.ONE) {
-                    parentView.findViewById(R.id.ll_inner_item_container).setVisibility(View.VISIBLE);
-                    ((ImageView) view.findViewById(R.id.img_folding_status)).setImageResource(R.drawable.btn_expanded);
-                } else {
-                    parentView.findViewById(R.id.ll_inner_item_container).setVisibility(View.GONE);
-                    ((ImageView) view.findViewById(R.id.img_folding_status)).setImageResource(R.drawable.expand_button);
-                }
-                storeLabel.setIsFold(1 - storeLabel.getIsFold());
+                int id = storeLabel.getStoreLabelId();
+                String name = storeLabel.getStoreLabelName();
+                SLog.info("id[%d], name[%s]", id, name);
+                Util.startFragment(ShopCommodityFragment.newInstance(true, EasyJSONObject.generate(
+                        "storeId", parentFragment.getStoreId(),
+                        "labelId", id
+                ).toString()));
             }
         });
         rvOuterList.setAdapter(adapter);
