@@ -1391,7 +1391,7 @@ public class Api {
         if (!Config.DEVELOPER_MODE) {
             return new OkHttpClient();
         }
-
+        SLog.info("如果是開發模式，設置OkHttpClient忽略ssl驗證");
         // 如果是開發模式，設置OkHttpClient忽略ssl驗證
         X509TrustManager xtm = new X509TrustManager() {
             @Override
