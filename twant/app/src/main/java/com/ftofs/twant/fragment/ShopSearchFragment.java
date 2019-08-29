@@ -91,7 +91,6 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
         });
 
         Util.setOnClickListener(view, R.id.btn_back, this);
-        Util.setOnClickListener(view, R.id.btn_search, this);
         Util.setOnClickListener(view, R.id.btn_clear_all, this);
 
         RecyclerView rvList = view.findViewById(R.id.rv_list);
@@ -115,7 +114,22 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
                 SearchItem item = searchItemList.get(position);
                 // Label忽略點擊
                 if (item.getItemType() == SearchItem.ITEM_TYPE_CATEGORY) { // 商品分類搜索
-
+                    if (item.id == SearchItem.CATEGORY_ID_NEW) {
+                        SLog.info("最新商品");
+                        start(ShopCommodityFragment.newInstance(true, EasyJSONObject.generate(
+                                "storeId", storeId,
+                                "sort", "new_desc").toString()));
+                    } else if (item.id == SearchItem.CATEGORY_ID_HOT) {
+                        SLog.info("店鋪熱賣");
+                        start(ShopCommodityFragment.newInstance(true, EasyJSONObject.generate(
+                                "storeId", storeId,
+                                "sort", "sale_desc").toString()));
+                    } else {
+                        SLog.info("id[%d], name[%s]", item.id, item.name);
+                        start(ShopCommodityFragment.newInstance(true, EasyJSONObject.generate(
+                                "storeId", storeId,
+                                "labelId", item.id).toString()));
+                    }
                 } else { // 具體的商品，跳到商品詳情
                     redirectToGoodsDetailFragment(item.id);
                 }
@@ -136,9 +150,6 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
         switch (id) {
             case R.id.btn_back:
                 pop();
-                break;
-            case R.id.btn_search:
-                doSearch();
                 break;
             case R.id.btn_clear_all:
                 etKeyword.setText("");

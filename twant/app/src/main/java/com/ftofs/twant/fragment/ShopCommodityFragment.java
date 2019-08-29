@@ -48,7 +48,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
     boolean isStandalone;
     int storeId;
-    EasyJSONObject paramsOriginal;
+    EasyJSONObject paramsOriginal; // 傳進來的參數
     boolean priceAsc;
 
 
@@ -114,18 +114,18 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 }
 
                 imgPriceOrderIndicator.setVisibility(View.GONE);
-                if (id == R.id.btn_order_general) {
+                if (id == R.id.btn_order_general) { // 綜合
                     SLog.info("btn_order_general");
                     loadStoreGoods(paramsOriginal, null);
-                } else if (id == R.id.btn_order_sale) {
+                } else if (id == R.id.btn_order_sale) { // 銷量
                     SLog.info("btn_order_sale");
                     EasyJSONObject extra = EasyJSONObject.generate("sort", "sale_desc");
                     loadStoreGoods(paramsOriginal, extra);
-                } else if (id == R.id.btn_order_new) {
+                } else if (id == R.id.btn_order_new) { // 上新
                     SLog.info("btn_order_new");
                     EasyJSONObject extra = EasyJSONObject.generate("sort", "new_desc");
                     loadStoreGoods(paramsOriginal, extra);
-                } else if (id == R.id.btn_order_price) {
+                } else if (id == R.id.btn_order_price) { // 價格
                     if (isRepeat) {
                         // 如果是再次點擊的話，切換排序順序
                         priceAsc = !priceAsc;
@@ -134,10 +134,10 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         priceAsc = true;
                     }
                     String sort;
-                    if (priceAsc) {
+                    if (priceAsc) { // 價格降序
                         sort = "price_desc";
                         imgPriceOrderIndicator.setImageResource(R.drawable.icon_price_sort_desc);
-                    } else {
+                    } else { // 價格升序
                         sort = "price_asc";
                         imgPriceOrderIndicator.setImageResource(R.drawable.icon_price_sort_asc);
                     }
@@ -153,7 +153,6 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         simpleTabManager.add(view.findViewById(R.id.btn_order_sale));
         simpleTabManager.add(view.findViewById(R.id.btn_order_new));
         simpleTabManager.add(view.findViewById(R.id.btn_order_price));
-
 
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
         imgPriceOrderIndicator = view.findViewById(R.id.img_price_order_indicator);
@@ -187,7 +186,22 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         });
         rvGoodsList.setAdapter(adapter);
 
-        loadStoreGoods(paramsOriginal, null);
+        if (paramsOriginal.exists("sort")) {
+            String sort = null;
+            try {
+                sort = paramsOriginal.getString("sort");
+            } catch (EasyJSONException e) {
+                e.printStackTrace();
+            }
+
+            if ("new_desc".equals(sort)) {  // 最新商品
+                simpleTabManager.performClick(2);
+            } else if ("sale_desc".equals(sort)) { // 店鋪熱賣
+                simpleTabManager.performClick(1);
+            }
+        } else {
+            loadStoreGoods(paramsOriginal, null);
+        }
     }
 
     /**

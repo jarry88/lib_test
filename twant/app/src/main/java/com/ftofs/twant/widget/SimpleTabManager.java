@@ -63,4 +63,12 @@ public abstract class SimpleTabManager implements View.OnClickListener {
         simpleTabButton.setOnClickListener(this);
         simpleTabButtonList.add(simpleTabButton);
     }
+
+    public void performClick(int index) {
+        if (index >= simpleTabButtonList.size()) {
+            return;
+        }
+
+        simpleTabButtonList.get(index).performClick();
+    }
 }
