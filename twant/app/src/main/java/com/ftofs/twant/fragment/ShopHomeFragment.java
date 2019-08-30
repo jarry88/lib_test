@@ -98,6 +98,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     int storeId;
     double storeDistance;  // 我與店鋪的距離
     String storeName;
+    String storeSignature;
+    String storeAvatarUrl;
     String storePhone;
     String storeAddress;
     double storeLongitude;
@@ -273,14 +275,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         storeName = storeInfo.getString("storeName");
                         parentFragment.setShopName(storeName);
 
-                        String shopAvatarUrl = StringUtil.normalizeImageUrl(storeInfo.getString("storeAvatar"));
+                        storeAvatarUrl = StringUtil.normalizeImageUrl(storeInfo.getString("storeAvatar"));
                         // 店鋪頭像
-                        Glide.with(ShopHomeFragment.this).load(shopAvatarUrl).centerCrop().into(imgShopAvatar);
+                        Glide.with(ShopHomeFragment.this).load(storeAvatarUrl).centerCrop().into(imgShopAvatar);
                         // 將店鋪頭像設置到工具欄按鈕
-                        parentFragment.setImgBottomBarShopAvatar(shopAvatarUrl);
+                        parentFragment.setImgBottomBarShopAvatar(storeAvatarUrl);
 
                         // 店鋪簽名
-                        tvShopSignature.setText(storeInfo.getString("storeSignature"));
+                        storeSignature = storeInfo.getString("storeSignature");
+                        tvShopSignature.setText(storeSignature);
 
                         // 商家介紹
                         merchantIntroduction = storeInfo.getString("storeIntroduce");
@@ -638,7 +641,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new SharePopup(_mActivity, SharePopup.SHARE_TYPE_STORE, storeId))
+                        .asCustom(new SharePopup(_mActivity, SharePopup.generateStoreShareLink(storeId), storeName, storeSignature, storeAvatarUrl))
                         .show();
                 break;
             case R.id.rl_shop_comment_container:

@@ -10,33 +10,42 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreServiceStaffListAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 public class StoreCustomerServicePopup extends BottomPopupView implements View.OnClickListener {
     Context context;
 
     TextView tvPopupTitle;
 
-    List<CustomerServiceStaff> staffList;
+    List<CustomerServiceStaff> staffList = new ArrayList<>();
 
     int storeId;
     StoreServiceStaffListAdapter adapter;
-    public StoreCustomerServicePopup(@NonNull Context context, int storeId, List<CustomerServiceStaff> staffList) {
+    public StoreCustomerServicePopup(@NonNull Context context, int storeId) {
         super(context);
 
         this.context = context;
         this.storeId = storeId;
-        this.staffList = staffList;
     }
 
 
@@ -50,7 +59,6 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
         super.onCreate();
 
         tvPopupTitle = findViewById(R.id.tv_popup_title);
-        tvPopupTitle.setText(context.getString(R.string.text_store_customer_service) + "(" + staffList.size() + ")");
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
 
         RecyclerView rvStaffList = findViewById(R.id.rv_staff_list);
@@ -73,6 +81,49 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
             }
         });
         rvStaffList.setAdapter(adapter);
+
+        loadData();
+    }
+
+
+    private void loadData() {
+        String path = Api.PATH_STORE_CUSTOMER_SERVICE + "/" + storeId;
+        SLog.info("path[%s]", path);
+
+        Api.getUI(path, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(context, responseObj)) {
+                        adapter.loadMoreFail();
+                        return;
+                    }
+
+                    EasyJSONArray serviceStaffList = responseObj.getArray("datas.serviceStaffList");
+                    for (Object object : serviceStaffList) {
+                        EasyJSONObject serviceStaff = (EasyJSONObject) object;
+
+                        CustomerServiceStaff staff = new CustomerServiceStaff();
+                        Util.packStaffInfo(staff, serviceStaff);
+
+                        staffList.add(staff);
+                    }
+
+                    adapter.setNewData(staffList);
+                    tvPopupTitle.setText(context.getString(R.string.text_store_customer_service) + "(" + staffList.size() + ")");
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
     }
 
     //完全可见执行

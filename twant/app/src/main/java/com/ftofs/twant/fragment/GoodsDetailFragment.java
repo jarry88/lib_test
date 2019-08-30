@@ -118,6 +118,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvFollow;
     int isFavorite;  // 是否關注
 
+    // 當前選中規格的商品名稱和賣點
+    String goodsName;
+    String jingle;
+    String currImageSrc;
+
     ImageView btnGoodsThumb;
     int isLike; // 是否點贊
 
@@ -406,7 +411,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new SharePopup(_mActivity, SharePopup.SHARE_TYPE_GOODS, commonId))
+                        .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName, jingle, currImageSrc))
                         .show();
                 break;
             case R.id.ll_comment_container:
@@ -414,15 +419,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 Util.startFragment(CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS));
                 break;
             case R.id.btn_bottom_bar_customer_service:
-                new XPopup.Builder(_mActivity)
-                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                        .moveUpToKeyboard(false)
-                        .asCustom(new StoreCustomerServicePopup(_mActivity, storeId, staffList))
-                        .show();
+                showStoreCustomerService();
                 break;
             default:
                 break;
         }
+    }
+
+    public void showStoreCustomerService() {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new StoreCustomerServicePopup(_mActivity, storeId))
+                .show();
     }
 
     /**
@@ -545,9 +554,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 .asLoading(getString(R.string.text_loading))
                 .show();
         String path = Api.PATH_GOODS_DETAIL + "/" + commonId;
-        SLog.info("path[%s]", path);
         EasyJSONObject params = EasyJSONObject.generate("token", token);
 
+        SLog.info("path[%s], params[%s]", path, params);
         Api.postUI(path, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -573,8 +582,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     String goodsImageUrl = goodsDetail.getString("imageSrc");
                     Glide.with(GoodsDetailFragment.this).load(goodsImageUrl).centerCrop().into(goodsImage);
 
-                    tvGoodsName.setText(goodsDetail.getString("goodsName"));
-                    tvGoodsJingle.setText(goodsDetail.getString("jingle"));
+                    goodsName = goodsDetail.getString("goodsName");
+                    tvGoodsName.setText(goodsName);
+                    jingle = goodsDetail.getString("jingle");
+                    tvGoodsJingle.setText(jingle);
 
                     String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(responseObj.getString("datas.goodsCountry.nationalFlag"));
                     Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
@@ -845,19 +856,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     adapter.setNewData(storeFriendsItemList);
-
-                    if (responseObj.exists("datas.storeServiceStaffList")) {
-                        // 獲取店鋪客服人員數據
-                        EasyJSONArray storeServiceStaffList = responseObj.getArray("datas.storeServiceStaffList");
-                        for (Object object : storeServiceStaffList) {
-                            EasyJSONObject storeServiceStaff = (EasyJSONObject) object;
-
-                            CustomerServiceStaff staff = new CustomerServiceStaff();
-                            Util.packStaffInfo(staff, storeServiceStaff);
-
-                            staffList.add(staff);
-                        }
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     SLog.info("Error!%s", e.getMessage());
@@ -1040,9 +1038,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         String fullSpecs = goodsInfo.goodsFullSpecs;
         tvCurrentSpecs.setText(fullSpecs);
 
-        String imageSrc = goodsInfo.imageSrc;
-        if (!StringUtil.isEmpty(imageSrc)) {
-            Glide.with(_mActivity).load(imageSrc).centerCrop().into(goodsImage);
+        currImageSrc = goodsInfo.imageSrc;
+        if (!StringUtil.isEmpty(currImageSrc)) {
+            Glide.with(_mActivity).load(currImageSrc).centerCrop().into(goodsImage);
         }
 
         if (discountEndTime > 0 &&

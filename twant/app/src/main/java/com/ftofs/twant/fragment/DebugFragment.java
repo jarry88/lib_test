@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SPField;
@@ -46,7 +47,9 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvEnvironment = view.findViewById(R.id.tv_environment);
-        String environmentInfo = "開發模式:" + Config.DEVELOPER_MODE + "\n" + "Api環境:" + Config.API_BASE_URL;
+        String environmentInfo = "開發模式:" + Config.DEVELOPER_MODE + "\n"
+                + "Api環境:" + Config.API_BASE_URL + "\n"
+                + "構建類型:" + BuildConfig.BUILD_TYPE;
         tvEnvironment.setText(environmentInfo);
 
         TextView tvMemberName = view.findViewById(R.id.tv_member_name);

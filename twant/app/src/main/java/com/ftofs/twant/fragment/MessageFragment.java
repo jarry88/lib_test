@@ -86,7 +86,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         Bundle args = getArguments();
         isStandalone = args.getBoolean("isStandalone");
 
-
+        Util.setOnClickListener(view, R.id.btn_message_search, this);
         Util.setOnClickListener(view, R.id.btn_message_menu, this);
         Util.setOnClickListener(view, R.id.btn_view_logistics_message, this);
         Util.setOnClickListener(view, R.id.btn_view_refund_message, this);
@@ -255,6 +255,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_message_search) {
+            Util.startFragment(SearchFriendFragment.newInstance());
         } else if (id == R.id.btn_message_menu) {
             new XPopup.Builder(_mActivity)
                     .offsetX(-Util.dip2px(_mActivity, 6))

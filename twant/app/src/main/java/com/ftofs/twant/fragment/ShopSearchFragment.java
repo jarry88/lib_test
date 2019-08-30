@@ -85,6 +85,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     doSearch();
+                    return true;
                 }
                 return false;
             }

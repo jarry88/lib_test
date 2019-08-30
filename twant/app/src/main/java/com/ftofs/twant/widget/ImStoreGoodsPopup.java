@@ -82,6 +82,7 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
                     Util.hideSoftInput(context, etKeyword);
 
                     loadData();
+                    return true;
                 }
                 return false;
             }

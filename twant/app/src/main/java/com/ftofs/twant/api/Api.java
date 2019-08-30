@@ -790,6 +790,16 @@ public class Api {
      */
     public static final String PATH_MEMBER_PAGE_ALL_COMMENT = "/memberpage/all/comment";
 
+    /**
+     * 店鋪客服列表
+     */
+    public static final String PATH_STORE_CUSTOMER_SERVICE = "/app/store/service";
+
+    /**
+     * 通訊錄模糊搜索
+     */
+    public static final String PATH_CONTACT_SEARCH = "/member/friend/contact_search";
+
 
     /**
      * 發送Http請求

@@ -207,4 +207,43 @@ public class FileUtil {
         Jarbon jarbon = new Jarbon();
         return getImageRoot() + "/" + jarbon.format("Ymd");
     }
+
+
+    /**
+     * 如果指定的目錄不存在，則創建它
+     * @param file 指定的目錄
+     * @return
+     */
+    public static boolean createOrExistsDir(File file) {
+        try {
+            return file != null && (file.exists() ? file.isDirectory() : createDir(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 创建目录，并添加nomedia文件
+     * @param dir
+     */
+    public static boolean createDir(File dir) throws IOException {
+        List<String> folderList = new ArrayList<>();
+        // 遍历每一层
+        while (!dir.exists()) {
+            folderList.add(dir.getName());
+            dir = dir.getParentFile();
+        }
+
+        for (int i = folderList.size() - 1; i >= 0; --i) {
+            String folderName = folderList.get(i);
+            dir = new File(dir, folderName);
+            // 创建目录
+            if (!dir.mkdir()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

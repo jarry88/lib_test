@@ -43,6 +43,10 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     public static final int STATE_TYPE_LIKE = 2;
 
     int postId;
+    String coverUrl;
+    String title;
+    String content;
+
 
     TextView tvPostTitle;
     ImageView imgAuthorAvatar;
@@ -145,7 +149,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new SharePopup(_mActivity, SharePopup.SHARE_TYPE_POST, postId))
+                    .asCustom(new SharePopup(_mActivity, SharePopup.generatePostShareLink(postId), title, content, coverUrl))
                     .show();
         } else if (id == R.id.img_author_avatar) {
             if (!StringUtil.isEmpty(authorMemberName)) {
@@ -246,8 +250,9 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     EasyJSONObject wantPostVoInfo = (EasyJSONObject) responseObj.get("datas.wantPostVoInfo");
                     EasyJSONObject memberVo = wantPostVoInfo.getObject("memberVo");
 
+                    coverUrl = wantPostVoInfo.getString("coverImage");
 
-                    String title = wantPostVoInfo.getString("postCategory") + " | " + wantPostVoInfo.getString("title");
+                    title = wantPostVoInfo.getString("postCategory") + " | " + wantPostVoInfo.getString("title");
                     tvPostTitle.setText(title);
 
                     String avatarUrl = memberVo.getString("avatar");
@@ -267,7 +272,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     float budgetPrice = (float) wantPostVoInfo.getDouble("budgetPrice");
                     tvBudgetPrice.setText(StringUtil.formatPrice(_mActivity, budgetPrice, 0));
 
-                    String content = wantPostVoInfo.getString("content");
+                    content = wantPostVoInfo.getString("content");
                     tvContent.setText(StringUtil.translateEmoji(_mActivity, content, (int) tvContent.getTextSize()));
 
                     int postReply = wantPostVoInfo.getInt("postReply");

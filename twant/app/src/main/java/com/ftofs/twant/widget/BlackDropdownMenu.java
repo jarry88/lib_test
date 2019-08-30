@@ -16,6 +16,7 @@ import com.ftofs.twant.fragment.AddFriendFragment;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.CartFragment;
 import com.ftofs.twant.fragment.ContactFragment;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.fragment.PersonalInfoFragment;
@@ -213,9 +214,11 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 Util.startFragment(AddFriendFragment.newInstance());
                 break;
             case TYPE_STORE:
-            case TYPE_GOODS:
                 // 咨詢客服
                 ((ShopMainFragment) baseFragment).onBottomBarClick(ShopMainFragment.CUSTOMER_SERVICE_FRAGMENT);
+                break;
+            case TYPE_GOODS:
+                ((GoodsDetailFragment) baseFragment).showStoreCustomerService();
                 break;
             case TYPE_ORDER:
                 // 個人專頁

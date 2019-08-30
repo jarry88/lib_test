@@ -212,8 +212,8 @@ public class StringUtil {
      * @param imageUrl
      */
     public static String normalizeImageUrl(String imageUrl) {
-        if (imageUrl == null) {
-            return null;
+        if (isEmpty(imageUrl)) {
+            return imageUrl;
         }
         if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
             return imageUrl;

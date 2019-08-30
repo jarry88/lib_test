@@ -18,7 +18,7 @@ import java.util.Date;
 public class SLog {
     public static void info(String format, Object... args) {
         if (!Config.DEVELOPER_MODE) {
-            // return;
+            return;
         }
 
         StackTraceElement[] traceArray = Thread.currentThread().getStackTrace();

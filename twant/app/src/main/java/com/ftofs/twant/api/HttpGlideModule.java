@@ -13,6 +13,7 @@ import com.ftofs.twant.log.SLog;
 
 import java.io.InputStream;
 
+// 參考 Glide4.8集成现有OkHttpClient并加载https图片 https://blog.csdn.net/ysy950803/article/details/85083160
 // 注意这个注解一定要加上，HttpGlideModule是自定义的名字
 @GlideModule
 public final class HttpGlideModule extends AppGlideModule {
