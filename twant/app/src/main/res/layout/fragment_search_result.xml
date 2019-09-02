@@ -193,14 +193,14 @@
                 android:text="@string/store_tab_title_general"
                 />
             <TextView
-                android:id="@+id/btn_store_search_order_sale"
+                android:id="@+id/btn_store_search_order_store_open"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textColor="@color/tw_black"
                 android:textSize="16sp"
-                android:text="@string/store_tab_title_sale"
+                android:text="@string/store_tab_title_store_open"
                 />
             <TextView
                 android:id="@+id/btn_store_search_order_follow"

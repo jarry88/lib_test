@@ -84,7 +84,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     boolean sortPriceAsc = true;  // 是否用升序來進行價格排序
 
     public static final int STORE_SEARCH_SORT_GENERAL = 0;
-    public static final int STORE_SEARCH_SORT_SALE = 1;
+    public static final int STORE_SEARCH_SORT_STORE_OPEN = 1;
     public static final int STORE_SEARCH_SORT_FOLLOW = 2;
     int storeSortButtonIndex = STORE_SEARCH_SORT_GENERAL; // 店鋪搜索當前用哪種排序標準 0,1,2
     TextView[] storeSortButtons = new TextView[3];
@@ -140,8 +140,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         storeSortButtons[STORE_SEARCH_SORT_GENERAL] = view.findViewById(R.id.btn_store_search_order_general);
         storeSortButtons[STORE_SEARCH_SORT_GENERAL].setOnClickListener(this);
-        storeSortButtons[STORE_SEARCH_SORT_SALE] = view.findViewById(R.id.btn_store_search_order_sale);
-        storeSortButtons[STORE_SEARCH_SORT_SALE].setOnClickListener(this);
+        storeSortButtons[STORE_SEARCH_SORT_STORE_OPEN] = view.findViewById(R.id.btn_store_search_order_store_open);
+        storeSortButtons[STORE_SEARCH_SORT_STORE_OPEN].setOnClickListener(this);
         storeSortButtons[STORE_SEARCH_SORT_FOLLOW] = view.findViewById(R.id.btn_store_search_order_follow);
         storeSortButtons[STORE_SEARCH_SORT_FOLLOW].setOnClickListener(this);
 
@@ -464,13 +464,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 storeSortButtonIndex = STORE_SEARCH_SORT_GENERAL;
                 storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
                 break;
-            case R.id.btn_store_search_order_sale:
-                if (storeSortButtonIndex == STORE_SEARCH_SORT_SALE) {
+            case R.id.btn_store_search_order_store_open:
+                if (storeSortButtonIndex == STORE_SEARCH_SORT_STORE_OPEN) {
                     return;
                 }
-                doSearch(searchType, keyword, EasyJSONObject.generate("sort", "sale_desc"));
+                doSearch(searchType, keyword, EasyJSONObject.generate("sort", "startBusiness_desc"));
                 storeSortButtons[storeSortButtonIndex].setTextColor(twBlack);
-                storeSortButtonIndex = STORE_SEARCH_SORT_SALE;
+                storeSortButtonIndex = STORE_SEARCH_SORT_STORE_OPEN;
                 storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
                 break;
             case R.id.btn_store_search_order_follow:
