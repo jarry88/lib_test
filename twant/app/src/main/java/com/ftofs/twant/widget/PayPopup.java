@@ -244,6 +244,12 @@ public class PayPopup extends BottomPopupView implements View.OnClickListener {
             });
 
         } else if (id == R.id.btn_weixin_pay) {
+            // 檢測微信是否已經安裝
+            if (!TwantApplication.wxApi.isWXAppInstalled()) {
+                ToastUtil.error(context, context.getString(R.string.weixin_not_installed_hint));
+                return;
+            }
+
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
                 return;

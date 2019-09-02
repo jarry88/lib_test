@@ -137,6 +137,7 @@
     <string name="input_search_keyword_hint">請輸入搜索關鍵字</string>
     <string name="search_keyword_hint">搜索關鍵字</string>
     <string name="search_friend_hint">搜索好友</string>
+    <string name="weixin_not_installed_hint">使用微信支付請先安裝微信</string>
 
     <string name="login_way_password">密碼</string>
     <string name="login_way_dynamic_code">動態碼</string>
