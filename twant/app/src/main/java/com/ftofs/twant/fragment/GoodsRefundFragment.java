@@ -686,8 +686,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         refundGoodsItemList.add(refundGoodsItem);
                         adapter.setData(refundGoodsItemList);
                         maxReturnCount = ordersGoodsVo.getInt("buyNum");
-                        tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
+                        // tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
                         abReturnCount.setMinValue(1, null);
+                        abReturnCount.setMaxValue(maxReturnCount, null);
                         abReturnCount.setValue(goodsNum);
 
                         EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");
@@ -700,9 +701,12 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         }
 
                         maxRefundAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
+                        etRefundAmount.setText(String.format("%.2f", maxRefundAmount));
+
                         tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
-
+                        e.printStackTrace();
+                        SLog.info("Error!%s", e.getMessage());
                     }
                 }
             });
@@ -760,7 +764,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         adapter.setData(refundGoodsItemList);
 
                         maxReturnCount = ordersGoodsVo.getInt("buyNum");
-                        tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
+                        // tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
 
                         EasyJSONArray refundReasonList = responseObj.getArray("datas.complainSubjectList");
                         for (Object object : refundReasonList) {
@@ -779,13 +783,14 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 }
             });
         } catch (Exception e) {
-
+            e.printStackTrace();
+            SLog.info("Error!%s", e.getMessage());
         }
     }
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
-        SLog.info("type[%d], id[%d], extra[%s]", type, id, extra);
+        SLog.info("type[%s], id[%d], extra[%s]", type, id, extra);
         if (type == PopupType.DEFAULT) {
             reasonIndex = id;
             tvRefundReason.setText(reasonItemList.get(reasonIndex).title);
