@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -158,6 +160,31 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_goods_filter, this);
         etKeyword = view.findViewById(R.id.et_keyword);
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String text = v.getText().toString().trim();
+                    if (StringUtil.isEmpty(text)) {
+                        ToastUtil.error(_mActivity, getString(R.string.input_search_keyword_hint));
+                        return true;
+                    }
+
+                    keyword = text;
+                    try {
+                        paramsObj.set("keyword", keyword);
+                    } catch (EasyJSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    doSearch(searchType, text, null);
+                    hideSoftInput();
+                    return true;
+                }
+
+                return false;
+            }
+        });
         if (paramsObj.exists("keyword")) {
             try {
                 keyword = paramsObj.getString("keyword");
