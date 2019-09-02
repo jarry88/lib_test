@@ -151,12 +151,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
      */
     File captureImageFile;
 
-    public static ChatFragment newInstance(EMConversation conversation) {
+    public static ChatFragment newInstance(EMConversation conversation, FriendInfo friendInfo) {
         Bundle args = new Bundle();
 
         ChatFragment fragment = new ChatFragment();
         fragment.setArguments(args);
         fragment.setConversation(conversation);
+        fragment.setFriendInfo(friendInfo);
 
         return fragment;
     }
@@ -182,16 +183,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         try {
             yourMemberName = conversation.conversationId();
-            yourNickname = extObj.getString("nickName");
-            yourAvatarUrl = extObj.getString("avatarUrl");
-            yourRole = extObj.getInt("role");
+            yourNickname = friendInfo.nickname;
+            yourAvatarUrl = friendInfo.avatarUrl;
+            yourRole = friendInfo.role;
             SLog.info("yourMemberName[%s], yourNickname[%s], yourAvatarUrl[%s], yourRole[%d]",
                     yourMemberName, yourNickname, yourAvatarUrl, yourRole);
         } catch (Exception e) {
 
         }
-
-        loadFriendInfo();
 
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvNickname.setOnClickListener(this);
@@ -275,13 +274,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
 
             messageListScrollToBottom();
-        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_FRIEND_INFO) {
-            if (loadFriendInfo()) {
-                SLog.info("更新到最新的好友資料");
-                tvNickname.setText(friendInfo.nickname);
-                setShowTimestamp(chatMessageList);
-                chatMessageAdapter.notifyDataSetChanged();
-            }
         }
     }
 
@@ -292,35 +284,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         rvMessageList.scrollToPosition(chatMessageAdapter.getItemCount() - 1);
     }
 
-    /**
-     * 加載聊天對象的信息
-     * @return
-     */
-    private boolean loadFriendInfo() {
-        String memberName = yourMemberName;
 
-        // 如果是客服聊天，根據imName查找真正的memberName
-        ImNameMap map = ImNameMap.getByImName(yourMemberName);
-        if (map != null) {
-            SLog.info("map[%s]", map);
-            storeId = map.storeId;
-        }
-
-        friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
-        if (friendInfo == null) {
-            SLog.info("好友信息[%s]為空", memberName);
-
-            return false;
-        } else {
-            if (StringUtil.isEmpty(friendInfo.avatarUrl)) {
-                SLog.info("friendInfo.avatarUrl is null");
-            } else {
-                SLog.info("friendInfo.avatarUrl[%s]", friendInfo.avatarUrl);
-            }
-
-            return true;
-        }
-    }
 
     private void loadChatData() {
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName);
@@ -1086,6 +1050,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     public void setConversation(EMConversation conversation) {
         this.conversation = conversation;
+    }
+
+    public void setFriendInfo(FriendInfo friendInfo) {
+        this.friendInfo = friendInfo;
     }
 
     private void setShowTimestamp(List<ChatMessage> chatMessages) {

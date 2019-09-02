@@ -94,7 +94,13 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
                 FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                Util.startFragment(ChatFragment.newInstance(conversation));
+
+                FriendInfo friendInfo = new FriendInfo();
+                friendInfo.memberName = staff.memberName;
+                friendInfo.nickname = staff.staffName;
+                friendInfo.avatarUrl = staff.avatar;
+                friendInfo.role = ChatUtil.ROLE_CS_AVAILABLE;
+                Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
             }
         });
         rvStaffList.setAdapter(adapter);

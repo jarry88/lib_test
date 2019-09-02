@@ -117,7 +117,12 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
             pop();
         } else if (id == R.id.btn_chat_with_him) {
             FriendInfo.upsertFriendInfo(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER);
-            Util.startFragment(ChatFragment.newInstance(ChatUtil.getConversation(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER)));
+            FriendInfo friendInfo = new FriendInfo();
+            friendInfo.memberName = memberName;
+            friendInfo.nickname = nickname;
+            friendInfo.avatarUrl = avatarUrl;
+            friendInfo.role = ChatUtil.ROLE_MEMBER;
+            Util.startFragment(ChatFragment.newInstance(ChatUtil.getConversation(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER), friendInfo));
         } else if (id == R.id.btn_follow) {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {

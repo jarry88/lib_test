@@ -162,7 +162,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        SLog.info("onEBMessage, messageType[%s]", message.messageType);
+        // SLog.info("onEBMessage, messageType[%s]", message.messageType);
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_POST) {
             isPostDataLoaded = false;
         }

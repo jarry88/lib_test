@@ -75,9 +75,14 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
 
                 dismiss();
 
+                FriendInfo friendInfo = new FriendInfo();
+                friendInfo.memberName = memberName;
+                friendInfo.nickname = staff.staffName;
+                friendInfo.avatarUrl = staff.avatar;
+                friendInfo.role = ChatUtil.ROLE_CS_AVAILABLE;
                 FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                Util.startFragment(ChatFragment.newInstance(conversation));
+                Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
             }
         });
         rvStaffList.setAdapter(adapter);

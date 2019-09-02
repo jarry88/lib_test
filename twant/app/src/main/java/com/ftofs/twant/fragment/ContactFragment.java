@@ -79,7 +79,7 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
                 FriendInfo friendInfo = friendInfoList.get(position);
                 EMConversation conversation = ChatUtil.getConversation(friendInfo.memberName,
                         friendInfo.nickname, friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
-                Util.startFragment(ChatFragment.newInstance(conversation));
+                Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
             }
         });
         rvContactList.setAdapter(adapter);

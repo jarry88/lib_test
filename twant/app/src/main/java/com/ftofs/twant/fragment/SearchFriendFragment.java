@@ -20,6 +20,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.UniversalMemberItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -93,7 +94,13 @@ public class SearchFriendFragment extends BaseFragment implements View.OnClickLi
                 UniversalMemberItem item = friendList.get(position);
                 EMConversation conversation = ChatUtil.getConversation(item.memberName,
                         item.nickname, item.avatarUrl, ChatUtil.ROLE_MEMBER);
-                start(ChatFragment.newInstance(conversation));
+
+                FriendInfo friendInfo = new FriendInfo();
+                friendInfo.memberName = item.memberName;
+                friendInfo.nickname = item.nickname;
+                friendInfo.avatarUrl = item.avatarUrl;
+                friendInfo.role = ChatUtil.ROLE_MEMBER;
+                start(ChatFragment.newInstance(conversation, friendInfo));
             }
         });
         rvFriendList.setAdapter(adapter);

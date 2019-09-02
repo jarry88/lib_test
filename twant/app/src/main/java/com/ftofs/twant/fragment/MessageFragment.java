@@ -119,9 +119,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 } else if (itemType == ChatConversation.ITEM_TYPE_RETURN) {
                     Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
                 } else {
+                    SLog.info("friendInfo[%s]", chatConversation.friendInfo);
                     EMConversation conversation = ChatUtil.getConversation(chatConversation.friendInfo.memberName,
                             chatConversation.friendInfo.nickname, chatConversation.friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
-                    Util.startFragment(ChatFragment.newInstance(conversation));
+
+                    Util.startFragment(ChatFragment.newInstance(conversation, chatConversation.friendInfo));
                 }
             }
         });
@@ -225,15 +227,19 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 continue;
             }
             long timestamp = lastMessage.getMsgTime();
-            SLog.info("memberName[%s], lastMessage[%s], timestamp[%s]",
-                    memberName, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"));
+            FriendInfo friendInfo = new FriendInfo();
+            friendInfo.memberName = memberName;
+            friendInfo.nickname = lastMessage.getStringAttribute("nickName", "");
+            friendInfo.avatarUrl = lastMessage.getStringAttribute("avatar", "");
+            friendInfo.role = Integer.valueOf(lastMessage.getStringAttribute("role", "0"));
+
+            SLog.info("memberName[%s], lastMessage[%s], timestamp[%s], nickname[%s], avatar[%s]",
+                    memberName, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"),
+                    friendInfo.nickname, friendInfo.avatarUrl);
+
+            SLog.info("friendInfo[%s]", friendInfo);
+
             ChatConversation chatConversation = new ChatConversation(ChatConversation.ITEM_TYPE_IM);
-
-            FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
-
-            if (friendInfo == null) {
-                continue;
-            }
 
             chatConversation.friendInfo = friendInfo;
 

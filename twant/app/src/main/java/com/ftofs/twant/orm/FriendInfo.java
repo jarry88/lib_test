@@ -1,5 +1,7 @@
 package com.ftofs.twant.orm;
 
+import android.support.annotation.NonNull;
+
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
@@ -46,5 +48,12 @@ public class FriendInfo extends LitePalSupport {
 
     public static void upsertFriendInfo(String memberName, String nickname, String avatarUrl) {
         upsertFriendInfo(memberName, nickname, avatarUrl, -1);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("memberName[%s], nickname[%s], avatarUrl[%s], role[%s]",
+                memberName, nickname, avatarUrl, role);
     }
 }
