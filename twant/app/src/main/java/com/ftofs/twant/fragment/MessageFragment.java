@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -58,6 +57,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     ScaledButton btnContact;
     ChatConversationAdapter adapter;
 
+    int totalUnreadCount;  // 未讀消息總數
     List<ChatConversation> chatConversationList = new ArrayList<>();
 
     public static MessageFragment newInstance(boolean isStandalone) {
@@ -123,6 +123,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     EMConversation conversation = ChatUtil.getConversation(chatConversation.friendInfo.memberName,
                             chatConversation.friendInfo.nickname, chatConversation.friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
 
+                    if (chatConversation.unreadCount > 0) {
+                        // 從未讀總數中減去這條會話的未讀數
+                        totalUnreadCount -= chatConversation.unreadCount;
+                        displayUnreadCount(totalUnreadCount);
+                    }
+
                     Util.startFragment(ChatFragment.newInstance(conversation, chatConversation.friendInfo));
                 }
             }
@@ -165,7 +171,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE ||
+                message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE) {
             loadData();
         }
     }
@@ -206,6 +213,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void loadData() {
+        totalUnreadCount = 0;
         chatConversationList.clear();
 
         // 添加【交易物流消息】、【退換貨消息】
@@ -247,11 +255,20 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             chatConversation.lastMessageType = ChatUtil.getIntMessageType(lastMessage);
             chatConversation.lastMessage = lastMessage.getBody().toString();
             chatConversation.timestamp = lastMessage.getMsgTime();
+            totalUnreadCount += chatConversation.unreadCount;
 
             chatConversationList.add(chatConversation);
         }
+        displayUnreadCount(totalUnreadCount);
 
         adapter.setNewData(chatConversationList);
+    }
+
+    private void displayUnreadCount(int totalUnreadCount) {
+        MainFragment mainFragment = MainFragment.getInstance();
+        if (mainFragment != null) {
+            mainFragment.setMessageItemCount(totalUnreadCount);
+        }
     }
 
 

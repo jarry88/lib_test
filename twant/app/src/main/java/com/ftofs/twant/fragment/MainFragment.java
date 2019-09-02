@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
@@ -38,6 +39,9 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public static final int CART_FRAGMENT = 3;
     /** 專頁 */
     public static final int MY_FRAGMENT = 4;
+
+    TextView tvMessageItemCount; // 顯示未讀消息條數的紅點
+    TextView tvCartItemCount;    // 顯示購物車中商品數的紅點
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_message, R.id.btn_circle,
@@ -83,6 +87,16 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         EventBus.getDefault().register(this);
+
+        tvMessageItemCount = view.findViewById(R.id.tv_message_item_count);
+        tvCartItemCount = view.findViewById(R.id.tv_cart_item_count);
+
+        tvMessageItemCount.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE, null);
+            }
+        }, 500);
 
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
@@ -196,4 +210,26 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             }
         }
     }
+
+    public void setMessageItemCount(int count) {
+        SLog.info("count[%d]", count);
+        if (count == 0) { // 如果沒有數據，則隱藏
+            tvMessageItemCount.setVisibility(View.GONE);
+        } else {
+            tvMessageItemCount.setText(String.valueOf(count));
+            tvMessageItemCount.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setCartItemCount(int count) {
+        SLog.info("count[%d]", count);
+        if (count == 0) { // 如果沒有數據，則隱藏
+            tvCartItemCount.setVisibility(View.GONE);
+        } else {
+            tvCartItemCount.setText(String.valueOf(count));
+            tvCartItemCount.setVisibility(View.VISIBLE);
+        }
+    }
 }
+
+

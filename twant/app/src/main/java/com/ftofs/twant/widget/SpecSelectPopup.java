@@ -289,6 +289,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 }
 
                 ToastUtil.success(context, "添加購物車成功");
+
+                // 通知更新購物車紅點提示
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE, null);
                 dismiss();
             }
         });

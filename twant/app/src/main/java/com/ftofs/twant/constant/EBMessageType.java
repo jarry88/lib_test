@@ -75,6 +75,11 @@ public enum EBMessageType {
      * 添加新貼文
      */
     MESSAGE_TYPE_ADD_POST,
+
+    /**
+     * 打開應用時，顯示初始化未讀消息條數和購物車項數等工具欄數據
+     */
+    MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE,
 }
 
 

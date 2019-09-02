@@ -68,6 +68,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     ScaledButton btnBack;
 
+    int totalCartItemCount; // 購物車中的項數，用于顯示在主頁的底部工具欄中
+
     int mode = Constant.MODE_VIEW;
     boolean needReloadData = true;
 
@@ -137,6 +139,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+
+
+
+    private void displayCartItemCount(int totalUnreadCount) {
+        MainFragment mainFragment = MainFragment.getInstance();
+        if (mainFragment != null) {
+            mainFragment.setCartItemCount(totalCartItemCount);
+        }
+    }
+
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
@@ -201,6 +213,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     tvFragmentTitle.setText(cartText);
 
                     EasyJSONArray cartStoreVoList = responseObj.getArray("datas.cartStoreVoList");
+
+                    totalCartItemCount = 0;
                     cartStoreItemContainer.removeAllViews();
                     for (Object object : cartStoreVoList) { // store LOOP
                         StoreStatus storeStatus = new StoreStatus();
@@ -255,6 +269,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                             EasyJSONArray cartItemVoList = cartSpuVo.getArray("cartItemVoList");
                             LinearLayout cartSkuItemContainer = cartSpuItem.findViewById(R.id.ll_cart_sku_item_container);
                             for (Object object3 : cartItemVoList) { // sku LOOP
+                                ++totalCartItemCount;
                                 SkuStatus skuStatus = new SkuStatus();
                                 skuStatus.parent = spuStatus;
                                 View cartSkuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_sku_item, cartSkuItemContainer, false);
@@ -294,6 +309,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                         totalStatus.storeStatusList.add(storeStatus);
                         cartStoreItemContainer.addView(cartStoreItem);
                     } // END OF store LOOP
+
+                    displayCartItemCount(cartItemCount);
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
                     SLog.info("Error!%s", e.getMessage());
@@ -456,6 +473,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_CART) {
             updateTotalData();
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE){
+            reloadList();
         }
     }
 }
