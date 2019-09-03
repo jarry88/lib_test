@@ -68,6 +68,7 @@ import okhttp3.Call;
 public class ShopHomeFragment extends BaseFragment implements View.OnClickListener, AutoVerticalScrollTextViewUtil.OnMyClickListener {
     ShopMainFragment parentFragment;
 
+    ImageView imgStoreStatus;
     ImageView imgShopAvatar;
     TextView tvShopSignature;
     TextView tvShopOpenDay;
@@ -162,6 +163,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
 
+        imgStoreStatus = view.findViewById(R.id.img_store_status);
         imgShopAvatar = view.findViewById(R.id.img_shop_avatar);
         imgShopAvatar.setOnClickListener(this);
         tvShopSignature = view.findViewById(R.id.tv_shop_signature);
@@ -280,6 +282,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         Glide.with(ShopHomeFragment.this).load(storeAvatarUrl).centerCrop().into(imgShopAvatar);
                         // 將店鋪頭像設置到工具欄按鈕
                         parentFragment.setImgBottomBarShopAvatar(storeAvatarUrl);
+
+                        int storeOpen = storeInfo.getInt("isOpen");
+                        if (storeOpen == 1) {
+                            imgStoreStatus.setImageResource(R.drawable.store_open);
+                        } else {
+                            imgStoreStatus.setImageResource(R.drawable.store_closed);
+                        }
 
                         // 店鋪簽名
                         storeSignature = storeInfo.getString("storeSignature");

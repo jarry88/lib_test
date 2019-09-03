@@ -21,6 +21,16 @@
             app:layout_constraintRight_toRightOf="parent"
             />
 
+        <!-- 營業中還是休息中 -->
+        <ImageView
+            android:id="@+id/img_store_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/img_shop_avatar"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="42dp"
+            />
+
         <!-- 店铺签名 -->
         <LinearLayout
             android:id="@+id/ll_shop_signature_container"
