@@ -111,4 +111,30 @@
             android:textColor="@color/tw_black"
             />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_gift_ind_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/text_gift"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:background="@drawable/goods_conform_indicator_bg"
+            />
+
+        <!-- 滿優惠的贈品列表 -->
+        <LinearLayout
+            android:id="@+id/ll_conform_gift_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical">
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

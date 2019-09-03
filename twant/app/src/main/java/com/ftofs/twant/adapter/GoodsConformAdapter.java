@@ -2,22 +2,35 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.entity.GiftVo;
 import com.ftofs.twant.entity.GoodsConformItem;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
+import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
+/**
+ * 商品詳情 => 滿優惠 Adapter
+ * @author zwm
+ */
 public class GoodsConformAdapter extends BaseQuickAdapter<GoodsConformItem, BaseViewHolder> {
     Context context;
-    public GoodsConformAdapter(Context context, int layoutResId, @Nullable List<GoodsConformItem> data) {
+    OnSelectedListener onSelectedListener;
+    public GoodsConformAdapter(Context context, int layoutResId, @Nullable List<GoodsConformItem> data, OnSelectedListener onSelectedListener) {
         super(layoutResId, data);
 
         this.context = context;
+        this.onSelectedListener = onSelectedListener;
     }
 
     @Override
@@ -49,6 +62,23 @@ public class GoodsConformAdapter extends BaseQuickAdapter<GoodsConformItem, Base
             helper.setText(R.id.tv_present_voucher_desc, presentVoucherDesc);
         } else {
             helper.setGone(R.id.ll_present_voucher_ind_container, false);
+        }
+
+        // 贈品
+        if (item.giftVoList != null && item.giftVoList.size() > 0) {
+            LinearLayout container = helper.getView(R.id.ll_conform_gift_list);
+            ConformGiftAdapter conformGiftAdapter = new ConformGiftAdapter(context, container,R.layout.goods_conform_gift_list_item);
+            conformGiftAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+                @Override
+                public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                    GiftVo giftVo = item.giftVoList.get(position);
+                    onSelectedListener.onSelected(PopupType.DEFAULT, 0, null); // 主要用于通知隱藏彈窗
+                    Util.startFragment(GoodsDetailFragment.newInstance(giftVo.commonId));
+                }
+            });
+            conformGiftAdapter.setData(item.giftVoList);
+        } else {
+            helper.setGone(R.id.ll_gift_ind_container, false);
         }
     }
 }

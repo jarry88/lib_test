@@ -107,7 +107,7 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
                 Util.startFragment(GoodsDetailFragment.newInstance(giftItem.commonId));
             }
         });
-        goodsConformAdapter = new GoodsConformAdapter(context, R.layout.goods_conform_list_item, goodsConformItemList);
+        goodsConformAdapter = new GoodsConformAdapter(context, R.layout.goods_conform_list_item, goodsConformItemList, this);
         if (tabId == TAB_ID_CONFORM) {
             rvList.setAdapter(goodsConformAdapter);
             ttbConform.setStatus(Constant.STATUS_SELECTED);
@@ -140,7 +140,7 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
 
         if (id == R.id.btn_dismiss) {
             dismiss();
-        } else if (id == R.id.btn_conform_tab || id == R.id.ttb_conform) {
+        } else if (id == R.id.btn_conform_tab || id == R.id.ttb_conform) { // 滿優惠
             if (tabId == TAB_ID_CONFORM) {
                 return;
             }
@@ -148,7 +148,7 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
             ttbConform.setStatus(Constant.STATUS_SELECTED);
             ttbGift.setStatus(Constant.STATUS_UNSELECTED);
             tabId = TAB_ID_CONFORM;
-        } else if (id == R.id.btn_gift_tab || id == R.id.ttb_gift) {
+        } else if (id == R.id.btn_gift_tab || id == R.id.ttb_gift) { // 贈品
             if (tabId == TAB_ID_GIFT) {
                 return;
             }
@@ -161,6 +161,10 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
-
+        if (type == PopupType.DEFAULT) {
+            dismiss();
+        }
     }
 }
+
+

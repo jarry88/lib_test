@@ -25,11 +25,11 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
-import com.ftofs.twant.domain.goods.ArrivalNotice;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
+import com.ftofs.twant.entity.GiftVo;
 import com.ftofs.twant.entity.GoodsConformItem;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.InStorePersonItem;
@@ -813,6 +813,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             goodsConformItem.templateId = conform.getInt("templateId");
                             goodsConformItem.templatePrice = conform.getInt("templatePrice");
 
+                            EasyJSONArray giftVoList = conform.getArray("giftVoList");
+                            if (giftVoList.length() > 0) {
+                                goodsConformItem.giftVoList = new ArrayList<>();
+                                for (Object object2 : giftVoList) {
+                                    GiftVo giftVo = (GiftVo) EasyJSONBase.jsonDecode(GiftVo.class, object2.toString());
+                                    SLog.info("giftVo[%s]", giftVo);
+                                    goodsConformItem.giftVoList.add(giftVo);
+                                }
+                            }
+
+
                             goodsConformItemList.add(goodsConformItem);
                             first = false;
                         }
@@ -834,10 +845,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         Glide.with(_mActivity).load(commenterAvatarUrl).centerCrop().into(imgCommenterAvatar);
                         tvCommenterNickname.setText(wantCommentVoInfo.getString("memberVo.nickName"));
                         String comment = wantCommentVoInfo.getString("content");
+                        if (StringUtil.isEmpty(comment)) {  // 如果評論內容為空，表明為圖片評論
+                            comment = "[圖片]";
+                        }
                         tvComment.setText(StringUtil.translateEmoji(_mActivity, comment, (int) tvComment.getTextSize()));
                     } else {
                         // 如果沒有評論，隱藏相應的控件
-                        llCommentContainer.setVisibility(GONE);
+                        // llCommentContainer.setVisibility(GONE);
                     }
 
                     // 好友
