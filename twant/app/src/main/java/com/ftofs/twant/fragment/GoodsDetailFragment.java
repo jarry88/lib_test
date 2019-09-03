@@ -22,10 +22,10 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.domain.goods.ArrivalNotice;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.EBMessage;
@@ -168,6 +168,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvCommenterNickname;
     TextView tvComment;
 
+    // 到貨通知按鈕
+    TextView btnArrivalNotice;
+    // 【想放購物車】和【想要購買】的包裝容器，如果有庫存時顯示這個
+    LinearLayout llStorageOkContainer;
+
     /**
      * goodsId與贈品列表的映射表
      */
@@ -230,6 +235,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
         tvGoodsName = view.findViewById(R.id.tv_goods_name);
         tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
+
+        btnArrivalNotice = view.findViewById(R.id.btn_arrival_notice);
+        btnArrivalNotice.setOnClickListener(this);
+        llStorageOkContainer = view.findViewById(R.id.ll_storage_ok_container);
 
         rlDiscountInfoContainer = view.findViewById(R.id.rl_discount_info_container);
         rlPriceTag = view.findViewById(R.id.rl_price_tag);
@@ -420,6 +429,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_bottom_bar_customer_service:
                 showStoreCustomerService();
+                break;
+            case R.id.btn_arrival_notice:
+                start(ArrivalNoticeFragment.newInstance(commonId, currGoodsId));
                 break;
             default:
                 break;
@@ -704,8 +716,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 voucherText.append(" / ");
                             }
                             EasyJSONObject voucher = (EasyJSONObject) object;
+                            int limitAmount = voucher.getInt("limitAmount");
+                            int couponPrice = voucher.getInt("couponPrice");
 
-                            voucherText.append(String.format("滿%d減%d", voucher.getInt("limitAmount"), voucher.getInt("couponPrice")));
+                            if (limitAmount == 0) {
+                                // 如果為0，表示無門檻
+                                voucherText.append(String.format("$%d無門檻", couponPrice));
+                            } else {
+                                voucherText.append(String.format("滿%d減%d", limitAmount, couponPrice));
+                            }
+
                             first = false;
                         }
 
@@ -757,6 +777,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         SLog.info("__goodsInfo.price[%s], goodsInfoVo[%s]", goodsInfo.price, goodsInfoVo.toString());
                         goodsInfo.imageSrc = goodsInfoVo.getString("imageSrc");
                         goodsInfo.goodsStorage = goodsInfoVo.getInt("goodsStorage");
+                        goodsInfo.reserveStorage = goodsInfoVo.getInt("reserveStorage");
                         goodsInfo.limitAmount = goodsInfoVo.getInt("limitAmount");
                         goodsInfo.unitName = goodsInfoVo.getString("unitName");
 
@@ -1036,6 +1057,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         selSpecValueIdList = StringUtil.specValueIdsToList(goodsInfo.specValueIds);
 
         String fullSpecs = goodsInfo.goodsFullSpecs;
+        SLog.info("fullSpecs[%s]", fullSpecs);
         tvCurrentSpecs.setText(fullSpecs);
 
         currImageSrc = goodsInfo.imageSrc;
@@ -1053,6 +1075,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             showPriceTag(true);
 
             tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+        }
+
+        // 看是否有現貨，如果沒有，則顯示到貨通知
+        int finalStorage = goodsInfo.getFinalStorage();
+        SLog.info("finalStorage[%d]", finalStorage);
+        if (finalStorage > 0) {
+            btnArrivalNotice.setVisibility(GONE);
+            llStorageOkContainer.setVisibility(VISIBLE);
+        } else {
+            btnArrivalNotice.setVisibility(VISIBLE);
+            llStorageOkContainer.setVisibility(GONE);
         }
     }
 

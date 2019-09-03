@@ -800,6 +800,11 @@ public class Api {
      */
     public static final String PATH_CONTACT_SEARCH = "/member/friend/contact_search";
 
+    /**
+     * 商品詳情：到貨通知
+     */
+    public static final String PATH_ARRIVAL_NOTICE = "/app/goods/arrival/notice";
+
 
     /**
      * 發送Http請求

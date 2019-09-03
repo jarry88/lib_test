@@ -632,6 +632,8 @@
     <string name="text_open_pay_ui">提交訂單成功，正在打開支付界面，請稍候...</string>
     <string name="text_seller_phone_not_set">商家未設置電話</string>
     <string name="text_upload_file_too_large">上傳文件太大</string>
+    <string name="text_arrival_notice">到貨通知</string>
+    <string name="arrival_notice_hint">若商品在30日內到貨，我們會通過短信通知您</string>
 
 
     <!-- 貨幣種類標志 -->

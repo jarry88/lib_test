@@ -20,6 +20,7 @@ import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
+import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ConfirmBillFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.log.SLog;
@@ -59,6 +60,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     Map<String, Integer> specValueIdMap;
     Map<Integer, GoodsInfo> goodsInfoMap;
 
+    // 當前選中的商品的信息
+    GoodsInfo goodsInfo;
+
     // 規格的數量
     int specCount;
     // 當前選中規格按鈕的引用
@@ -71,13 +75,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     int quantity;  // 外面傳進來的數量初始值
 
     String outOfMaxValueReason; // 購買數量超過庫存數或限購數的提示
-    int goodsStorage;
-    int limitAmount;
 
-    /**
-     * 當前選中的goodsId
-     */
-    int currGoodsId;
 
     /**
      *
@@ -133,13 +131,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         // 加入購物車
         btnOk = findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(this);
-        if (action == Constant.ACTION_ADD_TO_CART) {
-            btnOk.setText(R.string.text_want_to_add_to_cart);
-        } else if (action == Constant.ACTION_BUY) {
-            btnOk.setText(R.string.text_want_to_buy);
-        } else if (action == Constant.ACTION_SELECT_SPEC) {
-            btnOk.setText(R.string.ok);
-        }
 
         skuImage = findViewById(R.id.sku_image);
         tvPrice = findViewById(R.id.tv_price);
@@ -331,20 +322,19 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         if (id == R.id.ll_title_padding || id == R.id.btn_close) {
             dismiss();
         } else if (id == R.id.btn_ok) {
-            if (action == Constant.ACTION_ADD_TO_CART || action == Constant.ACTION_BUY) {
-                if (goodsStorage == 0) {
-                    ToastUtil.error(context, "庫存為零");
-                    return;
+            if (goodsInfo.getFinalStorage() > 0) {
+                if (action == Constant.ACTION_ADD_TO_CART) {
+                    addToCart();
+                } if (action == Constant.ACTION_BUY) {
+                    buy();
+                } else {
+                    // 選擇規格
+                    selectSpecs();
                 }
-            }
-
-            if (action == Constant.ACTION_ADD_TO_CART) {
-                addToCart();
-            } if (action == Constant.ACTION_BUY) {
-                buy();
             } else {
-                // 選擇規格
-                selectSpecs();
+                // 如果沒有庫存，跳轉到【到貨通知】
+                Util.startFragment(ArrivalNoticeFragment.newInstance(goodsInfo.commonId, goodsInfo.goodsId));
+                dismiss();
             }
         }
     }
@@ -401,10 +391,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             return;
         }
 
-        currGoodsId = goodsId;
-
         // 更新圖片的顯示
-        GoodsInfo goodsInfo = goodsInfoMap.get(goodsId);
+        goodsInfo = goodsInfoMap.get(goodsId);
         if (goodsInfo == null) {
             SLog.info("Error!找不到goodsId:" + goodsId);
             ToastUtil.error(context, "Error!找不到goodsId:" + goodsId);
@@ -416,21 +404,20 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             Glide.with(context).load(imageSrc).centerCrop().into(skuImage);
         }
 
+        int finalStorage = goodsInfo.getFinalStorage();
         SLog.info("goodsInfo.price[%s]", goodsInfo.price);
         tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
-        tvGoodsStorage.setText("( 庫存: " + goodsInfo.goodsStorage + goodsInfo.unitName + " )");
+        tvGoodsStorage.setText("( 庫存: " + finalStorage + goodsInfo.unitName + " )");
 
         // 限定購買的數量
         outOfMaxValueReason = "購買數量不能大于庫存數量";
-        goodsStorage = goodsInfo.goodsStorage;
-        limitAmount = goodsInfo.limitAmount;
-        SLog.info("goodsStorage[%d], limitAmount[%d]", goodsStorage, limitAmount);
+        SLog.info("finalStorage[%d], limitAmount[%d]", finalStorage, goodsInfo.limitAmount);
 
-        int maxValue = goodsStorage;
-        if (limitAmount > 0  // limitAmount 大于0才表示有效
-                && maxValue > limitAmount) {
-            maxValue = limitAmount;
-            outOfMaxValueReason = String.format("每人限購%d%s", limitAmount, goodsInfo.unitName);
+        int maxValue = finalStorage;
+        if (goodsInfo.limitAmount > 0  // limitAmount 大于0才表示有效
+                && maxValue > goodsInfo.limitAmount) {
+            maxValue = goodsInfo.limitAmount;
+            outOfMaxValueReason = String.format("每人限購%d%s", goodsInfo.limitAmount, goodsInfo.unitName);
         }
         SLog.info("maxValue[%d]", maxValue);
         abQuantity.setMaxValue(maxValue, new AdjustButton.OutOfValueCallback() {
@@ -439,5 +426,18 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 ToastUtil.error(context, outOfMaxValueReason);
             }
         });
+
+
+        if (finalStorage > 0) {
+            if (action == Constant.ACTION_ADD_TO_CART) {
+                btnOk.setText(R.string.text_want_to_add_to_cart);
+            } else if (action == Constant.ACTION_BUY) {
+                btnOk.setText(R.string.text_want_to_buy);
+            } else if (action == Constant.ACTION_SELECT_SPEC) {
+                btnOk.setText(R.string.ok);
+            }
+        } else {
+            btnOk.setText(R.string.text_arrival_notice);
+        }
     }
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.domain.goods.ArrivalNotice;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ImageProcess;
 import com.ftofs.twant.util.Jarbon;
@@ -67,10 +68,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            String srcAbsolutePath = Environment.getExternalStorageDirectory() + "/1/yzn.jpg";
-            String destAbsolutePath = Environment.getExternalStorageDirectory() + "/1/new.jpg";
-            ImageProcess.with(_mActivity).from(new File(srcAbsolutePath)).centerCrop().resize(200, 200)
-                    .toFile(destAbsolutePath);
+            start(ArrivalNoticeFragment.newInstance(1, 2));
         }
     }
 
