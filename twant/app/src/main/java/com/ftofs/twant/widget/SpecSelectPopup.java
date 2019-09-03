@@ -54,6 +54,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     ImageView skuImage;
     TextView tvPrice;
     TextView tvGoodsStorage;
+    TextView tvBuyLimit;
 
     TextView btnOk;
 
@@ -135,6 +136,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         skuImage = findViewById(R.id.sku_image);
         tvPrice = findViewById(R.id.tv_price);
         tvGoodsStorage = findViewById(R.id.tv_goods_storage);
+        tvBuyLimit = findViewById(R.id.tv_buy_limit);
 
         abQuantity = findViewById(R.id.ab_quantity);
         abQuantity.setValue(quantity);
@@ -408,6 +410,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         SLog.info("goodsInfo.price[%s]", goodsInfo.price);
         tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
         tvGoodsStorage.setText("( 庫存: " + finalStorage + goodsInfo.unitName + " )");
+        if (goodsInfo.limitAmount > 0) {
+            tvBuyLimit.setText(context.getString(R.string.text_buy_limit) + ": " + goodsInfo.limitAmount + goodsInfo.unitName);
+            tvBuyLimit.setVisibility(VISIBLE);
+        } else {
+            tvBuyLimit.setVisibility(INVISIBLE);
+        }
 
         // 限定購買的數量
         outOfMaxValueReason = "購買數量不能大于庫存數量";

@@ -18,16 +18,24 @@ public class GoodsInfo {
     public String unitName;
 
     /**
-     * 計算最終庫存
+     * 獲取最終庫存(商品的庫存減去預留庫存)
      * @return
      */
     public int getFinalStorage() {
-        // 商品的庫存需要減去預留庫存
         int finalStorage = goodsStorage - reserveStorage;
         if (finalStorage < 0) {
             finalStorage = 0;
         }
 
+        return finalStorage;
+    }
+
+    /**
+     * 獲取用戶可購買的數量(考慮限購)
+     * @return
+     */
+    public int getAvailableStorage() {
+        int finalStorage = getFinalStorage();
         // 如果沒有限購，直接返回最終庫存
         if (limitAmount == 0) {
             return finalStorage;
