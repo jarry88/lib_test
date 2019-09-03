@@ -112,7 +112,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     case "goods":
                         // 商品
                         int commonId = Integer.valueOf(webSliderItem.linkValue);
-                        Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                         break;
                     case "store":
                         // 店铺
@@ -218,7 +218,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     public void onClick(View v) {
                         int commonId = (int) v.getTag();
                         SLog.info("commonId[%d]", commonId);
-                        Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                     }
                 });
             }
@@ -400,7 +400,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 llGoodsImageContainer.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                                     }
                                 });
 

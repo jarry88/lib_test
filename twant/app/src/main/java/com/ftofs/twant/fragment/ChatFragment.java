@@ -532,7 +532,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     try {
                         int commonId = easyJSONObject.getInt("commonId");
-                        start(GoodsDetailFragment.newInstance(commonId));
+                        start(GoodsDetailFragment.newInstance(commonId, 0));
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }

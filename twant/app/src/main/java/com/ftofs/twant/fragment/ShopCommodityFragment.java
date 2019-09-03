@@ -181,7 +181,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 if (goods.getItemType() == Goods.ITEM_TYPE_PADDING) {
                     return;
                 }
-                Util.startFragment(GoodsDetailFragment.newInstance(goods.id));
+                Util.startFragment(GoodsDetailFragment.newInstance(goods.id, 0));
             }
         });
         rvGoodsList.setAdapter(adapter);

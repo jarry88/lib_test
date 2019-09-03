@@ -261,7 +261,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
      * @param commonId
      */
     private void redirectToGoodsDetailFragment(int commonId) {
-        Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
     }
 
     private void loadShopSearchData() {

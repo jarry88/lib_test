@@ -104,7 +104,7 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GiftItem giftItem = giftItemList.get(position);
                 dismiss();
-                Util.startFragment(GoodsDetailFragment.newInstance(giftItem.commonId));
+                Util.startFragment(GoodsDetailFragment.newInstance(giftItem.commonId, giftItem.goodsId));
             }
         });
         goodsConformAdapter = new GoodsConformAdapter(context, R.layout.goods_conform_list_item, goodsConformItemList, this);

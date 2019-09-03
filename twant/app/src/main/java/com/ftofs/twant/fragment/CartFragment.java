@@ -258,7 +258,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                             cartSpuItem.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                                 }
                             });
 

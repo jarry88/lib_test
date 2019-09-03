@@ -187,7 +187,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 SLog.info("id[%d]", id);
 
                 if (id == R.id.btn_goto_goods) {
-                    Util.startFragment(GoodsDetailFragment.newInstance(item.commonId));
+                    Util.startFragment(GoodsDetailFragment.newInstance(item.commonId, 0));
                 } else if (id == R.id.btn_refund) {
                     Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
                             "action", Constant.ACTION_REFUND,

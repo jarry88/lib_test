@@ -116,7 +116,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("HERE");
                 MyFollowGoodsItem myFollowGoodsItem = myFollowGoodsItemList.get(position);
-                start(GoodsDetailFragment.newInstance(myFollowGoodsItem.commonId));
+                start(GoodsDetailFragment.newInstance(myFollowGoodsItem.commonId, 0));
             }
         });
         myFollowGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {

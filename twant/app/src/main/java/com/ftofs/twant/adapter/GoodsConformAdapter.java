@@ -73,7 +73,7 @@ public class GoodsConformAdapter extends BaseQuickAdapter<GoodsConformItem, Base
                 public void onClick(ViewGroupAdapter adapter, View view, int position) {
                     GiftVo giftVo = item.giftVoList.get(position);
                     onSelectedListener.onSelected(PopupType.DEFAULT, 0, null); // 主要用于通知隱藏彈窗
-                    Util.startFragment(GoodsDetailFragment.newInstance(giftVo.commonId));
+                    Util.startFragment(GoodsDetailFragment.newInstance(giftVo.commonId, giftVo.goodsId));
                 }
             });
             conformGiftAdapter.setData(item.giftVoList);

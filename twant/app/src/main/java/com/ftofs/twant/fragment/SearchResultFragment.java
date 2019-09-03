@@ -226,7 +226,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     GoodsSearchItem goodsSearchItem = goodsItemList.get(position);
                     int commonId = goodsSearchItem.commonId;
-                    Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                 }
             });
             mGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {

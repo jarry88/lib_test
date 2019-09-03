@@ -112,7 +112,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GoodsSearchItem goodsSearchItem = goodsItemList.get(position);
-                start(GoodsDetailFragment.newInstance(goodsSearchItem.commonId));
+                start(GoodsDetailFragment.newInstance(goodsSearchItem.commonId, 0));
             }
         });
         rvGuessList.setAdapter(goodsAdapter);

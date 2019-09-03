@@ -68,7 +68,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            start(ArrivalNoticeFragment.newInstance(1, 2));
+            start(GoodsDetailFragment.newInstance(3591, 4674));
         }
     }
 

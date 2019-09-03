@@ -119,7 +119,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                 } else if (id == R.id.ll_goods_container) {
                     Footprint footprint = footprintList.get(position);
                     int commonId = footprint.commonId;
-                    Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                 }
             }
         });

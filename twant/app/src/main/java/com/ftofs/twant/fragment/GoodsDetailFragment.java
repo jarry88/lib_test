@@ -126,8 +126,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     ImageView btnGoodsThumb;
     int isLike; // 是否點贊
 
-    List<CustomerServiceStaff> staffList = new ArrayList<>();
-
     List<Spec> specList = new ArrayList<>();
     // 從逗號連接的specValueId定位出goodsId的Map
     Map<String, Integer> specValueIdMap = new HashMap<>();
@@ -203,10 +201,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
     CountDownHandler countDownHandler;
 
-    public static GoodsDetailFragment newInstance(int commonId) {
+    /**
+     * 構建商品詳情頁面
+     * @param commonId  spuId
+     * @param goodsId   skuId, 用于選中指定的sku，如果傳0,表示默認選中第一個sku
+     * @return
+     */
+    public static GoodsDetailFragment newInstance(int commonId, int goodsId) {
         Bundle args = new Bundle();
 
         args.putInt("commonId", commonId);
+        args.putInt("goodsId", goodsId);
         GoodsDetailFragment fragment = new GoodsDetailFragment();
         fragment.setArguments(args);
 
@@ -229,7 +234,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         Bundle args = getArguments();
         commonId = args.getInt("commonId");
-        SLog.info("commonId[%d]", commonId);
+        currGoodsId = args.getInt("goodsId");
+        SLog.info("commonId[%d], currGoodsId[%d]", commonId, currGoodsId);
 
         goodsImage = view.findViewById(R.id.goods_image);
         tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
@@ -762,8 +768,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             giftItemList.add(giftItem);
                         }
                         giftMap.put(goodsId, giftItemList);
-                        // 默認選中第一項sku
-                        if (first) {
+                        // 如果從外面傳進來的參數沒有指定goodsId, 則默認選中第一項sku
+                        if (currGoodsId == 0 && first) {
                             currGoodsId = goodsId;
                             SLog.info("默認選中第一項sku, goodsId[%d]", goodsId);
                         }
@@ -786,7 +792,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         first = false;
                     }
                     // 初始化默認選擇
-                    SLog.info("currGoodsId[%d]", currGoodsId);
+                    SLog.info("初始化默認選擇 currGoodsId[%d]", currGoodsId);
                     selectSku(currGoodsId);
 
 

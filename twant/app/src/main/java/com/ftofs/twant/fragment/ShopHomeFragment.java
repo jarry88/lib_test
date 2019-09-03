@@ -527,7 +527,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     commonId = pair.rightItem.commonId;
                                 }
 
-                                Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                             }
                         });
                         newInGoodsAdapter.setData(storeNewInItemList);
@@ -580,7 +580,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     commonId = pair.rightItem.commonId;
                                 }
 
-                                Util.startFragment(GoodsDetailFragment.newInstance(commonId));
+                                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                             }
                         });
                         hotGoodsAdapter.setData(storeHotItemList);
