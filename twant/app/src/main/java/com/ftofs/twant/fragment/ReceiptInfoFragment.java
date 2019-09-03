@@ -18,7 +18,7 @@ import com.ftofs.twant.util.Util;
 
 
 /**
- * 發票信息Fragment
+ * 單據信息Fragment
  * @author zwm
  */
 public class ReceiptInfoFragment extends BaseFragment implements View.OnClickListener {
@@ -27,7 +27,7 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
      */
     public static final int ACTION_NO_CHANGE = 1;
     /**
-     * 不開發票
+     * 不開單據
      */
     public static final int ACTION_NO_RECEIPT = 2;
     /**
@@ -117,7 +117,7 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
         bundle.putInt("position", position);
 
         if (action == ACTION_SAVE_AND_USE) {
-            // 傳遞發票數據信息
+            // 傳遞單據數據信息
             if (receipt == null) {
                 receipt = new Receipt();
             }

@@ -99,14 +99,14 @@
     <string name="text_delete_order">刪除訂單</string>
     <string name="text_pay_order">支付訂單</string>
 
-    <string name="receipt_info_fragment_title">發票信息</string>
-    <string name="text_receipt_header">發票抬頭</string>
-    <string name="input_receipt_header_hint">請輸入發票抬頭</string>
-    <string name="text_receipt_content">發票內容</string>
-    <string name="input_receipt_content_hint">請輸入發票內容</string>
+    <string name="receipt_info_fragment_title">單據信息</string>
+    <string name="text_receipt_header">單據抬頭</string>
+    <string name="input_receipt_header_hint">請輸入單據抬頭</string>
+    <string name="text_receipt_content">單據內容</string>
+    <string name="input_receipt_content_hint">請輸入單據內容</string>
     <string name="text_taxpayer_id">納稅人識別號</string>
     <string name="input_taxpayer_id_hint">請填寫納稅人識別號</string>
-    <string name="text_does_not_need_receipt">不開發票</string>
+    <string name="text_does_not_need_receipt">不開單據</string>
     <string name="text_save_and_use">保存使用</string>
     <string name="order_detail_fragment_title">訂單詳情</string>
 
@@ -321,7 +321,7 @@
     <string name="text_add_shipping_address">新增收貨地址</string>
     <string name="text_leave_message">留言</string>
     <string name="text_leave_message_hint">選填, 給商家留言  ( 100字以內 )</string>
-    <string name="text_receipt">發票</string>
+    <string name="text_receipt">單據</string>
     <string name="text_coupon">優惠券</string>
     <string name="text_shipping_time">配送時間</string>
     <string name="text_pay_way">支付方式</string>
@@ -384,6 +384,7 @@
     <string name="input_return_amount_hint">请输入退貨金额</string>
     <string name="input_complain_content_hint">請輸入您的投訴內容</string>
 
+    <string name="text_not_allow_send">所選地區暫時無貨</string>
 
     <string name="text_return_detail">退貨詳情</string>
     <string name="text_complain_detail">投訴詳情</string>

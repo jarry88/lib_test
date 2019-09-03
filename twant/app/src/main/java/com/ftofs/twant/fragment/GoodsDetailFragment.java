@@ -162,6 +162,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int commentCount = 0;
     TextView tvCommentCount;
     LinearLayout llCommentContainer;
+    LinearLayout llFirstCommentContainer;
     ImageView imgCommenterAvatar;
     TextView tvCommenterNickname;
     TextView tvComment;
@@ -296,10 +297,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         llCommentContainer = view.findViewById(R.id.ll_comment_container);
         llCommentContainer.setOnClickListener(this);
+        llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
         imgCommenterAvatar = view.findViewById(R.id.img_commenter_avatar);
         tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
         tvComment = view.findViewById(R.id.tv_comment);
-
 
         Util.setOnClickListener(view, R.id.btn_back_round, this);
         Util.setOnClickListener(view, R.id.btn_search_round, this);
@@ -611,10 +612,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tvGoodsCountryName.setText(responseObj.getString("datas.goodsCountry.countryCn"));
 
                     String areaInfo = responseObj.getString("datas.address.areaInfo");
-                    float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
                     tvShipTo.setText(areaInfo);
 
-                    tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
+                    int allowSend = responseObj.getInt("datas.freight.allowSend");
+                    float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
+                    if (allowSend == 1) {
+                        tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
+                    } else {
+                        tvFreightAmount.setText(getString(R.string.text_not_allow_send));
+                    }
+                    
 
                     float goodsPrice = Util.getSpuPrice(goodsDetail);
                     tvGoodsPrice.setText(String.format("%.2f", goodsPrice));
@@ -709,7 +716,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         Glide.with(llGoodsDetailImageContainer).load(imageUrl).into(imageView);
                         llGoodsDetailImageContainer.addView(imageView);
                     }
-
 
                     boolean first;
                     // 【領券】優惠
@@ -857,7 +863,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         tvComment.setText(StringUtil.translateEmoji(_mActivity, comment, (int) tvComment.getTextSize()));
                     } else {
                         // 如果沒有評論，隱藏相應的控件
-                        // llCommentContainer.setVisibility(GONE);
+                        llFirstCommentContainer.setVisibility(GONE);
                     }
 
                     // 好友
@@ -1162,10 +1168,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
 
                 try {
-                    float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
-                    tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
-                } catch (Exception e) {
+                    EasyJSONObject freight = responseObj.getObject("datas.freight");
+                    int allowSend = freight.getInt("allowSend");
+                    if (allowSend == 1) {
+                        float freightAmount = (float) freight.getDouble("freightAmount");
+                        tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
+                    } else {
+                        tvFreightAmount.setText(getString(R.string.text_not_allow_send));
+                    }
 
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });

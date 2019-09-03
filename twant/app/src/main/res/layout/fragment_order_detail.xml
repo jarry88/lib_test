@@ -292,7 +292,7 @@
                         android:layout_marginRight="@dimen/toolbar_margin_right"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:text="不開發票"
+                        android:text="不開單據"
                         android:textSize="14sp"
                         android:textColor="@color/tw_black"
                         />

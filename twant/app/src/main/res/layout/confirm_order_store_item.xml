@@ -140,7 +140,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/img_expand_receipt"
                 android:paddingLeft="30dp"
-                android:text="不開發票"
+                android:text="不開單據"
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 />

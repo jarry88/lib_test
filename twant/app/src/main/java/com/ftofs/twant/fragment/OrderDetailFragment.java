@@ -523,7 +523,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     ordersAmount = (float) ordersVo.getDouble("ordersAmount");
                     String shipTime = ordersVo.getString("shipTime");
 
-                    // 發票信息
+                    // 單據信息
                     String invoiceTitle = ordersVo.getString("invoiceTitle");
                     String invoiceContent = ordersVo.getString("invoiceContent");
                     String invoiceCode = ordersVo.getString("invoiceCode");
