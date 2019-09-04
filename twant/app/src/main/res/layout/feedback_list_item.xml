@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="15dp"
+    android:paddingBottom="15dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_create_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="2019-05-20 15:45:39"
+            android:textSize="14sp"
+            android:textColor="@color/tw_dark_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="請在這裡對您的問題進行描述，以便我們提供更好的幫助～請在這裡對您的問題進行描述，以便我們提供更好的幫助～"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            />
+    </LinearLayout>
+
+    <com.ftofs.twant.widget.SquareGridLayout
+        android:id="@+id/sgl_image_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        app:sgl_column_count="3">
+    </com.ftofs.twant.widget.SquareGridLayout>
+</LinearLayout>

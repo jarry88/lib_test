@@ -45,6 +45,10 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_logout, this);
         Util.setOnClickListener(view, R.id.btn_personal_info, this);
         Util.setOnClickListener(view, R.id.btn_security_setting, this);
+
+        Util.setOnClickListener(view, R.id.btn_logistics_address_setting, this);
+        Util.setOnClickListener(view, R.id.btn_feedback, this);
+
         Util.setOnClickListener(view, R.id.btn_about_takewant, this);
     }
 
@@ -58,10 +62,16 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
                 pop();
                 break;
             case R.id.btn_personal_info:
-                Util.startFragment(PersonalInfoFragment.newInstance());
+                start(PersonalInfoFragment.newInstance());
                 break;
             case R.id.btn_security_setting:
-                Util.startFragment(SecuritySettingFragment.newInstance());
+                start(SecuritySettingFragment.newInstance());
+                break;
+            case R.id.btn_logistics_address_setting:
+                start(AddrManageFragment.newInstance());
+                break;
+            case R.id.btn_feedback:
+                start(CommitFeedbackFragment.newInstance());
                 break;
             case R.id.btn_logout:
                 User.logout();
@@ -69,7 +79,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
                 pop();
                 break;
             case R.id.btn_about_takewant:
-                Util.startFragment(AboutFragment.newInstance());
+                start(AboutFragment.newInstance());
                 break;
             default:
                 break;

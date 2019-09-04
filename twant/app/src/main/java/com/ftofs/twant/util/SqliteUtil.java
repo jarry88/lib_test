@@ -37,7 +37,7 @@ public class SqliteUtil {
      */
     public static boolean switchUserDB(int user_id) {
         if (user_id < 1) {
-            return false;
+            // return false;
         }
 
         String dbName = getDbName();
@@ -107,7 +107,7 @@ public class SqliteUtil {
     public static String getDbName() {
         int user_id = User.getUserId();
         if (user_id < 1) {
-            return null;
+            // return null;
         }
         // 每个用户一个数据库，数据库名称为 user_db_<user_id>.db
         return "user_db_" + user_id + ".db";

@@ -805,6 +805,16 @@ public class Api {
      */
     public static final String PATH_ARRIVAL_NOTICE = "/app/goods/arrival/notice";
 
+    /**
+     * 提交反饋
+     */
+    public static final String PATH_COMMIT_FEEDBACK = "/app/suggest/save";
+
+    /**
+     * 用户反馈列表
+     */
+    public static final String PATH_FEEDBACK_LIST = "/app/suggest/list";
+
 
     /**
      * 發送Http請求

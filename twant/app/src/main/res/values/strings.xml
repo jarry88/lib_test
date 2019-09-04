@@ -36,6 +36,7 @@
     <string name="text_scan_qr_code_add_friend">用想要掃描二維碼，加我為朋友吧～</string>
 
     <string name="text_security_setting">安全設置</string>
+    <string name="text_logistics_address_setting">收貨地址設置</string>
     <string name="text_about_takewant">關于Takewant</string>
 
     <string name="text_takewant_introduction">Takewant介紹</string>
@@ -385,6 +386,12 @@
     <string name="input_complain_content_hint">請輸入您的投訴內容</string>
 
     <string name="text_not_allow_send">所選地區暫時無貨</string>
+    <string name="text_feedback">意見反饋</string>
+    <string name="text_view">查看</string>
+    <string name="text_question_and_suggestion">問題和意見</string>
+    <string name="input_question_and_suggestion_hint">請在這裡對您的問題進行描述，以便我們提供更好的幫助～</string>
+    <string name="text_feedback_title_upload_image">圖片（選填）</string>
+    <string name="text_my_feedback">我的反饋</string>
 
     <string name="text_return_detail">退貨詳情</string>
     <string name="text_complain_detail">投訴詳情</string>
@@ -564,7 +571,9 @@
     <string name="text_commented_most">評論最多</string>
 
     <string name="no_post_hint">暫無符合條件的貼文數據！</string>
+    <string name="no_data_hint">暫無符合條件的數據！</string>
     <string name="no_store_activity_hint">店鋪沒有設置活動，逛逛別的吧</string>
+
 
     <string name="text_member">會員</string>
     <string name="text_my_like">我的點贊</string>
