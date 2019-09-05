@@ -17,6 +17,7 @@ import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.log.SLog;
@@ -72,6 +73,8 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     int isLike;
     int isFavor;
 
+    int postComment;
+
     PostCommentListAdapter adapter;
     List<CommentItem> commentItemList = new ArrayList<>();
 
@@ -126,15 +129,17 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
             public void onClick(ViewGroupAdapter adapter, View view, int position) {
                 int id = view.getId();
 
+                SLog.info("id[%d]", id);
                 if (!User.isLogin()) {
                     start(LoginFragment.newInstance());
                     return;
                 }
-
+                SLog.info("id[%d]", id);
                 CommentItem commentItem = commentItemList.get(position);
-                if (id == R.id.img_avatar) {
+                if (id == R.id.img_commenter_avatar) {
                     start(MemberInfoFragment.newInstance(commentItem.memberName));
-                } else if (id == R.id.btn_reply_comment) {
+                } else if (id == R.id.btn_reply) {
+                    SLog.info("id[%d]", id);
                     start(CommentDetailFragment.newInstance(commentItem));
                 } else if (id == R.id.btn_thumb) {
                     switchThumbState(position);
@@ -174,7 +179,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 start(LoginFragment.newInstance());
                 return;
             }
-            start(AddCommentFragment.newInstance(postId, Constant.COMMENT_CHANNEL_POST));
+            startForResult(AddCommentFragment.newInstance(postId, Constant.COMMENT_CHANNEL_POST), RequestCode.ADD_COMMENT.ordinal());
         } else if (id == R.id.btn_thumb) {
             if (!User.isLogin()) {
                 start(LoginFragment.newInstance());
@@ -325,8 +330,8 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     content = wantPostVoInfo.getString("content");
                     tvContent.setText(StringUtil.translateEmoji(_mActivity, content, (int) tvContent.getTextSize()));
 
-                    int postReply = wantPostVoInfo.getInt("postReply");
-                    tvReplyCount.setText(String.format(getString(R.string.text_view_comment_count), postReply));
+                    postComment = wantPostVoInfo.getInt("postReply");
+                    updatePostCommentCount();
 
                     EasyJSONArray wantPostImages = wantPostVoInfo.getArray("wantPostImages");
                     for (Object object : wantPostImages) {
@@ -384,6 +389,10 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         });
     }
 
+    private void updatePostCommentCount() {
+        tvReplyCount.setText(String.format(getString(R.string.text_view_comment_count), postComment));
+    }
+
     private void loadCommentList() {
         String token = User.getToken();
 
@@ -416,7 +425,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 }
 
                 try {
-
+                    commentItemList.clear();
                     EasyJSONArray comments = responseObj.getArray("datas.comments");
                     for (Object object : comments) {
                         EasyJSONObject comment = (EasyJSONObject) object;
@@ -500,5 +509,29 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 }
             }
         });
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        SLog.info("HERE");
+        if (requestCode == RequestCode.ADD_COMMENT.ordinal()) {
+            SLog.info("HERE");
+
+            tvPostTitle.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadCommentList();
+                    postComment++;
+                    updatePostCommentCount();
+                }
+            }, 500); // 有時候重新加載的時候，也沒有從服務端加載到最新的數據，延遲個500毫秒
+        }
     }
 }
