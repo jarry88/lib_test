@@ -10,9 +10,17 @@ import android.widget.TextView;
 
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+
+import java.io.IOException;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 關于頁面
@@ -48,6 +56,8 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         Util.setOnClickListener(view, R.id.btn_view_takewant_introduction, this);
         Util.setOnClickListener(view, R.id.btn_view_secret_terms, this);
         Util.setOnClickListener(view, R.id.btn_view_service_contract, this);
+
+        Util.setOnClickListener(view, R.id.btn_check_update, this);
         Util.setOnClickListener(view, R.id.btn_goto_rate, this);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -80,8 +90,77 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                 url = "/article/info_h5/%E6%9C%8D%E5%8B%99%E5%8D%94%E8%AD%B0";
             }
             start(ExplorerFragment.newInstance(Config.WEB_BASE_URL + url, true));
+        } else if (id == R.id.btn_check_update) {
+            Api.getUI(Api.PATH_CHECK_UPDATE, EasyJSONObject.generate("version", BuildConfig.VERSION_NAME), new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        // 當前版本
+                        String currentVersion = BuildConfig.VERSION_NAME;
+                        // 最新版本
+                        String newestVersion = responseObj.getString("datas.version");
+
+
+                        SLog.info("currentVersion[%s], newestVersion[%s]", currentVersion, newestVersion);
+                        int result = versionCompare(currentVersion, newestVersion);
+                        SLog.info("result[%d]", result);
+
+                        if (result >= 0) {
+                            ToastUtil.success(_mActivity, "已經是最新版本");
+                        } else {
+                            ToastUtil.info(_mActivity, "發現新版本，正在轉去Google應用商店...");
+                            Util.gotoGooglePlay(_mActivity);
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
         } else if (id == R.id.btn_goto_rate) {
             Util.gotoGooglePlay(_mActivity);
         }
+    }
+
+    /**
+     * 版本號比較
+     * @param version1
+     * @param version2
+     * @return
+     *      * 如果version1比version2新，返回1
+     *      * 如果version1比version2舊，返回-1
+     *      * 如果version1與version2相同，返回0
+     */
+    private int versionCompare(String version1, String version2) {
+        String[] version1Arr = version1.split("\\.");
+        String[] version2Arr = version2.split("\\.");
+
+
+        // 獲取版本號分段數，取較小值是為了預防分段數不一致
+        int fieldCount = Math.min(version1Arr.length, version2Arr.length);
+        SLog.info("version1Arr[%s], version2Arr[%s], fieldCount[%d]", version1Arr, version2Arr, fieldCount);
+
+        for (int i = 0; i < fieldCount; i++) {
+            int field1 = Integer.valueOf(version1Arr[i]);
+            int field2 = Integer.valueOf(version2Arr[i]);
+            if (field1 > field2) {
+                return 1;
+            } else if (field1 < field2) {
+                return -1;
+            }
+        }
+
+        return 0;
     }
 }
