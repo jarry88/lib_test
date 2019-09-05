@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.lxj.xpopup.XPopup;
@@ -176,6 +177,14 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         if (index == selectedFragmentIndex) {
             // 已經是當前Fragment，返回
             return;
+        }
+
+        if (index == ACTIVITY_FRAGMENT) {
+            // 如果是點擊【店鋪活動】的按鈕，檢查用戶是否已經登錄
+            if (!User.isLogin()) {
+                Util.showLoginFragment();
+                return;
+            }
         }
 
         // 切換底部工具欄圖標的選中狀態

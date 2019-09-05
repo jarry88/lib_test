@@ -203,7 +203,7 @@
 
             <!-- 回復區 -->
             <LinearLayout
-                android:id="@+id/ll_reply_container"
+                android:id="@+id/ll_comment_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/toolbar_margin_left"

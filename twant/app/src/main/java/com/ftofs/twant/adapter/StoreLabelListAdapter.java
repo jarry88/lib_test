@@ -37,11 +37,18 @@ public class StoreLabelListAdapter extends BaseQuickAdapter<StoreLabel, BaseView
 
     @Override
     protected void convert(BaseViewHolder helper, StoreLabel item) {
+        List<StoreLabel> storeLabelList = item.getStoreLabelList();
         LinearLayout llInnerItemContainer = helper.getView(R.id.ll_inner_item_container);
-        helper.setText(R.id.tv_outer_title, item.getStoreLabelName());
+        int subItemCount = storeLabelList.size(); // 二級分類的項數
+        String labelName = item.getStoreLabelName();
+        if (subItemCount > 0) {
+            // 如果存在二級分類，顯示項數(0 不顯示是為了防止用戶誤解)
+            labelName += "(" + subItemCount + ")";
+        }
+
+        helper.setText(R.id.tv_outer_title, labelName);
 
         llInnerItemContainer.removeAllViews();
-        List<StoreLabel> storeLabelList = item.getStoreLabelList();
         int count = 0;
         LinearLayout llHorizontalContainer = null;
         for (StoreLabel storeLabel : storeLabelList) {

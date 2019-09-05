@@ -634,7 +634,9 @@
 
     <string name="text_view_count">瀏覽%d次</string>
     <string name="text_view_reply_count">查看%d條回復</string>
+    <string name="text_view_comment_count">查看%d條評論</string>
     <string name="text_publish_post">發布貼文...</string>
+    <string name="text_publish_new">發布</string>
     <string name="text_guess_your_like">猜你喜歡</string>
     <string name="text_store_wanted">店鋪招聘</string>
     <string name="text_wanted_job">招聘崗位</string>

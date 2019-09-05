@@ -171,7 +171,6 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 } else if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 }
-                SLog.info("");
             }
         });
 
@@ -270,11 +269,14 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_thumb) {
+            if (!User.isLogin()) {
+                start(LoginFragment.newInstance());
+                return;
+            }
             switchThumbState();
         } else if (id == R.id.btn_commit) {
-            String token = User.getToken();
-
-            if (StringUtil.isEmpty(token)) {
+            if (!User.isLogin()) {
+                start(LoginFragment.newInstance());
                 return;
             }
 
@@ -299,6 +301,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
             }
 
+            String token = User.getToken();
             String path = Api.PATH_PUBLISH_COMMENT + Api.makeQueryString(EasyJSONObject.generate("token", token));
             SLog.info("path[%s], params[%s]", path, params.toString());
             Api.postJsonUi(path, params.toString(), new UICallback() {
@@ -365,6 +368,10 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 start(ImageViewerFragment.newInstance(commentImageUrl));
             }
         } else if (id == R.id.img_commenter_avatar) {
+            if (!User.isLogin()) {
+                start(LoginFragment.newInstance());
+                return;
+            }
             start(MemberInfoFragment.newInstance(commentItem.memberName));
         }
     }
@@ -462,6 +469,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
                             commentReplyItemList.add(item);
                         }
+                        SLog.info("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
                         commentReplyListAdapter.setData(commentReplyItemList);
 
                     } catch (Exception e) {

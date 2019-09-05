@@ -156,10 +156,8 @@ public class TwantApplication extends Application {
         initChat();
 
         int userId = User.getUserId();
-        if (userId > 0) {
-            // 如果用戶已經登錄，則啟用用戶的數據庫
-            SqliteUtil.switchUserDB(userId);
-        }
+        SqliteUtil.switchUserDB(userId);
+
 
         // 設置時間處理工具的時區
         TimeZone tz = TimeZone.getDefault();

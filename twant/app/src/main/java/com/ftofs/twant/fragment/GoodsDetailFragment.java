@@ -404,6 +404,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 Util.startFragment(ShopMainFragment.newInstance(storeId));
                 break;
             case R.id.btn_show_voucher:
+                if (userId < 1) {
+                    start(LoginFragment.newInstance());
+                    return;
+                }
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
@@ -412,6 +416,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_show_conform:
             case R.id.btn_show_gift:
+                if (userId < 1) {
+                    start(LoginFragment.newInstance());
+                    return;
+                }
                 int tabId = StoreGiftPopup.TAB_ID_CONFORM;
                 if (id == R.id.btn_show_gift) {
                     tabId = StoreGiftPopup.TAB_ID_GIFT;
@@ -438,7 +446,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 showStoreCustomerService();
                 break;
             case R.id.btn_arrival_notice:
-                start(ArrivalNoticeFragment.newInstance(commonId, currGoodsId));
+                Util.startFragment(ArrivalNoticeFragment.newInstance(commonId, currGoodsId));
                 break;
             default:
                 break;

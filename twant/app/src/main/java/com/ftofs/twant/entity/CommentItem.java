@@ -19,9 +19,9 @@ public class CommentItem implements Parcelable {
 
     public String commenterAvatar;
     public String memberName;
-    public String nickname;
+    public String nickname; // 評論人的昵稱
     public String commentTime;
-    public String imageUrl;
+    public String imageUrl; // 評論的圖片
 
     public int relateCommonId;  // 相關的商品Id
     public int relateStoreId;   // 相關的店鋪Id

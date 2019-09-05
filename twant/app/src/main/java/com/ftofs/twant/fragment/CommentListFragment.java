@@ -100,6 +100,11 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 CommentItem commentItem = commentItemList.get(position);
                 int id = view.getId();
+
+                if (!User.isLogin()) {
+                    Util.showLoginFragment();
+                    return;
+                }
                 if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 } else if (id == R.id.btn_reply) {

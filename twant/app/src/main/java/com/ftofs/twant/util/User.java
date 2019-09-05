@@ -12,6 +12,10 @@ import com.orhanobut.hawk.Hawk;
  * @author zwm
  */
 public class User {
+    public static boolean isLogin() {
+        return getUserId() > 0;
+    }
+
     /**
      * 獲取當前已登錄的用戶Id
      * @return 如果已經登錄，返回用戶Id；否則，返回0

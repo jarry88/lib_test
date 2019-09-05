@@ -12,12 +12,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.CommentReplyListAdapter;
+import com.ftofs.twant.adapter.PostCommentListAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -31,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -47,7 +51,6 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     String title;
     String content;
 
-
     TextView tvPostTitle;
     ImageView imgAuthorAvatar;
     TextView tvNickname;
@@ -59,7 +62,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     SquareGridLayout sglImageContainer;
     TextView tvViewCount;
     TextView tvReplyCount;
-    LinearLayout llReplyContainer;
+    LinearLayout llCommentContainer;
     ImageView imgThumb;
     TextView tvThumbCount;
     ImageView imgLike;
@@ -69,8 +72,8 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     int isLike;
     int isFavor;
 
-    CommentReplyListAdapter adapter;
-    List<CommentReplyItem> commentReplyItemList = new ArrayList<>();
+    PostCommentListAdapter adapter;
+    List<CommentItem> commentItemList = new ArrayList<>();
 
     public static PostDetailFragment newInstance(int postId) {
         Bundle args = new Bundle();
@@ -109,8 +112,35 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
         tvViewCount = view.findViewById(R.id.tv_view_count);
         tvReplyCount = view.findViewById(R.id.tv_reply_count);
-        llReplyContainer = view.findViewById(R.id.ll_reply_container);
-        adapter = new CommentReplyListAdapter(_mActivity, llReplyContainer, R.layout.comment_reply_item);
+        llCommentContainer = view.findViewById(R.id.ll_comment_container);
+        adapter = new PostCommentListAdapter(_mActivity, llCommentContainer, R.layout.post_comment_item);
+        adapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                CommentItem commentItem = commentItemList.get(position);
+                start(CommentDetailFragment.newInstance(commentItem));
+            }
+        });
+        adapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                int id = view.getId();
+
+                if (!User.isLogin()) {
+                    start(LoginFragment.newInstance());
+                    return;
+                }
+
+                CommentItem commentItem = commentItemList.get(position);
+                if (id == R.id.img_avatar) {
+                    start(MemberInfoFragment.newInstance(commentItem.memberName));
+                } else if (id == R.id.btn_reply_comment) {
+                    start(CommentDetailFragment.newInstance(commentItem));
+                } else if (id == R.id.btn_thumb) {
+                    switchThumbState(position);
+                }
+            }
+        });
         imgThumb = view.findViewById(R.id.img_thumb);
         tvThumbCount = view.findViewById(R.id.tv_thumb_count);
         imgLike = view.findViewById(R.id.img_like);
@@ -124,7 +154,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         Util.setOnClickListener(view, R.id.btn_share, this);
 
         loadData();
-        loadReplyData();
+        loadCommentList();
     }
 
     @Override
@@ -140,10 +170,22 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_add_post_comment) {
+            if (!User.isLogin()) {
+                start(LoginFragment.newInstance());
+                return;
+            }
             start(AddCommentFragment.newInstance(postId, Constant.COMMENT_CHANNEL_POST));
         } else if (id == R.id.btn_thumb) {
+            if (!User.isLogin()) {
+                start(LoginFragment.newInstance());
+                return;
+            }
             switchInteractiveState(STATE_TYPE_THUMB);
         } else if (id == R.id.btn_like) {
+            if (!User.isLogin()) {
+                start(LoginFragment.newInstance());
+                return;
+            }
             switchInteractiveState(STATE_TYPE_LIKE);
         } else if (id == R.id.btn_share) {
             new XPopup.Builder(_mActivity)
@@ -153,7 +195,11 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     .show();
         } else if (id == R.id.img_author_avatar) {
             if (!StringUtil.isEmpty(authorMemberName)) {
-                start(MemberInfoFragment.newInstance(authorMemberName));
+                if (User.isLogin()) {
+                    start(MemberInfoFragment.newInstance(authorMemberName));
+                } else {
+                    start(LoginFragment.newInstance());
+                }
             }
         }
     }
@@ -223,14 +269,18 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
     private void loadData() {
         String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
+
+        EasyJSONObject params = EasyJSONObject.generate("postId", postId);
+
+        if (!StringUtil.isEmpty(token)) {
+            try {
+                params.set("token", token);
+            } catch (EasyJSONException e) {
+                e.printStackTrace();
+            }
         }
 
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "postId", postId);
-
+        SLog.info("params[%s]", params);
         Api.postUI(Api.PATH_POST_DETAIL, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -276,7 +326,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     tvContent.setText(StringUtil.translateEmoji(_mActivity, content, (int) tvContent.getTextSize()));
 
                     int postReply = wantPostVoInfo.getInt("postReply");
-                    tvReplyCount.setText(String.format(getString(R.string.text_view_reply_count), postReply));
+                    tvReplyCount.setText(String.format(getString(R.string.text_view_comment_count), postReply));
 
                     EasyJSONArray wantPostImages = wantPostVoInfo.getArray("wantPostImages");
                     for (Object object : wantPostImages) {
@@ -327,22 +377,27 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     tvThumbCount.setText(String.valueOf(postLike));
                     tvLikeCount.setText(String.valueOf(postFavor));
                 } catch (Exception e) {
-
+                    e.printStackTrace();
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });
     }
 
-    private void loadReplyData() {
+    private void loadCommentList() {
         String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
 
         EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
                 "channel", Constant.COMMENT_CHANNEL_POST,
                 "bindId", postId);
+
+        if (!StringUtil.isEmpty(token)) {
+            try {
+                params.set("token", token);
+            } catch (EasyJSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         SLog.info("params[%s]", params);
         Api.postUI(Api.PATH_COMMENT_LIST, params, new UICallback() {
@@ -361,29 +416,87 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 }
 
                 try {
+
                     EasyJSONArray comments = responseObj.getArray("datas.comments");
                     for (Object object : comments) {
                         EasyJSONObject comment = (EasyJSONObject) object;
                         EasyJSONObject memberVo = comment.getObject("memberVo");
-
-                        CommentReplyItem item = new CommentReplyItem();
-
-                        item.memberId = memberVo.getInt("memberId");
-                        item.memberName = memberVo.getString("memberName");
+                        CommentItem item = new CommentItem();
                         item.commentId = comment.getInt("commentId");
-                        item.avatarUrl = memberVo.getString("avatar");
-                        item.nickname = memberVo.getString("nickName");
-                        item.createTime = comment.getLong("createTime");
-                        item.content = comment.getString("content");
-                        item.isLike = comment.getInt("isLike");
+                        item.commentChannel = comment.getInt("commentChannel");
+                        item.commentType = comment.getInt("commentType");
                         item.commentLike = comment.getInt("commentLike");
+                        item.content = comment.getString("content");
+                        if (item.content == null) { // 兼容店鋪評論有些內容為null的問題
+                            item.content = "";
+                        }
+                        item.isLike = comment.getInt("isLike");
+                        item.commentReply = comment.getInt("commentReply");
 
-                        commentReplyItemList.add(item);
+                        if (memberVo != null) {
+                            item.commenterAvatar = memberVo.getString("avatar");
+                            item.memberName = memberVo.getString("memberName");
+                            item.nickname = memberVo.getString("nickName");
+                        }
+                        item.commentTime = comment.getString("commentStartTime");
+                        item.relatePostId = postId;
+
+                        if (item.commentType != Constant.COMMENT_TYPE_TEXT) {
+                            EasyJSONArray images = comment.getArray("images");
+                            if (images != null) {
+                                for (Object object2 : images) {
+                                    EasyJSONObject image = (EasyJSONObject) object2;
+                                    item.imageUrl = image.getString("imageUrl");
+                                }
+                            }
+                        }
+
+                        commentItemList.add(item);
                     }
 
-                    adapter.setData(commentReplyItemList);
+                    adapter.setData(commentItemList);
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void switchThumbState(final int position) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        final CommentItem commentItem = commentItemList.get(position);
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "commentId", commentItem.commentId,
+                "state", 1 - commentItem.isLike
+        );
+        Api.postUI(Api.PATH_COMMENT_LIKE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    commentItem.isLike = 1 - commentItem.isLike;
+                    commentItem.commentLike = responseObj.getInt("datas.likeCount");
+
+                    adapter.notifyItemChanged(position);
+                } catch (Exception e) {
+
                 }
             }
         });

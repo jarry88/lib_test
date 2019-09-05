@@ -185,14 +185,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         tvLikeCount = view.findViewById(R.id.tv_like_count);
         btnStoreThumb = view.findViewById(R.id.btn_store_thumb);
-        btnStoreThumb.setOnClickListener(this);
+        Util.setOnClickListener(view, R.id.ll_uo_thumb_up_container, this);
 
         tvFavoriteCount = view.findViewById(R.id.tv_favorite_count);
         btnStoreFavorite = view.findViewById(R.id.btn_store_favorite);
-        btnStoreFavorite.setOnClickListener(this);
+        Util.setOnClickListener(view, R.id.ll_uo_like_container, this);
 
         tvVisitorCount = view.findViewById(R.id.tv_visitor_count);
-
         Util.setOnClickListener(view, R.id.ll_uo_share_container, this);
 
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
@@ -624,10 +623,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         int id = v.getId();
 
         switch (id) {
-            case R.id.btn_store_thumb:
+            case R.id.ll_uo_thumb_up_container:
                 switchThumbState();
                 break;
-            case R.id.btn_store_favorite:
+            case R.id.ll_uo_like_container:
                 switchFavoriteState();
                 break;
             case R.id.btn_shop_map:

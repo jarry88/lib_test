@@ -42,7 +42,7 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
     ShopMainFragment parentFragment;
 
     List<StoreLabel> shopStoreLabelList = new ArrayList<>();
-    BaseQuickAdapter adapter;
+    StoreLabelListAdapter adapter;
 
     String responseStr;
     public static ShopCategoryFragment newInstance() {

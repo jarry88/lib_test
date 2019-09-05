@@ -68,6 +68,8 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
     LinearLayout llDiscountContainer;
     StoreDiscountListAdapter discountListAdapter;
 
+    boolean isStoreActivityDataLoaded;
+
     public static ShopActivityFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -270,6 +272,8 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             TextView tvEmptyHint = root.findViewById(R.id.tv_empty_hint);
                             tvEmptyHint.setText(R.string.no_store_activity_hint);
                         }
+
+                        isStoreActivityDataLoaded = true;
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                         SLog.info("Error!loadStoreActivityData failed");
@@ -314,5 +318,18 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                 voucherListAdapter.setData(storeVoucherList);
             }
         });
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (!isStoreActivityDataLoaded) {
+            loadStoreActivityData();
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

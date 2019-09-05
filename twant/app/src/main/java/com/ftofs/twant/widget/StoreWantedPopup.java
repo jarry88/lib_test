@@ -15,8 +15,10 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -138,8 +140,14 @@ public class StoreWantedPopup extends BottomPopupView implements View.OnClickLis
             rvWantedList.setVisibility(VISIBLE);
             svJobDetail.setVisibility(GONE);
         } else if (id == R.id.btn_follow) {
-            WantedPostItem item = wantedPostItemList.get(currentPosition);
             String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                Util.showLoginFragment();
+                dismiss();
+                return;
+            }
+
+            WantedPostItem item = wantedPostItemList.get(currentPosition);
             int postId = item.postId;
 
             EasyJSONObject params = EasyJSONObject.generate("token", token, "postId", postId);

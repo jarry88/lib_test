@@ -19,9 +19,13 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.SpecPair;
+import com.ftofs.twant.fragment.AddPostFragment;
+import com.ftofs.twant.fragment.ArrivalNoticeFragment;
+import com.ftofs.twant.fragment.ChatFragment;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
+import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.log.SLog;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
@@ -38,6 +42,18 @@ import me.yokeyword.fragmentation.ISupportFragment;
  * @author zwm
  */
 public class Util {
+    /**
+     * 需要登錄的才能顯示的Fragment列表
+     */
+    public static List<String> needLoginFragmentName = new ArrayList<>();
+    static {
+        needLoginFragmentName.add(AddPostFragment.class.getSimpleName());
+        needLoginFragmentName.add(MemberInfoFragment.class.getSimpleName());
+        needLoginFragmentName.add(MessageFragment.class.getSimpleName());
+        needLoginFragmentName.add(ChatFragment.class.getSimpleName());
+        needLoginFragmentName.add(ArrivalNoticeFragment.class.getSimpleName());
+    }
+
     /**
      * 进入全屏模式
      * 参考
@@ -332,6 +348,17 @@ public class Util {
     }
 
     public static void startFragment(ISupportFragment fragment) {
+        String fragmentClassName = fragment.getClass().getSimpleName();
+        SLog.info("fragmentClassName[%s]", fragmentClassName);
+
+        if (needLoginFragmentName.contains(fragmentClassName)) {
+            // 需要登錄才能顯示的Fragment，判斷用戶是否已經登錄，如果未登錄，則顯示登錄對話框
+            if (!User.isLogin()) {
+                showLoginFragment();
+                return;
+            }
+        }
+
         MainFragment mainFragment = MainFragment.getInstance();
         if (mainFragment == null) {
             ToastUtil.error(TwantApplication.getContext(), "MainFragment為空");
