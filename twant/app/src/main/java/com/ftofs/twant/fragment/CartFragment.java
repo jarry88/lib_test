@@ -473,7 +473,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_CART) {
             updateTotalData();
-        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE){
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE ||
+                    message.messageType == EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS) {
             reloadList();
         }
     }
