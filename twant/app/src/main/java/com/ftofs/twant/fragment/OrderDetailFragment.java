@@ -65,7 +65,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
-    List<CustomerServiceStaff> staffList = new ArrayList<>();
 
     TextView tvReceiverName;
     TextView tvMobile;
@@ -499,16 +498,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
-                    }
-
-                    EasyJSONArray serviceStaffList = responseObj.getArray("datas.serviceStaffList");
-                    for (Object object : serviceStaffList) {
-                        EasyJSONObject serviceStaff = (EasyJSONObject) object;
-
-                        CustomerServiceStaff staff = new CustomerServiceStaff();
-                        Util.packStaffInfo(staff, serviceStaff);
-
-                        staffList.add(staff);
                     }
 
                     EasyJSONObject ordersVo = responseObj.getObject("datas.ordersVo");
