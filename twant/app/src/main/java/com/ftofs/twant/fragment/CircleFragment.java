@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,7 +59,8 @@ import okhttp3.Call;
  * 想要圈
  * @author zwm
  */
-public class CircleFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class CircleFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener,
+        BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     List<PostCategory> postCategoryList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
 
@@ -67,6 +69,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     PostListAdapter adapter;
     SearchPostParams searchPostParams = new SearchPostParams();
     RecyclerView rvPostList;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     // 當前要加載第幾頁
     int currPage = 1;
@@ -109,6 +112,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         EventBus.getDefault().register(this);
 
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
 
         if (isStandalone) { // 獨立的頁面
@@ -134,6 +139,15 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PostItem postItem = postItemList.get(position);
                 Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
+            }
+        });
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_thumb) {
+                    switchThumbState(position);
+                }
             }
         });
         adapter.setEnableLoadMore(true);
@@ -296,7 +310,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         }
                     }
 
-                    // postItemList.clear();
+                    // 如果是加載第一頁的數據，先清除舊數據
+                    if (currPage == 1) {
+                        postItemList.clear();
+                    }
                     EasyJSONArray wantPostList = responseObj.getArray("datas.wantPostList");
                     for (Object object : wantPostList) {
                         EasyJSONObject post = (EasyJSONObject) object;
@@ -330,6 +347,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         postItemList.add(item);
                     }
 
+                    swipeRefreshLayout.setRefreshing(false);
                     adapter.loadMoreComplete();
                     isPostDataLoaded = true;
                     adapter.setNewData(postItemList);
@@ -382,6 +400,51 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         super.onSupportInvisible();
     }
 
+    private void switchThumbState(int position) {
+        SLog.info("switchInteractiveState[%d]", position);
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            Util.showLoginFragment();
+            return;
+        }
+
+        PostItem postItem = postItemList.get(position);
+        int newState = 1 - postItem.isLike;
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "postId", postItem.postId,
+                "state", newState);
+
+        SLog.info("params[%s]", params);
+        Api.postUI(Api.PATH_POST_THUMB, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                postItem.isLike = newState;
+                if (newState == 1) {
+                    postItem.postFollow++;
+                } else {
+                    postItem.postFollow--;
+                }
+
+                adapter.notifyItemChanged(position);
+            }
+        });
+    }
+
+
     public void setSearchPostParams(SearchPostParams searchPostParams) {
         this.searchPostParams = searchPostParams;
 
@@ -405,6 +468,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         return false;
     }
 
+    /**
+     * 上滑加載更多
+     */
     @Override
     public void onLoadMoreRequested() {
         SLog.info("onLoadMoreRequested");
@@ -414,5 +480,16 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             return;
         }
         loadPostData(currPage + 1);
+    }
+
+    /**
+     * 下拉刷新
+     */
+    @Override
+    public void onRefresh() {
+        SLog.info("onRefresh");
+        currPage = 1;
+        isPostDataLoaded = false;
+        loadPostData(currPage);
     }
 }

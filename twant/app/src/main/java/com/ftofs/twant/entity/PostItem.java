@@ -23,6 +23,8 @@ public class PostItem implements MultiItemEntity {
 
     public String deadline;
 
+    public int isLike;
+
     @Override
     public int getItemType() {
         return itemType;

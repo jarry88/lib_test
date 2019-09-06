@@ -42,6 +42,14 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
                     .setText(R.id.tv_comment_count, String.valueOf(item.postReply))
                     .setText(R.id.tv_category_name, item.postCategory);
 
+            helper.addOnClickListener(R.id.btn_thumb);
+            ImageView iconThumb = helper.getView(R.id.icon_thumb);
+            if (item.isLike == 1) {
+                iconThumb.setImageResource(R.drawable.icon_comment_thumb_blue);
+            } else {
+                iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
+            }
+
             if (!StringUtil.isEmpty(item.deadline)) {
                 helper.setText(R.id.tv_deadline, item.deadline.substring(5));
                 TwProgressBar progressBar = helper.getView(R.id.pg_deadline);
