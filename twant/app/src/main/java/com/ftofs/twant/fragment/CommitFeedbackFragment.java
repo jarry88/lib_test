@@ -16,6 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.ButtonClickInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
@@ -28,7 +29,9 @@ import com.ftofs.twant.widget.SquareGridLayout;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -41,6 +44,8 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
     SquareGridLayout sglImageContainer;
     ImageView btnAddImage;
     EditText etContent;
+
+    Map<Integer, ButtonClickInfo> buttonClickInfoMap = new HashMap<>();
 
     public static CommitFeedbackFragment newInstance() {
         Bundle args = new Bundle();
@@ -70,6 +75,7 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
         Util.setOnClickListener(view, R.id.btn_view, this);
         Util.setOnClickListener(view, R.id.btn_add_image, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
+        buttonClickInfoMap.put(R.id.btn_commit, new ButtonClickInfo());
     }
 
     @Override
@@ -93,6 +99,15 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
                 return;
             }
 
+            ButtonClickInfo buttonClickInfo = buttonClickInfoMap.get(id);
+            if (!buttonClickInfo.getCanClick()) {
+                SLog.info("不能點擊太快");
+                return;
+            }
+
+            buttonClickInfo.canClick = false;
+            buttonClickInfo.lastClickTime = System.currentTimeMillis();
+
             // 收集圖片列表
             List<String> imagePathList = new ArrayList<>();
             int childCount = sglImageContainer.getChildCount();
@@ -112,6 +127,9 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
+
+                    ButtonClickInfo buttonClickInfo = buttonClickInfoMap.get(R.id.btn_commit);
+                    buttonClickInfo.canClick = true; // 操作成功后，恢復可點擊
 
                     ToastUtil.success(_mActivity, "提交成功");
                     pop();

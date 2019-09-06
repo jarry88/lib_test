@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.domain.goods.ArrivalNotice;
+import com.ftofs.twant.entity.ButtonClickInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ImageProcess;
 import com.ftofs.twant.util.Jarbon;
@@ -25,7 +26,9 @@ import com.ftofs.twant.widget.TwProgressBar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import top.zibin.luban.Luban;
 
@@ -34,6 +37,8 @@ import top.zibin.luban.Luban;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
+    Map<Integer, ButtonClickInfo> buttonClickInfoMap = new HashMap<>();
+
     int i = 0;
     TwProgressBar progressBar;
     ImageView imageView;
@@ -57,6 +62,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Util.setOnClickListener(view, R.id.btn_test, this);
+        buttonClickInfoMap.put(R.id.btn_test, new ButtonClickInfo());
 
         progressBar = view.findViewById(R.id.tw_progress_bar);
         progressBar.setColor(TwProgressBar.COLOR_ORANGE);
@@ -68,7 +74,17 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            SLog.info("contains[%s]", Util.needLoginFragmentName.contains("AddPostFragment"));
+            ButtonClickInfo buttonClickInfo = buttonClickInfoMap.get(id);
+            if (!buttonClickInfo.getCanClick()) {
+                SLog.info("不能點擊");
+                return;
+            }
+
+            buttonClickInfo.canClick = false;
+            buttonClickInfo.lastClickTime = System.currentTimeMillis();
+            SLog.info("yesyes");
+
+            // SLog.info("contains[%s]", Util.needLoginFragmentName.contains("AddPostFragment"));
         }
     }
 
