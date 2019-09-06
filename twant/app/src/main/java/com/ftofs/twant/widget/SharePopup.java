@@ -19,6 +19,7 @@ import com.ftofs.twant.util.Guid;
 import com.ftofs.twant.util.ImageProcess;
 import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.WeixinUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BottomPopupView;
@@ -103,6 +104,11 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         if (id == R.id.btn_dismiss) {
             dismiss();
         } else if (id == R.id.btn_share_to_friend || id == R.id.btn_share_to_timeline) {
+            // 檢測微信是否已經安裝
+            if (!TwantApplication.wxApi.isWXAppInstalled()) {
+                ToastUtil.error(context, context.getString(R.string.weixin_not_installed_hint));
+                return;
+            }
             int scene;
             if (id == R.id.btn_share_to_friend) {
                 scene = WeixinUtil.WX_SCENE_SESSION;
