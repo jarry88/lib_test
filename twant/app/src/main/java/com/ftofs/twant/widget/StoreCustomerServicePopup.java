@@ -108,7 +108,6 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
 
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
-                        adapter.loadMoreFail();
                         return;
                     }
 

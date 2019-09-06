@@ -58,7 +58,7 @@ import okhttp3.Call;
  * 想要圈
  * @author zwm
  */
-public class CircleFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class CircleFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener, BaseQuickAdapter.RequestLoadMoreListener {
     List<PostCategory> postCategoryList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
 
@@ -66,6 +66,11 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     PostListAdapter adapter;
     SearchPostParams searchPostParams = new SearchPostParams();
+    RecyclerView rvPostList;
+
+    // 當前要加載第幾頁
+    int currPage = 1;
+    boolean hasMore;
 
     /**
      * 是否獨立的Fragment，還是依附于MainFragment
@@ -122,7 +127,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         Util.setOnClickListener(view, R.id.btn_post_filter, this);
 
-        RecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
+        rvPostList = view.findViewById(R.id.rv_post_list);
         adapter = new PostListAdapter(R.layout.post_list_item, postItemList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -131,6 +136,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
             }
         });
+        adapter.setEnableLoadMore(true);
+        adapter.setOnLoadMoreListener(this, rvPostList);
 
         // 設置空頁面
         View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
@@ -149,7 +156,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         item.categoryName = "全部";
         postCategoryList.add(item);
 
-        loadPostData();
+        if (searchPostParams.page > 0) {
+            currPage = searchPostParams.page;
+        }
+        loadPostData(currPage);
     }
 
 
@@ -187,13 +197,12 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    private void loadPostData() {
+    private void loadPostData(int page) {
         EasyJSONObject params = EasyJSONObject.generate();
 
         try {
-            if (searchPostParams.page > 0) {
-                params.set("page", searchPostParams.page);
-            }
+            params.set("page", page);
+
             if (!StringUtil.isEmpty(searchPostParams.category)) {
                 params.set("category", searchPostParams.category);
             }
@@ -229,8 +238,17 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        adapter.loadMoreFail();
                         return;
                     }
+
+                    hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                    SLog.info("hasMore[%s]", hasMore);
+                    if (!hasMore) {
+                        adapter.loadMoreEnd();
+                        adapter.setEnableLoadMore(false);
+                    }
+
 
                     // 如果未初始化，則初始化分類菜單
                     if (postCategoryList.size() <= 1) {
@@ -260,7 +278,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
                                 SLog.info("category[%s]", searchPostParams.category);
 
-                                loadPostData();
+                                loadPostData(currPage);
                             }
                         };
                         for (PostCategory postCategory : postCategoryList) {
@@ -278,7 +296,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         }
                     }
 
-                    postItemList.clear();
+                    // postItemList.clear();
                     EasyJSONArray wantPostList = responseObj.getArray("datas.wantPostList");
                     for (Object object : wantPostList) {
                         EasyJSONObject post = (EasyJSONObject) object;
@@ -303,8 +321,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         postItemList.add(item);
                     }
 
+                    adapter.loadMoreComplete();
                     isPostDataLoaded = true;
                     adapter.setNewData(postItemList);
+                    currPage++;
                 } catch (Exception e) {
                     e.printStackTrace();
                     SLog.info("Error!%s", e.getMessage());
@@ -319,7 +339,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         if (type == PopupType.POST_FILTER) {
             filterSelectedIndex = id;
             searchPostParams.sort = (String) extra;
-            loadPostData();
+            loadPostData(currPage);
         }
     }
 
@@ -342,7 +362,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             llTabButtonContainer.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    loadPostData();
+                    loadPostData(currPage);
                 }
             }, 500);
 
@@ -375,5 +395,16 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        SLog.info("onLoadMoreRequested");
+
+        if (!hasMore) {
+            adapter.setEnableLoadMore(false);
+            return;
+        }
+        loadPostData(currPage + 1);
     }
 }

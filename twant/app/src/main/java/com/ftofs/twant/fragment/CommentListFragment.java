@@ -94,6 +94,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvCommentList.setLayoutManager(layoutManager);
         adapter = new CommentListAdapter(R.layout.comment_item, commentItemList);
+        adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvCommentList);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
