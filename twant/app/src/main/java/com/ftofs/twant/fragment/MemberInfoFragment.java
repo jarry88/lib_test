@@ -281,7 +281,12 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
 
                     avatarUrl = StringUtil.normalizeImageUrl(member.getString("avatarUrl"));
 
-                    Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imageAvatar);
+                    if (StringUtil.useDefaultAvatar(avatarUrl)) {
+                        Glide.with(_mActivity).load(R.drawable.grey_default_avatar).centerCrop().into(imageAvatar);
+                    } else {
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imageAvatar);
+                    }
+
                     nickname = member.getString("nickName");
                     tvNickname.setText(nickname);
                     tvLocation.setText(member.getString("addressAreaInfo"));
@@ -292,8 +297,6 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
                     tvPopularity.setText(String.valueOf(memberHomeState.getInt("popularity")));
                     tvFollowCount.setText(String.valueOf(memberHomeState.getInt("follow")));
                     tvArticleCount.setText(String.valueOf(memberHomeState.getInt("post")));
-
-
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                 }

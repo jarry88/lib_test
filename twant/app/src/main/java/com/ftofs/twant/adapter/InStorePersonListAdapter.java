@@ -33,7 +33,11 @@ public class InStorePersonListAdapter extends BaseMultiItemQuickAdapter<InStoreP
             helper.setText(R.id.tv_category_label, item.nickname);
         } else {
             ImageView imgAvatar = helper.getView(R.id.img_avatar);
-            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatarUrl)).centerCrop().into(imgAvatar);
+            if (StringUtil.useDefaultAvatar(item.avatarUrl)) {
+                Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgAvatar);
+            } else {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatarUrl)).centerCrop().into(imgAvatar);
+            }
 
             helper.setText(R.id.tv_nickname, item.nickname);
         }

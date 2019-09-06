@@ -386,6 +386,7 @@
     <string name="input_complain_content_hint">請輸入您的投訴內容</string>
 
     <string name="text_not_allow_send">所選地區暫時無貨</string>
+    <string name="not_allow_send_hint">所選地區不支持配送</string>
     <string name="text_feedback">意見反饋</string>
     <string name="text_view">查看</string>
     <string name="text_question_and_suggestion">問題和意見</string>

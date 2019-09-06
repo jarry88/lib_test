@@ -126,6 +126,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     ImageView btnGoodsThumb;
     int isLike; // 是否點贊
 
+    int allowSend;
+
     List<Spec> specList = new ArrayList<>();
     // 從逗號連接的specValueId定位出goodsId的Map
     Map<String, Integer> specValueIdMap = new HashMap<>();
@@ -379,6 +381,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_buy:
                 if (userId > 0) {
+                    if (allowSend == 0) {
+                        ToastUtil.error(_mActivity, getString(R.string.not_allow_send_hint));
+                        return;
+                    }
                     showSpecSelectPopup(Constant.ACTION_BUY);
                 } else {
                     Util.showLoginFragment();
@@ -622,7 +628,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     String areaInfo = responseObj.getString("datas.address.areaInfo");
                     tvShipTo.setText(areaInfo);
 
-                    int allowSend = responseObj.getInt("datas.freight.allowSend");
+                    allowSend = responseObj.getInt("datas.freight.allowSend");
                     float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
                     if (allowSend == 1) {
                         tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
@@ -1177,7 +1183,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                 try {
                     EasyJSONObject freight = responseObj.getObject("datas.freight");
-                    int allowSend = freight.getInt("allowSend");
+                    allowSend = freight.getInt("allowSend");
                     if (allowSend == 1) {
                         float freightAmount = (float) freight.getDouble("freightAmount");
                         tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));

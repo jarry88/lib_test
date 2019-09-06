@@ -391,4 +391,30 @@ public class StringUtil {
 
         return sb.toString();
     }
+
+    /**
+     * 判斷是否為內網URL
+     * @param url
+     * @return
+     */
+    private static boolean isIntranetAddr(String url) {
+        if (url == null) {
+            return false;
+        }
+
+        return url.startsWith("http://192") || url.startsWith("https://192");
+    }
+
+    /**
+     * 根據頭像URL判斷，是否使用默認頭像
+     * @param url
+     * @return
+     */
+    public static boolean useDefaultAvatar(String url) {
+        if (isEmpty(url)) {
+            return true;
+        }
+
+        return isIntranetAddr(url);
+    }
 }

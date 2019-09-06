@@ -27,6 +27,10 @@ public class StoreFriendsAdapter extends BaseQuickAdapter<StoreFriendsItem, Base
     protected void convert(BaseViewHolder helper, StoreFriendsItem item) {
         ImageView imageView = helper.getView(R.id.img_avatar);
 
-        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatar)).centerCrop().into(imageView);
+        if (StringUtil.useDefaultAvatar(item.avatar)) {
+            Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imageView);
+        } else {
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatar)).centerCrop().into(imageView);
+        }
     }
 }
