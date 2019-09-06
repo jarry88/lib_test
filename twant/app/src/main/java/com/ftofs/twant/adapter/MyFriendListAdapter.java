@@ -20,7 +20,11 @@ public class MyFriendListAdapter extends BaseQuickAdapter<MyFriendListItem, Base
     @Override
     protected void convert(BaseViewHolder helper, MyFriendListItem item) {
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
-        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatarUrl)).centerCrop().into(imgAvatar);
+        if (StringUtil.useDefaultAvatar(item.avatarUrl)) {
+            Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgAvatar);
+        } else {
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatarUrl)).centerCrop().into(imgAvatar);
+        }
 
         helper.setText(R.id.tv_nickname, item.nickname);
         String memberLevel = String.format("V%d會員", item.level);

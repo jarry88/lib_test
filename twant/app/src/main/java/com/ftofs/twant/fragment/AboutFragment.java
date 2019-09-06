@@ -107,6 +107,12 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                             return;
                         }
 
+                        if (!responseObj.exists("datas.version")) {
+                            // 如果服務器端沒有返回版本信息，也當作是最新版本
+                            ToastUtil.success(_mActivity, getString(R.string.text_is_newest_version));
+                            return;
+                        }
+
                         // 當前版本
                         String currentVersion = BuildConfig.VERSION_NAME;
                         // 最新版本
@@ -118,13 +124,13 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
                         SLog.info("result[%d]", result);
 
                         if (result >= 0) {
-                            ToastUtil.success(_mActivity, "已經是最新版本");
+                            ToastUtil.success(_mActivity, getString(R.string.text_is_newest_version));
                         } else {
                             ToastUtil.info(_mActivity, "發現新版本，正在轉去Google應用商店...");
                             Util.gotoGooglePlay(_mActivity);
                         }
                     } catch (Exception e) {
-
+                        SLog.info("Error!%s", e.getMessage());
                     }
                 }
             });

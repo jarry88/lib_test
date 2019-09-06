@@ -393,6 +393,7 @@
     <string name="input_question_and_suggestion_hint">請在這裡對您的問題進行描述，以便我們提供更好的幫助～</string>
     <string name="text_feedback_title_upload_image">圖片（選填）</string>
     <string name="text_my_feedback">我的反饋</string>
+    <string name="text_is_newest_version">已經是最新版本</string>
 
     <string name="text_return_detail">退貨詳情</string>
     <string name="text_complain_detail">投訴詳情</string>
