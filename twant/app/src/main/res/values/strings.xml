@@ -385,7 +385,7 @@
     <string name="input_return_amount_hint">请输入退貨金额</string>
     <string name="input_complain_content_hint">請輸入您的投訴內容</string>
 
-    <string name="text_not_allow_send">所選地區暫時無貨</string>
+    <string name="text_not_allow_send">該地區無貨</string>
     <string name="not_allow_send_hint">所選地區不支持配送</string>
     <string name="text_feedback">意見反饋</string>
     <string name="text_view">查看</string>
