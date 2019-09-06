@@ -649,6 +649,8 @@
     <string name="text_arrival_notice">到貨通知</string>
     <string name="arrival_notice_hint">若商品在30日內到貨，我們會通過短信通知您</string>
 
+    <string name="data_load_end_hint">已經全部加載完畢</string>
+
 
     <!-- 貨幣種類標志 -->
     <string name="currency_type_sign">$</string>

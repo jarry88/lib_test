@@ -128,7 +128,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         Util.setOnClickListener(view, R.id.btn_post_filter, this);
 
         rvPostList = view.findViewById(R.id.rv_post_list);
-        adapter = new PostListAdapter(R.layout.post_list_item, postItemList);
+        adapter = new PostListAdapter(postItemList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -302,6 +302,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         EasyJSONObject post = (EasyJSONObject) object;
                         PostItem item = new PostItem();
 
+                        item.itemType = PostItem.ITEM_TYPE_NORMAL;
                         item.postId = post.getInt("postId");
                         item.coverImage = post.getString("coverImage");
                         item.postCategory = post.getString("postCategory");
@@ -317,6 +318,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                             item.authorNickname = memberVo.getString("nickName");
                         }
                         item.postFollow = post.getInt("postLike");
+
+                        postItemList.add(item);
+                    }
+
+                    if (!hasMore) {
+                        // 如果全部加載完畢，添加加載完畢的提示
+                        PostItem item = new PostItem();
+                        item.itemType = PostItem.ITEM_TYPE_LOAD_END_HINT;
 
                         postItemList.add(item);
                     }
@@ -365,7 +374,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     loadPostData(currPage);
                 }
             }, 500);
-
         }
     }
 
