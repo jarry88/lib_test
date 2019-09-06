@@ -6,85 +6,15 @@
     android:layout_marginTop="15dp"
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
-    android:paddingTop="10dp"
+    android:paddingTop="15dp"
     android:paddingBottom="15dp"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:orientation="vertical"
     android:background="@drawable/post_list_item_bg">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img_author_avatar"
-                android:layout_width="27dp"
-                android:layout_height="27dp"
-                android:src="@drawable/avatar_female"
-                />
-
-            <TextView
-                android:id="@+id/tv_author_nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="11dp"
-                android:textSize="13sp"
-                android:textColor="#666"
-                android:text="Chloe Ko"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_comment_grey"
-                />
-            <TextView
-                android:id="@+id/tv_comment_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:textSize="14sp"
-                android:textColor="#666"
-                android:text="0"
-                />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
-                android:src="@drawable/icon_thumb_up_grey"
-                />
-            <TextView
-                android:id="@+id/tv_like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:textSize="14sp"
-                android:textColor="#666"
-                android:text="0"
-                />
-        </LinearLayout>
-    </RelativeLayout>
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp">
+        android:layout_height="wrap_content">
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/post_cover_image"
             android:layout_width="0dp"
@@ -173,4 +103,80 @@
             android:layout_weight="1">
         </com.ftofs.twant.widget.TwProgressBar>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp">
+        <LinearLayout
+            android:id="@+id/ll_action_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_comment_grey"
+                />
+            <TextView
+                android:id="@+id/tv_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textSize="14sp"
+                android:textColor="#666"
+                android:text="0"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:src="@drawable/icon_thumb_up_grey"
+                />
+            <TextView
+                android:id="@+id/tv_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textSize="14sp"
+                android:textColor="#666"
+                android:text="0"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/ll_action_container"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_author_avatar"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:src="@drawable/avatar_female"
+                />
+
+            <TextView
+                android:id="@+id/tv_author_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="11dp"
+                android:textSize="13sp"
+                android:textColor="#666"
+                android:text="Chloe KoChloe KoChloe KoChloe KoChloe KoChloe KoChloe Ko"
+                android:singleLine="true"
+                android:ellipsize="end"
+                />
+        </LinearLayout>
+
+
+    </RelativeLayout>
 </LinearLayout>
