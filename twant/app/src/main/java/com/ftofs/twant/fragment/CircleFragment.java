@@ -188,6 +188,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     public void onEBMessage(EBMessage message) {
         // SLog.info("onEBMessage, messageType[%s]", message.messageType);
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_POST) {
+            SLog.info("收到添加貼文消息");
             isPostDataLoaded = false;
         }
     }
@@ -389,6 +390,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             llTabButtonContainer.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    currPage = 1;
                     loadPostData(currPage);
                 }
             }, 500);
