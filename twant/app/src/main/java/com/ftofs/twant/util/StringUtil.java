@@ -342,6 +342,20 @@ public class StringUtil {
         return message.substring(5, message.length() - 1);
     }
 
+    /**
+     * 判斷是否為環信格式的消息文本   比如， txt:"abc"
+     * @param message
+     * @return
+     */
+    public static boolean isEMMessageText(String message) {
+        if (message == null || message.length() == 0) {
+            return false;
+        }
+
+        char lastChar = message.charAt(message.length() - 1);
+        return message.startsWith("txt:\"") && lastChar == '"';
+    }
+
     public static Editable getSpannableMessageText(Context context, String text, int textSize) {
         return translateEmoji(context, getEMMessageText(text), textSize);
     }

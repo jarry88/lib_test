@@ -1359,6 +1359,11 @@ public class Api {
             return;
         }
 
+        // 過濾環信格式，提取內容
+        if (StringUtil.isEMMessageText(content)) {
+            content = StringUtil.getEMMessageText(content);
+        }
+
         EasyJSONObject messageBody = EasyJSONObject.generate(
                 "messageId", messageId,
                 "content", content);
