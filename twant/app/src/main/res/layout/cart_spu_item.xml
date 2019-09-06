@@ -23,11 +23,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp">
-            <ImageView
+            <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/goods_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:src="@drawable/cs_avatar_160"
+                app:riv_border_color="#E5E5E5"
+                app:riv_border_width="1dp"
+                app:riv_corner_radius="1dp"
                 />
             <TextView
                 android:id="@+id/tv_goods_name"
