@@ -513,7 +513,9 @@
     <!--高德-->
     <string name="amap_key">1486f43a90e9fc41b0d555a355aeaaa6</string>
 
-
+    <!-- 友盟推送 -->
+    <string name="umeng_push_app_key">5cefabce0cafb289ab0000a2</string>
+    <string name="umeng_push_message_secret">ac61bf046b5cd3a62387ae4c3687e70a</string>
 
     <string name="text_goods_bill">商品訂單</string>
     <string name="text_bill_all">全部</string>

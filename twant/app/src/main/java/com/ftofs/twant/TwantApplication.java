@@ -192,7 +192,7 @@ public class TwantApplication extends Application {
         // 参数三：渠道名称；
         // 参数四：设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机；
         // 参数五：Push推送业务的secret 填充Umeng Message Secret对应信息（需替换）
-        UMConfigure.init(this, "5cefabce0cafb289ab0000a2", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "ac61bf046b5cd3a62387ae4c3687e70a");
+        UMConfigure.init(this, getString(R.string.umeng_push_app_key), "Umeng", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret));
 
         //获取消息推送代理示例
         PushAgent mPushAgent = PushAgent.getInstance(this);
