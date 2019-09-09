@@ -12,12 +12,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.ftofs.twant.R;
+/*
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
+*/
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,13 +31,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class FBShareActivity extends Activity {
-    UMShareListener umShareListener;
+    // UMShareListener umShareListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fb);
 
+        /*
         umShareListener = new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA share_media) {
@@ -92,11 +95,12 @@ public class FBShareActivity extends Activity {
                 });
             }
         });
+        */
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        // UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }

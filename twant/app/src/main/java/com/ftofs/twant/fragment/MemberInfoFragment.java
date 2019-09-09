@@ -24,11 +24,8 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.InviteAddFriendPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
-import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.io.IOException;
 

@@ -4,6 +4,8 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.umeng.message.PushAgent;
+
 import me.yokeyword.fragmentation.SupportActivity;
 
 /**
@@ -18,6 +20,6 @@ public class BaseActivity extends SupportActivity {
 
         // 全部activity禁用横屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        PushAgent.getInstance(this).onAppStart();
     }
 }
