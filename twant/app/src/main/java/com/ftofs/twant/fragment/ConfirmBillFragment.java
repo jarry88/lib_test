@@ -543,7 +543,16 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         if (isFirstShowSelfFetchInfo) {  // 首次顯示自提信息
             if (mAddrItem != null) {
                 etSelfFetchNickname.setText(mAddrItem.realName);
-                etSelfFetchMobile.setText(mAddrItem.mobPhone);
+
+                // 設置不帶區號的手機號
+                String shortMobile = mAddrItem.mobPhone;
+                if (shortMobile.startsWith(Constant.AREA_CODE_HONGKONG) || shortMobile.startsWith(Constant.AREA_CODE_MACAO)) {
+                    shortMobile = shortMobile.substring(5);
+                } else if (shortMobile.startsWith(Constant.AREA_CODE_MAINLAND)) {
+                    shortMobile = shortMobile.substring(4);
+                }
+
+                etSelfFetchMobile.setText(shortMobile);
 
                 SLog.info("mAddrItem[%s]", mAddrItem.toString());
             }
