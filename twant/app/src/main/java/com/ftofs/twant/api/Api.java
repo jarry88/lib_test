@@ -821,6 +821,11 @@ public class Api {
      */
     public static final String PATH_CHECK_UPDATE = "/app/android";
 
+    /**
+     * 訂單數量查詢
+     */
+    public static final String PATH_ORDER_COUNT = "/member/orders/count";
+
 
     /**
      * 發送Http請求

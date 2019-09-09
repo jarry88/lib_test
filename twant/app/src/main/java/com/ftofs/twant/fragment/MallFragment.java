@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -22,6 +23,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,6 +50,9 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     GoodsSearchResultAdapter goodsAdapter;
     List<GoodsSearchItem> goodsItemList = new ArrayList<>();
 
+    // id: tv_to_be_paid_count, tv_to_be_shipped_count, tv_to_be_received_count, tv_to_be_commented_count;
+    TextView tvToBePaidCount, tvToBeShippedCount, tvToBeReceivedCount, tvToBeCommentedCount;
+
     public static MallFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -66,6 +72,11 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        tvToBePaidCount = view.findViewById(R.id.tv_to_be_paid_count);
+        tvToBeShippedCount = view.findViewById(R.id.tv_to_be_shipped_count);
+        tvToBeReceivedCount = view.findViewById(R.id.tv_to_be_received_count);
+        tvToBeCommentedCount = view.findViewById(R.id.tv_to_be_commented_count);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_my_bill, this);
@@ -118,6 +129,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         rvGuessList.setAdapter(goodsAdapter);
 
         loadGuessData();
+        loadOrderCountData();
     }
 
     @Override
@@ -234,6 +246,78 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
                     SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void loadOrderCountData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            SLog.info("Error!token 為空");
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate("token", token);
+
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_ORDER_COUNT, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                /*
+                new: 待付款
+                pay: 待發貨
+                finish: 已完成
+                send: 待收貨
+                noeval: 待評論
+                 */
+                try {
+                    int newCount = responseObj.getInt("datas.new");
+                    int payCount = responseObj.getInt("datas.pay");
+                    int sendCount = responseObj.getInt("datas.send");
+                    int noevalCount = responseObj.getInt("datas.noeval");
+
+                    if (newCount > 0) {
+                        tvToBePaidCount.setText(String.valueOf(newCount));
+                        tvToBePaidCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvToBePaidCount.setVisibility(View.GONE);
+                    }
+
+                    if (payCount > 0) {
+                        tvToBeShippedCount.setText(String.valueOf(payCount));
+                        tvToBeShippedCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvToBeShippedCount.setVisibility(View.GONE);
+                    }
+
+                    if (sendCount > 0) {
+                        tvToBeReceivedCount.setText(String.valueOf(sendCount));
+                        tvToBeReceivedCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvToBeReceivedCount.setVisibility(View.GONE);
+                    }
+
+                    if (noevalCount > 0) {
+                        tvToBeCommentedCount.setText(String.valueOf(noevalCount));
+                        tvToBeCommentedCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvToBeCommentedCount.setVisibility(View.GONE);
+                    }
+                } catch (Exception e) {
+
                 }
             }
         });

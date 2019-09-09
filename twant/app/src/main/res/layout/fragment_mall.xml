@@ -104,96 +104,182 @@
                 android:paddingTop="19dp"
                 android:paddingBottom="19dp"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:background="#F6F6F6">
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/btn_to_be_paid"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <ImageView
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/ll_to_be_paid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/icon_to_be_paid"
-                        />
+                        android:layout_centerHorizontal="true"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/icon_to_be_paid"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/text_bill_to_be_paid"
+                            android:textColor="@color/tw_black"
+                            android:textSize="14sp"
+                            />
+                    </LinearLayout>
                     <TextView
+                        android:id="@+id/tv_to_be_paid_count"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:layout_gravity="center_horizontal"
-                        android:text="@string/text_bill_to_be_paid"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
+                        android:layout_height="12dp"
+                        android:layout_toRightOf="@id/ll_to_be_paid"
+                        android:layout_marginLeft="-10dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:gravity="center"
+                        android:text="85"
+                        android:textColor="@android:color/white"
+                        android:textSize="8sp"
+                        android:background="@drawable/my_order_indicator_bg"
+                        android:visibility="gone"
                         />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
+
+                <RelativeLayout
                     android:id="@+id/btn_to_be_shipped"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <ImageView
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/ll_to_be_shipped"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/icon_to_be_sent"
-                        />
+                        android:layout_centerHorizontal="true"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/icon_to_be_sent"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/text_bill_to_be_shipped"
+                            android:textColor="@color/tw_black"
+                            android:textSize="14sp"
+                            />
+                    </LinearLayout>
                     <TextView
+                        android:id="@+id/tv_to_be_shipped_count"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:layout_gravity="center_horizontal"
-                        android:text="@string/text_bill_to_be_shipped"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
+                        android:layout_height="12dp"
+                        android:layout_toRightOf="@id/ll_to_be_shipped"
+                        android:layout_marginLeft="-10dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:gravity="center"
+                        android:text="85"
+                        android:textColor="@android:color/white"
+                        android:textSize="8sp"
+                        android:background="@drawable/my_order_indicator_bg"
+                        android:visibility="gone"
                         />
-                </LinearLayout>
-                <LinearLayout
+                </RelativeLayout>
+                <RelativeLayout
                     android:id="@+id/btn_to_be_received"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <ImageView
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/ll_to_be_received"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/icon_to_be_received"
-                        />
+                        android:layout_centerHorizontal="true"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/icon_to_be_received"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/text_bill_to_be_received"
+                            android:textColor="@color/tw_black"
+                            android:textSize="14sp"
+                            />
+                    </LinearLayout>
                     <TextView
+                        android:id="@+id/tv_to_be_received_count"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:layout_gravity="center_horizontal"
-                        android:text="@string/text_bill_to_be_received"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
+                        android:layout_height="12dp"
+                        android:layout_toRightOf="@id/ll_to_be_received"
+                        android:layout_marginLeft="-10dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:gravity="center"
+                        android:text="85"
+                        android:textColor="@android:color/white"
+                        android:textSize="8sp"
+                        android:background="@drawable/my_order_indicator_bg"
+                        android:visibility="gone"
                         />
-                </LinearLayout>
-                <LinearLayout
+                </RelativeLayout>
+                <RelativeLayout
                     android:id="@+id/btn_to_be_commented"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <ImageView
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/ll_to_be_commented"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/icon_to_be_commented"
-                        />
+                        android:layout_centerHorizontal="true"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/icon_to_be_commented"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/text_bill_to_be_commented"
+                            android:textColor="@color/tw_black"
+                            android:textSize="14sp"
+                            />
+                    </LinearLayout>
                     <TextView
+                        android:id="@+id/tv_to_be_commented_count"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:layout_gravity="center_horizontal"
-                        android:text="@string/text_bill_to_be_commented"
-                        android:textColor="@color/tw_black"
-                        android:textSize="14sp"
+                        android:layout_height="12dp"
+                        android:layout_toRightOf="@id/ll_to_be_commented"
+                        android:layout_marginLeft="-10dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:gravity="center"
+                        android:text="85"
+                        android:textColor="@android:color/white"
+                        android:textSize="8sp"
+                        android:background="@drawable/my_order_indicator_bg"
+                        android:visibility="gone"
                         />
-                </LinearLayout>
+                </RelativeLayout>
                 <LinearLayout
                     android:id="@+id/icon_return_or_exchange"
                     android:layout_width="0dp"
