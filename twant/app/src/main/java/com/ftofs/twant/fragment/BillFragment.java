@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -60,6 +61,12 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     int twBlack;
     boolean needRefresh;
 
+    TextView tvAllCount;
+    TextView tvToBePaidCount;
+    TextView tvToBeShippedCount;
+    TextView tvToBeReceivedCount;
+    TextView tvToBeCommentedCount;
+
     public static BillFragment newInstance(int billStatus) {
         Bundle args = new Bundle();
 
@@ -89,6 +96,12 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
+
+        tvAllCount = view.findViewById(R.id.tv_all_count);
+        tvToBePaidCount = view.findViewById(R.id.tv_to_be_paid_count);
+        tvToBeShippedCount = view.findViewById(R.id.tv_to_be_shipped_count);
+        tvToBeReceivedCount = view.findViewById(R.id.tv_to_be_received_count);
+        tvToBeCommentedCount = view.findViewById(R.id.tv_to_be_commented_count);
 
         Util.setOnClickListener(view, R.id.tv_fragment_title, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -134,6 +147,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         tvOrderStatusArr[billStatus].setStatus(Constant.STATUS_SELECTED);
         handleOrderStatusSwitch(orderStatusIds[billStatus]);
         loadBillData(billStatus);
+        loadOrderCountData();
     }
 
     @Override
@@ -189,6 +203,87 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         billStatus = index;
+    }
+
+    private void loadOrderCountData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            SLog.info("Error!token 為空");
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate("token", token);
+
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_ORDER_COUNT, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                /*
+                all: 全部
+                new: 待付款
+                pay: 待發貨
+                finish: 已完成
+                send: 待收貨
+                noeval: 待評論
+                 */
+                try {
+                    int allCount = responseObj.getInt("datas.all");
+                    int newCount = responseObj.getInt("datas.new");
+                    int payCount = responseObj.getInt("datas.pay");
+                    int sendCount = responseObj.getInt("datas.send");
+                    int noevalCount = responseObj.getInt("datas.noeval");
+
+                    if (allCount > 0) {
+                        tvAllCount.setText(String.valueOf(allCount));
+                        tvAllCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvAllCount.setVisibility(View.GONE);
+                    }
+
+                    if (newCount > 0) {
+                        tvToBePaidCount.setText(String.valueOf(newCount));
+                        tvToBePaidCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvToBePaidCount.setVisibility(View.GONE);
+                    }
+
+                    if (payCount > 0) {
+                        tvToBeShippedCount.setText(String.valueOf(payCount));
+                        tvToBeShippedCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvToBeShippedCount.setVisibility(View.GONE);
+                    }
+
+                    if (sendCount > 0) {
+                        tvToBeReceivedCount.setText(String.valueOf(sendCount));
+                        tvToBeReceivedCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvToBeReceivedCount.setVisibility(View.GONE);
+                    }
+
+                    if (noevalCount > 0) {
+                        tvToBeCommentedCount.setText(String.valueOf(noevalCount));
+                        tvToBeCommentedCount.setVisibility(View.VISIBLE);
+                    } else {
+                        tvToBeCommentedCount.setVisibility(View.GONE);
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 
     private void loadBillData(int billStatus) {
@@ -325,6 +420,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         super.onSupportVisible();
 
         if (needRefresh) {
+            loadOrderCountData();
             SLog.info("onSupportVisible::billStatus[%d]", billStatus);
             loadBillData(billStatus);
             needRefresh = false;

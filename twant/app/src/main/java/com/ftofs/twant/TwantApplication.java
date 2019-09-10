@@ -186,6 +186,10 @@ public class TwantApplication extends Application {
         // or load with glide
         BigImageViewer.initialize(GlideImageLoader.with(this));
 
+
+        if (Config.DEVELOPER_MODE) {
+            UMConfigure.setLogEnabled(true);
+        }
         // 在此处调用基础组件包提供的初始化函数 相应信息可在应用管理 -> 应用信息 中找到 http://message.umeng.com/list/apps
         // 参数一：当前上下文context；
         // 参数二：应用申请的Appkey（需替换）；
@@ -196,6 +200,7 @@ public class TwantApplication extends Application {
 
         //获取消息推送代理示例
         PushAgent mPushAgent = PushAgent.getInstance(this);
+        // mPushAgent.setNotificaitonOnForeground(false); // 如果应用在前台，您可以设置不显示通知栏消息。默认情况下，应用在前台是显示通知的。此方法请在mPushAgent.register方法之前调用。
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
             @Override
@@ -242,7 +247,7 @@ public class TwantApplication extends Application {
         // 为了防止环信SDK被初始化2次，加此判断会保证SDK被初始化1次
         // 默认的APP会在以包名为默认的process name下运行，如果查到的process name不是APP的process name就立即返回
         if (processAppName == null ||!processAppName.equalsIgnoreCase(getPackageName())) {
-            SLog.info("Warning!enter the service process!");
+            SLog.info("Warning!enter the service process!processAppName[%s]", processAppName);
 
             // 则此application::onCreate 是被service 调用的，直接返回
             return;

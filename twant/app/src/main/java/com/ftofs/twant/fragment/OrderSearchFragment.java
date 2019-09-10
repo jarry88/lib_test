@@ -65,6 +65,8 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Util.setOnClickListener(view, R.id.btn_back, this);
+
         EditText etKeyword = view.findViewById(R.id.et_keyword);
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

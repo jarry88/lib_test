@@ -59,82 +59,192 @@
     <LinearLayout
         android:id="@+id/btn_bill_category"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tool_bar"
         android:background="@drawable/bottom_separator_box"
         android:orientation="horizontal">
-        <com.ftofs.twant.widget.TwTabButton
-            android:id="@+id/btn_bill_all"
+
+        <RelativeLayout
+            android:id="@+id/btn_bill_all_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:gravity="center"
-            android:text="@string/text_bill_all"
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            app:ttb_stroke_width="2dp"
-            app:ttb_use_cap="true"
-            />
-        <com.ftofs.twant.widget.TwTabButton
-            android:id="@+id/btn_bill_to_be_paid"
+            android:layout_weight="1">
+            <com.ftofs.twant.widget.TwTabButton
+                android:id="@+id/btn_bill_all"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/text_bill_all"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                app:ttb_stroke_width="2dp"
+                app:ttb_use_cap="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_all_count"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_toRightOf="@id/btn_bill_all"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:gravity="center"
+                android:text="85"
+                android:textColor="@android:color/white"
+                android:textSize="8sp"
+                android:background="@drawable/my_order_indicator_bg"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_bill_to_be_paid_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:gravity="center"
-            android:text="@string/text_bill_to_be_paid"
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            app:ttb_stroke_width="2dp"
-            app:ttb_use_cap="true"
-            />
-        <com.ftofs.twant.widget.TwTabButton
-            android:id="@+id/btn_bill_to_be_shipped"
+            android:layout_weight="1">
+            <com.ftofs.twant.widget.TwTabButton
+                android:id="@+id/btn_bill_to_be_paid"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/text_bill_to_be_paid"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                app:ttb_stroke_width="2dp"
+                app:ttb_use_cap="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_to_be_paid_count"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_toRightOf="@id/btn_bill_to_be_paid"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:gravity="center"
+                android:text="85"
+                android:textColor="@android:color/white"
+                android:textSize="8sp"
+                android:background="@drawable/my_order_indicator_bg"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_bill_to_be_shipped_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:gravity="center"
-            android:text="@string/text_bill_to_be_shipped"
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            app:ttb_stroke_width="2dp"
-            app:ttb_use_cap="true"
-            />
-        <com.ftofs.twant.widget.TwTabButton
-            android:id="@+id/btn_bill_to_be_received"
+            android:layout_weight="1">
+            <com.ftofs.twant.widget.TwTabButton
+                android:id="@+id/btn_bill_to_be_shipped"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/text_bill_to_be_shipped"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                app:ttb_stroke_width="2dp"
+                app:ttb_use_cap="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_to_be_shipped_count"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_toRightOf="@id/btn_bill_to_be_shipped"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:gravity="center"
+                android:text="85"
+                android:textColor="@android:color/white"
+                android:textSize="8sp"
+                android:background="@drawable/my_order_indicator_bg"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_bill_to_be_received_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:gravity="center"
-            android:text="@string/text_bill_to_be_received"
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            app:ttb_stroke_width="2dp"
-            app:ttb_use_cap="true"
-            />
-        <com.ftofs.twant.widget.TwTabButton
-            android:id="@+id/btn_bill_to_be_commented"
+            android:layout_weight="1">
+            <com.ftofs.twant.widget.TwTabButton
+                android:id="@+id/btn_bill_to_be_received"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/text_bill_to_be_received"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                app:ttb_stroke_width="2dp"
+                app:ttb_use_cap="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_to_be_received_count"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_toRightOf="@id/btn_bill_to_be_received"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:gravity="center"
+                android:text="85"
+                android:textColor="@android:color/white"
+                android:textSize="8sp"
+                android:background="@drawable/my_order_indicator_bg"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_bill_to_be_commented_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:gravity="center"
-            android:text="@string/text_bill_to_be_commented"
-            android:textSize="16sp"
-            android:textColor="@color/tw_black"
-            app:ttb_stroke_width="2dp"
-            app:ttb_use_cap="true"
-            />
+            android:layout_weight="1">
+            <com.ftofs.twant.widget.TwTabButton
+                android:id="@+id/btn_bill_to_be_commented"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@string/text_bill_to_be_commented"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                app:ttb_stroke_width="2dp"
+                app:ttb_use_cap="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_to_be_commented_count"
+                android:layout_width="wrap_content"
+                android:layout_height="12dp"
+                android:layout_toRightOf="@id/btn_bill_to_be_commented"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:gravity="center"
+                android:text="85"
+                android:textColor="@android:color/white"
+                android:textSize="8sp"
+                android:background="@drawable/my_order_indicator_bg"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
