@@ -63,7 +63,7 @@ public class SqliteUtil {
         ///////////////////////////
         // 登錄環信
         ///////////////////////////
-        imLogin();
+        // imLogin();  貌似不要在這里調用環信登錄，不然會與友盟的:channel進程有沖突
 
 
         return true;
