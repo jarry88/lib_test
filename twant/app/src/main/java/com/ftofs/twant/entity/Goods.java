@@ -12,9 +12,9 @@ public class Goods implements MultiItemEntity {
      */
     public static final int ITEM_TYPE_NORMAL = 1;
     /**
-     * 為了防止底部工具欄遮擋的Item
+     * 數據全部加載完成的提示
      */
-    public static final int ITEM_TYPE_PADDING = 2;
+    public static final int ITEM_TYPE_LOAD_END_HINT = 2;
 
     public Goods(int id, String imageUrl, String name, String jingle, double price) {
         itemType = ITEM_TYPE_NORMAL;
@@ -27,7 +27,7 @@ public class Goods implements MultiItemEntity {
     }
 
     public Goods() {
-        itemType = ITEM_TYPE_PADDING;
+        itemType = ITEM_TYPE_LOAD_END_HINT;
     }
 
     private int itemType;

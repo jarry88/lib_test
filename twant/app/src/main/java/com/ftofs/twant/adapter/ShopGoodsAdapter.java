@@ -35,7 +35,7 @@ public class ShopGoodsAdapter extends BaseMultiItemQuickAdapter<Goods, BaseViewH
         this.context = context;
 
         addItemType(Goods.ITEM_TYPE_NORMAL, R.layout.shop_goods_item);
-        addItemType(Goods.ITEM_TYPE_PADDING, R.layout.bottom_toolbar_padding);
+        addItemType(Goods.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
     }
 
     @Override
@@ -47,7 +47,9 @@ public class ShopGoodsAdapter extends BaseMultiItemQuickAdapter<Goods, BaseViewH
             helper.setText(R.id.tv_goods_name, goods.name);
             helper.setText(R.id.tv_goods_jingle, goods.jingle);
             helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context, (float) goods.price, 1));
+        } else if (itemViewType == Goods.ITEM_TYPE_LOAD_END_HINT){
+            // 顯示即可，不用特別處理
         }
-
     }
 }
+

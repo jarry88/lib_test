@@ -241,6 +241,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
+                adapter.loadMoreFail();
             }
 
             @Override

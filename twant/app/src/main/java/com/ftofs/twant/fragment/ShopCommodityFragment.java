@@ -16,6 +16,7 @@ import com.ftofs.twant.adapter.ShopGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.Goods;
+import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -31,13 +32,11 @@ import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-
-
 /**
  * 店鋪商品Fragment
  * @author zwm
  */
-public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener {
+public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
     ShopMainFragment parentFragment;
 
     RecyclerView rvGoodsList;
@@ -49,7 +48,12 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     boolean isStandalone;
     int storeId;
     EasyJSONObject paramsOriginal; // 傳進來的參數
+    EasyJSONObject mExtra;
     boolean priceAsc;
+
+    // 當前加載第幾頁
+    int currPage = 0;
+    boolean hasMore;
 
 
     /**
@@ -116,15 +120,22 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 imgPriceOrderIndicator.setVisibility(View.GONE);
                 if (id == R.id.btn_order_general) { // 綜合
                     SLog.info("btn_order_general");
-                    loadStoreGoods(paramsOriginal, null);
+                    goodsList.clear();
+                    mExtra = null;
+                    currPage = 0;
+                    loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_sale) { // 銷量
                     SLog.info("btn_order_sale");
-                    EasyJSONObject extra = EasyJSONObject.generate("sort", "sale_desc");
-                    loadStoreGoods(paramsOriginal, extra);
+                    goodsList.clear();
+                    currPage = 0;
+                    mExtra = EasyJSONObject.generate("sort", "sale_desc");
+                    loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_new) { // 上新
                     SLog.info("btn_order_new");
-                    EasyJSONObject extra = EasyJSONObject.generate("sort", "new_desc");
-                    loadStoreGoods(paramsOriginal, extra);
+                    goodsList.clear();
+                    currPage = 0;
+                    mExtra = EasyJSONObject.generate("sort", "new_desc");
+                    loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_price) { // 價格
                     if (isRepeat) {
                         // 如果是再次點擊的話，切換排序順序
@@ -144,8 +155,10 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     imgPriceOrderIndicator.setVisibility(View.VISIBLE);
 
                     SLog.info("btn_order_price");
-                    EasyJSONObject extra = EasyJSONObject.generate("sort", sort);
-                    loadStoreGoods(paramsOriginal, extra);
+                    goodsList.clear();
+                    currPage = 0;
+                    mExtra = EasyJSONObject.generate("sort", sort);
+                    loadStoreGoods(paramsOriginal, mExtra, 1);
                 }
             }
         };
@@ -165,7 +178,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             @Override
             public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
                 Goods goods = goodsList.get(position);
-                if (goods.getItemType() == Goods.ITEM_TYPE_PADDING) {
+                if (goods.getItemType() == Goods.ITEM_TYPE_LOAD_END_HINT) {
                     // padding占滿整個列的寬度
                     return 2;
                 } else {
@@ -178,12 +191,16 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Goods goods = goodsList.get(position);
                 // padding忽略點擊
-                if (goods.getItemType() == Goods.ITEM_TYPE_PADDING) {
+                if (goods.getItemType() == Goods.ITEM_TYPE_LOAD_END_HINT) {
                     return;
                 }
                 Util.startFragment(GoodsDetailFragment.newInstance(goods.id, 0));
             }
         });
+        adapter.setEnableLoadMore(true);
+        adapter.setOnLoadMoreListener(this, rvGoodsList);
+
+
         rvGoodsList.setAdapter(adapter);
 
         if (paramsOriginal.exists("sort")) {
@@ -200,7 +217,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 simpleTabManager.performClick(1);
             }
         } else {
-            loadStoreGoods(paramsOriginal, null);
+            loadStoreGoods(paramsOriginal, null, 1);
         }
     }
 
@@ -208,8 +225,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
      * 加載店鋪商品
      * @param paramsOriginal
      * @param extra 額外的搜索參數
+     * @param page 第幾頁
      */
-    private void loadStoreGoods(EasyJSONObject paramsOriginal, EasyJSONObject extra) {
+    private void loadStoreGoods(EasyJSONObject paramsOriginal, EasyJSONObject extra, int page) {
         try {
             EasyJSONObject params = EasyJSONObject.generate();
             for (Map.Entry<String, Object> param : paramsOriginal.entrySet()) {
@@ -223,11 +241,14 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 }
             }
 
+            params.set("page", page);
+
             SLog.info("店鋪內商品搜索,params[%s]", params.toString());
             Api.getUI(Api.PATH_SEARCH_GOODS_IN_STORE, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
+                    adapter.loadMoreFail();
                 }
 
                 @Override
@@ -236,11 +257,18 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     try {
                         EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            adapter.loadMoreFail();
                             return;
                         }
 
+                        hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                        SLog.info("hasMore[%s]", hasMore);
+                        if (!hasMore) {
+                            adapter.loadMoreEnd();
+                            adapter.setEnableLoadMore(false);
+                        }
+
                         EasyJSONArray goodsArray = responseObj.getArray("datas.goodsCommonList");
-                        goodsList.clear();
                         for (Object object : goodsArray) {
                             EasyJSONObject goodsObject = (EasyJSONObject) object;
 
@@ -257,9 +285,17 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
                             goodsList.add(goods);
                         }
-                        // 添加一個防止底部工具欄擋住的Item
-                        goodsList.add(new Goods());
+
+                        if (!hasMore) {
+                            // 如果全部加載完畢，添加加載完畢的提示
+                            Goods goods = new Goods();
+                            goodsList.add(goods);
+                        }
+
                         adapter.setNewData(goodsList);
+                        adapter.loadMoreComplete();
+
+                        currPage++;
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }
@@ -291,6 +327,17 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         }
 
         return true;
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        SLog.info("onLoadMoreRequested");
+
+        if (!hasMore) {
+            adapter.setEnableLoadMore(false);
+            return;
+        }
+        loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
     }
 }
 
