@@ -77,6 +77,12 @@
                     android:layout_height="wrap_content"
                     android:text="是否有定位權限"
                     />
+                <Button
+                    android:id="@+id/btn_list_app_process"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="列出應用進程"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -1,5 +1,8 @@
 package com.ftofs.twant.fragment;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -20,12 +24,21 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.yanzhenjie.permission.runtime.Permission;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 
 /**
  * 顯示Debug信息的Fragment
  * @author zwm
  */
 public class DebugFragment extends BaseFragment implements View.OnClickListener {
+    private static class ProcessInfo {
+        public int id;
+        public String name;
+    }
+
     public static DebugFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -58,6 +71,7 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
         Util.setOnClickListener(view, R.id.btn_has_storage_permission, this);
         Util.setOnClickListener(view, R.id.btn_has_camera_permission, this);
         Util.setOnClickListener(view, R.id.btn_has_location_permission, this);
+        Util.setOnClickListener(view, R.id.btn_list_app_process, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
     }
 
@@ -84,6 +98,15 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
             } else {
                 ToastUtil.error(_mActivity, "沒權限");
             }
+        } else if (id == R.id.btn_list_app_process) {
+            List<ProcessInfo> processInfoList = getAppProcess();
+
+            StringBuilder sb = new StringBuilder();
+            for (ProcessInfo processInfo : processInfoList) {
+                sb.append(String.format("id[%d], name[%s]\n", processInfo.id, processInfo.name));
+            }
+
+            Toast.makeText(_mActivity, sb.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -92,5 +115,29 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
         SLog.info("onBackPressedSupport");
         pop();
         return true;
+    }
+
+
+    /**
+     * 獲取應用的進程列表
+     * @return
+     */
+    private List<ProcessInfo> getAppProcess() {
+        List<ProcessInfo> processInfoList = new ArrayList<>();
+        ActivityManager am = (ActivityManager) _mActivity.getSystemService(Context.ACTIVITY_SERVICE);
+        List l = am.getRunningAppProcesses();
+        Iterator i = l.iterator();
+        while (i.hasNext()) {
+            ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) (i.next());
+            if (info.processName.startsWith("com.ftofs")) {
+                ProcessInfo processInfo = new ProcessInfo();
+                processInfo.id = info.pid;
+                processInfo.name = info.processName;
+
+                processInfoList.add(processInfo);
+            }
+        }
+        SLog.info("PROCESS COUNT[%d]", processInfoList.size());
+        return processInfoList;
     }
 }

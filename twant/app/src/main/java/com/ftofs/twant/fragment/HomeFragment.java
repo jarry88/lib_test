@@ -271,7 +271,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
-                SLog.info("responseStr[%s]", responseStr);
+                // SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
                 try {
@@ -333,10 +333,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
-                    SLog.info("PATH_NEW_ARRIVALS, responseStr[%s]", responseStr);
+                    // SLog.info("PATH_NEW_ARRIVALS, responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                    SLog.info("responseObj[%s]", responseObj);
+                    // SLog.info("responseObj[%s]", responseObj);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         SLog.info("Error!responseObj is invalid");
                         return;

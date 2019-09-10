@@ -883,7 +883,7 @@ public class Api {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     int statusCode = response.code();
-                    SLog.info("statusCode[%d]", statusCode);
+                    // SLog.info("statusCode[%d]", statusCode);
 
                     Handler handler = new Handler(Looper.getMainLooper());
                     uiCallback.setOnResponse(call, response.body().string());
@@ -1432,7 +1432,7 @@ public class Api {
         if (!Config.DEVELOPER_MODE) {
             return new OkHttpClient();
         }
-        SLog.info("如果是開發模式，設置OkHttpClient忽略ssl驗證");
+        // SLog.info("如果是開發模式，設置OkHttpClient忽略ssl驗證");
         // 如果是開發模式，設置OkHttpClient忽略ssl驗證
         X509TrustManager xtm = new X509TrustManager() {
             @Override

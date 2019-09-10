@@ -2,6 +2,7 @@ package com.ftofs.twant;
 
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.Notification;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.StrictMode;
@@ -41,6 +42,9 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import org.litepal.LitePal;
@@ -82,7 +86,10 @@ public class TwantApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        int pid = android.os.Process.myPid();
 
+        String processAppName = getAppName(pid);
+        SLog.info("TwantApplication::onCreate(), pid[%d], processName[%s]", pid, processAppName);
         applicationContext = getApplicationContext();
 
         //Bugly异常处理
@@ -187,32 +194,7 @@ public class TwantApplication extends Application {
         BigImageViewer.initialize(GlideImageLoader.with(this));
 
 
-        if (Config.DEVELOPER_MODE) {
-            UMConfigure.setLogEnabled(true);
-        }
-        // 在此处调用基础组件包提供的初始化函数 相应信息可在应用管理 -> 应用信息 中找到 http://message.umeng.com/list/apps
-        // 参数一：当前上下文context；
-        // 参数二：应用申请的Appkey（需替换）；
-        // 参数三：渠道名称；
-        // 参数四：设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机；
-        // 参数五：Push推送业务的secret 填充Umeng Message Secret对应信息（需替换）
-        UMConfigure.init(this, getString(R.string.umeng_push_app_key), "Umeng", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret));
-
-        //获取消息推送代理示例
-        PushAgent mPushAgent = PushAgent.getInstance(this);
-        // mPushAgent.setNotificaitonOnForeground(false); // 如果应用在前台，您可以设置不显示通知栏消息。默认情况下，应用在前台是显示通知的。此方法请在mPushAgent.register方法之前调用。
-        //注册推送服务，每次调用register方法都会回调该接口
-        mPushAgent.register(new IUmengRegisterCallback() {
-            @Override
-            public void onSuccess(String deviceToken) {
-                //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
-                SLog.info("注册成功：deviceToken：-------->  " + deviceToken);
-            }
-            @Override
-            public void onFailure(String s, String s1) {
-                SLog.info("注册失败：-------->  " + "s:" + s + ",s1:" + s1);
-            }
-        });
+        initUmeng();
 
         // 將應用注冊到微信
         regToWx();
@@ -234,6 +216,112 @@ public class TwantApplication extends Application {
 
     public static ExecutorService getThreadPool() {
         return executorService;
+    }
+
+
+    private void initUmeng() {
+        int pid = android.os.Process.myPid();
+
+        String processAppName = getAppName(pid);
+        SLog.info("Umeng init processName[%s], pid[%d]", processAppName, pid);
+        // mPushAgent.register方法应该在主进程和channel进程中都被调用
+        if (processAppName == null ||!processAppName.equalsIgnoreCase(getPackageName())) {
+            // SLog.info("Warning!UMENG enter the service process!processAppName[%s]", processAppName);
+
+            // 则此application::onCreate 是被service 调用的，直接返回
+            // return;
+        }
+
+
+        if (Config.DEVELOPER_MODE) {
+            UMConfigure.setLogEnabled(true);
+        }
+        // 在此处调用基础组件包提供的初始化函数 相应信息可在应用管理 -> 应用信息 中找到 http://message.umeng.com/list/apps
+        // 参数一：当前上下文context；
+        // 参数二：应用申请的Appkey（需替换）；
+        // 参数三：渠道名称；
+        // 参数四：设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机；
+        // 参数五：Push推送业务的secret 填充Umeng Message Secret对应信息（需替换）
+        UMConfigure.init(this, getString(R.string.umeng_push_app_key), "Umeng", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret));
+
+        //获取消息推送代理示例
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+        // mPushAgent.setNotificaitonOnForeground(false); // 如果应用在前台，您可以设置不显示通知栏消息。默认情况下，应用在前台是显示通知的。此方法请在mPushAgent.register方法之前调用。
+
+        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+
+            /**
+             * 通知的回调方法（通知送达时会回调）
+             */
+            @Override
+            public void dealWithNotificationMessage(Context context, UMessage msg) {
+                //调用super，会展示通知，不调用super，则不展示通知。
+                super.dealWithNotificationMessage(context, msg);
+            }
+
+            /**
+             * 自定义消息的回调方法
+             */
+            @Override
+            public void dealWithCustomMessage(final Context context, final UMessage msg) {
+
+
+            }
+
+            /**
+             * 自定义通知栏样式的回调方法
+             */
+            @Override
+            public Notification getNotification(Context context, UMessage uMessage) {
+                return super.getNotification(context, uMessage);
+            }
+        };
+        mPushAgent.setMessageHandler(messageHandler);
+
+
+        /**
+         * 自定义行为的回调处理，参考文档：高级功能-通知的展示及提醒-自定义通知打开动作
+         * UmengNotificationClickHandler是在BroadcastReceiver中被调用，故
+         * 如果需启动Activity，需添加Intent.FLAG_ACTIVITY_NEW_TASK
+         * */
+        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+
+            @Override
+            public void launchApp(Context context, UMessage msg) {
+                super.launchApp(context, msg);
+            }
+
+            @Override
+            public void openUrl(Context context, UMessage msg) {
+                super.openUrl(context, msg);
+            }
+
+            @Override
+            public void openActivity(Context context, UMessage msg) {
+                super.openActivity(context, msg);
+            }
+
+            @Override
+            public void dealWithCustomAction(Context context, UMessage msg) {
+                SLog.info("dealWithCustomAction, message[%s]", msg.custom);
+            }
+        };
+        //使用自定义的NotificationHandler
+        mPushAgent.setNotificationClickHandler(notificationClickHandler);
+
+
+        //注册推送服务，每次调用register方法都会回调该接口
+        mPushAgent.register(new IUmengRegisterCallback() {
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
+                SLog.info("注册成功：deviceToken：-------->  " + deviceToken);
+            }
+            @Override
+            public void onFailure(String s, String s1) {
+                SLog.info("注册失败：-------->  " + "s:" + s + ",s1:" + s1);
+            }
+        });
     }
 
     /**
