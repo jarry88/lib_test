@@ -74,4 +74,9 @@ public enum PopupType {
      * 篩選貼文
      */
     POST_FILTER,
+
+    /**
+     * 選擇優惠券
+     */
+    SELECT_VOUCHER,
 }

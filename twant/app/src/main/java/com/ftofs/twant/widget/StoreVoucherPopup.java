@@ -55,7 +55,7 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.store_voucher_popup;
+        return R.layout.voucher_popup;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
 
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
 
-        RecyclerView rvStoreVoucherList = findViewById(R.id.rv_store_voucher_list);
+        RecyclerView rvStoreVoucherList = findViewById(R.id.rv_voucher_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvStoreVoucherList.setLayoutManager(layoutManager);
         adapter = new GoodsVoucherListAdapter(R.layout.store_voucher_item, storeVoucherList);

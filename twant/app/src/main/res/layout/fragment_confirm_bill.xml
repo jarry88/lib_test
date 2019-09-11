@@ -264,17 +264,15 @@
         android:id="@+id/rv_store_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="#F3F3F3">
     </android.support.v7.widget.RecyclerView>
 
     <!-- 底部工具欄 -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/top_separator_box_white">
+        android:layout_height="60dp"
+        android:background="@android:color/white">
         <TextView
             android:id="@+id/tv_item_count"
             android:layout_width="wrap_content"
@@ -298,16 +296,15 @@
             android:id="@+id/btn_commit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             android:paddingTop="13dp"
             android:paddingBottom="13dp"
             android:paddingLeft="26dp"
             android:paddingRight="26dp"
             android:text="@string/text_commit_bill"
-            android:textColor="#fff"
+            android:textColor="@android:color/white"
             android:textSize="14sp"
             android:background="@drawable/narrow_red_button"
             />

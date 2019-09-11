@@ -1,253 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:paddingLeft="@dimen/toolbar_margin_left"
+    android:paddingRight="@dimen/toolbar_margin_right"
+    android:paddingBottom="15dp"
+    android:background="@android:color/white"
     android:orientation="vertical">
-    <!-- 訂單主要信息 -->
-    <LinearLayout
-        android:id="@+id/ll_bill_main_info"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="15dp"
-        android:orientation="vertical"
-        android:background="#fff">
 
-        <LinearLayout
-            android:id="@+id/ll_store_info_container"
+    <LinearLayout
+        android:id="@+id/ll_store_info_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/icon_shop"
+            />
+
+        <TextView
+            android:id="@+id/tv_store_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginLeft="7dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/icon_shop"
-                />
+            android:layout_marginLeft="4dp"
+            android:layout_gravity="center_vertical"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
 
-            <TextView
-                android:id="@+id/tv_store_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_gravity="center_vertical"
-                android:text=""
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/expand_button"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_sku_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    </LinearLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/expand_button"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/ll_sku_item_container"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="#F7F7F7">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="@string/text_leave_message"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
+
+        <EditText
+            android:id="@+id/et_leave_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
+            android:layout_marginLeft="15dp"
+            android:hint="@string/text_leave_message_hint"
+            android:textSize="13sp"
+            android:textColor="@color/tw_black"
+            android:background="@null"
+            />
+    </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="15dp"
-            android:background="#e8e8e8"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@drawable/border_type_f">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_coupon"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
             />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/btn_use_voucher"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/text_leave_message"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <EditText
-                android:id="@+id/et_leave_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_gravity="center_vertical"
-                android:hint="@string/text_leave_message_hint"
-                android:textSize="13sp"
-                android:textColor="@color/tw_black"
-                android:background="@null"
-                />
-        </LinearLayout>
-    </LinearLayout>
-    <!-- END OF 訂單主要信息 -->
-
-    <!-- 附加信息 -->
-    <LinearLayout
-        android:id="@+id/ll_extra_info_1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_bill_main_info"
-        android:paddingLeft="@dimen/toolbar_margin_left"
-        android:paddingRight="@dimen/toolbar_margin_right"
-        android:background="#fff"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/btn_receipt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="@drawable/bottom_separator_box">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_receipt"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <ImageView
-                android:id="@+id/img_expand_receipt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/expand_button"
-                />
-
-            <!-- paddingLeft 30dp 是為了擴大點擊范圍 -->
-            <TextView
-                android:id="@+id/tv_receipt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/img_expand_receipt"
-                android:paddingLeft="30dp"
-                android:text="不開單據"
-                android:textColor="@color/tw_black"
-                android:textSize="13sp"
-                />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="@drawable/bottom_separator_box">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_coupon"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <ImageView
-                android:id="@+id/img_expand_coupon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/expand_button"
-                />
-
-            <TextView
+                android:id="@+id/tv_store_voucher_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/img_expand_coupon"
-                android:text="可用0張"
+                android:text=""
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 />
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/img_expand_coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/expand_button"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:background="@drawable/bottom_separator_box">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_shipping_time"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
+            android:layout_centerVertical="true"
+            android:text="@string/text_store_freight"
+            android:textSize="14sp"
+            android:textColor="@color/tw_dark_grey"
+            />
 
-            <LinearLayout
-                android:id="@+id/btn_change_shipping_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_shipping_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="工作日、雙休日、節假日均可送貨"
-                    android:textColor="@color/tw_black"
-                    android:textSize="13sp"
-                    />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/expand_button"
-                    />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_freight_amount"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp">
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="$8.00"
+            android:textColor="@color/tw_dark_grey"
+            android:textSize="14sp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_store_discount"
+            android:textSize="14sp"
+            android:textColor="@color/tw_dark_grey"
+            />
+
+        <TextView
+            android:id="@+id/tv_store_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="$8.00"
+            android:textColor="@color/tw_dark_grey"
+            android:textSize="14sp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_store_freight"
+                android:text="共1件，小計："
                 android:textSize="14sp"
-                android:textColor="@color/tw_black"
+                android:textColor="@color/tw_dark_grey"
                 />
 
             <TextView
-                android:id="@+id/tv_freight_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:text="$8.00"
-                android:textColor="@color/tw_black"
-                android:textSize="13sp"
+                android:text="$179.00"
+                android:textSize="16sp"
+                android:textColor="@color/tw_red"
                 />
-        </RelativeLayout>
-    </LinearLayout>
-    <!-- END OF 附加信息 -->
-</android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

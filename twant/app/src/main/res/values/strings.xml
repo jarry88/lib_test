@@ -245,6 +245,7 @@
     <string name="text_balance_not_enough">余額不足</string>
 
     <string name="text_receive_now">立即領取</string>
+    <string name="text_use_now">立即使用</string>
     <string name="text_been_received">已領取</string>
     <string name="text_valid_time">有效期</string>
     <string name="text_participate_activity">參與活動</string>
@@ -321,14 +322,16 @@
     <string name="text_confirm_bill">確認訂單</string>
     <string name="text_add_shipping_address">新增收貨地址</string>
     <string name="text_leave_message">留言</string>
-    <string name="text_leave_message_hint">選填, 給商家留言  ( 100字以內 )</string>
+    <string name="text_leave_message_hint">給商家留言，100字以內（選填）</string>
     <string name="text_receipt">單據</string>
+    <string name="text_receipt_info">單據信息</string>
     <string name="text_coupon">優惠券</string>
     <string name="text_shipping_time">配送時間</string>
     <string name="text_pay_way">支付方式</string>
     <string name="text_goods_price">商品金額</string>
     <string name="text_freight">運費</string>
     <string name="text_store_freight">店鋪運費</string>
+    <string name="text_goods_freight">商品運費</string>
     <string name="text_store_discount">店鋪優惠</string>
     <string name="text_mall_discount">商城優惠</string>
     <string name="text_commit_bill">提交訂單</string>

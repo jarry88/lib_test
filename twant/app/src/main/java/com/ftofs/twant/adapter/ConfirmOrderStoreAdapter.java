@@ -51,20 +51,11 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             final ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) multiItemEntity;
             helper.addOnClickListener(R.id.btn_receipt)  // 變更單據信息
                     .addOnClickListener(R.id.btn_change_shipping_time)  // 修改配送時間
-                    .addOnClickListener(R.id.ll_store_info_container);
-            helper.setText(R.id.tv_store_name, item.storeName);
-            helper.setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0));
-
-            // 如果沒設置單據，則顯示【不開單據】，否則顯示單據抬頭
-            if (item.receipt == null) {
-                helper.setText(R.id.tv_receipt, context.getResources().getString(R.string.text_does_not_need_receipt));
-            } else {
-                helper.setText(R.id.tv_receipt, item.receipt.header);
-            }
-
-            if (shippingTimeDescList != null && shippingTimeDescList.size() > 0) {
-                helper.setText(R.id.tv_shipping_time, shippingTimeDescList.get(item.shipTimeType).title);
-            }
+                    .addOnClickListener(R.id.ll_store_info_container)  // 點擊店鋪信息
+                    .addOnClickListener(R.id.btn_use_voucher);  // 使用店鋪券
+            helper.setText(R.id.tv_store_name, item.storeName)
+                .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0))
+                    .setText(R.id.tv_store_voucher_count, String.format("可用%d張", item.voucherCount));
 
             EditText etLeaveMessage = helper.getView(R.id.et_leave_message);
             etLeaveMessage.setText(item.leaveMessage);
@@ -111,11 +102,23 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
         } else {
             // 匯總數據
             ConfirmOrderSummaryItem item = (ConfirmOrderSummaryItem) multiItemEntity;
+
+            // 如果沒設置單據，則顯示【不開單據】，否則顯示單據抬頭
+            if (item.receipt == null) {
+                helper.setText(R.id.tv_receipt, context.getResources().getString(R.string.text_does_not_need_receipt));
+            } else {
+                helper.setText(R.id.tv_receipt, item.receipt.header);
+            }
+
+            if (shippingTimeDescList != null && shippingTimeDescList.size() > 0) {
+                helper.setText(R.id.tv_shipping_time, shippingTimeDescList.get(item.shipTimeType).title);
+            }
+
             helper.addOnClickListener(R.id.btn_change_pay_way);
             helper.setText(R.id.tv_pay_way, paymentTypeCodeToPayWayDesc(item.paymentTypeCode));
-            helper.setText(R.id.tv_buy_item_amount, StringUtil.formatPrice(context, item.totalAmount, 0));
-            helper.setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.totalFreight, 0));
-            helper.setText(R.id.tv_store_discount, "- " + StringUtil.formatPrice(context, item.storeDiscount, 0));
+            // helper.setText(R.id.tv_buy_item_amount, StringUtil.formatPrice(context, item.totalAmount, 0));
+            // helper.setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.totalFreight, 0));
+            // helper.setText(R.id.tv_store_discount, "- " + StringUtil.formatPrice(context, item.storeDiscount, 0));
         }
     }
 

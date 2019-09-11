@@ -37,7 +37,28 @@ public class SLog {
         String lineNumber = String.format("%05d", trace.getLineNumber());
 
         String logContent = String.format("[%s][%s][%s]%s", timestamp, fileName, lineNumber, content);
-        Log.e("SLog", logContent);
+        // 由于Logcat每条日志最大的长度是4096个字符，对于超出部分会进行截断处理，因此需要对于超长的日志进行分段处理
+        boolean first = true;
+        int limit = 3900;
+        while (true) {
+            String msg;
+            if (logContent.length() > limit) {
+                msg = logContent.substring(0, limit);
+            } else {
+                msg = logContent;
+            }
+
+            if (!first) {
+                msg = "------>[" + msg + "]";
+            }
+            Log.e("SLog", msg);
+
+            if (logContent.length() <= limit) {
+                break;
+            }
+            logContent = logContent.substring(limit);
+            first = false;
+        }
     }
 }
 
