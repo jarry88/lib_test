@@ -11,7 +11,9 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.OrderVoucherListAdapter;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.StoreVoucherVo;
+import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.log.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -24,19 +26,22 @@ import java.util.List;
  */
 public class OrderVoucherPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
+    int storeId;
+    String storeName;
     List<StoreVoucherVo> storeVoucherVoList = new ArrayList<>();
 
     OrderVoucherListAdapter adapter;
     OnSelectedListener onSelectedListener;
 
-    public OrderVoucherPopup(@NonNull Context context, List<StoreVoucherVo> storeVoucherVoList, OnSelectedListener onSelectedListener) {
+    public OrderVoucherPopup(@NonNull Context context, int storeId, String storeName, List<StoreVoucherVo> storeVoucherVoList, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
+        this.storeId = storeId;
+        this.storeName = storeName;
         this.storeVoucherVoList = storeVoucherVoList;
         this.onSelectedListener = onSelectedListener;
     }
-
 
 
     @Override
@@ -53,17 +58,19 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
         RecyclerView rvStoreVoucherList = findViewById(R.id.rv_voucher_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvStoreVoucherList.setLayoutManager(layoutManager);
-        adapter = new OrderVoucherListAdapter(R.layout.order_voucher_item, storeVoucherVoList);
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        adapter = new OrderVoucherListAdapter(R.layout.order_voucher_item, storeName, storeVoucherVoList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                int id = view.getId();
-                if (id == R.id.btn_receive_voucher_now) {
-                    if (onSelectedListener != null) {
-                        onSelectedListener.onSelected(PopupType.SELECT_VOUCHER, position, null);
-                    }
-                    dismiss();
-                }
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("HERE");
+                StoreVoucherVo storeVoucherVo = storeVoucherVoList.get(position);
+                VoucherUseStatus voucherUseStatus = new VoucherUseStatus();
+                voucherUseStatus.storeId = storeId;
+                voucherUseStatus.voucherId = storeVoucherVo.voucherId;
+                voucherUseStatus.isInUse = !storeVoucherVo.isInUse;
+                onSelectedListener.onSelected(PopupType.SELECT_VOUCHER, 0, voucherUseStatus);
+
+                dismiss();
             }
         });
         rvStoreVoucherList.setAdapter(adapter);

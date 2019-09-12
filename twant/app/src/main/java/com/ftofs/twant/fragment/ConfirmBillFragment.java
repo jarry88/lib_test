@@ -32,6 +32,7 @@ import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.entity.StoreVoucherVo;
+import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -117,6 +118,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     Map<Integer, List<StoreVoucherVo>> voucherMap = new HashMap<>();
     // 店鋪Id => 運費
     Map<Integer, Float> freightAmountMap = new HashMap<>();
+    // 店鋪Id => 店鋪優惠
+    Map<Integer, Float> storeDiscountMap = new HashMap<>();
 
     /**
      * 創建確認訂單的實例
@@ -218,7 +221,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         new XPopup.Builder(_mActivity)
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(false)
-                                .asCustom(new OrderVoucherPopup(_mActivity, storeVoucherVoList, ConfirmBillFragment.this))
+                                .asCustom(new OrderVoucherPopup(_mActivity, storeItem.storeId, storeItem.storeName, storeVoucherVoList,
+                                        ConfirmBillFragment.this))
                                 .show();
                         SLog.info("HERE");
                         break;
@@ -593,6 +597,42 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         llSelfFetchInfoContainer.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 更新店鋪優惠數據
+     */
+    private void updateStoreDiscountAmount() {
+        for (MultiItemEntity entity : confirmOrderItemList) {
+            if (!(entity instanceof ConfirmOrderStoreItem)) {
+                continue;
+            }
+            ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) entity;
+
+            Float storeDiscount = storeDiscountMap.get(item.storeId);
+            if (storeDiscount == null) {
+                continue;
+            }
+            item.discountAmount = storeDiscount;
+        }
+    }
+
+    /**
+     * 更新店鋪運費數據
+     */
+    private void updateStoreFreightAmount() {
+        for (MultiItemEntity entity : confirmOrderItemList) {
+            if (!(entity instanceof ConfirmOrderStoreItem)) {
+                continue;
+            }
+            ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) entity;
+
+            Float storeFreight = freightAmountMap.get(item.storeId);
+            if (storeFreight == null) {
+                continue;
+            }
+            item.freightAmount = storeFreight;
+        }
+    }
+
     private void loadBillData() {
         final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                 .asLoading("正在生成訂單")
@@ -616,6 +656,11 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                 tvItemCount.setText(String.format(template, summaryItem.totalItemCount));
                 tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,
                         summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount, 0));
+
+                // 更新每家店鋪的優惠額
+                updateStoreDiscountAmount();
+                // 更新每家店鋪的運費
+                updateStoreFreightAmount();
 
                 adapter.setNewData(confirmOrderItemList);
             }
@@ -679,10 +724,9 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                         voucherMap.put(storeId, storeVoucherVoList);
 
-
                         String storeName = buyStoreVo.getString("storeName");
                         // int itemCount = buyStoreVo.getInt("itemCount");
-                        float freightAmount = (float) buyStoreVo.getDouble("freightAmount");
+                        // float freightAmount = (float) buyStoreVo.getDouble("freightAmount"); 在第2步中獲取運費
                         float buyItemAmount = (float) buyStoreVo.getDouble("buyItemAmount");
 
                         int shipTimeType = 0;
@@ -732,7 +776,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         } // END OF 遍歷每個Sku
 
                         confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, buyItemAmount,
-                                freightAmount, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList));
+                                0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList));
 
                         commitStoreList.append(EasyJSONObject.generate(
                                 "storeId", storeId,
@@ -783,6 +827,15 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
                         return null;
+                    }
+
+                    // 獲取每家店鋪的優惠金額
+                    EasyJSONArray storeList = responseObj.getArray("datas.storeList");
+                    for (Object object : storeList) {
+                        EasyJSONObject store = (EasyJSONObject) object;
+                        int storeId = store.getInt("storeId");
+                        float storeDiscountAmount = (float) store.getDouble("storeDiscountAmount");
+                        storeDiscountMap.put(storeId, storeDiscountAmount);
                     }
 
                     ConfirmOrderSummaryItem summaryItem = getSummaryItem();
@@ -838,6 +891,50 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             this.selectedMobileZoneIndex = id;
             String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
             tvSelfFetchMobileZone.setText(areaName);
+        } else if (type == PopupType.SELECT_VOUCHER) {
+            SLog.info("HERE");
+            VoucherUseStatus voucherUseStatus = (VoucherUseStatus) extra;
+            updateStoreVoucherStatus(voucherUseStatus);
+        }
+    }
+
+    /**
+     * 更新店鋪券狀態
+     * @param voucherUseStatus
+     */
+    private void updateStoreVoucherStatus(VoucherUseStatus voucherUseStatus) {
+        int storeId = voucherUseStatus.storeId;
+        int position = 0;
+        for (MultiItemEntity entity : confirmOrderItemList) {
+            if (entity instanceof ConfirmOrderStoreItem) {
+                ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) entity;
+                if (item.storeId == storeId) {
+                    List<StoreVoucherVo> storeVoucherVoList = voucherMap.get(storeId);
+
+                    for (StoreVoucherVo storeVoucherVo : storeVoucherVoList) {
+                        if (storeVoucherVo.voucherId == voucherUseStatus.voucherId) {
+                            storeVoucherVo.isInUse = voucherUseStatus.isInUse; // 更新券的狀態
+
+                            if (voucherUseStatus.isInUse) { // 使用店鋪券
+                                // 獲取要使用的店鋪券名稱
+                                item.voucherName = StringUtil.formatPrice(_mActivity, storeVoucherVo.price, 0) + " " + storeVoucherVo.voucherTitle;
+                            }
+                        }
+                    }
+
+                    if (voucherUseStatus.isInUse) { // 使用店鋪券，將當前使用使用的店鋪券Id賦值到店鋪數據中
+                        item.voucherId = voucherUseStatus.voucherId;
+                    } else {  // 不使用店鋪券，將voucherId賦值為0
+                        item.voucherId = 0;
+                    }
+
+                    adapter.notifyItemChanged(position);
+
+                    break;
+                }
+            }
+
+            position++;
         }
     }
 

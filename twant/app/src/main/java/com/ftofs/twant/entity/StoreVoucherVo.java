@@ -39,7 +39,10 @@ public class StoreVoucherVo {
      */
     public String limitText = "";
 
-    
+    /**
+     * 是否在使用
+     */
+    public boolean isInUse;
 
     @Override
     public String toString() {

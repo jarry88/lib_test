@@ -31,6 +31,10 @@ import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
+/**
+ * 確認訂單店鋪列表Adapter
+ * @author zwm
+ */
 public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
     Context context;
     String timesSign;
@@ -56,9 +60,19 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                     .addOnClickListener(R.id.btn_change_shipping_time)  // 修改配送時間
                     .addOnClickListener(R.id.ll_store_info_container)  // 點擊店鋪信息
                     .addOnClickListener(R.id.btn_use_voucher);  // 使用店鋪券
+
+            String voucherStatus;
+            if (item.voucherId > 0) { // 如果正在使用優惠券，則顯示正在使用的券的名稱
+                SLog.info("HERE");
+                voucherStatus = item.voucherName;
+            } else { // 如果沒有使用優惠券，則顯示可用的券的數量
+                SLog.info("HERE");
+                voucherStatus = String.format("可用%d張", item.voucherCount);
+            }
             helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0))
-                .setText(R.id.tv_store_voucher_count, String.format("可用%d張", item.voucherCount))
+                .setText(R.id.tv_store_discount, StringUtil.formatPrice(context, item.discountAmount, 0))
+                .setText(R.id.tv_store_voucher_count, voucherStatus)
                 .setText(R.id.tv_store_item_count, String.format("共%d件，小計：", item.itemCount))
                 .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, item.buyItemAmount, 0));
 
@@ -141,9 +155,6 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 .addOnClickListener(R.id.btn_receipt)
                 .addOnClickListener(R.id.btn_change_shipping_time);
             helper.setText(R.id.tv_pay_way, paymentTypeCodeToPayWayDesc(item.paymentTypeCode));
-            // helper.setText(R.id.tv_buy_item_amount, StringUtil.formatPrice(context, item.totalAmount, 0));
-            // helper.setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.totalFreight, 0));
-            // helper.setText(R.id.tv_store_discount, "- " + StringUtil.formatPrice(context, item.storeDiscount, 0));
         }
     }
 
