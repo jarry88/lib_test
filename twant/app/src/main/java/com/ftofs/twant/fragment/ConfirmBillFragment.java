@@ -31,6 +31,7 @@ import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.twant.entity.StoreAmount;
 import com.ftofs.twant.entity.StoreVoucherVo;
 import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -119,7 +120,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     // 店鋪Id => 運費
     Map<Integer, Float> freightAmountMap = new HashMap<>();
     // 店鋪Id => 店鋪優惠
-    Map<Integer, Float> storeDiscountMap = new HashMap<>();
+    Map<Integer, StoreAmount> storeAmountMap = new HashMap<>();
 
     /**
      * 創建確認訂單的實例
@@ -295,7 +296,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     /*
                     storeId int 店铺Id,必填
                     receiverMessage string 购买留言，可以为空
-
+                    voucherId int 店铺券Id,可为空
                     goodsList 购买商品列表,必填
                         buyNum int 购买数量，必填
                         goodsId int 商品sku Id 当cartId=0时必填
@@ -313,6 +314,11 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     // 留言
                     if (!StringUtil.isEmpty(storeItem.leaveMessage)) {
                         store.set("receiverMessage", storeItem.leaveMessage);
+                    }
+
+                    if (storeItem.voucherId > 0) {
+                        SLog.info(">>>______________________________________<<<");
+                        store.set("voucherId", storeItem.voucherId);
                     }
 
 
@@ -598,20 +604,22 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     }
 
     /**
-     * 更新店鋪優惠數據
+     * 更新店鋪優惠數據和店鋪購買金額
      */
-    private void updateStoreDiscountAmount() {
+    private void updateStoreAmount() {
         for (MultiItemEntity entity : confirmOrderItemList) {
             if (!(entity instanceof ConfirmOrderStoreItem)) {
                 continue;
             }
             ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) entity;
 
-            Float storeDiscount = storeDiscountMap.get(item.storeId);
-            if (storeDiscount == null) {
+            StoreAmount storeAmount = storeAmountMap.get(item.storeId);
+            if (storeAmount == null) {
                 continue;
             }
-            item.discountAmount = storeDiscount;
+            item.discountAmount = storeAmount.storeDiscountAmount;
+            item.buyItemAmount = storeAmount.storeBuyAmount;
+            SLog.info("item.discountAmount[%s]", item.discountAmount);
         }
     }
 
@@ -653,12 +661,11 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
                 ConfirmOrderSummaryItem summaryItem = getSummaryItem();
                 String template = getResources().getString(R.string.text_confirm_order_total_item_count);
-                tvItemCount.setText(String.format(template, summaryItem.totalItemCount));
-                tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,
-                        summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount, 0));
+                tvItemCount.setText(String.format(template, totalItemCount));
+
 
                 // 更新每家店鋪的優惠額
-                updateStoreDiscountAmount();
+                updateStoreAmount();
                 // 更新每家店鋪的運費
                 updateStoreFreightAmount();
 
@@ -727,7 +734,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         String storeName = buyStoreVo.getString("storeName");
                         // int itemCount = buyStoreVo.getInt("itemCount");
                         // float freightAmount = (float) buyStoreVo.getDouble("freightAmount"); 在第2步中獲取運費
-                        float buyItemAmount = (float) buyStoreVo.getDouble("buyItemAmount");
+                        // float buyItemAmount = (float) buyStoreVo.getDouble("buyItemAmount"); 在第3步中獲取金額
 
                         int shipTimeType = 0;
 
@@ -775,7 +782,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             totalItemCount += buyNum;
                         } // END OF 遍歷每個Sku
 
-                        confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, buyItemAmount,
+                        confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
                                 0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList));
 
                         commitStoreList.append(EasyJSONObject.generate(
@@ -790,7 +797,6 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     confirmOrderItemList.add(new ConfirmOrderSummaryItem());
 
                     // 第2步：計算運費
-                    params = collectParams(false);
                     // 收集地址信息
                     EasyJSONObject address = responseObj.getObject("datas.address");
                     if (address != null) { // TODO: 2019/9/11 如果没有地址信息或【门店自提】方式，都不用做第2步
@@ -820,30 +826,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     // 第3步(請求參數與第2步相同) 計算最終結果
-                    SLog.info("params[%s]", params.toString());
-                    responseStr = Api.syncPost(Api.PATH_CALC_TOTAL, params);
-
-                    SLog.info("responseStr[%s]", responseStr);
-                    responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.isError(responseObj)) {
-                        return null;
-                    }
-
-                    // 獲取每家店鋪的優惠金額
-                    EasyJSONArray storeList = responseObj.getArray("datas.storeList");
-                    for (Object object : storeList) {
-                        EasyJSONObject store = (EasyJSONObject) object;
-                        int storeId = store.getInt("storeId");
-                        float storeDiscountAmount = (float) store.getDouble("storeDiscountAmount");
-                        storeDiscountMap.put(storeId, storeDiscountAmount);
-                    }
-
-                    ConfirmOrderSummaryItem summaryItem = getSummaryItem();
-                    summaryItem.totalItemCount = totalItemCount;
-                    summaryItem.totalAmount = (float) responseObj.getDouble("datas.buyGoodsItemAmount");
-                    summaryItem.storeDiscount = (float) responseObj.getDouble("datas.storeTotalDiscountAmount");
-                    SLog.info("summaryItem, totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
-                            summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
+                    calcAmount();
 
                     return "success";
                 } catch (Exception e) {
@@ -855,6 +838,55 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         };
 
         TwantApplication.getThreadPool().execute(taskObservable);
+    }
+
+    private void calcAmount() {
+        EasyJSONObject params = collectParams(true);
+        SLog.info("params[%s]", params.toString());
+
+        Api.postUI(Api.PATH_CALC_TOTAL, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    // 獲取每家店鋪的優惠金額
+                    EasyJSONArray storeList = responseObj.getArray("datas.storeList");
+                    for (Object object : storeList) {
+                        EasyJSONObject store = (EasyJSONObject) object;
+                        int storeId = store.getInt("storeId");
+                        float storeDiscountAmount = (float) store.getDouble("storeDiscountAmount");
+                        float buyAmount2 = (float) store.getDouble("buyAmount2");
+                        StoreAmount storeAmount = new StoreAmount(storeDiscountAmount, buyAmount2);
+                        storeAmountMap.put(storeId, storeAmount);
+                    }
+
+                    updateStoreAmount();
+                    adapter.setNewData(confirmOrderItemList);
+
+                    ConfirmOrderSummaryItem summaryItem = getSummaryItem();
+                    summaryItem.totalItemCount = totalItemCount;
+                    summaryItem.totalAmount = (float) responseObj.getDouble("datas.buyGoodsItemAmount");
+                    summaryItem.storeDiscount = (float) responseObj.getDouble("datas.storeTotalDiscountAmount");
+                    SLog.info("summaryItem, totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
+                            summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
+
+                    tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,
+                            summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount, 0));
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
@@ -895,6 +927,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
             SLog.info("HERE");
             VoucherUseStatus voucherUseStatus = (VoucherUseStatus) extra;
             updateStoreVoucherStatus(voucherUseStatus);
+
+            calcAmount();
         }
     }
 
@@ -938,6 +972,10 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    /**
+     * 獲取匯總數據項
+     * @return
+     */
     private ConfirmOrderSummaryItem getSummaryItem() {
         int size = confirmOrderItemList.size();
         if (size < 1) {

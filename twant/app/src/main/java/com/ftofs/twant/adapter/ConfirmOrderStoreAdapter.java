@@ -69,9 +69,14 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 SLog.info("HERE");
                 voucherStatus = String.format("可用%d張", item.voucherCount);
             }
+
+            String discountAmountText = StringUtil.formatPrice(context, item.discountAmount, 0);
+            if (item.discountAmount > 0) { // 如果有優惠，在前面加上負號
+                discountAmountText = "-" + discountAmountText;
+            }
             helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0))
-                .setText(R.id.tv_store_discount, StringUtil.formatPrice(context, item.discountAmount, 0))
+                .setText(R.id.tv_store_discount, discountAmountText)
                 .setText(R.id.tv_store_voucher_count, voucherStatus)
                 .setText(R.id.tv_store_item_count, String.format("共%d件，小計：", item.itemCount))
                 .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, item.buyItemAmount, 0));
