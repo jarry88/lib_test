@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -84,7 +85,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 LinearLayout skuItemView = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.confirm_order_sku_item, null, false);
 
                 ImageView goodsImageView = skuItemView.findViewById(R.id.goods_image);
-                Glide.with(goodsImageView).load(confirmOrderSkuItem.goodsImage).into(goodsImageView);
+                Glide.with(goodsImageView).load(confirmOrderSkuItem.goodsImage).centerCrop().into(goodsImageView);
                 TextView goodsName = skuItemView.findViewById(R.id.tv_goods_name);
                 goodsName.setText(confirmOrderSkuItem.goodsName);
                 TextView tvFullSpecs = skuItemView.findViewById(R.id.tv_goods_full_specs);
@@ -97,6 +98,16 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, Util.dip2px(context, 15), 0, 0);
+
+                LinearLayout llSkuGiftContainer = skuItemView.findViewById(R.id.ll_sku_gift_container);
+                if (confirmOrderSkuItem.giftItemList != null && confirmOrderSkuItem.giftItemList.size() > 0) {
+                    ConfirmOrderGiftListAdapter giftListAdapter = new ConfirmOrderGiftListAdapter(context, llSkuGiftContainer, R.layout.confirm_order_gift_item);
+                    giftListAdapter.setData(confirmOrderSkuItem.giftItemList);
+                } else {
+                    llSkuGiftContainer.removeAllViews();
+                    llSkuGiftContainer.setVisibility(View.GONE);
+                }
+
                 llSkuItemContainer.addView(skuItemView, layoutParams);
             }
         } else {

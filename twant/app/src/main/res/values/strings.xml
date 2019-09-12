@@ -565,6 +565,7 @@
     <string name="text_highest_price">最高價</string>
     <string name="text_promotion_activity">促銷活動</string>
     <string name="text_gift">贈品</string>
+    <string name="text_gift_simplify">贈</string>
     <string name="text_discount">折扣</string>
     <string name="text_reset">重置</string>
 

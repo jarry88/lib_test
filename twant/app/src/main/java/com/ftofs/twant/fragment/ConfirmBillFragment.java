@@ -28,6 +28,7 @@ import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
+import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.entity.StoreVoucherVo;
@@ -702,8 +703,18 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             String goodsFullSpecs = buyGoodsItem.getString("goodsFullSpecs");
                             float goodsPrice = (float) buyGoodsItem.getDouble("goodsPrice");
 
+                            // 處理SKU贈品信息
+                            List<GiftItem> giftItemList = new ArrayList<>();
+                            EasyJSONArray giftVoList = buyGoodsItem.getArray("giftVoList");
+                            if (giftVoList != null || giftVoList.length() > 0) {
+                                for (Object object3 : giftVoList) {
+                                    GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, object3.toString());
+                                    giftItemList.add(giftItem);
+                                }
+                            }
 
-                            ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, goodsId, goodsName, goodsFullSpecs, buyNum, goodsPrice);
+                            ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, goodsId, goodsName,
+                                    goodsFullSpecs, buyNum, goodsPrice, giftItemList);
                             confirmOrderSkuItemList.add(confirmOrderSkuItem);
 
                             String keyName = "cartId";
