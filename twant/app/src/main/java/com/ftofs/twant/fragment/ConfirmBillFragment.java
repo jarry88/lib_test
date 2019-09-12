@@ -91,6 +91,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     List<MultiItemEntity> confirmOrderItemList = new ArrayList<>();
 
     String currencyTypeSign;
+    int totalItemCount; // 整個訂單的總件數： 如果sku1有2件，sku2有3件，那么總件數就是5
     String textConfirmOrderTotalItemCount;
     String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_ONLINE, Constant.PAYMENT_TYPE_CODE_OFFLINE,
             Constant.PAYMENT_TYPE_CODE_CHAIN};
@@ -114,6 +115,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
     // 店鋪Id => 店鋪券列表
     Map<Integer, List<StoreVoucherVo>> voucherMap = new HashMap<>();
+    // 店鋪Id => 運費
+    Map<Integer, Float> freightAmountMap = new HashMap<>();
 
     /**
      * 創建確認訂單的實例
@@ -633,8 +636,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         return null;
                     }
 
-                    // 總件數
-                    int totalItemCount = 0;
+                    // 整個訂單的總件數
+                    totalItemCount = 0;
 
                     // 第1步: 獲取配送時間列表 和 店鋪券列表
                     EasyJSONObject params = EasyJSONObject.generate(
@@ -678,7 +681,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
 
 
                         String storeName = buyStoreVo.getString("storeName");
-                        int itemCount = buyStoreVo.getInt("itemCount");
+                        // int itemCount = buyStoreVo.getInt("itemCount");
                         float freightAmount = (float) buyStoreVo.getDouble("freightAmount");
                         float buyItemAmount = (float) buyStoreVo.getDouble("buyItemAmount");
 
@@ -687,7 +690,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         EasyJSONArray goodsList = EasyJSONArray.generate();
                         EasyJSONArray buyGoodsItemVoList = buyStoreVo.getArray("buyGoodsItemVoList");
                         List<ConfirmOrderSkuItem> confirmOrderSkuItemList = new ArrayList<>();
-                        for (Object object2 : buyGoodsItemVoList) {
+                        int storeItemCount = 0;
+                        for (Object object2 : buyGoodsItemVoList) { // 遍歷每個Sku
                             EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
                             int goodsId;
                             if (isFromCart == 1) {
@@ -723,18 +727,19 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                             }
                             goodsList.append(EasyJSONObject.generate(keyName, goodsId, "buyNum", buyNum));
 
-                            totalItemCount++;
-                        }
+                            storeItemCount += buyNum;
+                            totalItemCount += buyNum;
+                        } // END OF 遍歷每個Sku
 
                         confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, buyItemAmount,
-                                freightAmount, itemCount, storeVoucherVoList.size(), confirmOrderSkuItemList));
+                                freightAmount, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList));
 
                         commitStoreList.append(EasyJSONObject.generate(
                                 "storeId", storeId,
                                 "storeName", storeName,
                                 "goodsList", goodsList,
                                 "shipTimeType", shipTimeType));
-                    }
+                    }  // END OF 遍歷每家店鋪
                     SLog.info("HERE");
 
                     // 添加上汇总项目
@@ -757,6 +762,17 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                         if (ToastUtil.isError(responseObj)) {
                             return null;
                         }
+
+                        // 獲取店鋪Id對應的運費數據
+                        EasyJSONArray storeList = responseObj.getArray("datas.storeList");
+                        for (Object object : storeList) {
+                            EasyJSONObject store = (EasyJSONObject) object;
+
+                            int storeId = store.getInt("storeId");
+                            float freightAmount = (float) store.getDouble("freightAmount");
+
+                            freightAmountMap.put(storeId, freightAmount);
+                        }
                     }
 
                     // 第3步(請求參數與第2步相同) 計算最終結果
@@ -773,6 +789,8 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                     summaryItem.totalItemCount = totalItemCount;
                     summaryItem.totalAmount = (float) responseObj.getDouble("datas.buyGoodsItemAmount");
                     summaryItem.storeDiscount = (float) responseObj.getDouble("datas.storeTotalDiscountAmount");
+                    SLog.info("summaryItem, totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
+                            summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
                     return "success";
                 } catch (Exception e) {
@@ -855,3 +873,4 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         });
     }
 }
+

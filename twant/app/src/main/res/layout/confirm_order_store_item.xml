@@ -166,7 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:text="$8.00"
+            android:text="$9.00"
             android:textColor="@color/tw_dark_grey"
             android:textSize="14sp"
             />
@@ -183,6 +183,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/tv_store_item_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="共1件，小計："
@@ -191,6 +192,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_store_pay_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$179.00"

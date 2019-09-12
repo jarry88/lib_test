@@ -140,7 +140,7 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
             bundle.putParcelable("receipt", receipt);
         }
         setFragmentResult(RESULT_OK, bundle);
-
+        hideSoftInput();
         pop();
     }
 

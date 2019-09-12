@@ -4,11 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="15dp">
-    <!-- 左边 -->
-    <LinearLayout
+    <!-- 右边 -->
+    <TextView
+        android:id="@+id/tv_gift_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text=""
+        android:textColor="@color/tw_dark_grey"
+        android:textSize="13sp"
+        />
+
+
+    <!-- 左边 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/tv_gift_num"
+        android:layout_marginRight="15dp"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
         android:gravity="center_vertical">
         <TextView
             android:layout_width="16dp"
@@ -20,24 +37,16 @@
             android:textSize="11sp"
             />
         <TextView
+            android:id="@+id/tv_goods_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:textSize="13sp"
             android:textColor="@color/tw_black"
-            android:text="韓國Yueaeow保濕面膜/片 拷贝"
+            android:text=""
+            android:singleLine="true"
+            android:ellipsize="end"
             />
     </LinearLayout>
-
-    <!-- 右边 -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:text="X 1"
-        android:textColor="@color/tw_dark_grey"
-        android:textSize="13sp"
-        />
 </RelativeLayout>
 

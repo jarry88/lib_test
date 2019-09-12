@@ -269,45 +269,51 @@
     </android.support.v7.widget.RecyclerView>
 
     <!-- 底部工具欄 -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@android:color/white">
-        <TextView
-            android:id="@+id/tv_item_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:text=""
-            />
-        <TextView
-            android:id="@+id/tv_total_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tv_item_count"
-            android:layout_centerVertical="true"
-            android:text=""
-            android:textColor="@color/tw_red"
-            android:textSize="14sp"
-            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/border_type_e">
+            <TextView
+                android:id="@+id/tv_item_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text=""
+                />
+            <TextView
+                android:id="@+id/tv_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tv_item_count"
+                android:layout_centerVertical="true"
+                android:text=""
+                android:textColor="@color/tw_red"
+                android:textSize="14sp"
+                />
 
-        <TextView
-            android:id="@+id/btn_commit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
-            android:paddingTop="13dp"
-            android:paddingBottom="13dp"
-            android:paddingLeft="26dp"
-            android:paddingRight="26dp"
-            android:text="@string/text_commit_bill"
-            android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:background="@drawable/narrow_red_button"
-            />
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/btn_commit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:paddingLeft="26dp"
+                android:paddingRight="26dp"
+                android:text="@string/text_commit_bill"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:background="@drawable/narrow_red_button"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
 </LinearLayout>
 

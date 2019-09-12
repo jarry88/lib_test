@@ -21,7 +21,9 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
+import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -56,7 +58,9 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                     .addOnClickListener(R.id.btn_use_voucher);  // 使用店鋪券
             helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0))
-                    .setText(R.id.tv_store_voucher_count, String.format("可用%d張", item.voucherCount));
+                .setText(R.id.tv_store_voucher_count, String.format("可用%d張", item.voucherCount))
+                .setText(R.id.tv_store_item_count, String.format("共%d件，小計：", item.itemCount))
+                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, item.buyItemAmount, 0));
 
             EditText etLeaveMessage = helper.getView(R.id.et_leave_message);
             etLeaveMessage.setText(item.leaveMessage);
@@ -102,6 +106,14 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 LinearLayout llSkuGiftContainer = skuItemView.findViewById(R.id.ll_sku_gift_container);
                 if (confirmOrderSkuItem.giftItemList != null && confirmOrderSkuItem.giftItemList.size() > 0) {
                     ConfirmOrderGiftListAdapter giftListAdapter = new ConfirmOrderGiftListAdapter(context, llSkuGiftContainer, R.layout.confirm_order_gift_item);
+                    giftListAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+                        @Override
+                        public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                            SLog.info("onClick, position[%d]", position);
+                            GiftItem giftItem = confirmOrderSkuItem.giftItemList.get(position);
+                            Util.startFragment(GoodsDetailFragment.newInstance(giftItem.commonId, giftItem.goodsId));
+                        }
+                    });
                     giftListAdapter.setData(confirmOrderSkuItem.giftItemList);
                 } else {
                     llSkuGiftContainer.removeAllViews();
@@ -125,7 +137,9 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 helper.setText(R.id.tv_shipping_time, shippingTimeDescList.get(item.shipTimeType).title);
             }
 
-            helper.addOnClickListener(R.id.btn_change_pay_way);
+            helper.addOnClickListener(R.id.btn_change_pay_way)
+                .addOnClickListener(R.id.btn_receipt)
+                .addOnClickListener(R.id.btn_change_shipping_time);
             helper.setText(R.id.tv_pay_way, paymentTypeCodeToPayWayDesc(item.paymentTypeCode));
             // helper.setText(R.id.tv_buy_item_amount, StringUtil.formatPrice(context, item.totalAmount, 0));
             // helper.setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.totalFreight, 0));
