@@ -24,14 +24,46 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BottomPopupView;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.util.XPopupUtils;
+
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 高德地圖彈窗
  * @author zwm
  */
 public class AmapPopup extends BottomPopupView implements View.OnClickListener {
+    public static class MapAppInfo {
+        public boolean available;
+        public int id;
+        public String name;
+        public String uri;
+        public String packageName;
+
+        public MapAppInfo(boolean available, int id, String name, String uri, String packageName) {
+            this.available = available;
+            this.id = id;
+            this.name = name;
+            this.uri = uri;
+            this.packageName = packageName;
+        }
+    }
+
+
+    /**
+     * 高德地圖
+     */
+    public static final int MAP_ID_AMAP = 0;
+    /**
+     * Google地圖
+     */
+    public static final int MAP_ID_GOOGLE = 1;
+
     Activity activity;
     MapView mapView;
     AMap aMap;
@@ -39,12 +71,19 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
     StoreMapInfo storeMapInfo;
     Bundle savedInstanceState;
 
+    public List<MapAppInfo> mapAppInfoList;
+    int availableMapCount;
+
     public AmapPopup(@NonNull Activity activity, StoreMapInfo storeMapInfo, @Nullable Bundle savedInstanceState) {
         super(activity);
 
         this.activity = activity;
         this.storeMapInfo = storeMapInfo;
         this.savedInstanceState = savedInstanceState;
+
+        mapAppInfoList = new ArrayList<>();
+        mapAppInfoList.add(new MapAppInfo(false, MAP_ID_AMAP, "高德地圖", null, "com.autonavi.minimap"));
+        mapAppInfoList.add(new MapAppInfo(false, MAP_ID_GOOGLE, "Google地圖", null, "com.google.android.apps.maps"));
     }
 
     @Override
@@ -117,26 +156,102 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
             Util.dialPhone(activity, storeMapInfo.storePhone);
         } else if (id == R.id.btn_map_navigation) {
             Intent intent;
-            try {
-                // 判斷是否已經安裝高德地圖
-                if (Util.isPackageInstalled(activity, "com.autonavi.minimap")) {
-                    SLog.info("已經安裝高德地圖");
-                    String uri = "androidamap://navi?sourceApplication=" + activity.getString(R.string.app_name) + "&poiname=我的目的地&lat="+storeMapInfo.storeLatitude+"&lon="+storeMapInfo.storeLongitude+"&dev=0";
-                    SLog.info("uri[%s]", uri);
-                    intent = Intent.parseUri(uri, 0);
-                    activity.startActivity(intent);
-                } else {
-                    SLog.info("未安裝高德地圖");
-                    // 如果未安裝高德地圖，則跳轉到應用市場
-                    ToastUtil.error(activity, "您尚未安裝高德地圖");
-                    Uri uri = Uri.parse("market://details?id=com.autonavi.minimap");
-                    intent = new Intent(Intent.ACTION_VIEW, uri);
-                    activity.startActivity(intent);
-                }
-            } catch (Exception e) {
-                SLog.info("Error!%s", e.getMessage());
+
+            MapAppInfo mapAppInfo = mapAppInfoList.get(MAP_ID_AMAP);
+            if (Util.isPackageInstalled(activity, mapAppInfo.packageName)) {
+                SLog.info("已經安裝高德地圖");
+                mapAppInfo.available = true;
+                mapAppInfo.uri = "androidamap://navi?sourceApplication=" + activity.getString(R.string.app_name) + "&poiname=我的目的地&lat="+storeMapInfo.storeLatitude+"&lon="+storeMapInfo.storeLongitude+"&dev=0";
+                availableMapCount++;
             }
 
+            mapAppInfo = mapAppInfoList.get(MAP_ID_GOOGLE);
+            if (Util.isPackageInstalled(activity, mapAppInfo.packageName)) {
+                SLog.info("已經安裝Google地圖");
+                mapAppInfo.available = true;
+                mapAppInfo.uri = "google.navigation:q=" +storeMapInfo.storeLatitude+","+storeMapInfo.storeLongitude;
+                availableMapCount++;
+            }
+
+            /*
+             * 處理方式
+             * 1、如果安裝了多個地圖應用，則彈出列表讓用戶選擇
+             * 2、如果只有一個地圖應用，則直接用那個地圖應用來導航
+             * 3、如果沒有安裝地圖應用，則提示用戶安裝
+             */
+
+            if (availableMapCount > 1) {
+                String[] availableApp = new String[availableMapCount];
+                int i = 0;
+                for (MapAppInfo item : mapAppInfoList) {
+                    if (item.available) {
+                        availableApp[i++] = item.name;
+                    }
+                }
+
+                new XPopup.Builder(getContext())
+//                        .maxWidth(600)
+                        .asCenterList("請選擇", availableApp,
+                                new OnSelectListener() {
+                                    @Override
+                                    public void onSelect(int position, String text) {
+                                        SLog.info("position[%d], text[%s]", position, text);
+                                        MapAppInfo item = mapAppInfoList.get(position);
+                                        showMapNavigation(item);
+                                    }
+                                })
+                        .show();
+            } else if (availableMapCount == 1) {
+                // 找出一個可用的地圖
+                for (MapAppInfo item : mapAppInfoList) {
+                    if (item.available) {
+                        showMapNavigation(item);
+                        break;
+                    }
+                }
+            } else {
+                SLog.info("未安裝任何地圖應用");
+                // 如果未安裝地圖應用，則跳轉到應用市場
+                ToastUtil.error(activity, "您尚未安裝任何地圖應用");
+                Uri uri = Uri.parse("market://details?id=com.autonavi.minimap");
+                intent = new Intent(Intent.ACTION_VIEW, uri);
+                activity.startActivity(intent);
+            }
         }
+    }
+
+    private void showMapNavigation(MapAppInfo mapAppInfo) {
+        if (mapAppInfo.id == MAP_ID_AMAP) {
+            navigateWithAmap();
+        } else if (mapAppInfo.id == MAP_ID_GOOGLE) {
+            navigateWithGoogle();
+        }
+    }
+
+    private void navigateWithAmap() {
+        MapAppInfo mapAppInfo = mapAppInfoList.get(MAP_ID_AMAP);
+        SLog.info("uri[%s]", mapAppInfo.uri);
+        Intent intent = null;
+        try {
+            intent = Intent.parseUri(mapAppInfo.uri, 0);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        activity.startActivity(intent);
+    }
+
+    /**
+     * 使用Google地圖導航
+     * 參考
+     * https://developers.google.com/maps/documentation/urls/guide
+     * https://developers.google.com/maps/documentation/urls/android-intents
+     */
+    private void navigateWithGoogle() {
+        MapAppInfo mapAppInfo = mapAppInfoList.get(MAP_ID_GOOGLE);
+        SLog.info("uri[%s]", mapAppInfo.uri);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mapAppInfo.uri));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.google.android.apps.maps");
+        activity.startActivity(intent);
     }
 }
