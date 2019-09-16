@@ -234,7 +234,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onSelected(PopupType type, final int id, Object extra) {
-        SLog.info("type[%d]", type);
+        SLog.info("type[%s]", type);
 
         if (type == PopupType.DEFAULT) {
             String token = User.getToken();

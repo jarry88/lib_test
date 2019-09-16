@@ -14,12 +14,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.ConfirmOrderGiftListAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.cart.BaseStatus;
 import com.ftofs.twant.entity.cart.SkuStatus;
 import com.ftofs.twant.entity.cart.SpuStatus;
@@ -40,6 +44,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -188,6 +195,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                 "token", token,
                 "clientType", Constant.CLIENT_TYPE_ANDROID);
 
+        SLog.info("params[%s]", params);
         Api.postUI(Api.PATH_CART_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -298,6 +306,28 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 skuStatus.setPrice(goodsPrice);
                                 skuStatus.setCount(buyNum);
 
+                                // 贈品列表
+                                EasyJSONArray giftVoList = cartSkuVo.getArray("giftVoList");
+                                if (!Util.isJsonNull(giftVoList) && giftVoList.length() > 0) {
+                                    LinearLayout llGiftListContainer = cartSkuItem.findViewById(R.id.ll_gift_list_container);
+                                    ConfirmOrderGiftListAdapter adapter = new ConfirmOrderGiftListAdapter(_mActivity, llGiftListContainer, R.layout.cart_gift_item);
+                                    List<GiftItem> giftItemList = new ArrayList<>();
+                                    for (Object object4 : giftVoList) {
+                                        GiftItem giftItem = (GiftItem) EasyJSONObject.jsonDecode(GiftItem.class, object4.toString());
+                                        giftItemList.add(giftItem);
+                                    }
+                                    adapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                                            GiftItem giftItem = giftItemList.get(position);
+                                            Util.startFragment(GoodsDetailFragment.newInstance(giftItem.commonId, giftItem.goodsId));
+                                        }
+                                    });
+                                    adapter.setData(giftItemList);
+
+                                    llGiftListContainer.setVisibility(View.VISIBLE);
+                                }
+
                                 spuStatus.skuStatusList.add(skuStatus);
                                 cartSkuItemContainer.addView(cartSkuItem);
                             } // END OF sku LOOP
@@ -314,6 +344,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
                     SLog.info("Error!%s", e.getMessage());
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (java.lang.InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
                 }
             }
         });
