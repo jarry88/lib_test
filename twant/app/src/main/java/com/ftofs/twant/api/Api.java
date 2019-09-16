@@ -826,6 +826,11 @@ public class Api {
      */
     public static final String PATH_ORDER_COUNT = "/member/orders/count";
 
+    /**
+     * 訂單商品評論
+     */
+    public static final String PATH_GOODS_COMMENT = "/member/orders/comment/send";
+
 
     /**
      * 發送Http請求

@@ -338,6 +338,7 @@
     <string name="text_order_amount">訂單金額</string>
     <string name="text_order_total_amount">訂單總額</string>
     <string name="text_commit">提交</string>
+    <string name="text_commit_comment">提交評論</string>
     <string name="text_title">標題</string>
     <string name="input_hint">請輸入</string>
     <string name="text_keyword">關鍵字</string>
@@ -352,6 +353,7 @@
     <string name="text_category">分類</string>
 
     <string name="text_store_service_staff">店鋪服務人員</string>
+    <string name="text_comment_content_can_not_be_empty">評論內容不能為空</string>
 
 
     <string name="currency_type_macao">葡幣</string>

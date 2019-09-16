@@ -57,6 +57,7 @@
                     android:textSize="16sp"
                     android:textColor="@color/tw_black"
                     />
+                <!--
                 <TextView
                     android:id="@+id/btn_receive_voucher_now"
                     android:layout_width="63dp"
@@ -71,6 +72,7 @@
                     android:textColor="#fff"
                     android:textSize="12sp"
                     />
+                    -->
             </RelativeLayout>
             <TextView
                 android:id="@+id/tv_usable_client_type_text"

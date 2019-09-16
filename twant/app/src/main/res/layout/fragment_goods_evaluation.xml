@@ -124,12 +124,13 @@
         <!-- 編輯框 -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="171dp"
+            android:layout_height="271dp"
             android:layout_marginTop="15dp"
             android:padding="15dp"
             android:orientation="vertical"
             android:background="#F7F7F7">
             <EditText
+                android:id="@+id/et_content"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -139,16 +140,39 @@
                 android:hint="點擊輸入您對該商品的評論"
                 android:background="@null"
                 />
-            <LinearLayout
+            <com.ftofs.twant.widget.SquareGridLayout
+                android:id="@+id/sgl_image_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:sgl_column_count="3">
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:id="@+id/btn_add_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="6dp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/btn_add_post_content_image"
                     />
-            </LinearLayout>
+            </com.ftofs.twant.widget.SquareGridLayout>
         </LinearLayout>
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_button_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/btn_commit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:text="@string/text_commit_comment"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/red_button"
+            />
+    </RelativeLayout>
 </LinearLayout>

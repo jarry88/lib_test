@@ -243,7 +243,7 @@ addressAreaInfo String 地区全名
                     onSelectedListener.onSelected(popupType, 0, addressAreaInfo);
                     dismiss();
                 } catch (Exception e) {
-
+                    SLog.info("Error!%s", e.getMessage());
                 }
             }
         });
