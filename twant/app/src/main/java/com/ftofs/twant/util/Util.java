@@ -450,4 +450,27 @@ public class Util {
         } catch (ActivityNotFoundException activityNotFoundException1) {
         }
     }
+
+    /**
+     * 數組倒序
+     * @param arr
+     * @param <T>
+     */
+    public static <T> void arrayReverse(T[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+
+        int i = 0;
+        int j = arr.length - 1;
+
+        while (i < j) {
+            T temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+
+            i++;
+            j--;
+        }
+    }
 }

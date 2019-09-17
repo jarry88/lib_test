@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.CustomerServiceStaff;
@@ -87,6 +89,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     LinearLayout llOrderButtonContainer;
 
+    HorizontalScrollView hsvBottomToolbar;
+
     String storePhone;
     boolean needReloadData;
 
@@ -149,6 +153,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         orderButtonNameMap.put(buttonNameList[7], getString(R.string.text_delete_order));
         orderButtonNameMap.put(buttonNameList[8], getString(R.string.text_pay_order));
 
+        Util.arrayReverse(buttonNameList); // 倒序排序，與iOS保持一致
+
         tvReceiverName = view.findViewById(R.id.tv_receiver_name);
         tvMobile = view.findViewById(R.id.tv_mobile);
         tvAddress = view.findViewById(R.id.tv_address);
@@ -167,6 +173,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         tvPaySn = view.findViewById(R.id.tv_pay_sn);
         llOrderSendTimeContainer = view.findViewById(R.id.ll_order_send_time_container);
         tvSendTime = view.findViewById(R.id.tv_send_time);
+
+        hsvBottomToolbar = view.findViewById(R.id.hsv_bottom_toolbar);
 
         llOrderButtonContainer = view.findViewById(R.id.ll_order_button_container);
 
@@ -208,6 +216,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         rvOrderDetailGoodsList.setAdapter(adapter);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.tv_fragment_title, this);
 
         loadOrderDetail();
     }
@@ -364,6 +373,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_goto_store:
                 Util.startFragment(ShopMainFragment.newInstance(storeId));
+                break;
+            case R.id.tv_fragment_title:
+                if (Config.DEVELOPER_MODE) {
+                    hsvBottomToolbar.fullScroll(View.FOCUS_RIGHT);
+                }
                 break;
             default:
                 break;
@@ -603,6 +617,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 Util.dip2px(_mActivity, 39));
                         llOrderButtonContainer.addView(button, layoutParams);
                     }
+                    hsvBottomToolbar.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            hsvBottomToolbar.fullScroll(View.FOCUS_RIGHT);
+                        }
+                    }, 50);
+
 
 
                     int showMemberComplain = ordersVo.getInt("showMemberComplain");
