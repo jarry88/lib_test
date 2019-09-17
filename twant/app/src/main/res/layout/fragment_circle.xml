@@ -15,7 +15,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/border_type_d">
+        android:background="@android:color/white">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_search_post"
             android:layout_width="31dp"
@@ -57,7 +57,7 @@
         android:id="@+id/tool_bar_standalone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@drawable/border_type_d">
+        android:background="@android:color/white">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"

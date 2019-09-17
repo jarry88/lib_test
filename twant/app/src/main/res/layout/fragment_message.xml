@@ -11,7 +11,7 @@
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@drawable/bottom_separator_box_white">
+        android:background="@drawable/border_type_d">
 
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"

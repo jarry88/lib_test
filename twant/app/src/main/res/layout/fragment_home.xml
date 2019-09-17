@@ -242,7 +242,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="10sp"
                 android:textColor="@color/tw_black"
-                android:text="@string/text_new_arrivals_english"
+                android:text="N E W   A R R I V A L S"
                 android:gravity="center"
                 />
         </LinearLayout>

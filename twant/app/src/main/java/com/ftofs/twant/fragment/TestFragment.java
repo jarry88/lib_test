@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ import top.zibin.luban.Luban;
 public class TestFragment extends BaseFragment implements View.OnClickListener {
     Map<Integer, ButtonClickInfo> buttonClickInfoMap = new HashMap<>();
 
+    HorizontalScrollView hsv;
     int i = 0;
     TwProgressBar progressBar;
     ImageView imageView;
@@ -68,23 +70,15 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         progressBar.setColor(TwProgressBar.COLOR_ORANGE);
 
         imageView = view.findViewById(R.id.image_view);
+
+        hsv = view.findViewById(R.id.hsv);
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            ButtonClickInfo buttonClickInfo = buttonClickInfoMap.get(id);
-            if (!buttonClickInfo.getCanClick()) {
-                SLog.info("不能點擊");
-                return;
-            }
-
-            buttonClickInfo.canClick = false;
-            buttonClickInfo.lastClickTime = System.currentTimeMillis();
-            SLog.info("yesyes");
-
-            // SLog.info("contains[%s]", Util.needLoginFragmentName.contains("AddPostFragment"));
+            hsv.fullScroll(View.FOCUS_RIGHT);
         }
     }
 

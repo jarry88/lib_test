@@ -214,13 +214,13 @@
     <string name="input_common_used_template_title_hint">請輸入標題</string>
     <string name="input_common_used_template_content_hint">請輸入固定版式內容</string>
 
-    <string name="text_new_arrivals_chinese">最新入駐</string>
-    <string name="text_new_arrivals_english">NEW ARRIVALS</string>
+    <string name="text_new_arrivals_chinese">最 新 入 駐</string>
+    <string name="text_new_arrivals_english">N E W  A R R I V A L S</string>
 
-    <string name="text_new_in_chinese">最新商品</string>
-    <string name="text_new_in_english">NEW IN</string>
-    <string name="text_store_hot_item_chinese">店舖熱賣</string>
-    <string name="text_store_hot_item_english">RECOMMEND</string>
+    <string name="text_new_in_chinese">最 新 商 品</string>
+    <string name="text_new_in_english">N E W   I N</string>
+    <string name="text_store_hot_item_chinese">店 舖 熱 賣</string>
+    <string name="text_store_hot_item_english">H O T   S A L E</string>
 
     <string name="text_voucher">優惠券</string>
     <string name="text_conform">滿減優惠</string>

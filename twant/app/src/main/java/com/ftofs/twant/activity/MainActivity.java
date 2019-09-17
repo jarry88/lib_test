@@ -121,7 +121,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         EventBus.getDefault().register(this);
 
         int color = getResources().getColor(R.color.tw_red, null);
-        Util.setWindowStatusBarColor(this, color);
+        Util.setWindowStatusBarColor(this, android.R.color.white);
 
         // 監聽DecorView的變化
         View activityRoot = getWindow().getDecorView();

@@ -26,7 +26,7 @@
             android:id="@+id/img_store_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/img_shop_avatar"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginRight="42dp"
             />
@@ -762,7 +762,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textColor="@color/tw_black"
-                android:textSize="21sp"
+                android:textSize="10sp"
                 android:text="@string/text_store_hot_item_english"
                 />
             <LinearLayout
@@ -798,7 +798,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textColor="@color/tw_black"
-                android:textSize="21sp"
+                android:textSize="10sp"
                 android:text="@string/text_new_in_english"
                 />
             <LinearLayout
