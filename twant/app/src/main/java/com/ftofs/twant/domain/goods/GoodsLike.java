@@ -20,7 +20,7 @@ public class GoodsLike implements Serializable {
     private int commonId;
 
     /**
-     * 點贊狀態 1是0否
+     * 點讚狀態 1是0否
      */
     private int state;
 

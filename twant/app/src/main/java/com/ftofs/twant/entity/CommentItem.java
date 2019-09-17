@@ -13,8 +13,8 @@ public class CommentItem implements Parcelable {
     public int commentChannel; // 貼文渠道 1全部 2店鋪 3商品 4貼文 5推文
 
     public String content;
-    public int isLike; // 是否點贊
-    public int commentLike; // 點贊數
+    public int isLike; // 是否點讚
+    public int commentLike; // 點讚數
     public int commentReply; // 回復數
 
     public String commenterAvatar;

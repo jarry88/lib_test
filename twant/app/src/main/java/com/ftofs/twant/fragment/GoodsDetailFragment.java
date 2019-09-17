@@ -124,7 +124,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     String currImageSrc;
 
     ImageView btnGoodsThumb;
-    int isLike; // 是否點贊
+    int isLike; // 是否點讚
 
     int allowSend;
 
@@ -511,7 +511,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     /**
-     * 商品點贊/取消點贊
+     * 商品點讚/取消點讚
      */
     private void switchThumbState() {
         String token = User.getToken();

@@ -284,7 +284,7 @@ public class GoodsCommonExport {
     private String waterMarkPosition;
 
     /**
-     * 點贊數量
+     * 點讚數量
      */
     private int goodsLike = 0;
 

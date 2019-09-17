@@ -95,7 +95,7 @@ public class SearchCommentVo {
 
     //以下字段不存在于搜索引擎
     /**
-     * 點贊狀態
+     * 點讚狀態
      */
     private int isLike = 0;
 

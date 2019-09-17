@@ -29,7 +29,7 @@ public class StoreSearchItem {
     public float distance;
     public String shopDay;
     /**
-     * 點贊數量
+     * 點讚數量
      */
     public int likeCount;
     public int goodsCommonCount;

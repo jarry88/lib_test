@@ -265,7 +265,7 @@ public class Api {
 
 
     /**
-     * 商品點贊/取消點贊
+     * 商品點讚/取消點讚
      */
     public static final String PATH_GOODS_LIKE = "/app/goods/like";
 
@@ -282,7 +282,7 @@ public class Api {
 
 
     /**
-     * 店鋪：會員點贊/取消點贊
+     * 店鋪：會員點讚/取消點讚
      */
     public static final String PATH_STORE_LIKE = "/app/store/like";
 
@@ -399,17 +399,17 @@ public class Api {
     public static final String PATH_USER_DATA = "/memberpage/index";
 
     /**
-     * 個人專頁-互動-我的點贊-店鋪
+     * 個人專頁-互動-我的點讚-店鋪
      */
     public static final String PATH_MY_LIKE_STORE = "/memberpage/like/store";
 
     /**
-     * 個人專頁-互動-我的點贊-商品
+     * 個人專頁-互動-我的點讚-商品
      */
     public static final String PATH_MY_LIKE_GOODS = "/memberpage/like/goods";
 
     /**
-     * 個人專頁-互動-我的點贊-文章
+     * 個人專頁-互動-我的點讚-文章
      */
     public static final String PATH_MY_LIKE_POST = "/memberpage/like/want_post";
 
@@ -721,7 +721,7 @@ public class Api {
     public static final String PATH_POST_DETAIL = "/want_post/info";
 
     /**
-     * 貼文點贊/取消點贊
+     * 貼文點讚/取消點讚
      */
     public static final String PATH_POST_THUMB = "/want_post/like";
 

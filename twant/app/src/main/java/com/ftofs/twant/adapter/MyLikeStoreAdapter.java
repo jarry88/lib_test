@@ -12,7 +12,7 @@ import com.ftofs.twant.entity.MyLikeStoreItem;
 import java.util.List;
 
 /**
- * 【我的點贊】店鋪
+ * 【我的點讚】店鋪
  * @author zwm
  */
 public class MyLikeStoreAdapter extends BaseQuickAdapter<MyLikeStoreItem, BaseViewHolder> {

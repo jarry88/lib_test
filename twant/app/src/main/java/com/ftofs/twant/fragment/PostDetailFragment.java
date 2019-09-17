@@ -359,7 +359,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     }
 
                     int postView = wantPostVoInfo.getInt("postView"); // 瀏覽次數
-                    int postLike = wantPostVoInfo.getInt("postLike");  // 點贊次數
+                    int postLike = wantPostVoInfo.getInt("postLike");  // 點讚次數
                     int postFavor = wantPostVoInfo.getInt("postFavor");  // 喜歡次數
 
                     String viewCount = String.format(getString(R.string.text_view_count), postView);

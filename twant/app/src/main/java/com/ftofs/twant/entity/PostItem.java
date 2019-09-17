@@ -17,7 +17,7 @@ public class PostItem implements MultiItemEntity {
     public String authorNickname;
     public String createTime;
 
-    public int postThumb;  // 點贊數
+    public int postThumb;  // 點讚數
     public int postReply; // 回復/評論數
     public int postFollow;  // 關注數
 

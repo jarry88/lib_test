@@ -108,7 +108,7 @@ public class SearchWantPostVo {
 
     //以下屬性不存在於搜索引擎
     /**
-     * 點贊狀態
+     * 點讚狀態
      */
     private int isLike = 0;
 

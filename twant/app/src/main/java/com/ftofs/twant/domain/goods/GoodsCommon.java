@@ -478,7 +478,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private String waterMarkPosition;
 
     /**
-     * Modify By liusf 2019/1/9 11:01 被點贊数量
+     * Modify By liusf 2019/1/9 11:01 被點讚数量
      */
     private int goodsLike = 0;
 

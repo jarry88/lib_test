@@ -40,7 +40,7 @@ import okhttp3.Call;
 
 
 /**
- * 我的點贊Fragment
+ * 我的點讚Fragment
  * @author zwm
  */
 public class MyLikeFragment extends BaseFragment implements View.OnClickListener {

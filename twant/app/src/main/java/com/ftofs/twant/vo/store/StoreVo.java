@@ -144,7 +144,7 @@ public class StoreVo {
     private int isFavorite = 0;
 
     /**
-     * 是否點贊
+     * 是否點讚
      */
     private int isLike = 0;
 

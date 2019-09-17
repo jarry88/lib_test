@@ -32,7 +32,7 @@ public class PostFilterDrawerPopupView extends DrawerPopupView implements View.O
 
     /**
      * 貼文篩選描述
-     * postView 查看最多 postFavor 最受關注 postLike 點贊最多 postReply 評論最多 expiresDate 截止日期
+     * postView 查看最多 postFavor 最受關注 postLike 點讚最多 postReply 評論最多 expiresDate 截止日期
      */
     String filterDescArr[] = new String[] {
            "postView",  "postFavor", "postLike", "postReply", "expiresDate"

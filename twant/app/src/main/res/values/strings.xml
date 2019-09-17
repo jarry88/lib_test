@@ -255,7 +255,7 @@
 
     <string name="text_order_list_sku_count_template">共 %d 件商品</string>
 
-    <string name="text_like">點贊</string>
+    <string name="text_like">點讚</string>
     <string name="text_follow">關注</string>
     <string name="text_main_business">主營</string>
     <string name="text_add_friend_simplify">加好友</string>
@@ -577,7 +577,7 @@
     <string name="text_date">日期</string>
     <string name="text_viewed_most">查看最多</string>
     <string name="text_focused_most">最受關注</string>
-    <string name="text_thumbed_most">點贊最多</string>
+    <string name="text_thumbed_most">點讚最多</string>
     <string name="text_commented_most">評論最多</string>
 
     <string name="no_post_hint">暫無符合條件的貼文數據！</string>
@@ -586,8 +586,8 @@
 
 
     <string name="text_member">會員</string>
-    <string name="text_my_like">我的點贊</string>
-    <string name="text_my_like_desc">我點贊過的歷史紀錄</string>
+    <string name="text_my_like">我的點讚</string>
+    <string name="text_my_like_desc">我點讚過的歷史紀錄</string>
     <string name="text_my_comment">我的評論</string>
     <string name="text_my_comment_desc">我評論過的歷史紀錄</string>
     <string name="text_my_follow">我的關注</string>

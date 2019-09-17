@@ -60,12 +60,12 @@ public class GoodsCommonVo implements Serializable{
 	private BigInteger goodsSaleNum = new BigInteger("0");
 
     /**
-     * 點贊數量
+     * 點讚數量
      */
 	private long goodsLike;
 
     /**
-     * 點贊狀態
+     * 點讚狀態
      */
 	private int isLike;
 

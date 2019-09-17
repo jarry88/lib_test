@@ -90,7 +90,7 @@
                 android:src="@drawable/icon_search_round"
                 />
 
-            <!-- 商品點贊 -->
+            <!-- 商品點讚 -->
             <ImageView
                 android:id="@+id/btn_goods_thumb"
                 android:layout_width="wrap_content"

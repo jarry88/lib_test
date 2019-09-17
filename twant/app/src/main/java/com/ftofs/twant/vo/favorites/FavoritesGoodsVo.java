@@ -65,7 +65,7 @@ public class FavoritesGoodsVo {
     private StoreVo storeVo = null;
 
     /**
-     * 1是0否點贊
+     * 1是0否點讚
      */
     private int isLike;
 
