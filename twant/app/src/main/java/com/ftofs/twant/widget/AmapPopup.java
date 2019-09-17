@@ -127,6 +127,23 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
 
         // 使高德地圖顯示指定的地點，如果不设置的话中心点是北京
         aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+
+        // 初始化地圖應用狀態
+        MapAppInfo mapAppInfo = mapAppInfoList.get(MAP_ID_AMAP);
+        if (Util.isPackageInstalled(activity, mapAppInfo.packageName)) {
+            SLog.info("已經安裝高德地圖");
+            mapAppInfo.available = true;
+            mapAppInfo.uri = "androidamap://navi?sourceApplication=" + activity.getString(R.string.app_name) + "&poiname=我的目的地&lat="+storeMapInfo.storeLatitude+"&lon="+storeMapInfo.storeLongitude+"&dev=0";
+            availableMapCount++;
+        }
+
+        mapAppInfo = mapAppInfoList.get(MAP_ID_GOOGLE);
+        if (Util.isPackageInstalled(activity, mapAppInfo.packageName)) {
+            SLog.info("已經安裝Google地圖");
+            mapAppInfo.available = true;
+            mapAppInfo.uri = "google.navigation:q=" +storeMapInfo.storeLatitude+","+storeMapInfo.storeLongitude;
+            availableMapCount++;
+        }
     }
 
     //完全可见执行
@@ -155,24 +172,6 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
         } else if (id == R.id.btn_dial_store_phone) {
             Util.dialPhone(activity, storeMapInfo.storePhone);
         } else if (id == R.id.btn_map_navigation) {
-            Intent intent;
-
-            MapAppInfo mapAppInfo = mapAppInfoList.get(MAP_ID_AMAP);
-            if (Util.isPackageInstalled(activity, mapAppInfo.packageName)) {
-                SLog.info("已經安裝高德地圖");
-                mapAppInfo.available = true;
-                mapAppInfo.uri = "androidamap://navi?sourceApplication=" + activity.getString(R.string.app_name) + "&poiname=我的目的地&lat="+storeMapInfo.storeLatitude+"&lon="+storeMapInfo.storeLongitude+"&dev=0";
-                availableMapCount++;
-            }
-
-            mapAppInfo = mapAppInfoList.get(MAP_ID_GOOGLE);
-            if (Util.isPackageInstalled(activity, mapAppInfo.packageName)) {
-                SLog.info("已經安裝Google地圖");
-                mapAppInfo.available = true;
-                mapAppInfo.uri = "google.navigation:q=" +storeMapInfo.storeLatitude+","+storeMapInfo.storeLongitude;
-                availableMapCount++;
-            }
-
             /*
              * 處理方式
              * 1、如果安裝了多個地圖應用，則彈出列表讓用戶選擇
@@ -214,7 +213,7 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
                 // 如果未安裝地圖應用，則跳轉到應用市場
                 ToastUtil.error(activity, "您尚未安裝任何地圖應用");
                 Uri uri = Uri.parse("market://details?id=com.autonavi.minimap");
-                intent = new Intent(Intent.ACTION_VIEW, uri);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 activity.startActivity(intent);
             }
         }
