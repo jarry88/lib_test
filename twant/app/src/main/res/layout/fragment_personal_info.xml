@@ -9,7 +9,7 @@
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@drawable/bottom_separator_box">
+        android:background="@drawable/border_type_d">
 
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
@@ -38,7 +38,7 @@
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:background="@drawable/bottom_separator_box">
+        android:background="@drawable/border_type_d">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="20dp"
-                android:src="@mipmap/ic_launcher"
+                android:src="@drawable/grey_default_avatar"
                 />
             <ImageView
                 android:id="@+id/img_set_avatar"
@@ -80,7 +80,7 @@
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
-        android:background="@drawable/bottom_separator_box">
+        android:background="@drawable/border_type_d">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
-        android:background="@drawable/bottom_separator_box">
+        android:background="@drawable/border_type_d">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
-        android:background="@drawable/bottom_separator_box">
+        android:background="@drawable/border_type_d">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -212,7 +212,7 @@
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
-        android:background="@drawable/bottom_separator_box">
+        android:background="@drawable/border_type_d">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -257,7 +257,7 @@
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
-        android:background="@drawable/bottom_separator_box">
+        android:background="@drawable/border_type_d">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -294,4 +294,63 @@
                 />
         </LinearLayout>
     </RelativeLayout>
+
+    <!-- 個性簽名 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@drawable/border_type_d">
+        <TextView
+            android:id="@+id/label_member_signature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/tw_black"
+            android:textSize="16sp"
+            android:text="@string/text_member_signature"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/btn_set_signature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/icon_edit_member_signature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_button"
+                    />
+                <TextView
+                    android:id="@+id/tv_member_signature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_toLeftOf="@id/icon_edit_member_signature"
+                    android:paddingLeft="30dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="#676666"
+                    android:textSize="16sp"
+                    android:text="@string/text_not_set"
+                    />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>
+
+

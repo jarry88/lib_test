@@ -831,6 +831,11 @@ public class Api {
      */
     public static final String PATH_GOODS_COMMENT = "/member/orders/comment/send";
 
+    /**
+     * 修改個性簽名
+     */
+    public static final String PATH_EDIT_MEMBER_SIGNATURE = "/memberpage/modify/signature";
+
 
     /**
      * 發送Http請求

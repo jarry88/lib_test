@@ -42,7 +42,7 @@
             android:text="@string/ok"
             android:textSize="14sp"
             android:textColor="@android:color/white"
-            android:background="@drawable/mini_red_button"
+            android:background="@drawable/micro_red_button"
             android:visibility="gone"
             />
     </RelativeLayout>

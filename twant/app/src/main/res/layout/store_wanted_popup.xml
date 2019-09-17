@@ -94,7 +94,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:background="@drawable/mini_red_button"
+                    android:background="@drawable/micro_red_button"
                     android:text="@string/text_follow"
                     android:textColor="@android:color/white"
                     android:textSize="13sp"

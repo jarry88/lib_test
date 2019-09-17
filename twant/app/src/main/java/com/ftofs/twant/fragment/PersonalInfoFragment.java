@@ -63,6 +63,8 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
     String birthday;
     TextView tvBirthday;
     TextView tvMemberLocation;
+    TextView tvMemberSignature;
+    String memberSignature;
 
     public static PersonalInfoFragment newInstance() {
         Bundle args = new Bundle();
@@ -95,9 +97,11 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         Util.setOnClickListener(view, R.id.btn_set_gender, this);
         Util.setOnClickListener(view, R.id.btn_select_birthday, this);
         Util.setOnClickListener(view, R.id.btn_set_location, this);
+        Util.setOnClickListener(view, R.id.btn_set_signature, this);
 
         imgAvatar = view.findViewById(R.id.img_avatar);
         tvMemberLocation = view.findViewById(R.id.tv_member_location);
+        tvMemberSignature = view.findViewById(R.id.tv_member_signature);
 
         contentView = view;
     }
@@ -157,6 +161,9 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                         .moveUpToKeyboard(false)
                         .asCustom(new AreaPopup(_mActivity, PopupType.MEMBER_ADDRESS, this))
                         .show();
+                break;
+            case R.id.btn_set_signature:
+                startForResult(EditMemberSignatureFragment.newInstance(memberSignature), RequestCode.EDIT_MEMBER_SIGNATURE.ordinal());
                 break;
             default:
                 break;
@@ -225,6 +232,13 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     if (!StringUtil.isEmpty(location)) {
                         tvMemberLocation.setText(location);
                     }
+
+                    memberSignature = memberInfo.getString("memberSignature");
+                    if (!StringUtil.isEmpty(memberSignature)) {
+                        tvMemberSignature.setText(memberSignature);
+                    } else {
+                        memberSignature = "";
+                    }
                 } catch (Exception e) {
 
                 }
@@ -271,6 +285,22 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             SLog.info("extra[%s]", extra);
             String location = (String) extra;
             tvMemberLocation.setText(location);
+        }
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == RequestCode.EDIT_MEMBER_SIGNATURE.ordinal()) {
+            memberSignature = data.getString("memberSignature");
+            tvMemberSignature.setText(memberSignature);
         }
     }
 

@@ -98,4 +98,9 @@ public enum RequestCode {
      * 添加評論
      */
     ADD_COMMENT,
+
+    /**
+     * 修改個性簽名
+     */
+    EDIT_MEMBER_SIGNATURE,
 }
