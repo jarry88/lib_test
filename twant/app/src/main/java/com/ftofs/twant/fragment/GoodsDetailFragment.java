@@ -125,8 +125,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     ImageView btnGoodsThumb;
     int isLike; // 是否點讚
+    int goodsLike;
 
     int allowSend;
+
+    TextView tvThumbCount;
+    TextView tvGoodsCommentCount;
 
     List<Spec> specList = new ArrayList<>();
     // 從逗號連接的specValueId定位出goodsId的Map
@@ -279,6 +283,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         llGoodsDetailImageContainer = view.findViewById(R.id.ll_goods_detail_image_container);
         btnGoodsThumb = view.findViewById(R.id.btn_goods_thumb);
         btnGoodsThumb.setOnClickListener(this);
+
+        tvThumbCount = view.findViewById(R.id.tv_thumb_count);
+        tvGoodsCommentCount = view.findViewById(R.id.tv_goods_comment_count);
 
         Util.setOnClickListener(view, R.id.btn_goods_share, this);
 
@@ -544,6 +551,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     isLike = 1 - isLike;
+                    if (isLike == 1) {
+                        goodsLike++;
+                    } else {
+                        goodsLike--;
+                    }
                     updateThumbView();
 
                 } catch (Exception e) {
@@ -572,6 +584,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         } else {
             btnGoodsThumb.setImageResource(R.drawable.icon_goods_thumb_grey);
         }
+        tvThumbCount.setText(String.valueOf(goodsLike));
     }
 
     private void showSpecSelectPopup(int action) {
@@ -642,7 +655,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     // 是否点赞
                     isLike = goodsDetail.getInt("isLike");
+                    goodsLike = goodsDetail.getInt("goodsLike");
                     updateThumbView();
+
+
 
                     // 是否關注
                     isFavorite = goodsDetail.getInt("isFavorite");
@@ -861,6 +877,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     commentCount = responseObj.getInt("datas.wantCommentVoInfoCount");
                     tvCommentCount.setText(String.format(getString(R.string.text_comment) + "(%d)", commentCount));
+                    tvGoodsCommentCount.setText(String.valueOf(commentCount));
 
                     SLog.info("commentCount[%d]", commentCount);
                     if (commentCount > 0) {

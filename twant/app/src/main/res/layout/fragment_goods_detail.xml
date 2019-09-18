@@ -54,6 +54,23 @@
                 android:src="@drawable/icon_goods_comment"
                 />
 
+            <TextView
+                android:id="@+id/tv_goods_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                app:layout_constraintTop_toBottomOf="@id/btn_goods_comment"
+                app:layout_constraintStart_toStartOf="@id/btn_goods_comment"
+                app:layout_constraintEnd_toEndOf="@id/btn_goods_comment"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:shadowColor="#ffa8a8a8"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                />
+
             <!-- 圓形返回按鈕 -->
             <ImageView
                 android:id="@+id/btn_back_round"
@@ -100,6 +117,23 @@
                 app:layout_constraintRight_toRightOf="@id/goods_image"
                 app:layout_constraintBottom_toTopOf="@id/btn_goods_comment"
                 android:src="@drawable/icon_goods_thumb_grey"
+                />
+
+            <TextView
+                android:id="@+id/tv_thumb_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                app:layout_constraintTop_toBottomOf="@id/btn_goods_thumb"
+                app:layout_constraintStart_toStartOf="@id/btn_goods_thumb"
+                app:layout_constraintEnd_toEndOf="@id/btn_goods_thumb"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:shadowColor="#ffa8a8a8"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="1"
                 />
 
             <!-- 限時折扣活動信息 -->
