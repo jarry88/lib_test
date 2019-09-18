@@ -264,8 +264,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         }
 
         if (StringUtil.isEmpty(currentKeyword)) {
-            ToastUtil.error(_mActivity, getString(R.string.input_search_keyword_hint));
-            return;
+            // ToastUtil.error(_mActivity, getString(R.string.input_search_keyword_hint));
+            // return;
+            currentKeyword = "";
         }
 
         hideSoftInput();
