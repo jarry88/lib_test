@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +19,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.FeaturesGoodsAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.adapter.StoreGoodsListAdapter;
-import com.ftofs.twant.adapter.TrustValueListAdapter;
+import com.ftofs.twant.adapter.TestAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.InStorePersonItem;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
@@ -40,7 +41,6 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AmapPopup;
 import com.ftofs.twant.widget.InStorePersonPopup;
-import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
@@ -140,6 +140,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     TextView tvJobTitle2;
     TextView tvJobSalary2;
 
+    RecyclerView rvFeaturesGoodsList;
+    LinearLayout llFeaturesGoodsContainer;
+    PagerSnapHelper pagerSnapHelper;
+    LinearLayoutManager featuresGoodsLayoutManager;
+
     List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
 
     public static ShopHomeFragment newInstance() {
@@ -216,6 +221,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         Util.setOnClickListener(view, R.id.rl_shop_comment_container, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
 
+        llFeaturesGoodsContainer = view.findViewById(R.id.ll_features_goods_container);
+        rvFeaturesGoodsList = view.findViewById(R.id.rv_features_goods_list);
+        featuresGoodsLayoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
+        rvFeaturesGoodsList.setLayoutManager(featuresGoodsLayoutManager);
+        // rvFeaturesGoodsList.setAdapter(new TestAdapter());
+        // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
+        // https://www.jianshu.com/p/e54db232df62
+        pagerSnapHelper = new PagerSnapHelper();
+        pagerSnapHelper.attachToRecyclerView(rvFeaturesGoodsList);
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
@@ -479,6 +493,64 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             vwSeparatorStoreWanted.setVisibility(View.GONE);
                         }
 
+                        // 鎮店之寶
+                        boolean showFeaturesGoods = false; // 是否顯示鎮店之寶
+                        if (responseObj.exists("datas.featuresGoodsVoList")) {
+                            EasyJSONArray featuresGoodsVoList = responseObj.getArray("datas.featuresGoodsVoList");
+                            if (!Util.isJsonNull(featuresGoodsVoList) && featuresGoodsVoList.length() > 0) {
+                                showFeaturesGoods = true;
+
+                                List<StoreGoodsItem> storeGoodsItemList = new ArrayList<>();
+                                for (Object object : featuresGoodsVoList) {
+                                    EasyJSONObject featuresGoodsVo = (EasyJSONObject) object;
+                                    StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
+
+                                    storeGoodsItem.commonId = featuresGoodsVo.getInt("commonId");
+                                    storeGoodsItem.imageSrc = featuresGoodsVo.getString("imageSrc");
+                                    storeGoodsItem.goodsName = featuresGoodsVo.getString("goodsName");
+                                    storeGoodsItem.jingle = featuresGoodsVo.getString("jingle");
+                                    storeGoodsItem.price = Util.getSpuPrice(featuresGoodsVo);
+
+                                    storeGoodsItemList.add(storeGoodsItem);
+                                }
+
+                                FeaturesGoodsAdapter featuresGoodsAdapter = new FeaturesGoodsAdapter(_mActivity, storeGoodsItemList);
+                                rvFeaturesGoodsList.setAdapter(featuresGoodsAdapter);
+
+                                rvFeaturesGoodsList.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        int targetPosition = Integer.MAX_VALUE / 2;
+                                        rvFeaturesGoodsList.scrollToPosition(targetPosition);
+                                        /*
+                                        解決PagerSnapHelper的scrollToPosition不能居中的問題
+                                        https://stackoverflow.com/questions/42988016/how-to-programmatically-snap-to-position-on-recycler-view-with-linearsnaphelper
+                                         */
+                                        rvFeaturesGoodsList.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                View view = featuresGoodsLayoutManager.findViewByPosition(targetPosition);
+                                                if (view == null) {
+                                                    SLog.info("Error!Cant find target View for initial Snap");
+                                                    return;
+                                                }
+
+                                                int[] snapDistance = pagerSnapHelper.calculateDistanceToFinalSnap(featuresGoodsLayoutManager, view);
+                                                if (snapDistance[0] != 0 || snapDistance[1] != 0) {
+                                                    rvFeaturesGoodsList.scrollBy(snapDistance[0], snapDistance[1]);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }, 50);
+                            }
+                        }
+
+                        if (showFeaturesGoods) {
+                            llFeaturesGoodsContainer.setVisibility(View.VISIBLE);
+                        } else {
+                            llFeaturesGoodsContainer.setVisibility(View.GONE);
+                        }
 
                         // 最新商品
                         EasyJSONArray newGoodsVoList = responseObj.getArray("datas.newGoodsVoList");

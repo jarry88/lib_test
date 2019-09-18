@@ -736,13 +736,50 @@
             android:background="@color/tw_light_grey"
             />
 
+        <!-- 鎮店之寶 -->
+        <LinearLayout
+            android:id="@+id/ll_features_goods_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/vw_separator_store_wanted"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:textColor="@color/tw_black"
+                android:textSize="21sp"
+                android:text="鎮 店 之 寶"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@color/tw_black"
+                android:textSize="10sp"
+                android:text="U n i q u e   P r o d u c t"
+                />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_features_goods_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
 
         <!-- 店舖熱賣 -->
         <LinearLayout
             android:id="@+id/ll_store_hot_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/vw_separator_store_wanted"
+            app:layout_constraintTop_toBottomOf="@id/ll_features_goods_container"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:background="@android:color/white"
@@ -754,7 +791,7 @@
                 android:gravity="center"
                 android:textColor="@color/tw_black"
                 android:textSize="21sp"
-                android:text="@string/text_store_hot_item_chinese"
+                android:text="店 舖 熱 賣"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -763,7 +800,7 @@
                 android:gravity="center"
                 android:textColor="@color/tw_black"
                 android:textSize="10sp"
-                android:text="@string/text_store_hot_item_english"
+                android:text="H O T   S A L E"
                 />
             <LinearLayout
                 android:id="@+id/ll_hot_item_list"
@@ -790,7 +827,7 @@
                 android:gravity="center"
                 android:textColor="@color/tw_black"
                 android:textSize="21sp"
-                android:text="@string/text_new_in_chinese"
+                android:text="最 新 商 品"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -799,7 +836,7 @@
                 android:gravity="center"
                 android:textColor="@color/tw_black"
                 android:textSize="10sp"
-                android:text="@string/text_new_in_english"
+                android:text="N E W   I N"
                 />
             <LinearLayout
                 android:id="@+id/ll_new_in_item_list"
@@ -808,6 +845,5 @@
                 android:orientation="vertical">
             </LinearLayout>
         </LinearLayout>
-
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
