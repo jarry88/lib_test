@@ -18,6 +18,7 @@ public class SPField {
     public static final String FIELD_GENDER = "gender";
     public static final String FIELD_MEMBER_SIGNATURE = "member_signature";
     public static final String FIELD_MEMBER_BIO = "member_bio";
+    public static final String FIELD_AMAP_LOCATION = "amap_location";
 
 
     /**

@@ -107,7 +107,7 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
             // 如果沒有距離，則隱藏距離信息
             tvStoreDistance.setVisibility(GONE);
         } else {
-            String distanceText = activity.getString(R.string.text_distance) + String.format("%.1f") + "距km";
+            String distanceText = activity.getString(R.string.text_distance) + String.format("%.1f", storeMapInfo.storeDistance / 1000) + "km";
             tvStoreDistance.setText(distanceText);
         }
 

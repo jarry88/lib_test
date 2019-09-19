@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.domain.goods.ArrivalNotice;
 import com.ftofs.twant.entity.ButtonClickInfo;
 import com.ftofs.twant.log.SLog;
@@ -78,7 +79,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            hsv.fullScroll(View.FOCUS_RIGHT);
+            TwantApplication.getTwLocation().startLocation();
         }
     }
 

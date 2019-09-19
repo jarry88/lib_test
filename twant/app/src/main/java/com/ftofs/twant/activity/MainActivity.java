@@ -2,10 +2,12 @@ package com.ftofs.twant.activity;
 
 
 import android.annotation.SuppressLint;
+import android.content.pm.PermissionGroupInfo;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -24,8 +26,11 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
+import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.PayUtil;
+import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
@@ -34,6 +39,7 @@ import com.ftofs.twant.util.Util;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
 import com.orhanobut.hawk.Hawk;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -158,6 +164,24 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         activityRoot.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
 
         loadMainFragment();
+
+        // 2秒后，進行定位
+        PermissionUtil.actionWithPermission(this, new String[]{
+                Permission.ACCESS_COARSE_LOCATION, Permission.ACCESS_COARSE_LOCATION}, "店鋪定位需要授予", new CommonCallback() {
+            @Override
+            public String onSuccess(@Nullable String data) {
+                // 進行定位
+                SLog.info("進行定位");
+                TwantApplication.getTwLocation().startLocation();
+                return null;
+            }
+
+            @Override
+            public String onFailure(@Nullable String data) {
+                ToastUtil.error(MainActivity.this, "您拒絕了授權");
+                return null;
+            }
+        });
     }
 
     @Override

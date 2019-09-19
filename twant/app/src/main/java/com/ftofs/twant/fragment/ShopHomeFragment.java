@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.FeaturesGoodsAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.adapter.StoreGoodsListAdapter;
@@ -27,7 +29,9 @@ import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.InStorePersonItem;
+import com.ftofs.twant.entity.Location;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreGoodsItem;
@@ -35,6 +39,7 @@ import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -47,14 +52,18 @@ import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.ftofs.twant.widget.StoreWantedPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.orhanobut.hawk.Hawk;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
@@ -264,6 +273,20 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 params.set("token", token);
             }
 
+            String locationStr = Hawk.get(SPField.FIELD_AMAP_LOCATION, "");
+            SLog.info("locationStr[%s]", locationStr);
+            if (!StringUtil.isEmpty(locationStr)) {
+                Location location = (Location) EasyJSONBase.jsonDecode(Location.class, locationStr);
+
+                if (System.currentTimeMillis() - location.timestamp < 3600 * 1000) { // 1小時內的定位才考慮
+                    params.set("lng", location.longitude);
+                    params.set("lat", location.latitude);
+                    SLog.info("定位數據有效");
+                } else {
+                    SLog.info("定位數據過期");
+                }
+            }
+
             SLog.info("path[%s], params[%s]", path, params.toString());
             Api.postUI(path, params, new UICallback() {
                 @Override
@@ -394,6 +417,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                         String storeDistanceStr = storeInfo.getString("distance");
                         storeDistance = Double.valueOf(storeDistanceStr);
+                        SLog.info("storeDistance[%.2f]", storeDistance);
 
 
                         // 社交分享
@@ -686,6 +710,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             });
         } catch (EasyJSONException e) {
             e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 
@@ -903,5 +935,19 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 .moveUpToKeyboard(false)
                 .asCustom(new StoreAnnouncementPopup(_mActivity, storeAnnouncementList))
                 .show();
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        if (PermissionUtil.hasPermission(new String[] {Permission.ACCESS_COARSE_LOCATION, Permission.ACCESS_FINE_LOCATION})) {
+            TwantApplication.getTwLocation().startLocation();
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

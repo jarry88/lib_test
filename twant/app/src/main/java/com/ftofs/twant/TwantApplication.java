@@ -11,6 +11,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.lbs.TwLocation;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.FriendInfo;
@@ -74,13 +75,19 @@ public class TwantApplication extends Application {
     // 線程池
     private static ExecutorService executorService;
 
+    TwLocation twLocation;
+
     // IWXAPI是第三方app和微信通信的openapi接口
     public static IWXAPI wxApi;
 
-    private static Context applicationContext = null;
+    private static TwantApplication instance = null;
 
-    public static Context getContext() {
-        return applicationContext;
+    public static TwantApplication getInstance() {
+        return instance;
+    }
+
+    public static TwLocation getTwLocation() {
+        return getInstance().twLocation;
     }
 
     @Override
@@ -90,7 +97,7 @@ public class TwantApplication extends Application {
 
         String processAppName = getAppName(pid);
         SLog.info("TwantApplication::onCreate(), pid[%d], processName[%s]", pid, processAppName);
-        applicationContext = getApplicationContext();
+        instance = this;
 
         //Bugly异常处理
         CrashReport.initCrashReport(getApplicationContext(), Config.BUGLY_KEY, Config.DEVELOPER_MODE);
@@ -195,6 +202,8 @@ public class TwantApplication extends Application {
 
 
         initUmeng();
+
+        initAmapLocation();
 
         // 將應用注冊到微信
         regToWx();
@@ -350,7 +359,7 @@ public class TwantApplication extends Application {
         options.setAutoDownloadThumbnail(true);
 
         //初始化
-        EMClient.getInstance().init(applicationContext, options);
+        EMClient.getInstance().init(instance, options);
         //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
         EMClient.getInstance().setDebugMode(true);
 
@@ -495,6 +504,24 @@ public class TwantApplication extends Application {
             }
         };
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
+    }
+
+    /**
+     * 初始化高德地圖定位
+     */
+    private void initAmapLocation() {
+        int pid = android.os.Process.myPid();
+
+        String processAppName = getAppName(pid);
+        // 如果APP启用了远程的service，此application:onCreate会被调用2次
+        // 为了防止环信SDK被初始化2次，加此判断会保证SDK被初始化1次
+        // 默认的APP会在以包名为默认的process name下运行，如果查到的process name不是APP的process name就立即返回
+        if (processAppName == null || !processAppName.equalsIgnoreCase(getPackageName())) {
+            // 则此application::onCreate 是被service 调用的，直接返回
+            return;
+        }
+
+        twLocation = new TwLocation(this);
     }
 
     private String getAppName(int pID) {

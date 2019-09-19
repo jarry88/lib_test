@@ -1215,7 +1215,7 @@ public class Api {
      */
     public static String syncUploadFile(File file) {
         long threadId = Thread.currentThread().getId();
-        Context context = TwantApplication.getContext();
+        Context context = TwantApplication.getInstance();
 
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
