@@ -80,6 +80,11 @@ public enum EBMessageType {
      * 打開應用時，顯示初始化未讀消息條數和購物車項數等工具欄數據
      */
     MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE,
+
+    /**
+     * 重新加載商品詳情
+     */
+    MESSAGE_TYPE_RELOAD_GOODS_DETAIL,
 }
 
 

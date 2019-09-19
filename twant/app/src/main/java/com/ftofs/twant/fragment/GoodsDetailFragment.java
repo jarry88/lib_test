@@ -72,6 +72,7 @@ import java.util.TimerTask;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -185,6 +186,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     List<GoodsConformItem> goodsConformItemList = new ArrayList<>();
     Map<Integer, GoodsInfo> goodsInfoMap = new HashMap<>();
 
+    List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
+    CountDownHandler countDownHandler;
+
+    boolean isDataValid;
+
     static class CountDownHandler extends Handler {
         WeakReference<GoodsDetailFragment> weakReference;
 
@@ -204,9 +210,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             goodsDetailFragment.tvCountDownSecond.setText(String.format("%02d", timeInfo.second));
         }
     }
-
-    List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
-    CountDownHandler countDownHandler;
 
     /**
      * 構建商品詳情頁面
@@ -336,9 +339,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             }
         });
         rvStoreFriendsList.setAdapter(adapter);
-
-        String token = User.getToken();
-        loadGoodsDetail(commonId, token);
     }
 
 
@@ -595,12 +595,28 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 .show();
     }
 
-    private void loadGoodsDetail(final int commonId, String token) {
+    private void loadGoodsDetail() {
+        // 清空一下數據，以便可以重復加載
+        specList.clear();
+        specPairList.clear();
+        selSpecValueIdList.clear();
+        storeFriendsItemList.clear();
+        goodsConformItemList.clear();
+        inStorePersonItemList.clear();
+
+        String token = User.getToken();
         final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                 .asLoading(getString(R.string.text_loading))
                 .show();
         String path = Api.PATH_GOODS_DETAIL + "/" + commonId;
-        EasyJSONObject params = EasyJSONObject.generate("token", token);
+        EasyJSONObject params = EasyJSONObject.generate();
+        if (!StringUtil.isEmpty(token)) {
+            try {
+                params.set("token", token);
+            } catch (EasyJSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         SLog.info("path[%s], params[%s]", path, params);
         Api.postUI(path, params, new UICallback() {
@@ -933,6 +949,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
                     }
 
+                    isDataValid = true;
                     adapter.setNewData(storeFriendsItemList);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -979,6 +996,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             } catch (Exception e) {
 
             }
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_RELOAD_GOODS_DETAIL) {
+            SLog.info("EBMessageType.MESSAGE_TYPE_RELOAD_GOODS_DETAIL");
+            isDataValid = false;
         }
     }
 
@@ -1042,6 +1062,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         if (discountEndTime > 0) {
             startCountDown();
+        }
+
+        if (!isDataValid) {
+            loadGoodsDetail();
         }
     }
 
