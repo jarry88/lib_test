@@ -11,7 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.StoreGoodsItem;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
 
 
 import java.util.List;
@@ -62,6 +65,13 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
         holder.tvGoodsName.setText(item.goodsName);
         holder.tvGoodsJingle.setText(item.jingle);
         holder.tvGoodsPrice.setText(StringUtil.formatPrice(context, item.price, 1));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Util.startFragment(GoodsDetailFragment.newInstance(item.commonId, 0));
+            }
+        });
     }
 
     @Override
