@@ -369,7 +369,7 @@ public class StringUtil {
     public static boolean isMobileValid(String mobile, int areaId) {
         String[] mobileRex = new String[] {
                 "",
-                "^[6|9][0-9]{7}$", // 香港
+                "^[569][0-9]{7}$", // 香港
                 "^1[0-9]{10}$",    // 大陸
                 "^6[0-9]{7}$"   // 澳門
         };
