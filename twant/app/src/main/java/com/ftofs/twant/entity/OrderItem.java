@@ -18,15 +18,5 @@ public class OrderItem {
     public String ordersStateName;
     public float freightAmount;
     public float ordersAmount;
-    public boolean showPayButton;
-    public int payId;
     public List<OrderSkuItem> orderSkuItemList;
-
-    public void setShowPayButton(boolean showPayButton) {
-        this.showPayButton = showPayButton;
-    }
-
-    public void setPayId(int payId) {
-        this.payId = payId;
-    }
 }

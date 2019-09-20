@@ -236,7 +236,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         });
         rvStoreList.setAdapter(adapter);
 
-        loadBillData();
+        loadOrderData();
 
         getMobileZoneList();
     }
@@ -645,7 +645,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-    private void loadBillData() {
+    private void loadOrderData() {
         final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
                 .asLoading("正在生成訂單")
                 .show();

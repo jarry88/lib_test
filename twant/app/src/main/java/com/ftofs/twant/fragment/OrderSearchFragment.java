@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.OrderListAdapter;
+import com.ftofs.twant.adapter.OrderItemListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.OrderItem;
@@ -43,7 +43,7 @@ import okhttp3.Call;
  */
 public class OrderSearchFragment extends BaseFragment implements View.OnClickListener {
     List<OrderItem> orderItemList = new ArrayList<>();
-    OrderListAdapter adapter;
+    OrderItemListAdapter adapter;
 
     public static OrderSearchFragment newInstance() {
         Bundle args = new Bundle();
@@ -84,7 +84,7 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
         RecyclerView rvOrderList = view.findViewById(R.id.rv_order_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
-        adapter = new OrderListAdapter(_mActivity, R.layout.order_item, orderItemList);
+        adapter = new OrderItemListAdapter(_mActivity, R.layout.order_item, orderItemList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -193,7 +193,7 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
                     adapter.setNewData(orderItemList);
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
-                    SLog.info("Error!loadBillData failed");
+                    SLog.info("Error!loadOrderData failed");
                 }
             }
         });
