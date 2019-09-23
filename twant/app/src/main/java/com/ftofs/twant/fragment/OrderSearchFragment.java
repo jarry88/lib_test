@@ -16,10 +16,12 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.OrderItemListAdapter;
+import com.ftofs.twant.adapter.PayItemListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.OrderSkuItem;
+import com.ftofs.twant.entity.PayItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -42,8 +44,8 @@ import okhttp3.Call;
  * @author zwm
  */
 public class OrderSearchFragment extends BaseFragment implements View.OnClickListener {
-    List<OrderItem> orderItemList = new ArrayList<>();
-    OrderItemListAdapter adapter;
+    List<PayItem> payItemList = new ArrayList<>();
+    PayItemListAdapter adapter;
 
     public static OrderSearchFragment newInstance() {
         Bundle args = new Bundle();
@@ -84,29 +86,7 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
         RecyclerView rvOrderList = view.findViewById(R.id.rv_order_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
-        adapter = new OrderItemListAdapter(_mActivity, R.layout.order_item, orderItemList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                SLog.info("onItemClick");
-
-                OrderItem orderItem = orderItemList.get(position);
-
-                Util.startFragment(OrderDetailFragment.newInstance(orderItem.orderId));
-            }
-        });
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                int id = view.getId();
-                SLog.info("id[%d]", id);
-                if (id == R.id.btn_pay_order) {
-                    int payId = (int) view.getTag();
-                    SLog.info("payId[%d]", payId);
-                    Util.startFragment(ICBCFragment.newInstance(String.valueOf(payId)));
-                }
-            }
-        });
+        adapter = new PayItemListAdapter(_mActivity, R.layout.order_item, payItemList);
         rvOrderList.setAdapter(adapter);
     }
 
@@ -145,7 +125,7 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
 
                 try {
                     EasyJSONArray ordersPayVoList = responseObj.getArray("datas.ordersPayVoList");
-                    orderItemList.clear();
+                    payItemList.clear();
                     for (Object object : ordersPayVoList) { // PayObject
                         EasyJSONObject ordersPayVo = (EasyJSONObject) object;
 
@@ -178,19 +158,16 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
                                 orderSkuItemList.add(new OrderSkuItem(goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
                             }  // END OF Sku
 
-                            OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount, orderSkuItemList);
-                            // 最后一個顯示【支付訂單】按鈕
-                            if (index == len -1) {
-                                orderItem.setShowPayButton(true);
-                                orderItem.setPayId(payId);
-                            }
+                            OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount,
+                                    false, false, false, false, orderSkuItemList);
 
-                            orderItemList.add(orderItem);
+
+                            // payItemList.add(orderItem);
                             ++index;
                         } // END OF Order Object
                     } // END OF Pay Object
-                    SLog.info("orderItemList:count[%d]", orderItemList.size());
-                    adapter.setNewData(orderItemList);
+                    SLog.info("payItemList:count[%d]", payItemList.size());
+                    adapter.setNewData(payItemList);
                 } catch (EasyJSONException e) {
                     e.printStackTrace();
                     SLog.info("Error!loadOrderData failed");
@@ -207,7 +184,6 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
             pop();
         }
     }
-
 
     @Override
     public boolean onBackPressedSupport() {

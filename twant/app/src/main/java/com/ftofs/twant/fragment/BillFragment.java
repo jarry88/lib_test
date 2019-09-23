@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.adapter.PayItemListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -52,10 +53,15 @@ import okhttp3.Call;
  * @author zwm
  */
 public class BillFragment extends BaseFragment implements View.OnClickListener, TwTabButton.TtbOnSelectListener {
-    int billStatus;
+    int orderStatus;
+
+    RecyclerView rvOrderList;
 
     List<PayItem> payItemList = new ArrayList<>();
-    PayItemListAdapter adapter;
+    List<OrderItem> orderItemList = new ArrayList<>();
+
+    PayItemListAdapter payItemListAdapter;
+    OrderListAdapter orderListAdapter;
     TwTabButton[] tvOrderStatusArr = new TwTabButton[5];
     int[] orderStatusIds = new int[] {R.id.btn_bill_all, R.id.btn_bill_to_be_paid, R.id.btn_bill_to_be_shipped,
            R.id.btn_bill_to_be_received, R.id.btn_bill_to_be_commented};
@@ -70,10 +76,10 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     TextView tvToBeReceivedCount;
     TextView tvToBeCommentedCount;
 
-    public static BillFragment newInstance(int billStatus) {
+    public static BillFragment newInstance(int orderStatus) {
         Bundle args = new Bundle();
 
-        args.putInt("billStatus", billStatus);
+        args.putInt("orderStatus", orderStatus);
         BillFragment fragment = new BillFragment();
         fragment.setArguments(args);
 
@@ -94,8 +100,8 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         EventBus.getDefault().register(this);
 
         Bundle args = getArguments();
-        billStatus = args.getInt("billStatus", Constant.ORDER_STATUS_ALL);
-        SLog.info("billStatus[%d]", billStatus);
+        orderStatus = args.getInt("orderStatus", Constant.ORDER_STATUS_ALL);
+        SLog.info("orderStatus[%d]", orderStatus);
 
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
@@ -119,11 +125,11 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
             ++index;
         }
 
-        RecyclerView rvOrderList = view.findViewById(R.id.rv_order_list);
+        rvOrderList = view.findViewById(R.id.rv_order_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
-        adapter = new PayItemListAdapter(_mActivity, R.layout.pay_item, payItemList);
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        payItemListAdapter = new PayItemListAdapter(_mActivity, R.layout.pay_item, payItemList);
+        payItemListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
@@ -139,11 +145,20 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         });
-        rvOrderList.setAdapter(adapter);
+        // rvOrderList.setAdapter(payItemListAdapter);
 
-        tvOrderStatusArr[billStatus].setStatus(Constant.STATUS_SELECTED);
-        handleOrderStatusSwitch(orderStatusIds[billStatus]);
-        loadOrderData(billStatus);
+        orderListAdapter = new OrderListAdapter(_mActivity, R.layout.order_item, orderItemList);
+        orderListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+            }
+        });
+        // rvOrderList.setAdapter(orderListAdapter);
+
+        tvOrderStatusArr[orderStatus].setStatus(Constant.STATUS_SELECTED);
+        handleOrderStatusSwitch(orderStatusIds[orderStatus]);
+        loadOrderData(orderStatus);
         loadOrderCountData();
     }
 
@@ -157,7 +172,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     public void onEBMessage(EBMessage message) {
         SLog.info("BillFragment::onEBMessage()");
         if (message.messageType == EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST) {
-            SLog.info("重新加載訂單列表數據, billStatus[%d]", billStatus);
+            SLog.info("重新加載訂單列表數據, orderStatus[%d]", orderStatus);
             needRefresh = true;
         }
     }
@@ -199,7 +214,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
             }
         }
 
-        billStatus = index;
+        orderStatus = index;
     }
 
     private void loadOrderCountData() {
@@ -283,7 +298,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
         });
     }
 
-    private void loadOrderData(int billStatus) {
+    private void loadOrderData(int orderStatus) {
         try {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
@@ -293,7 +308,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
             EasyJSONObject params = EasyJSONObject.generate("token", token);
 
-            String ordersState = getOrdersState(billStatus);
+            String ordersState = getOrdersState(orderStatus);
             if (!StringUtil.isEmpty(ordersState)) {
                 params.set("ordersState", ordersState);
             }
@@ -328,12 +343,24 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
                             int payId = ordersPayVo.getInt("payId");
                             float payAmount = (float) ordersPayVo.getDouble("ordersOnlineDiffAmount");
-                            PayItem payItem = new PayItem(payId, payAmount, Constant.ORDER_STATUS_TO_BE_PAID == billStatus);
+
+                            boolean showPayButton = false;
+                            if (Constant.ORDER_STATUS_TO_BE_PAID == orderStatus ||
+                                    (Constant.ORDER_STATUS_ALL == orderStatus && payAmount > 0.0001f)) {
+                                // 如果是【待付款】Tab的訂單或【全部】Tab里面有付款金額的訂單，都需要付款處理
+                                showPayButton = true;
+                            }
+
+                            PayItem payItem = null;
+                            if (showPayButton) { // 如果是需要支付的支付單，最外層作為一個Item(對應于一個支付單有多個訂單的情況)
+                                payItem = new PayItem(payId, payAmount, true);
+                            }
 
                             EasyJSONArray ordersVoList = ordersPayVo.getArray("ordersVoList");
-                            int len = ordersVoList.length();
-                            int index = 0;
                             for (Object object2 : ordersVoList) { // OrderVo 一一對應于店鋪
+                                if (!showPayButton) {
+                                    payItem = new PayItem(payId, payAmount, false);
+                                }
                                 EasyJSONObject ordersVo = (EasyJSONObject) object2;
 
                                 int ordersId = ordersVo.getInt("ordersId");
@@ -342,8 +369,14 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                                 float freightAmount = (float) ordersVo.getDouble("freightAmount");
                                 float ordersAmount = (float) ordersVo.getDouble("ordersAmount");
 
-                                List<OrderSkuItem> orderSkuItemList = new ArrayList<>();
+                                int showMemberCancel = ordersVo.getInt("showMemberCancel");
+                                int showMemberBuyAgain = ordersVo.getInt("showMemberBuyAgain");
+                                int showShipSearch = ordersVo.getInt("showShipSearch");
+                                int showEvaluation = ordersVo.getInt("showEvaluation");
+                                SLog.info("showMemberCancel[%d], showMemberBuyAgain[%d], showShipSearch[%d], showEvaluation[%d]",
+                                        showMemberCancel, showMemberBuyAgain, showShipSearch, showEvaluation);
 
+                                List<OrderSkuItem> orderSkuItemList = new ArrayList<>();
                                 // 獲取Sku列表
                                 EasyJSONArray ordersGoodsVoList = ordersVo.getArray("ordersGoodsVoList");
                                 for (Object object3 : ordersGoodsVoList) { // Sku
@@ -358,17 +391,24 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                                     orderSkuItemList.add(new OrderSkuItem(goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
                                 }  // END OF Sku
 
-                                OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount, orderSkuItemList);
 
+                                OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount,
+                                        showMemberCancel == 1, showMemberBuyAgain == 1, showShipSearch == 1,
+                                        showEvaluation == 1, orderSkuItemList);
 
                                 payItem.orderItemList.add(orderItem);
-                                ++index;
+                                if (!showPayButton) {
+                                    payItemList.add(payItem);
+                                }
                             } // END OF Order Object
 
-                            payItemList.add(payItem);
+                            if (showPayButton) { // 如果是需要支付的支付單，最外層作為一個Item
+                                payItemList.add(payItem);
+                            }
                         } // END OF Pay Object
                         SLog.info("payItemList:count[%d]", payItemList.size());
-                        adapter.setNewData(payItemList);
+                        payItemListAdapter.setNewData(payItemList);
+                        rvOrderList.setAdapter(payItemListAdapter);
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                         SLog.info("Error!loadOrderData failed");
@@ -410,7 +450,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     public void onSelect(TwTabButton tabButton) {
         int id = tabButton.getId();
         handleOrderStatusSwitch(id);
-        loadOrderData(billStatus);
+        loadOrderData(orderStatus);
     }
 
     @Override
@@ -419,8 +459,8 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
         if (needRefresh) {
             loadOrderCountData();
-            SLog.info("onSupportVisible::billStatus[%d]", billStatus);
-            loadOrderData(billStatus);
+            SLog.info("onSupportVisible::orderStatus[%d]", orderStatus);
+            loadOrderData(orderStatus);
             needRefresh = false;
         }
     }

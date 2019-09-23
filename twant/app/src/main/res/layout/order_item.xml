@@ -3,8 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
     android:orientation="vertical">
 
+    <!-- 店鋪頭部 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -49,14 +51,15 @@
             />
     </RelativeLayout>
 
+    <!-- Sku列表 -->
     <LinearLayout
         android:id="@+id/ll_sku_item_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
     </LinearLayout>
 
+    <!-- 件數和金額匯總 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,4 +86,70 @@
             android:text="$ 329.00"
             />
     </LinearLayout>
+
+    <!-- 操作按鈕欄 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+            <!-- 再次購買 -->
+            <TextView
+                android:id="@+id/btn_buy_again"
+                android:layout_width="76dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:text="@string/text_buy_again"
+                android:textColor="@color/tw_black"
+                android:textSize="13sp"
+                android:background="@drawable/smaller_outline_button"
+                />
+            <!-- 取消訂單 -->
+            <TextView
+                android:id="@+id/btn_cancel_order"
+                android:layout_width="76dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:text="@string/text_cancel_order"
+                android:textColor="@color/tw_black"
+                android:textSize="13sp"
+                android:background="@drawable/smaller_outline_button_revert"
+                />
+            <!-- 查看物流 -->
+            <TextView
+                android:id="@+id/btn_view_logistics"
+                android:layout_width="76dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:text="@string/text_view_logistics"
+                android:textColor="@color/tw_black"
+                android:textSize="13sp"
+                android:background="@drawable/smaller_outline_button"
+                />
+            <!-- 訂單評論 -->
+            <TextView
+                android:id="@+id/btn_order_comment"
+                android:layout_width="76dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:text="@string/text_order_comment"
+                android:textColor="@color/tw_black"
+                android:textSize="13sp"
+                android:background="@drawable/smaller_outline_button_revert"
+                />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vw_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="@color/tw_light_grey"
+        />
+
 </LinearLayout>

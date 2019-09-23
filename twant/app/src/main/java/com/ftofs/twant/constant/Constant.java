@@ -44,6 +44,12 @@ public class Constant {
     public static final int ORDER_STATUS_TO_BE_COMMENTED = 4; // 待評價
 
 
+    /**
+     * 服務器端的訂單狀態的定義
+     */
+    public static final int SERVER_ORDERS_STATE_UNINITIALIZED = -1; // 未初始化的，表示未取到服務器端的值
+    public static final int SERVER_ORDERS_STATE_TO_BE_PAID = 10; // 待付款
+
 
     /**
      * 數字定義
