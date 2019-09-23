@@ -374,7 +374,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                     return;
                 }
 
-                Util.startFragmentForResult(ConfirmBillFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
+                Util.startFragmentForResult(ConfirmOrderFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
                 break;
             case R.id.btn_delete:
                 try {

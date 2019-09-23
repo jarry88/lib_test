@@ -14,15 +14,13 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
-import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
-import com.ftofs.twant.fragment.ConfirmBillFragment;
-import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -40,7 +38,6 @@ import java.util.Map;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 規格選擇框
@@ -303,7 +300,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 "buyNum", abQuantity.getValue(),
                 "goodsId", goodsId));
 
-        Util.startFragment(ConfirmBillFragment.newInstance(0, easyJSONArray.toString()));
+        Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString()));
     }
 
     private void selectSpecs() {

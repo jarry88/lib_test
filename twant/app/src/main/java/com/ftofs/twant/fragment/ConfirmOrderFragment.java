@@ -67,7 +67,7 @@ import okhttp3.Call;
  * 確認訂單Fragment
  * @author zwm
  */
-public class ConfirmBillFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class ConfirmOrderFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     String buyData;
 
     int isFromCart;
@@ -130,13 +130,13 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
      * @param buyData
      * @return
      */
-    public static ConfirmBillFragment newInstance(int isFromCart, String buyData) {
+    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData) {
         Bundle args = new Bundle();
 
         args.putInt("isFromCart", isFromCart);
         args.putString("buyData", buyData);
 
-        ConfirmBillFragment fragment = new ConfirmBillFragment();
+        ConfirmOrderFragment fragment = new ConfirmOrderFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -145,7 +145,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_confirm_bill, container, false);
+        View view = inflater.inflate(R.layout.fragment_confirm_order, container, false);
         return view;
     }
 
@@ -225,7 +225,7 @@ public class ConfirmBillFragment extends BaseFragment implements View.OnClickLis
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(false)
                                 .asCustom(new OrderVoucherPopup(_mActivity, storeItem.storeId, storeItem.storeName, storeVoucherVoList,
-                                        ConfirmBillFragment.this))
+                                        ConfirmOrderFragment.this))
                                 .show();
                         SLog.info("HERE");
                         break;

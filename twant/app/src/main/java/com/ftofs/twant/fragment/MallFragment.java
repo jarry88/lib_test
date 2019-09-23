@@ -141,7 +141,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 pop();
                 break;
             case R.id.btn_my_bill:
-                Util.startFragment(BillFragment.newInstance(Constant.ORDER_STATUS_ALL));
+                Util.startFragment(OrderFragment.newInstance(Constant.ORDER_STATUS_ALL));
                 break;
 
             case R.id.btn_to_be_paid:
@@ -158,7 +158,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 } else {
                     orderStatus = Constant.ORDER_STATUS_TO_BE_COMMENTED;
                 }
-                Util.startFragment(BillFragment.newInstance(orderStatus));
+                Util.startFragment(OrderFragment.newInstance(orderStatus));
                 break;
 
             case R.id.icon_return_or_exchange:

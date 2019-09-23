@@ -9,10 +9,8 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ListPopupAdapter;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.fragment.ConfirmBillFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.lxj.xpopup.core.BottomPopupView;

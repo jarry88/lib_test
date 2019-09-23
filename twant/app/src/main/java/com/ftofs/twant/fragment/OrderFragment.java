@@ -53,7 +53,7 @@ import okhttp3.Call;
  * 訂單頁面
  * @author zwm
  */
-public class BillFragment extends BaseFragment implements View.OnClickListener, TwTabButton.TtbOnSelectListener {
+public class OrderFragment extends BaseFragment implements View.OnClickListener, TwTabButton.TtbOnSelectListener {
     int orderStatus;
 
     RecyclerView rvOrderList;
@@ -77,11 +77,11 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     TextView tvToBeReceivedCount;
     TextView tvToBeCommentedCount;
 
-    public static BillFragment newInstance(int orderStatus) {
+    public static OrderFragment newInstance(int orderStatus) {
         Bundle args = new Bundle();
 
         args.putInt("orderStatus", orderStatus);
-        BillFragment fragment = new BillFragment();
+        OrderFragment fragment = new OrderFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -90,7 +90,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bill, container, false);
+        View view = inflater.inflate(R.layout.fragment_order, container, false);
         return view;
     }
 
@@ -171,7 +171,7 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        SLog.info("BillFragment::onEBMessage()");
+        SLog.info("OrderFragment::onEBMessage()");
         if (message.messageType == EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST) {
             SLog.info("重新加載訂單列表數據, orderStatus[%d]", orderStatus);
             needRefresh = true;
