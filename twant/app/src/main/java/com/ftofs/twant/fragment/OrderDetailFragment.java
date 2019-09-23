@@ -584,6 +584,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     List<String> showButtonNameList = new ArrayList<>();
 
                     for (String buttonName : buttonNameList) {
+                        if (TEXT_MEMBER_PAY.equals(buttonName)) { // 訂單詳情里暫不顯示支付按鈕
+                            continue;
+                        }
                         if (ordersVo.getInt(buttonName) == 1) {
                             showButtonNameList.add(buttonName);
                         }
