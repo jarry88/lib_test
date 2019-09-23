@@ -21,6 +21,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.OrderSkuItem;
 import com.ftofs.twant.entity.PayItem;
@@ -391,10 +392,26 @@ public class BillFragment extends BaseFragment implements View.OnClickListener, 
                                     orderSkuItemList.add(new OrderSkuItem(goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
                                 }  // END OF Sku
 
+                                // 獲取贈品列表
+                                List<GiftItem> giftItemList = new ArrayList<>();
+                                EasyJSONArray ordersGiftVoList = ordersVo.getArray("ordersGiftVoList");
+                                if (!Util.isJsonNull(ordersGiftVoList) && ordersGiftVoList.length() > 0) {
+                                    for (Object object3 : ordersGiftVoList) {
+                                        EasyJSONObject ordersGiftVo = (EasyJSONObject) object3;
+                                        GiftItem giftItem = new GiftItem();
+                                        giftItem.commonId = ordersGiftVo.getInt("commonId");
+                                        giftItem.goodsId = ordersGiftVo.getInt("goodsId");
+                                        giftItem.giftNum = ordersGiftVo.getInt("giftNum");
+                                        giftItem.goodsName = ordersGiftVo.getString("goodsName");
+
+                                        giftItemList.add(giftItem);
+                                    }
+                                }
+
 
                                 OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount,
                                         showMemberCancel == 1, showMemberBuyAgain == 1, showShipSearch == 1,
-                                        showEvaluation == 1, orderSkuItemList);
+                                        showEvaluation == 1, orderSkuItemList, giftItemList);
 
                                 payItem.orderItemList.add(orderItem);
                                 if (!showPayButton) {

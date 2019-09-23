@@ -6,8 +6,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.OrderItem;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
 
 /**
  * 訂單列表里面的訂單項
@@ -72,6 +76,25 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
 
         if (!showPayButton && (position == getItemCount() - 1)) { // 如果不顯示支付按鈕，并且是最后一項，則隱藏分隔線
             itemView.findViewById(R.id.vw_separator).setVisibility(View.GONE);
+        }
+
+        LinearLayout llOrderGiftListContainer = itemView.findViewById(R.id.ll_order_gift_list_container);
+        // 處理贈品列表
+        if (itemData.giftItemList == null || itemData.giftItemList.size() == 0) {
+            SLog.info("here");
+            llOrderGiftListContainer.setVisibility(View.GONE);
+        } else {
+            SLog.info("here");
+            llOrderGiftListContainer.setVisibility(View.VISIBLE);
+            OrderGiftItemListAdapter orderGiftItemListAdapter = new OrderGiftItemListAdapter(context, llOrderGiftListContainer, R.layout.cart_gift_item);
+            orderGiftItemListAdapter.setItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                    GiftItem giftItem = itemData.giftItemList.get(position);
+                    Util.startFragment(GoodsDetailFragment.newInstance(giftItem.commonId, giftItem.goodsId));
+                }
+            });
+            orderGiftItemListAdapter.setData(itemData.giftItemList);
         }
     }
 }

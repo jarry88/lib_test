@@ -159,7 +159,7 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
                             }  // END OF Sku
 
                             OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount,
-                                    false, false, false, false, orderSkuItemList);
+                                    false, false, false, false, orderSkuItemList, null);
 
 
                             // payItemList.add(orderItem);
