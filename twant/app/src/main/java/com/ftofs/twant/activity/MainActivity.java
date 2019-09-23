@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     }
                 } else {
                     // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                    ToastUtil.error(MainActivity.this, "支付寶支付失敗" + payResult);
+                    ToastUtil.error(MainActivity.this, payResult.getMemo());
                     SLog.info("支付寶支付失敗[%s]", payResult);
                 }
             }
