@@ -20,6 +20,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.OrderItem;
@@ -129,7 +130,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         rvOrderList = view.findViewById(R.id.rv_order_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
-        payItemListAdapter = new PayItemListAdapter(_mActivity, R.layout.pay_item, payItemList);
+        payItemListAdapter = new PayItemListAdapter(_mActivity, R.layout.pay_item, payItemList, this);
         payItemListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -470,14 +471,18 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         loadOrderData(orderStatus);
     }
 
+    private void reloadData() {
+        loadOrderCountData();
+        SLog.info("onSupportVisible::orderStatus[%d]", orderStatus);
+        loadOrderData(orderStatus);
+    }
+
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
 
         if (needRefresh) {
-            loadOrderCountData();
-            SLog.info("onSupportVisible::orderStatus[%d]", orderStatus);
-            loadOrderData(orderStatus);
+            reloadData();
             needRefresh = false;
         }
     }
@@ -485,5 +490,68 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+    public void orderOperation(OrderOperation operationType, int ordersId) {
+        try {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "ordersId", ordersId);
+
+            String path;
+            if (operationType == OrderOperation.ORDER_OPERATION_TYPE_CANCEL) {
+                path = Api.PATH_CANCEL_ORDER;
+            } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
+                path = Api.PATH_DELETE_ORDER;
+            } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
+                path = Api.PATH_BUY_AGAIN;
+                params.set("clientType", Constant.CLIENT_TYPE_ANDROID);
+            } else {
+                return;
+            }
+            SLog.info("params[%s]", params);
+            Api.postUI(path, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        if (operationType == OrderOperation.ORDER_OPERATION_TYPE_CANCEL) {
+                            ToastUtil.success(_mActivity, "取消訂單成功");
+                            rvOrderList.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    reloadData();
+                                }
+                            }, 500);
+                        } else if(operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
+                            ToastUtil.success(_mActivity, "刪除訂單成功");
+                        } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
+                            ToastUtil.success(_mActivity, "訂單已添加到購物車");
+                            start(CartFragment.newInstance(true));
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
 }

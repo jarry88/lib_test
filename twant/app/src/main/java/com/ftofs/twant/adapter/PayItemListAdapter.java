@@ -7,12 +7,20 @@ import android.widget.LinearLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.PayItem;
+import com.ftofs.twant.fragment.GoodsEvaluationFragment;
 import com.ftofs.twant.fragment.OrderDetailFragment;
+import com.ftofs.twant.fragment.OrderFragment;
+import com.ftofs.twant.fragment.OrderLogisticsInfoFragment;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwConfirmPopup;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.util.List;
 
@@ -25,10 +33,13 @@ public class PayItemListAdapter extends BaseQuickAdapter<PayItem, BaseViewHolder
     Context context;
     String currencyTypeSign;
     String timesSign;
+    OrderFragment orderFragment;
 
-    public PayItemListAdapter(Context context, int layoutResId, List data) {
+    public PayItemListAdapter(Context context, int layoutResId, List data, OrderFragment orderFragment) {
         super(layoutResId, data);
         this.context = context;
+        this.orderFragment = orderFragment;
+
         currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
         timesSign = context.getResources().getString(R.string.times_sign);
     }
@@ -47,12 +58,40 @@ public class PayItemListAdapter extends BaseQuickAdapter<PayItem, BaseViewHolder
 
                 if (id == R.id.btn_cancel_order) {
                     SLog.info("btn_cancel_order");
+                    String confirmText = "確定要取消訂單嗎?";
+                    new XPopup.Builder(context)
+//                         .dismissOnTouchOutside(false)
+                            // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                            .setPopupCallback(new XPopupCallback() {
+                                @Override
+                                public void onShow() {
+                                }
+                                @Override
+                                public void onDismiss() {
+                                }
+                            }).asCustom(new TwConfirmPopup(context, confirmText, null, new OnConfirmCallback() {
+                        @Override
+                        public void onYes() {
+                            SLog.info("onYes");
+                            orderFragment.orderOperation(OrderOperation.ORDER_OPERATION_TYPE_CANCEL, orderItem.orderId);
+                        }
+
+                        @Override
+                        public void onNo() {
+                            SLog.info("onNo");
+                        }
+                    }))
+                            .show();
                 } else if (id == R.id.btn_buy_again) {
                     SLog.info("btn_buy_again");
+                    orderFragment.orderOperation(OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN, orderItem.orderId);
                 } else if (id == R.id.btn_view_logistics) {
                     SLog.info("btn_view_logistics");
+                    Util.startFragment(OrderLogisticsInfoFragment.newInstance(orderItem.orderId));
                 } else if (id == R.id.btn_order_comment) {
                     SLog.info("btn_order_comment");
+                    Util.startFragment(GoodsEvaluationFragment.newInstance());
                 }
             }
         });

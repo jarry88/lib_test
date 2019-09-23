@@ -23,7 +23,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
-import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
@@ -93,10 +93,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     String storePhone;
     boolean needReloadData;
-
-    public static final int ORDER_OPERATION_TYPE_CANCEL = 1;
-    public static final int ORDER_OPERATION_TYPE_DELETE = 2;
-    public static final int ORDER_OPERATION_TYPE_BUY_AGAIN = 3;
 
     public static final String TEXT_MEMBER_BUY_AGAIN = "showMemberBuyAgain";
     public static final String TEXT_MEMBER_RECEIVE = "showMemberReceive";
@@ -256,14 +252,14 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             SLog.info("tag[%s]", tag);
             // 取消訂單 或 刪除訂單
             if (tag.equals(TEXT_MEMBER_CANCEL) || tag.equals(TEXT_MEMBER_DELETE)) {
-                int operationType = ORDER_OPERATION_TYPE_CANCEL;
+                OrderOperation operationType = OrderOperation.ORDER_OPERATION_TYPE_CANCEL;
                 if (tag.equals(TEXT_MEMBER_DELETE)) {
-                    operationType = ORDER_OPERATION_TYPE_DELETE;
+                    operationType = OrderOperation.ORDER_OPERATION_TYPE_DELETE;
                 }
-                final int finalOperationType = operationType;
+                final OrderOperation finalOperationType = operationType;
 
                 String confirmText = "確定要取消訂單嗎?";
-                if (operationType == ORDER_OPERATION_TYPE_DELETE) {
+                if (operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
                     confirmText = "確定要刪除訂單嗎?";
                 }
                 new XPopup.Builder(_mActivity)
@@ -316,7 +312,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             }))
                         .show();
             } else if (tag.equals(TEXT_MEMBER_BUY_AGAIN)) {
-                orderOperation(ORDER_OPERATION_TYPE_BUY_AGAIN);
+                orderOperation(OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN);
             } else if (tag.equals(TEXT_EVALUATION)) {
                 Util.startFragment(GoodsEvaluationFragment.newInstance());
             } else if (tag.equals(TEXT_MEMBER_PAY)) {
@@ -384,7 +380,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
-    private void orderOperation(final int operationType) {
+    private void orderOperation(OrderOperation operationType) {
         try {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
@@ -396,11 +392,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     "ordersId", ordersId);
 
             String path;
-            if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
+            if (operationType == OrderOperation.ORDER_OPERATION_TYPE_CANCEL) {
                 path = Api.PATH_CANCEL_ORDER;
-            } else if (operationType == ORDER_OPERATION_TYPE_DELETE) {
+            } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
                 path = Api.PATH_DELETE_ORDER;
-            } else if (operationType == ORDER_OPERATION_TYPE_BUY_AGAIN) {
+            } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
                 path = Api.PATH_BUY_AGAIN;
                 params.set("clientType", Constant.CLIENT_TYPE_ANDROID);
             } else {
@@ -423,12 +419,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             return;
                         }
 
-                        if (operationType == ORDER_OPERATION_TYPE_CANCEL) {
+                        if (operationType == OrderOperation.ORDER_OPERATION_TYPE_CANCEL) {
                             ToastUtil.success(_mActivity, "取消訂單成功");
-                        } else if(operationType == ORDER_OPERATION_TYPE_DELETE) {
+                        } else if(operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
                             ToastUtil.success(_mActivity, "刪除訂單成功");
-                        } else if (operationType == ORDER_OPERATION_TYPE_BUY_AGAIN) {
+                        } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
                             ToastUtil.success(_mActivity, "訂單已添加到購物車");
+                            start(CartFragment.newInstance(true));
                         }
 
                         pop();
