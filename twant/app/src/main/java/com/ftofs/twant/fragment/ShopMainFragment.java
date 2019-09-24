@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +28,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 public class ShopMainFragment extends BaseFragment implements View.OnClickListener {
     // 店鋪Id
     int storeId;
+    RelativeLayout toolbar;
 
     TextView tvShopTitle;
 
@@ -89,6 +91,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         Bundle args = getArguments();
         storeId = args.getInt("shopId");
 
+        toolbar = view.findViewById(R.id.tool_bar);
         tvShopTitle = view.findViewById(R.id.tv_shop_title);
         imgBottomBarShopAvatar = view.findViewById(R.id.img_bottom_bar_shop_avatar);
 
@@ -185,6 +188,12 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 Util.showLoginFragment();
                 return;
             }
+        }
+
+        if (index == COMMODITY_FRAGMENT) { // 如果切換到商品Tab，頂部工具欄隱藏分隔線
+            toolbar.setBackgroundColor(getResources().getColor(android.R.color.white, null));
+        } else { // 如果切換到其它Tab，恢復背景
+            toolbar.setBackgroundResource(R.drawable.border_type_d);
         }
 
         // 切換底部工具欄圖標的選中狀態

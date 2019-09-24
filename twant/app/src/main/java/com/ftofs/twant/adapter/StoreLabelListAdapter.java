@@ -59,7 +59,7 @@ public class StoreLabelListAdapter extends BaseQuickAdapter<StoreLabel, BaseView
 
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(Util.dip2px(context, 15), 0, Util.dip2px(context, 15), Util.dip2px(context, 5));
+                params.setMargins(Util.dip2px(context, 15), 0, Util.dip2px(context, 15), Util.dip2px(context, 15));
                 llInnerItemContainer.addView(llHorizontalContainer, params);
             }
 
