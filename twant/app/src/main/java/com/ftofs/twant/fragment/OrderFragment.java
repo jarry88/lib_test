@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.adapter.OrderListAdapter;
 import com.ftofs.twant.adapter.PayItemListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -23,7 +22,6 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
-import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.OrderSkuItem;
 import com.ftofs.twant.entity.PayItem;
@@ -155,6 +153,14 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 }
             }
         });
+
+        // 設置空頁面
+        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
+        // 設置空頁面的提示語
+        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
+        tvEmptyHint.setText(R.string.no_order_hint);
+        payItemListAdapter.setEmptyView(emptyView);
+
         rvOrderList.setAdapter(payItemListAdapter);
 
         tvOrderStatusArr[orderStatus].setStatus(Constant.STATUS_SELECTED);
