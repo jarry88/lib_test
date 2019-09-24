@@ -65,7 +65,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_view_order) {
             pop();
             // 轉去訂單列表，已跟進能確認過
-            Util.startFragment(OrderFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED));
+            Util.startFragment(OrderFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED, OrderFragment.USAGE_LIST));
         } else if (id == R.id.btn_goto_home) {
             popTo(MainFragment.class, false);
         }

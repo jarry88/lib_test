@@ -62,7 +62,7 @@
         android:paddingRight="@dimen/toolbar_margin_right"
         android:orientation="vertical"
         android:background="@android:color/white">
-        <!-- 單據信息 -->
+        <!-- 票據信息 -->
         <RelativeLayout
             android:id="@+id/btn_receipt"
             android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/img_expand_receipt"
                 android:paddingLeft="30dp"
-                android:text="不開單據"
+                android:text="不開票據"
                 android:textColor="@color/tw_black"
                 android:textSize="13sp"
                 />

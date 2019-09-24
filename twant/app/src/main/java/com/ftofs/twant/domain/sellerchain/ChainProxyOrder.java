@@ -24,9 +24,9 @@ public class ChainProxyOrder {
     private String receiverPhone;
     //收貨地址
     private String receiverAddress;
-    //單據抬頭
+    //票據抬頭
     private String invoiceTitle;
-    //單據內容
+    //票據內容
     private String invoiceContent;
     //納稅人識別號
     private String invoiceCode;

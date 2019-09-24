@@ -56,7 +56,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
 
         if (itemViewType == Constant.ITEM_VIEW_TYPE_COMMON) {
             final ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) multiItemEntity;
-            helper.addOnClickListener(R.id.btn_receipt)  // 變更單據信息
+            helper.addOnClickListener(R.id.btn_receipt)  // 變更票據信息
                     .addOnClickListener(R.id.btn_change_shipping_time)  // 修改配送時間
                     .addOnClickListener(R.id.ll_store_info_container)  // 點擊店鋪信息
                     .addOnClickListener(R.id.btn_use_voucher);  // 使用店鋪券
@@ -145,7 +145,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             // 匯總數據
             ConfirmOrderSummaryItem item = (ConfirmOrderSummaryItem) multiItemEntity;
 
-            // 如果沒設置單據，則顯示【不開單據】，否則顯示單據抬頭
+            // 如果沒設置票據，則顯示【不開票據】，否則顯示票據抬頭
             if (item.receipt == null) {
                 helper.setText(R.id.tv_receipt, context.getResources().getString(R.string.text_does_not_need_receipt));
             } else {

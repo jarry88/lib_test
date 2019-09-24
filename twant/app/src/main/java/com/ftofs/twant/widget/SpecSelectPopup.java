@@ -164,16 +164,16 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                         (currSpecValueId == 0 && index == 0) // 如果沒有傳specValueIdList的話，默認選中第1個
                 ) {
                     button.setBackgroundResource(R.drawable.spec_item_selected_bg);
+                    button.setTextColor(context.getColor(R.color.tw_red));
                     isSelected = true;
                 } else {
                     button.setBackgroundResource(R.drawable.spec_item_unselected_bg);
+                    button.setTextColor(context.getColor(R.color.tw_black));
                 }
 
                 button.setText(specValue.specValueName);
                 button.setTextSize(14);
 
-                int color = getResources().getColor(R.color.tw_black, null);
-                button.setTextColor(color);
                 button.setPadding(Util.dip2px(context, 16), Util.dip2px(context, 6),
                         Util.dip2px(context, 16), Util.dip2px(context, 6));
 
@@ -204,7 +204,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                         // 當前選中的按鈕
                         TextView currButton = (TextView) view;
                         // 將前一個選中的按鈕的邊框變灰，當前選中的變為高亮色
+                        prevButton.setTextColor(context.getColor(R.color.tw_black));
                         prevButton.setBackgroundResource(R.drawable.spec_item_unselected_bg);
+                        currButton.setTextColor(context.getColor(R.color.tw_red));
                         currButton.setBackgroundResource(R.drawable.spec_item_selected_bg);
 
                         selSpecValueIdList.set(currData.position, currData.specValueId);

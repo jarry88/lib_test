@@ -4,16 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * 單據信息
+ * 票據信息
  * @author zwm
  */
 public class Receipt implements Parcelable {
     /**
-     * 單據抬頭
+     * 票據抬頭
      */
     public String header;
     /**
-     * 單據內容
+     * 票據內容
      */
     public String content;
     /**

@@ -1,5 +1,6 @@
 package com.ftofs.twant.adapter;
 
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,9 +35,18 @@ public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHo
         TextView tvContent = helper.getView(R.id.tv_content);
         tvContent.setText(StringUtil.translateEmoji(mContext, item.content, (int) tvContent.getTextSize()));
 
+        TextView btnReply = helper.getView(R.id.btn_reply);
+        String replyText = mContext.getString(R.string.text_reply);
+        if (item.commentReply > 0) { // 評論列表，如果是零回復，則不要顯示那個0
+            replyText += (" " + item.commentReply);
+        } else {
+            btnReply.setBackground(null);
+        }
+        btnReply.setText(replyText);
+
         helper.setText(R.id.tv_commenter_nickname, item.nickname)
                 .setText(R.id.tv_comment_time, item.commentTime)
-                .setText(R.id.btn_reply, mContext.getString(R.string.text_reply) + " " + item.commentReply)
+                .setText(R.id.btn_reply,  replyText)
                 .setText(R.id.tv_thumb_count, String.valueOf(item.commentLike))
                 .addOnClickListener(R.id.btn_reply, R.id.btn_thumb, R.id.img_commenter_avatar);
 

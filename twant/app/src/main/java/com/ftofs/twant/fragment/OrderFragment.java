@@ -5,9 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -50,17 +53,33 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 訂單頁面
+ * 訂單列表頁面 和 訂單搜索頁面
  * @author zwm
  */
 public class OrderFragment extends BaseFragment implements View.OnClickListener,
         TwTabButton.TtbOnSelectListener, BaseQuickAdapter.RequestLoadMoreListener {
+    /**
+     * 用途：訂單列表
+     */
+    public static final int USAGE_LIST = 1;
+    /**
+     * 用途：訂單搜索
+     */
+    public static final int USAGE_SEARCH = 2;
+
+
+    /**
+     * 用于哪種用途
+     */
+    int usage;
+
     int orderStatus;
 
     // 當前加載第幾頁
     int currPage = 0;
     boolean hasMore;
     int selTabId; // 当前选中的Tab的Id
+    String keyword;  // 搜索關鍵字（商品標題或訂單號），訂單搜索時才用到
 
     RecyclerView rvOrderList;
 
@@ -81,10 +100,14 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     TextView tvToBeReceivedCount;
     TextView tvToBeCommentedCount;
 
-    public static OrderFragment newInstance(int orderStatus) {
+    EditText etKeyword;
+
+    public static OrderFragment newInstance(int orderStatus, int usage) {
         Bundle args = new Bundle();
 
         args.putInt("orderStatus", orderStatus);
+        args.putInt("usage", usage);
+
         OrderFragment fragment = new OrderFragment();
         fragment.setArguments(args);
 
@@ -106,29 +129,59 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
         Bundle args = getArguments();
         orderStatus = args.getInt("orderStatus", Constant.ORDER_STATUS_ALL);
-        SLog.info("orderStatus[%d]", orderStatus);
+        usage = args.getInt("usage");
+        SLog.info("orderStatus[%d], usage[%d]", orderStatus, usage);
         selTabId = orderStatusIds[orderStatus];
 
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
 
-        tvAllCount = view.findViewById(R.id.tv_all_count);
-        tvToBePaidCount = view.findViewById(R.id.tv_to_be_paid_count);
-        tvToBeShippedCount = view.findViewById(R.id.tv_to_be_shipped_count);
-        tvToBeReceivedCount = view.findViewById(R.id.tv_to_be_received_count);
-        tvToBeCommentedCount = view.findViewById(R.id.tv_to_be_commented_count);
+        if (usage == USAGE_LIST) {
+            view.findViewById(R.id.ll_order_list_toolbar_container).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.ll_order_search_toolbar_container).setVisibility(View.GONE);
 
-        Util.setOnClickListener(view, R.id.tv_fragment_title, this);
-        Util.setOnClickListener(view, R.id.btn_back, this);
-        Util.setOnClickListener(view, R.id.btn_search, this);
-        Util.setOnClickListener(view, R.id.btn_menu, this);
+            tvAllCount = view.findViewById(R.id.tv_all_count);
+            tvToBePaidCount = view.findViewById(R.id.tv_to_be_paid_count);
+            tvToBeShippedCount = view.findViewById(R.id.tv_to_be_shipped_count);
+            tvToBeReceivedCount = view.findViewById(R.id.tv_to_be_received_count);
+            tvToBeCommentedCount = view.findViewById(R.id.tv_to_be_commented_count);
 
-        int index = 0;
-        for (int id : orderStatusIds) {
-            TwTabButton tvOrderStatus = view.findViewById(id);
-            tvOrderStatusArr[index] = tvOrderStatus;
-            tvOrderStatus.setTtbOnSelectListener(this);
-            ++index;
+            Util.setOnClickListener(view, R.id.tv_fragment_title, this);
+            Util.setOnClickListener(view, R.id.btn_back_list, this);
+            Util.setOnClickListener(view, R.id.btn_search, this);
+            Util.setOnClickListener(view, R.id.btn_menu, this);
+
+            int index = 0;
+            for (int id : orderStatusIds) {
+                TwTabButton tvOrderStatus = view.findViewById(id);
+                tvOrderStatusArr[index] = tvOrderStatus;
+                tvOrderStatus.setTtbOnSelectListener(this);
+                ++index;
+            }
+        } else {
+            view.findViewById(R.id.ll_order_list_toolbar_container).setVisibility(View.GONE);
+            view.findViewById(R.id.ll_order_search_toolbar_container).setVisibility(View.VISIBLE);
+
+            etKeyword = view.findViewById(R.id.et_keyword);
+            etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                        keyword = v.getText().toString().trim();
+                        if (StringUtil.isEmpty(keyword)) {
+                            ToastUtil.error(_mActivity, getString(R.string.input_order_search_hint));
+                            return true;
+                        }
+                        // doSearch(keyword);
+                        currPage = 0;
+                        loadOrderData(Constant.ORDER_STATUS_ALL, currPage + 1);
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
+            Util.setOnClickListener(view, R.id.btn_back_search, this);
         }
 
         rvOrderList = view.findViewById(R.id.rv_order_list);
@@ -160,13 +213,14 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
         tvEmptyHint.setText(R.string.no_order_hint);
         payItemListAdapter.setEmptyView(emptyView);
-
         rvOrderList.setAdapter(payItemListAdapter);
 
-        tvOrderStatusArr[orderStatus].setStatus(Constant.STATUS_SELECTED);
-        handleOrderStatusSwitch(orderStatusIds[orderStatus]);
-        loadOrderData(orderStatus, currPage + 1);
-        loadOrderCountData();
+        if (usage == USAGE_LIST) {
+            tvOrderStatusArr[orderStatus].setStatus(Constant.STATUS_SELECTED);
+            handleOrderStatusSwitch(orderStatusIds[orderStatus]);
+            loadOrderData(orderStatus, currPage + 1);
+            loadOrderCountData();
+        }
     }
 
     @Override
@@ -187,14 +241,14 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_back) {
+        if (id == R.id.btn_back_list || id == R.id.btn_back_search) {
             pop();
         } else if (id == R.id.tv_fragment_title) {
             if (Config.DEVELOPER_MODE) {
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
             }
         } else if (id == R.id.btn_search) {
-            start(OrderSearchFragment.newInstance());
+            start(OrderFragment.newInstance(Constant.ORDER_STATUS_ALL, OrderFragment.USAGE_SEARCH));
         } else if (id == R.id.btn_menu) {
             new XPopup.Builder(_mActivity)
                     .offsetX(-Util.dip2px(_mActivity, 6))
@@ -317,10 +371,15 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                     "token", token,
                     "page", page);
 
-            String ordersState = getOrdersState(orderStatus);
-            if (!StringUtil.isEmpty(ordersState)) {
-                params.set("ordersState", ordersState);
+            if (usage == USAGE_LIST) {
+                String ordersState = getOrdersState(orderStatus);
+                if (!StringUtil.isEmpty(ordersState)) {
+                    params.set("ordersState", ordersState);
+                }
+            } else {
+                params.set("keyword", keyword);
             }
+
             SLog.info("params[%s]", params);
 
             final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)

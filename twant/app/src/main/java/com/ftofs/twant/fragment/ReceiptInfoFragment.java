@@ -18,7 +18,7 @@ import com.ftofs.twant.util.Util;
 
 
 /**
- * 單據信息Fragment
+ * 票據信息Fragment
  * @author zwm
  */
 public class ReceiptInfoFragment extends BaseFragment implements View.OnClickListener {
@@ -27,7 +27,7 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
      */
     public static final int ACTION_NO_CHANGE = 1;
     /**
-     * 不開單據
+     * 不開票據
      */
     public static final int ACTION_NO_RECEIPT = 2;
     /**
@@ -37,7 +37,6 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
 
     EditText etReceiptHeader;
     EditText etReceiptContent;
-    EditText etTaxPayerId;
 
     int position;
     Receipt receipt;
@@ -78,12 +77,10 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
 
         etReceiptHeader = view.findViewById(R.id.et_receipt_header);
         etReceiptContent = view.findViewById(R.id.et_receipt_content);
-        etTaxPayerId = view.findViewById(R.id.et_taxpayer_id);
 
         if (receipt != null) {
             etReceiptHeader.setText(receipt.header);
             etReceiptContent.setText(receipt.content);
-            etTaxPayerId.setText(receipt.taxPayerId);
         }
 
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -117,13 +114,13 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
         bundle.putInt("position", position);
 
         if (action == ACTION_SAVE_AND_USE) {
-            // 傳遞單據數據信息
+            // 傳遞票據數據信息
             if (receipt == null) {
                 receipt = new Receipt();
             }
             receipt.header = etReceiptHeader.getText().toString().trim();
             receipt.content = etReceiptContent.getText().toString().trim();
-            receipt.taxPayerId = etTaxPayerId.getText().toString().trim();
+            receipt.taxPayerId = "";
 
             if (StringUtil.isEmpty(receipt.header)) {
                 ToastUtil.error(_mActivity, getString(R.string.input_receipt_header_hint));
@@ -131,10 +128,6 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
             }
             if (StringUtil.isEmpty(receipt.content)) {
                 ToastUtil.error(_mActivity, getString(R.string.input_receipt_content_hint));
-                return;
-            }
-            if (StringUtil.isEmpty(receipt.taxPayerId)) {
-                ToastUtil.error(_mActivity, getString(R.string.input_taxpayer_id_hint));
                 return;
             }
             bundle.putParcelable("receipt", receipt);

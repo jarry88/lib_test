@@ -572,9 +572,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         if (isFavorite == Constant.ONE) {
             iconFollow.setImageResource(R.drawable.icon_follow_red);
             tvFollow.setText(R.string.text_followed);
+            tvFollow.setTextColor(_mActivity.getColor(R.color.tw_red));
         } else {
             iconFollow.setImageResource(R.drawable.icon_goods_follow_grey);
             tvFollow.setText(R.string.text_follow);
+            tvFollow.setTextColor(_mActivity.getColor(R.color.tw_black));
         }
     }
 
