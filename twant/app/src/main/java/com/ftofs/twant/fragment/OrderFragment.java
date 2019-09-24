@@ -23,6 +23,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.OrderSkuItem;
 import com.ftofs.twant.entity.PayItem;
@@ -54,16 +55,20 @@ import okhttp3.Call;
  * 訂單頁面
  * @author zwm
  */
-public class OrderFragment extends BaseFragment implements View.OnClickListener, TwTabButton.TtbOnSelectListener {
+public class OrderFragment extends BaseFragment implements View.OnClickListener,
+        TwTabButton.TtbOnSelectListener, BaseQuickAdapter.RequestLoadMoreListener {
     int orderStatus;
+
+    // 當前加載第幾頁
+    int currPage = 0;
+    boolean hasMore;
+    int selTabId; // 当前选中的Tab的Id
 
     RecyclerView rvOrderList;
 
     List<PayItem> payItemList = new ArrayList<>();
-    List<OrderItem> orderItemList = new ArrayList<>();
 
     PayItemListAdapter payItemListAdapter;
-    OrderListAdapter orderListAdapter;
     TwTabButton[] tvOrderStatusArr = new TwTabButton[5];
     int[] orderStatusIds = new int[] {R.id.btn_bill_all, R.id.btn_bill_to_be_paid, R.id.btn_bill_to_be_shipped,
            R.id.btn_bill_to_be_received, R.id.btn_bill_to_be_commented};
@@ -104,6 +109,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         Bundle args = getArguments();
         orderStatus = args.getInt("orderStatus", Constant.ORDER_STATUS_ALL);
         SLog.info("orderStatus[%d]", orderStatus);
+        selTabId = orderStatusIds[orderStatus];
 
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
@@ -131,6 +137,8 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
         payItemListAdapter = new PayItemListAdapter(_mActivity, R.layout.pay_item, payItemList, this);
+        payItemListAdapter.setEnableLoadMore(true);
+        payItemListAdapter.setOnLoadMoreListener(this, rvOrderList);
         payItemListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -147,20 +155,11 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 }
             }
         });
-        // rvOrderList.setAdapter(payItemListAdapter);
-
-        orderListAdapter = new OrderListAdapter(_mActivity, R.layout.order_item, orderItemList);
-        orderListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-            }
-        });
-        // rvOrderList.setAdapter(orderListAdapter);
+        rvOrderList.setAdapter(payItemListAdapter);
 
         tvOrderStatusArr[orderStatus].setStatus(Constant.STATUS_SELECTED);
         handleOrderStatusSwitch(orderStatusIds[orderStatus]);
-        loadOrderData(orderStatus);
+        loadOrderData(orderStatus, currPage + 1);
         loadOrderCountData();
     }
 
@@ -300,7 +299,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         });
     }
 
-    private void loadOrderData(int orderStatus) {
+    private void loadOrderData(int orderStatus, int page) {
         try {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
@@ -308,7 +307,9 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 return;
             }
 
-            EasyJSONObject params = EasyJSONObject.generate("token", token);
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "page", page);
 
             String ordersState = getOrdersState(orderStatus);
             if (!StringUtil.isEmpty(ordersState)) {
@@ -337,9 +338,17 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                         return;
                     }
 
+
                     try {
+                        hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                        SLog.info("hasMore[%s]", hasMore);
+                        if (!hasMore) {
+                            payItemListAdapter.loadMoreEnd();
+                            payItemListAdapter.setEnableLoadMore(false);
+                        }
+
                         EasyJSONArray ordersPayVoList = responseObj.getArray("datas.ordersPayVoList");
-                        payItemList.clear();
+
                         for (Object object : ordersPayVoList) { // PayObject
                             EasyJSONObject ordersPayVo = (EasyJSONObject) object;
 
@@ -425,8 +434,15 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                             }
                         } // END OF Pay Object
                         SLog.info("payItemList:count[%d]", payItemList.size());
+                        if (!hasMore && payItemList.size() > 0) {
+                            // 如果全部加載完畢，添加加載完畢的提示
+
+                        }
+
                         payItemListAdapter.setNewData(payItemList);
-                        rvOrderList.setAdapter(payItemListAdapter);
+                        payItemListAdapter.loadMoreComplete();
+
+                        currPage++;
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                         SLog.info("Error!loadOrderData failed");
@@ -467,14 +483,25 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onSelect(TwTabButton tabButton) {
         int id = tabButton.getId();
+        if (id == selTabId) {
+            SLog.info("重复点击");
+            return;
+        }
+
         handleOrderStatusSwitch(id);
-        loadOrderData(orderStatus);
+        currPage = 0;
+        payItemList.clear();
+        payItemListAdapter.setEnableLoadMore(true);
+        loadOrderData(orderStatus, currPage + 1);
+
+        selTabId = id;
     }
 
     private void reloadData() {
         loadOrderCountData();
         SLog.info("onSupportVisible::orderStatus[%d]", orderStatus);
-        loadOrderData(orderStatus);
+        currPage = 0;
+        loadOrderData(orderStatus, currPage + 1);
     }
 
     @Override
@@ -554,4 +581,18 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
         }
     }
+
+    @Override
+    public void onLoadMoreRequested() {
+        SLog.info("onLoadMoreRequested");
+
+        if (!hasMore) {
+            payItemListAdapter.setEnableLoadMore(false);
+            return;
+        }
+        loadOrderData(orderStatus, currPage + 1);
+    }
 }
+
+
+

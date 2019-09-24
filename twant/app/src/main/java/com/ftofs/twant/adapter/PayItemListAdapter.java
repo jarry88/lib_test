@@ -16,7 +16,6 @@ import com.ftofs.twant.fragment.OrderFragment;
 import com.ftofs.twant.fragment.OrderLogisticsInfoFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;

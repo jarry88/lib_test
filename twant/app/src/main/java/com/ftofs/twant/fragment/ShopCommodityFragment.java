@@ -286,7 +286,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             goodsList.add(goods);
                         }
 
-                        if (!hasMore) {
+                        if (!hasMore && goodsList.size() > 0) {
                             // 如果全部加載完畢，添加加載完畢的提示
                             Goods goods = new Goods();
                             goodsList.add(goods);
