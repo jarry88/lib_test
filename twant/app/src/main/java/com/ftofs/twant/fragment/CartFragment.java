@@ -29,6 +29,7 @@ import com.ftofs.twant.entity.cart.SkuStatus;
 import com.ftofs.twant.entity.cart.SpuStatus;
 import com.ftofs.twant.entity.cart.StoreStatus;
 import com.ftofs.twant.entity.cart.TotalStatus;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -36,8 +37,10 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.CartAdjustButton;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -377,60 +380,86 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                 Util.startFragmentForResult(ConfirmOrderFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
                 break;
             case R.id.btn_delete:
-                try {
-                    buyData = totalStatus.getBuyData();
-                    if (buyData.length() < 1) {
-                        // 如果沒有勾選什么數據，返回
-                        SLog.info("如果沒有勾選什么數據，返回");
-                        return;
-                    }
-
-
-                    boolean first = true;
-                    StringBuilder cartId = new StringBuilder();
-                    for (Object object : buyData) {
-                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-                        if (!first) {
-                            cartId.append(",");
-                        }
-                        cartId.append(easyJSONObject.getInt("cartId"));
-                        first = false;
-                    }
-
-                    String token = User.getToken();
-                    if (StringUtil.isEmpty(token)) {
-                        return;
-                    }
-
-                    EasyJSONObject params = EasyJSONObject.generate("token", token, "cartId", cartId.toString());
-                    SLog.info("params[%s]", params);
-                    Api.postUI(Api.PATH_DELETE_CART, params, new UICallback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            ToastUtil.showNetworkError(_mActivity, e);
-                        }
-
-                        @Override
-                        public void onResponse(Call call, String responseStr) throws IOException {
-                            if (StringUtil.isEmpty(responseStr)) {
-                                return;
-                            }
-
-                            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                            if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                return;
-                            }
-
-                            ToastUtil.success(_mActivity, "刪除成功");
-                            reloadList();
-                        }
-                    });
-                } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                buyData = totalStatus.getBuyData();
+                if (buyData.length() < 1) {
+                    // 如果沒有勾選什么數據，返回
+                    SLog.info("如果沒有勾選什么數據，返回");
+                    return;
                 }
+
+
+                new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                        .setPopupCallback(new XPopupCallback() {
+                            @Override
+                            public void onShow() {
+                            }
+                            @Override
+                            public void onDismiss() {
+                            }
+                        }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎？", null, new OnConfirmCallback() {
+                        @Override
+                        public void onYes() {
+                            SLog.info("onYes");
+                            deleteCartItem(buyData);
+                        }
+
+                        @Override
+                        public void onNo() {
+                            SLog.info("onNo");
+                        }
+                    })).show();
                 break;
             default:
                 break;
+        }
+    }
+
+    private void deleteCartItem(EasyJSONArray buyData) {
+        try {
+            boolean first = true;
+            StringBuilder cartId = new StringBuilder();
+            for (Object object : buyData) {
+                EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                if (!first) {
+                    cartId.append(",");
+                }
+                cartId.append(easyJSONObject.getInt("cartId"));
+                first = false;
+            }
+
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate("token", token, "cartId", cartId.toString());
+            SLog.info("params[%s]", params);
+            Api.postUI(Api.PATH_DELETE_CART, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    if (StringUtil.isEmpty(responseStr)) {
+                        return;
+                    }
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.success(_mActivity, "刪除成功");
+                    reloadList();
+                }
+            });
+        } catch (Exception e) {
+            SLog.info("Error!%s", e.getMessage());
         }
     }
 
