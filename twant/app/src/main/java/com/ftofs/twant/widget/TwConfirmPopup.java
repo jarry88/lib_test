@@ -89,10 +89,9 @@ public class TwConfirmPopup extends CenterPopupView implements View.OnClickListe
     }
 
     @Override
-    protected int getMaxHeight() {
-        return (int) (XPopupUtils.getWindowHeight(getContext())*.85f);
+    protected int getMaxWidth() {
+        return (int) (XPopupUtils.getWindowWidth(getContext()) * 0.65f);
     }
-
 
     @Override
     public void onClick(View v) {

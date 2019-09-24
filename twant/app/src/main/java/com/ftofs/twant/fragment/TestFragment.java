@@ -16,6 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.domain.goods.ArrivalNotice;
 import com.ftofs.twant.entity.ButtonClickInfo;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ImageProcess;
 import com.ftofs.twant.util.Jarbon;
@@ -24,7 +25,10 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
 import com.ftofs.twant.widget.QuickClickButton;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.TwProgressBar;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +83,29 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            TwantApplication.getTwLocation().startLocation();
+            new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                    // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                    .setPopupCallback(new XPopupCallback() {
+                        @Override
+                        public void onShow() {
+                        }
+                        @Override
+                        public void onDismiss() {
+                        }
+                    }).asCustom(new TwConfirmPopup(_mActivity, "確認收貨嗎?", "收貨經過24小時后，就會打款到商家的哦~", new OnConfirmCallback() {
+                @Override
+                public void onYes() {
+                    SLog.info("onYes");
+                }
+
+                @Override
+                public void onNo() {
+                    SLog.info("onNo");
+                }
+            }))
+                    .show();
         }
     }
 
