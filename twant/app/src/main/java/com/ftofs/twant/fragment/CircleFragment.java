@@ -321,7 +321,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         EasyJSONObject post = (EasyJSONObject) object;
                         PostItem item = new PostItem();
 
-                        item.itemType = PostItem.ITEM_TYPE_NORMAL;
+                        item.itemType = Constant.ITEM_TYPE_NORMAL;
                         item.postId = post.getInt("postId");
                         item.coverImage = post.getString("coverImage");
                         item.postCategory = post.getString("postCategory");
@@ -344,7 +344,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     if (!hasMore) {
                         // 如果全部加載完畢，添加加載完畢的提示
                         PostItem item = new PostItem();
-                        item.itemType = PostItem.ITEM_TYPE_LOAD_END_HINT;
+                        item.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
 
                         postItemList.add(item);
                     }

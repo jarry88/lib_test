@@ -34,20 +34,20 @@ public class ShopGoodsAdapter extends BaseMultiItemQuickAdapter<Goods, BaseViewH
         super(data);
         this.context = context;
 
-        addItemType(Goods.ITEM_TYPE_NORMAL, R.layout.shop_goods_item);
-        addItemType(Goods.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
+        addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.shop_goods_item);
+        addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, Goods goods) {
         int itemViewType = helper.getItemViewType();
-        if (itemViewType == Goods.ITEM_TYPE_NORMAL) {
+        if (itemViewType == Constant.ITEM_TYPE_NORMAL) {
             ImageView goodsImage = helper.getView(R.id.img_goods);
             Glide.with(context).load(goods.imageUrl).centerCrop().into(goodsImage);
             helper.setText(R.id.tv_goods_name, goods.name);
             helper.setText(R.id.tv_goods_jingle, goods.jingle);
             helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context, (float) goods.price, 1));
-        } else if (itemViewType == Goods.ITEM_TYPE_LOAD_END_HINT){
+        } else if (itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT){
             // 顯示即可，不用特別處理
         }
     }

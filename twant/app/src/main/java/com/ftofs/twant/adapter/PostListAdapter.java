@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
@@ -22,14 +23,14 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
     public PostListAdapter(@Nullable List<PostItem> data) {
         super(data);
 
-        addItemType(PostItem.ITEM_TYPE_NORMAL, R.layout.post_list_item);
-        addItemType(PostItem.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
+        addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.post_list_item);
+        addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, PostItem item) {
         int itemType = item.getItemType();
-        if (itemType == PostItem.ITEM_TYPE_NORMAL) {
+        if (itemType == Constant.ITEM_TYPE_NORMAL) {
             ImageView coverImage = helper.getView(R.id.post_cover_image);
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.coverImage)).centerCrop().into(coverImage);
 
@@ -74,7 +75,7 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
             } else {
                 layoutParams.bottomMargin = 0;
             }
-        } else if (itemType == PostItem.ITEM_TYPE_LOAD_END_HINT){
+        } else if (itemType == Constant.ITEM_TYPE_LOAD_END_HINT){
             // 顯示即可，不用特別處理
         }
     }

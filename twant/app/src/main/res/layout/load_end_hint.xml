@@ -9,5 +9,4 @@
     android:textColor="@color/tw_black"
     android:textSize="16sp"
     android:text="@string/data_load_end_hint">
-
 </TextView>

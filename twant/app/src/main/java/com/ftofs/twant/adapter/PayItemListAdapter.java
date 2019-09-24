@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.OrderItem;
 import com.ftofs.twant.entity.PayItem;
@@ -28,16 +30,19 @@ import java.util.List;
  * 每個支付單號一個PayItem，一個PayItem包含一個或多個OrderItem(OrderItem與店鋪是一一對應的關系)，一個OrderItem包含若干個SkuItem(不直接包含SpuItem)
  * @author zwm
  */
-public class PayItemListAdapter extends BaseQuickAdapter<PayItem, BaseViewHolder> {
+public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseViewHolder> {
     Context context;
     String currencyTypeSign;
     String timesSign;
     OrderFragment orderFragment;
 
-    public PayItemListAdapter(Context context, int layoutResId, List data, OrderFragment orderFragment) {
-        super(layoutResId, data);
+    public PayItemListAdapter(Context context, List data, OrderFragment orderFragment) {
+        super(data);
         this.context = context;
         this.orderFragment = orderFragment;
+
+        addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.pay_item);
+        addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
 
         currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
         timesSign = context.getResources().getString(R.string.times_sign);
@@ -45,71 +50,76 @@ public class PayItemListAdapter extends BaseQuickAdapter<PayItem, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder helper, PayItem item) {
-        LinearLayout llOrderListContainer = helper.getView(R.id.ll_order_list_container);
-        llOrderListContainer.removeAllViews();
+        int itemType = item.getItemType();
+        if (itemType == Constant.ITEM_TYPE_NORMAL) {
+            LinearLayout llOrderListContainer = helper.getView(R.id.ll_order_list_container);
+            llOrderListContainer.removeAllViews();
 
-        OrderItemListAdapter adapter = new OrderItemListAdapter(mContext, llOrderListContainer, R.layout.order_item, item.showPayButton);
-        adapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(ViewGroupAdapter adapter, View view, int position) {
-                OrderItem orderItem = item.orderItemList.get(position);
-                int id = view.getId();
+            OrderItemListAdapter adapter = new OrderItemListAdapter(mContext, llOrderListContainer, R.layout.order_item, item.showPayButton);
+            adapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+                @Override
+                public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                    OrderItem orderItem = item.orderItemList.get(position);
+                    int id = view.getId();
 
-                if (id == R.id.btn_cancel_order) {
-                    SLog.info("btn_cancel_order");
-                    String confirmText = "確定要取消訂單嗎?";
-                    new XPopup.Builder(context)
+                    if (id == R.id.btn_cancel_order) {
+                        SLog.info("btn_cancel_order");
+                        String confirmText = "確定要取消訂單嗎?";
+                        new XPopup.Builder(context)
 //                         .dismissOnTouchOutside(false)
-                            // 设置弹窗显示和隐藏的回调监听
+                                // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
-                            .setPopupCallback(new XPopupCallback() {
-                                @Override
-                                public void onShow() {
-                                }
-                                @Override
-                                public void onDismiss() {
-                                }
-                            }).asCustom(new TwConfirmPopup(context, confirmText, null, new OnConfirmCallback() {
-                        @Override
-                        public void onYes() {
-                            SLog.info("onYes");
-                            orderFragment.orderOperation(OrderOperation.ORDER_OPERATION_TYPE_CANCEL, orderItem.orderId);
-                        }
+                                .setPopupCallback(new XPopupCallback() {
+                                    @Override
+                                    public void onShow() {
+                                    }
+                                    @Override
+                                    public void onDismiss() {
+                                    }
+                                }).asCustom(new TwConfirmPopup(context, confirmText, null, new OnConfirmCallback() {
+                            @Override
+                            public void onYes() {
+                                SLog.info("onYes");
+                                orderFragment.orderOperation(OrderOperation.ORDER_OPERATION_TYPE_CANCEL, orderItem.orderId);
+                            }
 
-                        @Override
-                        public void onNo() {
-                            SLog.info("onNo");
-                        }
-                    }))
-                            .show();
-                } else if (id == R.id.btn_buy_again) {
-                    SLog.info("btn_buy_again");
-                    orderFragment.orderOperation(OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN, orderItem.orderId);
-                } else if (id == R.id.btn_view_logistics) {
-                    SLog.info("btn_view_logistics");
-                    Util.startFragment(OrderLogisticsInfoFragment.newInstance(orderItem.orderId));
-                } else if (id == R.id.btn_order_comment) {
-                    SLog.info("btn_order_comment");
-                    Util.startFragment(GoodsEvaluationFragment.newInstance());
+                            @Override
+                            public void onNo() {
+                                SLog.info("onNo");
+                            }
+                        }))
+                                .show();
+                    } else if (id == R.id.btn_buy_again) {
+                        SLog.info("btn_buy_again");
+                        orderFragment.orderOperation(OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN, orderItem.orderId);
+                    } else if (id == R.id.btn_view_logistics) {
+                        SLog.info("btn_view_logistics");
+                        Util.startFragment(OrderLogisticsInfoFragment.newInstance(orderItem.orderId));
+                    } else if (id == R.id.btn_order_comment) {
+                        SLog.info("btn_order_comment");
+                        Util.startFragment(GoodsEvaluationFragment.newInstance());
+                    }
                 }
-            }
-        });
-        adapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(ViewGroupAdapter adapter, View view, int position) {
-                OrderItem orderItem = item.orderItemList.get(position);
-                Util.startFragment(OrderDetailFragment.newInstance(orderItem.orderId));
-            }
-        });
-        adapter.setData(item.orderItemList);
+            });
+            adapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+                @Override
+                public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                    OrderItem orderItem = item.orderItemList.get(position);
+                    Util.startFragment(OrderDetailFragment.newInstance(orderItem.orderId));
+                }
+            });
+            adapter.setData(item.orderItemList);
 
-        if (item.showPayButton) {
-            // 子View點擊事件
-            helper.addOnClickListener(R.id.btn_pay_order);
-            helper.setText(R.id.btn_pay_order, "支付訂單 " + String.format("%.2f", item.payAmount));
-            helper.setGone(R.id.btn_pay_order, true);
+            if (item.showPayButton) {
+                // 子View點擊事件
+                helper.addOnClickListener(R.id.btn_pay_order);
+                helper.setText(R.id.btn_pay_order, "支付訂單 " + String.format("%.2f", item.payAmount));
+                helper.setGone(R.id.btn_pay_order, true);
+            } else {
+                helper.setGone(R.id.btn_pay_order, false);
+            }
         } else {
-            helper.setGone(R.id.btn_pay_order, false);
+
         }
     }
 }

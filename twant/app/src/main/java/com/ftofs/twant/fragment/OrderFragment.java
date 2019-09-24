@@ -136,7 +136,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         rvOrderList = view.findViewById(R.id.rv_order_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
-        payItemListAdapter = new PayItemListAdapter(_mActivity, R.layout.pay_item, payItemList, this);
+        payItemListAdapter = new PayItemListAdapter(_mActivity, payItemList, this);
         payItemListAdapter.setEnableLoadMore(true);
         payItemListAdapter.setOnLoadMoreListener(this, rvOrderList);
         payItemListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -436,7 +436,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                         SLog.info("payItemList:count[%d]", payItemList.size());
                         if (!hasMore && payItemList.size() > 0) {
                             // 如果全部加載完畢，添加加載完畢的提示
-
+                            payItemList.add(new PayItem(Constant.ITEM_TYPE_LOAD_END_HINT));
                         }
 
                         payItemListAdapter.setNewData(payItemList);

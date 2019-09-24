@@ -52,6 +52,16 @@ public class Constant {
 
 
     /**
+     * 正常的Item
+     */
+    public static final int ITEM_TYPE_NORMAL = 1;
+    /**
+     * 數據全部加載完成的提示
+     */
+    public static final int ITEM_TYPE_LOAD_END_HINT = 2;
+
+
+    /**
      * 數字定義
      */
     public final static Integer ZERO = 0;

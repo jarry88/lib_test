@@ -15,6 +15,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ShopGoodsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
@@ -178,7 +179,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             @Override
             public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
                 Goods goods = goodsList.get(position);
-                if (goods.getItemType() == Goods.ITEM_TYPE_LOAD_END_HINT) {
+                if (goods.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
                     // padding占滿整個列的寬度
                     return 2;
                 } else {
@@ -191,7 +192,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Goods goods = goodsList.get(position);
                 // padding忽略點擊
-                if (goods.getItemType() == Goods.ITEM_TYPE_LOAD_END_HINT) {
+                if (goods.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
                     return;
                 }
                 Util.startFragment(GoodsDetailFragment.newInstance(goods.id, 0));

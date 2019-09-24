@@ -86,7 +86,7 @@ public class OrderSearchFragment extends BaseFragment implements View.OnClickLis
         RecyclerView rvOrderList = view.findViewById(R.id.rv_order_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
-        adapter = new PayItemListAdapter(_mActivity, R.layout.order_item, payItemList, null);
+        adapter = new PayItemListAdapter(_mActivity, payItemList, null);
         rvOrderList.setAdapter(adapter);
     }
 

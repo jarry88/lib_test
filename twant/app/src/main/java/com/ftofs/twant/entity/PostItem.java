@@ -3,9 +3,6 @@ package com.ftofs.twant.entity;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 public class PostItem implements MultiItemEntity {
-    public static final int ITEM_TYPE_NORMAL = 1;
-    public static final int ITEM_TYPE_LOAD_END_HINT = 2;  // 數據全部加載完成的提示
-
     public int itemType;
 
     public int postId;
