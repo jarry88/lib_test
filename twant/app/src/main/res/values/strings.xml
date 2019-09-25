@@ -235,9 +235,9 @@
     <string name="text_free_freight">包郵</string>
     <string name="text_free_freight_desc">訂單免郵費</string>
     <string name="text_instant_discount">立減</string>
-    <string name="text_instant_discount_desc">下單時立減%d</string>
+    <string name="text_instant_discount_desc">滿%d元，減%d元</string>
     <string name="text_present_voucher">送券</string>
-    <string name="text_present_voucher_desc">贈送$%d店舖券一張</string>
+    <string name="text_present_voucher_desc">滿%d元，送%d元店舖券</string>
 
     <string name="text_pay_success">訂單支付成功</string>
     <string name="text_view_order">查看訂單</string>

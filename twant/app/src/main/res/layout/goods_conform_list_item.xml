@@ -46,6 +46,7 @@
             android:background="@drawable/goods_conform_indicator_bg"
             />
         <TextView
+            android:id="@+id/tv_free_freight_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

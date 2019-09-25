@@ -26,7 +26,7 @@ public class GoodsGiftAdapter extends BaseQuickAdapter<GiftItem, BaseViewHolder>
         Glide.with(context).load(item.imageSrc).centerCrop().into(goodsImage);
 
         helper.setText(R.id.tv_goods_name, item.goodsName);
-        String giftHint = "(贈完為止) *" + item.giftNum;
+        String giftHint = "(贈完為止) X" + item.giftNum;
         helper.setText(R.id.tv_gift_hint, giftHint);
     }
 }

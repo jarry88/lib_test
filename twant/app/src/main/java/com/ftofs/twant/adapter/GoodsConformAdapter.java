@@ -44,12 +44,15 @@ public class GoodsConformAdapter extends BaseQuickAdapter<GoodsConformItem, Base
         // 包郵
         if (item.isFreeFreight == 0) {
             helper.setGone(R.id.ll_free_freight_ind_container, false);
+        } else {
+            String freeFreightDesc = String.format("满%d元，包邮", item.limitAmount);
+            helper.setText(R.id.tv_free_freight_desc, freeFreightDesc);
         }
 
         // 立減
         if (item.conformPrice > 0) {
             String instantDiscountDesc = context.getString(R.string.text_instant_discount_desc);
-            instantDiscountDesc = String.format(instantDiscountDesc, item.conformPrice);
+            instantDiscountDesc = String.format(instantDiscountDesc, item.limitAmount, item.conformPrice);
             helper.setText(R.id.tv_instant_discount_desc, instantDiscountDesc);
         } else {
             helper.setGone(R.id.ll_instant_discount_ind_container, false);
@@ -58,7 +61,7 @@ public class GoodsConformAdapter extends BaseQuickAdapter<GoodsConformItem, Base
         // 送券
         if (item.templateId > 0) {
             String presentVoucherDesc = context.getString(R.string.text_present_voucher_desc);
-            presentVoucherDesc = String.format(presentVoucherDesc, item.templatePrice);
+            presentVoucherDesc = String.format(presentVoucherDesc, item.limitAmount, item.templatePrice);
             helper.setText(R.id.tv_present_voucher_desc, presentVoucherDesc);
         } else {
             helper.setGone(R.id.ll_present_voucher_ind_container, false);
@@ -67,7 +70,7 @@ public class GoodsConformAdapter extends BaseQuickAdapter<GoodsConformItem, Base
         // 贈品
         if (item.giftVoList != null && item.giftVoList.size() > 0) {
             LinearLayout container = helper.getView(R.id.ll_conform_gift_list);
-            ConformGiftAdapter conformGiftAdapter = new ConformGiftAdapter(context, container,R.layout.goods_conform_gift_list_item);
+            ConformGiftAdapter conformGiftAdapter = new ConformGiftAdapter(context, container,R.layout.goods_conform_gift_list_item, item.limitAmount);
             conformGiftAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
                 @Override
                 public void onClick(ViewGroupAdapter adapter, View view, int position) {
