@@ -2,12 +2,14 @@ package com.ftofs.twant.adapter;
 
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
@@ -27,8 +29,21 @@ public class StoreServiceStaffListAdapter extends BaseQuickAdapter<CustomerServi
     @Override
     protected void convert(BaseViewHolder helper, CustomerServiceStaff item) {
         ImageView imgStaffAvatar = helper.getView(R.id.img_staff_avatar);
-        Glide.with(mContext).load(item.avatar).centerCrop().into(imgStaffAvatar);
+        if (StringUtil.useDefaultAvatar(item.avatar)) {
+            Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgStaffAvatar);
+        } else {
+            Glide.with(mContext).load(item.avatar).centerCrop().into(imgStaffAvatar);
+        }
 
         helper.setText(R.id.tv_staff_name, item.staffName);
+
+        TextView tvCustomerServiceType = helper.getView(R.id.tv_customer_service_type);
+        if (item.staffType == 1) {
+            tvCustomerServiceType.setText(R.string.text_pre_sale);
+            tvCustomerServiceType.setBackgroundResource(R.drawable.customer_service_type_indicator_bg_red);
+        } else {
+            tvCustomerServiceType.setText(R.string.text_post_sale);
+            tvCustomerServiceType.setBackgroundResource(R.drawable.customer_service_type_indicator_bg_blue);
+        }
     }
 }

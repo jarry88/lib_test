@@ -60,9 +60,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             app:stb_text="@string/text_my_store_coupon"
-            app:stb_stroke_width="1dp"
+            app:stb_stroke_width="2dp"
             app:stb_use_cap="true"
-            app:stb_padding_bottom="1dp"
+            app:stb_padding_bottom="1.5dp"
             />
 
         <com.ftofs.twant.widget.SimpleTabButton
@@ -71,9 +71,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             app:stb_text="@string/text_receive_store_coupon"
-            app:stb_stroke_width="1dp"
+            app:stb_stroke_width="2dp"
             app:stb_use_cap="true"
-            app:stb_padding_bottom="1dp"
+            app:stb_padding_bottom="1.5dp"
             />
     </LinearLayout>
     <!-- END OF Tab按鈕欄 -->

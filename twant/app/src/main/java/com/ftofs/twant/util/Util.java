@@ -387,6 +387,7 @@ public class Util {
             staff.imName = storeServiceStaffVo.getString("imName");
             staff.avatar = storeServiceStaffVo.getString("avatar");
             staff.welcomeMessage = storeServiceStaffVo.getString("welcome");
+            staff.staffType = storeServiceStaffVo.getInt("staffType");
         } catch (Exception e) {
 
         }

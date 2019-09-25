@@ -121,7 +121,7 @@
     <string name="text_unavailable_store_coupon">不可用店鋪券</string>
 
 
-    <string name="mobile_zone_text">地區區號</string>
+    <string name="mobile_zone_text">地區選擇</string>
     <string name="ok">確定</string>
     <string name="input_mobile_hint">請輸入手機號碼</string>
 
@@ -190,7 +190,7 @@
     <string name="my_bill_to_be_sent">待發貨</string>
     <string name="my_bill_to_be_received">待收貨</string>
     <string name="my_bill_to_be_commented">待評價</string>
-    <string name="my_bill_return_or_exchange">退換貨</string>
+    <string name="my_bill_return_or_exchange">退換/售後</string>
 
     <string name="my_coupon">我的優惠券</string>
     <string name="my_follow">我的關注</string>
@@ -307,6 +307,8 @@
     <string name="text_want_to_add_to_cart">想放購物車</string>
 
     <string name="text_customer_service">客服</string>
+    <string name="text_pre_sale">售前</string>
+    <string name="text_post_sale">售后</string>
     <string name="text_followed">已關注</string>
     <string name="text_spec">規格</string>
     <string name="text_send_to">送至</string>
@@ -384,7 +386,7 @@
     <string name="text_return_tab">退貨</string>
     <string name="text_complain_tab">投訴</string>
     <string name="text_refund_list">退款列表</string>
-    <string name="text_return_list">退貨列表</string>
+    <string name="text_return_list">售後服務</string>
     <string name="text_complain_list">投訴列表</string>
     <string name="text_view_complaint">查看投訴</string>
     <string name="select_refund_reason_hint">请选择退款原因</string>
@@ -544,6 +546,7 @@
     <string name="text_receive_store_coupon">領取店鋪券</string>
 
     <string name="text_address_management">地址管理</string>
+    <string name="text_shipping_address">收貨地址</string>
     <string name="text_add">添加</string>
     <string name="text_add_address">地址添加</string>
     <string name="text_edit_address">地址編輯</string>

@@ -4,101 +4,103 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#F3F3F3">
 
-    <!-- 工具欄 -->
-    <RelativeLayout
-        android:id="@+id/tool_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:background="@drawable/border_type_d">
-
-        <com.ftofs.twant.widget.ScaledButton
-            android:id="@+id/btn_back"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
-            android:layout_centerVertical="true"
-            app:icon_src="@drawable/icon_back"
-            />
-
-        <TextView
-            android:id="@+id/tv_fragment_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textSize="18sp"
-            android:text=""
-            android:textColor="@color/tw_black"
-            />
-    </RelativeLayout>
-    <!-- END OF 工具欄 -->
 
     <LinearLayout
-        android:id="@+id/ll_goods_outer_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
-        android:background="@drawable/border_type_d"
+        android:background="@android:color/white"
         android:orientation="vertical">
-
-        <!-- 店名 -->
-        <LinearLayout
-            android:id="@+id/ll_store_name_container"
+        <!-- 工具欄 -->
+        <RelativeLayout
+            android:id="@+id/tool_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@drawable/border_type_d">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/icon_shop"
+            <com.ftofs.twant.widget.ScaledButton
+                android:id="@+id/btn_back"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_marginLeft="7dp"
+                android:layout_centerVertical="true"
+                app:icon_src="@drawable/icon_back"
                 />
 
             <TextView
-                android:id="@+id/tv_store_name"
+                android:id="@+id/tv_fragment_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"
                 android:text=""
+                android:textColor="@color/tw_black"
                 />
-            <ImageView
-                android:layout_width="wrap_content"
+        </RelativeLayout>
+        <!-- END OF 工具欄 -->
+
+        <LinearLayout
+            android:id="@+id/ll_goods_outer_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:background="@drawable/border_type_d"
+            android:orientation="vertical">
+
+            <!-- 店名 -->
+            <LinearLayout
+                android:id="@+id/ll_store_name_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/expand_button"
-                />
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/icon_shop"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_store_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/tw_black"
+                    android:text=""
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/expand_button"
+                    />
+            </LinearLayout>
+
+            <!-- 商品列表 -->
+            <LinearLayout
+                android:id="@+id/ll_goods_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
         </LinearLayout>
 
-        <!-- 商品列表 -->
         <LinearLayout
-            android:id="@+id/ll_goods_list_container"
+            android:id="@+id/ll_widget_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_widget_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/tw_slight_grey"
-        />
 
     <RelativeLayout
         android:layout_width="match_parent"

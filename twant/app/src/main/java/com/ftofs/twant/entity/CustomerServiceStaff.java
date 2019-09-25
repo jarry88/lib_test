@@ -12,4 +12,5 @@ public class CustomerServiceStaff {
     public String imName; // 跟店員聊天時，用這個(相當于臨時聊天)
     public String avatar;
     public String welcomeMessage;
+    public int staffType;
 }

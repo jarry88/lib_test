@@ -122,7 +122,7 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
                     }
 
                     adapter.setNewData(staffList);
-                    tvPopupTitle.setText(context.getString(R.string.text_store_customer_service) + "(" + staffList.size() + ")");
+                    tvPopupTitle.setText(context.getString(R.string.text_store_customer_service) + "(" + staffList.size() + "人)");
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                 }

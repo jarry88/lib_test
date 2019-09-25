@@ -244,8 +244,7 @@
                     android:layout_marginLeft="@dimen/toolbar_margin_left"
                     android:layout_marginRight="@dimen/toolbar_margin_right"
                     android:paddingTop="15dp"
-                    android:paddingBottom="15dp"
-                    android:background="@drawable/bottom_separator_box">
+                    android:paddingBottom="15dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -271,7 +270,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="15dp"
                     android:paddingBottom="15dp"
-                    android:background="@drawable/bottom_separator_box">
+                    android:background="@drawable/border_type_d">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

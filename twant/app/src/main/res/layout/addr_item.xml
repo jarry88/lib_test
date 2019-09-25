@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="15dp"
-    android:background="#fff"
+    android:layout_marginLeft="@dimen/toolbar_margin_left"
+    android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:background="@drawable/addr_item_bg"
     android:orientation="vertical">
     <LinearLayout
         android:id="@+id/btn_use_this_addr"
@@ -47,7 +49,7 @@
             android:textSize="14sp"
             android:textColor="@color/tw_black"
             android:text=""
-            android:background="@drawable/bottom_separator_box"
+            android:background="@drawable/border_type_d"
             />
     </LinearLayout>
     <!-- 地址項工具欄 -->

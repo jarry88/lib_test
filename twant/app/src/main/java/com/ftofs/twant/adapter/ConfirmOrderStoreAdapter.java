@@ -61,14 +61,19 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                     .addOnClickListener(R.id.ll_store_info_container)  // 點擊店鋪信息
                     .addOnClickListener(R.id.btn_use_voucher);  // 使用店鋪券
 
-            String voucherStatus;
-            if (item.voucherId > 0) { // 如果正在使用優惠券，則顯示正在使用的券的名稱
-                SLog.info("HERE");
-                voucherStatus = item.voucherName;
-            } else { // 如果沒有使用優惠券，則顯示可用的券的數量
-                SLog.info("HERE");
-                voucherStatus = String.format("可用%d張", item.voucherCount);
+            String voucherStatus = "";
+            if (item.voucherCount > 0) {
+                if (item.voucherId > 0) { // 如果正在使用優惠券，則顯示正在使用的券的名稱
+                    SLog.info("HERE");
+                    voucherStatus = item.voucherName;
+                } else { // 如果沒有使用優惠券，則顯示可用的券的數量
+                    SLog.info("HERE");
+                    voucherStatus = String.format("可用%d張", item.voucherCount);
+                }
+            } else { // 如果沒有可用的優惠券，則隱藏
+                helper.setGone(R.id.rl_voucher_container, false);
             }
+
 
             String discountAmountText = StringUtil.formatPrice(context, item.discountAmount, 0);
             if (item.discountAmount > 0) { // 如果有優惠，在前面加上負號
