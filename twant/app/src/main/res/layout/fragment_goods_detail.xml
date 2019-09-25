@@ -390,8 +390,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="9dp"
-                    android:layout_marginBottom="9dp"
-                    android:visibility="gone">
+                    android:layout_marginBottom="9dp">
                     <TextView
                         android:id="@+id/text_receive_voucher"
                         android:layout_width="wrap_content"
@@ -431,6 +430,7 @@
 
 
                 <!-- 贈品 -->
+                <!--
                 <RelativeLayout
                     android:id="@+id/btn_show_gift"
                     android:layout_width="match_parent"
@@ -473,8 +473,9 @@
                         android:ellipsize="end"
                         />
                 </RelativeLayout>
+                -->
 
-                <!-- 滿減 -->
+                <!-- 促銷 -->
                 <RelativeLayout
                     android:id="@+id/btn_show_conform"
                     android:layout_width="match_parent"
@@ -501,21 +502,47 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/expand_button_red"
                         />
-                    <TextView
-                        android:id="@+id/tv_conform_text"
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_toRightOf="@id/text_conform_simplify"
                         android:layout_toLeftOf="@id/icon_expand_conform"
                         android:layout_centerVertical="true"
-                        android:text=""
-                        android:textSize="14sp"
-                        android:textColor="@color/tw_red"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/tv_gift_hint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:paddingTop="1dp"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:text="贈品"
+                            android:textSize="14sp"
+                            android:textColor="@color/tw_red"
+                            android:background="@drawable/tv_gift_hint_bg"
+                            android:visibility="gone"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_conform_hint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:paddingTop="1dp"
+                            android:paddingBottom="1dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:text="滿優惠"
+                            android:textSize="14sp"
+                            android:textColor="@color/tw_red"
+                            android:background="@drawable/tv_gift_hint_bg"
+                            android:visibility="gone"
+                            />
+                    </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
 

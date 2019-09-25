@@ -55,6 +55,13 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
     RelativeLayout btnConformTab;
     RelativeLayout btnGiftTab;
 
+    /**
+     * 構造方法
+     * @param context
+     * @param tabId
+     * @param giftItemList 贈品列表（SKU級別）
+     * @param goodsConformItemList 滿優惠列表（SPU或店鋪級別）
+     */
     public StoreGiftPopup(@NonNull Context context, int tabId, List<GiftItem> giftItemList, List<GoodsConformItem> goodsConformItemList) {
         super(context);
 

@@ -94,6 +94,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     // 購買數量
     int buyNum = 1;
 
+    // 滿優惠數
+    int conformCount;
+    // 贈品數
+    int giftCount;
+
     /**
      * 限時折扣倒計時是否正在倒數
      */
@@ -149,10 +154,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvVoucherText;
 
     RelativeLayout btnShowConform;
-    TextView tvConformText;
+    TextView tvConformHint;
+    TextView tvGiftHint;
 
-    RelativeLayout btnShowGift;
-    TextView tvGiftText;
 
     TextView tvCountDownDay;
     TextView tvCountDownHour;
@@ -298,11 +302,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         btnShowConform = view.findViewById(R.id.btn_show_conform);
         btnShowConform.setOnClickListener(this);
-        tvConformText = view.findViewById(R.id.tv_conform_text);
-
-        btnShowGift = view.findViewById(R.id.btn_show_gift);
-        btnShowGift.setOnClickListener(this);
-        tvGiftText = view.findViewById(R.id.tv_gift_text);
+        tvConformHint = view.findViewById(R.id.tv_conform_hint);
+        tvGiftHint = view.findViewById(R.id.tv_gift_hint);
 
         tvCommentCount = view.findViewById(R.id.tv_comment_count);
         Util.setOnClickListener(view, R.id.btn_goods_comment, this);
@@ -428,14 +429,20 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .show();
                 break;
             case R.id.btn_show_conform:
-            case R.id.btn_show_gift:
+                // 顯示促銷信息
                 if (userId < 1) {
                     start(LoginFragment.newInstance());
                     return;
                 }
-                int tabId = StoreGiftPopup.TAB_ID_CONFORM;
-                if (id == R.id.btn_show_gift) {
+                // 顯示哪個Tab
+                int tabId;
+
+                if (conformCount > 0) {
+                    tabId = StoreGiftPopup.TAB_ID_CONFORM;
+                } else if (giftCount > 0) {
                     tabId = StoreGiftPopup.TAB_ID_GIFT;
+                } else {
+                    return;
                 }
                 List<GiftItem> giftItemList = giftMap.get(currGoodsId);
                 new XPopup.Builder(_mActivity)
@@ -676,8 +683,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     goodsLike = goodsDetail.getInt("goodsLike");
                     updateThumbView();
 
-
-
                     // 是否關注
                     isFavorite = goodsDetail.getInt("isFavorite");
                     updateFavoriteView();
@@ -821,6 +826,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, giftVo.toString());
                             giftItemList.add(giftItem);
                         }
+                        SLog.info("ddddddddddddddddddxxxxx[%d][%d]", goodsId, giftItemList.size());
                         giftMap.put(goodsId, giftItemList);
                         // 如果從外面傳進來的參數沒有指定goodsId, 則默認選中第一項sku
                         if (currGoodsId == 0 && first) {
@@ -845,10 +851,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                         first = false;
                     }
-                    // 初始化默認選擇
-                    SLog.info("初始化默認選擇 currGoodsId[%d]", currGoodsId);
-                    selectSku(currGoodsId);
-
 
                     // 【滿減】優惠
                     EasyJSONArray conformList = responseObj.getArray("datas.goodsDetail.conformList");
@@ -887,11 +889,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             goodsConformItemList.add(goodsConformItem);
                             first = false;
                         }
-
-                        tvConformText.setText(conformText);
                         btnShowConform.setVisibility(VISIBLE);
                     }
 
+                    // 初始化默認選擇
+                    SLog.info("初始化默認選擇 currGoodsId[%d]", currGoodsId);
+                    selectSku(currGoodsId);
 
                     commentCount = responseObj.getInt("datas.wantCommentVoInfoCount");
                     tvCommentCount.setText(String.format(getString(R.string.text_comment) + "(%d)", commentCount));
@@ -967,8 +970,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             giftText.append(giftItem.goodsName);
             giftText.append(" ");
         }
-        tvGiftText.setText(giftText);
-        btnShowGift.setVisibility(VISIBLE);
     }
 
     @Override
@@ -1129,12 +1130,33 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             return;
         }
 
+        // 滿優惠數
+        conformCount = goodsConformItemList.size();
+        // 贈品數
+        giftCount = 0;
         List<GiftItem> giftItemList = giftMap.get(currGoodsId);
-        if (giftItemList == null || giftItemList.size() == 0) { // 如果當前規格沒有贈品，則隱藏贈品優惠提示
-            btnShowGift.setVisibility(GONE);
-        } else {
-            showGiftHint(giftItemList);
+        if (giftItemList != null && giftItemList.size() > 0) { // 獲取贈品數量
+            giftCount = giftItemList.size();
         }
+        SLog.info("currGoodsId[%d], giftCount[%d], conformCount[%d]", currGoodsId, giftCount, conformCount);
+
+        int btnShowConformVisibility = VISIBLE;
+        if (giftCount > 0) {
+            tvGiftHint.setVisibility(VISIBLE);
+        } else {
+            tvGiftHint.setVisibility(GONE);
+        }
+
+        if (conformCount > 0) {
+            tvConformHint.setVisibility(VISIBLE);
+        } else {
+            tvConformHint.setVisibility(GONE);
+        }
+
+        if (giftCount < 1 && conformCount < 1) {
+            btnShowConformVisibility = GONE;
+        }
+        btnShowConform.setVisibility(btnShowConformVisibility);
 
         SLog.info("goodsInfo.specValueIds[%s]", goodsInfo.specValueIds);
         selSpecValueIdList = StringUtil.specValueIdsToList(goodsInfo.specValueIds);
