@@ -155,7 +155,7 @@ public class TwantApplication extends Application {
 
         int fragmentationMode;
         if (Config.DEVELOPER_MODE) {
-            fragmentationMode = Fragmentation.BUBBLE;
+            fragmentationMode = Fragmentation.NONE;
         } else {
             fragmentationMode = Fragmentation.NONE;
         }

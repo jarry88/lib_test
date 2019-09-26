@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -178,13 +179,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_dial_store_phone, this);
         Util.setOnClickListener(view, R.id.btn_advisory_service, this);
 
-        RecyclerView rvOrderDetailGoodsList = view.findViewById(R.id.rv_order_detail_goods_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
-        rvOrderDetailGoodsList.setLayoutManager(layoutManager);
-        adapter = new OrderDetailGoodsAdapter(_mActivity, R.layout.order_detail_goods_item, orderDetailGoodsItemList);
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        LinearLayout llOrderDetailGoodsList = view.findViewById(R.id.ll_order_detail_goods_list);
+        adapter = new OrderDetailGoodsAdapter(_mActivity, llOrderDetailGoodsList, R.layout.order_detail_goods_item);
+        adapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
                 OrderDetailGoodsItem item = orderDetailGoodsItemList.get(position);
                 int id = view.getId();
                 SLog.info("id[%d]", id);
@@ -209,7 +208,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 }
             }
         });
-        rvOrderDetailGoodsList.setAdapter(adapter);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.tv_fragment_title, this);
@@ -646,7 +644,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 showMemberComplain,
                                 goodsVo.getInt("complainId")));
                     }
-                    adapter.setNewData(orderDetailGoodsItemList);
+                    adapter.setData(orderDetailGoodsItemList);
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                     e.printStackTrace();

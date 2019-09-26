@@ -164,11 +164,12 @@
                         />
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_order_detail_goods_list"
+                <LinearLayout
+                    android:id="@+id/ll_order_detail_goods_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
+                    android:orientation="vertical">
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"

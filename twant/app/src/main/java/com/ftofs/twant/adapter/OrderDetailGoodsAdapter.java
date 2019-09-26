@@ -2,6 +2,8 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -17,54 +19,64 @@ import java.util.List;
  * 訂單詳情頁面的商品列表Adapter
  * @author zwm
  */
-public class OrderDetailGoodsAdapter extends BaseQuickAdapter<OrderDetailGoodsItem, BaseViewHolder> {
+public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsItem> {
     Context context;
     String timesSign;
 
-    public OrderDetailGoodsAdapter(Context context, int layoutResId, @Nullable List<OrderDetailGoodsItem> data) {
-        super(layoutResId, data);
+    /**
+     * 構造方法
+     *
+     * @param context
+     * @param container    容器
+     * @param itemLayoutId itemView的布局Id
+     */
+    public OrderDetailGoodsAdapter(Context context, ViewGroup container, int itemLayoutId) {
+        super(context, container, itemLayoutId);
+
         this.context = context;
 
         timesSign = context.getString(R.string.times_sign);
+        addClickableChildrenId(R.id.btn_goto_goods, R.id.btn_refund, R.id.btn_return, R.id.btn_view_complaint, R.id.btn_complain);
     }
 
+
     @Override
-    protected void convert(BaseViewHolder helper, OrderDetailGoodsItem item) {
-        ImageView goodsImage = helper.getView(R.id.goods_image);
-        Glide.with(context).load(item.imageSrc).centerCrop().into(goodsImage);
-        helper.setText(R.id.tv_goods_name, item.goodsName);
-        helper.setText(R.id.tv_goods_full_specs, item.goodsFullSpecs);
-        helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context, item.goodsPrice, 0));
-        helper.setText(R.id.tv_buy_item_amount, timesSign + " " + item.buyNum);
+    public void bindView(int position, View itemView, OrderDetailGoodsItem itemData) {
+        ImageView goodsImage = itemView.findViewById(R.id.goods_image);
+        Glide.with(context).load(itemData.imageSrc).centerCrop().into(goodsImage);
+        setText(itemView, R.id.tv_goods_name, itemData.goodsName);
+        setText(itemView, R.id.tv_goods_full_specs, itemData.goodsFullSpecs);
+        setText(itemView, R.id.tv_goods_price, StringUtil.formatPrice(context, itemData.goodsPrice, 0));
+        setText(itemView, R.id.tv_buy_item_amount, timesSign + " " + itemData.buyNum);
 
-        helper.addOnClickListener(R.id.btn_goto_goods)
-                .addOnClickListener(R.id.btn_refund)
-                .addOnClickListener(R.id.btn_return)
-                .addOnClickListener(R.id.btn_view_complaint)
-                .addOnClickListener(R.id.btn_complain);
-
-        if (item.refundType == 0) {
-            if (item.showRefund == 1) {
-                helper.setGone(R.id.btn_refund, true)
-                        .setGone(R.id.btn_return, true);
+        if (itemData.refundType == 0) {
+            View btnRefund = itemView.findViewById(R.id.btn_refund);
+            View btnReturn = itemView.findViewById(R.id.btn_return);
+            if (itemData.showRefund == 1) {
+                btnRefund.setVisibility(View.VISIBLE);
+                btnReturn.setVisibility(View.VISIBLE);
             } else {
-                helper.setGone(R.id.btn_refund, false)
-                        .setGone(R.id.btn_return, false);
+                btnRefund.setVisibility(View.GONE);
+                btnReturn.setVisibility(View.GONE);
             }
-        } else if (item.refundType == 1) { // 查看退款
+        } else if (itemData.refundType == 1) { // 查看退款
 
-        } else if (item.refundType == 2) { // 查看退貨
+        } else if (itemData.refundType == 2) { // 查看退貨
 
         }
 
-        if (item.showMemberComplain == 1) {
-            if (item.complainId == 0) {
-                helper.setGone(R.id.btn_complain, true);
-                helper.setGone(R.id.btn_view_complaint, false);
+        if (itemData.showMemberComplain == 1) {
+            View btnComplain = itemView.findViewById(R.id.btn_complain);
+            View btnViewComplaint = itemView.findViewById(R.id.btn_view_complaint);
+            if (itemData.complainId == 0) {
+                btnComplain.setVisibility(View.VISIBLE);
+                btnViewComplaint.setVisibility(View.GONE);
             } else {
-                helper.setGone(R.id.btn_complain, false);
-                helper.setGone(R.id.btn_view_complaint, true);
+                btnComplain.setVisibility(View.GONE);
+                btnViewComplaint.setVisibility(View.VISIBLE);
             }
         }
     }
 }
+
+
