@@ -32,7 +32,7 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
     public OrderItemListAdapter(Context context, ViewGroup container, int itemLayoutId, boolean showPayButton) {
         super(context, container, itemLayoutId);
 
-        addClickableChildrenId(R.id.btn_cancel_order, R.id.btn_buy_again, R.id.btn_view_logistics, R.id.btn_order_comment);
+        addClickableChildrenId(R.id.btn_cancel_order, R.id.btn_buy_again, R.id.btn_view_logistics, R.id.btn_order_comment, R.id.btn_have_received);
         this.showPayButton = showPayButton;
     }
 
@@ -68,6 +68,12 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
             itemView.findViewById(R.id.btn_order_comment).setVisibility(View.VISIBLE);
         } else {
             itemView.findViewById(R.id.btn_order_comment).setVisibility(View.GONE);
+        }
+
+        if (itemData.showMemberReceive) {
+            itemView.findViewById(R.id.btn_have_received).setVisibility(View.VISIBLE);
+        } else {
+            itemView.findViewById(R.id.btn_have_received).setVisibility(View.GONE);
         }
 
         LinearLayout llSkuItemContainer = itemView.findViewById(R.id.ll_sku_item_container);

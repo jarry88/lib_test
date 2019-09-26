@@ -403,7 +403,6 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                         return;
                     }
 
-
                     try {
                         hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
                         SLog.info("hasMore[%s]", hasMore);
@@ -412,8 +411,11 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                             payItemListAdapter.setEnableLoadMore(false);
                         }
 
+                        SLog.info("PAGE[%d]", page);
+                        if (page == 1) {  // 如果是第1頁，清空原有數據
+                            payItemList.clear();
+                        }
                         EasyJSONArray ordersPayVoList = responseObj.getArray("datas.ordersPayVoList");
-
                         for (Object object : ordersPayVoList) { // PayObject
                             EasyJSONObject ordersPayVo = (EasyJSONObject) object;
 
@@ -449,8 +451,9 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                 int showMemberBuyAgain = ordersVo.getInt("showMemberBuyAgain");
                                 int showShipSearch = ordersVo.getInt("showShipSearch");
                                 int showEvaluation = ordersVo.getInt("showEvaluation");
-                                SLog.info("showMemberCancel[%d], showMemberBuyAgain[%d], showShipSearch[%d], showEvaluation[%d]",
-                                        showMemberCancel, showMemberBuyAgain, showShipSearch, showEvaluation);
+                                int showMemberReceive = ordersVo.getInt("showMemberReceive");
+                                SLog.info("showMemberCancel[%d], showMemberBuyAgain[%d], showShipSearch[%d], showEvaluation[%d], showMemberReceive[%d]",
+                                        showMemberCancel, showMemberBuyAgain, showShipSearch, showEvaluation, showMemberReceive);
 
                                 List<OrderSkuItem> orderSkuItemList = new ArrayList<>();
                                 // 獲取Sku列表
@@ -486,7 +489,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
                                 OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount,
                                         showMemberCancel == 1, showMemberBuyAgain == 1, showShipSearch == 1,
-                                        showEvaluation == 1, orderSkuItemList, giftItemList);
+                                        showEvaluation == 1, showMemberReceive == 1, orderSkuItemList, giftItemList);
 
                                 payItem.orderItemList.add(orderItem);
                                 if (!showPayButton) {
@@ -630,7 +633,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                 public void run() {
                                     reloadData();
                                 }
-                            }, 500);
+                            }, 1500);
                         } else if(operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
                             ToastUtil.success(_mActivity, "刪除訂單成功");
                         } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
@@ -645,6 +648,51 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         } catch (Exception e) {
 
         }
+    }
+
+    /**
+     * 確認收貨
+     */
+    public void confirmReceive(int ordersId) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "ordersId", ordersId);
+
+        SLog.info("params[%s]", params);
+
+        Api.postUI(Api.PATH_CONFIRM_RECEIVE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.success(_mActivity, "確認收貨成功");
+                    rvOrderList.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            reloadData();
+                        }
+                    }, 1500);
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 
     @Override

@@ -8,6 +8,8 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.OrderItem;
@@ -18,12 +20,19 @@ import com.ftofs.twant.fragment.OrderFragment;
 import com.ftofs.twant.fragment.OrderLogisticsInfoFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 
+import java.io.IOException;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 訂單列表Adapter(顯示地方: 訂單列表的【全部】、【待付款】和查詢訂單Fragment中顯示)
@@ -98,6 +107,32 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                     } else if (id == R.id.btn_order_comment) {
                         SLog.info("btn_order_comment");
                         Util.startFragment(GoodsEvaluationFragment.newInstance());
+                    } else if (id == R.id.btn_have_received) {
+                        SLog.info("btn_have_received");
+                        new XPopup.Builder(context)
+//                         .dismissOnTouchOutside(false)
+                                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                                .setPopupCallback(new XPopupCallback() {
+                                    @Override
+                                    public void onShow() {
+                                    }
+                                    @Override
+                                    public void onDismiss() {
+                                    }
+                                }).asCustom(new TwConfirmPopup(context, "確認收貨嗎?", null, new OnConfirmCallback() {
+                            @Override
+                            public void onYes() {
+                                SLog.info("onYes");
+                                orderFragment.confirmReceive(orderItem.orderId);
+                            }
+
+                            @Override
+                            public void onNo() {
+                                SLog.info("onNo");
+                            }
+                        }))
+                                .show();
                     }
                 }
             });
