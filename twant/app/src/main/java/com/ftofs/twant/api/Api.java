@@ -169,7 +169,7 @@ public class Api {
     /**
      * 店鋪搜索
      */
-    public static final String PATH_SEARCH_STORE = "/search/store";
+    public static final String PATH_SEARCH_STORE = "/app/search/store";
 
     /**
      * 店铺内商品搜索

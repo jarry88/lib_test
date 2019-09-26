@@ -31,6 +31,13 @@ public class StoreSearchResultAdapter extends BaseQuickAdapter<StoreSearchItem, 
             helper.setText(R.id.tv_main_business, mContext.getString(R.string.text_main_business) + ": " + item.mainBusiness);
         }
 
+        if (StringUtil.isEmpty(item.className)) {
+            helper.setGone(R.id.tv_store_class, false);
+        } else {
+            helper.setText(R.id.tv_store_class, item.className);
+            helper.setGone(R.id.tv_store_class, true);
+        }
+
 
         ImageView imgStoreFigure = helper.getView(R.id.img_store_figure);
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.storeFigureImage)).centerCrop().into(imgStoreFigure);

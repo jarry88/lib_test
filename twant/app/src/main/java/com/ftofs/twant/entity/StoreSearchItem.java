@@ -7,11 +7,12 @@ import java.util.List;
  * @author zwm
  */
 public class StoreSearchItem {
-    public StoreSearchItem(int storeId, String storeAvatarUrl, String storeName, String mainBusiness, String storeFigureImage,
+    public StoreSearchItem(int storeId, String storeAvatarUrl, String storeName, String className, String mainBusiness, String storeFigureImage,
                            float distance, String shopDay, int likeCount, int goodsCommonCount, List<String> goodsImageList) {
         this.storeId = storeId;
         this.storeAvatarUrl = storeAvatarUrl;
         this.storeName = storeName;
+        this.className = className;
         this.mainBusiness = mainBusiness;
         this.storeFigureImage = storeFigureImage;
         this.distance = distance;
@@ -24,6 +25,7 @@ public class StoreSearchItem {
     public int storeId;
     public String storeAvatarUrl;
     public String storeName;
+    public String className; // 店鋪分類名稱，比如：超級市場、文具店等
     public String mainBusiness;
     public String storeFigureImage;
     public float distance;

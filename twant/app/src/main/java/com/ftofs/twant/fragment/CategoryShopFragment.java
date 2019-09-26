@@ -84,7 +84,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
                 CategoryShop categoryShop = categoryShopList.get(position);
 
                 Util.startFragment(SearchResultFragment.newInstance(SearchType.STORE.name(),
-                        EasyJSONObject.generate("keyword", String.valueOf(categoryShop.shopId)).toString()));
+                        EasyJSONObject.generate("classId", String.valueOf(categoryShop.shopId)).toString()));
             }
         });
         rvShopList.setAdapter(categoryShopAdapter);

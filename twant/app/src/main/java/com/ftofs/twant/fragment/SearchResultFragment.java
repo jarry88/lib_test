@@ -374,6 +374,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     }
                 });
             } else if (searchType == SearchType.STORE) {
+                SLog.info("params[%s]", params);
                 Api.getUI(Api.PATH_SEARCH_STORE, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -400,6 +401,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 int storeId = store.getInt("storeId");
                                 String storeAvatarUrl = store.getString("storeAvatarUrl");
                                 String storeName = store.getString("storeName");
+                                String className = store.getString("className");
                                 String mainBusiness = store.getString("storeZy");
                                 String storeFigureImage = store.getString("storeFigureImage");
                                 float distance = Float.valueOf(store.getString("distance"));
@@ -415,7 +417,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                     goodsImageList.add(goodsCommon.getString("imageSrc"));
                                 }
 
-                                storeItemList.add(new StoreSearchItem(storeId, storeAvatarUrl, storeName, mainBusiness,
+                                storeItemList.add(new StoreSearchItem(storeId, storeAvatarUrl, storeName, className, mainBusiness,
                                         storeFigureImage, distance, shopDay, likeCount, goodsCommonCount, goodsImageList));
                             }
 
