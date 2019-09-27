@@ -2,18 +2,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="540dp"
+    android:layout_height="440dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/list_popup_bg"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
         <TextView
             android:id="@+id/tv_popup_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+
+            android:layout_centerVertical="true"
             android:text="@string/text_select_big_area"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
@@ -23,9 +27,9 @@
             android:id="@+id/btn_dismiss"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginTop="19dp"
             android:layout_marginRight="12dp"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             app:icon_src="@drawable/btn_close"
             />
     </RelativeLayout>
@@ -35,22 +39,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/border_type_d">
-        <TextView
-            android:id="@+id/tv_ship_to"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/toolbar_margin_left"
-            android:text="@string/text_shipping_to"
-            android:textColor="@color/tw_black"
-            android:textSize="15sp"
-            />
 
         <LinearLayout
             android:id="@+id/ll_area_container"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginLeft="@dimen/toolbar_margin_left"
             android:layout_marginRight="@dimen/toolbar_margin_right"
             android:orientation="horizontal">

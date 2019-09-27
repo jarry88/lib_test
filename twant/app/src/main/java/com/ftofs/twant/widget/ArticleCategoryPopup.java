@@ -61,7 +61,6 @@ public class ArticleCategoryPopup extends BottomPopupView implements View.OnClic
         super.onCreate();
 
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
-        findViewById(R.id.btn_ok).setOnClickListener(this);
 
         FlowLayout flCategoryButtonContainer = findViewById(R.id.fl_category_button_container);
         boolean first = true;
@@ -87,6 +86,9 @@ public class ArticleCategoryPopup extends BottomPopupView implements View.OnClic
                     prevCategoryButton = (TextView) v;
                     prevCategoryButton.setTextColor(twBlue);
                     selectedId = (int) prevCategoryButton.getTag();
+
+                    onSelectedListener.onSelected(PopupType.ARTICLE_CATEGORY, selectedId, null);
+                    dismiss();
                 }
             });
 
@@ -122,9 +124,6 @@ public class ArticleCategoryPopup extends BottomPopupView implements View.OnClic
         int id = v.getId();
 
         if (id == R.id.btn_dismiss) {
-            dismiss();
-        } else if (id == R.id.btn_ok) {
-            onSelectedListener.onSelected(PopupType.ARTICLE_CATEGORY, selectedId, null);
             dismiss();
         }
     }

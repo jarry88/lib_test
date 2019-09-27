@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:background="@drawable/bottom_separator_box">
+        android:background="@drawable/border_type_d">
 
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
-            android:text="@string/text_wanted_job"
+            android:text="@string/text_job_desc"
             />
 
         <com.ftofs.twant.widget.ScaledButton
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text=""
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textColor="@color/tw_black"
                 />
             <RelativeLayout
@@ -73,7 +73,8 @@
                     android:layout_centerVertical="true"
                     android:text=""
                     android:textColor="@color/tw_red"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     />
                 <TextView
                     android:id="@+id/tv_salary_unit"
@@ -89,55 +90,71 @@
 
                 <TextView
                     android:id="@+id/btn_follow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:gravity="center"
-                    android:background="@drawable/micro_red_button"
                     android:text="@string/text_follow"
                     android:textColor="@android:color/white"
                     android:textSize="13sp"
                     />
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp">
-                <TextView
-                    android:id="@+id/tv_post_area"
+                <LinearLayout
+                    android:id="@+id/ll_mailbox_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="13sp"
-                    android:textColor="@color/tw_dark_grey"
-                    />
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_job_mailbox"
+                        />
 
-                <TextView
+                    <TextView
+                        android:id="@+id/tv_mail_box"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text=""
+                        android:textSize="13sp"
+                        android:textColor="@color/tw_dark_grey"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:text="@string/text_mail_box"
-                    android:textSize="13sp"
-                    android:textColor="@color/tw_dark_grey"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="："
-                    android:textSize="13sp"
-                    android:textColor="@color/tw_dark_grey"
-                    />
-                <TextView
-                    android:id="@+id/tv_mail_box"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="13sp"
-                    android:textColor="@color/tw_dark_grey"
-                    />
-            </LinearLayout>
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/ll_mailbox_container">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_job_location"
+                        />
+                    <TextView
+                        android:id="@+id/tv_post_area"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text=""
+                        android:textSize="13sp"
+                        android:textColor="@color/tw_dark_grey"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -154,13 +171,15 @@
                     <View
                         android:layout_width="2dp"
                         android:layout_height="15dp"
-                        android:background="@color/tw_black"
+                        android:background="@color/tw_red"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:text="@string/text_job_desc"
+                        android:text="崗位職責"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_black"
                         />
                 </LinearLayout>
 
@@ -169,6 +188,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+
                     />
             </LinearLayout>
 

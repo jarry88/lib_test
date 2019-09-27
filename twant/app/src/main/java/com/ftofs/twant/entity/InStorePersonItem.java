@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 public class InStorePersonItem implements MultiItemEntity {
     public static final int TYPE_LABEL = 1;  // 分類標簽名: 好友 店友
     public static final int TYPE_ITEM = 2;
+    public static final int TYPE_EMPTY_HINT = 3;  // 進店人員列表為空的提示
 
     public int itemType;
     public String memberName;

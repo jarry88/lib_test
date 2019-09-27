@@ -62,6 +62,7 @@ import okhttp3.Call;
 public class OrderDetailFragment extends BaseFragment implements View.OnClickListener {
     int ordersId;
     int storeId;
+    String storeName;
     String paySnStr;
     int payId;
     float ordersAmount = -1;
@@ -312,7 +313,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             } else if (tag.equals(TEXT_MEMBER_BUY_AGAIN)) {
                 orderOperation(OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN);
             } else if (tag.equals(TEXT_EVALUATION)) {
-                Util.startFragment(GoodsEvaluationFragment.newInstance());
+                Util.startFragment(GoodsEvaluationFragment.newInstance(storeId, storeName, orderDetailGoodsItemList));
             } else if (tag.equals(TEXT_MEMBER_PAY)) {
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -515,7 +516,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String address = ordersVo.getString("receiverAreaInfo") + ordersVo.getString("receiverAddress");
 
                     storeId = ordersVo.getInt("storeId");
-                    String storeName = ordersVo.getString("storeName");
+                    storeName = ordersVo.getString("storeName");
                     String ordersStateName = ordersVo.getString("ordersStateName");
                     float freightAmount = (float) ordersVo.getDouble("freightAmount");
                     ordersAmount = (float) ordersVo.getDouble("ordersAmount");

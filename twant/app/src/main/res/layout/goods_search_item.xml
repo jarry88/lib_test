@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:background="@drawable/bottom_separator_box">
+            android:background="@drawable/border_type_d">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_store_avatar"
                 android:layout_width="25dp"
@@ -118,7 +118,8 @@
             android:layout_marginTop="8dp"
             android:text="$ 129.00"
             android:textColor="@color/tw_red"
-            android:textSize="12sp"
+            android:textSize="14sp"
+            android:textStyle="bold"
             />
     </LinearLayout>
 </LinearLayout>

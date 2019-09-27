@@ -29,12 +29,20 @@ import java.util.List;
 public class InStorePersonPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
     InStorePersonListAdapter adapter;
+    int inStorePersonCount;
     List<InStorePersonItem> inStorePersonItemList;
 
-    public InStorePersonPopup(@NonNull Context context, List<InStorePersonItem> inStorePersonItemList) {
+    /**
+     * 構造方法
+     * @param context
+     * @param inStorePersonCount 進店人數
+     * @param inStorePersonItemList
+     */
+    public InStorePersonPopup(@NonNull Context context, int inStorePersonCount, List<InStorePersonItem> inStorePersonItemList) {
         super(context);
 
         this.context = context;
+        this.inStorePersonCount = inStorePersonCount;
         this.inStorePersonItemList = inStorePersonItemList;
     }
 
@@ -48,7 +56,7 @@ public class InStorePersonPopup extends BottomPopupView implements View.OnClickL
         super.onCreate();
 
         TextView tvPopupTitle = findViewById(R.id.tv_popup_title);
-        String title = String.format(context.getString(R.string.text_in_store_person_list) + "(%d人)", inStorePersonItemList.size() - 2); // 減去2個Label
+        String title = String.format(context.getString(R.string.text_in_store_person_list) + "(%d人)", inStorePersonCount); // 減去2個Label
         tvPopupTitle.setText(title);
 
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
@@ -61,7 +69,7 @@ public class InStorePersonPopup extends BottomPopupView implements View.OnClickL
             @Override
             public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
                 InStorePersonItem item = inStorePersonItemList.get(position);
-                if (item.getItemType() == InStorePersonItem.TYPE_LABEL) {
+                if (item.getItemType() == InStorePersonItem.TYPE_LABEL || item.getItemType() == InStorePersonItem.TYPE_EMPTY_HINT) {
                     return 5;
                 } else {
                     return 1;

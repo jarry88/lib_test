@@ -6,7 +6,8 @@
     android:layout_marginLeft="@dimen/toolbar_margin_left"
     android:layout_marginRight="@dimen/toolbar_margin_right"
     android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+    android:paddingBottom="5dp"
+    android:background="@drawable/border_type_d_f3f3f3">
     <TextView
         android:id="@+id/tv_suggestion_keyword"
         android:layout_width="wrap_content"

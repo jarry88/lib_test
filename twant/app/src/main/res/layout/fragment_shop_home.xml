@@ -45,12 +45,11 @@
             <TextView
                 android:id="@+id/tv_shop_signature"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="22dp"
                 android:layout_marginLeft="60dp"
                 android:layout_marginRight="60dp"
+                android:gravity="center"
                 android:background="@drawable/shop_signature_bg"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:paddingLeft="19dp"
                 android:paddingRight="19dp"
                 android:textSize="12sp"
@@ -212,7 +211,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:background="@drawable/bottom_separator_box">
+            android:background="@drawable/border_type_d">
             <LinearLayout
                 android:id="@+id/ll_uo_thumb_up_container"
                 android:layout_width="wrap_content"
@@ -311,7 +310,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:background="@drawable/bottom_separator_box"
+            android:background="@drawable/border_type_d"
             android:orientation="vertical">
             <RelativeLayout
                 android:layout_width="match_parent"

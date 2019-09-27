@@ -59,7 +59,7 @@ public class CategoryBrandAdapter extends BaseQuickAdapter<CategoryBrand, BaseVi
             Glide.with(context).load(imageUrl).centerCrop().into(brandImageLeft);
 
             helper.setText(R.id.tv_brand_name_chinese_left, categoryBrand.brandNameChinese);
-            helper.setText(R.id.tv_brand_name_english_left, categoryBrand.brandNameEnglish);
+            // helper.setText(R.id.tv_brand_name_english_left, categoryBrand.brandNameEnglish);
         } else {
             // 显示左边，隐藏右边的控件
             helper.setGone(R.id.rl_right_container, true);
@@ -69,7 +69,7 @@ public class CategoryBrandAdapter extends BaseQuickAdapter<CategoryBrand, BaseVi
             Glide.with(context).load(imageUrl).centerCrop().into(brandImageRight);
 
             helper.setText(R.id.tv_brand_name_chinese_right, categoryBrand.brandNameChinese);
-            helper.setText(R.id.tv_brand_name_english_right, categoryBrand.brandNameEnglish);
+            // helper.setText(R.id.tv_brand_name_english_right, categoryBrand.brandNameEnglish);
         }
 
         int itemCount = getItemCount();

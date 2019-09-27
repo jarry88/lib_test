@@ -191,10 +191,10 @@ public class StoreWantedPopup extends BottomPopupView implements View.OnClickLis
     private void updateFollowStatus(int follow) {
         if (follow == 1) {
             btnFollow.setText(context.getString(R.string.text_followed));
-            btnFollow.setBackgroundResource(R.drawable.grey_button);
+            btnFollow.setBackgroundResource(R.drawable.red_button_followed);
         } else {
             btnFollow.setText(context.getString(R.string.text_follow));
-            btnFollow.setBackgroundResource(R.drawable.micro_red_button);
+            btnFollow.setBackgroundResource(R.drawable.red_button_follow);
         }
     }
 }

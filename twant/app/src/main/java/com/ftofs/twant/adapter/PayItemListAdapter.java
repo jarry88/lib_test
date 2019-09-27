@@ -106,7 +106,7 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                         Util.startFragment(OrderLogisticsInfoFragment.newInstance(orderItem.orderId));
                     } else if (id == R.id.btn_order_comment) {
                         SLog.info("btn_order_comment");
-                        Util.startFragment(GoodsEvaluationFragment.newInstance());
+                        Util.startFragment(GoodsEvaluationFragment.newInstance(0, null, null));
                     } else if (id == R.id.btn_have_received) {
                         SLog.info("btn_have_received");
                         new XPopup.Builder(context)

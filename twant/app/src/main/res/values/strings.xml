@@ -349,7 +349,7 @@
     <string name="input_hint">請輸入</string>
     <string name="text_keyword">關鍵字</string>
     <string name="text_article_category">文章分類</string>
-    <string name="text_deadline">截止日期</string>
+    <string name="text_deadline">選擇日期</string>
     <string name="text_budget_price">預算價格</string>
     <string name="text_cover_image">封面圖</string>
     <string name="input_post_content_hint">想要說點什麼...</string>
@@ -357,6 +357,7 @@
     <string name="text_dead_line">截止</string>
     <string name="text_budget">預算</string>
     <string name="text_category">分類</string>
+    <string name="no_store_friend_hint">暫時沒有進店好友</string>
 
     <string name="text_store_service_staff">店鋪服務人員</string>
     <string name="text_comment_content_can_not_be_empty">評論內容不能為空</string>
@@ -658,7 +659,7 @@
     <string name="text_guess_your_like">猜你喜歡</string>
     <string name="text_store_wanted">店鋪招聘</string>
     <string name="text_wanted_job">招聘崗位</string>
-    <string name="text_job_desc">崗位描述</string>
+    <string name="text_job_desc">職位描述</string>
     <string name="text_mail_box">郵箱</string>
     <string name="text_in_store_person_list">進店人員列表</string>
     <string name="text_open_pay_ui">提交訂單成功，正在打開支付界面，請稍候...</string>

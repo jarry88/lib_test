@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +15,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.adapter.GoodsEvaluationAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
-import com.ftofs.twant.entity.ButtonClickInfo;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
@@ -48,11 +52,23 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
     RelativeLayout rlButtonContainer;
     EditText etContent;
 
-    public static GoodsEvaluationFragment newInstance() {
+    int storeId;
+    String storeName;
+    List<OrderDetailGoodsItem> orderDetailGoodsItemList;
+
+    int currAddImagePosition; // 當前要添加圖片的評價項
+    RecyclerView rvEvaluationList;
+    GoodsEvaluationAdapter adapter;
+
+    public static GoodsEvaluationFragment newInstance(int storeId, String storeName, List<OrderDetailGoodsItem> orderDetailGoodsItemList) {
         Bundle args = new Bundle();
 
         GoodsEvaluationFragment fragment = new GoodsEvaluationFragment();
         fragment.setArguments(args);
+
+        fragment.setStoreId(storeId);
+        fragment.setStoreName(storeName);
+        fragment.setOrderDetailGoodsItemList(orderDetailGoodsItemList);
 
         return fragment;
     }
@@ -74,10 +90,25 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         sglImageContainer = view.findViewById(R.id.sgl_image_container);
         rlButtonContainer = view.findViewById(R.id.rl_button_container);
         btnAddImage = view.findViewById(R.id.btn_add_image);
-        btnAddImage.setOnClickListener(this);
+
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
+
+        rvEvaluationList = view.findViewById(R.id.rv_evaluation_list);
+        adapter = new GoodsEvaluationAdapter(R.layout.goods_evaluation_item, storeId, storeName, orderDetailGoodsItemList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_add_image) {
+                    currAddImagePosition = position;
+                    openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+                }
+            }
+        });
+        rvEvaluationList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        rvEvaluationList.setAdapter(adapter);
     }
 
     @Override
@@ -93,9 +124,6 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
             case R.id.btn_back:
                 pop();
                 break;
-            case R.id.btn_add_image:
-                openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
-                break;
             case R.id.btn_commit:
                 commitComment();
                 break;
@@ -103,7 +131,6 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
                 break;
         }
     }
-
 
     private void commitComment() {
         String token = User.getToken();
@@ -193,26 +220,12 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         String imageAbsolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
         SLog.info("imageAbsolutePath[%s]", imageAbsolutePath);
 
-        final View imageWidget = LayoutInflater.from(_mActivity).inflate(R.layout.refund_image_widget, sglImageContainer, false);
-        ImageView imageView = imageWidget.findViewById(R.id.refund_image);
-        imageWidget.findViewById(R.id.btn_remove_image).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sglImageContainer.removeView(imageWidget);
-                btnAddImage.setVisibility(View.VISIBLE);
-            }
-        });
-
-        imageWidget.setTag(imageAbsolutePath);
-
-        Glide.with(_mActivity).load(imageAbsolutePath).centerCrop().into(imageView);
-        int childCount = sglImageContainer.getChildCount();
-        if (childCount > 0) {
-            if (childCount == 3) { // 最多3張圖片，如果原本已經有2張 加1個添加按鈕，則隱藏添加按鈕
-                btnAddImage.setVisibility(View.GONE);
-            }
-            sglImageContainer.addView(imageWidget, childCount - 1);
+        OrderDetailGoodsItem orderDetailGoodsItem = orderDetailGoodsItemList.get(currAddImagePosition);
+        if (orderDetailGoodsItem.evaluationImageList == null) {
+            orderDetailGoodsItem.evaluationImageList = new ArrayList<>();
         }
+        orderDetailGoodsItem.evaluationImageList.add(imageAbsolutePath);
+        adapter.notifyItemChanged(currAddImagePosition);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -231,5 +244,17 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
                 }, 150);
             }
         }
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public void setOrderDetailGoodsItemList(List<OrderDetailGoodsItem> orderDetailGoodsItemList) {
+        this.orderDetailGoodsItemList = orderDetailGoodsItemList;
     }
 }

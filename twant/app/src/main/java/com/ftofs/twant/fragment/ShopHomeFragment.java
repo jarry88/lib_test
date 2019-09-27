@@ -154,6 +154,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     PagerSnapHelper pagerSnapHelper;
     LinearLayoutManager featuresGoodsLayoutManager;
 
+    int inStorePersonCount;
     List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
 
     public static ShopHomeFragment newInstance() {
@@ -357,35 +358,47 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_friend)));
                         EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.friends");
                         if (!Util.isJsonNull(friends)) {
-                            for (Object object : friends) {
-                                EasyJSONObject friend = (EasyJSONObject) object;
+                            if (friends.length() > 0) {
+                                for (Object object : friends) {
+                                    EasyJSONObject friend = (EasyJSONObject) object;
 
-                                String memberName = friend.getString("memberName");
-                                String avatar = friend.getString("avatar");
-                                String nickname = friend.getString("nickName");
+                                    String memberName = friend.getString("memberName");
+                                    String avatar = friend.getString("avatar");
+                                    String nickname = friend.getString("nickName");
 
-                                InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
-                                inStorePersonItemList.add(inStorePersonItem);
+                                    InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                                    inStorePersonItemList.add(inStorePersonItem);
+                                }
+                                inStorePersonCount += friends.length();
+                            } else { // 為空則添加提示
+                                inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
                             }
+
                         }
 
                         // 店友
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
                         EasyJSONArray members = responseObj.getArray("datas.memberAccessStatVo.members");
                         if (!Util.isJsonNull(members)) {
-                            for (Object object : members) {
-                                EasyJSONObject friend = (EasyJSONObject) object;
+                            if (members.length() > 0) {
+                                for (Object object : members) {
+                                    EasyJSONObject friend = (EasyJSONObject) object;
 
-                                String memberName = friend.getString("memberName");
-                                String avatar = friend.getString("avatar");
-                                String nickname = friend.getString("nickName");
+                                    String memberName = friend.getString("memberName");
+                                    String avatar = friend.getString("avatar");
+                                    String nickname = friend.getString("nickName");
 
-                                StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
-                                storeFriendsItemList.add(storeFriendsItem);
+                                    StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
+                                    storeFriendsItemList.add(storeFriendsItem);
 
-                                InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
-                                inStorePersonItemList.add(inStorePersonItem);
+                                    InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                                    inStorePersonItemList.add(inStorePersonItem);
+                                }
+                                inStorePersonCount += members.length();
+                            } else { // 為空則添加提示
+                                inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
                             }
+
                         }
                         adapter.setNewData(storeFriendsItemList);
 
@@ -773,7 +786,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new InStorePersonPopup(_mActivity, inStorePersonItemList))
+                        .asCustom(new InStorePersonPopup(_mActivity, inStorePersonCount, inStorePersonItemList))
                         .show();
                 break;
             default:

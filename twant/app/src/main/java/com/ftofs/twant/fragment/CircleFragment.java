@@ -394,7 +394,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     currPage = 1;
                     loadPostData(currPage);
                 }
-            }, 500);
+            }, 1500);
         }
     }
 

@@ -255,7 +255,13 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         } else {
                             imgThumb.setImageResource(R.drawable.icon_post_thumb_black);
                         }
-                        tvThumbCount.setText(String.valueOf(responseObj.getInt("datas.likeCount")));
+
+                        int likeCount = responseObj.getInt("datas.likeCount");
+                        if (likeCount > 0) {
+                            tvThumbCount.setText(String.valueOf(likeCount));
+                        } else {
+                            tvThumbCount.setText("");
+                        }
                     } else if (type == STATE_TYPE_LIKE) {
                         isFavor = 1 - isFavor;
                         if (isFavor == 1) {
@@ -263,7 +269,13 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         } else {
                             imgLike.setImageResource(R.drawable.icon_post_like_black);
                         }
-                        tvLikeCount.setText(String.valueOf(responseObj.getInt("datas.favorCount")));
+
+                        int favorCount = responseObj.getInt("datas.favorCount");
+                        if (favorCount > 0) {
+                            tvLikeCount.setText(String.valueOf(favorCount));
+                        } else {
+                            tvLikeCount.setText("");
+                        }
                     }
                 } catch (Exception e) {
 
@@ -379,8 +391,17 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         imgLike.setImageResource(R.drawable.icon_post_like_black);
                     }
 
-                    tvThumbCount.setText(String.valueOf(postLike));
-                    tvLikeCount.setText(String.valueOf(postFavor));
+                    if (postLike > 0) {
+                        tvThumbCount.setText(String.valueOf(postLike));
+                    } else {
+                        tvThumbCount.setText("");
+                    }
+
+                    if (postFavor > 0) {
+                        tvLikeCount.setText(String.valueOf(postFavor));
+                    } else {
+                        tvLikeCount.setText("");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     SLog.info("Error!%s", e.getMessage());
@@ -531,7 +552,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     postComment++;
                     updatePostCommentCount();
                 }
-            }, 500); // 有時候重新加載的時候，也沒有從服務端加載到最新的數據，延遲個500毫秒
+            }, 1500); // 有時候重新加載的時候，也沒有從服務端加載到最新的數據，延遲個1500毫秒
         }
     }
 }

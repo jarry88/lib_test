@@ -7,7 +7,7 @@
     android:layout_marginLeft="@dimen/toolbar_margin_left"
     android:layout_marginRight="@dimen/toolbar_margin_right"
     android:paddingBottom="16dp"
-    android:background="@drawable/bottom_separator_box"
+    android:background="@drawable/border_type_d"
     android:orientation="vertical">
 
     <TextView

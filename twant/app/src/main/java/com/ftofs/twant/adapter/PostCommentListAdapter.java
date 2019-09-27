@@ -50,10 +50,23 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> {
         TextView tvContent = itemView.findViewById(R.id.tv_content);
         tvContent.setText(StringUtil.translateEmoji(context, itemData.content, (int) tvContent.getTextSize()));
 
+        TextView btnReply = itemView.findViewById(R.id.btn_reply);
+        String commentReply = context.getString(R.string.text_reply);
+        if (itemData.commentReply > 0) {
+            commentReply += " " + itemData.commentReply;
+        } else {
+            btnReply.setBackground(null);
+        }
+        btnReply.setText(commentReply);
+
         setText(itemView, R.id.tv_commenter_nickname, itemData.nickname);
         setText(itemView, R.id.tv_comment_time, itemData.commentTime);
-        setText(itemView, R.id.btn_reply, context.getString(R.string.text_reply) + " " + itemData.commentReply);
-        setText(itemView, R.id.tv_thumb_count, String.valueOf(itemData.commentLike));
+        setText(itemView, R.id.btn_reply, commentReply);
+        if (itemData.commentLike > 0) {
+            setText(itemView, R.id.tv_thumb_count, String.valueOf(itemData.commentLike));
+        } else {
+            setText(itemView, R.id.tv_thumb_count, "");
+        }
 
         if (itemData.commentType == Constant.COMMENT_TYPE_TEXT || StringUtil.isEmpty(itemData.imageUrl)) {
             itemView.findViewById(R.id.image_view).setVisibility(View.GONE);

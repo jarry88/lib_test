@@ -50,10 +50,13 @@
                     android:id="@+id/tv_brand_name_chinese_left"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
                     android:gravity="center"
                     android:textColor="@color/tw_black"
-                    android:textSize="16sp"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
                     />
+                <!--
                 <TextView
                     android:id="@+id/tv_brand_name_english_left"
                     android:layout_width="match_parent"
@@ -62,6 +65,7 @@
                     android:textColor="#FF676666"
                     android:textSize="11sp"
                     />
+                -->
             </LinearLayout>
         </LinearLayout>
         <View
@@ -101,10 +105,13 @@
                     android:id="@+id/tv_brand_name_chinese_right"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp"
                     android:gravity="center"
                     android:textColor="@color/tw_black"
-                    android:textSize="16sp"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
                     />
+                <!--
                 <TextView
                     android:id="@+id/tv_brand_name_english_right"
                     android:layout_width="match_parent"
@@ -113,6 +120,7 @@
                     android:textColor="#FF676666"
                     android:textSize="11sp"
                     />
+                -->
             </LinearLayout>
             <RelativeLayout
                 android:layout_width="0dp"

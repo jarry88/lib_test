@@ -23,6 +23,7 @@ public class InStorePersonListAdapter extends BaseMultiItemQuickAdapter<InStoreP
 
         addItemType(InStorePersonItem.TYPE_ITEM, R.layout.in_store_person_item);
         addItemType(InStorePersonItem.TYPE_LABEL, R.layout.in_store_item_label);
+        addItemType(InStorePersonItem.TYPE_EMPTY_HINT, R.layout.in_store_item_empty_hint);
     }
 
     @Override
@@ -31,7 +32,7 @@ public class InStorePersonListAdapter extends BaseMultiItemQuickAdapter<InStoreP
 
         if (itemViewType == InStorePersonItem.TYPE_LABEL) {
             helper.setText(R.id.tv_category_label, item.nickname);
-        } else {
+        } else if (itemViewType == InStorePersonItem.TYPE_ITEM) {
             ImageView imgAvatar = helper.getView(R.id.img_avatar);
             if (StringUtil.useDefaultAvatar(item.avatarUrl)) {
                 Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgAvatar);
