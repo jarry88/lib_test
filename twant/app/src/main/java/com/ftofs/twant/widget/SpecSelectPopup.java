@@ -2,8 +2,10 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -129,6 +131,13 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         // 加入購物車
         btnOk = findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(this);
+        if (action == Constant.ACTION_ADD_TO_CART) {
+            btnOk.setBackgroundResource(R.drawable.blue_button);
+        } else if (action == Constant.ACTION_BUY) {
+            btnOk.setBackgroundResource(R.drawable.red_button);
+        } else if (action == Constant.ACTION_SELECT_SPEC) {
+            btnOk.setBackgroundResource(R.drawable.red_button);
+        }
 
         skuImage = findViewById(R.id.sku_image);
         tvPrice = findViewById(R.id.tv_price);
@@ -174,8 +183,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 button.setText(specValue.specValueName);
                 button.setTextSize(14);
 
-                button.setPadding(Util.dip2px(context, 16), Util.dip2px(context, 6),
-                        Util.dip2px(context, 16), Util.dip2px(context, 6));
+                button.setPadding(Util.dip2px(context, 16), 0, Util.dip2px(context, 16), 0);
 
                 if (isSelected) {
                     // 如果是開始的選中狀態，記錄一下
@@ -216,7 +224,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                     }
                 });
 
-                flSpecButtonContainer.addView(button);
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Util.dip2px(context, 32));
+                button.setGravity(Gravity.CENTER);
+                flSpecButtonContainer.addView(button, layoutParams);
                 ++index;
             }
             llSpecContainer.addView(llSpec);

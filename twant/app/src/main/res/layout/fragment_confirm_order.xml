@@ -96,7 +96,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="20dp"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textColor="@color/tw_black"
                         android:text=""
                         />
@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textColor="@color/tw_black"
                         android:text=""
                         />
@@ -118,6 +118,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:src="@drawable/icon_shop_location"
                         />
                     <TextView
@@ -128,12 +129,13 @@
                         android:layout_marginRight="16dp"
                         android:layout_weight="1"
                         android:textColor="@color/tw_dark_grey"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:text=""
                         />
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
                         android:src="@drawable/expand_button"
                         />
                 </LinearLayout>
@@ -284,6 +286,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"
                 android:text=""
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
                 />
             <TextView
                 android:id="@+id/tv_total_price"
@@ -293,7 +297,8 @@
                 android:layout_centerVertical="true"
                 android:text=""
                 android:textColor="@color/tw_red"
-                android:textSize="14sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 />
 
             <TextView

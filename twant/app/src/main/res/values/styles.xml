@@ -13,7 +13,7 @@
         <item name="stTextBold">false</item>
         <item name="stTextColor">#fff</item>
         <item name="stTextSize">17sp</item>
-        <item name="stColorBackground">#000</item>
+        <item name="stColorBackground">@color/tw_black</item>
         <item name="stSolidBackground">true</item>
         <item name="stLength">SHORT</item>
         <item name="stGravity">center</item>

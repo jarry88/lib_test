@@ -48,7 +48,13 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> {
         Glide.with(context).load(StringUtil.normalizeImageUrl(itemData.commenterAvatar)).centerCrop().into(imgCommenterAvatar);
 
         TextView tvContent = itemView.findViewById(R.id.tv_content);
-        tvContent.setText(StringUtil.translateEmoji(context, itemData.content, (int) tvContent.getTextSize()));
+        if (StringUtil.isEmpty(itemData.content)) {
+            tvContent.setVisibility(View.GONE);
+        } else {
+            tvContent.setText(StringUtil.translateEmoji(context, itemData.content, (int) tvContent.getTextSize()));
+            tvContent.setVisibility(View.VISIBLE);
+        }
+
 
         TextView btnReply = itemView.findViewById(R.id.btn_reply);
         String commentReply = context.getString(R.string.text_reply);

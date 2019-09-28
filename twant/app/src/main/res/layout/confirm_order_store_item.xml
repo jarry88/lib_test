@@ -75,6 +75,8 @@
             android:textSize="13sp"
             android:textColor="@color/tw_black"
             android:background="@null"
+            android:singleLine="true"
+            android:ellipsize="end"
             />
     </LinearLayout>
 
@@ -197,8 +199,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$179.00"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textColor="@color/tw_red"
+                android:textStyle="bold"
                 />
         </LinearLayout>
     </RelativeLayout>

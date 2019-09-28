@@ -45,7 +45,7 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="14sp"
-            android:text="@string/text_publish_new"
+            android:text="@string/text_publish"
             android:background="@drawable/micro_blue_button"
             />
 
