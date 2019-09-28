@@ -23,7 +23,6 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
-import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
@@ -41,7 +40,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;

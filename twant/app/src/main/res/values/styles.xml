@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="tw_toast">
+        <item name="stTextBold">false</item>
+        <item name="stTextColor">#fff</item>
+        <item name="stTextSize">17sp</item>
+        <item name="stColorBackground">#000</item>
+        <item name="stSolidBackground">true</item>
+        <item name="stLength">SHORT</item>
+        <item name="stGravity">center</item>
+        <item name="stRadius">4dp</item>
+    </style>
 </resources>

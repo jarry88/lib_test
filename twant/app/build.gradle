@@ -129,7 +129,7 @@ dependencies {
 
     implementation 'top.zibin:Luban:1.1.8'
 
-    implementation 'com.github.anzaizai:EasySwipeMenuLayout:1.1.4'
+    // implementation 'com.github.anzaizai:EasySwipeMenuLayout:1.1.4'
 
 
     implementation 'com.github.piasy:BigImageViewer:1.5.7'
@@ -150,6 +150,9 @@ dependencies {
     //4，permissionsdispatcher权限
     implementation'com.github.hotchemi:permissionsdispatcher:3.1.0'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
+
+
+    implementation 'com.muddzdev:styleabletoast:2.2.0'
 
 
     //PushSDK必须依赖基础组件库，所以需要加入对应依赖

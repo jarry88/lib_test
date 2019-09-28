@@ -19,6 +19,8 @@ public class MyFriendListAdapter extends BaseQuickAdapter<MyFriendListItem, Base
 
     @Override
     protected void convert(BaseViewHolder helper, MyFriendListItem item) {
+        helper.addOnClickListener(R.id.btn_delete_friend, R.id.img_avatar);
+
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
         if (StringUtil.useDefaultAvatar(item.avatarUrl)) {
             Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgAvatar);

@@ -1,9 +1,12 @@
 package com.ftofs.twant.util;
 
 import android.content.Context;
+import android.widget.Toast;
 
+import com.ftofs.twant.R;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.log.SLog;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import org.json.JSONObject;
 
@@ -24,15 +27,15 @@ public class ToastUtil {
     public static String COMMON_ERROR_MESSAGE = "系統錯誤";
 
     public static void info(Context context, String text) {
-        Toasty.info(context, text, Toasty.LENGTH_SHORT, true).show();
+        StyleableToast.makeText(context, text, Toast.LENGTH_SHORT, R.style.tw_toast).show();
     }
 
     public static void success(Context context, String text) {
-        Toasty.success(context, text, Toasty.LENGTH_SHORT, true).show();
+        StyleableToast.makeText(context, text, Toast.LENGTH_SHORT, R.style.tw_toast).show();
     }
 
     public static void error(Context context, String text) {
-        Toasty.error(context, text, Toasty.LENGTH_SHORT, true).show();
+        StyleableToast.makeText(context, text, Toast.LENGTH_SHORT, R.style.tw_toast).show();
     }
 
     /**

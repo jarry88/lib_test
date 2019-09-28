@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.constant.EasySwipeMenuState;
 import com.ftofs.twant.domain.goods.ArrivalNotice;
 import com.ftofs.twant.entity.ButtonClickInfo;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -24,11 +26,13 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
+import com.ftofs.twant.widget.EasySwipeMenuLayout;
 import com.ftofs.twant.widget.QuickClickButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.TwProgressBar;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +53,11 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     int i = 0;
     TwProgressBar progressBar;
     ImageView imageView;
+
+    EasySwipeMenuLayout swipeMenuLayout;
+
+    boolean open;
+
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -77,35 +86,19 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         imageView = view.findViewById(R.id.image_view);
 
         hsv = view.findViewById(R.id.hsv);
+        swipeMenuLayout = view.findViewById(R.id.swipe_menu_layout);
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            new XPopup.Builder(_mActivity)
-//                         .dismissOnTouchOutside(false)
-                    // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                    .setPopupCallback(new XPopupCallback() {
-                        @Override
-                        public void onShow() {
-                        }
-                        @Override
-                        public void onDismiss() {
-                        }
-                    }).asCustom(new TwConfirmPopup(_mActivity, "確認收貨嗎?", "收貨經過24小時后，就會打款到商家的哦~", new OnConfirmCallback() {
-                @Override
-                public void onYes() {
-                    SLog.info("onYes");
-                }
-
-                @Override
-                public void onNo() {
-                    SLog.info("onNo");
-                }
-            }))
-                    .show();
+            if (open) {
+                swipeMenuLayout.handlerSwipeMenu(EasySwipeMenuState.CLOSE);
+            } else {
+                swipeMenuLayout.handlerSwipeMenu(EasySwipeMenuState.RIGHTOPEN);
+            }
+            open = !open;
         }
     }
 

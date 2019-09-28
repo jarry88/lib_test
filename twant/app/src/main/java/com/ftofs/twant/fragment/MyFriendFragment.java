@@ -16,13 +16,16 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.MyFriendListItem;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -73,6 +76,41 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 String memberName = myFriendListItems.get(position).memberName;
                 start(MemberInfoFragment.newInstance(memberName));
+            }
+        });
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                String memberName = myFriendListItems.get(position).memberName;
+
+                int id = view.getId();
+                if (id == R.id.btn_delete_friend) {
+                    new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                            // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                            .setPopupCallback(new XPopupCallback() {
+                                @Override
+                                public void onShow() {
+                                }
+                                @Override
+                                public void onDismiss() {
+                                }
+                            }).asCustom(new TwConfirmPopup(_mActivity, "您確定要刪除好友嗎?", null, new OnConfirmCallback() {
+                        @Override
+                        public void onYes() {
+                            SLog.info("onYes");
+                            deleteFriend(position, memberName);
+                        }
+
+                        @Override
+                        public void onNo() {
+                            SLog.info("onNo");
+                        }
+                    })).show();
+                } else if (id == R.id.img_avatar) {
+                    start(MemberInfoFragment.newInstance(memberName));
+                }
             }
         });
         rvList.setAdapter(adapter);
@@ -128,11 +166,8 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                 }
-
-
             }
         });
-
 
         adapter.setNewData(myFriendListItems);
     }
@@ -161,5 +196,42 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
                     .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_HOME_AND_MY))
                     .show();
         }
+    }
+
+    private void deleteFriend(int position, String memberName) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "friendMemberName", memberName);
+
+        SLog.info("params[%s]", params.toString());
+        Api.postUI(Api.PATH_DELETE_FRIEND, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    myFriendListItems.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    ToastUtil.success(_mActivity, "刪除成功");
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 }
