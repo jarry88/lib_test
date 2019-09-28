@@ -26,6 +26,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.EvaluationGoodsItem;
 import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -313,7 +314,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             } else if (tag.equals(TEXT_MEMBER_BUY_AGAIN)) {
                 orderOperation(OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN);
             } else if (tag.equals(TEXT_EVALUATION)) {
-                Util.startFragment(GoodsEvaluationFragment.newInstance(storeId, storeName, orderDetailGoodsItemList));
+                List<EvaluationGoodsItem> evaluationGoodsItemList = new ArrayList<>();
+                for (OrderDetailGoodsItem orderDetailGoodsItem : orderDetailGoodsItemList) {
+                    EvaluationGoodsItem evaluationGoodsItem = new EvaluationGoodsItem(orderDetailGoodsItem.commonId, orderDetailGoodsItem.imageSrc,
+                            orderDetailGoodsItem.goodsName, orderDetailGoodsItem.goodsFullSpecs);
+                    evaluationGoodsItemList.add(evaluationGoodsItem);
+                }
+                Util.startFragment(GoodsEvaluationFragment.newInstance(ordersId, storeId, storeName, evaluationGoodsItemList));
             } else if (tag.equals(TEXT_MEMBER_PAY)) {
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -646,6 +653,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("complainId")));
                     }
                     adapter.setData(orderDetailGoodsItemList);
+                    needReloadData = false;
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                     e.printStackTrace();
@@ -665,8 +673,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     public void onSupportVisible() {
         super.onSupportVisible();
         if (needReloadData) {
-            loadOrderDetail();
-            needReloadData = false;
+            hsvBottomToolbar.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadOrderDetail();
+                }
+            }, 1500);
         }
     }
 

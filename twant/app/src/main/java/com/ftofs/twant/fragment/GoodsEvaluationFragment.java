@@ -10,11 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
@@ -24,6 +22,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.EvaluationGoodsItem;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -34,6 +33,8 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SquareGridLayout;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,29 +47,34 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 
+/**
+ * 訂單商品評價
+ * @author zwm
+ */
 public class GoodsEvaluationFragment extends BaseFragment implements View.OnClickListener {
     SquareGridLayout sglImageContainer;
     ImageView btnAddImage;
     RelativeLayout rlButtonContainer;
-    EditText etContent;
 
+    int ordersId;
     int storeId;
     String storeName;
-    List<OrderDetailGoodsItem> orderDetailGoodsItemList;
+    List<EvaluationGoodsItem> evaluationGoodsItemList;
 
     int currAddImagePosition; // 當前要添加圖片的評價項
     RecyclerView rvEvaluationList;
     GoodsEvaluationAdapter adapter;
 
-    public static GoodsEvaluationFragment newInstance(int storeId, String storeName, List<OrderDetailGoodsItem> orderDetailGoodsItemList) {
+    public static GoodsEvaluationFragment newInstance(int ordersId, int storeId, String storeName, List<EvaluationGoodsItem> evaluationGoodsItemList) {
         Bundle args = new Bundle();
 
         GoodsEvaluationFragment fragment = new GoodsEvaluationFragment();
         fragment.setArguments(args);
 
+        fragment.setOrdersId(ordersId);
         fragment.setStoreId(storeId);
         fragment.setStoreName(storeName);
-        fragment.setOrderDetailGoodsItemList(orderDetailGoodsItemList);
+        fragment.setEvaluationGoodsItemList(evaluationGoodsItemList);
 
         return fragment;
     }
@@ -86,7 +92,6 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
 
         EventBus.getDefault().register(this);
 
-        etContent = view.findViewById(R.id.et_content);
         sglImageContainer = view.findViewById(R.id.sgl_image_container);
         rlButtonContainer = view.findViewById(R.id.rl_button_container);
         btnAddImage = view.findViewById(R.id.btn_add_image);
@@ -96,7 +101,7 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_commit, this);
 
         rvEvaluationList = view.findViewById(R.id.rv_evaluation_list);
-        adapter = new GoodsEvaluationAdapter(R.layout.goods_evaluation_item, storeId, storeName, orderDetailGoodsItemList);
+        adapter = new GoodsEvaluationAdapter(R.layout.goods_evaluation_item, storeId, storeName, evaluationGoodsItemList);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -138,31 +143,30 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
             return;
         }
 
-        String content = etContent.getText().toString().trim();
-        if (StringUtil.isEmpty(content)) {
-            ToastUtil.error(_mActivity, getString(R.string.text_comment_content_can_not_be_empty));
-            return;
-        }
-
-        // 收集圖片列表
-        List<String> imagePathList = new ArrayList<>();
-        int childCount = sglImageContainer.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View view = sglImageContainer.getChildAt(i);
-            if (view instanceof ImageView) {  // 如果是添加按鈕，則跳過
-                continue;
+        for (EvaluationGoodsItem evaluationGoodsItem : evaluationGoodsItemList) {
+            if (StringUtil.isEmpty(evaluationGoodsItem.content)) {
+                ToastUtil.error(_mActivity, getString(R.string.text_comment_content_can_not_be_empty));
+                return;
             }
-            imagePathList.add((String) view.getTag());
         }
 
+        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
+                .asLoading(getString(R.string.text_committing))
+                .show();
         TaskObserver taskObserver = new TaskObserver() {
             @Override
             public void onMessage() {
+                loadingPopup.dismiss();
+
                 String responseStr = (String) message;
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
+
+                // 如果提交成功，訂單詳情和訂單列表頁面都要刷新一下
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
 
                 ToastUtil.success(_mActivity, "提交成功");
                 pop();
@@ -172,26 +176,54 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
             @Override
             public Object doWork() {
-                EasyJSONArray imageList = EasyJSONArray.generate();
+                EasyJSONArray wantCommentVoList = EasyJSONArray.generate();
+                // 處理每一項Sku
+                for (EvaluationGoodsItem evaluationGoodsItem : evaluationGoodsItemList) {
+                    /*
+                    {
+                        "deep": "1",
+                        "content": "ordersComment111-1",
+                        "relateCommonId": "1693",
+                        "images": [
+                        {
+                            "imageUrl": "image/07/8d/078d90ea33ae01417aa3d230f97849b1.png"
+                        }
+                        ],
+                        "commentChannel": "3"
+                    }
+                     */
 
-                // 上傳圖片文件
-                for (String imagePath : imagePathList) {
-                    String name = Api.syncUploadFile(new File(imagePath));
-                    SLog.info("name[%s]", name);
-                    if (StringUtil.isEmpty(name)) {
-                        continue;
+                    EasyJSONArray images = EasyJSONArray.generate();
+
+                    // 上傳圖片文件
+                    for (String imagePath : evaluationGoodsItem.imageList) {
+                        String name = Api.syncUploadFile(new File(imagePath));
+                        SLog.info("name[%s]", name);
+                        if (StringUtil.isEmpty(name)) {
+                            continue;
+                        }
+
+                        images.append(EasyJSONObject.generate("imageUrl", name));
                     }
 
-                    imageList.append(EasyJSONObject.generate("imageUrl", name));
+                    EasyJSONObject wantCommentVo = EasyJSONObject.generate(
+                            "deep", "1",
+                            "content", evaluationGoodsItem.content,
+                            "relateCommonId", String.valueOf(evaluationGoodsItem.commonId),
+                            "images", images,
+                            "commentChannel", "3");
+                    wantCommentVoList.append(wantCommentVo);
                 }
 
+
                 EasyJSONObject params = EasyJSONObject.generate(
-                        "suggestContent", content,
-                        "imageList", imageList);
+                        "ordersId", ordersId,
+                        "ordersType", "1",
+                        "wantCommentVoList", wantCommentVoList);
 
                 SLog.info("params[%s]", params.toString());
 
-                String path = Api.PATH_COMMIT_FEEDBACK + Api.makeQueryString(EasyJSONObject.generate("token", token));
+                String path = Api.PATH_GOODS_COMMENT + Api.makeQueryString(EasyJSONObject.generate("token", token));
                 String responseStr = Api.syncPostJson(path, params.toString());
                 SLog.info("responseStr[%s]", responseStr);
                 return responseStr;
@@ -220,11 +252,8 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         String imageAbsolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
         SLog.info("imageAbsolutePath[%s]", imageAbsolutePath);
 
-        OrderDetailGoodsItem orderDetailGoodsItem = orderDetailGoodsItemList.get(currAddImagePosition);
-        if (orderDetailGoodsItem.evaluationImageList == null) {
-            orderDetailGoodsItem.evaluationImageList = new ArrayList<>();
-        }
-        orderDetailGoodsItem.evaluationImageList.add(imageAbsolutePath);
+        EvaluationGoodsItem evaluationGoodsItem = evaluationGoodsItemList.get(currAddImagePosition);
+        evaluationGoodsItem.imageList.add(imageAbsolutePath);
         adapter.notifyItemChanged(currAddImagePosition);
     }
 
@@ -246,6 +275,10 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         }
     }
 
+    public void setOrdersId(int ordersId) {
+        this.ordersId = ordersId;
+    }
+
     public void setStoreId(int storeId) {
         this.storeId = storeId;
     }
@@ -254,7 +287,9 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         this.storeName = storeName;
     }
 
-    public void setOrderDetailGoodsItemList(List<OrderDetailGoodsItem> orderDetailGoodsItemList) {
-        this.orderDetailGoodsItemList = orderDetailGoodsItemList;
+    public void setEvaluationGoodsItemList(List<EvaluationGoodsItem> evaluationGoodsItemList) {
+        this.evaluationGoodsItemList = evaluationGoodsItemList;
     }
 }
+
+

@@ -461,13 +461,15 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                 for (Object object3 : ordersGoodsVoList) { // Sku
                                     EasyJSONObject ordersGoodsVo = (EasyJSONObject) object3;
 
+                                    int commonId = ordersGoodsVo.getInt("commonId");
+                                    int goodsId = ordersGoodsVo.getInt("goodsId");
                                     String goodsName = ordersGoodsVo.getString("goodsName");
                                     String imageSrc = ordersGoodsVo.getString("imageSrc");
                                     float goodsPrice = (float) ordersGoodsVo.getDouble("goodsPrice");
                                     String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
                                     int buyNum = ordersGoodsVo.getInt("buyNum");
 
-                                    orderSkuItemList.add(new OrderSkuItem(goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
+                                    orderSkuItemList.add(new OrderSkuItem(commonId, goodsId, goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
                                 }  // END OF Sku
 
                                 // 獲取贈品列表
@@ -575,10 +577,16 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
+        SLog.info("needRefresh[%s]", needRefresh);
         if (needRefresh) {
-            reloadData();
-            needRefresh = false;
+            rvOrderList.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SLog.info("reloadData___________________________________");
+                    reloadData();
+                    needRefresh = false;
+                }
+            }, 1500);
         }
     }
 

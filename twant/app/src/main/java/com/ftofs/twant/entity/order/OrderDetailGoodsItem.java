@@ -1,6 +1,5 @@
 package com.ftofs.twant.entity.order;
 
-import java.util.List;
 
 /**
  * 訂單詳情的商品列表Item
@@ -41,8 +40,4 @@ public class OrderDetailGoodsItem {
     public int showRefund;
     public int showMemberComplain;
     public int complainId;
-
-    // 以下字段為訂單評價時才用到
-    public String evaluationContent;  // 評論內容
-    public List<String> evaluationImageList; // 評價圖片
 }

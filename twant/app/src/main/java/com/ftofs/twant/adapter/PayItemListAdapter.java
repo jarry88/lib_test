@@ -5,14 +5,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.OrderOperation;
+import com.ftofs.twant.entity.EvaluationGoodsItem;
 import com.ftofs.twant.entity.OrderItem;
+import com.ftofs.twant.entity.OrderSkuItem;
 import com.ftofs.twant.entity.PayItem;
 import com.ftofs.twant.fragment.GoodsEvaluationFragment;
 import com.ftofs.twant.fragment.OrderDetailFragment;
@@ -20,19 +19,13 @@ import com.ftofs.twant.fragment.OrderFragment;
 import com.ftofs.twant.fragment.OrderLogisticsInfoFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-
-import cn.snailpad.easyjson.EasyJSONObject;
-import okhttp3.Call;
 
 /**
  * 訂單列表Adapter(顯示地方: 訂單列表的【全部】、【待付款】和查詢訂單Fragment中顯示)
@@ -106,7 +99,14 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
                         Util.startFragment(OrderLogisticsInfoFragment.newInstance(orderItem.orderId));
                     } else if (id == R.id.btn_order_comment) {
                         SLog.info("btn_order_comment");
-                        Util.startFragment(GoodsEvaluationFragment.newInstance(0, null, null));
+                        // newInstance(storeId, storeName, orderDetailGoodsItemList)
+                        List<EvaluationGoodsItem> evaluationGoodsItemList = new ArrayList<>();
+                        for (OrderSkuItem orderSkuItem : orderItem.orderSkuItemList) {
+                            EvaluationGoodsItem evaluationGoodsItem = new EvaluationGoodsItem(orderSkuItem.commonId, orderSkuItem.imageSrc,
+                                    orderSkuItem.goodsName, orderSkuItem.goodsFullSpecs);
+                            evaluationGoodsItemList.add(evaluationGoodsItem);
+                        }
+                        Util.startFragment(GoodsEvaluationFragment.newInstance(orderItem.orderId, 0, orderItem.storeName, evaluationGoodsItemList));
                     } else if (id == R.id.btn_have_received) {
                         SLog.info("btn_have_received");
                         new XPopup.Builder(context)

@@ -5,7 +5,9 @@ package com.ftofs.twant.entity;
  * @author zwm
  */
 public class OrderSkuItem {
-    public OrderSkuItem(String goodsName, String imageSrc, float goodsPrice, String goodsFullSpecs, int buyNum) {
+    public OrderSkuItem(int commonId, int goodsId, String goodsName, String imageSrc, float goodsPrice, String goodsFullSpecs, int buyNum) {
+        this.commonId = commonId;
+        this.goodsId = goodsId;
         this.goodsName = goodsName;
         this.imageSrc = imageSrc;
         this.goodsPrice = goodsPrice;
@@ -13,6 +15,8 @@ public class OrderSkuItem {
         this.buyNum = buyNum;
     }
 
+    public int commonId;
+    public int goodsId;
     public String goodsName;
     public String imageSrc;
     public float goodsPrice;
