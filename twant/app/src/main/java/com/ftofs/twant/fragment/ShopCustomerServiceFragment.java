@@ -17,7 +17,6 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CustomerServiceStaffListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
@@ -33,6 +32,7 @@ import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -55,6 +55,15 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
     CustomerServiceStaffListAdapter adapter;
 
     boolean isShown;
+
+    /**
+     * 展示客服歡迎語動畫的順序, 從0開始(以隨機的順序顯示歡迎語動畫)
+     */
+    List<Integer> welcomeMessageAnimOrder = new ArrayList<>();
+    /**
+     * 展示完歡迎語動畫的數量
+     */
+    int animDoneCount;
 
     public static ShopCustomerServiceFragment newInstance() {
         Bundle args = new Bundle();
@@ -81,7 +90,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
         rvStaffList = view.findViewById(R.id.rv_staff_list);
         GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, LinearLayoutManager.VERTICAL, false);
         rvStaffList.setLayoutManager(layoutManager);
-        adapter = new CustomerServiceStaffListAdapter(R.layout.store_customer_service_staff, customerServiceStaffList);
+        adapter = new CustomerServiceStaffListAdapter(this, R.layout.store_customer_service_staff, customerServiceStaffList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -161,6 +170,11 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
                         EasyJSONArray storeServiceStaffVoList = storeInfo.getArray("storeServiceStaffVoList");
 
+                        for (int i = 0; i < storeServiceStaffVoList.length(); i++) {
+                            welcomeMessageAnimOrder.add(i);
+                        }
+                        Collections.shuffle(welcomeMessageAnimOrder); // 以隨機的順序顯示歡迎語動畫
+
                         for (Object object : storeServiceStaffVoList) {
                             EasyJSONObject storeServiceStaffVo = (EasyJSONObject) object;
                             CustomerServiceStaff staff = new CustomerServiceStaff();
@@ -168,6 +182,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
                             customerServiceStaffList.add(staff);
                         }
+                        adapter.setNewData(customerServiceStaffList);
 
                         if (isShown) {
                             parentFragment.setFragmentTitle(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
@@ -189,6 +204,13 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
         isShown = true;
         parentFragment.setFragmentTitle(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
+
+        rvStaffList.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startWelcomeMessageAnim();
+            }
+        }, 1000);
     }
 
     @Override
@@ -197,4 +219,28 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
         isShown = false;
     }
+
+    /**
+     * 當前歡迎語動畫播放完成
+     */
+    public void onWelcomeMessageAnimationEnd() {
+        int position = welcomeMessageAnimOrder.get(animDoneCount);
+        customerServiceStaffList.get(position).showWelcomeMessageAnimation = false;
+        animDoneCount++;
+        // 開始下一個歡迎語動畫
+        startWelcomeMessageAnim();
+    }
+
+    /**
+     * 開始歡迎語動畫
+     */
+    private void startWelcomeMessageAnim() {
+        if (animDoneCount < welcomeMessageAnimOrder.size()) {
+            int position = welcomeMessageAnimOrder.get(animDoneCount);
+            customerServiceStaffList.get(position).showWelcomeMessageAnimation = true;
+            adapter.notifyItemChanged(position);
+        }
+    }
 }
+
+

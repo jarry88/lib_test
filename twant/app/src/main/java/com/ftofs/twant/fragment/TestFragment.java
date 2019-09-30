@@ -7,6 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,6 +39,8 @@ import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +62,9 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     EasySwipeMenuLayout swipeMenuLayout;
 
     boolean open;
+    TextView textView;
+
+    Animation animation;
 
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
@@ -77,6 +85,8 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        textView = view.findViewById(R.id.text_view);
         Util.setOnClickListener(view, R.id.btn_test, this);
         buttonClickInfoMap.put(R.id.btn_test, new ButtonClickInfo());
 
@@ -87,18 +97,48 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
 
         hsv = view.findViewById(R.id.hsv);
         swipeMenuLayout = view.findViewById(R.id.swipe_menu_layout);
+
+        animation = AnimationUtils.loadAnimation(_mActivity,R.anim.welcome_message);
+        //动画监听
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            //动画开始的时候触发
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+            //动画结束的时候触发
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                SLog.info("onAnimationEnd");
+            }
+            //动画重新执行的时候触发
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            if (open) {
-                swipeMenuLayout.handlerSwipeMenu(EasySwipeMenuState.CLOSE);
-            } else {
-                swipeMenuLayout.handlerSwipeMenu(EasySwipeMenuState.RIGHTOPEN);
+
+            textView.startAnimation(animation);
+
+            List<Integer> integerList = new ArrayList<>();
+            for (int j = 0; j < 8; j++) {
+                integerList.add(j);
             }
-            open = !open;
+
+            Collections.shuffle(integerList);
+            String result = "";
+            for (int i : integerList) {
+                result += i + ", ";
+            }
+            SLog.info("result[%s]", result);
         }
     }
 

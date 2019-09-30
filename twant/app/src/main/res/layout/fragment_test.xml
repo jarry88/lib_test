@@ -26,10 +26,21 @@
         android:background="#ffa"
         />
 
-    <ImageView
-        android:id="@+id/image_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp">
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="view anim"
+            android:textColor="#FFFFAA"
+            android:background="#8888FF"
+            android:visibility="invisible"
+            />
+    </RelativeLayout>
 
     <HorizontalScrollView
         android:id="@+id/hsv"

@@ -13,4 +13,5 @@ public class CustomerServiceStaff {
     public String avatar;
     public String welcomeMessage;
     public int staffType;
+    public boolean showWelcomeMessageAnimation; // 是否需要顯示歡迎語動畫
 }

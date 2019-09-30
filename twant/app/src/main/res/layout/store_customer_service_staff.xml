@@ -19,6 +19,7 @@
         android:textColor="@color/tw_black"
         android:text=""
         android:background="@drawable/icon_cs_message_bubble"
+        android:visibility="invisible"
         />
 
     <TextView
