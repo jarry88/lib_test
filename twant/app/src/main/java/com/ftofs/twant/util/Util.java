@@ -474,4 +474,10 @@ public class Util {
             j--;
         }
     }
+
+    public static int getYOnScreen(View view) {
+        int[] location = new int[2] ;
+        view.getLocationOnScreen(location);
+        return location[1];
+    }
 }

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,7 +17,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FollowMeAvatarAdapter;
 import com.ftofs.twant.adapter.MemberPostListAdapter;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.EBMessageType;
@@ -31,7 +29,9 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.MaxHeightRecyclerView;
 import com.ftofs.twant.widget.QuickClickButton;
+import com.ftofs.twant.widget.RvScrollView;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 
@@ -53,6 +53,7 @@ import okhttp3.Call;
  * @author zwm
  */
 public class MyFragment extends BaseFragment implements View.OnClickListener {
+    RvScrollView rsvContainer;
     // 【關注我的】數據列表
     List<UniversalMemberItem> followMeList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
@@ -147,6 +148,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         tvPersonalProfile = view.findViewById(R.id.tv_personal_profile);
         tvPersonalProfile.setOnClickListener(this);
 
+
         RecyclerView rvFollowMeList = view.findViewById(R.id.rv_follow_me_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
         rvFollowMeList.setLayoutManager(layoutManager);
@@ -161,13 +163,28 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         });
         rvFollowMeList.setAdapter(adapter);
 
-        LinearLayout llPostList = view.findViewById(R.id.ll_post_list);
-        memberPostListAdapter = new MemberPostListAdapter(_mActivity, llPostList, R.layout.member_post_list_item);
-        memberPostListAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+        rsvContainer = view.findViewById(R.id.rsv_container);
+        MaxHeightRecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
+        memberPostListAdapter = new MemberPostListAdapter(R.layout.member_post_list_item, postItemList);
+        rvPostList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        memberPostListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PostItem postItem = postItemList.get(position);
                 Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
+            }
+        });
+        rvPostList.setAdapter(memberPostListAdapter);
+        rsvContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                // 設置RecyclerView的最大高度和參考點
+                int height = rsvContainer.getHeight();
+                rvPostList.setMaxHeight(height);
+
+                SLog.info("height[%d], rawY[%d]", height, Util.getYOnScreen(rsvContainer));
+                rsvContainer.setRefView(rvPostList);
+                rsvContainer.setyLocation(Util.getYOnScreen(rsvContainer));
             }
         });
     }
@@ -324,7 +341,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                     }
 
                     SLog.info("postItemList.size[%d]", postItemList.size());
-                    memberPostListAdapter.setData(postItemList);
+                    memberPostListAdapter.setNewData(postItemList);
                 } catch (Exception e) {
 
                 }

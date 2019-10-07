@@ -66,4 +66,8 @@
         <attr name="canLeftSwipe" format="boolean" />
         <attr name="fraction" format="float" />
     </declare-styleable>
+
+    <declare-styleable name="MaxHeightRecyclerView">
+        <attr name="maxHeight" format="dimension"></attr>
+    </declare-styleable>
 </resources>

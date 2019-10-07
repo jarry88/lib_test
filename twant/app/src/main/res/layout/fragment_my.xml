@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ftofs.twant.widget.RvScrollView
+    android:id="@+id/rsv_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -374,12 +376,12 @@
                         />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll_post_list"
+                <com.ftofs.twant.widget.MaxHeightRecyclerView
+                    android:id="@+id/rv_post_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
-                </LinearLayout>
+                </com.ftofs.twant.widget.MaxHeightRecyclerView>
             </LinearLayout>
         </LinearLayout>
 
@@ -399,4 +401,4 @@
             android:layout_centerHorizontal="true"
             />
     </RelativeLayout>
-</ScrollView>
+</com.ftofs.twant.widget.RvScrollView>
