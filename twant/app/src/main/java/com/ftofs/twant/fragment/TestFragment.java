@@ -125,20 +125,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-
-            textView.startAnimation(animation);
-
-            List<Integer> integerList = new ArrayList<>();
-            for (int j = 0; j < 8; j++) {
-                integerList.add(j);
-            }
-
-            Collections.shuffle(integerList);
-            String result = "";
-            for (int i : integerList) {
-                result += i + ", ";
-            }
-            SLog.info("result[%s]", result);
+            start(PayVendorFragment.newInstance());
         }
     }
 
