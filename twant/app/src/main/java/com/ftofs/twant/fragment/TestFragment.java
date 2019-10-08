@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.AppGuideActivity;
 import com.ftofs.twant.constant.EasySwipeMenuState;
 import com.ftofs.twant.domain.goods.ArrivalNotice;
 import com.ftofs.twant.entity.ButtonClickInfo;
@@ -125,7 +127,9 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            start(PayVendorFragment.newInstance(1, 13.28f, 6.34f));
+            // start(PayVendorFragment.newInstance(1, 13.28f, 6.34f));
+            Intent intent = new Intent(_mActivity, AppGuideActivity.class);
+            startActivity(intent);
         }
     }
 

@@ -11,15 +11,6 @@ import java.util.Date;
  */
 public class Time {
     /**
-     * 類似php的date()函數
-     * @param format
-     * @return
-     */
-    public static String date(String format) {
-        return fromMillisUnixtime(System.currentTimeMillis(), format);
-    }
-
-    /**
      * 与fromUnixtime()函数类似，只是第1个参数为毫秒数
      * @param millisUnixtime  毫秒的unix 时间戳
      * @param format

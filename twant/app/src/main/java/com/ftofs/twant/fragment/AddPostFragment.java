@@ -34,6 +34,7 @@ import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
@@ -142,7 +143,7 @@ public class AddPostFragment extends BaseFragment implements View.OnClickListene
 
         tvKeyword = view.findViewById(R.id.tv_keyword);
 
-        deadline = Time.date("Y-m-d");
+        deadline = new Jarbon().toDateString();
         tvDeadline = view.findViewById(R.id.tv_deadline);
         tvDeadline.setText(deadline);
 

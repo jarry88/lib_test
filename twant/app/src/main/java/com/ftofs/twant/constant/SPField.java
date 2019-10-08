@@ -19,6 +19,11 @@ public class SPField {
     public static final String FIELD_MEMBER_SIGNATURE = "member_signature";
     public static final String FIELD_MEMBER_BIO = "member_bio";
     public static final String FIELD_AMAP_LOCATION = "amap_location";
+    /**
+     * 最近一次顯示App引導頁的日期
+     * App引導頁每天顯示一次
+     */
+    public static final String FIELD_SHOW_APP_GUIDE_DATE = "show_app_guide_date";
 
 
     /**

@@ -836,6 +836,11 @@ public class Api {
      */
     public static final String PATH_EDIT_MEMBER_SIGNATURE = "/memberpage/modify/signature";
 
+    /**
+     * 獲取啟動引導頁
+     */
+    public static final String PATH_APP_GUIDE = "/app/guide";
+
 
     /**
      * 發送Http請求

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Takewant想要</string>
 
-    <string name="copyright">© %s Takewant版權所有</string>
+    <string name="copyright">© %d Takewant版權所有</string>
 
     <string name="register_fragment_title">注冊賬號</string>
     <string name="login_fragment_title">登入</string>
@@ -515,7 +515,7 @@
 
     <string name="text_my_article">我的文章</string>
 
-    
+
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>
     <string name="umeng_app_key">5cee21bd4ca357016b00068d</string>
