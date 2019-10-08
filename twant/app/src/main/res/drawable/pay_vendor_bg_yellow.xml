@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <corners android:topLeftRadius="8dp" android:topRightRadius="8dp" />
-    <solid android:color="#FED700" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 增加這個item，當上一個支付方式旋轉時，以白色為背景（而不是以透明為背景） -->
+    <item android:left="8dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+    <item>
+        <shape
+            android:shape="rectangle">
+            <corners android:topLeftRadius="8dp" android:topRightRadius="8dp" />
+            <solid android:color="#FED700" />
+        </shape>
+    </item>
+</layer-list>
+

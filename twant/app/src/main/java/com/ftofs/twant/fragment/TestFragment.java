@@ -125,7 +125,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            start(PayVendorFragment.newInstance());
+            start(PayVendorFragment.newInstance(1, 13.28f, 6.34f));
         }
     }
 

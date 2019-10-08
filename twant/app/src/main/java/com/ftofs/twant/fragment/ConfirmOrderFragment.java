@@ -17,7 +17,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.ConfirmOrderStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -46,7 +45,6 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.OrderVoucherPopup;
-import com.ftofs.twant.widget.PayPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -86,6 +84,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     TextView tvAddress;
     TextView tvItemCount;  // 共xxx件
     TextView tvTotalPrice;  // 合計:多少錢
+    float totalPrice;
 
     RelativeLayout btnAddShippingAddress;
     LinearLayout btnChangeShippingAddress;
@@ -474,11 +473,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             // 在線支付或門店自提都需要先付款
                             try {
                                 int payId = responseObj.getInt("datas.payId");
-                                new XPopup.Builder(_mActivity)
-                                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                                        .moveUpToKeyboard(false)
-                                        .asCustom(new PayPopup(_mActivity, (MainActivity) _mActivity, payId))
-                                        .show();
+                                start(PayVendorFragment.newInstance(payId, totalPrice, 0));
                             } catch (EasyJSONException e) {
                                 e.printStackTrace();
                             }
@@ -884,8 +879,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("summaryItem, totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
                             summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
-                    tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,
-                            summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount, 0));
+                    totalPrice = summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount;
+                    tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                 }
@@ -967,7 +962,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     }
 
                     adapter.notifyItemChanged(position);
-
                     break;
                 }
             }

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.PayItemListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -34,7 +33,6 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
-import com.ftofs.twant.widget.PayPopup;
 import com.ftofs.twant.widget.TwTabButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -196,13 +194,8 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 int id = view.getId();
                 SLog.info("id[%d]", id);
                 if (id == R.id.btn_pay_order) {
-                    int payId = payItemList.get(position).payId;
-                    SLog.info("payId[%d]", payId);
-                    new XPopup.Builder(_mActivity)
-                            // 如果不加这个，评论弹窗会移动到软键盘上面
-                            .moveUpToKeyboard(false)
-                            .asCustom(new PayPopup(_mActivity, (MainActivity) _mActivity, payId))
-                            .show();
+                    PayItem payItem = payItemList.get(position);
+                    start(PayVendorFragment.newInstance(payItem.payId, payItem.payAmount, 0));
                 }
             }
         });

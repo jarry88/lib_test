@@ -40,20 +40,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="32dp"
             android:orientation="horizontal">
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="46dp"
+                android:layout_marginTop="55dp"
                 android:layout_marginLeft="64dp"
-                android:text="MOP$"
-                />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#A8A8A8"
+                    android:textSize="14sp"
+                    android:text="MOP$"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#A8A8A8"
+                    />
+            </LinearLayout>
+
             <TextView
+                android:id="@+id/tv_pay_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginLeft="16dp"
-                android:text="818.00"
+                android:text="0.00"
                 android:textSize="40sp"
                 android:textColor="@color/tw_red"
                 />
@@ -64,118 +80,230 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/toolbar_margin_left"
             android:layout_marginRight="@dimen/toolbar_margin_right"
-            android:background="@drawable/pay_vendor_outer_container_bg">
-            <LinearLayout
+            android:background="@drawable/pay_vendor_container_bg"
+            android:orientation="vertical">
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/pay_vendor_inner_container_bg"
-                android:orientation="vertical">
-
+                android:layout_marginRight="5dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="71dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@drawable/pay_vendor_bg_blue">
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="16dp"
-                        android:src="@drawable/new_icon_pay_wallet"
+                    android:layout_height="wrap_content">
+                    <View
+                        android:id="@+id/vw_first_separator"
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="17dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:background="@android:color/white"
                         />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="64dp"
-                        android:layout_marginTop="28dp"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:text="想付錢包"
+                    <RelativeLayout
+                        android:id="@+id/btn_wallet"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@drawable/pay_vendor_bg_blue">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/new_icon_pay_wallet"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="64dp"
+                            android:layout_marginTop="28dp"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/white"
+                            android:text="想付錢包"
+                            />
+                        <TextView
+                            android:id="@+id/tv_wallet_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="132dp"
+                            android:layout_marginTop="29dp"
+                            android:textSize="14sp"
+                            android:textColor="@android:color/white"
+                            android:text="(餘額：$0.00)"
+                            />
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="70dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@android:color/white"
+                        />
+                    <RelativeLayout
+                        android:id="@+id/btn_mpay"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="85dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@drawable/pay_vendor_bg_orange">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/new_icon_pay_mpay"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="64dp"
+                            android:layout_marginTop="28dp"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/white"
+                            android:text="MPay"
+                            />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="155dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@android:color/white"
+                        />
+                    <RelativeLayout
+                        android:id="@+id/btn_taifung_pay"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="170dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@drawable/pay_vendor_bg_yellow">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/new_icon_pay_taifung"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="64dp"
+                            android:layout_marginTop="28dp"
+                            android:textSize="16sp"
+                            android:textColor="@color/tw_black"
+                            android:text="大豐銀行電子支付"
+                            />
+                    </RelativeLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="240dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@android:color/white"
+                        />
+                    <RelativeLayout
+                        android:id="@+id/btn_weixin_pay"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="255dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@drawable/pay_vendor_bg_green">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/new_icon_pay_weixin"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="64dp"
+                            android:layout_marginTop="28dp"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/white"
+                            android:text="微信支付（大陸）"
+                            />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="325dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@android:color/white"
+                        />
+                    <RelativeLayout
+                        android:id="@+id/btn_ali_pay"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="340dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@drawable/pay_vendor_bg_blue">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/new_icon_pay_alipay"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="64dp"
+                            android:layout_marginTop="28dp"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/white"
+                            android:text="支付寶（大陸）"
+                            />
+                    </RelativeLayout>
+
+                    <!-- 最后一個用于支付的View -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="410dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@android:color/white"
                         />
                 </RelativeLayout>
+            </ScrollView>
 
-                <RelativeLayout
-                    android:id="@+id/btn_mpay"
-                    android:layout_width="match_parent"
-                    android:layout_height="71dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@drawable/pay_vendor_bg_orange">
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="16dp"
-                        android:src="@drawable/new_icon_pay_mpay"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="64dp"
-                        android:layout_marginTop="28dp"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:text="MPay"
-                        />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="71dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@drawable/pay_vendor_bg_yellow">
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="16dp"
-                        android:src="@drawable/new_icon_pay_taifung"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="64dp"
-                        android:layout_marginTop="28dp"
-                        android:textSize="16sp"
-                        android:textColor="@color/tw_black"
-                        android:text="大豐銀行電子支付"
-                        />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="71dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:background="@drawable/pay_vendor_bg_blue">
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="16dp"
-                        android:src="@drawable/new_icon_pay_alipay_hk"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="64dp"
-                        android:layout_marginTop="28dp"
-                        android:textSize="16sp"
-                        android:textColor="@android:color/white"
-                        android:text="AlipayHK"
-                        />
-                </RelativeLayout>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/btn_pay"
+                android:layout_width="245dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:text="去支付"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/red_button"
+                />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

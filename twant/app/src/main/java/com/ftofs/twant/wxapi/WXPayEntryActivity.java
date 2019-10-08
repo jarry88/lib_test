@@ -11,7 +11,6 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
-import com.ftofs.twant.widget.PayPopup;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;

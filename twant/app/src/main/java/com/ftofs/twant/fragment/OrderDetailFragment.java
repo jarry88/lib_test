@@ -4,8 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +12,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
@@ -35,7 +31,6 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.PayPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
@@ -322,11 +317,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 }
                 Util.startFragment(GoodsEvaluationFragment.newInstance(ordersId, storeId, storeName, evaluationGoodsItemList));
             } else if (tag.equals(TEXT_MEMBER_PAY)) {
-                new XPopup.Builder(_mActivity)
-                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                        .moveUpToKeyboard(false)
-                        .asCustom(new PayPopup(_mActivity, (MainActivity) _mActivity, payId))
-                        .show();
+                start(PayVendorFragment.newInstance(payId, ordersAmount, 0));
             } else if (tag.equals(TEXT_SHIP_SEARCH)) {
                 SLog.info("查看物流");
                 Util.startFragment(OrderLogisticsInfoFragment.newInstance(ordersId));
