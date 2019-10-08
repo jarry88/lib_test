@@ -32,6 +32,7 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.MaxHeightRecyclerView;
 import com.ftofs.twant.widget.QuickClickButton;
 import com.ftofs.twant.widget.RvScrollView;
+import com.ftofs.twant.widget.SharePopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 
@@ -58,7 +59,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     List<UniversalMemberItem> followMeList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
 
-    BaseQuickAdapter adapter;
+    FollowMeAvatarAdapter followMeAvatarAdapter;
 
     ImageView imgAvatar;
     ImageView imgAuthorAvatar;
@@ -152,8 +153,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         RecyclerView rvFollowMeList = view.findViewById(R.id.rv_follow_me_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
         rvFollowMeList.setLayoutManager(layoutManager);
-        adapter = new FollowMeAvatarAdapter(R.layout.follow_me_avatar_item, followMeList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        followMeAvatarAdapter = new FollowMeAvatarAdapter(R.layout.follow_me_avatar_item, followMeList);
+        followMeAvatarAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 UniversalMemberItem item = followMeList.get(position);
@@ -161,7 +162,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                 Util.startFragment(MemberInfoFragment.newInstance(memberName));
             }
         });
-        rvFollowMeList.setAdapter(adapter);
+        rvFollowMeList.setAdapter(followMeAvatarAdapter);
 
         rsvContainer = view.findViewById(R.id.rsv_container);
         MaxHeightRecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
@@ -172,6 +173,25 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PostItem postItem = postItemList.get(position);
                 Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
+            }
+        });
+        memberPostListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                PostItem postItem = postItemList.get(position);
+
+                if (id == R.id.btn_thumb) {
+                    switchThumbState(position);
+                } else if (id == R.id.btn_fav) {
+
+                } else {
+                    new XPopup.Builder(_mActivity)
+                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(new SharePopup(_mActivity, SharePopup.generatePostShareLink(postItem.postId), postItem.title, "", postItem.coverImage))
+                            .show();
+                }
             }
         });
         rvPostList.setAdapter(memberPostListAdapter);
@@ -315,7 +335,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                         followMeList.add(item);
                     }
 
-                    adapter.setNewData(followMeList);
+                    followMeAvatarAdapter.setNewData(followMeList);
 
                     userDataLoaded = true;
 
@@ -362,5 +382,49 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+    private void switchThumbState(int position) {
+        SLog.info("switchInteractiveState[%d]", position);
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            Util.showLoginFragment();
+            return;
+        }
+
+        PostItem postItem = postItemList.get(position);
+        int newState = 1 - postItem.isLike;
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "postId", postItem.postId,
+                "state", newState);
+
+        SLog.info("params[%s]", params);
+        Api.postUI(Api.PATH_POST_THUMB, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                postItem.isLike = newState;
+                if (newState == 1) {
+                    postItem.postThumb++;
+                } else {
+                    postItem.postThumb--;
+                }
+
+                memberPostListAdapter.notifyItemChanged(position);
+            }
+        });
     }
 }

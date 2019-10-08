@@ -13,6 +13,10 @@ import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
+/**
+ * 個人專頁貼文列表Adapter
+ * @author zwm
+ */
 public class MemberPostListAdapter extends BaseQuickAdapter<PostItem, BaseViewHolder> {
 
     public MemberPostListAdapter(int layoutResId, @Nullable List<PostItem> data) {
@@ -21,6 +25,8 @@ public class MemberPostListAdapter extends BaseQuickAdapter<PostItem, BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, PostItem itemData) {
+        helper.addOnClickListener(R.id.btn_thumb, R.id.btn_fav, R.id.btn_share);
+
         ImageView coverImageView = helper.getView(R.id.post_cover_image);
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(itemData.coverImage)).centerCrop().into(coverImageView);
 
