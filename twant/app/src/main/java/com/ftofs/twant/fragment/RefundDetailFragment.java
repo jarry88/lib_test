@@ -254,8 +254,6 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                         progressList.add(getString(R.string.text_finished));
                     }
 
-                    indicator.setData(progressList, currentStep);
-
                     if (action == Constant.ACTION_REFUND || action == Constant.ACTION_RETURN) {
                         EasyJSONObject refundItemVo = responseObj.getObject("datas.refundItemVo");
 
@@ -377,6 +375,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                         tvMerchant.setText(ordersVo.getString("storeName"));
                     }
 
+                    indicator.setData(progressList, currentStep);
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
                 }
