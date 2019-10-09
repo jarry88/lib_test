@@ -161,9 +161,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         textConfirmOrderTotalItemCount = getResources().getString(R.string.text_confirm_order_total_item_count);
 
         // 初始化支付方式數據
-        payWayItemList.add(new ListPopupItem(0, getResources().getString(R.string.text_pay_online), null));
-        payWayItemList.add(new ListPopupItem(1, getResources().getString(R.string.text_pay_delivery), null));
-        payWayItemList.add(new ListPopupItem(2, getResources().getString(R.string.text_pay_fetch), null));
+        payWayItemList.add(new ListPopupItem(0, R.drawable.pay_way_online_selected, R.drawable.pay_way_online_unselected, getResources().getString(R.string.text_pay_online), null));
+        payWayItemList.add(new ListPopupItem(1, R.drawable.pay_way_delivery_selected, R.drawable.pay_way_delivery_unselected, getResources().getString(R.string.text_pay_delivery), null));
+        payWayItemList.add(new ListPopupItem(2, R.drawable.pay_way_fetch_selected, R.drawable.pay_way_fetch_unselected, getResources().getString(R.string.text_pay_fetch), null));
 
         tvReceiverName = view.findViewById(R.id.tv_receiver_name);
         tvMobile = view.findViewById(R.id.tv_mobile);

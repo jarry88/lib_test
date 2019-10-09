@@ -24,11 +24,13 @@ import java.util.List;
  */
 public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgIcon;
         ImageView checkedImage;
         TextView tvText;
 
         public ViewHolder(View view) {
             super(view);
+            imgIcon = view.findViewById(R.id.img_icon);
             checkedImage = view.findViewById(R.id.checked_image);
             tvText = view.findViewById(R.id.tv_text);
         }
@@ -79,6 +81,16 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
         if (i == index) {
             viewHolder.tvText.setTextColor(highlightedTextColor);
             viewHolder.checkedImage.setVisibility(View.VISIBLE);
+
+            if (item.selectedIconResId != 0) {
+                viewHolder.imgIcon.setImageResource(item.selectedIconResId);
+            }
+            viewHolder.imgIcon.setVisibility(item.selectedIconResId != 0 ? View.VISIBLE : View.GONE);
+        } else {
+            if (item.unselectedIconResId != 0) {
+                viewHolder.imgIcon.setImageResource(item.unselectedIconResId);
+            }
+            viewHolder.imgIcon.setVisibility(item.unselectedIconResId != 0 ? View.VISIBLE : View.GONE);
         }
 
 
