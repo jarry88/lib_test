@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/tw_confirm_popup_bg">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="新 版 來 襲"
+        android:textColor="@color/tw_blue"
+        android:textSize="24sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="V1.2.27"
+        android:textColor="@color/tw_black"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_version_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="34dp"
+        android:layout_marginRight="34dp"
+        android:textColor="@color/tw_black"
+        android:textSize="14sp"
+        android:text="1、在這次的更新中我們優化了會話功能，你可以更快更有效的和對方進行溝通交流；\n2、在這次的更新中我們優化了一些功能、修復了一些BUG，你可以更便捷的使用Takewant商城；"
+        />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/btn_app_update_now"
+            android:layout_width="205dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="我要升級"
+            android:textColor="@android:color/white"
+            android:textSize="19sp"
+            android:background="@drawable/app_update_blue_button"
+            />
+        <LinearLayout
+            android:id="@+id/ll_update_button_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/btn_app_update_later"
+                android:layout_width="122dp"
+                android:layout_height="44dp"
+                android:gravity="center"
+                android:text="以後再說"
+                android:textSize="19sp"
+                android:textColor="@color/tw_black"
+                android:background="@drawable/app_update_later_outline_button"
+                />
+            <TextView
+                android:id="@+id/btn_app_update_try"
+                android:layout_width="122dp"
+                android:layout_height="44dp"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="升級試試"
+                android:textSize="19sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/app_update_try_blue_button"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

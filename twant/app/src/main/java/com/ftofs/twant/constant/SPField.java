@@ -27,6 +27,17 @@ public class SPField {
 
 
     /**
+     * 升級對話框是否在顯示，即最近一次顯示的時間戳
+     */
+    public static final String FIELD_APP_UPDATE_POPUP_SHOWN_TIMESTAMP = "app_update_popup_shown_timestamp";
+
+    /**
+     * 升級對話框最近一次顯示的日期
+     */
+    public static final String FIELD_APP_UPDATE_POPUP_SHOWN_DATE = "app_update_popup_shown_date";
+
+
+    /**
      * MPay 訂單的PayId
      */
     public static final String FIELD_MPAY_PAY_ID = "mpay_pay_id_%d";

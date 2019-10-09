@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 import com.alipay.sdk.app.PayTask;
+import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -29,6 +31,7 @@ import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.IntentUtil;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -36,6 +39,8 @@ import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AppUpdatePopup;
+import com.lxj.xpopup.XPopup;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
 import com.orhanobut.hawk.Hawk;
@@ -182,6 +187,84 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 return null;
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 如果不是在顯示版本升級對話框，則檢查是否有新版本
+        long popupShownTimestamp = Hawk.get(SPField.FIELD_APP_UPDATE_POPUP_SHOWN_TIMESTAMP, 0L);
+        SLog.info("popupShownTimestamp[%s]", popupShownTimestamp);
+
+        // 最近一次顯示時間超過一天，則進行檢查更新(主要用于前后臺切換時，不要重復顯示)
+        if (System.currentTimeMillis() - popupShownTimestamp > 24 * 3600 * 1000) {
+            Api.getUI(Api.PATH_CHECK_UPDATE, EasyJSONObject.generate("version", BuildConfig.VERSION_NAME), new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(MainActivity.this, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(MainActivity.this, responseObj)) {
+                            return;
+                        }
+
+                        if (!responseObj.exists("datas.version")) {
+                            // 如果服務器端沒有返回版本信息，也當作是最新版本
+                            return;
+                        }
+
+                        // 當前版本
+                        String currentVersion = BuildConfig.VERSION_NAME;
+                        // 最新版本
+                        String newestVersion = responseObj.getString("datas.version");
+
+                        SLog.info("currentVersion[%s], newestVersion[%s]", currentVersion, newestVersion);
+                        int result = Util.versionCompare(currentVersion, newestVersion);
+                        SLog.info("result[%d]", result);
+
+                        if (result < 0) { // 發現新版本
+                            boolean isDismissOnBackPressed = true;
+                            boolean isDismissOnTouchOutside = true;
+                            boolean isForceUpdate = (responseObj.getInt("datas.isForceUpdate") != 0);
+
+                            String version = responseObj.getString("datas.version");
+                            String versionDesc = responseObj.getString("datas.remarks");
+
+                            // isForceUpdate = true;
+                            // 如果是強制升級，點擊對話框外的區域或按下返回鍵，也不能關閉對話框
+                            if (isForceUpdate) {
+                                isDismissOnBackPressed = false;
+                                isDismissOnTouchOutside = false;
+                            }
+
+                            String today = new Jarbon().toDateString();
+                            String appUpdatePopupShownDate = Hawk.get(SPField.FIELD_APP_UPDATE_POPUP_SHOWN_DATE);
+                            if (!isForceUpdate && today.equals(appUpdatePopupShownDate)) { // 如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示
+                                SLog.info("如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示");
+                                return;
+                            }
+
+                            new XPopup.Builder(MainActivity.this)
+                                    .dismissOnBackPressed(isDismissOnBackPressed) // 按返回键是否关闭弹窗，默认为true
+                                    .dismissOnTouchOutside(isDismissOnTouchOutside) // 点击外部是否关闭弹窗，默认为true
+                                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                                    .moveUpToKeyboard(false)
+                                    .asCustom(new AppUpdatePopup(MainActivity.this, version, versionDesc, isForceUpdate))
+                                    .show();
+                        }
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
+        }
     }
 
     @Override

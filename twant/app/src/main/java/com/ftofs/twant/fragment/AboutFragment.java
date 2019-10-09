@@ -120,7 +120,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
 
 
                         SLog.info("currentVersion[%s], newestVersion[%s]", currentVersion, newestVersion);
-                        int result = versionCompare(currentVersion, newestVersion);
+                        int result = Util.versionCompare(currentVersion, newestVersion);
                         SLog.info("result[%d]", result);
 
                         if (result >= 0) {
@@ -137,36 +137,5 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         } else if (id == R.id.btn_goto_rate) {
             Util.gotoGooglePlay(_mActivity);
         }
-    }
-
-    /**
-     * 版本號比較
-     * @param version1
-     * @param version2
-     * @return
-     *      * 如果version1比version2新，返回1
-     *      * 如果version1比version2舊，返回-1
-     *      * 如果version1與version2相同，返回0
-     */
-    private int versionCompare(String version1, String version2) {
-        String[] version1Arr = version1.split("\\.");
-        String[] version2Arr = version2.split("\\.");
-
-
-        // 獲取版本號分段數，取較小值是為了預防分段數不一致
-        int fieldCount = Math.min(version1Arr.length, version2Arr.length);
-        SLog.info("version1Arr[%s], version2Arr[%s], fieldCount[%d]", version1Arr, version2Arr, fieldCount);
-
-        for (int i = 0; i < fieldCount; i++) {
-            int field1 = Integer.valueOf(version1Arr[i]);
-            int field2 = Integer.valueOf(version2Arr[i]);
-            if (field1 > field2) {
-                return 1;
-            } else if (field1 < field2) {
-                return -1;
-            }
-        }
-
-        return 0;
     }
 }
