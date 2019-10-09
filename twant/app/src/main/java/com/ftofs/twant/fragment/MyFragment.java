@@ -29,9 +29,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.MaxHeightRecyclerView;
 import com.ftofs.twant.widget.QuickClickButton;
-import com.ftofs.twant.widget.RvScrollView;
 import com.ftofs.twant.widget.SharePopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
@@ -54,7 +52,6 @@ import okhttp3.Call;
  * @author zwm
  */
 public class MyFragment extends BaseFragment implements View.OnClickListener {
-    RvScrollView rsvContainer;
     // 【關注我的】數據列表
     List<UniversalMemberItem> followMeList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
@@ -164,8 +161,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
         });
         rvFollowMeList.setAdapter(followMeAvatarAdapter);
 
-        rsvContainer = view.findViewById(R.id.rsv_container);
-        MaxHeightRecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
+        RecyclerView rvPostList = view.findViewById(R.id.rv_post_list);
         memberPostListAdapter = new MemberPostListAdapter(R.layout.member_post_list_item, postItemList);
         rvPostList.setLayoutManager(new LinearLayoutManager(_mActivity));
         memberPostListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -195,18 +191,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         rvPostList.setAdapter(memberPostListAdapter);
-        rsvContainer.post(new Runnable() {
-            @Override
-            public void run() {
-                // 設置RecyclerView的最大高度和參考點
-                int height = rsvContainer.getHeight();
-                rvPostList.setMaxHeight(height);
-
-                SLog.info("height[%d], rawY[%d]", height, Util.getYOnScreen(rsvContainer));
-                rsvContainer.setRefView(rvPostList);
-                rsvContainer.setyLocation(Util.getYOnScreen(rsvContainer));
-            }
-        });
     }
 
     @Override
