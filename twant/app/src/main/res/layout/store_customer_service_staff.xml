@@ -18,6 +18,9 @@
         android:textSize="14sp"
         android:textColor="@color/tw_black"
         android:text=""
+        android:lines="2"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:background="@drawable/icon_cs_message_bubble"
         android:visibility="invisible"
         />
