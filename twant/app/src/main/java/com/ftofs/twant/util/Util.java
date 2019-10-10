@@ -9,6 +9,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentationMagician;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +20,8 @@ import android.widget.EditText;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.domain.member.PurchaseBuy;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.AddPostFragment;
@@ -510,5 +515,35 @@ public class Util {
         }
 
         return 0;
+    }
+
+    /**
+     * 獲取指定層的Fragment
+     * @param activity 所在的Activity
+     * @param layer 第幾層，從0開始，棧頂的layer為0
+     * @return
+     */
+    public static Fragment getFragmentByLayer(FragmentActivity activity, int layer) {
+        if (layer < 0) {
+            return null;
+        }
+        String packageName = activity.getPackageName();
+        // SLog.info("packageName[%s]", packageName);
+        List<Fragment> resultList = new ArrayList<>();
+        List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(activity.getSupportFragmentManager());
+        for (Fragment fragment : fragmentList) {
+            // SLog.info("fragment[%s][%s]", fragment, fragment.getClass().getName());
+            String className = fragment.getClass().getName();
+            if (className.startsWith(packageName)) {
+                resultList.add(fragment);
+            }
+        }
+
+        if (layer < resultList.size()) {
+            layer = resultList.size() - 1 - layer; // 進行倒序操作
+            return resultList.get(layer);
+        }
+
+        return null;
     }
 }

@@ -192,4 +192,18 @@ public class Constant {
     // 摄像头动作类型
     public static final int CAMERA_ACTION_IMAGE = 1;  // 用Camera拍照片
     public static final int CAMERA_ACTION_VIDEO = 2;  // 用Camera拍视频
+
+
+    /**
+     * 用戶界面重用 -- 用戶注冊
+     */
+    public static final int USAGE_USER_REGISTER = 1;
+    /**
+     * 用戶界面重用 -- 重置密碼
+     */
+    public static final int USAGE_RESET_PASSWORD = 2;
+    /**
+     * 用戶界面重用 -- 設置支付密碼
+     */
+    public static final int USAGE_SET_PAYMENT_PASSWORD = 3;
 }

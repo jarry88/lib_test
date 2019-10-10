@@ -24,6 +24,7 @@ import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -40,25 +42,35 @@ import okhttp3.Response;
 
 
 /**
- * 重置密碼
+ * 用戶注冊、重置密碼、設置支付密碼Fragment
  * @author zwm
  */
 public class ResetPasswordFragment extends BaseFragment implements
         View.OnClickListener, OnSelectedListener {
     /**
+     * 用途
+     */
+    int usage;
+
+    TextView tvFragmentTitle;
+
+    /**
      * 當前選中的區號索引
      */
     private int selectedMobileZoneIndex = 0;
     List<MobileZone> mobileZoneList = new ArrayList<>();
-    ImageView btnRefreshCaptcha;
+
     String captchaKey;
+    ImageView btnRefreshCaptcha;
     EditText etMobile;
     EditText etCaptcha;
     TextView tvAreaName;
 
-    public static ResetPasswordFragment newInstance() {
+
+    public static ResetPasswordFragment newInstance(int usage) {
         Bundle args = new Bundle();
 
+        args.putInt("usage", usage);
         ResetPasswordFragment fragment = new ResetPasswordFragment();
         fragment.setArguments(args);
 
@@ -76,9 +88,21 @@ public class ResetPasswordFragment extends BaseFragment implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle args = getArguments();
+        usage = args.getInt("usage");
+
         Util.setOnClickListener(view, R.id.btn_back, this);
-        Util.setOnClickListener(view, R.id.btn_next, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
+        Util.setOnClickListener(view, R.id.btn_next, this);
+
+        tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
+        if (usage == Constant.USAGE_USER_REGISTER) {
+            tvFragmentTitle.setText(R.string.register_fragment_title);
+        } else if (usage == Constant.USAGE_RESET_PASSWORD) {
+            tvFragmentTitle.setText(R.string.reset_password_fragment_title);
+        } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
+            tvFragmentTitle.setText(R.string.payment_password_fragment_title);
+        }
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
 
@@ -90,32 +114,86 @@ public class ResetPasswordFragment extends BaseFragment implements
         getMobileZoneList();
     }
 
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_mobile_zone) {
+            List<ListPopupItem> itemList = new ArrayList<>();
+            for (MobileZone mobileZone : mobileZoneList) {
+                ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);
+                itemList.add(item);
+            }
+
+            hideSoftInput();
+
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
+                            PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
+                    .show();
+        } else if (id == R.id.btn_refresh_captcha) {
+            refreshCaptcha();
         } else if (id == R.id.btn_next) {
+            getSmsCode();
+        }
+    }
+
+    private void getSmsCode() {
+        try {
             if (mobileZoneList.size() <= selectedMobileZoneIndex) {
                 return;
             }
+            // 獲取區號
             final MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
 
+            // 注账号为 区号,手机号
             final String mobile = etMobile.getText().toString().trim();
-            String captcha = etCaptcha.getText().toString().trim();
+            if (StringUtil.isEmpty(mobile)) {
+                ToastUtil.error(_mActivity, "手機號不能為空");
+                return;
+            }
 
 
+            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
+                String[] areaArray = new String[] {
+                        "",
+                        getString(R.string.text_hongkong),
+                        getString(R.string.text_mainland),
+                        getString(R.string.text_macao)
+                };
 
-            String fullMobile = mobileZone.areaCode + "," + mobile;
+                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
+                ToastUtil.error(_mActivity, msg);
+                return;
+            }
+
+            final String fullMobile = String.format("%s,%s", mobileZone.areaCode, mobile);
+
+            String captchaText = etCaptcha.getText().toString().trim();
+            if (StringUtil.isEmpty(captchaText)) {
+                ToastUtil.error(_mActivity, "驗證碼不能為空");
+                return;
+            }
 
             EasyJSONObject params = EasyJSONObject.generate(
                     "mobile", fullMobile,
                     "captchaKey", captchaKey,
-                    "captchaVal", captcha,
-                    "sendType", Sms.SEND_TYPE_FIND_PASSWORD
-            );
-            SLog.info("params[%s]", params);
+                    "captchaVal", captchaText);
 
+
+            if (usage == Constant.USAGE_USER_REGISTER) {
+                params.set("sendType", Sms.SEND_TYPE_REGISTER);
+            } else if (usage == Constant.USAGE_RESET_PASSWORD) {
+                params.set("sendType", Sms.SEND_TYPE_FIND_PASSWORD);
+            } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
+                params.set("sendType", Sms.SEND_TYPE_SECURITY_VERIFY);
+            }
+
+            SLog.info("params[%s]", params);
             Api.getUI(Api.PATH_SEND_SMS_CODE, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -125,51 +203,33 @@ public class ResetPasswordFragment extends BaseFragment implements
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        // 如果出錯，刷新驗證碼
-                        refreshCaptcha();
-                        return;
-                    }
-
+                    final EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
+                            // 如果出錯，刷新驗證碼
+                            refreshCaptcha();
                             ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
                             return;
                         }
 
-                        hideSoftInput();
-
-                        ToastUtil.success(_mActivity, "動態碼已發送");
-
+                        // 發送驗證碼成功
                         int smsCodeValidTime = responseObj.getInt("datas.authCodeValidTime");
-                        Util.startFragment(ResetPasswordConfirmFragment.newInstance(mobileZone.areaCode, mobile, smsCodeValidTime));
+                        if (usage == Constant.USAGE_USER_REGISTER) {
+                            start(RegisterConfirmFragment.newInstance(mobileZone.areaCode, mobile, smsCodeValidTime));
+                        } else {
+                            start(ResetPasswordConfirmFragment.newInstance(usage, mobileZone.areaCode, mobile, smsCodeValidTime));
+                        }
                     } catch (EasyJSONException e) {
                         e.printStackTrace();
                     }
                 }
             });
-        } else if (id == R.id.btn_refresh_captcha) {
-            refreshCaptcha();
-        } else if (id == R.id.btn_mobile_zone) {
-            List<ListPopupItem> itemList = new ArrayList<>();
-            for (MobileZone mobileZone : mobileZoneList) {
-                ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);
-                itemList.add(item);
-            }
-
-            // 先隱藏軟鍵盤
-            hideSoftInput();
-
-            new XPopup.Builder(_mActivity)
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
-                            PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
-                    .show();
+        } catch (Exception e) {
+            SLog.info("Error!%s", e.getMessage());
         }
     }
+
 
     /**
      * 刷新驗證碼
@@ -179,7 +239,6 @@ public class ResetPasswordFragment extends BaseFragment implements
             @Override
             public void onMessage() {
                 Pair<Bitmap, String> result = (Pair<Bitmap, String>) message;
-                SLog.info("result[%s]", result);
                 if (result == null) {
                     return;
                 }
@@ -197,6 +256,9 @@ public class ResetPasswordFragment extends BaseFragment implements
             @Override
             public void onMessage() {
                 mobileZoneList = (List<MobileZone>) message;
+                if (mobileZoneList == null) {
+                    return;
+                }
                 SLog.info("mobileZoneList.size[%d]", mobileZoneList.size());
                 if (mobileZoneList.size() > 0) {
                     tvAreaName.setText(mobileZoneList.get(0).areaName);
@@ -207,7 +269,7 @@ public class ResetPasswordFragment extends BaseFragment implements
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
-        SLog.info("selectedMobileZoneIndex[%d], id[%d]", selectedMobileZoneIndex, id);
+        SLog.info("selectedMobileZoneIndex[%d], selectedIndex[%d]", selectedMobileZoneIndex, id);
         if (this.selectedMobileZoneIndex == id) {
             return;
         }

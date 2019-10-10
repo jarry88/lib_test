@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
@@ -68,9 +69,9 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS, null);
             popTo(MainFragment.class, false);
         } else if (id == R.id.btn_login_password) {
-            Util.startFragment(ResetPasswordFragment.newInstance());
+            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_RESET_PASSWORD));
         } else if (id == R.id.btn_payment_password) {
-            Util.startFragment(PaymentPasswordFragment.newInstance());
+            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
         }
     }
 

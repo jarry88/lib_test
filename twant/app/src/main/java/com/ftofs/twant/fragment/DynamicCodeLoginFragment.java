@@ -236,7 +236,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                             PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
         } else if (id == R.id.btn_forget_password) {
-            Util.startFragment(ResetPasswordFragment.newInstance());
+            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_RESET_PASSWORD));
         }
     }
 

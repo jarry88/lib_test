@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
@@ -76,7 +77,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         if (id == R.id.btn_back) {
             pop();
         } if (id == R.id.btn_register) {
-            Util.startFragment(RegisterFragment.newInstance());
+            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_USER_REGISTER));
         }
     }
 

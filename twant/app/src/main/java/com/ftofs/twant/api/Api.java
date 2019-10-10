@@ -841,6 +841,16 @@ public class Api {
      */
     public static final String PATH_APP_GUIDE = "/app/guide";
 
+    /**
+     * 我的錢包詳情
+     */
+    public static final String PATH_WALLET_INFO = "/member/wallet/info";
+
+    /**
+     * 设置/修改支付密码/激活想付钱包
+     */
+    public static final String PATH_WALLET_PAYMENT_PASSWORD = "/member/wallet/paypwd";
+
 
     /**
      * 發送Http請求
