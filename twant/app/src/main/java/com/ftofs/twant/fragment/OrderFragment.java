@@ -445,8 +445,10 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                 int showShipSearch = ordersVo.getInt("showShipSearch");
                                 int showEvaluation = ordersVo.getInt("showEvaluation");
                                 int showMemberReceive = ordersVo.getInt("showMemberReceive");
+                                /*
                                 SLog.info("showMemberCancel[%d], showMemberBuyAgain[%d], showShipSearch[%d], showEvaluation[%d], showMemberReceive[%d]",
                                         showMemberCancel, showMemberBuyAgain, showShipSearch, showEvaluation, showMemberReceive);
+                                        */
 
                                 List<OrderSkuItem> orderSkuItemList = new ArrayList<>();
                                 // 獲取Sku列表

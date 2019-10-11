@@ -40,6 +40,9 @@ import okhttp3.Call;
  * @author zwm
  */
 public class MallFragment extends BaseFragment implements View.OnClickListener {
+    int walletStatus = Constant.WANT_PAY_WALLET_STATUS_UNKNOWN;
+
+
     ScrollView svContainer;
 
     /**
@@ -90,7 +93,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_my_express, this);
         Util.setOnClickListener(view, R.id.btn_my_store_coupon, this);
         Util.setOnClickListener(view, R.id.btn_my_footprint, this);
-        Util.setOnClickListener(view, R.id.btn_my_address, this);
+        Util.setOnClickListener(view, R.id.btn_wallet, this);
         Util.setOnClickListener(view, R.id.btn_my_bonus, this);
         Util.setOnClickListener(view, R.id.btn_my_trust_value, this);
 
@@ -130,6 +133,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         loadGuessData();
         loadOrderCountData();
+
+        checkWalletStatus(false);
     }
 
     @Override
@@ -177,8 +182,8 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 Util.startFragment(FootprintFragment.newInstance());
                 break;
 
-            case R.id.btn_my_address:
-                Util.startFragment(AddrManageFragment.newInstance());
+            case R.id.btn_wallet:
+                startWantPayWallet();
                 break;
 
             case R.id.btn_my_bonus:
@@ -191,6 +196,65 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    private void startWantPayWallet() {
+        if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_ACTIVATED) {
+            start(WalletFragment.newInstance());
+        } else if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED) { // 如果錢包未激活，則重定向到激活頁面
+            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
+        } else if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_UNKNOWN) {
+            checkWalletStatus(true);
+        }
+    }
+
+    /**
+     * 檢查想付錢包的狀態
+     * @param startFragment 是否根據結果啟動想付錢包頁面或激活頁面
+     */
+    private void checkWalletStatus(boolean startFragment) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate("token", token);
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_WALLET_INFO, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONObject wantWallet = responseObj.getObject("datas.wantWallet");
+                    if (Util.isJsonNull(wantWallet)) { // 如果為null，表示未激活
+                        walletStatus = Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED;
+                        if (startFragment) {
+                            // 如果未激活，啟動激活頁面
+                            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
+                        }
+                    } else {
+                        walletStatus = Constant.WANT_PAY_WALLET_STATUS_ACTIVATED;
+                        if (startFragment) {
+                            start(WalletFragment.newInstance());
+                        }
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void loadGuessData() {

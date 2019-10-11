@@ -206,4 +206,22 @@ public class Constant {
      * 用戶界面重用 -- 設置支付密碼
      */
     public static final int USAGE_SET_PAYMENT_PASSWORD = 3;
+
+
+
+
+    /**
+     * 想付錢包狀態 -- 未知
+     */
+    public static final int WANT_PAY_WALLET_STATUS_UNKNOWN = 0;
+
+    /**
+     * 想付錢包狀態 -- 已激活
+     */
+    public static final int WANT_PAY_WALLET_STATUS_ACTIVATED = 1;
+
+    /**
+     * 想付錢包狀態 -- 未激活
+     */
+    public static final int WANT_PAY_WALLET_STATUS_NOT_ACTIVATED = 2;
 }

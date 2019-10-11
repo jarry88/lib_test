@@ -77,6 +77,7 @@
             android:text="立刻激活"
             android:textSize="14sp"
             android:textColor="@android:color/white"
+            android:visibility="gone"
             />
     </RelativeLayout>
 </LinearLayout>

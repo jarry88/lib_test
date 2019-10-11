@@ -29,6 +29,8 @@ import okhttp3.Call;
  */
 public class WalletFragment extends BaseFragment implements View.OnClickListener {
     TextView btnActivateNow;
+    TextView tvAccountBalance;
+
     public static WalletFragment newInstance() {
         Bundle args = new Bundle();
         
@@ -52,6 +54,8 @@ public class WalletFragment extends BaseFragment implements View.OnClickListener
         Util.setOnClickListener(view, R.id.btn_back, this);
         btnActivateNow = view.findViewById(R.id.btn_activate_now);
         btnActivateNow.setOnClickListener(this);
+
+        tvAccountBalance = view.findViewById(R.id.tv_account_balance);
     }
 
     @Override
@@ -114,6 +118,10 @@ public class WalletFragment extends BaseFragment implements View.OnClickListener
                         btnActivateNow.setVisibility(View.VISIBLE); // 未激活，顯示激活按鈕
                     } else {
                         btnActivateNow.setVisibility(View.GONE); // 已激活，隱藏激活按鈕
+
+                        // 獲取余額
+                        float balance = (float) responseObj.getDouble("datas.memberInfo.predepositAvailable");
+                        tvAccountBalance.setText(String.format("%.2f", balance));
                     }
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());

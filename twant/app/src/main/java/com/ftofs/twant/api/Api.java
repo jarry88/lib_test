@@ -851,6 +851,11 @@ public class Api {
      */
     public static final String PATH_WALLET_PAYMENT_PASSWORD = "/member/wallet/paypwd";
 
+    /**
+     * 預存款支付
+     */
+    public static final String PATH_WALLET_PAY = "/member/buy/pay/app/predepositPay";
+
 
     /**
      * 發送Http請求

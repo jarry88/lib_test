@@ -17,17 +17,23 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.WalletPayPopup;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.enums.PopupAnimation;
 import com.macau.pay.sdk.MPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.vivebest.taifung.api.PaymentHandler;
 import com.vivebest.taifung.api.TaifungSDK;
+
+import org.litepal.util.Const;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,7 +47,14 @@ import okhttp3.Call;
  * 選擇支付商
  * @author zwm
  */
-public class PayVendorFragment extends BaseFragment implements View.OnClickListener {
+public class PayVendorFragment extends BaseFragment implements View.OnClickListener, CommonCallback {
+    int walletStatus = Constant.WANT_PAY_WALLET_STATUS_UNKNOWN;
+
+    /**
+     * 是否需要Pop出本Fragment
+     */
+    boolean needPop;
+
     int payId;
 
     /*
@@ -111,7 +124,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         tvPayAmount = view.findViewById(R.id.tv_pay_amount);
         tvPayAmount.setText(String.format("%.2f", payAmount));
         tvWalletBalance = view.findViewById(R.id.tv_wallet_balance);
-        tvWalletBalance.setText(String.format("(餘額：%s)", StringUtil.formatPrice(_mActivity, walletBalance, 0)));
+        tvWalletBalance.setText("(未激活)");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_pay, this);
@@ -121,6 +134,53 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             btnPayVendor.setOnClickListener(this);
             payVendorButtonMap.put(payButtonIdArr[i], btnPayVendor);
         }
+
+        getWalletBalance();
+    }
+
+
+    private void getWalletBalance() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate("token", token);
+        SLog.info("params[%s]", params);
+
+        Api.getUI(Api.PATH_WALLET_INFO, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONObject wantWallet = responseObj.getObject("datas.wantWallet");
+                    if (Util.isJsonNull(wantWallet)) { // 如果為null，表示未激活
+                        walletStatus = Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED;
+                        tvWalletBalance.setText("(未激活)");
+                    } else {
+                        walletStatus = Constant.WANT_PAY_WALLET_STATUS_ACTIVATED;
+
+                        // 獲取余額
+                        walletBalance = (float) responseObj.getDouble("datas.memberInfo.predepositAvailable");
+                        tvWalletBalance.setText(String.format("(餘額：%s)", StringUtil.formatPrice(_mActivity, walletBalance, 0)));
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 
@@ -157,6 +217,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
             if (selectedPayButtonId == R.id.btn_wallet) {
                 // 錢包支付
+                doWalletPay();
             } else if (selectedPayButtonId == R.id.btn_mpay) {
                 doMPay();
             } else if (selectedPayButtonId == R.id.btn_taifung_pay) {
@@ -178,9 +239,18 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     private boolean handleSelectPayVendor(View view, int id) {
         for (int i = 0; i < payButtonIdArr.length; i++) {
             // 如果是用錢包支付，先判斷余額
-            if (id == R.id.btn_wallet && payAmount > walletBalance) {
-                ToastUtil.error(_mActivity, "余額不足");
-                return true;
+            if (id == R.id.btn_wallet) {
+                if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED) { // 如果錢包未激活，跳轉到激活界面
+                    start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
+                    return true;
+                }
+                if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_UNKNOWN) { // 如果錢包狀態未知，則不處理，等到獲取狀態先
+                    return true;
+                }
+                if (payAmount > walletBalance) {
+                    ToastUtil.error(_mActivity, "余額不足");
+                    return true;
+                }
             }
 
             if (id == payButtonIdArr[i]) {
@@ -225,11 +295,19 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         }
     }
 
+    private void doWalletPay() {
+        new XPopup.Builder(getContext())
+                .popupAnimation(PopupAnimation.TranslateFromBottom)
+                .hasStatusBarShadow(true)
+                .asCustom(new WalletPayPopup(_mActivity, payId, payAmount, this))
+                .show();
+    }
+
     private void doMPay() {
         String token = User.getToken();
 
         if (StringUtil.isEmpty(token)) {
-            ToastUtil.error(_mActivity, "用戶未登錄");
+            ToastUtil.error(_mActivity, getString(R.string.text_user_not_login));
             return;
         }
 
@@ -480,5 +558,39 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             SLog.info("key[%s]", key);
             Hawk.put(key, EasyJSONObject.generate("payId", payId, "timestampMillis", System.currentTimeMillis()).toString());
         }
+    }
+
+    @Override
+    public String onSuccess(@Nullable String data) {
+        SLog.info("想要錢包支付成功");
+        needPop = true;
+        PayUtil.onPaySuccess(false, 0, 0);
+
+        return null;
+    }
+
+    @Override
+    public String onFailure(@Nullable String data) {
+        SLog.info("想要錢包支付失敗");
+        return null;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        if (needPop) {
+            tvPayAmount.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    pop();
+                }
+            }, 200);
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

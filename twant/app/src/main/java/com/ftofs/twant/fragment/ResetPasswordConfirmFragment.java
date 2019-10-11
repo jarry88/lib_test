@@ -265,7 +265,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
 
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
-            ToastUtil.error(_mActivity, "請先登錄");
+            ToastUtil.error(_mActivity, getString(R.string.text_user_not_login));
             return;
         }
 

@@ -12,6 +12,7 @@
     <string name="confirm_payment_password_text">再次設置密碼</string>
     <string name="reset_password_fragment_title">重置密碼</string>
     <string name="reset_password_confirm_password_hint">請再次輸入密碼</string>
+    <string name="input_pay_password_hint">請輸入付款密碼</string>
 
     <string name="personal_info_fragment_title">個人信息</string>
     <string name="text_avatar">頭像</string>
@@ -265,6 +266,7 @@
     <string name="text_main_business">主營</string>
     <string name="text_add_friend_simplify">加好友</string>
     <string name="text_chat_with_him">與他聊天</string>
+    <string name="text_user_not_login">用戶未登錄</string>
 
     <string name="text_shop">店鋪</string>
     <string name="text_commodity">商品</string>
