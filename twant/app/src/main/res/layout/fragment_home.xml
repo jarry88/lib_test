@@ -21,49 +21,20 @@
     </RelativeLayout>
 
     <!-- 搜索框 -->
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/sticky_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/toolbar_margin_left"
         android:layout_marginRight="@dimen/toolbar_margin_right"
         android:paddingTop="20dp"
-        android:paddingBottom="20dp">
-
-        <LinearLayout
-            android:id="@+id/btn_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/icon_category"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_category"
-                android:textColor="@color/tw_black"
-                android:textSize="10sp"
-                />
-        </LinearLayout>
-
-
+        android:paddingBottom="20dp"
+        android:orientation="vertical">
         <LinearLayout
             android:id="@+id/ll_search_box"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/btn_category"
-            android:layout_marginRight="15dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:background="@drawable/home_search_box_bg">
@@ -82,7 +53,66 @@
                 android:textColor="@color/tw_grey"
                 />
         </LinearLayout>
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingRight="11dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/blue_outline_button_bg_radius_15"
+                    android:gravity="center"
+                    android:text="@string/text_store"
+                    android:textColor="@color/tw_blue"
+                    android:textSize="16sp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingRight="11dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/blue_outline_button_bg_radius_15"
+                    android:gravity="center"
+                    android:text="@string/text_goods"
+                    android:textColor="@color/tw_blue"
+                    android:textSize="16sp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingRight="11dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="@drawable/blue_outline_button_bg_radius_15"
+                    android:gravity="center"
+                    android:text="@string/category_brand"
+                    android:textColor="@color/tw_blue"
+                    android:textSize="16sp"
+                    />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/btn_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/icon_category"
+                />
+        </LinearLayout>
+    </LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/content_view"
@@ -113,7 +143,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_marginTop="15dp"
-                android:background="@color/tw_red"
+                android:background="@color/tw_blue"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <RelativeLayout

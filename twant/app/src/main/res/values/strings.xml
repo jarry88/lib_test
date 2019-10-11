@@ -268,8 +268,8 @@
     <string name="text_chat_with_him">與他聊天</string>
     <string name="text_user_not_login">用戶未登錄</string>
 
-    <string name="text_shop">店鋪</string>
-    <string name="text_commodity">商品</string>
+    <string name="text_store">店鋪</string>
+    <string name="text_goods">商品</string>
     <string name="text_cart">購物車</string>
     <string name="text_edit">編輯</string>
     <string name="text_search">搜索</string>

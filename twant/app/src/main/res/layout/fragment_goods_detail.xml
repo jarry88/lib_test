@@ -891,7 +891,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/tw_black"
                     android:textSize="11sp"
-                    android:text="@string/text_shop"
+                    android:text="@string/text_store"
                     />
             </LinearLayout>
 

@@ -42,8 +42,8 @@ public class CategoryShopAdapter extends BaseQuickAdapter<CategoryShop, BaseView
         ImageView coverImage = helper.getView(R.id.img_cover);
         Glide.with(context).load(coverUrl).centerCrop().into(coverImage);
 
-        String shopText = context.getString(R.string.text_shop);
-        String commodityText = context.getString(R.string.text_commodity);
+        String shopText = context.getString(R.string.text_store);
+        String commodityText = context.getString(R.string.text_goods);
         helper.setText(R.id.tv_shop_parent_name, categoryShop.shopParentName);
 
         String shopCountStr = String.format("%s %d", shopText, categoryShop.shopCount);
