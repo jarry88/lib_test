@@ -45,7 +45,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_acivity);
+        setContentView(R.layout.activity_splash);
 
 
         TextView tvCopyRight = findViewById(R.id.copyright);
