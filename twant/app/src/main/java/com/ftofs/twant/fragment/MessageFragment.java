@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -26,6 +27,7 @@ import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.MaxHeightRecyclerView;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.chat.EMClient;
@@ -56,6 +58,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     ScaledButton btnBack;
     ScaledButton btnContact;
     ChatConversationAdapter adapter;
+
+    LinearLayout llMessageListContainer;
 
     int totalUnreadCount;  // 未讀消息總數
     List<ChatConversation> chatConversationList = new ArrayList<>();
@@ -104,58 +108,57 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             btnContact.setVisibility(View.VISIBLE);
         }
 
-        RecyclerView rvChatConversationList = view.findViewById(R.id.rv_chat_conversation_list);
+        llMessageListContainer = view.findViewById(R.id.ll_message_list_container);
+
+        MaxHeightRecyclerView rvChatConversationList = view.findViewById(R.id.rv_chat_conversation_list);
+        llMessageListContainer.post(new Runnable() {
+            @Override
+            public void run() {
+                int height = llMessageListContainer.getHeight();
+                rvChatConversationList.setMaxHeight(height);
+            }
+        });
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvChatConversationList.setLayoutManager(layoutManager);
-        adapter = new ChatConversationAdapter(chatConversationList);
+        adapter = new ChatConversationAdapter(R.layout.chat_conversation_im, chatConversationList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ChatConversation chatConversation = chatConversationList.get(position);
-                int itemType = chatConversation.itemType;
 
-                if (itemType == ChatConversation.ITEM_TYPE_LOGISTICS) {
-                    Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_LOGISTICS));
-                } else if (itemType == ChatConversation.ITEM_TYPE_RETURN) {
-                    Util.startFragment(LogisticsMessageListFragment.newInstance(Constant.MESSAGE_CATEGORY_REFUND));
-                } else {
-                    SLog.info("friendInfo[%s]", chatConversation.friendInfo);
-                    EMConversation conversation = ChatUtil.getConversation(chatConversation.friendInfo.memberName,
-                            chatConversation.friendInfo.nickname, chatConversation.friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
+                SLog.info("friendInfo[%s]", chatConversation.friendInfo);
+                EMConversation conversation = ChatUtil.getConversation(chatConversation.friendInfo.memberName,
+                        chatConversation.friendInfo.nickname, chatConversation.friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
 
-                    if (chatConversation.unreadCount > 0) {
-                        // 從未讀總數中減去這條會話的未讀數
-                        totalUnreadCount -= chatConversation.unreadCount;
-                        displayUnreadCount(totalUnreadCount);
-                    }
-
-                    Util.startFragment(ChatFragment.newInstance(conversation, chatConversation.friendInfo));
+                if (chatConversation.unreadCount > 0) {
+                    // 從未讀總數中減去這條會話的未讀數
+                    totalUnreadCount -= chatConversation.unreadCount;
+                    displayUnreadCount(totalUnreadCount);
                 }
+
+                Util.startFragment(ChatFragment.newInstance(conversation, chatConversation.friendInfo));
             }
         });
         adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
                 ChatConversation chatConversation = chatConversationList.get(position);
-                int itemType = chatConversation.itemType;
 
-                if (itemType == ChatConversation.ITEM_TYPE_IM) {
-                    new XPopup.Builder(getContext())
-//                        .maxWidth(600)
-                            .asCenterList("請選擇操作", new String[] {"刪除該聊天"},
-                                    new OnSelectListener() {
-                                        @Override
-                                        public void onSelect(int position, String text) {
-                                            SLog.info("position[%d], text[%s]", position, text);
-                                            if (position == 0) {
-                                                showDeleteConversationConfirm(chatConversation.friendInfo.memberName);
-                                            }
+                new XPopup.Builder(getContext())
+//                    .maxWidth(600)
+                        .asCenterList("請選擇操作", new String[] {"刪除該聊天"},
+                                new OnSelectListener() {
+                                    @Override
+                                    public void onSelect(int position, String text) {
+                                        SLog.info("position[%d], text[%s]", position, text);
+                                        if (position == 0) {
+                                            showDeleteConversationConfirm(chatConversation.friendInfo.memberName);
                                         }
-                                    })
-                            .show();
-                    return true;
-                }
-                return false;
+                                    }
+                                })
+                        .show();
+                return true;
             }
         });
 
@@ -217,10 +220,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         totalUnreadCount = 0;
         chatConversationList.clear();
 
-        // 添加【交易物流消息】、【退換貨消息】
-        chatConversationList.add(new ChatConversation(ChatConversation.ITEM_TYPE_LOGISTICS));
-        chatConversationList.add(new ChatConversation(ChatConversation.ITEM_TYPE_RETURN));
-
         // 獲取環信所有會話列表
         Map<String, EMConversation> conversationMap = EMClient.getInstance().chatManager().getAllConversations();
         SLog.info("會話數[%d]", conversationMap.size());
@@ -248,7 +247,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
             SLog.info("friendInfo[%s]", friendInfo);
 
-            ChatConversation chatConversation = new ChatConversation(ChatConversation.ITEM_TYPE_IM);
+            ChatConversation chatConversation = new ChatConversation();
 
             chatConversation.friendInfo = friendInfo;
 
