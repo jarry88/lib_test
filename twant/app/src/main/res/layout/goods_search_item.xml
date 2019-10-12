@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="@color/tw_red"
+            android:textColor="#666"
             android:textSize="13sp"
             android:text="客厅装饰品烛台蜡烛摆件"
             android:singleLine="true"
@@ -117,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="$ 129.00"
-            android:textColor="@color/tw_red"
+            android:textColor="@color/tw_blue"
             android:textSize="14sp"
             android:textStyle="bold"
             />

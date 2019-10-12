@@ -27,7 +27,7 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
     private int selectedIndex = 0;
     private List<CategoryMenu> categoryMenuList;
 
-    private int twRed;
+    private int twBlue;
     private int twBlack;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,7 +50,7 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
         this.categoryMenuList = categoryMenuList;
         this.onSelectedListener = onSelectedListener;
 
-        twRed = context.getResources().getColor(R.color.tw_red, null);
+        twBlue = context.getResources().getColor(R.color.tw_blue, null);
         twBlack = context.getResources().getColor(R.color.tw_black, null);
     }
 
@@ -108,9 +108,9 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
     private void changeItemStatus(ViewHolder holder, boolean select) {
         if (select) {
             holder.vwIndicator.setVisibility(View.VISIBLE);
-            holder.tvCategoryNameChinese.setTextColor(twRed);
+            holder.tvCategoryNameChinese.setTextColor(twBlue);
             if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
-                holder.tvCategoryNameEnglish.setTextColor(twRed);
+                holder.tvCategoryNameEnglish.setTextColor(twBlue);
             }
         } else {
             holder.vwIndicator.setVisibility(View.INVISIBLE);

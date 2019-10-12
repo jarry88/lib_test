@@ -97,7 +97,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:paddingLeft="@dimen/toolbar_margin_left"
             android:paddingRight="@dimen/toolbar_margin_right"
-            android:background="@color/tw_red"
+            android:background="@color/tw_blue"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="wrap_content"

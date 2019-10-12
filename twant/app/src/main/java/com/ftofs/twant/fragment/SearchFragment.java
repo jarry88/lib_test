@@ -338,7 +338,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
                         hotKeywordButton.setText(hotKeyword);
                         hotKeywordButton.setTextSize(14);
                         if (count == 0) { // 第1個關鍵詞顯示紅色
-                            hotKeywordButton.setTextColor(getResources().getColor(R.color.tw_red, null));
+                            hotKeywordButton.setTextColor(getResources().getColor(R.color.tw_blue, null));
                         } else {
                             hotKeywordButton.setTextColor(getResources().getColor(R.color.tw_black, null));
                         }

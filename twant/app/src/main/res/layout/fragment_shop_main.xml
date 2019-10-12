@@ -87,6 +87,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:scaleType="fitXY"
+            android:tint="@color/tw_blue"
             android:src="@drawable/bottom_navigation_bar_bg"
             />
         

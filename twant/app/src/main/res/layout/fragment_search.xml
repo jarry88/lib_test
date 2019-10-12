@@ -84,9 +84,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tool_bar"
-        app:tabIndicatorColor="@color/tw_red"
+        app:tabIndicatorColor="@color/tw_blue"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/tw_red"
+        app:tabSelectedTextColor="@color/tw_blue"
         app:tabTextColor="@color/tw_black"
         android:background="@drawable/border_type_d"
         />

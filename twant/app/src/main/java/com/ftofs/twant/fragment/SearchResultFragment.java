@@ -60,6 +60,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     int twBlack;
     int twRed;
+    int twBlue;
 
     GoodsSearchResultAdapter mGoodsAdapter;
     StoreSearchResultAdapter mStoreAdapter;
@@ -125,6 +126,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
+        twBlue = getResources().getColor(R.color.tw_blue, null);
 
         if (searchTypeStr.equals(SearchType.GOODS.name())) {
             view.findViewById(R.id.ll_store_filter).setVisibility(View.GONE);
@@ -537,7 +539,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         } else {
             goodsSortButtonIndex = GOODS_SEARCH_SORT_PRICE;
         }
-        goodsSortButtons[goodsSortButtonIndex].setTextColor(twRed);
+        goodsSortButtons[goodsSortButtonIndex].setTextColor(twBlue);
         if (goodsSortButtonIndex == GOODS_SEARCH_SORT_PRICE) { // 如果現在是用價格排序，則顯示價格升序、降序圖標
             if (sortPriceAsc) {
                 iconPriceOrder.setImageResource(R.drawable.icon_price_sort_asc);

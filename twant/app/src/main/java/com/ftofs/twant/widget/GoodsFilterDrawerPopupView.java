@@ -51,7 +51,7 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
     TextView btnReset;
     TextView btnOk;
 
-    int twRed;
+    int twBlue;
     int twBlack;
 
     public GoodsFilterDrawerPopupView(@NonNull Context context, List<FilterCategoryGroup> filterCategoryGroupList,
@@ -61,7 +61,7 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
         this.filterCategoryGroupList = filterCategoryGroupList;
         this.onSelectedListener = onSelectedListener;
 
-        twRed = getResources().getColor(R.color.tw_red, null);
+        twBlue = getResources().getColor(R.color.tw_blue, null);
         twBlack = getResources().getColor(R.color.tw_black, null);
     }
 
@@ -116,9 +116,8 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
     private void setActivityButton(TextView button, boolean enable) {
         SLog.info("button[%s]", button.toString());
         if (enable) {
-            SLog.info("twRed[%x]", twRed);
             button.setBackgroundResource(R.drawable.promotion_activity_button_bg);
-            button.setTextColor(twRed);
+            button.setTextColor(twBlue);
         } else {
             button.setBackgroundResource(R.drawable.price_room_edit_text_bg);
             button.setTextColor(twBlack);

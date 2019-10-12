@@ -14,7 +14,7 @@ public class CategoryCommodityMenuAdapter extends BaseQuickAdapter<CategoryMenu,
     Context context;
     boolean isExpanded;
     int twBlack;
-    int twRed;
+    int twBlue;
     public CategoryCommodityMenuAdapter(Context context, int layoutResId, @Nullable List<CategoryMenu> data) {
         super(layoutResId, data);
 
@@ -22,14 +22,14 @@ public class CategoryCommodityMenuAdapter extends BaseQuickAdapter<CategoryMenu,
         isExpanded = false;
 
         twBlack = context.getColor(R.color.tw_black);
-        twRed = context.getColor(R.color.tw_red);
+        twBlue = context.getColor(R.color.tw_blue);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, CategoryMenu item) {
         if (item.selected) {
             helper.setGone(R.id.vw_indicator, true);
-            helper.setTextColor(R.id.tv_category_name_chinese, twRed);
+            helper.setTextColor(R.id.tv_category_name_chinese, twBlue);
         } else {
             helper.setGone(R.id.vw_indicator, false);
             helper.setTextColor(R.id.tv_category_name_chinese, twBlack);

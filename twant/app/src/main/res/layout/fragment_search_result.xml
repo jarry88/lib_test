@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/tw_red"
+                    android:textColor="@color/tw_blue"
                     android:textSize="16sp"
                     android:text="@string/goods_tab_title_general"
                     />
