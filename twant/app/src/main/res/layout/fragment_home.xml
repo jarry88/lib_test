@@ -9,13 +9,14 @@
     <RelativeLayout
         android:id="@+id/top_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="23dp"
+        android:paddingBottom="0dp">
         <ImageView
             android:id="@+id/btn_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
             android:src="@drawable/icon_takewant"
             />
     </RelativeLayout>
@@ -65,6 +66,7 @@
                 android:layout_weight="1"
                 android:paddingRight="11dp">
                 <TextView
+                    android:id="@+id/btn_category_store"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/blue_outline_button_bg_radius_15"
@@ -80,6 +82,7 @@
                 android:layout_weight="1"
                 android:paddingRight="11dp">
                 <TextView
+                    android:id="@+id/btn_category_goods"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/blue_outline_button_bg_radius_15"
@@ -95,6 +98,7 @@
                 android:layout_weight="1"
                 android:paddingRight="11dp">
                 <TextView
+                    android:id="@+id/btn_category_brand"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@drawable/blue_outline_button_bg_radius_15"
@@ -175,6 +179,7 @@
                     android:layout_width="1dp"
                     android:layout_height="30dp"
                     android:background="#F84D8A"
+                    android:visibility="gone"
                     />
 
                 <RelativeLayout
@@ -207,6 +212,7 @@
                     android:layout_width="1dp"
                     android:layout_height="30dp"
                     android:background="#F84D8A"
+                    android:visibility="gone"
                     />
                 <RelativeLayout
                     android:layout_width="0dp"

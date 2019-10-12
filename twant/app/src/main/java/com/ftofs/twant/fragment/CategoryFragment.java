@@ -14,6 +14,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.BitmapUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
@@ -25,12 +26,23 @@ import java.util.List;
  * @author zwm
  */
 public class CategoryFragment extends BaseFragment implements View.OnClickListener {
+    public static final int TAB_STORE = 0;
+    public static final int TAB_GOODS = 1;
+    public static final int TAB_BRAND = 2;
+
+    /**
+     * 當前選中哪個Tab
+     */
+    int currTabIndex;
+
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
-    public static CategoryFragment newInstance() {
+
+    public static CategoryFragment newInstance(int currTabIndex) {
         Bundle args = new Bundle();
 
+        args.putInt("currTabIndex", currTabIndex);
         CategoryFragment fragment = new CategoryFragment();
         fragment.setArguments(args);
 
@@ -47,6 +59,9 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle args = getArguments();
+        currTabIndex = args.getInt("currTabIndex");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
@@ -70,8 +85,16 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
 
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
         viewPager.setAdapter(adapter);
+
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);
+
+        tabLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(currTabIndex);
+            }
+        }, 250);
     }
     
     @Override

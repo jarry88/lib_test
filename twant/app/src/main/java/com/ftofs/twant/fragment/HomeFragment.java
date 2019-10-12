@@ -81,6 +81,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_category, this);
+        Util.setOnClickListener(view, R.id.btn_category_store, this);
+        Util.setOnClickListener(view, R.id.btn_category_goods, this);
+        Util.setOnClickListener(view, R.id.btn_category_brand, this);
         Util.setOnClickListener(view, R.id.ll_search_box, this);
         Util.setOnClickListener(view, R.id.btn_message, this);
 
@@ -166,8 +169,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_category) {
-            Util.startFragment(CategoryFragment.newInstance());
+        if (id == R.id.btn_category || id == R.id.btn_category_store ||
+                id == R.id.btn_category_goods || id == R.id.btn_category_brand) {
+            int currTabIndex;
+            if (id == R.id.btn_category || id == R.id.btn_category_store) {
+                currTabIndex = CategoryFragment.TAB_STORE;
+            } else if (id == R.id.btn_category_goods) {
+                currTabIndex = CategoryFragment.TAB_GOODS;
+            } else {
+                currTabIndex = CategoryFragment.TAB_BRAND;
+            }
+
+            Util.startFragment(CategoryFragment.newInstance(currTabIndex));
         } else if (id == R.id.ll_search_box) {
             Util.startFragment(SearchFragment.newInstance(SearchType.ALL));
         } else if (id == R.id.btn_test) {
