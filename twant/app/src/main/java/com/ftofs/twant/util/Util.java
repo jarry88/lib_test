@@ -111,36 +111,6 @@ public class Util {
 
 
 
-    public static void setWindowStatusBarColor(Activity activity, int color) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Window window = activity.getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(color);
-
-                //底部导航栏
-                //window.setNavigationBarColor(activity.getResources().getColor(colorResId));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 設置App的狀態欄的顏色，可以隨時動態改變
-     * 在錘子手機中，狀態欄有一種灰色蒙板的感覺，在紅米手機中沒有
-     * @param activity
-     * @param color
-     */
-    public static void setStatusBarColor(Activity activity, int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            activity.getWindow().setStatusBarColor(color);
-        }
-    }
-
-
     /**
      * 將byte數組轉換為字符串
      * @param byteArray

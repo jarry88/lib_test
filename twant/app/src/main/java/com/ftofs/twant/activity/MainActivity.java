@@ -3,6 +3,7 @@ package com.ftofs.twant.activity;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PermissionGroupInfo;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +41,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AppUpdatePopup;
+import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
@@ -132,8 +134,12 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         EventBus.getDefault().register(this);
 
         int color = getResources().getColor(R.color.tw_blue, null);
-        // Util.setWindowStatusBarColor(this, android.R.color.white);
-        Util.setStatusBarColor(this, color);
+        /*
+        改變狀態欄顏色，在錘子手機中，狀態欄有一種灰色蒙板的感覺，在紅米手機中沒有
+         */
+        StatusBarUtil.setColor(this, color, 0);
+        // StatusBarUtil.setTranslucent(this);
+        // StatusBarUtil.setTransparent(this);
 
         // 監聽DecorView的變化
         View activityRoot = getWindow().getDecorView();

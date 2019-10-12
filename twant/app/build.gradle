@@ -153,6 +153,7 @@ dependencies {
 
 
     implementation 'com.muddzdev:styleabletoast:2.2.0'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 
 
     //PushSDK必须依赖基础组件库，所以需要加入对应依赖
