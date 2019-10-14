@@ -66,6 +66,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import cn.snailpad.easyjson.json.JSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 
@@ -425,8 +426,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         storeAddress = storeInfo.getString("chainAreaInfo") + storeInfo.getString("chainAddress");
                         tvShopAddress.setText(storeAddress);
 
-                        storeLongitude = storeInfo.getDouble("lng");
-                        storeLatitude = storeInfo.getDouble("lat");
+                        Object lngObj = storeInfo.get("lng");
+                        if (!Util.isJsonNull(lngObj)) {
+                            storeLongitude = (double) lngObj;
+                        }
+                        Object latObj = storeInfo.get("lat");
+                        if (!Util.isJsonNull(latObj)) {
+                            storeLatitude = (double) latObj;
+                        }
 
                         String storeDistanceStr = storeInfo.getString("distance");
                         storeDistance = Double.valueOf(storeDistanceStr);
