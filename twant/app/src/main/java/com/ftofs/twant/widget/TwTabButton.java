@@ -20,7 +20,7 @@ public class TwTabButton extends android.support.v7.widget.AppCompatTextView {
 
     Paint paint;
 
-    int twRed;
+    int twBlue;
     int twBlack;
     int strokeWidthPx;
     boolean useCap;
@@ -45,7 +45,7 @@ public class TwTabButton extends android.support.v7.widget.AppCompatTextView {
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         twBlack = getResources().getColor(R.color.tw_black, null);
-        twRed = getResources().getColor(R.color.tw_red, null);
+        twBlue = getResources().getColor(R.color.tw_blue, null);
 
         setOnClickListener(new OnClickListener() {
             @Override
@@ -76,7 +76,7 @@ public class TwTabButton extends android.support.v7.widget.AppCompatTextView {
         this.status = status;
 
         if (status == Constant.STATUS_SELECTED) {
-            setTextColor(twRed);
+            setTextColor(twBlue);
         } else {
             setTextColor(twBlack);
         }
@@ -97,7 +97,7 @@ public class TwTabButton extends android.support.v7.widget.AppCompatTextView {
                 paint.setStrokeCap(Paint.Cap.ROUND);
             }
 
-            paint.setColor(twRed);
+            paint.setColor(twBlue);
 
             // 水平方向：兩邊往中間縮進strokeWidth，以容納Cap的寬度
             float startX = 0;

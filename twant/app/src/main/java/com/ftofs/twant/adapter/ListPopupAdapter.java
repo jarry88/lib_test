@@ -61,7 +61,7 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
         this.itemList = itemList;
         this.index = index;
 
-        highlightedTextColor = context.getColor(R.color.tw_red);
+        highlightedTextColor = context.getColor(R.color.tw_blue);
     }
 
     @NonNull

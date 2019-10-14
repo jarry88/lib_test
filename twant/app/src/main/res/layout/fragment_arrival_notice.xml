@@ -40,7 +40,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:background="@drawable/micro_red_button"
+            android:background="@drawable/micro_blue_button"
             android:text="@string/ok"
             android:textSize="14sp"
             android:textColor="@android:color/white"

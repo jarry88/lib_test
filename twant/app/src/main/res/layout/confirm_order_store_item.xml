@@ -200,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:text="$179.00"
                 android:textSize="18sp"
-                android:textColor="@color/tw_red"
+                android:textColor="@color/tw_blue"
                 android:textStyle="bold"
                 />
         </LinearLayout>

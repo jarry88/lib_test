@@ -29,7 +29,7 @@ public class AreaItemView extends android.support.v7.widget.AppCompatTextView {
     }
 
     int status = Constant.STATUS_UNSELECTED;
-    int twRed;
+    int twBlue;
     int twBlack;
 
     public AreaItemView(Context context) {
@@ -47,14 +47,14 @@ public class AreaItemView extends android.support.v7.widget.AppCompatTextView {
 
         setTextSize(15);
         twBlack = getResources().getColor(R.color.tw_black, null);
-        twRed = getResources().getColor(R.color.tw_red, null);
+        twBlue = getResources().getColor(R.color.tw_blue, null);
     }
 
     public void setStatus(int status) {
         this.status = status;
 
         if (status == Constant.STATUS_SELECTED) {
-            setTextColor(twRed);
+            setTextColor(twBlue);
             setBackgroundResource(R.drawable.red_bottom_separator_box);
         } else {
             setTextColor(twBlack);
