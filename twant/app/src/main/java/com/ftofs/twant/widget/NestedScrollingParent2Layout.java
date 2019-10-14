@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
 
 /**
@@ -26,6 +27,7 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
     private View mStickyView;
     private View mContentView;
     private int mTopViewHeight;
+    NestedScrollingCallback callback;
 
 
     private NestedScrollingParentHelper mNestedScrollingParentHelper = new NestedScrollingParentHelper(this);
@@ -43,10 +45,14 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
         setOrientation(VERTICAL);
     }
 
+    public void setCallback(NestedScrollingCallback callback) {
+        this.callback = callback;
+    }
+
 
     @Override
     public boolean onStartNestedScroll(@NonNull View child, @NonNull View target, int axes, int type) {
-        
+        // SLog.info("onStartNestedScroll");
         return (axes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
     }
 
@@ -69,7 +75,10 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
      */
     @Override
     public void onNestedPreScroll(@NonNull View target, int dx, int dy, @NonNull int[] consumed, int type) {
-        
+        // SLog.info("onNestedPreScroll");
+        if (callback != null) {
+            callback.onCbStartNestedScroll();
+        }
         //这里不管手势滚动还是fling都处理
         boolean hideTop = dy > 0 && getScrollY() < mTopViewHeight;
         boolean showTop = dy < 0 && getScrollY() >= 0 && !target.canScrollVertically(-1);
@@ -98,7 +107,10 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
 
     @Override
     public void onStopNestedScroll(@NonNull View target, int type) {
-        
+        // SLog.info("onStopNestedScroll");
+        if (callback != null) {
+            callback.onCbStopNestedScroll();
+        }
         if (type == ViewCompat.TYPE_NON_TOUCH) {
             System.out.println("onStopNestedScroll");
         }
@@ -154,9 +166,9 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
         }
         if (y > mTopViewHeight) {
             y = mTopViewHeight;
-            SLog.info("in sticky status");
+            // SLog.info("in sticky status");
         } else {
-            SLog.info("out sticky status");
+            // SLog.info("out sticky status");
         }
         super.scrollTo(x, y);
     }

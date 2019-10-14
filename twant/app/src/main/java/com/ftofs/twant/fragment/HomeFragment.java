@@ -4,11 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,12 +22,14 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.WebSliderItem;
+import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.NestedScrollingParent2Layout;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -48,12 +52,24 @@ import okhttp3.Call;
  * 首頁
  * @author zwm
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener, NestedScrollingCallback {
     LinearLayout llNewArrivalsContainer;
     MZBannerView bannerView;
 
+    LinearLayout llFloatButtonContainer;
+    NestedScrollingParent2Layout scrollingParent2Layout;
+    NestedScrollView contentView;
+
     boolean carouselLoaded;
     boolean newArrivalsLoaded;
+
+    /*
+    用于記錄滑動狀態，以處理浮動按鈕的顯示與隱藏
+     */
+    private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800; // 浮動按鈕滑動顯示與隱藏效果的延遲時間(毫秒)
+    boolean isScrolling = false; // 是否在滑動狀態
+    long lastScrollingTimestamp = 0;  // 最近一次滑動的時間戳（毫秒）
+    boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
 
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
 
@@ -86,6 +102,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         Util.setOnClickListener(view, R.id.btn_category_brand, this);
         Util.setOnClickListener(view, R.id.ll_search_box, this);
         Util.setOnClickListener(view, R.id.btn_message, this);
+
+        Util.setOnClickListener(view, R.id.btn_add_feedback, this);
+        Util.setOnClickListener(view, R.id.btn_goto_top, this);
+
+        scrollingParent2Layout = view.findViewById(R.id.scrolling_parent);
+        scrollingParent2Layout.setCallback(this);
+        contentView = view.findViewById(R.id.content_view);
+        llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
 
         llNewArrivalsContainer = view.findViewById(R.id.ll_new_arrivals_container);
         bannerView = view.findViewById(R.id.banner_view);
@@ -188,12 +212,61 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 // Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
                 Util.startFragment(TestFragment.newInstance());
             }
+        } else if (id == R.id.btn_add_feedback) {
+            Util.startFragment(CommitFeedbackFragment.newInstance());
+        } else if (id == R.id.btn_goto_top) {
+            scrollingParent2Layout.scrollTo(0, 0);
+            contentView.scrollTo(0, 0);
         }
     }
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("onSelected, type[%d], id[%d], extra[%s]", type, id, extra);
+    }
+
+    @Override
+    public void onCbStartNestedScroll() {
+        isScrolling = true;
+        lastScrollingTimestamp = System.currentTimeMillis();
+        hideFloatButton();
+    }
+
+    @Override
+    public void onCbStopNestedScroll() {
+        isScrolling = false;
+        llFloatButtonContainer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isScrolling) {
+                    return;
+                }
+
+                showFloatButton();
+            }
+        }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY);
+    }
+
+    private void showFloatButton() {
+        if (floatButtonShown ){
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity, 6);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = true;
+    }
+
+    private void hideFloatButton() {
+        if (!floatButtonShown) {
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity,  -25);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = false;
     }
 
     public static class BannerViewHolder implements MZViewHolder<WebSliderItem> {
@@ -457,4 +530,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
     }
+
+
 }
