@@ -52,28 +52,27 @@
         android:paddingBottom="12dp"
         android:background="@drawable/new_arrivals_pane_bg"
         android:orientation="vertical">
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/btn_goto_store"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:background="@drawable/border_type_d">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_store_avatar"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_centerVertical="true"
                 android:src="@drawable/cs_avatar_160"
                 />
             <TextView
                 android:id="@+id/tv_store_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginLeft="6dp"
-                android:layout_toRightOf="@id/img_store_avatar"
-                android:layout_centerVertical="true"
-                android:text="質簡生活館"
+                android:text="質簡"
                 android:textSize="13sp"
                 android:textColor="@color/tw_black"
                 android:singleLine="true"
@@ -83,12 +82,16 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tv_store_name"
                 android:layout_marginLeft="15dp"
-                android:layout_centerVertical="true"
                 android:src="@drawable/expand_button"
                 />
-        </RelativeLayout>
+        </LinearLayout>
+        <!-- 分隔線 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tw_light_grey"
+            />
         <TextView
             android:id="@+id/tv_goods_name"
             android:layout_width="match_parent"
