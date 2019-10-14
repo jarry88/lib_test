@@ -64,6 +64,10 @@ public abstract class SimpleTabManager implements View.OnClickListener {
         simpleTabButtonList.add(simpleTabButton);
     }
 
+    /**
+     * 選中哪個Tab
+     * @param index
+     */
     public void performClick(int index) {
         if (index >= simpleTabButtonList.size()) {
             return;

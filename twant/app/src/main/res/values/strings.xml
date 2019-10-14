@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Takewant想要</string>
+    <string name="app_name">想要城</string>
 
     <string name="copyright">© %d Takewant版權所有</string>
 
@@ -65,6 +65,8 @@
     <string name="text_time_limited_offer">限時優惠</string>
     <string name="text_order_search">訂單搜索</string>
 
+    <string name="text_platform_coupon_card_pass">平臺券卡密</string>
+    <string name="input_platform_coupon_card_pass_hint">請輸入平臺券卡密</string>
     <string name="text_store_coupon_card_pass">店鋪券卡密</string>
     <string name="input_store_coupon_card_pass_hint">請輸入店鋪券卡密</string>
     <string name="text_captcha">驗證碼</string>

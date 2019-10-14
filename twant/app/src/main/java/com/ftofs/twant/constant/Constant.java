@@ -224,4 +224,13 @@ public class Constant {
      * 想付錢包狀態 -- 未激活
      */
     public static final int WANT_PAY_WALLET_STATUS_NOT_ACTIVATED = 2;
+
+    /**
+     * 卡券類型 -- 店鋪券
+     */
+    public static final int COUPON_TYPE_STORE = 1;
+    /**
+     * 卡券類型 -- 平臺券
+     */
+    public static final int COUPON_TYPE_PLATFORM = 2;
 }

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="卡券領取"
+            android:textColor="@color/tw_black"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="52dp"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/micro_blue_button"
+            />
+    </RelativeLayout>
+    <!-- END OF 工具欄 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal"
+        android:background="@drawable/border_type_d">
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/tab_platform_coupon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            app:stb_text="兌換平臺券"
+            app:stb_horizontal_padding="0dp">
+        </com.ftofs.twant.widget.SimpleTabButton>
+
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/tab_store_coupon"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            app:stb_text="兌換店鋪券"
+            app:stb_horizontal_padding="0dp">
+        </com.ftofs.twant.widget.SimpleTabButton>
+    </LinearLayout>
+
+    <!-- 領取店鋪券 -->
+    <LinearLayout
+        android:id="@+id/ll_receive_store_coupon_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/text_receive_store_coupon_hint"
+            android:textSize="13sp"
+            android:textColor="@color/tw_blue"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            android:background="@drawable/border_type_d">
+            <TextView
+                android:id="@+id/tv_card_pass_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                android:text="@string/text_platform_coupon_card_pass"
+                />
+
+            <EditText
+                android:id="@+id/et_coupon_card_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:hint="@string/input_platform_coupon_card_pass_hint"
+                android:textColor="@color/tw_black"
+                android:textSize="17sp"
+                android:inputType="number"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
+                android:background="@null"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
+            android:orientation="vertical"
+            android:background="@drawable/border_type_d">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                android:text="@string/text_captcha"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/btn_refresh_captcha"
+                    android:layout_width="105dp"
+                    android:layout_height="29dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
+                    />
+                <EditText
+                    android:id="@+id/et_captcha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_toLeftOf="@id/btn_refresh_captcha"
+                    android:layout_centerVertical="true"
+                    android:inputType="text"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
+                    android:hint="@string/input_captcha_hint"
+                    android:textColor="@color/tw_black"
+                    android:textSize="17sp"
+                    android:background="@null"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+    <!-- END OF 領取店鋪券 -->
+</LinearLayout>
