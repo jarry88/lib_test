@@ -856,6 +856,11 @@ public class Api {
      */
     public static final String PATH_WALLET_PAY = "/member/buy/pay/app/predepositPay";
 
+    /**
+     * 获取会员平台券列表
+     */
+    public static final String PATH_PLATFORM_COUPON_LIST = "/member/coupon/list";
+
 
     /**
      * 發送Http請求

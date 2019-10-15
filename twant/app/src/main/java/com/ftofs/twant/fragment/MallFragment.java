@@ -175,7 +175,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                 break;
 
             case R.id.btn_my_store_coupon:
-                Util.startFragment(StoreCouponFragment.newInstance());
+                Util.startFragment(CouponFragment.newInstance());
                 break;
 
             case R.id.btn_my_footprint:
