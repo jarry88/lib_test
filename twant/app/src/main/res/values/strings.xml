@@ -39,9 +39,9 @@
 
     <string name="text_security_setting">安全設置</string>
     <string name="text_logistics_address_setting">收貨地址設置</string>
-    <string name="text_about_takewant">關于Takewant</string>
+    <string name="text_about_takewant">關于想要城</string>
 
-    <string name="text_takewant_introduction">Takewant介紹</string>
+    <string name="text_takewant_introduction">想要城介紹</string>
     <string name="text_check_update">檢測更新</string>
     <string name="text_secret_terms">私隱條款</string>
     <string name="text_service_contract">服務協議</string>

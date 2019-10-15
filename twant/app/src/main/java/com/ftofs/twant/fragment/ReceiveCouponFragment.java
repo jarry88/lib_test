@@ -30,10 +30,10 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 領取【店鋪券】
+ * 領取【平臺券】、【店鋪券】Fragment
  * @author zwm
  */
-public class ReceiveStoreCouponFragment extends BaseFragment implements View.OnClickListener {
+public class ReceiveCouponFragment extends BaseFragment implements View.OnClickListener {
     /**
      * 卡券類型
      */
@@ -46,12 +46,11 @@ public class ReceiveStoreCouponFragment extends BaseFragment implements View.OnC
     EditText etCouponCardPass;
     EditText etCaptcha;
 
-
-    public static ReceiveStoreCouponFragment newInstance(int couponType) {
+    public static ReceiveCouponFragment newInstance(int couponType) {
         Bundle args = new Bundle();
 
         args.putInt("couponType", couponType);
-        ReceiveStoreCouponFragment fragment = new ReceiveStoreCouponFragment();
+        ReceiveCouponFragment fragment = new ReceiveCouponFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -60,7 +59,7 @@ public class ReceiveStoreCouponFragment extends BaseFragment implements View.OnC
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_receive_store_coupon, container, false);
+        View view = inflater.inflate(R.layout.fragment_receive_coupon, container, false);
         return view;
     }
 
@@ -126,7 +125,7 @@ public class ReceiveStoreCouponFragment extends BaseFragment implements View.OnC
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_ok) {
-            receiveStoreCoupon();
+            receiveCoupon();
         } else if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();
         }
@@ -139,7 +138,7 @@ public class ReceiveStoreCouponFragment extends BaseFragment implements View.OnC
         return true;
     }
 
-    private void receiveStoreCoupon() {
+    private void receiveCoupon() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             return;
@@ -152,7 +151,14 @@ public class ReceiveStoreCouponFragment extends BaseFragment implements View.OnC
 
         SLog.info("params[%s]", params.toString());
 
-        Api.postUI(Api.PATH_RECEIVE_STORE_COUPON, params, new UICallback() {
+        String url;
+        if (couponType == Constant.COUPON_TYPE_STORE) {
+            url = Api.PATH_RECEIVE_STORE_COUPON_BY_PWD;
+        } else {
+            url = Api.PATH_RECEIVE_PLATFORM_COUPON_BY_PWD;
+        }
+
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);

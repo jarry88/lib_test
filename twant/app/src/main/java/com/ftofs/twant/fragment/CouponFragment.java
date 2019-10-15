@@ -94,7 +94,7 @@ public class CouponFragment extends BaseFragment implements View.OnClickListener
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_receive_store_coupon) {
-            start(ReceiveStoreCouponFragment.newInstance(couponType));
+            start(ReceiveCouponFragment.newInstance(couponType));
         }
     }
 

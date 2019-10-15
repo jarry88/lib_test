@@ -436,11 +436,6 @@ public class Api {
      */
     public static final String PATH_STORE_COUPON_LIST = "/member/app/voucher/list";
 
-    /**
-     * 卡密领取店铺券
-     */
-    public static final String PATH_RECEIVE_STORE_COUPON = "/member/voucher/receive/pwd";
-
 
     /**
      * 修改個人簡介
@@ -860,6 +855,16 @@ public class Api {
      * 获取会员平台券列表
      */
     public static final String PATH_PLATFORM_COUPON_LIST = "/member/coupon/list";
+
+    /**
+     * 卡密领取店铺券
+     */
+    public static final String PATH_RECEIVE_STORE_COUPON_BY_PWD = "/member/voucher/receive/pwd";
+
+    /**
+     * 领取卡密领取类型平台券（需要图片验证码）
+     */
+    public static final String PATH_RECEIVE_PLATFORM_COUPON_BY_PWD = "/member/coupon/receive/pwd";
 
 
     /**
