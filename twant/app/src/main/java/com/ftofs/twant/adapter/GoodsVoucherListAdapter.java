@@ -28,14 +28,23 @@ public class GoodsVoucherListAdapter extends BaseQuickAdapter<StoreVoucher, Base
                 "  -  " + itemData.useEndTime;
         helper.setText(R.id.tv_valid_time, validTime);
 
-        if (itemData.memberIsReceive == Constant.ONE) {
+        if (itemData.usable) {
+            int voucherBackgroundResId;
+            int receiveVoucherNowBackgroundResId;
+            if (itemData.storeId == 0) {
+                voucherBackgroundResId = R.drawable.blue_voucher;
+                receiveVoucherNowBackgroundResId = R.drawable.blue_button_follow;
+            } else {
+                voucherBackgroundResId = R.drawable.pink_voucher;
+                receiveVoucherNowBackgroundResId = R.drawable.pink_button;
+            }
+            helper.setText(R.id.btn_receive_voucher_now, mContext.getString(R.string.text_receive_now));
+            helper.getView(R.id.rl_left_container).setBackgroundResource(voucherBackgroundResId);
+            helper.getView(R.id.btn_receive_voucher_now).setBackgroundResource(receiveVoucherNowBackgroundResId);
+        } else {
             helper.setText(R.id.btn_receive_voucher_now, mContext.getString(R.string.text_been_received));
             helper.getView(R.id.rl_left_container).setBackgroundResource(R.drawable.grey_voucher);
             helper.getView(R.id.btn_receive_voucher_now).setBackgroundResource(R.drawable.grey_button);
-        } else {
-            helper.setText(R.id.btn_receive_voucher_now, mContext.getString(R.string.text_receive_now));
-            helper.getView(R.id.rl_left_container).setBackgroundResource(R.drawable.pink_voucher);
-            helper.getView(R.id.btn_receive_voucher_now).setBackgroundResource(R.drawable.pink_button);
         }
     }
 }

@@ -36,6 +36,7 @@ import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.entity.SpecValue;
 import com.ftofs.twant.entity.StoreFriendsItem;
+import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -182,6 +183,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView btnArrivalNotice;
     // 【想放購物車】和【想要購買】的包裝容器，如果有庫存時顯示這個
     LinearLayout llStorageOkContainer;
+
+    /**
+     * 店鋪券和平臺券列表
+     */
+    List<StoreVoucher> storeVoucherList = new ArrayList<>();
 
     /**
      * goodsId與贈品列表的映射表
@@ -425,7 +431,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new StoreVoucherPopup(_mActivity, storeId))
+                        .asCustom(new StoreVoucherPopup(_mActivity, storeVoucherList))
                         .show();
                 break;
             case R.id.btn_show_conform:
@@ -604,6 +610,83 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 .show();
     }
 
+    /**
+     * 獲取店鋪券和平臺券列表
+     */
+    private void loadCouponList() {
+        try {
+            String token = User.getToken();
+            EasyJSONObject params = EasyJSONObject.generate("commonId", commonId);
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
+            Api.postUI(Api.PATH_GOODS_DETAIL_COUPON_LIST, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    SLog.info("__responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    try {
+                        boolean first;
+                        // 【領券】優惠
+                        storeVoucherList.clear();
+                        EasyJSONArray couponList = responseObj.getArray("datas.list");
+                        if (couponList.length() > 0) {
+                            first = true;
+                            StringBuilder voucherText = new StringBuilder();
+                            for (Object object : couponList) {
+                                if (!first) {
+                                    voucherText.append(" / ");
+                                }
+                                EasyJSONObject voucher = (EasyJSONObject) object;
+                                int limitAmount = (int) voucher.getDouble("searchCouponActivityVo.limitAmount");
+                                int couponPrice = (int) voucher.getDouble("searchCouponActivityVo.couponPrice");
+
+                                if (limitAmount == 0) {
+                                    // 如果為0，表示無門檻
+                                    voucherText.append(String.format("$%d無門檻", couponPrice));
+                                } else {
+                                    voucherText.append(String.format("滿%d減%d", limitAmount, couponPrice));
+                                }
+
+                                first = false;
+
+                                String useGoodsRangeExplain = voucher.getString("searchCouponActivityVo.useGoodsRangeExplain");
+                                int memberIsReceive = voucher.getInt("memberIsReceive");
+                                int storeId = voucher.getInt("searchCouponActivityVo.storeId");
+                                String limitAmountText = voucher.getString("searchCouponActivityVo.limitAmountText");
+                                String usableClientTypeText = voucher.getString("searchCouponActivityVo.usableClientTypeText");
+                                String useStartTime = voucher.getString("searchCouponActivityVo.useStartTime");
+                                String useEndTime = voucher.getString("searchCouponActivityVo.useEndTime");
+                                StoreVoucher storeVoucher = new StoreVoucher(storeId, 0, useGoodsRangeExplain, couponPrice,
+                                        limitAmountText, usableClientTypeText, useStartTime, useEndTime, memberIsReceive == 0);
+                                storeVoucher.searchSn = voucher.getString("searchCouponActivityVo.searchSn");
+
+                                storeVoucherList.add(storeVoucher);
+                            }
+
+                            tvVoucherText.setText(voucherText);
+                            btnShowVoucher.setVisibility(VISIBLE);
+                        }
+                    } catch (Exception e) {
+                        SLog.info("Error!%s", e.getMessage());
+                    }
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
     private void loadGoodsDetail() {
         // 清空一下數據，以便可以重復加載
         specList.clear();
@@ -770,34 +853,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         llGoodsDetailImageContainer.addView(imageView);
                     }
 
-                    boolean first;
-                    // 【領券】優惠
-                    EasyJSONArray voucherList = goodsDetail.getArray("goodsDetailCouponVoList");
-                    if (voucherList.length() > 0) {
-                        first = true;
-                        StringBuilder voucherText = new StringBuilder();
-                        for (Object object : voucherList) {
-                            if (!first) {
-                                voucherText.append(" / ");
-                            }
-                            EasyJSONObject voucher = (EasyJSONObject) object;
-                            int limitAmount = voucher.getInt("limitAmount");
-                            int couponPrice = voucher.getInt("couponPrice");
-
-                            if (limitAmount == 0) {
-                                // 如果為0，表示無門檻
-                                voucherText.append(String.format("$%d無門檻", couponPrice));
-                            } else {
-                                voucherText.append(String.format("滿%d減%d", limitAmount, couponPrice));
-                            }
-
-                            first = false;
-                        }
-
-                        tvVoucherText.setText(voucherText);
-                        btnShowVoucher.setVisibility(VISIBLE);
-                    }
-
                     // 限時折扣
                     EasyJSONObject discount = goodsDetail.getObject("discount");
                     if (discount != null) {
@@ -810,7 +865,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     // 【贈品】優惠
-                    first = true;
+                    boolean first = true;
                     EasyJSONArray goodsInfoVoList = responseObj.getArray("datas.goodsDetail.goodsInfoVoList");
                     for (Object object : goodsInfoVoList) {
                         GoodsInfo goodsInfo = new GoodsInfo();
@@ -1079,6 +1134,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
 
         if (!isDataValid) {
+            loadCouponList();
             loadGoodsDetail();
         }
     }

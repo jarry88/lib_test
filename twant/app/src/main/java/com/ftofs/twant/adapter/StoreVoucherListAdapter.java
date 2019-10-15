@@ -40,14 +40,14 @@ public class StoreVoucherListAdapter extends ViewGroupAdapter<StoreVoucher> {
                 "  -  " + itemData.useEndTime;
         setText(itemView, R.id.tv_valid_time, validTime);
 
-        if (itemData.memberIsReceive == Constant.ONE) {
-            setText(itemView, R.id.btn_receive_voucher_now, context.getString(R.string.text_been_received));
-            setBackgroundResource(itemView, R.id.rl_left_container, R.drawable.grey_voucher);
-            setBackgroundResource(itemView, R.id.btn_receive_voucher_now, R.drawable.grey_button);
-        } else {
+        if (itemData.usable) {
             setText(itemView, R.id.btn_receive_voucher_now, context.getString(R.string.text_receive_now));
             setBackgroundResource(itemView, R.id.rl_left_container, R.drawable.pink_voucher);
             setBackgroundResource(itemView, R.id.btn_receive_voucher_now, R.drawable.pink_button);
+        } else {
+            setText(itemView, R.id.btn_receive_voucher_now, context.getString(R.string.text_been_received));
+            setBackgroundResource(itemView, R.id.rl_left_container, R.drawable.grey_voucher);
+            setBackgroundResource(itemView, R.id.btn_receive_voucher_now, R.drawable.grey_button);
         }
     }
 }

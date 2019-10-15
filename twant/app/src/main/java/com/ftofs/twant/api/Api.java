@@ -866,6 +866,16 @@ public class Api {
      */
     public static final String PATH_RECEIVE_PLATFORM_COUPON_BY_PWD = "/member/coupon/receive/pwd";
 
+    /**
+     * 商品詳情頁-查詢優惠券列表(包含店鋪券、平台券)
+     */
+    public static final String PATH_GOODS_DETAIL_COUPON_LIST = "/search/coupon/activity/list";
+
+    /**
+     * 優惠券(包含店鋪券、平台券)領取
+     */
+    public static final String PATH_RECEIVE_COUPON = "/member/coupon/receive/search";
+
 
     /**
      * 發送Http請求

@@ -103,7 +103,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                 if (id == R.id.btn_receive_voucher_now) {
                     StoreVoucher storeVoucher = storeVoucherList.get(position);
                     // 檢查未領取才調用領取接口
-                    if (storeVoucher.memberIsReceive == Constant.ZERO) {
+                    if (storeVoucher.usable) {
                         receiveVoucher(position, storeVoucher.templateId);
                     }
                 }
@@ -215,7 +215,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                                         voucher.getString("usableClientTypeText"),
                                         voucher.getString("useStartTime"),
                                         voucher.getString("useEndTime"),
-                                        voucher.getInt("memberIsReceive"));
+                                        voucher.getInt("memberIsReceive") == 0);
                                 storeVoucherList.add(storeVoucher);
                             }
                             voucherListAdapter.setData(storeVoucherList);
@@ -314,7 +314,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
 
                 ToastUtil.success(_mActivity, "領取成功");
                 StoreVoucher storeVoucher = storeVoucherList.get(position);
-                storeVoucher.memberIsReceive = 1;
+                storeVoucher.usable = false;
                 voucherListAdapter.setData(storeVoucherList);
             }
         });

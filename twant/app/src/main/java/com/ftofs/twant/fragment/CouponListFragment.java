@@ -142,7 +142,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 voucher.getString("voucherUsableClientTypeText"),
                                 voucher.getString("startTime"),
                                 voucher.getString("endTime"),
-                                0
+                                true
                         );
                         availableVoucherList.add(storeVoucher);
                     }
@@ -203,7 +203,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 voucher.getString("voucherUsableClientTypeText"),
                                 voucher.getString("startTime"),
                                 voucher.getString("endTime"),
-                                0
+                                true
                         );
                         availableVoucherList.add(storeVoucher);
                     }
@@ -224,7 +224,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 voucher.getString("voucherUsableClientTypeText"),
                                 voucher.getString("startTime"),
                                 voucher.getString("endTime"),
-                                1
+                                false
                         );
                         unavailableVoucherList.add(storeVoucher);
                     }

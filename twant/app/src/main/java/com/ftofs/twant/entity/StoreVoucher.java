@@ -3,7 +3,7 @@ package com.ftofs.twant.entity;
 public class StoreVoucher {
     public StoreVoucher(int storeId, int templateId, String storeName, int templatePrice, String limitAmountText,
                         String usableClientTypeText, String useStartTime, String useEndTime,
-                        int memberIsReceive) {
+                        boolean usable) {
         this.storeId = storeId;
         this.templateId = templateId;
         this.storeName = storeName;
@@ -12,7 +12,7 @@ public class StoreVoucher {
         this.usableClientTypeText = usableClientTypeText;
         this.useStartTime = useStartTime;
         this.useEndTime = useEndTime;
-        this.memberIsReceive = memberIsReceive;
+        this.usable = usable;
     }
 
     public int storeId;
@@ -25,7 +25,8 @@ public class StoreVoucher {
     public String useEndTime;
 
     /**
-     * 優惠券是否已經領取
+     * 券是否可用
      */
-    public int memberIsReceive;
+    public boolean usable;
+    public String searchSn;
 }

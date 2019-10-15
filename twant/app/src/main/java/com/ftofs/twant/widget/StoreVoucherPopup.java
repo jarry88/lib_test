@@ -38,17 +38,16 @@ import okhttp3.Call;
  * @author zwm
  */
 public class StoreVoucherPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
-    int storeId;
     Context context;
-    List<StoreVoucher> storeVoucherList = new ArrayList<>();
+    List<StoreVoucher> storeVoucherList;
 
     GoodsVoucherListAdapter adapter;
 
-    public StoreVoucherPopup(@NonNull Context context, int storeId) {
+    public StoreVoucherPopup(@NonNull Context context, List<StoreVoucher> storeVoucherList) {
         super(context);
 
         this.context = context;
-        this.storeId = storeId;
+        this.storeVoucherList = storeVoucherList;
     }
 
 
@@ -75,15 +74,13 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
                 if (id == R.id.btn_receive_voucher_now) {
                     StoreVoucher storeVoucher = storeVoucherList.get(position);
                     // 檢查未領取才調用領取接口
-                    if (storeVoucher.memberIsReceive == Constant.ZERO) {
-                        receiveVoucher(position, storeVoucher.templateId);
+                    if (storeVoucher.usable) {
+                        receiveVoucher(position, storeVoucher.searchSn);
                     }
                 }
             }
         });
         rvStoreVoucherList.setAdapter(adapter);
-
-        loadStoreActivityData();
     }
 
     //完全可见执行
@@ -96,73 +93,6 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
     @Override
     protected void onDismiss() {
 
-    }
-
-    /**
-     * 加載店鋪活動數據
-     */
-    private void loadStoreActivityData() {
-        try {
-            String token = User.getToken();
-            if (StringUtil.isEmpty(token)) {
-                SLog.info("Error!token 為空");
-                return;
-            }
-
-            EasyJSONObject params = EasyJSONObject.generate(
-                    "storeId", storeId,
-                    "token", token);
-
-            SLog.info("params[%s]", params);
-
-            final BasePopupView loadingPopup = new XPopup.Builder(getContext())
-                    .asLoading(context.getString(R.string.text_loading))
-                    .show();
-
-            Api.postUI(Api.PATH_STORE_ACTIVITY, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(context, e);
-                    loadingPopup.dismiss();
-                }
-
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    loadingPopup.dismiss();
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(context, responseObj)) {
-                        return;
-                    }
-
-                    try {
-                        EasyJSONArray voucherList = responseObj.getArray("datas.voucherList");
-                        for (Object object : voucherList) { // PayObject
-                            EasyJSONObject voucher = (EasyJSONObject) object;
-
-                            StoreVoucher storeVoucher = new StoreVoucher(
-                                    voucher.getInt("storeId"),
-                                    voucher.getInt("templateId"),
-                                    voucher.getString("storeName"),
-                                    voucher.getInt("templatePrice"),
-                                    voucher.getString("limitAmountText"),
-                                    voucher.getString("usableClientTypeText"),
-                                    voucher.getString("useStartTime"),
-                                    voucher.getString("useEndTime"),
-                                    voucher.getInt("memberIsReceive"));
-                            storeVoucherList.add(storeVoucher);
-                        }
-                        adapter.setNewData(storeVoucherList);
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
-                        SLog.info("Error!loadStoreActivityData failed");
-                    }
-                }
-            });
-        } catch (Exception e) {
-
-        }
     }
 
     @Override
@@ -184,7 +114,7 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
 
     }
 
-    private void receiveVoucher(final int position, int templateId) {
+    private void receiveVoucher(final int position, String searchSn) {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             SLog.info("Error!token 為空");
@@ -193,10 +123,10 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
 
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
-                "templateId", templateId);
+                "searchSn", searchSn);
 
         SLog.info("params[%s]", params);
-        Api.postUI(Api.PATH_RECEIVE_VOUCHER, params, new UICallback() {
+        Api.postUI(Api.PATH_RECEIVE_COUPON, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(context, e);
@@ -213,7 +143,7 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
 
                 ToastUtil.success(context, "領取成功");
                 StoreVoucher storeVoucher = storeVoucherList.get(position);
-                storeVoucher.memberIsReceive = 1;
+                storeVoucher.usable = false;
                 adapter.setNewData(storeVoucherList);
             }
         });
