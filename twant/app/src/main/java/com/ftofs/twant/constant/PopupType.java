@@ -79,4 +79,9 @@ public enum PopupType {
      * 選擇優惠券
      */
     SELECT_VOUCHER,
+
+    /**
+     * 選擇平臺券
+     */
+    SELECT_PLATFORM_COUPON,
 }

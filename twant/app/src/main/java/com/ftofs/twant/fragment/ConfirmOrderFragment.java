@@ -123,6 +123,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     // 店鋪Id => 店鋪優惠
     Map<Integer, StoreAmount> storeAmountMap = new HashMap<>();
 
+
+    int platformCouponIndex = -1; // 當前正在使用的平臺券列表Index(-1表示沒有使用)
+    List<StoreVoucherVo> platformCouponList = new ArrayList<>();
+
     /**
      * 創建確認訂單的實例
      * @param isFromCart 1 -- 來源于購物車 0 -- 直接購買
@@ -223,10 +227,19 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         new XPopup.Builder(_mActivity)
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(false)
-                                .asCustom(new OrderVoucherPopup(_mActivity, storeItem.storeId, storeItem.storeName, storeVoucherVoList,
-                                        ConfirmOrderFragment.this))
+                                .asCustom(new OrderVoucherPopup(_mActivity, storeItem.storeId, storeItem.storeName,
+                                        Constant.COUPON_TYPE_STORE, storeVoucherVoList, -1, ConfirmOrderFragment.this))
                                 .show();
                         SLog.info("HERE");
+                        break;
+                    case R.id.btn_select_platform_coupon:
+                        SLog.info("HERE");
+                        new XPopup.Builder(_mActivity)
+                                // 如果不加这个，评论弹窗会移动到软键盘上面
+                                .moveUpToKeyboard(false)
+                                .asCustom(new OrderVoucherPopup(_mActivity, 0, "",
+                                        Constant.COUPON_TYPE_PLATFORM, platformCouponList, platformCouponIndex, ConfirmOrderFragment.this))
+                                .show();
                         break;
                     default:
                         break;
@@ -793,7 +806,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("HERE");
 
                     // 添加上汇总项目
-                    confirmOrderItemList.add(new ConfirmOrderSummaryItem());
+                    ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
+                    confirmOrderItemList.add(confirmOrderSummaryItem);
 
                     // 第2步：計算運費
                     // 收集地址信息
@@ -827,6 +841,13 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     // 第3步(請求參數與第2步相同) 計算最終結果
                     calcAmount();
 
+                    // 請求平臺券列表(請求參數與第2步相同)
+                    getPlatformCoupon();
+
+                    confirmOrderSummaryItem.platformCouponCount = platformCouponList.size();
+                    confirmOrderSummaryItem.platformCouponStatus = "可用" + confirmOrderSummaryItem.platformCouponCount + "張";
+                    SLog.info("confirmOrderSummaryItem.platformCouponCount[%d]", confirmOrderSummaryItem.platformCouponCount);
+
                     return "success";
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
@@ -839,6 +860,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         TwantApplication.getThreadPool().execute(taskObservable);
     }
 
+    /**
+     * 計算金額
+     */
     private void calcAmount() {
         EasyJSONObject params = collectParams(true);
         SLog.info("params[%s]", params.toString());
@@ -888,6 +912,42 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         });
     }
 
+    private void getPlatformCoupon() {
+        EasyJSONObject params = collectParams(true);
+        SLog.info("params[%s]", params.toString());
+
+        String responseStr = Api.syncPost(Api.PATH_BUY_COUPON_LIST, params);
+        SLog.info("__responseStr[%s]", responseStr);
+        if (!EasyJSONBase.isJSONString(responseStr)) {
+            return;
+        }
+
+        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+        if (ToastUtil.isError(responseObj)) {
+            return;
+        }
+
+        try {
+            EasyJSONArray couponList = responseObj.getArray("datas.couponList");
+            for (Object object : couponList) {
+                EasyJSONObject coupon = (EasyJSONObject) object;
+                StoreVoucherVo storeVoucherVo = new StoreVoucherVo();
+
+                storeVoucherVo.voucherId = coupon.getInt("coupon.couponId");
+                storeVoucherVo.voucherTitle = coupon.getString("coupon.useGoodsRangeExplain");
+                storeVoucherVo.startTime = coupon.getString("coupon.useStartTimeText");
+                storeVoucherVo.endTime = coupon.getString("coupon.useEndTimeText");
+                storeVoucherVo.limitAmount = (float) coupon.getDouble("coupon.limitAmount");
+                storeVoucherVo.limitText = coupon.getString("coupon.limitText");
+                storeVoucherVo.price = (float) coupon.getDouble("coupon.couponPrice");
+
+                platformCouponList.add(storeVoucherVo);
+            }
+        } catch (Exception e) {
+            SLog.info("Error!%s", e.getMessage());
+        }
+    }
+
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
         if (type == PopupType.PAY_WAY) {
@@ -926,6 +986,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             SLog.info("HERE");
             VoucherUseStatus voucherUseStatus = (VoucherUseStatus) extra;
             updateStoreVoucherStatus(voucherUseStatus);
+
+            calcAmount();
+        } else if (type == PopupType.SELECT_PLATFORM_COUPON) { // 選擇平臺券
+            if (platformCouponIndex == id) { // 再次點擊，表示取消選擇
+                platformCouponIndex = -1;
+            }
 
             calcAmount();
         }

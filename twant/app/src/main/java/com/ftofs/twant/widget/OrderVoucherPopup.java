@@ -9,7 +9,9 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.OrderVoucherListAdapter;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.StoreVoucherVo;
 import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -28,18 +30,34 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
     Context context;
     int storeId;
     String storeName;
-    List<StoreVoucherVo> storeVoucherVoList = new ArrayList<>();
+    int couponType;
+    List<StoreVoucherVo> storeVoucherVoList;
+    int platformCouponIndex;
 
     OrderVoucherListAdapter adapter;
     OnSelectedListener onSelectedListener;
 
-    public OrderVoucherPopup(@NonNull Context context, int storeId, String storeName, List<StoreVoucherVo> storeVoucherVoList, OnSelectedListener onSelectedListener) {
+    /**
+     * Constructor
+     * @param context
+     * @param storeId
+     * @param storeName
+     * @param couponType 表示storeVoucherVoList是店鋪券還是平臺券
+     * @param storeVoucherVoList 店鋪券列表 或 平臺券列表
+     * @param platformCouponIndex 當前正在使用的平臺券列表Index(-1表示沒有使用)，當couponType為平臺券時才用
+     * @param onSelectedListener
+     */
+    public OrderVoucherPopup(@NonNull Context context, int storeId, String storeName, int couponType,
+                             List<StoreVoucherVo> storeVoucherVoList, int platformCouponIndex,
+                             OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
         this.storeId = storeId;
         this.storeName = storeName;
+        this.couponType = couponType;
         this.storeVoucherVoList = storeVoucherVoList;
+        this.platformCouponIndex = platformCouponIndex;
         this.onSelectedListener = onSelectedListener;
     }
 
@@ -58,7 +76,8 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
         RecyclerView rvStoreVoucherList = findViewById(R.id.rv_voucher_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvStoreVoucherList.setLayoutManager(layoutManager);
-        adapter = new OrderVoucherListAdapter(R.layout.order_voucher_item, storeName, storeVoucherVoList);
+
+        adapter = new OrderVoucherListAdapter(R.layout.order_voucher_item, storeName, couponType, storeVoucherVoList, platformCouponIndex);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -68,7 +87,12 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
                 voucherUseStatus.storeId = storeId;
                 voucherUseStatus.voucherId = storeVoucherVo.voucherId;
                 voucherUseStatus.isInUse = !storeVoucherVo.isInUse;
-                onSelectedListener.onSelected(PopupType.SELECT_VOUCHER, 0, voucherUseStatus);
+                if (couponType == Constant.COUPON_TYPE_STORE) {
+                    onSelectedListener.onSelected(PopupType.SELECT_VOUCHER, 0, voucherUseStatus);
+                } else {
+                    onSelectedListener.onSelected(PopupType.SELECT_PLATFORM_COUPON, 0, voucherUseStatus);
+                }
+
 
                 dismiss();
             }

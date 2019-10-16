@@ -628,7 +628,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
-                    SLog.info("__responseStr[%s]", responseStr);
+                    SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {

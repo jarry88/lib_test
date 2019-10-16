@@ -61,6 +61,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                     .addOnClickListener(R.id.ll_store_info_container)  // 點擊店鋪信息
                     .addOnClickListener(R.id.btn_use_voucher);  // 使用店鋪券
 
+
             String voucherStatus = "";
             if (item.voucherCount > 0) {
                 if (item.voucherId > 0) { // 如果正在使用優惠券，則顯示正在使用的券的名稱
@@ -163,8 +164,16 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
 
             helper.addOnClickListener(R.id.btn_change_pay_way)
                 .addOnClickListener(R.id.btn_receipt)
-                .addOnClickListener(R.id.btn_change_shipping_time);
-            helper.setText(R.id.tv_pay_way, paymentTypeCodeToPayWayDesc(item.paymentTypeCode));
+                .addOnClickListener(R.id.btn_change_shipping_time)
+                .addOnClickListener(R.id.btn_select_platform_coupon);  // 使用平臺券;
+            SLog.info("item.platformCouponCount[%d]", item.platformCouponCount);
+            if (item.platformCouponCount > 0) {
+                helper.setText(R.id.tv_pay_way, paymentTypeCodeToPayWayDesc(item.paymentTypeCode))
+                        .setText(R.id.tv_platform_coupon, item.platformCouponStatus);
+                helper.setGone(R.id.rl_select_platform_coupon_container, true);
+            } else {
+                helper.setGone(R.id.rl_select_platform_coupon_container, false);
+            }
         }
     }
 

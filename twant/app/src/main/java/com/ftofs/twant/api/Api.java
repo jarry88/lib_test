@@ -876,6 +876,11 @@ public class Api {
      */
     public static final String PATH_RECEIVE_COUPON = "/member/coupon/receive/search";
 
+    /**
+     * 购买第一步：请求平台券
+     */
+    public static final String PATH_BUY_COUPON_LIST = "/member/buy/coupon/list";
+
 
     /**
      * 發送Http請求
