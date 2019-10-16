@@ -530,4 +530,8 @@ public class Util {
 
         return null;
     }
+
+    public static String getAvailableCouponCountDesc(int count) {
+        return "可用" + count + "張";
+    }
 }

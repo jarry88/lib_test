@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -71,6 +72,13 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
     protected void onCreate() {
         super.onCreate();
 
+        TextView tvPopupTitle = findViewById(R.id.tv_popup_title);
+        if (couponType == Constant.COUPON_TYPE_STORE) {
+            tvPopupTitle.setText(R.string.text_voucher);
+        } else {
+            tvPopupTitle.setText(R.string.text_platform_coupon);
+        }
+
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
 
         RecyclerView rvStoreVoucherList = findViewById(R.id.rv_voucher_list);
@@ -90,9 +98,9 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
                 if (couponType == Constant.COUPON_TYPE_STORE) {
                     onSelectedListener.onSelected(PopupType.SELECT_VOUCHER, 0, voucherUseStatus);
                 } else {
-                    onSelectedListener.onSelected(PopupType.SELECT_PLATFORM_COUPON, 0, voucherUseStatus);
+                    SLog.info("position[%d]", position);
+                    onSelectedListener.onSelected(PopupType.SELECT_PLATFORM_COUPON, position, null);
                 }
-
 
                 dismiss();
             }

@@ -69,7 +69,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                     voucherStatus = item.voucherName;
                 } else { // 如果沒有使用優惠券，則顯示可用的券的數量
                     SLog.info("HERE");
-                    voucherStatus = String.format("可用%d張", item.voucherCount);
+                    voucherStatus = Util.getAvailableCouponCountDesc(item.voucherCount);
                 }
             } else { // 如果沒有可用的優惠券，則隱藏
                 helper.setGone(R.id.rl_voucher_container, false);

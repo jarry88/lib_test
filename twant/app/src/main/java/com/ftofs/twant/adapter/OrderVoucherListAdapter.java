@@ -1,11 +1,14 @@
 package com.ftofs.twant.adapter;
 
 import android.support.annotation.Nullable;
+import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreVoucherVo;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
@@ -34,15 +37,40 @@ public class OrderVoucherListAdapter extends BaseQuickAdapter<StoreVoucherVo, Ba
     protected void convert(BaseViewHolder helper, StoreVoucherVo itemData) {
         helper.setText(R.id.tv_template_price, StringUtil.formatPrice(mContext, itemData.price, 0));
         helper.setText(R.id.tv_limit_amount_text, itemData.limitText);
-        helper.setText(R.id.tv_store_name, storeName);
+        if (couponType == Constant.COUPON_TYPE_STORE) {
+            helper.setText(R.id.tv_store_name, storeName);
+        } else {
+            helper.setText(R.id.tv_store_name, itemData.voucherTitle);
+        }
+
         String validTime = mContext.getString(R.string.text_valid_time) + ": " + itemData.startTime +
                 "  -  " + itemData.endTime;
         helper.setText(R.id.tv_valid_time, validTime);
 
-        if (itemData.isInUse) {
-            helper.setGone(R.id.img_voucher_in_use_indicator, true);
+
+
+        RelativeLayout rlLeftContainer = helper.getView(R.id.rl_left_container);
+        if (couponType == Constant.COUPON_TYPE_STORE) {
+            rlLeftContainer.setBackgroundResource(R.drawable.red_voucher);
+            if (itemData.isInUse) {
+                helper.setGone(R.id.img_voucher_in_use_indicator, true);
+            } else {
+                helper.setGone(R.id.img_voucher_in_use_indicator, false);
+            }
         } else {
-            helper.setGone(R.id.img_voucher_in_use_indicator, false);
+            rlLeftContainer.setBackgroundResource(R.drawable.blue_voucher);
+            int position = helper.getAdapterPosition();
+            SLog.info("position[%d]", position);
+            if (position == platformCouponIndex) {
+                helper.setGone(R.id.img_voucher_in_use_indicator, true);
+            } else {
+                helper.setGone(R.id.img_voucher_in_use_indicator, false);
+            }
         }
     }
+    /*
+    public void setPlatformCouponIndex(int platformCouponIndex) {
+        this.platformCouponIndex = platformCouponIndex;
+    }
+    */
 }

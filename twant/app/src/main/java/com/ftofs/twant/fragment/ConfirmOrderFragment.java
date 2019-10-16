@@ -299,6 +299,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     "isExistTrys", isExistTrys,
                     "storeList", commitStoreList);
 
+            if (platformCouponIndex != -1) { // 如果有選擇平臺券
+                StoreVoucherVo platformCoupon = platformCouponList.get(platformCouponIndex);
+                EasyJSONArray couponIdList = EasyJSONArray.generate(String.valueOf(platformCoupon.voucherId));
+                commitBuyData.set("couponIdList", couponIdList);
+            }
+
             SLog.info("forCommit[%s]", forCommit);
             if (forCommit) {
                 ConfirmOrderSummaryItem summaryItem = getSummaryItem();
@@ -845,7 +851,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     getPlatformCoupon();
 
                     confirmOrderSummaryItem.platformCouponCount = platformCouponList.size();
-                    confirmOrderSummaryItem.platformCouponStatus = "可用" + confirmOrderSummaryItem.platformCouponCount + "張";
+                    confirmOrderSummaryItem.platformCouponStatus = Util.getAvailableCouponCountDesc(confirmOrderSummaryItem.platformCouponCount);
                     SLog.info("confirmOrderSummaryItem.platformCouponCount[%d]", confirmOrderSummaryItem.platformCouponCount);
 
                     return "success";
@@ -900,10 +906,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     summaryItem.totalItemCount = totalItemCount;
                     summaryItem.totalAmount = (float) responseObj.getDouble("datas.buyGoodsItemAmount");
                     summaryItem.storeDiscount = (float) responseObj.getDouble("datas.storeTotalDiscountAmount");
+                    summaryItem.platformDiscount = (float) responseObj.getDouble("datas.platTotalDiscountAmount");
                     SLog.info("summaryItem, totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
                             summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
-                    totalPrice = summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount;
+                    totalPrice = summaryItem.totalAmount + summaryItem.totalFreight - summaryItem.storeDiscount - summaryItem.platformDiscount;
                     tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());
@@ -989,9 +996,21 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             calcAmount();
         } else if (type == PopupType.SELECT_PLATFORM_COUPON) { // 選擇平臺券
+            SLog.info("platformCouponIndex[%d], id[%d]", platformCouponIndex, id);
+            ConfirmOrderSummaryItem confirmOrderSummaryItem = getSummaryItem();
             if (platformCouponIndex == id) { // 再次點擊，表示取消選擇
                 platformCouponIndex = -1;
+                // 沒選中任何平臺券，顯示平臺券數量
+                confirmOrderSummaryItem.platformCouponStatus = Util.getAvailableCouponCountDesc(confirmOrderSummaryItem.platformCouponCount);
+            } else {
+                // 顯示當前選中的平臺券信息
+                platformCouponIndex = id;
+                StoreVoucherVo platformCoupon = platformCouponList.get(platformCouponIndex);
+                String statusText = StringUtil.formatPrice(_mActivity, platformCoupon.price, 0) + platformCoupon.limitText;
+                confirmOrderSummaryItem.platformCouponStatus = statusText;
             }
+
+            SLog.info("platformCouponIndex[%d]", platformCouponIndex);
 
             calcAmount();
         }

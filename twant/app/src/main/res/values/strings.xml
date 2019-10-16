@@ -229,6 +229,7 @@
     <string name="text_features_goods_chinese">鎮 店 之 寶</string>
     <string name="text_features_goods_english">U n i q u e   P r o d u c t</string>
 
+    <string name="text_platform_coupon">平臺券</string>
     <string name="text_voucher">優惠券</string>
     <string name="text_conform">滿減優惠</string>
     <string name="text_conform_short">滿優惠</string>
