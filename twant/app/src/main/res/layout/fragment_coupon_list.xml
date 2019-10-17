@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/tw_slight_grey"
     android:orientation="vertical">
     <ScrollView
         android:id="@+id/sv_container"
@@ -17,6 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
+                android:paddingBottom="20dp"
                 android:orientation="vertical">
             </LinearLayout>
 
@@ -60,8 +62,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:orientation="vertical">
-
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

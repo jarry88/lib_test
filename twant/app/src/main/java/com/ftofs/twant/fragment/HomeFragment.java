@@ -194,7 +194,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     int index = (finalI + 1) % ANIM_COUNT;
-                    SLog.info("index[%d]", index);
+                    // SLog.info("index[%d]", index);
                     vwSloganHighLighter.postDelayed(new Runnable() {
                         @Override
                         public void run() {

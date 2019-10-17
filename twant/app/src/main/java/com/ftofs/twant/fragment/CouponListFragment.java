@@ -133,22 +133,27 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                     for (Object object : couponList) {
                         EasyJSONObject voucher = (EasyJSONObject) object;
 
+                        int couponState = voucher.getInt("couponState");
                         StoreVoucher storeVoucher = new StoreVoucher(
-                                voucher.getInt("store.storeId"),
-                                voucher.getInt("templateId"),
-                                voucher.getString("store.storeName"),
-                                voucher.getInt("price"),
+                                0,
+                                0,
+                                voucher.getString("useGoodsRangeExplain"),
+                                voucher.getInt("couponPrice"),
                                 voucher.getString("limitAmountText"),
-                                voucher.getString("voucherUsableClientTypeText"),
-                                voucher.getString("startTime"),
-                                voucher.getString("endTime"),
-                                true
+                                voucher.getString("usableClientTypeText"),
+                                voucher.getString("useStartTimeText"),
+                                voucher.getString("useEndTimeText"),
+                                couponState == 0
                         );
-                        availableVoucherList.add(storeVoucher);
+                        if (couponState == 0) {
+                            availableVoucherList.add(storeVoucher);
+                        } else {
+                            unavailableVoucherList.add(storeVoucher);
+                        }
+
                     }
                     SLog.info("length[%d]", availableVoucherList.size());
                     availableCouponAdapter.setData(availableVoucherList);
-
                     unavailableCouponAdapter.setData(unavailableVoucherList);
 
                     emptyDataHandler(availableVoucherList.size(), unavailableVoucherList.size());
