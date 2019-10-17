@@ -41,30 +41,7 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
                     .setText(R.id.tv_author_nickname, item.authorNickname)
                     .setText(R.id.tv_like_count, String.valueOf(item.postFollow))
                     .setText(R.id.tv_comment_count, String.valueOf(item.postReply))
-                    .setText(R.id.tv_category_name, item.postCategory);
-
-            helper.addOnClickListener(R.id.btn_thumb);
-            ImageView iconThumb = helper.getView(R.id.icon_thumb);
-            if (item.isLike == 1) {
-                iconThumb.setImageResource(R.drawable.icon_comment_thumb_blue);
-            } else {
-                iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
-            }
-
-            if (!StringUtil.isEmpty(item.deadline)) {
-                helper.setText(R.id.tv_deadline, item.deadline.substring(5));
-                TwProgressBar progressBar = helper.getView(R.id.pg_deadline);
-                Jarbon jarbonDeadline = Jarbon.parse(item.deadline);
-                Jarbon now = new Jarbon();
-                int diffInDays = now.diffInDays(jarbonDeadline);
-                if (diffInDays < 3) {
-                    progressBar.setColor(TwProgressBar.COLOR_RED);
-                } else if (3 <= diffInDays && diffInDays <= 7) {
-                    progressBar.setColor(TwProgressBar.COLOR_ORANGE);
-                } else {
-                    progressBar.setColor(TwProgressBar.COLOR_GREEN);
-                }
-            }
+                    .setText(R.id.tv_create_time, item.createTime);
 
             int itemCount = getItemCount();
             int position = helper.getAdapterPosition();

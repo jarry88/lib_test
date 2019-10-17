@@ -151,7 +151,7 @@
                     android:textColor="#fff"
                     android:textSize="16sp"
                     android:gravity="center"
-                    android:background="@drawable/narrow_blue_button"
+                    android:background="@drawable/narrow_red_button"
                     />
             </LinearLayout>
         </RelativeLayout>

@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentationMagician;
+import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,6 +34,7 @@ import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.log.SLog;
+import com.umeng.commonsdk.debug.I;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.util.ArrayList;
@@ -533,5 +536,17 @@ public class Util {
 
     public static String getAvailableCouponCountDesc(int count) {
         return "可用" + count + "張";
+    }
+
+    /**
+     * 獲取屏幕的分辨率像素
+     * @param context
+     * @return (寬，高)
+     */
+    public static Pair<Integer, Integer> getScreenDimemsion(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        return new Pair<>(screenWidth, screenHeight);
     }
 }

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/toolbar_margin_left"
     android:layout_marginRight="@dimen/toolbar_margin_right"
-    android:layout_marginBottom="15dp"
+    android:layout_marginTop="15dp"
     android:orientation="horizontal">
     <RelativeLayout
         android:id="@+id/rl_left_container"
@@ -38,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_weight="1"
-        android:background="@drawable/voucher_item_right_bg_red">
+        android:background="@drawable/coupon_bg_white">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

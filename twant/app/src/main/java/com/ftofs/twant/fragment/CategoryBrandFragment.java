@@ -72,7 +72,6 @@ public class CategoryBrandFragment extends BaseFragment implements View.OnClickL
         rvCategoryMenu = view.findViewById(R.id.rv_category_menu);
         rvBrandList = view.findViewById(R.id.rv_commodity_list);
 
-        rvCategoryMenu = view.findViewById(R.id.rv_category_menu);
         LinearLayoutManager layoutManagerCategory = new LinearLayoutManager(_mActivity);
         layoutManagerCategory.setOrientation(LinearLayoutManager.VERTICAL);
         rvCategoryMenu.setLayoutManager(layoutManagerCategory);

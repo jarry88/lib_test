@@ -146,7 +146,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
                 if (id == R.id.btn_thumb) {
-                    switchThumbState(position);
+                    // switchThumbState(position);  現在做成不可點擊
                 }
             }
         });

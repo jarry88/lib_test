@@ -1,5 +1,7 @@
 package com.ftofs.twant.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -56,6 +58,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     LinearLayout llNewArrivalsContainer;
     MZBannerView bannerView;
 
+    public static final int ANIM_COUNT = 4;
+    ObjectAnimator[] animatorArr = new ObjectAnimator[ANIM_COUNT];
+
+    // 三大口號的高亮背景
+    View vwSloganHighLighter;
+
     LinearLayout llFloatButtonContainer;
     NestedScrollingParent2Layout scrollingParent2Layout;
     NestedScrollView contentView;
@@ -94,6 +102,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         super.onViewCreated(view, savedInstanceState);
 
         EventBus.getDefault().register(this);
+
 
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_category, this);
@@ -163,6 +172,59 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 }
             }
         });
+
+
+        vwSloganHighLighter = view.findViewById(R.id.vw_slogan_highlighter);
+
+        long animDuration = 1500;
+        int blockWidth = Util.getScreenDimemsion(_mActivity).first / 3; // 分3塊
+        animatorArr[0] = ObjectAnimator.ofFloat(vwSloganHighLighter,"translationX",-blockWidth,0).setDuration(animDuration);
+        animatorArr[1] = ObjectAnimator.ofFloat(vwSloganHighLighter,"translationX",0,blockWidth).setDuration(animDuration);
+        animatorArr[2] = ObjectAnimator.ofFloat(vwSloganHighLighter,"translationX",blockWidth,2*blockWidth).setDuration(animDuration);
+        animatorArr[3] = ObjectAnimator.ofFloat(vwSloganHighLighter,"translationX",2*blockWidth,3*blockWidth).setDuration(animDuration);
+
+        for (int i = 0; i < ANIM_COUNT; i++) {
+            int finalI = i;
+            animatorArr[i].addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    int index = (finalI + 1) % ANIM_COUNT;
+                    SLog.info("index[%d]", index);
+                    vwSloganHighLighter.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            animatorArr[index].start();
+                        }
+                    }, 1000);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+        }
+
+        vwSloganHighLighter.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vwSloganHighLighter.getLayoutParams();
+                layoutParams.width = blockWidth;
+                vwSloganHighLighter.setLayoutParams(layoutParams);
+                vwSloganHighLighter.setVisibility(View.VISIBLE);
+                animatorArr[0].start();
+            }
+        }, 500);
     }
 
 

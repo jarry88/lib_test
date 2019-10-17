@@ -466,7 +466,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 doSearch(searchType, keyword, null);
                 storeSortButtons[storeSortButtonIndex].setTextColor(twBlack);
                 storeSortButtonIndex = STORE_SEARCH_SORT_GENERAL;
-                storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
+                storeSortButtons[storeSortButtonIndex].setTextColor(twBlue);
                 break;
             case R.id.btn_store_search_order_store_open:
                 if (storeSortButtonIndex == STORE_SEARCH_SORT_STORE_OPEN) {
@@ -475,7 +475,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 doSearch(searchType, keyword, EasyJSONObject.generate("sort", "startBusiness_desc"));
                 storeSortButtons[storeSortButtonIndex].setTextColor(twBlack);
                 storeSortButtonIndex = STORE_SEARCH_SORT_STORE_OPEN;
-                storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
+                storeSortButtons[storeSortButtonIndex].setTextColor(twBlue);
                 break;
             case R.id.btn_store_search_order_follow:
                 if (storeSortButtonIndex == STORE_SEARCH_SORT_FOLLOW) {
@@ -484,7 +484,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 doSearch(searchType, keyword, EasyJSONObject.generate("sort", "collect_desc"));
                 storeSortButtons[storeSortButtonIndex].setTextColor(twBlack);
                 storeSortButtonIndex = STORE_SEARCH_SORT_FOLLOW;
-                storeSortButtons[storeSortButtonIndex].setTextColor(twRed);
+                storeSortButtons[storeSortButtonIndex].setTextColor(twBlue);
                 break;
             case R.id.btn_sort_goods_general:
                 if (goodsSortButtonIndex == GOODS_SEARCH_SORT_GENERAL) {
