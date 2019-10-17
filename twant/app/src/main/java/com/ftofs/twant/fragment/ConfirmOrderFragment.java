@@ -938,6 +938,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             EasyJSONArray couponList = responseObj.getArray("datas.couponList");
             for (Object object : couponList) {
                 EasyJSONObject coupon = (EasyJSONObject) object;
+
+                boolean available = coupon.getBoolean("couponIsAble");
+                if (!available) {
+                    continue;
+                }
                 StoreVoucherVo storeVoucherVo = new StoreVoucherVo();
 
                 storeVoucherVo.voucherId = coupon.getInt("coupon.couponId");

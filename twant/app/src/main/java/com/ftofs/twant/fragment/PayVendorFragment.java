@@ -16,7 +16,9 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.PayUtil;
@@ -33,6 +35,7 @@ import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.vivebest.taifung.api.PaymentHandler;
 import com.vivebest.taifung.api.TaifungSDK;
 
+import org.greenrobot.eventbus.EventBus;
 import org.litepal.util.Const;
 
 import java.io.IOException;
@@ -49,11 +52,6 @@ import okhttp3.Call;
  */
 public class PayVendorFragment extends BaseFragment implements View.OnClickListener, CommonCallback {
     int walletStatus = Constant.WANT_PAY_WALLET_STATUS_UNKNOWN;
-
-    /**
-     * 是否需要Pop出本Fragment
-     */
-    boolean needPop;
 
     int payId;
 
@@ -563,9 +561,10 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     @Override
     public String onSuccess(@Nullable String data) {
         SLog.info("想要錢包支付成功");
-        needPop = true;
-        PayUtil.onPaySuccess(false, 0, 0);
 
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WALLET_PAY_SUCCESS, null);
+        // PayUtil.onPaySuccess(false, 0, 0);
+        pop();
         return null;
     }
 
@@ -578,15 +577,6 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
-        if (needPop) {
-            tvPayAmount.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    pop();
-                }
-            }, 200);
-        }
     }
 
     @Override

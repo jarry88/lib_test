@@ -238,7 +238,7 @@
                             android:layout_marginTop="28dp"
                             android:textSize="16sp"
                             android:textColor="@android:color/white"
-                            android:text="微信支付（大陸）"
+                            android:text="微信支付（內地）"
                             />
                     </RelativeLayout>
 
@@ -274,7 +274,7 @@
                             android:layout_marginTop="28dp"
                             android:textSize="16sp"
                             android:textColor="@android:color/white"
-                            android:text="支付寶（大陸）"
+                            android:text="支付寶（內地）"
                             />
                     </RelativeLayout>
 

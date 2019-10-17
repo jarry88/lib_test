@@ -924,8 +924,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         String timeStr = responseObj.getString(path);
         if (StringUtil.isEmpty(timeStr)) {
             return "";
-        } else {
+        } else if (timeStr.length() >= 5) {
             return timeStr.substring(0, 5);
+        } else {
+            return "";
         }
     }
 

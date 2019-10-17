@@ -85,6 +85,11 @@ public enum EBMessageType {
      * 重新加載商品詳情
      */
     MESSAGE_TYPE_RELOAD_GOODS_DETAIL,
+
+    /**
+     * 想付錢包支付成功
+     */
+    MESSAGE_TYPE_WALLET_PAY_SUCCESS,
 }
 
 

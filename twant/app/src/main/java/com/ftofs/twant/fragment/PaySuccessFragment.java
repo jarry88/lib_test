@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,9 +64,16 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
         int id = v.getId();
 
         if (id == R.id.btn_view_order) {
+            // 看下一層的Fragment是什么，如果是訂單列表Fragment，則只需要pop，不需要start
+            Fragment fragment = Util.getFragmentByLayer(_mActivity, 2);
+            boolean needStartFragment = !OrderFragment.class.equals(fragment.getClass());
+            SLog.info("needStartFragment[%s]", needStartFragment);
             pop();
+
             // 轉去訂單列表，已跟進能確認過
-            Util.startFragment(OrderFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED, OrderFragment.USAGE_LIST));
+            if (needStartFragment) {
+                Util.startFragment(OrderFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED, OrderFragment.USAGE_LIST));
+            }
         } else if (id == R.id.btn_goto_home) {
             popTo(MainFragment.class, false);
         }

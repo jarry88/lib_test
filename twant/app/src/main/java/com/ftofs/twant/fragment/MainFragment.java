@@ -210,6 +210,14 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             if (HOME_FRAGMENT <= fragmentIndex && fragmentIndex <= MY_FRAGMENT) {
                 showHideFragment(fragmentIndex);
             }
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_WALLET_PAY_SUCCESS) {
+            SLog.info("EBMessageType.MESSAGE_TYPE_WALLET_PAY_SUCCESS");
+            tvMessageItemCount.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    start(PaySuccessFragment.newInstance(""));
+                }
+            }, 250);
         }
     }
 
