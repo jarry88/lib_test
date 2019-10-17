@@ -174,7 +174,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
-                            android:textColor="#FDCFE0"
+                            android:textColor="#d4ecfb"
                             android:textSize="12sp"
                             />
 
@@ -289,7 +289,7 @@
                     android:id="@+id/tv_goods_jingle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
+                    android:textColor="#666"
                     android:textSize="14sp"
                     />
 

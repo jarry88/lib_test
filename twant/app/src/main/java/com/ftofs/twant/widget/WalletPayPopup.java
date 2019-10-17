@@ -194,6 +194,7 @@ public class WalletPayPopup extends FullScreenPopupView implements View.OnClickL
                     EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(context, responseObj)) {
+                        SLog.info("__f支付失敗");
                         return;
                     }
 

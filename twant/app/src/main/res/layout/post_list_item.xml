@@ -55,7 +55,7 @@
                     android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="4dp"
                     android:lines="2"
                     android:ellipsize="end"
                     android:textColor="@color/tw_black"
@@ -80,6 +80,16 @@
                 app:riv_corner_radius_bottom_left="5dp"
                 app:riv_corner_radius_bottom_right="5dp"
                 android:src="@drawable/del"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/post_action_bar_bg"
                 />
 
             <LinearLayout
