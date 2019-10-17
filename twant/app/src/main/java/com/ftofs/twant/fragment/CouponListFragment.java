@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreVoucherListAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
@@ -20,6 +21,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,6 +83,15 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
         LinearLayout llAvailableCouponContainer = view.findViewById(R.id.ll_available_coupon_container);
         availableCouponAdapter = new StoreVoucherListAdapter(_mActivity, llAvailableCouponContainer, R.layout.store_voucher_item);
+        availableCouponAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                StoreVoucher storeVoucher = availableVoucherList.get(position);
+                if (storeVoucher.storeId > 0) {
+                    Util.startFragment(ShopMainFragment.newInstance(storeVoucher.storeId));
+                }
+            }
+        });
 
         LinearLayout llUnavailableStoreCouponContainer = view.findViewById(R.id.ll_unavailable_coupon_container);
         unavailableCouponAdapter = new StoreVoucherListAdapter(_mActivity, llUnavailableStoreCouponContainer, R.layout.store_voucher_item);

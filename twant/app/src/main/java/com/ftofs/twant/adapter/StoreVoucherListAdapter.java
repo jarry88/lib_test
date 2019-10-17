@@ -3,6 +3,7 @@ package com.ftofs.twant.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
@@ -40,21 +41,26 @@ public class StoreVoucherListAdapter extends ViewGroupAdapter<StoreVoucher> {
                 "  -  " + itemData.useEndTime;
         setText(itemView, R.id.tv_valid_time, validTime);
 
-
+        TextView btnReceiveVoucherNow = itemView.findViewById(R.id.btn_receive_voucher_now);
         if (itemData.usable) {
-            setText(itemView, R.id.btn_receive_voucher_now, context.getString(R.string.text_receive_now));
+            btnReceiveVoucherNow.setText(context.getString(R.string.text_receive_now));
             if (itemData.storeId > 0) { // storeId大于0，表示是店鋪券
                 setBackgroundResource(itemView, R.id.rl_left_container, R.drawable.pink_voucher);
-                setBackgroundResource(itemView, R.id.btn_receive_voucher_now, R.drawable.pink_button);
+                btnReceiveVoucherNow.setVisibility(View.VISIBLE);
+                btnReceiveVoucherNow.setBackgroundResource(R.drawable.pink_button);
             } else {
                 setBackgroundResource(itemView, R.id.rl_left_container, R.drawable.blue_voucher);
-                setBackgroundResource(itemView, R.id.btn_receive_voucher_now, R.drawable.blue_button_follow);
+                btnReceiveVoucherNow.setVisibility(View.GONE);
             }
-
         } else {
-            setText(itemView, R.id.btn_receive_voucher_now, context.getString(R.string.text_been_received));
             setBackgroundResource(itemView, R.id.rl_left_container, R.drawable.grey_voucher);
-            setBackgroundResource(itemView, R.id.btn_receive_voucher_now, R.drawable.grey_button);
+            if (itemData.storeId > 0) {
+                btnReceiveVoucherNow.setVisibility(View.VISIBLE);
+                btnReceiveVoucherNow.setBackgroundResource(R.drawable.grey_button);
+                btnReceiveVoucherNow.setText(context.getString(R.string.text_been_received));
+            } else {
+                btnReceiveVoucherNow.setVisibility(View.GONE);
+            }
         }
     }
 }
