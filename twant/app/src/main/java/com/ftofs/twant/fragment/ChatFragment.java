@@ -998,8 +998,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 public void onMessage() {
                     Pair<String, String> result = (Pair<String, String>) message;
                     if (result == null) {
+                        SLog.info("Error!Upload failed");
                         return;
                     }
+
+                    SLog.info("ossUrl[%s], absoluteUrl[%s]", result.first, result.second);
 
                     //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
                     EMMessage message = EMMessage.createImageSendMessage(absolutePath, false, yourMemberName);
