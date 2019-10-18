@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.LinearLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ChatConversation;
@@ -44,6 +42,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import cn.snailpad.easyjson.EasyJSONBase;
+import cn.snailpad.easyjson.EasyJSONObject;
 
 
 /**
@@ -217,51 +218,60 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     }
 
     private void loadData() {
-        totalUnreadCount = 0;
-        chatConversationList.clear();
+        try {
+            totalUnreadCount = 0;
+            chatConversationList.clear();
 
-        // 獲取環信所有會話列表
-        Map<String, EMConversation> conversationMap = EMClient.getInstance().chatManager().getAllConversations();
-        SLog.info("會話數[%d]", conversationMap.size());
-        for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
-            String memberName = entry.getKey();
-            EMConversation conversation = entry.getValue();
+            // 獲取環信所有會話列表
+            Map<String, EMConversation> conversationMap = EMClient.getInstance().chatManager().getAllConversations();
+            SLog.info("會話數[%d]", conversationMap.size());
+            for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
+                String memberName = entry.getKey();
+                EMConversation conversation = entry.getValue();
 
-            String extField = conversation.getExtField();
-            SLog.info("extField[%s]", extField);
+                EMMessage lastMessage = conversation.getLastMessage();
+                if (lastMessage == null) {
+                    continue;
+                }
+                long timestamp = lastMessage.getMsgTime();
+                FriendInfo friendInfo = new FriendInfo();
 
-            EMMessage lastMessage = conversation.getLastMessage();
-            if (lastMessage == null) {
-                continue;
+                friendInfo.memberName = memberName;
+                String extField = conversation.getExtField();
+                SLog.info("extField[%s]", extField);
+                if (EasyJSONBase.isJSONString(extField)) {
+                    EasyJSONObject extFieldObj = (EasyJSONObject) EasyJSONObject.parse(extField);
+
+                    friendInfo.nickname = extFieldObj.getString("nickName");
+                    friendInfo.avatarUrl = extFieldObj.getString("avatarUrl");
+                    friendInfo.role = extFieldObj.getInt("role");
+                }
+
+
+                SLog.info("memberName[%s], lastMessage[%s], timestamp[%s], nickname[%s], avatar[%s]",
+                        memberName, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"),
+                        friendInfo.nickname, friendInfo.avatarUrl);
+
+                SLog.info("friendInfo[%s]", friendInfo);
+
+                ChatConversation chatConversation = new ChatConversation();
+
+                chatConversation.friendInfo = friendInfo;
+
+                chatConversation.unreadCount = conversation.getUnreadMsgCount();
+                chatConversation.lastMessageType = ChatUtil.getIntMessageType(lastMessage);
+                chatConversation.lastMessage = lastMessage.getBody().toString();
+                chatConversation.timestamp = lastMessage.getMsgTime();
+                totalUnreadCount += chatConversation.unreadCount;
+
+                chatConversationList.add(chatConversation);
             }
-            long timestamp = lastMessage.getMsgTime();
-            FriendInfo friendInfo = new FriendInfo();
-            friendInfo.memberName = memberName;
-            friendInfo.nickname = lastMessage.getStringAttribute("nickName", "");
-            friendInfo.avatarUrl = lastMessage.getStringAttribute("avatar", "");
-            friendInfo.role = Integer.valueOf(lastMessage.getStringAttribute("role", "0"));
+            displayUnreadCount(totalUnreadCount);
 
-            SLog.info("memberName[%s], lastMessage[%s], timestamp[%s], nickname[%s], avatar[%s]",
-                    memberName, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"),
-                    friendInfo.nickname, friendInfo.avatarUrl);
-
-            SLog.info("friendInfo[%s]", friendInfo);
-
-            ChatConversation chatConversation = new ChatConversation();
-
-            chatConversation.friendInfo = friendInfo;
-
-            chatConversation.unreadCount = conversation.getUnreadMsgCount();
-            chatConversation.lastMessageType = ChatUtil.getIntMessageType(lastMessage);
-            chatConversation.lastMessage = lastMessage.getBody().toString();
-            chatConversation.timestamp = lastMessage.getMsgTime();
-            totalUnreadCount += chatConversation.unreadCount;
-
-            chatConversationList.add(chatConversation);
+            adapter.setNewData(chatConversationList);
+        } catch (Exception e) {
+            SLog.info("Error!%s", e.getMessage());
         }
-        displayUnreadCount(totalUnreadCount);
-
-        adapter.setNewData(chatConversationList);
     }
 
     private void displayUnreadCount(int totalUnreadCount) {
