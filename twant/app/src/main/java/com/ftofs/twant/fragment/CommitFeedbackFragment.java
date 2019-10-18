@@ -5,11 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -44,6 +47,7 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
     SquareGridLayout sglImageContainer;
     ImageView btnAddImage;
     EditText etContent;
+    TextView tvWordCount;
 
     Map<Integer, ButtonClickInfo> buttonClickInfoMap = new HashMap<>();
 
@@ -69,6 +73,24 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
 
         sglImageContainer = view.findViewById(R.id.sgl_image_container);
         etContent = view.findViewById(R.id.et_content);
+        tvWordCount = view.findViewById(R.id.tv_word_count);
+        etContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                int wordCount = s.length();
+                tvWordCount.setText(wordCount + "/200");
+            }
+        });
         btnAddImage = view.findViewById(R.id.btn_add_image);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
