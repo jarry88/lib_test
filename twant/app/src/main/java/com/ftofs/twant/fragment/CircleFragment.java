@@ -71,8 +71,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     RecyclerView rvPostList;
     SwipeRefreshLayout swipeRefreshLayout;
 
-    // 當前要加載第幾頁
-    int currPage = 1;
+    // 當前要加載第幾頁(從1開始）
+    int currPage = 0;
     boolean hasMore;
 
     /**
@@ -171,9 +171,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         postCategoryList.add(item);
 
         if (searchPostParams.page > 0) {
-            currPage = searchPostParams.page;
+            loadPostData(searchPostParams.page);
+        } else {
+            loadPostData(currPage + 1);
         }
-        loadPostData(currPage);
     }
 
 
@@ -213,6 +214,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void loadPostData(int page) {
+        // 組裝篩選參數
         EasyJSONObject params = EasyJSONObject.generate();
 
         try {
@@ -294,7 +296,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
                                 SLog.info("category[%s]", searchPostParams.category);
 
-                                loadPostData(currPage);
+                                currPage = 0;
+                                loadPostData(currPage + 1);
                             }
                         };
                         for (PostCategory postCategory : postCategoryList) {
@@ -313,7 +316,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     }
 
                     // 如果是加載第一頁的數據，先清除舊數據
-                    if (currPage == 1) {
+                    if (page == 1) {
                         postItemList.clear();
                     }
                     EasyJSONArray wantPostList = responseObj.getArray("datas.wantPostList");
@@ -341,7 +344,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         postItemList.add(item);
                     }
 
-                    if (!hasMore) {
+                    if (!hasMore && postItemList.size() > 1) {
                         // 如果全部加載完畢，添加加載完畢的提示
                         PostItem item = new PostItem();
                         item.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
@@ -368,7 +371,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         if (type == PopupType.POST_FILTER) {
             filterSelectedIndex = id;
             searchPostParams.sort = (String) extra;
-            loadPostData(currPage);
+            currPage = 0;
+            loadPostData(currPage + 1);
         }
     }
 
@@ -391,8 +395,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             llTabButtonContainer.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    currPage = 1;
-                    loadPostData(currPage);
+                    currPage = 0;
+                    loadPostData(currPage + 1);
                 }
             }, 1500);
         }
@@ -491,8 +495,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onRefresh() {
         SLog.info("onRefresh");
-        currPage = 1;
+        currPage = 0;
         isPostDataLoaded = false;
-        loadPostData(currPage);
+        loadPostData(currPage + 1);
     }
 }
