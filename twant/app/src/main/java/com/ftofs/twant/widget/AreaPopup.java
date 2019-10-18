@@ -78,10 +78,6 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
         llAreaContainer = findViewById(R.id.ll_area_container);
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
 
-        if (popupType == PopupType.MEMBER_ADDRESS) {
-            // 如果是選擇會員地址，將【配送至】提示文本隱藏
-            findViewById(R.id.tv_ship_to).setVisibility(GONE);
-        }
 
         RecyclerView rvList = findViewById(R.id.rv_area_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
