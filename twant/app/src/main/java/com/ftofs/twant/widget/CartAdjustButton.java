@@ -20,7 +20,7 @@ import okhttp3.Call;
 import okhttp3.Response;
 
 /**
- * 購物車數量調節按鈕
+ * 購物籃數量調節按鈕
  * @author zwm
  */
 public class CartAdjustButton extends AdjustButton {

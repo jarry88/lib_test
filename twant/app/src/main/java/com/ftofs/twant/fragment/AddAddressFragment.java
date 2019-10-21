@@ -116,7 +116,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             }
 
             if (mIsDefaultAddr == 1) {
-                mSbDefaultAddr.setIconResource(R.drawable.icon_cart_item_checked);
+                mSbDefaultAddr.setIconResource(R.drawable.icon_checked);
             }
         } else {
             // 地址添加
@@ -164,7 +164,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             if (mIsDefaultAddr == 1) {
                 mSbDefaultAddr.setIconResource(R.drawable.icon_cart_item_unchecked);
             } else {
-                mSbDefaultAddr.setIconResource(R.drawable.icon_cart_item_checked);
+                mSbDefaultAddr.setIconResource(R.drawable.icon_checked);
             }
             mIsDefaultAddr = 1 - mIsDefaultAddr;
             SLog.info("mIsDefaultAddr[%d]", mIsDefaultAddr);

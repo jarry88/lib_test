@@ -773,7 +773,7 @@
         </LinearLayout>
 
 
-        <!-- 店舖熱賣 -->
+        <!-- 店鋪熱賣 -->
         <LinearLayout
             android:id="@+id/ll_store_hot_container"
             android:layout_width="0dp"
@@ -790,7 +790,7 @@
                 android:gravity="center"
                 android:textColor="@color/tw_black"
                 android:textSize="21sp"
-                android:text="店 舖 熱 賣"
+                android:text="店 鋪 熱 賣"
                 />
             <TextView
                 android:layout_width="match_parent"

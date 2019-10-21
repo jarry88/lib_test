@@ -12,7 +12,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
 /**
- * 購物車數量調節按鈕
+ * 購物籃數量調節按鈕
  * @author zwm
  */
 public class AdjustButton extends android.support.v7.widget.AppCompatTextView {

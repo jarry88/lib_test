@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_gravity="center_vertical"
-            android:text="贈送$5店舖券一張"
+            android:text="贈送$5店鋪券一張"
             android:textSize="16sp"
             android:textColor="@color/tw_black"
             />

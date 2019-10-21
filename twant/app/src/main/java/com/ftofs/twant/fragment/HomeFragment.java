@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -57,6 +59,14 @@ import okhttp3.Call;
 public class HomeFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener, NestedScrollingCallback {
     LinearLayout llNewArrivalsContainer;
     MZBannerView bannerView;
+    float density;
+
+    /**
+     * 【店鋪形像圖】的寬度
+     */
+    int storeFigureContainerWidth;
+    int remainWidth; // 占掉外邊距的寬度
+
 
     public static final int ANIM_COUNT = 4;
     ObjectAnimator[] animatorArr = new ObjectAnimator[ANIM_COUNT];
@@ -103,6 +113,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         EventBus.getDefault().register(this);
 
+        density = Util.getDensity(_mActivity);
+        SLog.info("density[%s]", density);
+        Pair<Integer, Integer> screenDimension = Util.getScreenDimemsion(_mActivity);
+        storeFigureContainerWidth = screenDimension.first -  2 * Util.dip2px(_mActivity, 32.5f); // 屏幕寬度減去兩邊32.5dp
+        remainWidth = storeFigureContainerWidth - Util.dip2px(_mActivity, 52);
+        SLog.info("storeFigureContainerWidth[%d], remainWidth[%d]", storeFigureContainerWidth, remainWidth);
 
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_category, this);
@@ -255,18 +271,18 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_category || id == R.id.btn_category_store ||
-                id == R.id.btn_category_goods || id == R.id.btn_category_brand) {
-            int currTabIndex;
-            if (id == R.id.btn_category || id == R.id.btn_category_store) {
-                currTabIndex = CategoryFragment.TAB_STORE;
-            } else if (id == R.id.btn_category_goods) {
-                currTabIndex = CategoryFragment.TAB_GOODS;
-            } else {
-                currTabIndex = CategoryFragment.TAB_BRAND;
-            }
-
-            Util.startFragment(CategoryFragment.newInstance(currTabIndex));
+        if (id == R.id.btn_category) {
+            Util.startFragment(CategoryFragment.newInstance(CategoryFragment.TAB_STORE));
+        } else if (id == R.id.btn_category_store) {
+            Util.startFragment(SearchResultFragment.newInstance(SearchType.STORE.name(),
+                    EasyJSONObject.generate("keyword", "").toString()));
+        } else if (id == R.id.btn_category_goods) {
+            Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                    EasyJSONObject.generate("keyword", "").toString()));
+        } else if (id == R.id.btn_category_brand) {
+            SearchPostParams searchPostParams = new SearchPostParams();
+            searchPostParams.keyword = "";
+            Util.startFragment(CircleFragment.newInstance(true, searchPostParams));
         } else if (id == R.id.ll_search_box) {
             Util.startFragment(SearchFragment.newInstance(SearchType.ALL));
         } else if (id == R.id.btn_test) {
@@ -491,6 +507,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     }
 
                     try {
+                        float ratio = density / 2.5f;
+                        if (ratio < 1) {
+                            ratio = 0.95f;
+                        }
+                        ratio = 1;
+                        SLog.info("__ratio[%s]", ratio);
+
                         EasyJSONArray storeList = responseObj.getArray("datas.storeList");
                         SLog.info("storeList size[%d]", storeList.length());
 
@@ -521,6 +544,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             Glide.with(_mActivity).load(storeFigureImageUrl).centerCrop().into(imgStoreFigure);
 
 
+
                             int index = 0;
                             // 店鋪的3個商品展示
                             for (Object object2 : store.getArray("goodsList")) {
@@ -530,18 +554,48 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 String uri = StringUtil.normalizeImageUrl(imageSrc);
                                 LinearLayout llGoodsImageContainer = null;
 
+                                int dimen;
                                 if (index == 0) {
+                                    dimen = (int) (ratio * remainWidth * 79 / 258);
+                                    SLog.info("__dimen[%d]", dimen);
                                     ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
+                                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageLeft.getLayoutParams();
+                                    layoutParams.width = dimen;
+                                    layoutParams.height = dimen;
+                                    goodsImageLeft.setLayoutParams(layoutParams);
                                     Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageLeft);
                                     llGoodsImageContainer = storeView.findViewById(R.id.goods_image_left_container);
+                                    if (density < 2.5f) {
+                                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) llGoodsImageContainer.getLayoutParams();
+                                        layoutParams1.leftMargin = (int) (0.5 * layoutParams1.leftMargin);
+                                        llGoodsImageContainer.setLayoutParams(layoutParams1);
+                                    }
                                 } else if (index == 1) {
+                                    dimen = (int) (ratio * remainWidth * 100 / 258);
+                                    SLog.info("__dimen[%d]", dimen);
                                     ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
+                                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageMiddle.getLayoutParams();
+                                    layoutParams.width = dimen;
+                                    layoutParams.height = dimen;
+                                    goodsImageMiddle.setLayoutParams(layoutParams);
                                     Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageMiddle);
                                     llGoodsImageContainer = storeView.findViewById(R.id.goods_image_middle_container);
                                 } else if (index == 2) {
+                                    dimen = (int) (ratio * remainWidth * 79 / 258);
+                                    SLog.info("__dimen[%d]", dimen);
                                     ImageView goodsImageRight = storeView.findViewById(R.id.goods_image_right);
+                                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageRight.getLayoutParams();
+                                    layoutParams.width = dimen;
+                                    layoutParams.height = dimen;
+                                    goodsImageRight.setLayoutParams(layoutParams);
                                     Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageRight);
                                     llGoodsImageContainer = storeView.findViewById(R.id.goods_image_right_container);
+                                    if (density < 2.5f) {
+                                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) llGoodsImageContainer.getLayoutParams();
+                                        layoutParams1.rightMargin = (int) (0.5 * layoutParams1.rightMargin);
+                                        SLog.info("_____RIGHT[%d]", layoutParams1.rightMargin);
+                                        llGoodsImageContainer.setLayoutParams(layoutParams1);
+                                    }
                                 }
 
                                 llGoodsImageContainer.setVisibility(View.VISIBLE);

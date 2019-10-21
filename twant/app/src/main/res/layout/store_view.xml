@@ -77,6 +77,7 @@
             />
     </LinearLayout>
 
+
     <LinearLayout
         android:id="@+id/goods_image_left_container"
         android:layout_width="wrap_content"

@@ -35,21 +35,21 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public static final int MESSAGE_FRAGMENT = 1;
     /** 想要圈 */
     public static final int CIRCLE_FRAGMENT = 2;
-    /** 購物車 */
+    /** 購物籃 */
     public static final int CART_FRAGMENT = 3;
     /** 專頁 */
     public static final int MY_FRAGMENT = 4;
 
     TextView tvMessageItemCount; // 顯示未讀消息條數的紅點
-    TextView tvCartItemCount;    // 顯示購物車中商品數的紅點
+    TextView tvCartItemCount;    // 顯示購物籃中商品數的紅點
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_message, R.id.btn_circle,
                                                     R.id.btn_cart, R.id.btn_my};
     private ImageView[] bottomBarIcons = new ImageView[5];
-    private int[] bottomBarIconResources = new int[] {R.drawable.icon__bottom_bar_home, R.drawable.icon__bottom_bar_message, 0,
+    private int[] bottomBarIconResources = new int[] {R.drawable.icon__bottom_bar_home, R.drawable.icon__bottom_bar_message, R.drawable.icon__bottom_bar_want,
                                                         R.drawable.icon__bottom_bar_cart, R.drawable.icon__bottom_bar_my};
-    private int[] bottomBarSelIconResources = new int[] {R.drawable.icon__bottom_bar_home_sel, R.drawable.icon__bottom_bar_message_sel, 0,
+    private int[] bottomBarSelIconResources = new int[] {R.drawable.icon__bottom_bar_home_sel, R.drawable.icon__bottom_bar_message_sel, R.drawable.icon__bottom_bar_want_sel,
             R.drawable.icon__bottom_bar_cart_sel, R.drawable.icon__bottom_bar_my_sel};
 
     /**
@@ -104,6 +104,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
         bottomBarIcons[HOME_FRAGMENT] = view.findViewById(R.id.icon_home);
         bottomBarIcons[MESSAGE_FRAGMENT] = view.findViewById(R.id.icon_message);
+        bottomBarIcons[CIRCLE_FRAGMENT] = view.findViewById(R.id.icon_circle);
         bottomBarIcons[CART_FRAGMENT] = view.findViewById(R.id.icon_cart);
         bottomBarIcons[MY_FRAGMENT] = view.findViewById(R.id.icon_my);
     }
@@ -159,7 +160,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             }
 
             if (index == MESSAGE_FRAGMENT || index == CART_FRAGMENT || index == MY_FRAGMENT) {
-                // 如果是查看【消息】、【購物車】或【我的】，先檢查是否已經登錄
+                // 如果是查看【消息】、【購物籃】或【我的】，先檢查是否已經登錄
                 if (!User.isLogin()) {
                     Util.showLoginFragment();
                     return;
@@ -174,16 +175,13 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
 
         // 切換未選中圖標
-        if (selectedFragmentIndex != CIRCLE_FRAGMENT) {
-            bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarIconResources[selectedFragmentIndex]);
-        }
+        bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarIconResources[selectedFragmentIndex]);
 
         selectedFragmentIndex = index;
 
         // 切換選中圖標
-        if (selectedFragmentIndex != CIRCLE_FRAGMENT) {
-            bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarSelIconResources[selectedFragmentIndex]);
-        }
+        bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarSelIconResources[selectedFragmentIndex]);
+
     }
 
     @Override
@@ -204,7 +202,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) {
             showHideFragment(HOME_FRAGMENT);
             setMessageItemCount(0); // 未讀消息數置0
-            setCartItemCount(0); // 購物車商品數置0
+            setCartItemCount(0); // 購物籃商品數置0
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT) {
             int fragmentIndex = (int) message.data;
             if (HOME_FRAGMENT <= fragmentIndex && fragmentIndex <= MY_FRAGMENT) {

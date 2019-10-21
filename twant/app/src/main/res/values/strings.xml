@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">想要城</string>
 
-    <string name="copyright">© %d Takewant版權所有</string>
+    <string name="copyright">© %d 想要城Takewant 版權所有</string>
 
     <string name="register_fragment_title">注冊賬號</string>
     <string name="login_fragment_title">登入</string>
@@ -39,7 +39,7 @@
 
     <string name="text_security_setting">安全設置</string>
     <string name="text_logistics_address_setting">收貨地址設置</string>
-    <string name="text_about_takewant">關于想要城</string>
+    <string name="text_about_takewant">關於想要城</string>
 
     <string name="text_takewant_introduction">想要城介紹</string>
     <string name="text_check_update">檢測更新</string>
@@ -49,11 +49,11 @@
 
     <string name="text_phone">電話</string>
     <string name="text_distance">距離</string>
-    <string name="text_create_post">發表帖文</string>
+    <string name="text_create_post">發表想要</string>
     <string name="text_reply">回復</string>
     <string name="text_comment_detail">評論詳情</string>
     <string name="text_create_comment">發表評論</string>
-    <string name="text_post_detail">貼文詳情</string>
+    <string name="text_post_detail">想要詳情</string>
     <string name="text_post">貼文</string>
 
     <string name="text_message">消息</string>
@@ -178,7 +178,7 @@
     <string name="bottom_bar_title_home">首頁</string>
     <string name="bottom_bar_title_message">消息</string>
     <string name="bottom_bar_title_circle">想要圈</string>
-    <string name="bottom_bar_title_cart">購物車</string>
+    <string name="bottom_bar_title_cart">購物籃</string>
     <string name="bottom_bar_title_my">我的</string>
 
     <!-- 店鋪的底部工具欄 -->
@@ -223,7 +223,7 @@
 
     <string name="text_new_in_chinese">最 新 商 品</string>
     <string name="text_new_in_english">N E W   I N</string>
-    <string name="text_store_hot_item_chinese">店 舖 熱 賣</string>
+    <string name="text_store_hot_item_chinese">店 鋪 熱 賣</string>
     <string name="text_store_hot_item_english">H O T   S A L E</string>
 
     <string name="text_features_goods_chinese">鎮 店 之 寶</string>
@@ -241,7 +241,7 @@
     <string name="text_instant_discount">立減</string>
     <string name="text_instant_discount_desc">滿%d元，減%d元</string>
     <string name="text_present_voucher">送券</string>
-    <string name="text_present_voucher_desc">滿%d元，送%d元店舖券</string>
+    <string name="text_present_voucher_desc">滿%d元，送%d元店鋪券</string>
 
     <string name="text_pay_success">訂單支付成功</string>
     <string name="text_view_order">查看訂單</string>
@@ -273,7 +273,7 @@
 
     <string name="text_store">店鋪</string>
     <string name="text_goods">商品</string>
-    <string name="text_cart">購物車</string>
+    <string name="text_cart">購物籃</string>
     <string name="text_edit">編輯</string>
     <string name="text_search">搜索</string>
     <string name="text_quantity">數量</string>
@@ -310,7 +310,7 @@
     <string name="text_all_goods">全部商品</string>
 
     <string name="text_want_to_buy">想要購買</string>
-    <string name="text_want_to_add_to_cart">想放購物車</string>
+    <string name="text_want_to_add_to_cart">想放購物籃</string>
 
     <string name="text_customer_service">客服</string>
     <string name="text_pre_sale">售前</string>
@@ -617,7 +617,7 @@
     <string name="text_store_customer_service">店鋪客服</string>
 
     <string name="search_tab_title_goods">商品</string>
-    <string name="search_tab_title_store">店鋪</string>
+    <string name="search_tab_title_store">商店</string>
     <string name="search_tab_title_article">文章</string>
 
     <string name="goods_tab_title_general">綜合</string>
@@ -662,8 +662,8 @@
     <string name="text_view_count">瀏覽%d次</string>
     <string name="text_view_reply_count">查看%d條回復</string>
     <string name="text_view_comment_count">查看%d條評論</string>
-    <string name="text_publish_post">發布貼文...</string>
-    <string name="text_publish_new">發布</string>
+    <string name="text_publish_post">發表想要...</string>
+    <string name="text_publish_new">發表</string>
     <string name="text_guess_your_like">猜你喜歡</string>
     <string name="text_store_wanted">店鋪招聘</string>
     <string name="text_wanted_job">招聘崗位</string>

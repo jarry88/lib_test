@@ -23,7 +23,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 關于頁面
+ * 關於頁面
  * @author zwm
  */
 public class AboutFragment extends BaseFragment implements View.OnClickListener {

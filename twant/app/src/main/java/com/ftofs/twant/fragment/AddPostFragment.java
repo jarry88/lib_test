@@ -62,7 +62,7 @@ import okhttp3.Call;
 
 
 /**
- * 發表帖文Fragment
+ * 發表想要Fragment
  * @author zwm
  */
 public class AddPostFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {

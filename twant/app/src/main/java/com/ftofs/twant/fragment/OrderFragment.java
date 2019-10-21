@@ -640,7 +640,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                         } else if(operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
                             ToastUtil.success(_mActivity, "刪除訂單成功");
                         } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
-                            ToastUtil.success(_mActivity, "訂單已添加到購物車");
+                            ToastUtil.success(_mActivity, "訂單已添加到購物籃");
                             start(CartFragment.newInstance(true));
                         }
                     } catch (Exception e) {

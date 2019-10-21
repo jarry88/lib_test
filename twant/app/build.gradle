@@ -14,7 +14,7 @@ android {
         applicationId "com.ftofs.twant"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 12
+        versionCode 13
         versionName "1.2.2.60"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

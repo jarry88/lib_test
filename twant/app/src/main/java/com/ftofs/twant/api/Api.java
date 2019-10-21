@@ -183,18 +183,18 @@ public class Api {
     public static final String PATH_GOODS_DETAIL = "/app/goods";
 
     /**
-     * 添加購物車
+     * 添加購物籃
      */
     public static final String PATH_ADD_CART = "/cart/add";
 
     /**
-     * 刪除購物車
+     * 刪除購物籃
      */
     public static final String PATH_DELETE_CART = "/cart/del/batch/sku";
 
 
     /**
-     * 購物車列表
+     * 購物籃列表
      */
     public static final String PATH_CART_LIST = "/cart/list";
 

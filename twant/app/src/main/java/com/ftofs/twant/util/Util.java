@@ -549,4 +549,16 @@ public class Util {
         int screenHeight = dm.heightPixels;
         return new Pair<>(screenWidth, screenHeight);
     }
+
+
+    /**
+     * 獲取屏幕density
+     * @param activity
+     * @return
+     */
+    public static float getDensity(Activity activity) {
+        DisplayMetrics dm = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        return dm.density;
+    }
 }

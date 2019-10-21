@@ -62,7 +62,7 @@
             android:layout_height="31dp"
             android:layout_marginLeft="7dp"
             android:layout_centerVertical="true"
-            app:icon_src="@drawable/icon_cart_item_checked"
+            app:icon_src="@drawable/icon_checked"
             />
         <TextView
             android:layout_width="wrap_content"
