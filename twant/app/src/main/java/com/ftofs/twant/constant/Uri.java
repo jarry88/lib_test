@@ -13,7 +13,7 @@ public class Uri {
      */
     public final static String WEB_DOMAIN = Config.WEB_BASE_URL;
     /**
-     * 購物車
+     * 購物籃
      */
     public final static String API_SHOPPING_CART_LIST = API_DOMAIN.concat("/cart/list");
 

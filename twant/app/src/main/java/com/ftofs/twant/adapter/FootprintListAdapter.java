@@ -84,7 +84,7 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
                 btnSelectDate.setVisibility(View.VISIBLE);
 
                 if (dateStatus.isChecked()) {
-                    btnSelectDate.setIconResource(R.drawable.icon_cart_item_checked);
+                    btnSelectDate.setIconResource(R.drawable.icon_checked);
                 } else {
                     btnSelectDate.setIconResource(R.drawable.icon_cart_item_unchecked);
                 }
@@ -100,7 +100,7 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
                 btnSelectStore.setVisibility(View.VISIBLE);
 
                 if (storeStatus.isChecked()) {
-                    btnSelectStore.setIconResource(R.drawable.icon_cart_item_checked);
+                    btnSelectStore.setIconResource(R.drawable.icon_checked);
                 } else {
                     btnSelectStore.setIconResource(R.drawable.icon_cart_item_unchecked);
                 }
@@ -116,7 +116,7 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
                 btnSelectGoods.setVisibility(View.VISIBLE);
 
                 if (goodsStatus.isChecked()) {
-                    btnSelectGoods.setIconResource(R.drawable.icon_cart_item_checked);
+                    btnSelectGoods.setIconResource(R.drawable.icon_checked);
                 } else {
                     btnSelectGoods.setIconResource(R.drawable.icon_cart_item_unchecked);
                 }

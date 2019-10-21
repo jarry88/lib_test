@@ -198,7 +198,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 baseFragment.start(SearchFragment.newInstance(SearchType.ALL));
                 break;
             case TYPE_ORDER:
-                // 購物車
+                // 購物籃
                 baseFragment.start(CartFragment.newInstance(true));
                 break;
             default:

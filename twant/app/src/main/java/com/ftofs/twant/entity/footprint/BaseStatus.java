@@ -34,7 +34,7 @@ public class BaseStatus {
         this.checked = checked;
         if (radio != null) {
             if (checked) {
-                radio.setIconResource(R.drawable.icon_cart_item_checked);
+                radio.setIconResource(R.drawable.icon_checked);
             } else {
                 radio.setIconResource(R.drawable.icon_cart_item_unchecked);
             }

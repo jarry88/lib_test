@@ -206,7 +206,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         // 最近一次顯示時間超過一天，則進行檢查更新(主要用于前后臺切換時，不要重復顯示)
         if (System.currentTimeMillis() - popupShownTimestamp > 24 * 3600 * 1000) {
-            Api.getUI(Api.PATH_CHECK_UPDATE, EasyJSONObject.generate("version", BuildConfig.VERSION_NAME), new UICallback() {
+            EasyJSONObject params = EasyJSONObject.generate("version", BuildConfig.VERSION_NAME);
+            SLog.info("params[%s]", params);
+            Api.getUI(Api.PATH_CHECK_UPDATE, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(MainActivity.this, e);

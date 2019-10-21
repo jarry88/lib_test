@@ -61,7 +61,7 @@ public class TotalStatus extends BaseStatus {
     }
 
     /**
-     * 獲取要購買的Sku的數據，用于提交訂單 或 刪除購物車
+     * 獲取要購買的Sku的數據，用于提交訂單 或 刪除購物籃
      * @return
      */
     public EasyJSONArray getBuyData() {

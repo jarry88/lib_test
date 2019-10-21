@@ -8,18 +8,19 @@
     tools:context=".activity.SplashActivity">
 
     <ImageView
-        android:layout_width="214dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="163dp"
+        android:layout_marginTop="86.5dp"
         android:src="@drawable/logo"
         />
 
     <ImageView
-        android:layout_width="215dp"
-        android:layout_height="14dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="235dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="110dp"
         android:src="@drawable/take_what_iwant"
         />
 

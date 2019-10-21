@@ -23,7 +23,7 @@ public class AddrListAdapter extends BaseQuickAdapter<AddrItem, BaseViewHolder> 
         helper.setText(R.id.tv_addr, item.areaInfo + " " + item.address);
         ScaledButton scaledButton = helper.getView(R.id.img_default_addr_indicator);
         if (item.isDefault == 1) {
-            scaledButton.setIconResource(R.drawable.icon_cart_item_checked);
+            scaledButton.setIconResource(R.drawable.icon_checked);
         } else {
             scaledButton.setIconResource(R.drawable.icon_cart_item_unchecked);
         }

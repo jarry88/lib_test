@@ -107,6 +107,8 @@
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:background="@drawable/bottom_bar_shop_avatar_bg"
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="2dp"
                 />
             <TextView
                 android:layout_width="wrap_content"
