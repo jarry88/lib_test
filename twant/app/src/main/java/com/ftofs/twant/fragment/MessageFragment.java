@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.ChatConversation;
@@ -95,6 +96,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         Util.setOnClickListener(view, R.id.btn_message_menu, this);
         Util.setOnClickListener(view, R.id.btn_view_logistics_message, this);
         Util.setOnClickListener(view, R.id.btn_view_refund_message, this);
+
+        Util.setOnClickListener(view, R.id.btn_transact_message, this);
+        Util.setOnClickListener(view, R.id.btn_asset_message, this);
+        Util.setOnClickListener(view, R.id.btn_social_message, this);
+        Util.setOnClickListener(view, R.id.btn_bargain_message, this);
+        Util.setOnClickListener(view, R.id.btn_notice_message, this);
 
         btnBack = view.findViewById(R.id.btn_back);
         btnContact = view.findViewById(R.id.btn_contact);
@@ -301,7 +308,30 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     .show();
         } else if (id == R.id.btn_contact) {
             Util.startFragment(ContactFragment.newInstance());
+        } else if (id == R.id.btn_transact_message || id == R.id.btn_asset_message || id == R.id.btn_social_message ||
+                    id == R.id.btn_bargain_message || id == R.id.btn_notice_message) {
+            Util.startFragment(MessageListFragment.newInstance(getMessageTplClass(id)));
         }
+    }
+
+    /**
+     * 按鈕Id對應到消息模板代碼
+     * @param btnId
+     * @return
+     */
+    private int getMessageTplClass(int btnId) {
+        if (btnId == R.id.btn_transact_message) {
+            return Constant.TPL_CLASS_TRANSACT;
+        } else if (btnId == R.id.btn_asset_message) {
+            return Constant.TPL_CLASS_ASSET;
+        } else if (btnId == R.id.btn_social_message) {
+            return Constant.TPL_CLASS_SOCIAL;
+        } else if (btnId == R.id.btn_bargain_message) {
+            return Constant.TPL_CLASS_BARGAIN;
+        } else if (btnId == R.id.btn_notice_message) {
+            return Constant.TPL_CLASS_NOTICE;
+        }
+        return 0;
     }
 
     @Override

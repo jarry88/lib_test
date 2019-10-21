@@ -233,4 +233,19 @@ public class Constant {
      * 卡券類型 -- 平臺券
      */
     public static final int COUPON_TYPE_PLATFORM = 2;
+
+
+    /*
+    消息模板分类
+    1001-交易消息
+    1002-資產消息
+    1003-社交消息
+    1004-促銷消息
+    1005-通知消息
+     */
+    public static final int TPL_CLASS_TRANSACT = 1001;
+    public static final int TPL_CLASS_ASSET = 1002;
+    public static final int TPL_CLASS_SOCIAL = 1003;
+    public static final int TPL_CLASS_BARGAIN = 1004;
+    public static final int TPL_CLASS_NOTICE = 1005;
 }

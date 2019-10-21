@@ -76,6 +76,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
         <LinearLayout
+            android:id="@+id/btn_transact_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -97,6 +98,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btn_asset_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -118,6 +120,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btn_social_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -139,6 +142,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btn_bargain_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -160,6 +164,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btn_notice_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
