@@ -47,15 +47,12 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-
         TextView tvCopyRight = findViewById(R.id.copyright);
         String copyright = getResources().getString(R.string.copyright);
         // 获取年份
         copyright = String.format(copyright, jarbon.getYear());
 
         tvCopyRight.setText(copyright);
-
-
 
         // 判斷是否需要啟動App引導頁(每天需要顯示一次引導頁)
         String lastShowAppGuideDate = Hawk.get(SPField.FIELD_SHOW_APP_GUIDE_DATE);
@@ -66,53 +63,42 @@ public class SplashActivity extends BaseActivity {
 
         if (!today.equals(lastShowAppGuideDate)) { // 需要顯示App引導頁
             SLog.info("需要顯示App引導頁");
-            TaskObserver taskObserver = new TaskObserver() {
-                @Override
-                public void onMessage() {
-                    startActivity(AppGuideActivity.class);
-                }
-            };
-
-
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
-                @Override
-                public Object doWork() {
-                    try {
-                        String responseStr = Api.syncGet(Api.PATH_APP_GUIDE, null);
-                        if (StringUtil.isEmpty(responseStr)) {
-                            return false;
-                        }
-
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                        if (responseObj == null) {
-                            return false;
-                        }
-
-                        EasyJSONArray appGuideImageArray = responseObj.getArray("datas.appGuideImage");
-
-                        for (Object object : appGuideImageArray) {
-                            EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-                            String url = easyJSONObject.getString("guideImage");
-                            String filename = PathUtil.getFilename(url);
-                            File appGuideImageFile = FileUtil.getCacheFile(SplashActivity.this, "app_guide/" + filename);
-                            if (!appGuideImageFile.exists()) { // 如果引導圖片不存在，則下載
-                                Api.syncDownloadFile(StringUtil.normalizeImageUrl(url), appGuideImageFile);
-                            }
-                        }
-
-                        SLog.info("下載App引導數據成功");
-                        return true;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    return null;
-                }
-            });
+            startTargetActivity(AppGuideActivity.class);
         } else {
             SLog.info("【不】需要顯示App引導頁");
-            startActivity(MainActivity.class);
+            startTargetActivity(MainActivity.class);
         }
+
+        // 下載App引導頁圖片任務
+        TwantApplication.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String responseStr = Api.syncGet(Api.PATH_APP_GUIDE, null);
+                    SLog.info("responseStr[%s]", responseStr);
+                    if (StringUtil.isEmpty(responseStr)) {
+                        return;
+                    }
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (responseObj == null) {
+                        return;
+                    }
+
+                    EasyJSONArray appGuideImageArray = responseObj.getArray("datas.appGuideImage");
+                    for (Object object : appGuideImageArray) {
+                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                        String url = easyJSONObject.getString("guideImage");
+                        File appGuideImageFile = FileUtil.getCacheFile(SplashActivity.this, url);
+                        if (!appGuideImageFile.exists()) { // 如果引導圖片不存在，則下載
+                            Api.syncDownloadFile(StringUtil.normalizeImageUrl(url), appGuideImageFile);
+                        }
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 
     @Override
@@ -140,7 +126,7 @@ public class SplashActivity extends BaseActivity {
      * 啟動指定的Activity
      * @param cls
      */
-    private void startActivity(Class<?> cls) {
+    private void startTargetActivity(Class<?> cls) {
         // delayMillis為啟動頁需要顯示的時間減去App啟動所耗的時間
         long delayMillis = SPLASH_DURATION - (System.currentTimeMillis() - appStartTime);
         if (delayMillis < 0) {

@@ -11,8 +11,11 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.StringUtil;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -43,10 +46,20 @@ public class AppGuidePagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        String imagePath = imageList.get(position);
+        File imageFile = FileUtil.getCacheFile(context, imagePath);
         if (position == imageList.size() - 1) {
             View lastAppGuide = LayoutInflater.from(context).inflate(R.layout.last_app_guide, container, false);
             ImageView iv = lastAppGuide.findViewById(R.id.img_background);
-            Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
+
+            if (imageFile.exists()) { // 引導頁圖片文件已存在本地
+                SLog.info("___app_guide exists");
+                Glide.with(context).load(imageFile).centerCrop().into(iv);
+            } else { // 引導頁圖片需要在網上下載
+                SLog.info("___app_guide not exists");
+                Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
+            }
+
             lastAppGuide.findViewById(R.id.btn_start_main_activity).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -60,7 +73,13 @@ public class AppGuidePagerAdapter extends PagerAdapter {
             return lastAppGuide;
         } else {
             ImageView iv = new ImageView(context);
-            Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
+            if (imageFile.exists()) { // 引導頁圖片文件已存在本地
+                SLog.info("___app_guide exists");
+                Glide.with(context).load(imageFile).centerCrop().into(iv);
+            } else { // 引導頁圖片需要在網上下載
+                SLog.info("___app_guide not exists");
+                Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
+            }
             container.addView(iv);
             return iv;
         }

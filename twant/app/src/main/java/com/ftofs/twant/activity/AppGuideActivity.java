@@ -7,16 +7,27 @@ import android.support.v4.view.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.AppGuidePagerAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.orhanobut.hawk.Hawk;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * App啟動引導頁
@@ -35,13 +46,51 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
         Hawk.put(SPField.FIELD_SHOW_APP_GUIDE_DATE, new Jarbon().toDateString());
 
         vpAppGuide = findViewById(R.id.vp_app_guide);
-        imageList.add("image/57/76/5776e2ca8a1403530fca6e4bc097ff39.png");
-        imageList.add("image/2c/a4/2ca495d4b0b55074ab110e1767288b8b.png");
-        imageList.add("image/05/3c/053cd519a2feaa1cc40a4bde2a58a625.png");
 
+        loadData();
+    }
+
+    private void loadData() {
+        Api.getUI(Api.PATH_APP_GUIDE, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(AppGuideActivity.this, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    if (StringUtil.isEmpty(responseStr)) {
+                        return;
+                    }
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (responseObj == null) {
+                        return;
+                    }
+
+                    EasyJSONArray appGuideImageArray = responseObj.getArray("datas.appGuideImage");
+                    for (Object object : appGuideImageArray) {
+                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                        String url = easyJSONObject.getString("guideImage");
+                        imageList.add(url);
+                    }
+
+                    showAppGuide();
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+
+    private void showAppGuide() {
         AppGuidePagerAdapter adapter = new AppGuidePagerAdapter(this, imageList, this);
         vpAppGuide.setAdapter(adapter);
     }
+
 
     @Override
     protected void onResume() {
