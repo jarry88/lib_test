@@ -220,21 +220,30 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
             return "訂單發貨提醒";
         } else if (tplCode.equals("memberOrdersReceive")) {
             return "訂單收貨提醒";
-        } else if (tplCode.equals("storeGoodsCommonUpdate") || tplCode.equals("storeHr") || tplCode.equals("storeInfoUpdate") ||
-                tplCode.equals("storeOpen")) {
+        } else if (tplCode.equals("storeHr") || tplCode.equals("storeInfoUpdate")) {
             return "店鋪提醒";
+        } else if (tplCode.equals("storeGoodsCommonUpdate")) {
+            return "商品更新提醒";
+        } else if (tplCode.equals("storeOpen")) {
+            return "店鋪開店提醒";
         } else if (tplCode.equals("storeClose")) {
             return "店鋪關店提醒";
         } else if (tplCode.equals("storeGoodsCommonNew")) {
             return "店鋪消息";
         } else if (tplCode.equals("storeSalesPromotion")) {
             return "店鋪促銷提醒";
+        }  else if (tplCode.equals("memberDiscountCoupon")) {
+            return "店鋪優惠消息";
         } else if (tplCode.equals("memberWantCommentLike") || tplCode.equals("memberWantPostLike")) {
             return "點讚提醒";
-        } else if (tplCode.equals("memberFriendsApply")) {
+        } else if (tplCode.equals("memberFriendsApply") || tplCode.equals("memberAgreeFriendsApply")) {
             return "好友邀請提醒";
         } else if (tplCode.equals("storeAnnouncement")) {
             return "店鋪公告提醒";
+        } else if (tplCode.equals("memberStoreWantCommentReply") || tplCode.equals("memberGoodsWantCommentReply")) {
+            return "評論提醒";
+        } else if (tplCode.equals("memberFollowWantPost")) {
+            return "關注提醒 ";
         }
 
 

@@ -38,13 +38,15 @@ public class NoticeListAdapter extends BaseMultiItemQuickAdapter<NoticeItem, Bas
             if (item.tplCode.equals("memberReturnUpdate")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_return).centerCrop().into(imageView);
             } else if (item.tplCode.equals("storeOpen") || item.tplCode.equals("storeClose") ||
-                    item.tplCode.equals("storeInfoUpdate") || item.tplCode.equals("storeGoodsCommonNew") || item.tplCode.equals("storeAnnouncement")) {
+                    item.tplCode.equals("storeInfoUpdate") || item.tplCode.equals("storeGoodsCommonNew") || item.tplCode.equals("storeAnnouncement") ||
+                    item.tplCode.equals("storeGoodsCommonUpdate")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_store).centerCrop().into(imageView);
-            } else if (item.tplCode.equals("storeSalesPromotion")) {
+            } else if (item.tplCode.equals("storeSalesPromotion") || item.tplCode.equals("memberDiscountCoupon")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_bargain).centerCrop().into(imageView);
-            } else if (item.tplCode.equals("memberWantCommentLike")) {
+            } else if (item.tplCode.equals("memberWantCommentLike") || item.tplCode.equals("memberStoreWantCommentReply") || item.tplCode.equals("memberGoodsWantCommentReply")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_interactive).centerCrop().into(imageView);
-            } else if (item.tplCode.equals("memberWantPostLike") || item.tplCode.equals("memberFriendsApply")) {
+            } else if (item.tplCode.equals("memberWantPostLike") || item.tplCode.equals("memberFriendsApply") ||
+                    item.tplCode.equals("memberFollowWantPost") || item.tplCode.equals("memberAgreeFriendsApply")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_friend).centerCrop().into(imageView);
             } else {
                 Glide.with(mContext).load(item.imageUrl).centerCrop().into(imageView);
