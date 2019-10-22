@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -837,20 +838,37 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsMobileBodyVo.setWidth(easyJSONObject.getInt("width"));
                         goodsMobileBodyVo.setHeight(easyJSONObject.getInt("height"));
 
-                        String imageUrl = StringUtil.normalizeImageUrl(easyJSONObject.getString("value"));
+                        if (goodsMobileBodyVo.getType().equals("image")) {
+                            String imageUrl = StringUtil.normalizeImageUrl(easyJSONObject.getString("value"));
 
-                        ImageView imageView = new ImageView(_mActivity);
-                        imageView.setAdjustViewBounds(true);
-                        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                        imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                SLog.info("imageUrl[%s]", imageUrl);
-                                start(ImageViewerFragment.newInstance(imageUrl));
-                            }
-                        });
-                        Glide.with(llGoodsDetailImageContainer).load(imageUrl).into(imageView);
-                        llGoodsDetailImageContainer.addView(imageView);
+                            ImageView imageView = new ImageView(_mActivity);
+                            imageView.setAdjustViewBounds(true);
+                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                            imageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    SLog.info("imageUrl[%s]", imageUrl);
+                                    start(ImageViewerFragment.newInstance(imageUrl));
+                                }
+                            });
+                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).into(imageView);
+                            llGoodsDetailImageContainer.addView(imageView);
+                        } else if (goodsMobileBodyVo.getType().equals("text")) {
+                            TextView textView = new TextView(_mActivity);
+                            textView.setText(goodsMobileBodyVo.getValue());
+                            textView.setTextColor(getResources().getColor(R.color.tw_black, null));
+                            textView.setTextSize(16);
+                            textView.setGravity(Gravity.CENTER);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            layoutParams.leftMargin = Util.dip2px(_mActivity, 20);
+                            layoutParams.rightMargin = layoutParams.leftMargin;
+                            layoutParams.topMargin = Util.dip2px(_mActivity, 10);
+                            layoutParams.bottomMargin = layoutParams.topMargin;
+                            textView.setLayoutParams(layoutParams);
+
+                            llGoodsDetailImageContainer.addView(textView);
+                        }
+
                     }
 
                     // 限時折扣
