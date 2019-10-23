@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
@@ -74,6 +75,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvFreightAmount;
     TextView tvOrdersAmount;
     TextView tvShipTime;
+    RelativeLayout rlTakeCodeContainer;
+    TextView tvTakeCode;
     TextView tvOrdersSn;
 
     LinearLayout llOrderCreateTimeContainer;
@@ -157,6 +160,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         tvFreightAmount = view.findViewById(R.id.tv_freight_amount);
         tvOrdersAmount = view.findViewById(R.id.tv_orders_amount);
         tvShipTime = view.findViewById(R.id.tv_ship_time);
+        rlTakeCodeContainer = view.findViewById(R.id.rl_take_code_container);
+        tvTakeCode = view.findViewById(R.id.tv_take_code);
         tvOrdersSn = view.findViewById(R.id.tv_orders_sn);
 
         llOrderCreateTimeContainer = view.findViewById(R.id.ll_order_create_time_container);
@@ -529,6 +534,15 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         receipt.header = invoiceTitle;
                         receipt.content = invoiceContent;
                         receipt.taxPayerId = invoiceCode;
+                    }
+
+                    // 自提碼
+                    if (responseObj.exists("datas.ordersVo.takeCode")) {
+                        int takeCode = responseObj.getInt("datas.ordersVo.takeCode");
+                        if (takeCode > 0) {
+                            rlTakeCodeContainer.setVisibility(View.VISIBLE);
+                            tvTakeCode.setText(String.valueOf(takeCode));
+                        }
                     }
 
                     long ordersSn = ordersVo.getLong("ordersSn");
