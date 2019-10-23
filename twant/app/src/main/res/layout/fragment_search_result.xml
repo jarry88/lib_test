@@ -176,6 +176,7 @@
                     />
             </RelativeLayout>
         </LinearLayout>
+        <!--
         <LinearLayout
             android:id="@+id/ll_store_filter"
             android:layout_width="match_parent"
@@ -213,6 +214,119 @@
                 android:textSize="16sp"
                 android:text="@string/store_tab_title_follow"
                 />
+        </LinearLayout>
+        -->
+        <LinearLayout
+            android:id="@+id/ll_store_filter"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:background="@drawable/border_type_d">
+            <RelativeLayout
+                android:id="@+id/btn_follow"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="關注"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/btn_general"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/tv_general"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="綜合"
+                        android:textColor="@color/tw_black"
+                        android:textSize="16sp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/icon_general"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3.5dp"
+                        android:src="@drawable/icon_store_filter_expand_black"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/btn_location"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/tv_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="所在地"
+                        android:textColor="@color/tw_black"
+                        android:textSize="16sp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/icon_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3.5dp"
+                        android:src="@drawable/icon_store_filter_expand_black"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/btn_biz_circle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/tv_biz_circle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="商圈"
+                        android:textColor="@color/tw_black"
+                        android:textSize="16sp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/icon_biz_circle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3.5dp"
+                        android:src="@drawable/icon_store_filter_expand_black"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

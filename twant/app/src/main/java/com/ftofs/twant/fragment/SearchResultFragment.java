@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -21,9 +22,9 @@ import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.StoreSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.entity.BizCircleItem;
 import com.ftofs.twant.entity.FilterCategoryGroup;
 import com.ftofs.twant.entity.FilterCategoryItem;
 import com.ftofs.twant.entity.GoodsSearchItem;
@@ -36,9 +37,11 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
+import com.ftofs.twant.widget.StoreFilterPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,7 +52,6 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 搜索结果Fragment
@@ -58,9 +60,39 @@ import okhttp3.Response;
 public class SearchResultFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     SearchType searchType;
 
+    int filterType;
+
+    /**
+     * 商圈列表
+     */
+    List<BizCircleItem> bizCircleItemList;
+
+    /**
+     * 所在地列表
+     */
+    List<BizCircleItem> locationItemList;
+
     int twBlack;
     int twRed;
     int twBlue;
+
+    int currSelId; // 表示店鋪列表當前選中哪個Tab
+    int generalItemSelectedId = 1;
+
+    StoreFilterPopup storeFilterPopup;
+
+    boolean followStatus;
+    TextView tvFollow;
+    TextView tvGeneral;
+    ImageView iconGeneral;
+    TextView tvLocation;
+    ImageView iconLocation;
+    TextView tvBizCircle;
+    ImageView iconBizCircle;
+
+    RelativeLayout btnGeneral;
+    RelativeLayout btnLocation;
+    RelativeLayout btnBizCircle;
 
     GoodsSearchResultAdapter mGoodsAdapter;
     StoreSearchResultAdapter mStoreAdapter;
@@ -88,7 +120,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     public static final int STORE_SEARCH_SORT_STORE_OPEN = 1;
     public static final int STORE_SEARCH_SORT_FOLLOW = 2;
     int storeSortButtonIndex = STORE_SEARCH_SORT_GENERAL; // 店鋪搜索當前用哪種排序標準 0,1,2
-    TextView[] storeSortButtons = new TextView[3];
+
 
     public static final int GOODS_SEARCH_SORT_GENERAL = 0;
     public static final int GOODS_SEARCH_SORT_SALE = 1;
@@ -134,18 +166,28 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         } else if (searchTypeStr.equals(SearchType.STORE.name())) {
             view.findViewById(R.id.ll_goods_filter).setVisibility(View.GONE);
             view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
+
+            tvFollow = view.findViewById(R.id.tv_follow);
+            tvGeneral = view.findViewById(R.id.tv_general);
+            iconGeneral = view.findViewById(R.id.icon_general);
+            tvLocation = view.findViewById(R.id.tv_location);
+            iconLocation = view.findViewById(R.id.icon_location);
+            tvBizCircle = view.findViewById(R.id.tv_biz_circle);
+            iconBizCircle = view.findViewById(R.id.icon_biz_circle);
+
+            Util.setOnClickListener(view, R.id.btn_follow, this);
+
+            btnGeneral = view.findViewById(R.id.btn_general);
+            btnGeneral.setOnClickListener(this);
+            btnLocation = view.findViewById(R.id.btn_location);
+            btnLocation.setOnClickListener(this);
+            btnBizCircle = view.findViewById(R.id.btn_biz_circle);
+            btnBizCircle.setOnClickListener(this);
         }
 
         Util.setOnClickListener(view, R.id.btn_clear_all, this);
 
         iconPriceOrder = view.findViewById(R.id.icon_price_order);
-
-        storeSortButtons[STORE_SEARCH_SORT_GENERAL] = view.findViewById(R.id.btn_store_search_order_general);
-        storeSortButtons[STORE_SEARCH_SORT_GENERAL].setOnClickListener(this);
-        storeSortButtons[STORE_SEARCH_SORT_STORE_OPEN] = view.findViewById(R.id.btn_store_search_order_store_open);
-        storeSortButtons[STORE_SEARCH_SORT_STORE_OPEN].setOnClickListener(this);
-        storeSortButtons[STORE_SEARCH_SORT_FOLLOW] = view.findViewById(R.id.btn_store_search_order_follow);
-        storeSortButtons[STORE_SEARCH_SORT_FOLLOW].setOnClickListener(this);
 
         goodsSortButtons[GOODS_SEARCH_SORT_GENERAL] = view.findViewById(R.id.tv_text_general);
         goodsSortButtons[GOODS_SEARCH_SORT_SALE] = view.findViewById(R.id.tv_text_sale);
@@ -395,6 +437,63 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 return;
                             }
 
+                            // 首次初始化【所在地】列表
+                            if (locationItemList == null) {
+                                locationItemList = new ArrayList<>();
+
+                                EasyJSONArray searchStoreAreaVoList = responseObj.getArray("datas.searchStoreAreaVoList");
+                                for (Object object : searchStoreAreaVoList) {
+                                    EasyJSONObject searchStoreAreaVo = (EasyJSONObject) object;
+
+                                    int id = searchStoreAreaVo.getInt("areaId");
+                                    String name = searchStoreAreaVo.getString("region");
+                                    BizCircleItem bizCircleItem = new BizCircleItem(id, name);
+                                    bizCircleItem.subItemList = new ArrayList<>();
+                                    // 添加【全部】按鈕
+                                    bizCircleItem.subItemList.add(new BizCircleItem(id, "全部"));
+
+                                    EasyJSONArray areaList = searchStoreAreaVo.getArray("areaList");
+                                    for (Object object2 : areaList) {
+                                        EasyJSONObject area = (EasyJSONObject) object2;
+                                        int subId = area.getInt("areaId");
+                                        String subName = area.getString("areaName");
+
+                                        bizCircleItem.subItemList.add(new BizCircleItem(subId, subName));
+                                    }
+
+                                    locationItemList.add(bizCircleItem);
+                                }
+                            }
+
+                            // 首次初始化【商圈】列表
+                            if (bizCircleItemList == null) {
+                                bizCircleItemList = new ArrayList<>();
+
+                                EasyJSONArray businessDistrictMap = responseObj.getArray("datas.businessDistrictMap");
+                                for (Object object : businessDistrictMap) {
+                                    EasyJSONObject searchStoreAreaVo = (EasyJSONObject) object;
+
+                                    int id = searchStoreAreaVo.getInt("districtAreaId");
+                                    String name = searchStoreAreaVo.getString("areaName");
+                                    BizCircleItem bizCircleItem = new BizCircleItem(id, name);
+                                    bizCircleItem.subItemList = new ArrayList<>();
+                                    // 添加【全部】按鈕
+                                    bizCircleItem.subItemList.add(new BizCircleItem(id, "全部"));
+
+                                    EasyJSONArray businessDistrictList = searchStoreAreaVo.getArray("businessDistrictList");
+                                    for (Object object2 : businessDistrictList) {
+                                        EasyJSONObject area = (EasyJSONObject) object2;
+                                        int subId = area.getInt("districtId");
+                                        String subName = area.getString("districtName");
+
+                                        bizCircleItem.subItemList.add(new BizCircleItem(subId, subName));
+                                    }
+
+                                    bizCircleItemList.add(bizCircleItem);
+                                }
+                            }
+
+
                             storeItemList.clear();
                             EasyJSONArray easyJSONArray = responseObj.getArray("datas.storeList");
                             for (Object object : easyJSONArray) {
@@ -459,6 +558,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             case R.id.btn_goto_top:
                 rvSearchResultList.scrollToPosition(0);
                 break;
+                /*
             case R.id.btn_store_search_order_general:
                 if (storeSortButtonIndex == STORE_SEARCH_SORT_GENERAL) {
                     return;
@@ -486,6 +586,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 storeSortButtonIndex = STORE_SEARCH_SORT_FOLLOW;
                 storeSortButtons[storeSortButtonIndex].setTextColor(twBlue);
                 break;
+
+                */
             case R.id.btn_sort_goods_general:
                 if (goodsSortButtonIndex == GOODS_SEARCH_SORT_GENERAL) {
                     return;
@@ -518,10 +620,79 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 doSearch(searchType, keyword, EasyJSONObject.generate("sort", priceSortStr));
                 switchGoodsSortIndicator(id);
                 break;
+            case R.id.btn_follow:
+                followStatus = !followStatus;
+                if (followStatus) {
+                    tvFollow.setTextColor(twBlue);
+                } else {
+                    tvFollow.setTextColor(twBlack);
+                }
+                break;
+            case R.id.btn_general:
+                filterType = StoreFilterPopup.TYPE_GENERAL;
+                togglePopup(v, id);
+                break;
+            case R.id.btn_location:
+                filterType = StoreFilterPopup.TYPE_LOCATION;
+                togglePopup(v, id);
+                break;
+            case R.id.btn_biz_circle:
+                filterType = StoreFilterPopup.TYPE_BIZ_CIRCLE;
+                togglePopup(v, id);
+                break;
             default:
                 break;
         }
     }
+
+    private void togglePopup(View view, int id) {
+        currSelId = id;
+        if (storeFilterPopup == null) {
+            storeFilterPopup = (StoreFilterPopup) new XPopup.Builder(_mActivity)
+                    .atView(view)
+                    .setPopupCallback(new XPopupCallback() {
+                        @Override
+                        public void onShow() {
+                            SLog.info("显示了");
+                            if (currSelId == R.id.btn_general) {
+                                btnGeneral.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
+                                tvGeneral.setTextColor(twBlue);
+                                iconGeneral.setImageResource(R.drawable.icon_store_filter_expand_blue);
+                            } else if (currSelId == R.id.btn_location) {
+                                btnLocation.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
+                                tvLocation.setTextColor(twBlue);
+                                iconLocation.setImageResource(R.drawable.icon_store_filter_expand_blue);
+                            } else if (currSelId == R.id.btn_biz_circle) {
+                                btnBizCircle.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
+                                tvBizCircle.setTextColor(twBlue);
+                                iconBizCircle.setImageResource(R.drawable.icon_store_filter_expand_blue);
+                            }
+                        }
+                        @Override
+                        public void onDismiss() {
+                            SLog.info("关闭了");
+
+                            btnGeneral.setBackground(null);
+                            tvGeneral.setTextColor(twBlack);
+                            iconGeneral.setImageResource(R.drawable.icon_store_filter_expand_black);
+
+                            btnLocation.setBackground(null);
+                            tvLocation.setTextColor(twBlack);
+                            iconLocation.setImageResource(R.drawable.icon_store_filter_expand_black);
+
+                            btnBizCircle.setBackground(null);
+                            tvBizCircle.setTextColor(twBlack);
+                            iconBizCircle.setImageResource(R.drawable.icon_store_filter_expand_black);
+                        }
+                    })
+                    .asCustom(new StoreFilterPopup(_mActivity, filterType, generalItemSelectedId, bizCircleItemList, this));
+            storeFilterPopup.show();
+        } else {
+            storeFilterPopup.dismiss();
+            storeFilterPopup = null;
+        }
+    }
+
 
     /**
      * 切換當前商品排序的指示
@@ -568,9 +739,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
-        EasyJSONObject params = (EasyJSONObject) extra;
-        SLog.info("params[%s]", params.toString());
+        if (type == PopupType.STORE_GENERAL_FILTER) {
+            generalItemSelectedId = id;
+            tvGeneral.setText((String) extra);
+        } else if (type == PopupType.DEFAULT) {
+            EasyJSONObject params = (EasyJSONObject) extra;
+            SLog.info("params[%s]", params.toString());
 
-        doSearch(searchType, keyword, params);
+            doSearch(searchType, keyword, params);
+        }
     }
 }

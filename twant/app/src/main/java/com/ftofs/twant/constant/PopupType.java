@@ -84,4 +84,9 @@ public enum PopupType {
      * 選擇平臺券
      */
     SELECT_PLATFORM_COUPON,
+
+    /**
+     * 選擇店鋪過濾類型: 綜合、關注量、開店時長
+     */
+    STORE_GENERAL_FILTER,
 }
