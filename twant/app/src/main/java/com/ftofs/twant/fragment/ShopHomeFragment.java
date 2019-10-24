@@ -316,8 +316,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         parentFragment.setShopName(storeName);
 
                         storeAvatarUrl = StringUtil.normalizeImageUrl(storeInfo.getString("storeAvatar"));
+                        SLog.info("storeAvatarUrl[%s]", storeAvatarUrl);
                         // 店鋪頭像
-                        Glide.with(ShopHomeFragment.this).load(storeAvatarUrl).centerCrop().into(imgShopAvatar);
+                        if (StringUtil.isEmpty(storeAvatarUrl)) {
+                            Glide.with(ShopHomeFragment.this).load(R.drawable.default_store_avatar).centerCrop().into(imgShopAvatar);
+                        } else {
+                            Glide.with(ShopHomeFragment.this).load(storeAvatarUrl).centerCrop().into(imgShopAvatar);
+                        }
                         // 將店鋪頭像設置到工具欄按鈕
                         parentFragment.setImgBottomBarShopAvatar(storeAvatarUrl);
 
@@ -728,16 +733,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     }
                 }
             });
-        } catch (EasyJSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (java.lang.InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            SLog.info("Error!%s", e.getMessage());
         }
     }
 

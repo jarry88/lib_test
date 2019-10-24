@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
@@ -217,7 +218,11 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     }
 
     public void setImgBottomBarShopAvatar(String url) {
-        Glide.with(this).load(url).into(imgBottomBarShopAvatar);
+        if (StringUtil.isEmpty(url)) {
+            Glide.with(this).load(R.drawable.default_store_avatar).into(imgBottomBarShopAvatar);
+        } else {
+            Glide.with(this).load(url).into(imgBottomBarShopAvatar);
+        }
     }
 
     public void setShopName(String storeName) {
