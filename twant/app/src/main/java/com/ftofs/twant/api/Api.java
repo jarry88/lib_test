@@ -881,6 +881,11 @@ public class Api {
      */
     public static final String PATH_BUY_COUPON_LIST = "/member/buy/coupon/list";
 
+    /**
+     * 店鋪想看列表
+     */
+    public static final String PATH_STORE_VIDEO_LIST = "/store/video";
+
 
     /**
      * 發送Http請求

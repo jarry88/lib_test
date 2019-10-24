@@ -1,27 +1,37 @@
 package com.ftofs.twant.fragment;
 
+import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ShopGoodsAdapter;
+import com.ftofs.twant.adapter.VideoListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.entity.VideoItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabManager;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +47,8 @@ import okhttp3.Call;
  * 店鋪商品Fragment
  * @author zwm
  */
-public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener {
+    public static final int ANIM_COUNT = 2;
     ShopMainFragment parentFragment;
 
     RecyclerView rvGoodsList;
@@ -56,6 +67,14 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     int currPage = 0;
     boolean hasMore;
 
+    int currVideoPage = 0;
+    boolean videoHasMore;
+
+    LinearLayout llPage1;
+    LinearLayout llPage2;
+    private int currAnimIndex;
+    VideoListAdapter videoListAdapter;
+    List<VideoItem> videoItemList = new ArrayList<>();
 
     /**
      * 新建一個實例
@@ -99,6 +118,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         }
 
 
+
         if (isStandalone) {
             view.findViewById(R.id.tool_bar).setVisibility(View.VISIBLE);
             Util.setOnClickListener(view, R.id.btn_search_goods, this);
@@ -107,6 +127,17 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             view.findViewById(R.id.tool_bar).setVisibility(View.GONE);
         }
 
+        // 獲取屏幕寬度
+        int screenWidth = Util.getScreenDimemsion(_mActivity).first;
+        llPage1 = view.findViewById(R.id.ll_page_1);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) llPage1.getLayoutParams();
+        layoutParams.width = screenWidth;
+        llPage1.setLayoutParams(layoutParams);
+
+        llPage2 = view.findViewById(R.id.ll_page_2);
+        layoutParams = (LinearLayout.LayoutParams) llPage2.getLayoutParams();
+        layoutParams.width = screenWidth;
+        llPage2.setLayoutParams(layoutParams);
 
         SimpleTabManager simpleTabManager = new SimpleTabManager(0) {
             @Override
@@ -199,7 +230,18 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             }
         });
         adapter.setEnableLoadMore(true);
-        adapter.setOnLoadMoreListener(this, rvGoodsList);
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                SLog.info("onLoadMoreRequested");
+
+                if (!hasMore) {
+                    adapter.setEnableLoadMore(false);
+                    return;
+                }
+                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
+            }
+        }, rvGoodsList);
 
 
         rvGoodsList.setAdapter(adapter);
@@ -220,6 +262,45 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         } else {
             loadStoreGoods(paramsOriginal, null, 1);
         }
+
+        RecyclerView rvVideoList = view.findViewById(R.id.rv_video_list);
+        rvVideoList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        videoListAdapter = new VideoListAdapter(videoItemList);
+
+        // 設置空頁面
+        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
+        // 設置空頁面的提示語
+        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
+        tvEmptyHint.setText(R.string.no_order_hint);
+        videoListAdapter.setEmptyView(emptyView);
+
+        videoListAdapter.setEnableLoadMore(true);
+        videoListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                SLog.info("onLoadMoreRequested");
+
+                if (!videoHasMore) {
+                    videoListAdapter.setEnableLoadMore(false);
+                    return;
+                }
+                loadVideoCover(currPage + 1);
+            }
+        }, rvVideoList);
+        videoListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_play) { // 點擊播放按鈕
+                    VideoItem videoItem = videoItemList.get(position);
+                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, videoItem.videoId);
+                    startActivity(intent);
+                }
+            }
+        });
+        rvVideoList.setAdapter(videoListAdapter);
+
+        loadVideoCover(currPage + 1);
     }
 
     /**
@@ -307,6 +388,93 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         }
     }
 
+    private void loadVideoCover(int page) {
+        EasyJSONObject params = EasyJSONObject.generate(
+                "storeId", storeId,
+                "page", page);
+
+        String url = Api.PATH_STORE_VIDEO_LIST + "/" + storeId;
+        SLog.info("loadVideoCover, url[%s], params[%s]", url, params);
+        Api.getUI(url, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+                videoListAdapter.loadMoreFail();
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                try {
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        videoListAdapter.loadMoreFail();
+                        return;
+                    }
+
+                    hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                    SLog.info("hasMore[%s]", hasMore);
+                    if (!hasMore) {
+                        videoListAdapter.loadMoreEnd();
+                        videoListAdapter.setEnableLoadMore(false);
+                    }
+
+                    EasyJSONArray videoVoList = responseObj.getArray("datas.videoVoList");
+                    for (Object object : videoVoList) {
+                        EasyJSONObject videoVo = (EasyJSONObject) object;
+
+                        VideoItem videoItem = new VideoItem(Constant.ITEM_TYPE_NORMAL);
+                        String videoUrl = videoVo.getString("videoUrl");
+                        videoItem.videoId = Util.getYoutubeVideoId(videoUrl);
+                        videoItem.playCount = videoVo.getInt("playTimes");
+                        videoItem.updateTime = videoVo.getString("updateTime");
+
+                        EasyJSONArray goodsCommonList = videoVo.getArray("goodsCommonList");
+                        for (Object object2 : goodsCommonList) {
+                            EasyJSONObject goodsCommon = (EasyJSONObject) object2;
+                            Goods goods = new Goods();
+                            goods.id = goodsCommon.getInt("commonId");
+                            goods.imageUrl = goodsCommon.getString("goodsImage");
+
+                            videoItem.goodsList.add(goods);
+                        }
+
+                        videoItemList.add(videoItem);
+                    }
+
+                    if (!videoHasMore && videoItemList.size() > 0) {
+                        // 如果全部加載完畢，添加加載完畢的提示
+                        videoItemList.add(new VideoItem(Constant.ITEM_TYPE_LOAD_END_HINT));
+
+                        videoListAdapter.setNewData(videoItemList);
+                        videoListAdapter.loadMoreComplete();
+
+                        currVideoPage++;
+                    }
+
+                    SLog.info("videoItemList.size[%d]", videoItemList.size());
+                    videoListAdapter.setNewData(videoItemList);
+                } catch (EasyJSONException e) {
+                    e.printStackTrace();
+                    SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void switchTabPage() {
+        SLog.info("currAnimIndex[%d]", currAnimIndex);
+        if (currAnimIndex == 0) {
+            llPage1.setVisibility(View.GONE);
+            llPage2.setVisibility(View.VISIBLE);
+        } else {
+            llPage1.setVisibility(View.VISIBLE);
+            llPage2.setVisibility(View.GONE);
+        }
+
+        currAnimIndex = (currAnimIndex + 1) % ANIM_COUNT;
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -328,17 +496,6 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         }
 
         return true;
-    }
-
-    @Override
-    public void onLoadMoreRequested() {
-        SLog.info("onLoadMoreRequested");
-
-        if (!hasMore) {
-            adapter.setEnableLoadMore(false);
-            return;
-        }
-        loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
     }
 }
 

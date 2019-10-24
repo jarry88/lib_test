@@ -32,6 +32,34 @@
                 />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_tab_button_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+            <com.ftofs.twant.widget.SimpleTabButton
+                android:id="@+id/stb_all"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="16sp"
+                app:stb_text="全部"
+                app:stb_stroke_width="2dp"
+                app:stb_use_cap="true"
+                app:stb_horizontal_padding="5dp">
+            </com.ftofs.twant.widget.SimpleTabButton>
+            <com.ftofs.twant.widget.SimpleTabButton
+                android:id="@+id/stb_want_see"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="40dp"
+                android:textSize="16sp"
+                app:stb_text="想看"
+                app:stb_stroke_width="2dp"
+                app:stb_use_cap="true"
+                app:stb_horizontal_padding="5dp">
+            </com.ftofs.twant.widget.SimpleTabButton>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_shop_title"

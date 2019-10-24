@@ -1,12 +1,15 @@
 package com.ftofs.twant.fragment;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +20,9 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.SimpleTabButton;
+import com.ftofs.twant.widget.SimpleTabManager;
 import com.lxj.xpopup.XPopup;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -38,6 +44,12 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
     // 店鋪名稱
     String storeName = "";
+
+    ImageView btnMenu;
+    ScaledButton btnSearch;
+    LinearLayout llTabButtonContainer;
+
+
 
     public static final int FRAGMENT_COUNT = 5;
 
@@ -96,6 +108,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         tvShopTitle = view.findViewById(R.id.tv_shop_title);
         imgBottomBarShopAvatar = view.findViewById(R.id.img_bottom_bar_shop_avatar);
 
+        llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
+
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
         }
@@ -107,10 +121,51 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             bottomBarIcons[i] = view.findViewById(bottomBarIconIds[i]);
         }
 
-
-        Util.setOnClickListener(view, R.id.btn_menu, this);
-        Util.setOnClickListener(view, R.id.btn_search, this);
+        btnMenu = view.findViewById(R.id.btn_menu);
+        btnMenu.setOnClickListener(this);
+        btnSearch = view.findViewById(R.id.btn_search);
+        btnSearch.setOnClickListener(this);
         Util.setOnClickListener(view, R.id.btn_back, this);
+
+        SimpleTabManager simpleTabManager = new SimpleTabManager(0) {
+            @Override
+            public void onClick(View v) {
+                boolean isRepeat = onSelect(v);
+                int id = v.getId();
+                SLog.info("id[%d]", id);
+                if (isRepeat) {
+                    return;
+                }
+
+                ShopCommodityFragment shopCommodityFragment = (ShopCommodityFragment) mFragments[COMMODITY_FRAGMENT];
+                if (shopCommodityFragment != null) {
+                    shopCommodityFragment.switchTabPage();
+                }
+            }
+        };
+
+        simpleTabManager.add(view.findViewById(R.id.stb_all));
+        simpleTabManager.add(view.findViewById(R.id.stb_want_see));
+
+        showGoodsFragment(false);
+    }
+
+    /**
+     * 是否切換到顯示商品Fragment
+     * @param show
+     */
+    private void showGoodsFragment(boolean show) {
+        if (show) {
+            tvShopTitle.setVisibility(View.GONE);
+            btnMenu.setVisibility(View.GONE);
+            btnSearch.setVisibility(View.GONE);
+            llTabButtonContainer.setVisibility(View.VISIBLE);
+        } else {
+            tvShopTitle.setVisibility(View.VISIBLE);
+            btnMenu.setVisibility(View.VISIBLE);
+            btnSearch.setVisibility(View.VISIBLE);
+            llTabButtonContainer.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -177,6 +232,10 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         }
     }
 
+    /**
+     * 底部工具欄的點擊處理
+     * @param index
+     */
     public void onBottomBarClick(int index) {
         if (index == selectedFragmentIndex) {
             // 已經是當前Fragment，返回
@@ -193,8 +252,10 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         if (index == COMMODITY_FRAGMENT) { // 如果切換到商品Tab，頂部工具欄隱藏分隔線
             toolbar.setBackgroundColor(getResources().getColor(android.R.color.white, null));
+            showGoodsFragment(true);
         } else { // 如果切換到其它Tab，恢復背景
             toolbar.setBackgroundResource(R.drawable.border_type_d);
+            showGoodsFragment(false);
         }
 
         // 切換底部工具欄圖標的選中狀態

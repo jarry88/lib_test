@@ -37,6 +37,11 @@ import com.ftofs.twant.log.SLog;
 import com.umeng.commonsdk.debug.I;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
+import org.urllib.Query;
+import org.urllib.Urls;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -560,5 +565,28 @@ public class Util {
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         return dm.density;
+    }
+
+    /**
+     * 從Youtube視頻URL中獲取視頻Id
+     * 有下列三種形式:
+     * https://www.youtube.com/watch?v=ASeDClVcaN4&feature=player_embedded_uturn
+     * https://www.youtube.com/watch?v=BiIRTvNlDgs
+     * https://youtu.be/BiIRTvNlDgs?t=24
+     * @param youtubeUrl
+     * @return
+     */
+    public static String getYoutubeVideoId(String youtubeUrl) {
+        // 先處理第3種形式
+        if (youtubeUrl.startsWith("https://youtu.be/")) {
+            return Urls.parse(youtubeUrl).path().filename();
+        }
+        List<Query.KeyValue> paramList = Urls.parse(youtubeUrl).query().params();
+        for (Query.KeyValue kv : paramList) {
+            if (kv.key().equals("v")) {
+                return kv.value();
+            }
+        }
+        return null;
     }
 }
