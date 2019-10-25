@@ -4,37 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tw_blue"
+    android:background="@android:color/white"
     tools:context=".activity.SplashActivity">
 
     <ImageView
+        android:id="@+id/splash_base"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/splash_base"
+        android:scaleType="fitXY"
+        />
+
+    <ImageView
+        android:id="@+id/take_what_iwant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="-167dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="86.5dp"
-        android:src="@drawable/logo"
+        android:layout_above="@id/splash_base"
+        android:src="@drawable/take_what_iwant"
         />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="-44.5dp"
+        android:layout_above="@id/take_what_iwant"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="110dp"
-        android:src="@drawable/take_what_iwant"
+        android:src="@drawable/logo"
         />
-
 
     <TextView
         android:id="@+id/copyright"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="copyright"
         android:textColor="#fff"
         android:textSize="12sp"
         />
-
 </RelativeLayout>
