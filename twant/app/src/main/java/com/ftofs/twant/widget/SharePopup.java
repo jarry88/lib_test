@@ -219,6 +219,6 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     }
 
     public static String generatePostShareLink(int postId) {
-        return Config.WEB_BASE_URL + "/wantpost/detail/" + postId;
+        return Config.WEB_BASE_URL + "/wantpost/article/detail/" + postId;
     }
 }
