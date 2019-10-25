@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
@@ -54,6 +56,7 @@ import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.StoreGiftPopup;
 import com.ftofs.twant.widget.StoreVoucherPopup;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -99,6 +102,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int conformCount;
     // 贈品數
     int giftCount;
+
+    String goodsVideoId;
 
     /**
      * 限時折扣倒計時是否正在倒數
@@ -170,6 +175,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int inStorePersonCount;
     StoreFriendsAdapter adapter;
     List<StoreFriendsItem> storeFriendsItemList = new ArrayList<>();
+
+    ImageView btnPlay;
 
     // 商品評論條數
     int commentCount = 0;
@@ -262,6 +269,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
         tvGoodsName = view.findViewById(R.id.tv_goods_name);
         tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
+
+        btnPlay = view.findViewById(R.id.btn_play);
+        btnPlay.setOnClickListener(this);
 
         btnArrivalNotice = view.findViewById(R.id.btn_arrival_notice);
         btnArrivalNotice.setOnClickListener(this);
@@ -474,6 +484,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 break;
             case R.id.btn_arrival_notice:
                 Util.startFragment(ArrivalNoticeFragment.newInstance(commonId, currGoodsId));
+                break;
+            case R.id.btn_play:
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, goodsVideoId);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -871,6 +885,22 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     }
 
+                    // 視頻
+                    boolean hasGoodsVideo = false;
+                    if (goodsDetail.exists("detailVideo")) {
+                        String goodsVideoUrl = goodsDetail.getString("detailVideo");
+                        goodsVideoId = Util.getYoutubeVideoId(goodsVideoUrl);
+                        if (!StringUtil.isEmpty(goodsVideoId)) {
+                            hasGoodsVideo = true;
+                        }
+                    }
+
+                    if (hasGoodsVideo) {
+                        btnPlay.setVisibility(VISIBLE);
+                    } else {
+                        btnPlay.setVisibility(GONE);
+                    }
+
                     // 限時折扣
                     EasyJSONObject discount = goodsDetail.getObject("discount");
                     if (discount != null) {
@@ -899,7 +929,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, giftVo.toString());
                             giftItemList.add(giftItem);
                         }
-                        SLog.info("ddddddddddddddddddxxxxx[%d][%d]", goodsId, giftItemList.size());
+                        // SLog.info("ddddddddddddddddddxxxxx[%d][%d]", goodsId, giftItemList.size());
                         giftMap.put(goodsId, giftItemList);
                         // 如果從外面傳進來的參數沒有指定goodsId, 則默認選中第一項sku
                         if (currGoodsId == 0 && first) {

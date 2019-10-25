@@ -30,6 +30,18 @@
                 app:layout_constraintRight_toRightOf="parent"
                 />
 
+            <ImageView
+                android:id="@+id/btn_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="@id/goods_image"
+                app:layout_constraintRight_toRightOf="@id/goods_image"
+                app:layout_constraintTop_toTopOf="@id/goods_image"
+                app:layout_constraintBottom_toBottomOf="@id/goods_image"
+                android:src="@drawable/icon_play"
+                android:visibility="gone"
+                />
+
             <!-- 商品分享按鈕 -->
             <ImageView
                 android:id="@+id/btn_goods_share"
