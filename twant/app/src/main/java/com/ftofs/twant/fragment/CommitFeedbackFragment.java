@@ -40,7 +40,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
- * 意見反饋Fragment
+ * 建議表達Fragment
  * @author zwm
  */
 public class CommitFeedbackFragment extends BaseFragment implements View.OnClickListener {

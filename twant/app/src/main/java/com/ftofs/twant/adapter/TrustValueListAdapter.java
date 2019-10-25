@@ -10,7 +10,7 @@ import com.ftofs.twant.entity.TrustValueItem;
 import java.util.List;
 
 /**
- * 信賴值明細Adapter
+ * 真實值明細Adapter
  * @author zwm
  */
 public class TrustValueListAdapter extends BaseQuickAdapter<TrustValueItem, BaseViewHolder> {

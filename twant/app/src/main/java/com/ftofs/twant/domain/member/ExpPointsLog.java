@@ -14,7 +14,7 @@ public class ExpPointsLog implements Serializable {
     private int memberId = 0;
 
     /**
-     * 信賴值
+     * 真實值
      */
     private int points = 0;
 

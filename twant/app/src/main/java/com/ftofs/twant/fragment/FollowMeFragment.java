@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 【關注我的】Fragment
+ * 【粉絲】Fragment
  * @author zwm
  */
 public class FollowMeFragment extends BaseFragment implements View.OnClickListener {

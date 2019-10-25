@@ -426,7 +426,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         } else if(operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
                             ToastUtil.success(_mActivity, "刪除訂單成功");
                         } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
-                            ToastUtil.success(_mActivity, "訂單已添加到購物籃");
+                            ToastUtil.success(_mActivity, "訂單已添加到購物袋");
                             start(CartFragment.newInstance(true));
                         }
 

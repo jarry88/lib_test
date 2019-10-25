@@ -129,7 +129,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     /**
      * 創建確認訂單的實例
-     * @param isFromCart 1 -- 來源于購物籃 0 -- 直接購買
+     * @param isFromCart 1 -- 來源于購物袋 0 -- 直接購買
      * @param buyData
      * @return
      */

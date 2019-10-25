@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 【我的足跡】总的狀態模型
+ * 【瀏覽記憶】总的狀態模型
  * @author zwm
  */
 public class TotalStatus extends BaseStatus {

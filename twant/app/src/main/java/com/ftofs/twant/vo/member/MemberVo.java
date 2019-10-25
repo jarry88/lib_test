@@ -129,7 +129,7 @@ public class MemberVo {
      */
     private String addressAreaInfo = "";
     /**
-     * 信賴值
+     * 真實值
      */
     private int experiencePoints = 0;
     /**

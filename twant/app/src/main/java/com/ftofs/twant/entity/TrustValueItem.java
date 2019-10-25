@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 /**
- * 信賴值數據結構
+ * 真實值數據結構
  * @author zwm
  */
 public class TrustValueItem {

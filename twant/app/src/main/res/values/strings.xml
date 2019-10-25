@@ -77,9 +77,9 @@
     <string name="text_male">男</string>
     <string name="text_female">女</string>
 
-    <string name="trust_value_fragment_title">信賴值明細(%d)</string>
+    <string name="trust_value_fragment_title">真實值明細(%d)</string>
     <string name="bonus_fragment_title">積分明細(%d)</string>
-    <string name="footprint_fragment_title">我的足跡</string>
+    <string name="footprint_fragment_title">瀏覽記憶</string>
     <string name="text_goods_evaluation">商品評價</string>
     <string name="input_goods_evaluation_hint">點擊輸入您對該商品的評論</string>
 
@@ -147,7 +147,7 @@
     <string name="login_way_password">密碼</string>
     <string name="login_way_dynamic_code">動態碼</string>
     <string name="input_personal_profile_hint">新增個人簡介，讓大家更了解你</string>
-    <string name="text_popularity">人氣</string>
+    <string name="text_popularity">訪客</string>
     <string name="text_article">文章</string>
     <string name="text_mall">商城</string>
     <string name="text_friend">好友</string>
@@ -178,7 +178,7 @@
     <string name="bottom_bar_title_home">首頁</string>
     <string name="bottom_bar_title_message">消息</string>
     <string name="bottom_bar_title_circle">想要圈</string>
-    <string name="bottom_bar_title_cart">購物籃</string>
+    <string name="bottom_bar_title_cart">購物袋</string>
     <string name="bottom_bar_title_my">我的</string>
 
     <!-- 店鋪的底部工具欄 -->
@@ -188,7 +188,7 @@
     <string name="shop_bottom_bar_title_activity">活動</string>
     <string name="shop_bottom_bar_title_customer_service">客服</string>
 
-    <string name="my_bill">我的訂單</string>
+    <string name="my_bill">想要訂單</string>
     <string name="my_bill_to_be_paid">待付款</string>
     <string name="my_bill_to_be_sent">待發貨</string>
     <string name="my_bill_to_be_received">待收貨</string>
@@ -197,10 +197,10 @@
 
     <string name="my_coupon">我的優惠券</string>
     <string name="my_follow">我的關注</string>
-    <string name="my_footprint">我的足跡</string>
+    <string name="my_footprint">瀏覽記憶</string>
     <string name="my_address">我的收貨地址</string>
     <string name="my_bonus">我的積分</string>
-    <string name="my_trust_value">我的信賴值</string>
+    <string name="my_trust_value">我的真實值</string>
 
     <string name="setting_personal_info">個人資料</string>
     <string name="setting_personal_info_hint">設置個人詳細資料</string>
@@ -218,12 +218,12 @@
     <string name="input_common_used_template_title_hint">請輸入標題</string>
     <string name="input_common_used_template_content_hint">請輸入固定版式內容</string>
 
-    <string name="text_new_arrivals_chinese">最 新 入 駐</string>
+    <string name="text_new_arrivals_chinese">最 新 想 要 店</string>
     <string name="text_new_arrivals_english">N E W  A R R I V A L S</string>
 
-    <string name="text_new_in_chinese">最 新 商 品</string>
+    <string name="text_new_in_chinese">最 新 產 品</string>
     <string name="text_new_in_english">N E W   I N</string>
-    <string name="text_store_hot_item_chinese">店 鋪 熱 賣</string>
+    <string name="text_store_hot_item_chinese">熱 賣 產 品</string>
     <string name="text_store_hot_item_english">H O T   S A L E</string>
 
     <string name="text_features_goods_chinese">鎮 店 之 寶</string>
@@ -273,7 +273,7 @@
 
     <string name="text_store">店鋪</string>
     <string name="text_goods">商品</string>
-    <string name="text_cart">購物籃</string>
+    <string name="text_cart">購物袋</string>
     <string name="text_edit">編輯</string>
     <string name="text_search">搜索</string>
     <string name="text_quantity">數量</string>
@@ -292,10 +292,10 @@
 
     <string name="text_history_search">歷史搜索</string>
     <string name="text_hot_search">熱門搜索</string>
-    <string name="text_follow_me">關注我的</string>
+    <string name="text_follow_me">粉絲</string>
 
     <string name="text_store_open_day_prefix">開業時長</string>
-    <string name="text_store_friend">店友</string>
+    <string name="text_store_friend">居民</string>
     <string name="text_share">分享</string>
     <string name="text_map">地圖</string>
     <string name="text_shop_comment">店鋪評論</string>
@@ -310,7 +310,7 @@
     <string name="text_all_goods">全部商品</string>
 
     <string name="text_want_to_buy">想要購買</string>
-    <string name="text_want_to_add_to_cart">想放購物籃</string>
+    <string name="text_want_to_add_to_cart">想放購物袋</string>
 
     <string name="text_customer_service">客服</string>
     <string name="text_pre_sale">售前</string>
@@ -405,7 +405,7 @@
 
     <string name="text_not_allow_send">該地區無貨</string>
     <string name="not_allow_send_hint">所選地區不支持配送</string>
-    <string name="text_feedback">意見反饋</string>
+    <string name="text_feedback">建議表達</string>
     <string name="text_view">查看</string>
     <string name="text_question_and_suggestion">問題和意見</string>
     <string name="input_question_and_suggestion_hint">請在這裡對您的問題進行描述，以便我們提供更好的幫助～</string>
@@ -549,7 +549,7 @@
     <string name="text_footprint">足跡</string>
     <string name="text_address">地址</string>
     <string name="text_bonus">積分</string>
-    <string name="text_trust_value">信賴值</string>
+    <string name="text_trust_value">真實值</string>
 
     <string name="text_my_store_coupon">我的店鋪券</string>
     <string name="text_receive_store_coupon">領取店鋪券</string>

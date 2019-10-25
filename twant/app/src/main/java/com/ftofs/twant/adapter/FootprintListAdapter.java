@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 【我的足跡】列表Adapter
+ * 【瀏覽記憶】列表Adapter
  * @author zwm
  */
 public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHolder> {

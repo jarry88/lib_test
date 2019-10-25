@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /**
- * 【我的足跡】日期狀態模型
+ * 【瀏覽記憶】日期狀態模型
  * @author zwm
  */
 public class DateStatus extends BaseStatus {

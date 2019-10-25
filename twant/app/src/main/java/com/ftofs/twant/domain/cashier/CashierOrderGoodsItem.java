@@ -4,7 +4,7 @@ public class CashierOrderGoodsItem {
 	private Integer commonId;
 	private Integer goodsId;//skuId
 	private Integer buyNum;//数量
-	private Integer cartId;//購物籃id
+	private Integer cartId;//購物袋id
 
 	public Integer getCommonId() {
 		return commonId;

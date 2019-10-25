@@ -11,7 +11,7 @@ import com.ftofs.twant.domain.member.MemberHomeStat;
  */
 public class MemberHomeStatVo extends MemberHomeStat {
     /**
-     * 購物籃商品數量
+     * 購物袋商品數量
      */
     private long cartList = 0;
 

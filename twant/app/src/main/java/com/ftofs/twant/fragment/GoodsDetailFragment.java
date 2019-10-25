@@ -189,7 +189,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     // 到貨通知按鈕
     TextView btnArrivalNotice;
-    // 【想放購物籃】和【想要購買】的包裝容器，如果有庫存時顯示這個
+    // 【想放購物袋】和【想要購買】的包裝容器，如果有庫存時顯示這個
     LinearLayout llStorageOkContainer;
 
     /**

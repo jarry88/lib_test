@@ -183,18 +183,18 @@ public class Api {
     public static final String PATH_GOODS_DETAIL = "/app/goods";
 
     /**
-     * 添加購物籃
+     * 添加購物袋
      */
     public static final String PATH_ADD_CART = "/cart/add";
 
     /**
-     * 刪除購物籃
+     * 刪除購物袋
      */
     public static final String PATH_DELETE_CART = "/cart/del/batch/sku";
 
 
     /**
-     * 購物籃列表
+     * 購物袋列表
      */
     public static final String PATH_CART_LIST = "/cart/list";
 
@@ -314,7 +314,7 @@ public class Api {
 
 
     /**
-     * 個人中心：我的足跡
+     * 個人中心：瀏覽記憶
      */
     public static final String PATH_FOOTPRINT = "/member/app/browse/list";
 

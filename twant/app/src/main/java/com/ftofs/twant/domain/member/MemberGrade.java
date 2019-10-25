@@ -19,7 +19,7 @@ public class MemberGrade implements Serializable {
     private String gradeName = "";
 
     /**
-     * 信賴值
+     * 真實值
      */
     private int expPoints = 0;
 

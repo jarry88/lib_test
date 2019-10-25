@@ -245,7 +245,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         } else if (searchType == SearchType.STORE) {
             view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
 
-            // 如果是搜索店鋪，隱藏【返回頂部】和【轉到購物籃】按鈕
+            // 如果是搜索店鋪，隱藏【返回頂部】和【轉到購物袋】按鈕
             btnGotoTop.setVisibility(View.GONE);
             btnGotoCart.setVisibility(View.GONE);
         }

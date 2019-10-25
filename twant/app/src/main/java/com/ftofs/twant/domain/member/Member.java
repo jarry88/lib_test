@@ -142,7 +142,7 @@ public class Member implements Serializable,Cloneable {
     private String addressAreaInfo = "";
 
     /**
-     * 信賴值
+     * 真實值
      */
     private int experiencePoints = 0;
 

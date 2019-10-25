@@ -5,7 +5,7 @@ package com.ftofs.twant.vo;
  * @license    http://www.shopnc.net
  * @link       http://www.shopnc.net
  *
- * 信賴值日志
+ * 真實值日志
  * 
  * @author hbj
  * Created 2017/4/13 16:15
@@ -20,7 +20,7 @@ public class ExpPointsLogMemberVo {
      */
     private int memberId;
     /**
-     * 信賴值负数表示扣除，正数表示增加
+     * 真實值负数表示扣除，正数表示增加
      */
     private int points;
     /**

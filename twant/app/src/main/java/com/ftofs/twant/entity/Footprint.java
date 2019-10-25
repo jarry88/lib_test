@@ -1,12 +1,12 @@
 package com.ftofs.twant.entity;
 
 /**
- * 【我的足跡】數據結構
+ * 【瀏覽記憶】數據結構
  * @author zwm
  */
 public class Footprint {
     /**
-     * 我的足跡選中狀態的常量定義
+     * 瀏覽記憶選中狀態的常量定義
      */
     // 沒選中任何東西
     public static final int SELECT_STATUS_NONE = 0;

@@ -52,7 +52,7 @@ import okhttp3.Call;
  * @author zwm
  */
 public class MyFragment extends BaseFragment implements View.OnClickListener {
-    // 【關注我的】數據列表
+    // 【粉絲】數據列表
     List<UniversalMemberItem> followMeList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
 
@@ -241,7 +241,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
             case R.id.btn_publish_post:
                 Util.startFragment(AddPostFragment.newInstance());
                 break;
-            // 點擊兩個地方都顯示【關注我的】Fragment
+            // 點擊兩個地方都顯示【粉絲】Fragment
             case R.id.btn_show_more:
             case R.id.icon_expand:
                 Util.startFragment(FollowMeFragment.newInstance(followMeList));
@@ -305,7 +305,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                         tvPersonalProfile.setText(personalProfile);
                     }
 
-                    // 【關注我的】數據
+                    // 【粉絲】數據
                     followMeList.clear();
                     EasyJSONArray fansList = responseObj.getArray("datas.fansList");
                     for (Object object : fansList) {

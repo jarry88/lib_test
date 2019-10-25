@@ -31,12 +31,12 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 信賴值明細Fragment
+ * 真實值明細Fragment
  * @author zwm
  */
 public class TrustValueFragment extends BaseFragment implements View.OnClickListener {
     /*
-    【我的積分】列表與【我的信賴值】列表共用一個Fragment，所以通過dataType字段來區分
+    【我的積分】列表與【我的真實值】列表共用一個Fragment，所以通過dataType字段來區分
      */
 
     public static final int DATA_TYPE_BONUS = 1;

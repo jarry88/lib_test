@@ -59,7 +59,7 @@ import okhttp3.Response;
 
 
 /**
- * 購物籃
+ * 購物袋
  * @author zwm
  */
 public class CartFragment extends BaseFragment implements View.OnClickListener {
@@ -78,7 +78,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
     ScaledButton btnBack;
 
-    int totalCartItemCount; // 購物籃中的項數，用于顯示在主頁的底部工具欄中
+    int totalCartItemCount; // 購物袋中的項數，用于顯示在主頁的底部工具欄中
 
     int mode = Constant.MODE_VIEW;
     boolean needReloadData = true;
@@ -171,7 +171,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     }
 
     /**
-     * 重新加載購物籃
+     * 重新加載購物袋
      */
     private void reloadList() {
         totalStatus.storeStatusList.clear();
@@ -464,7 +464,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     }
 
     /**
-     * 切換購物籃的模式
+     * 切換購物袋的模式
      * 查看模式 還是 編輯模式
      */
     private void switchMode() {

@@ -5,7 +5,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.widget.ScaledButton;
 
 /**
- * 【我的足跡】狀態模型的基類
+ * 【瀏覽記憶】狀態模型的基類
  * @author zwm
  */
 public class BaseStatus {

@@ -35,13 +35,13 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public static final int MESSAGE_FRAGMENT = 1;
     /** 想要圈 */
     public static final int CIRCLE_FRAGMENT = 2;
-    /** 購物籃 */
+    /** 購物袋 */
     public static final int CART_FRAGMENT = 3;
     /** 專頁 */
     public static final int MY_FRAGMENT = 4;
 
     TextView tvMessageItemCount; // 顯示未讀消息條數的紅點
-    TextView tvCartItemCount;    // 顯示購物籃中商品數的紅點
+    TextView tvCartItemCount;    // 顯示購物袋中商品數的紅點
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_message, R.id.btn_circle,
@@ -160,7 +160,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             }
 
             if (index == MESSAGE_FRAGMENT || index == CART_FRAGMENT || index == MY_FRAGMENT) {
-                // 如果是查看【消息】、【購物籃】或【我的】，先檢查是否已經登錄
+                // 如果是查看【消息】、【購物袋】或【我的】，先檢查是否已經登錄
                 if (!User.isLogin()) {
                     Util.showLoginFragment();
                     return;
@@ -202,7 +202,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) {
             showHideFragment(HOME_FRAGMENT);
             setMessageItemCount(0); // 未讀消息數置0
-            setCartItemCount(0); // 購物籃商品數置0
+            setCartItemCount(0); // 購物袋商品數置0
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT) {
             int fragmentIndex = (int) message.data;
             if (HOME_FRAGMENT <= fragmentIndex && fragmentIndex <= MY_FRAGMENT) {

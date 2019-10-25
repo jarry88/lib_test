@@ -128,7 +128,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         // findViewById(R.id.ll_title_padding).setOnClickListener(this);
         findViewById(R.id.btn_close).setOnClickListener(this);
 
-        // 加入購物籃
+        // 加入購物袋
         btnOk = findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(this);
         if (action == Constant.ACTION_ADD_TO_CART) {
@@ -253,7 +253,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     }
 
     /**
-     * 添加到購物籃
+     * 添加到購物袋
      */
     private void addToCart() {
         String token = User.getToken();
@@ -290,9 +290,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                     return;
                 }
 
-                ToastUtil.success(context, "添加購物籃成功");
+                ToastUtil.success(context, "添加購物袋成功");
 
-                // 通知更新購物籃紅點提示
+                // 通知更新購物袋紅點提示
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE, null);
                 dismiss();
             }

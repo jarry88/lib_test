@@ -790,7 +790,7 @@
                 android:gravity="center"
                 android:textColor="@color/tw_black"
                 android:textSize="21sp"
-                android:text="店 鋪 熱 賣"
+                android:text="熱 賣 產 品"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -826,7 +826,7 @@
                 android:gravity="center"
                 android:textColor="@color/tw_black"
                 android:textSize="21sp"
-                android:text="最 新 商 品"
+                android:text="最 新 產 品"
                 />
             <TextView
                 android:layout_width="match_parent"

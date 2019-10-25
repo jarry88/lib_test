@@ -45,7 +45,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 我的足跡Fragment
+ * 瀏覽記憶Fragment
  * @author zwm
  */
 public class FootprintFragment extends BaseFragment implements View.OnClickListener {
