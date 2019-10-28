@@ -889,9 +889,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     boolean hasGoodsVideo = false;
                     if (goodsDetail.exists("detailVideo")) {
                         String goodsVideoUrl = goodsDetail.getString("detailVideo");
-                        goodsVideoId = Util.getYoutubeVideoId(goodsVideoUrl);
-                        if (!StringUtil.isEmpty(goodsVideoId)) {
-                            hasGoodsVideo = true;
+                        if (!StringUtil.isEmpty(goodsVideoUrl)) {
+                            goodsVideoId = Util.getYoutubeVideoId(goodsVideoUrl);
+                            if (!StringUtil.isEmpty(goodsVideoId)) {
+                                hasGoodsVideo = true;
+                            }
                         }
                     }
 
