@@ -7,10 +7,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.entity.GeneralFilterItem;
+import com.ftofs.twant.entity.StoreSortCriteriaItem;
 
-public class GeneralFilterAdapter extends ViewGroupAdapter<GeneralFilterItem> {
+public class StoreSortCriteriaAdapter extends ViewGroupAdapter<StoreSortCriteriaItem> {
     int twBlack;
+
     int twBlue;
 
     /**
@@ -20,7 +21,7 @@ public class GeneralFilterAdapter extends ViewGroupAdapter<GeneralFilterItem> {
      * @param container    容器
      * @param itemLayoutId itemView的布局Id
      */
-    public GeneralFilterAdapter(Context context, ViewGroup container, int itemLayoutId) {
+    public StoreSortCriteriaAdapter(Context context, ViewGroup container, int itemLayoutId) {
         super(context, container, itemLayoutId);
 
         twBlack = context.getColor(R.color.tw_black);
@@ -28,7 +29,7 @@ public class GeneralFilterAdapter extends ViewGroupAdapter<GeneralFilterItem> {
     }
 
     @Override
-    public void bindView(int position, View itemView, GeneralFilterItem itemData) {
+    public void bindView(int position, View itemView, StoreSortCriteriaItem itemData) {
         TextView tvName = itemView.findViewById(R.id.tv_name);
         ImageView imgStatusIndicator = itemView.findViewById(R.id.img_status_indicator);
 

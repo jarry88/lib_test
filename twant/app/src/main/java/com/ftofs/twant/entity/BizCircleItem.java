@@ -9,10 +9,12 @@ import java.util.List;
 public class BizCircleItem {
     public int id;
     public String name;
+    public BizCircleId bizCircleId;
     public List<BizCircleItem> subItemList;
 
-    public BizCircleItem(int id, String name) {
+    public BizCircleItem(int id, String name, BizCircleId bizCircleId) {
         this.id = id;
         this.name = name;
+        this.bizCircleId = bizCircleId;
     }
 }

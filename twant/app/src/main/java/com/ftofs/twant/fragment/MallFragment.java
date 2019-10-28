@@ -111,7 +111,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, GridLayoutManager.VERTICAL, false);
         rvGuessList.setLayoutManager(layoutManager);
-        goodsAdapter = new GoodsSearchResultAdapter(_mActivity, R.layout.goods_search_item, goodsItemList);
+        goodsAdapter = new GoodsSearchResultAdapter(_mActivity, goodsItemList);
         goodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
