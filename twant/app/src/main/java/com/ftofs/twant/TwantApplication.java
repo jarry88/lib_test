@@ -8,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.os.StrictMode;
 
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.lbs.TwLocation;
@@ -43,6 +45,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
@@ -75,6 +78,8 @@ public class TwantApplication extends Application {
     // 線程池
     private static ExecutorService executorService;
 
+    String umengDeviceToken;
+
     TwLocation twLocation;
 
     // IWXAPI是第三方app和微信通信的openapi接口
@@ -89,6 +94,8 @@ public class TwantApplication extends Application {
     public static TwLocation getTwLocation() {
         return getInstance().twLocation;
     }
+
+    PushAgent mPushAgent;
 
     @Override
     public void onCreate() {
@@ -254,7 +261,7 @@ public class TwantApplication extends Application {
         UMConfigure.init(this, getString(R.string.umeng_push_app_key), "Umeng", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret));
 
         //获取消息推送代理示例
-        PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent = PushAgent.getInstance(this);
         // mPushAgent.setNotificaitonOnForeground(false); // 如果应用在前台，您可以设置不显示通知栏消息。默认情况下，应用在前台是显示通知的。此方法请在mPushAgent.register方法之前调用。
 
         UmengMessageHandler messageHandler = new UmengMessageHandler() {
@@ -325,6 +332,9 @@ public class TwantApplication extends Application {
             public void onSuccess(String deviceToken) {
                 //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
                 SLog.info("注册成功：deviceToken：-------->  " + deviceToken);
+                umengDeviceToken = deviceToken;
+
+                setUmengAlias();
             }
             @Override
             public void onFailure(String s, String s1) {
@@ -332,6 +342,45 @@ public class TwantApplication extends Application {
             }
         });
     }
+
+    public void setUmengAlias() {
+        if (mPushAgent == null) {
+            return;
+        }
+        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+        if (StringUtil.isEmpty(memberName)) {
+            return;
+        }
+
+        if (StringUtil.isEmpty(umengDeviceToken)) {
+            return;
+        }
+        mPushAgent.setAlias(memberName, Constant.UMENG_ALIAS_TYPE, new UTrack.ICallBack() {
+            @Override
+            public void onMessage(boolean b, String s) {
+                SLog.info("setAlias.UTrack.ICallBack.onMessage[%s][%s]", b, s);
+            }
+        });
+    }
+
+    public void delUmengAlias() {
+        if (mPushAgent == null) {
+            return;
+        }
+
+        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+        if (StringUtil.isEmpty(memberName)) {
+            return;
+        }
+
+        mPushAgent.deleteAlias(memberName, Constant.UMENG_ALIAS_TYPE, new UTrack.ICallBack() {
+            @Override
+            public void onMessage(boolean isSuccess, String message) {
+                SLog.info("deleteAlias.UTrack.ICallBack.onMessage[%s][%s]", isSuccess, message);
+            }
+        });
+    }
+
 
     /**
      * 初始化聊天功能

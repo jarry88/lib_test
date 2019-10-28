@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.EBMessage;
@@ -208,6 +209,7 @@ public class PasswordLoginFragment extends BaseFragment implements
                     ToastUtil.success(_mActivity, "登錄成功");
                     int userId = responseObj.getInt("datas.memberId");
                     SharedPreferenceUtil.saveUserInfo(responseObj);
+                    TwantApplication.getInstance().setUmengAlias();
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
                     hideSoftInput();
                     SqliteUtil.switchUserDB(userId);

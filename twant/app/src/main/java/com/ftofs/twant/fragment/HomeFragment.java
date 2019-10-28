@@ -557,7 +557,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 int dimen;
                                 if (index == 0) {
                                     dimen = (int) (ratio * remainWidth * 79 / 258);
-                                    SLog.info("__dimen[%d]", dimen);
+                                    // SLog.info("__dimen[%d]", dimen);
                                     ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
                                     LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageLeft.getLayoutParams();
                                     layoutParams.width = dimen;
@@ -572,7 +572,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                     }
                                 } else if (index == 1) {
                                     dimen = (int) (ratio * remainWidth * 100 / 258);
-                                    SLog.info("__dimen[%d]", dimen);
+                                    // SLog.info("__dimen[%d]", dimen);
                                     ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
                                     LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageMiddle.getLayoutParams();
                                     layoutParams.width = dimen;
@@ -582,7 +582,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                     llGoodsImageContainer = storeView.findViewById(R.id.goods_image_middle_container);
                                 } else if (index == 2) {
                                     dimen = (int) (ratio * remainWidth * 79 / 258);
-                                    SLog.info("__dimen[%d]", dimen);
+                                    // SLog.info("__dimen[%d]", dimen);
                                     ImageView goodsImageRight = storeView.findViewById(R.id.goods_image_right);
                                     LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageRight.getLayoutParams();
                                     layoutParams.width = dimen;
@@ -646,6 +646,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
     }
-
-
 }
+
+

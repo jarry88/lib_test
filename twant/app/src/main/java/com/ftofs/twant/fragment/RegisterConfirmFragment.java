@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
@@ -158,6 +159,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                         // 保存服務器端返回的數據
                         int userId = responseObj.getInt("datas.memberId");
                         SharedPreferenceUtil.saveUserInfo(responseObj);
+                        TwantApplication.getInstance().setUmengAlias();
                         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
                         hideSoftInput();
                         SqliteUtil.switchUserDB(userId);

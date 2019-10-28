@@ -64,6 +64,17 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     SearchType searchType;
 
     /**
+     * 店鋪搜索結果的排序標準
+     * "" 按【綜合】排序，服務器端返回什么就是什么
+     * "collect_desc"  按【關注量】排序
+     * "startBusiness_desc" 按【開店時長】排序
+     */
+    public static final String STORE_SORT_GENERAL = "";
+    public static final String STORE_SORT_FOLLOW = "collect_desc";
+    public static final String STORE_SORT_OPEN = "startBusiness_desc";
+
+
+    /**
      * 當前選中的過濾條件的類型： 【所在地】和【商圈】只能二選一
      */
     /*
@@ -369,9 +380,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 }
             }
 
-            SLog.info("params[%s]", params);
+            String token = User.getToken();
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
+
+
 
             if (searchType == SearchType.GOODS) {
+                SLog.info("params[%s]", params);
                 Api.getUI(Api.PATH_SEARCH_GOODS, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -791,6 +808,17 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             if (type == PopupType.STORE_SORT_TYPE) {
                 generalItemSelectedId = id;
                 tvSort.setText((String) extra);
+
+                EasyJSONObject params = EasyJSONObject.generate();
+                if (generalItemSelectedId == 1) {
+                    // 不需要傳參數
+                } else if (generalItemSelectedId == 2) {
+                    params.set("sort", STORE_SORT_FOLLOW);
+                } else if (generalItemSelectedId == 3) {
+                    params.set("sort", STORE_SORT_OPEN);
+                }
+
+                doSearch(searchType, keyword, params);
             } else if (type == PopupType.STORE_FILTER_LOCATION || type == PopupType.STORE_FILTER_BIZ_CIRCLE) {
                 bizCircleId = (BizCircleId) extra;
 

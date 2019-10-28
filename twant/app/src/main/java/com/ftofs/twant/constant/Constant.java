@@ -248,4 +248,7 @@ public class Constant {
     public static final int TPL_CLASS_SOCIAL = 1003;
     public static final int TPL_CLASS_BARGAIN = 1004;
     public static final int TPL_CLASS_NOTICE = 1005;
+
+
+    public static final String UMENG_ALIAS_TYPE = "twant";
 }

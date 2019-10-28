@@ -1,5 +1,6 @@
 package com.ftofs.twant.util;
 
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
@@ -68,6 +69,9 @@ public class User {
                 }
             });
         }
+
+        // 解除友盟別名綁定
+        TwantApplication.getInstance().delUmengAlias();
 
         Hawk.delete(SPField.FIELD_USER_ID);
         Hawk.delete(SPField.FIELD_TOKEN);
