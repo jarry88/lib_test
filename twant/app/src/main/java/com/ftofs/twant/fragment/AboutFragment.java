@@ -83,13 +83,13 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
             String url;
 
             if (id == R.id.btn_view_takewant_introduction) { // Takewant介紹
-                url = "/introduce";
+                url = "https://www.twant.com/web/introduce";
             } else if (id == R.id.btn_view_secret_terms) {  // 私隱條款
-                url = "/article/info_h5/%E7%A7%81%E9%9A%B1%E6%A2%9D%E6%AC%BE";
+                url = "https://f2.twant.com/web/article/info_h5/3";
             } else { // 服務協議
-                url = "/article/info_h5/%E6%9C%8D%E5%8B%99%E5%8D%94%E8%AD%B0";
+                url = "https://f2.twant.com/web/article/info_h5/0";
             }
-            start(ExplorerFragment.newInstance(Config.WEB_BASE_URL + url, true));
+            start(ExplorerFragment.newInstance(url, true));
         } else if (id == R.id.btn_check_update) {
             Api.getUI(Api.PATH_CHECK_UPDATE, EasyJSONObject.generate("version", BuildConfig.VERSION_NAME), new UICallback() {
                 @Override
