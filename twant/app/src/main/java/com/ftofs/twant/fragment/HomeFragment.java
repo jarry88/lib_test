@@ -22,6 +22,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.SearchPostParams;
@@ -33,7 +34,11 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.DoubleElevenPopup;
+import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.NestedScrollingParent2Layout;
+import com.lxj.xpopup.XPopup;
+import com.orhanobut.hawk.Hawk;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -90,6 +95,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
 
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
+
+    DoubleElevenPopup doubleElevenPopup; // 雙十一活動彈窗
 
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -260,6 +267,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         bannerView.start();
+
+        // 獲取上次顯示的時間戳
+        long doubleElevenPopupShownTimestamp = Hawk.get(SPField.FIELD_DOUBLE_ELEVEN_POPUP_SHOWN_TIMESTAMP, 0L);
+        // doubleElevenPopupShownTimestamp = 0;
+        // 最多1小時顯示一次活動彈窗
+        if (System.currentTimeMillis() - doubleElevenPopupShownTimestamp > 3600 * 1000) {
+            if (doubleElevenPopup == null) {
+                doubleElevenPopup = (DoubleElevenPopup) new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new DoubleElevenPopup(_mActivity));
+            }
+            if (!doubleElevenPopup.isShown()) {
+                doubleElevenPopup.show();
+                // 記錄這一次顯示的時間
+                Hawk.put(SPField.FIELD_DOUBLE_ELEVEN_POPUP_SHOWN_TIMESTAMP, System.currentTimeMillis());
+            }
+        }
     }
 
     @Override

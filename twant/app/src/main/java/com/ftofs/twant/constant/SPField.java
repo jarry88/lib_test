@@ -36,6 +36,11 @@ public class SPField {
      */
     public static final String FIELD_APP_UPDATE_POPUP_SHOWN_DATE = "app_update_popup_shown_date";
 
+    /**
+     * 雙十一活動對話框最近一次顯示的時間戳
+     */
+    public static final String FIELD_DOUBLE_ELEVEN_POPUP_SHOWN_TIMESTAMP = "double_eleven_popup_shown_timestamp";
+
 
     /**
      * MPay 訂單的PayId
