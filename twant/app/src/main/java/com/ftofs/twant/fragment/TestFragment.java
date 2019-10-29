@@ -22,7 +22,6 @@ import java.util.List;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
-
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -50,12 +49,11 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            SLog.info("filename[%s]", Urls.parse("https://youtu.be/BiIRTvNlDgs?t=24")
-                    .path().filename());
+            start(H5GameFragment.newInstance("http://gogo.so/1.html"));
+            // http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test.html
+            // start(H5GameFragment.newInstance("http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test2.html?q=1211"));
         }
     }
-
-
 
     @Override
     public boolean onBackPressedSupport() {

@@ -12,6 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.handler.NativeJsBridge;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.XPopup;
@@ -58,6 +59,8 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
 
         webView = view.findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
+        NativeJsBridge nativeJsBridge = new NativeJsBridge();
+        webView.addJavascriptInterface(nativeJsBridge, "android");
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
