@@ -1,5 +1,8 @@
 package com.ftofs.twant.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CommentReplyItem {
     public int memberId;
     public String memberName;
@@ -14,4 +17,6 @@ public class CommentReplyItem {
     public boolean isQuoteReply;  // 是否為引用回復，如果是引用回復時，下面的字段才有用
     public String quoteNickname;  // 引用評論作者的昵稱
     public String quoteContent;   // 引用評論的內容
+
+    public List<String> imageList = new ArrayList<>();
 }

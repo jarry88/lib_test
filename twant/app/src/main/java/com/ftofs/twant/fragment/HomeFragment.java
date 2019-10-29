@@ -356,7 +356,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity, 6);
+        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
         llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = true;
     }
@@ -367,7 +367,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity,  -25);
+        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
         llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = false;
     }
@@ -567,8 +567,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             String storeFigureImageUrl = StringUtil.normalizeImageUrl(store.getString("storeVo.storeFigureImage"));
                             ImageView imgStoreFigure = storeView.findViewById(R.id.img_store_figure);
                             Glide.with(_mActivity).load(storeFigureImageUrl).centerCrop().into(imgStoreFigure);
-
-
 
                             int index = 0;
                             // 店鋪的3個商品展示

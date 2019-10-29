@@ -280,10 +280,16 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 return;
             }
 
+            String replyContent = etReplyContent.getText().toString().trim();
+            if (StringUtil.isEmpty(replyContent)) {
+                ToastUtil.error(_mActivity, "回復不能為空");
+                return;
+            }
+
             EasyJSONObject params = EasyJSONObject.generate(
                     "commentChannel", commentItem.commentChannel,
                     "deep", 2,
-                    "content", StringUtil.filterCommentContent(etReplyContent.getText().toString().trim()),
+                    "content", StringUtil.filterCommentContent(replyContent),
                     "parentCommentId", commentItem.commentId,
                     "replyCommentId", replyCommentId);
 
@@ -457,6 +463,18 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                             item.nickname = reply.getString("memberVo.nickName");
                             item.createTime = reply.getLong("createTime");
                             item.content = reply.getString("content");
+                            if (StringUtil.isEmpty(item.content)) {
+                                item.content = "";
+                            }
+                            EasyJSONArray images = reply.getArray("images");
+                            if (!Util.isJsonNull(images)) {
+                                for (Object object2 : images) {
+                                    EasyJSONObject image = (EasyJSONObject) object2;
+                                    item.imageList.add(image.getString("imageUrl"));
+                                }
+                            }
+
+
                             item.commentLike = reply.getInt("commentLike");
                             item.isLike = reply.getInt("isLike");
 
@@ -471,7 +489,6 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         }
                         SLog.info("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
                         commentReplyListAdapter.setData(commentReplyItemList);
-
                     } catch (Exception e) {
                         e.printStackTrace();
                         SLog.info("Error!%s", e.getMessage());

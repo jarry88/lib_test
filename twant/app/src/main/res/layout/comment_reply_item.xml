@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/toolbar_margin_left"
@@ -46,6 +47,14 @@
             android:textColor="@color/tw_black"
             android:textSize="16sp"
             />
+
+        <com.ftofs.twant.widget.SquareGridLayout
+            android:id="@+id/sgl_image_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:sgl_column_count="3">
+
+        </com.ftofs.twant.widget.SquareGridLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

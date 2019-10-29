@@ -14,8 +14,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.CommentReplyItem;
+import com.ftofs.twant.fragment.ImageViewerFragment;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SquareGridLayout;
 
 /**
  * 評論回復列表Adapter
@@ -43,24 +46,63 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
     @Override
     public void bindView(int position, View itemView, CommentReplyItem itemData) {
         ImageView imgAvatar = itemView.findViewById(R.id.img_avatar);
-        Glide.with(context).load(StringUtil.normalizeImageUrl(itemData.avatarUrl))
-                .centerCrop().into(imgAvatar);
+        if (StringUtil.isEmpty(itemData.avatarUrl)) {
+            Glide.with(context).load(R.drawable.grey_default_avatar)
+                    .centerCrop().into(imgAvatar);
+        } else {
+            Glide.with(context).load(StringUtil.normalizeImageUrl(itemData.avatarUrl))
+                    .centerCrop().into(imgAvatar);
+        }
+
 
         setText(itemView, R.id.tv_nickname, itemData.nickname);
         setText(itemView, R.id.tv_timestamp, new Jarbon(itemData.createTime).format("Y-m-d H:i:s"));
 
         TextView tvReplyContent = itemView.findViewById(R.id.tv_reply_content);
 
-        Editable content = StringUtil.translateEmoji(context, itemData.content, (int) tvReplyContent.getTextSize());
-        if (itemData.isQuoteReply) {
-            SpannableString spannableString = new SpannableString(" //@" + itemData.quoteNickname + ":");
-            ForegroundColorSpan colorSpan = new ForegroundColorSpan(twBlue);
-            spannableString.setSpan(colorSpan, 1, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (StringUtil.isEmpty(itemData.content)) {
+            tvReplyContent.setVisibility(View.GONE);
+        } else {
+            tvReplyContent.setVisibility(View.VISIBLE);
 
-            content.append(spannableString);
-            content.append(StringUtil.translateEmoji(context, itemData.quoteContent, (int) tvReplyContent.getTextSize()));
+            Editable content = StringUtil.translateEmoji(context, itemData.content, (int) tvReplyContent.getTextSize());
+            if (itemData.isQuoteReply) {
+                SpannableString spannableString = new SpannableString(" //@" + itemData.quoteNickname + ":");
+                ForegroundColorSpan colorSpan = new ForegroundColorSpan(twBlue);
+                spannableString.setSpan(colorSpan, 1, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                content.append(spannableString);
+                content.append(StringUtil.translateEmoji(context, itemData.quoteContent, (int) tvReplyContent.getTextSize()));
+            }
+            tvReplyContent.setText(content);
         }
-        tvReplyContent.setText(content);
+
+        // 如果評論有圖片
+        if (itemData.imageList.size() > 0) {
+            SquareGridLayout sglImageContainer = itemView.findViewById(R.id.sgl_image_container);
+            sglImageContainer.removeAllViews();
+
+            for (String imageUrl : itemData.imageList) {
+                ImageView imageView = new ImageView(context);
+                Glide.with(context).load(StringUtil.normalizeImageUrl(imageUrl)).centerCrop().into(imageView);
+
+                ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                layoutParams.topMargin = Util.dip2px(context, 3);
+                layoutParams.bottomMargin = Util.dip2px(context, 3);
+                layoutParams.leftMargin = Util.dip2px(context, 3);
+                layoutParams.rightMargin = Util.dip2px(context, 3);
+
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Util.startFragment(ImageViewerFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                    }
+                });
+
+                sglImageContainer.addView(imageView, layoutParams);
+            }
+        }
+
 
         setText(itemView, R.id.tv_like_count, String.valueOf(itemData.commentLike));
 
