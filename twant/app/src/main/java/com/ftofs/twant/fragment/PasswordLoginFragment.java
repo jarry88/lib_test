@@ -209,7 +209,7 @@ public class PasswordLoginFragment extends BaseFragment implements
                     ToastUtil.success(_mActivity, "登錄成功");
                     int userId = responseObj.getInt("datas.memberId");
                     SharedPreferenceUtil.saveUserInfo(responseObj);
-                    TwantApplication.getInstance().setUmengAlias();
+                    TwantApplication.getInstance().setUmengAlias(Constant.ACTION_ADD);
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
                     hideSoftInput();
                     SqliteUtil.switchUserDB(userId);

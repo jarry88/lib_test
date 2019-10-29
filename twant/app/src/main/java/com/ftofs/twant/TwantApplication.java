@@ -56,6 +56,7 @@ import org.litepal.tablemanager.callback.DatabaseListener;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -236,6 +237,7 @@ public class TwantApplication extends Application {
 
 
     private void initUmeng() {
+        SLog.info("initUmeng");
         int pid = android.os.Process.myPid();
 
         String processAppName = getAppName(pid);
@@ -271,6 +273,7 @@ public class TwantApplication extends Application {
              */
             @Override
             public void dealWithNotificationMessage(Context context, UMessage msg) {
+                SLog.info("dealWithNotificationMessage, msg[%s]", dumpUmengMessage(msg));
                 //调用super，会展示通知，不调用super，则不展示通知。
                 super.dealWithNotificationMessage(context, msg);
             }
@@ -280,8 +283,7 @@ public class TwantApplication extends Application {
              */
             @Override
             public void dealWithCustomMessage(final Context context, final UMessage msg) {
-
-
+                SLog.info("dealWithCustomMessage, msg[%s]", dumpUmengMessage(msg));
             }
 
             /**
@@ -289,6 +291,7 @@ public class TwantApplication extends Application {
              */
             @Override
             public Notification getNotification(Context context, UMessage uMessage) {
+                SLog.info("getNotification, msg[%s]", dumpUmengMessage(uMessage));
                 return super.getNotification(context, uMessage);
             }
         };
@@ -325,25 +328,48 @@ public class TwantApplication extends Application {
         //使用自定义的NotificationHandler
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
 
-
+        SLog.info("mPushAgent.register");
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
             @Override
             public void onSuccess(String deviceToken) {
                 //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
-                SLog.info("注册成功：deviceToken：-------->  " + deviceToken);
+                SLog.info("mPushAgent.register 注册成功：deviceToken：-------->  " + deviceToken);
                 umengDeviceToken = deviceToken;
 
-                setUmengAlias();
+                setUmengAlias(Constant.ACTION_ADD);
             }
             @Override
             public void onFailure(String s, String s1) {
-                SLog.info("注册失败：-------->  " + "s:" + s + ",s1:" + s1);
+                SLog.info("mPushAgent.register 注册失败：-------->  " + "s:" + s + ",s1:" + s1);
             }
         });
     }
 
-    public void setUmengAlias() {
+    public String getUmengDeviceToken() {
+        return umengDeviceToken;
+    }
+
+    /**
+     * 格式化友盟消息
+     * @param msg
+     * @return
+     */
+    private String dumpUmengMessage(UMessage msg) {
+        EasyJSONObject extra = EasyJSONObject.generate();
+        try {
+            for (String key : msg.extra.keySet()) {
+                extra.set(key, msg.extra.get(key));
+            }
+        } catch (Exception e) {
+
+        }
+
+        return String.format("custom[%s], extra[%s]", msg.custom, extra.toString());
+    }
+
+
+    public void setUmengAlias(int action) {
         if (mPushAgent == null) {
             return;
         }
@@ -355,12 +381,21 @@ public class TwantApplication extends Application {
         if (StringUtil.isEmpty(umengDeviceToken)) {
             return;
         }
-        mPushAgent.setAlias(memberName, Constant.UMENG_ALIAS_TYPE, new UTrack.ICallBack() {
-            @Override
-            public void onMessage(boolean b, String s) {
-                SLog.info("setAlias.UTrack.ICallBack.onMessage[%s][%s]", b, s);
-            }
-        });
+        if (action == Constant.ACTION_ADD) {
+            mPushAgent.addAlias(memberName, Constant.UMENG_ALIAS_TYPE, new UTrack.ICallBack() {
+                @Override
+                public void onMessage(boolean b, String s) {
+                    SLog.info("addAlias.UTrack.ICallBack.onMessage[%s][%s]", b, s);
+                }
+            });
+        } else if (action == Constant.ACTION_EDIT) {
+            mPushAgent.setAlias(memberName, Constant.UMENG_ALIAS_TYPE, new UTrack.ICallBack() {
+                @Override
+                public void onMessage(boolean b, String s) {
+                    SLog.info("setAlias.UTrack.ICallBack.onMessage[%s][%s]", b, s);
+                }
+            });
+        }
     }
 
     public void delUmengAlias() {

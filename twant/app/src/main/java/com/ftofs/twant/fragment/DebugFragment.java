@@ -9,11 +9,13 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.interfaces.CommonCallback;
@@ -34,6 +36,8 @@ import java.util.List;
  * @author zwm
  */
 public class DebugFragment extends BaseFragment implements View.OnClickListener {
+    EditText etUmengDeviceToken;
+
     private static class ProcessInfo {
         public int id;
         public String name;
@@ -68,10 +72,13 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
         TextView tvMemberName = view.findViewById(R.id.tv_member_name);
         tvMemberName.setText("memberName:" + User.getUserInfo(SPField.FIELD_MEMBER_NAME, ""));
 
+        etUmengDeviceToken = view.findViewById(R.id.et_umeng_device_token);
+
         Util.setOnClickListener(view, R.id.btn_has_storage_permission, this);
         Util.setOnClickListener(view, R.id.btn_has_camera_permission, this);
         Util.setOnClickListener(view, R.id.btn_has_location_permission, this);
         Util.setOnClickListener(view, R.id.btn_list_app_process, this);
+        Util.setOnClickListener(view, R.id.btn_get_umeng_device_token, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
     }
 
@@ -107,6 +114,10 @@ public class DebugFragment extends BaseFragment implements View.OnClickListener 
             }
 
             Toast.makeText(_mActivity, sb.toString(), Toast.LENGTH_LONG).show();
+        } else if (id == R.id.btn_get_umeng_device_token) {
+            String umengDeviceToken = TwantApplication.getInstance().getUmengDeviceToken();
+            SLog.info("umengDeviceToken[%s]", umengDeviceToken);
+            etUmengDeviceToken.setText(umengDeviceToken);
         }
     }
 
