@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -194,6 +195,11 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
     private void setMemberAddress() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        if (selectedAreaList.size() < 3) {
+            ToastUtil.error(context, "請選擇區域");
             return;
         }
 
