@@ -17,6 +17,7 @@ public class PostItem implements MultiItemEntity {
     public int postThumb;  // 點讚數
     public int postReply; // 回復/評論數
     public int postFollow;  // 關注數
+    public int postView;  // 瀏覽量
 
     public String deadline;
 

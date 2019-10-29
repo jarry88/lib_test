@@ -41,6 +41,7 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
                     .setText(R.id.tv_author_nickname, item.authorNickname)
                     .setText(R.id.tv_like_count, String.valueOf(item.postFollow))
                     .setText(R.id.tv_comment_count, String.valueOf(item.postReply))
+                    .setText(R.id.tv_view_count, String.valueOf(item.postView))
                     .setText(R.id.tv_create_time, item.createTime);
 
             int itemCount = getItemCount();

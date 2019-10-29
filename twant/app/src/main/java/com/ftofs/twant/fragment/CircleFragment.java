@@ -331,6 +331,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         item.title = post.getString("title");
                         item.postReply = post.getInt("postReply");
                         item.postFollow = post.getInt("postLike");
+                        item.postView = post.getInt("postView");
                         item.deadline = post.getString("expiresDate");
 
                         EasyJSONObject memberVo = post.getObject("memberVo");
