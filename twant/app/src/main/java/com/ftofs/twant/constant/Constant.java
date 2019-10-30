@@ -59,6 +59,10 @@ public class Constant {
      * 數據全部加載完成的提示
      */
     public static final int ITEM_TYPE_LOAD_END_HINT = 2;
+    /**
+     * 雙十一活動Banner
+     */
+    public static final int ITEM_TYPE_DOUBLE_ELEVEN_BANNER = 3;
 
 
     /**

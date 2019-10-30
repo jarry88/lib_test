@@ -1,8 +1,10 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,7 @@ import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.StoreSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
@@ -141,6 +144,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     ImageView iconPriceOrder;
     boolean sortPriceAsc = true;  // 是否用升序來進行價格排序
+
+    /**
+     * 是否為雙十一活動
+     */
+    boolean isDoubleEleven = false;
 
     public static final int STORE_SEARCH_SORT_GENERAL = 0;
     public static final int STORE_SEARCH_SORT_STORE_OPEN = 1;
@@ -287,6 +295,19 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         rvSearchResultList = view.findViewById(R.id.rv_search_result_list);
 
         if (searchType == SearchType.GOODS) { // 商品搜索
+            try {
+                if (paramsObj.exists("is_double_eleven") && paramsObj.getBoolean("is_double_eleven")) {
+                    // 如果是雙11活動，則將背景色設置為紅色
+                    isDoubleEleven = true;
+                    view.findViewById(R.id.tool_bar).setVisibility(View.GONE);
+                    view.findViewById(R.id.ll_filter_bar).setVisibility(View.GONE);
+                    rvSearchResultList.setBackgroundColor(Color.parseColor("#FFF3004D"));
+                }
+            } catch (Exception e) {
+
+            }
+
+
             GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, GridLayoutManager.VERTICAL, false);
             rvSearchResultList.setLayoutManager(layoutManager);
             mGoodsAdapter = new GoodsSearchResultAdapter(_mActivity, goodsItemList);
@@ -309,6 +330,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     if (id == R.id.btn_goto_store) {
                         GoodsSearchItem item = goodsItemList.get(position);
                         Util.startFragment(ShopMainFragment.newInstance(item.storeId));
+                    } else if (id == R.id.btn_play_game) {
+                        String url = Util.makeDoubleElevenH5GameUrl();
+                        if (url == null) {
+                            Util.showLoginFragment();
+                            return;
+                        }
+                        start(H5GameFragment.newInstance(url));
                     }
                 }
             });
@@ -316,11 +344,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 @Override
                 public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
                     GoodsSearchItem item = goodsItemList.get(position);
-                    if (item.getItemType() == Constant.ITEM_TYPE_NORMAL) {
+                    int itemType = item.getItemType();
+                    if (itemType == Constant.ITEM_TYPE_NORMAL) {
                         return 1;
-                    } else {
+                    } else if (itemType == Constant.ITEM_TYPE_LOAD_END_HINT || itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
                         return 2;
                     }
+                    return 1;
                 }
             });
             rvSearchResultList.setAdapter(mGoodsAdapter);
@@ -410,6 +440,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             goodsItemList.clear();
                             // filterCategoryGroupList.clear();
 
+                            if (isDoubleEleven) {
+                                goodsItemList.add(new GoodsSearchItem(Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER));
+                            }
+
                             EasyJSONArray easyJSONArray = responseObj.getArray("datas.goodsList");
                             for (Object object : easyJSONArray) {
                                 EasyJSONObject goods = (EasyJSONObject) object;
@@ -433,7 +467,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                         storeName, commonId, goodsName, jingle, price, nationalFlag));
                             }
 
-                            goodsItemList.add(new GoodsSearchItem());
+                            goodsItemList.add(new GoodsSearchItem(Constant.ITEM_TYPE_LOAD_END_HINT));
 
                             SLog.info("goodsItemList.size[%d]", goodsItemList.size());
                             mGoodsAdapter.setNewData(goodsItemList);

@@ -10,6 +10,10 @@ public class SPField {
     public static final String FIELD_TOKEN = "token";
     public static final String FIELD_NICKNAME = "nickname";
     public static final String FIELD_LAST_LOGIN_TIME = "last_login_time";
+    /**
+     * 區號+手機，用逗號隔開，例如：0086,13425038750
+     */
+    public static final String FIELD_MOBILE = "mobile";
     public static final String FIELD_MOBILE_ENCRYPT = "mobile_encrypt";
     public static final String FIELD_SEARCH_TYPE = "search_type_";
     public static final String FIELD_MEMBER_NAME = "member_name";

@@ -22,8 +22,8 @@ public class GoodsSearchItem implements MultiItemEntity {
         this.nationalFlag = nationalFlag;
     }
 
-    public GoodsSearchItem() {
-        this.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
+    public GoodsSearchItem(int itemType) {
+        this.itemType = itemType;
     }
 
     public int itemType;

@@ -8,7 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 雙11活動入口頁面
@@ -44,9 +49,15 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
         int id = v.getId();
 
         if (id == R.id.btn_go_shopping) {
-
+            EasyJSONObject params = EasyJSONObject.generate("is_double_eleven", true);
+            start(SearchResultFragment.newInstance(SearchType.GOODS.name(), params.toString()));
         } else if (id == R.id.btn_play_game) {
-            start(H5GameFragment.newInstance("http://gogo.so/del.jpg"));
+            String url = Util.makeDoubleElevenH5GameUrl();
+            if (url == null) {
+                Util.showLoginFragment();
+                return;
+            }
+            start(H5GameFragment.newInstance(url));
         }
     }
 

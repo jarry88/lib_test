@@ -6,6 +6,8 @@ import com.ftofs.twant.log.SLog;
 
 /**
  * js調用原生接口
+ * 最全面总结 Android WebView与 JS 的交互方式
+ * https://www.jianshu.com/p/345f4d8a5cfa
  * @author zwm
  */
 public class NativeJsBridge {

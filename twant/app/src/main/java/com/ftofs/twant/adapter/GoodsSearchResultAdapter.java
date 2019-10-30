@@ -33,6 +33,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
     public GoodsSearchResultAdapter(Context context, List<GoodsSearchItem> data) {
         super(data);
 
+        addItemType(Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER, R.layout.double_eleven_header);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.goods_search_item);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.publish_my_want);
 
@@ -43,7 +44,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
     @Override
     protected void convert(BaseViewHolder helper, GoodsSearchItem item) {
-        if (item.getItemType() == Constant.ITEM_TYPE_NORMAL) {
+        int itemType = item.getItemType();
+        if (itemType == Constant.ITEM_TYPE_NORMAL) {
             ImageView goodsImage = helper.getView(R.id.goods_image);
             Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
 
@@ -62,6 +64,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
             helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context, item.price, 1));
 
             helper.addOnClickListener(R.id.btn_goto_store);
+        } else if (itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
+            helper.addOnClickListener(R.id.btn_play_game);
         } else {
 
         }

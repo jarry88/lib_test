@@ -77,6 +77,7 @@ public class User {
         Hawk.delete(SPField.FIELD_TOKEN);
         Hawk.delete(SPField.FIELD_NICKNAME);
         Hawk.delete(SPField.FIELD_LAST_LOGIN_TIME);
+        Hawk.delete(SPField.FIELD_MOBILE);
         Hawk.delete(SPField.FIELD_MOBILE_ENCRYPT);
         Hawk.delete(SPField.FIELD_MEMBER_NAME);
         Hawk.delete(SPField.FIELD_IM_TOKEN);

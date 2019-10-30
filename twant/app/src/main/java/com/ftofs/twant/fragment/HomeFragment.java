@@ -134,6 +134,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         Util.setOnClickListener(view, R.id.btn_category_brand, this);
         Util.setOnClickListener(view, R.id.ll_search_box, this);
         Util.setOnClickListener(view, R.id.btn_message, this);
+        Util.setOnClickListener(view, R.id.btn_goto_double_eleven, this);
 
         Util.setOnClickListener(view, R.id.btn_add_feedback, this);
         Util.setOnClickListener(view, R.id.btn_goto_top, this);
@@ -320,6 +321,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         } else if (id == R.id.btn_goto_top) {
             scrollingParent2Layout.scrollTo(0, 0);
             contentView.scrollTo(0, 0);
+        } else if (id == R.id.btn_goto_double_eleven) {
+            Util.startFragment(DoubleElevenFragment.newInstance());
         }
     }
 

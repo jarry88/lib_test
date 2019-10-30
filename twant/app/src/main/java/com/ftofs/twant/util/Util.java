@@ -23,6 +23,7 @@ import android.widget.EditText;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.domain.member.PurchaseBuy;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.SpecPair;
@@ -588,5 +589,18 @@ public class Util {
             }
         }
         return null;
+    }
+
+
+    /**
+     * 生成雙11活動H5游戲的URL，如果用戶未登錄，返回null
+     * @return
+     */
+    public static String makeDoubleElevenH5GameUrl() {
+        String mobile = User.getUserInfo(SPField.FIELD_MOBILE, null);
+        if (mobile == null) {
+            return null;
+        }
+        return "http://wx.twant.com:8080/index?mobile=" + mobile;
     }
 }

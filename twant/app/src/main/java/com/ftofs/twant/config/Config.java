@@ -73,5 +73,4 @@ public class Config {
     public static String BUGLY_KEY = "222fdc9738";
 
     public static final String YOUTUBE_DEVELOPER_KEY = "takewant";
-
 }

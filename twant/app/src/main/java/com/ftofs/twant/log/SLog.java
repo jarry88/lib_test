@@ -60,5 +60,13 @@ public class SLog {
             first = false;
         }
     }
+
+    public static void hex(byte[] data) {
+        if (data == null || data.length == 0) {
+            return;
+        }
+
+
+    }
 }
 
