@@ -793,6 +793,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     tvFansCount.setText(getString(R.string.text_fans) + goodsFavorite);
                     tvGoodsSale.setText(getString(R.string.text_monthly_sale) + goodsSaleNum + getString(R.string.text_monthly_sale_unit));
+                    // 隱藏銷量信息
+                    tvGoodsSale.setVisibility(View.INVISIBLE);
 
                     // 下面開始組裝規格數據列表
                     EasyJSONArray specJson = goodsDetail.getArray("specJson");
