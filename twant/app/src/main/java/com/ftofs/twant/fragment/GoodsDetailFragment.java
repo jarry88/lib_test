@@ -761,17 +761,21 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     tvGoodsCountryName.setText(responseObj.getString("datas.goodsCountry.countryCn"));
 
-                    String areaInfo = responseObj.getString("datas.address.areaInfo");
-                    tvShipTo.setText(areaInfo);
-
-                    allowSend = responseObj.getInt("datas.freight.allowSend");
-                    float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
-                    if (allowSend == 1) {
-                        tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
-                    } else {
-                        tvFreightAmount.setText(getString(R.string.text_not_allow_send));
+                    if (responseObj.exists("datas.address.areaInfo")) {
+                        String areaInfo = responseObj.getString("datas.address.areaInfo");
+                        tvShipTo.setText(areaInfo);
                     }
-                    
+
+
+                    if (responseObj.exists("datas.freight.allowSend")) {
+                        allowSend = responseObj.getInt("datas.freight.allowSend");
+                        float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
+                        if (allowSend == 1) {
+                            tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
+                        } else {
+                            tvFreightAmount.setText(getString(R.string.text_not_allow_send));
+                        }
+                    }
 
                     float goodsPrice = Util.getSpuPrice(goodsDetail);
                     tvGoodsPrice.setText(String.format("%.2f", goodsPrice));

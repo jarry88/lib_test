@@ -17,7 +17,7 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
     public float totalFreight;
     public float storeDiscount;
     public float platformDiscount;
-    public Receipt receipt; // 票據信息
+    public Receipt receipt; // 單據信息
     public int shipTimeType; // 配送時間
     public int totalItemCount;  // 總件數
     public int platformCouponCount;  // 平臺券數量

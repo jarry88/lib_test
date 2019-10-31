@@ -35,7 +35,7 @@ public enum RequestCode {
     INPUT_RECEIVER_INFO,
 
     /**
-     * 編輯票據
+     * 編輯單據
      */
     EDIT_RECEIPT,
 

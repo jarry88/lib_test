@@ -57,8 +57,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="澳洲制造 优选羊毛缝制"
-            android:textSize="16sp"
-            android:textColor="@color/tw_red"
+            android:textSize="15sp"
+            android:textColor="#666"
+            android:fontFamily="sans-serif-light"
             android:maxLines="1"
             android:ellipsize="end"
             />
@@ -68,8 +69,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="$ 129.00"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textColor="@color/tw_red"
+            android:textStyle="bold"
             />
     </LinearLayout>
 </LinearLayout>

@@ -84,7 +84,7 @@
                     android:layout_toRightOf="@id/tv_salary_range"
                     android:layout_centerVertical="true"
                     android:text=""
-                    android:textColor="@color/tw_red"
+                    android:textColor="@color/tw_black"
                     android:textSize="11sp"
                     />
 

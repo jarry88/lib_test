@@ -201,7 +201,7 @@
                             android:text="@string/text_time_limited_offer"
                             android:textColor="#fff"
                             android:textSize="12sp"
-                            android:background="#FEB809"
+                            android:background="@color/tw_red"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -322,6 +322,7 @@
                         android:text=""
                         android:textSize="17sp"
                         android:textColor="@android:color/white"
+                        android:textStyle="bold"
                         />
                 </RelativeLayout>
 
@@ -1010,7 +1011,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="65dp"
+        android:layout_marginBottom="75dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:src="@drawable/icon_goto_cart_red"

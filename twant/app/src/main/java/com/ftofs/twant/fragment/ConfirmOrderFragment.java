@@ -356,7 +356,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     store.set("goodsList", goodsList);
 
 
-                    // 票據信息
+                    // 單據信息
                     if (summaryItem.receipt != null) {
                         store.set("invoiceTitle", summaryItem.receipt.header);
                         store.set("invoiceContent", summaryItem.receipt.content);
@@ -564,7 +564,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
 
             ConfirmOrderSummaryItem summaryItem = (ConfirmOrderSummaryItem) confirmOrderItemList.get(position);
-            if (action == ReceiptInfoFragment.ACTION_NO_RECEIPT) { // 不開票據
+            if (action == ReceiptInfoFragment.ACTION_NO_RECEIPT) { // 不開單據
                 summaryItem.receipt = null;
             } else if (action == ReceiptInfoFragment.ACTION_SAVE_AND_USE) {
                 summaryItem.receipt = data.getParcelable("receipt");

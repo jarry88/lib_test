@@ -42,7 +42,7 @@
     <string name="text_logistics_address_setting">收貨地址設置</string>
     <string name="text_about_takewant">關於想要城</string>
 
-    <string name="text_takewant_introduction">想要城介紹</string>
+    <string name="text_takewant_introduction">想要城Takewant介紹</string>
     <string name="text_check_update">檢測更新</string>
     <string name="text_secret_terms">私隱條款</string>
     <string name="text_service_contract">服務協議</string>
@@ -105,14 +105,14 @@
     <string name="text_delete_order">刪除訂單</string>
     <string name="text_pay_order">支付訂單</string>
 
-    <string name="receipt_info_fragment_title">票據信息</string>
-    <string name="text_receipt_header">票據抬頭</string>
-    <string name="input_receipt_header_hint">請輸入票據抬頭</string>
-    <string name="text_receipt_content">票據內容</string>
-    <string name="input_receipt_content_hint">請輸入票據內容</string>
+    <string name="receipt_info_fragment_title">單據信息</string>
+    <string name="text_receipt_header">單據抬頭</string>
+    <string name="input_receipt_header_hint">請輸入單據抬頭</string>
+    <string name="text_receipt_content">單據內容</string>
+    <string name="input_receipt_content_hint">請輸入單據內容</string>
     <string name="text_taxpayer_id">納稅人識別號</string>
     <string name="input_taxpayer_id_hint">請填寫納稅人識別號</string>
-    <string name="text_does_not_need_receipt">不開票據</string>
+    <string name="text_does_not_need_receipt">不開單據</string>
     <string name="text_save_and_use">保存使用</string>
     <string name="order_detail_fragment_title">訂單詳情</string>
 
@@ -336,8 +336,8 @@
     <string name="text_add_shipping_address">新增收貨地址</string>
     <string name="text_leave_message">留言</string>
     <string name="text_leave_message_hint">給商家留言，100字以內（選填）</string>
-    <string name="text_receipt">票據</string>
-    <string name="text_receipt_info">票據信息</string>
+    <string name="text_receipt">單據</string>
+    <string name="text_receipt_info">單據信息</string>
     <string name="text_coupon">優惠券</string>
     <string name="text_shipping_time">配送時間</string>
     <string name="text_pay_way">支付方式</string>

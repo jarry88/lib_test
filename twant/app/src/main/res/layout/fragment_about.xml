@@ -47,17 +47,27 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="94dp"
-                android:layout_height="94dp"
-                android:layout_marginTop="49dp"
-                android:src="@mipmap/ic_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45.5dp"
+                android:src="@drawable/logo_about"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:text="想要城 Takewant"
+                android:textColor="@color/tw_black"
+                android:textSize="19sp"
+                android:textStyle="bold"
                 />
 
             <TextView
                 android:id="@+id/tv_app_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="23dp"
+                android:layout_marginTop="9.5dp"
                 android:textColor="@color/tw_black"
                 android:textSize="14sp"
                 />

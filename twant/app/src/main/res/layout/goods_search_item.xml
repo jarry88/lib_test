@@ -116,15 +116,52 @@
             android:ellipsize="end"
             />
 
-        <TextView
-            android:id="@+id/tv_goods_price"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="$ 129.00"
-            android:textColor="@color/tw_red"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            />
+            android:layout_marginTop="8dp">
+            <TextView
+                android:id="@+id/tv_goods_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="$ 129.00"
+                android:textColor="@color/tw_red"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2.5dp"
+                    android:paddingRight="2.5dp"
+                    android:text="滿減"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/icon_goods_bargain_bg"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:paddingLeft="2.5dp"
+                    android:paddingRight="2.5dp"
+                    android:text="折扣"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/white"
+                    android:background="@drawable/icon_goods_bargain_bg"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -18,7 +18,8 @@ public class WantedJobListAdapter extends BaseQuickAdapter<WantedPostItem, BaseV
 
     @Override
     protected void convert(BaseViewHolder helper, WantedPostItem item) {
-        helper.setText(R.id.tv_title, String.format("%s | %s", item.postType, item.postTitle));
-        helper.setText(R.id.tv_salary, String.format("%s%s/%s", item.salaryRange, item.currency, item.salaryType));
+        helper.setText(R.id.tv_title, String.format("%s | %s", item.postType, item.postTitle))
+                .setText(R.id.tv_salary, String.format("%s", item.salaryRange))
+                .setText(R.id.tv_salary_unit, String.format("%s/%s", item.currency, item.salaryType));
     }
 }
