@@ -36,10 +36,11 @@ public class StoreSortCriteriaAdapter extends ViewGroupAdapter<StoreSortCriteria
         tvName.setText(itemData.name);
         if (itemData.selected) {
             tvName.setTextColor(twBlue);
+            imgStatusIndicator.setVisibility(View.VISIBLE);
             imgStatusIndicator.setImageResource(R.drawable.icon_checked);
         } else {
             tvName.setTextColor(twBlack);
-            imgStatusIndicator.setImageResource(R.drawable.icon_cart_item_unchecked);
+            imgStatusIndicator.setVisibility(View.GONE);
         }
     }
 }

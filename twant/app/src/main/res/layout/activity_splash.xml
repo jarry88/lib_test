@@ -7,32 +7,21 @@
     android:background="@android:color/white"
     tools:context=".activity.SplashActivity">
 
+
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="227dp"
+        android:layout_alignParentBottom="true"
+        android:background="#03B9FF"
+        />
+
     <ImageView
-        android:id="@+id/splash_base"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/splash_base"
+        android:layout_centerInParent="true"
         android:scaleType="fitXY"
-        />
-
-    <ImageView
-        android:id="@+id/take_what_iwant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="-167dp"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/splash_base"
-        android:src="@drawable/take_what_iwant"
-        />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="-44.5dp"
-        android:layout_above="@id/take_what_iwant"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/logo"
+        android:src="@drawable/splash_bg"
         />
 
     <TextView
@@ -46,4 +35,6 @@
         android:textColor="#fff"
         android:textSize="12sp"
         />
+
+
 </RelativeLayout>

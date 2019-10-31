@@ -49,9 +49,11 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            start(H5GameFragment.newInstance("http://gogo.so/1.html"));
+            // start(H5GameFragment.newInstance("http://gogo.so/1.html"));
             // http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test.html
             // start(H5GameFragment.newInstance("http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test2.html?q=1211"));
+            byte b = 3;
+            SLog.info("b[%d]", b);
         }
     }
 

@@ -129,7 +129,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         searchTabLayout = view.findViewById(R.id.search_tab_layout);
         if (searchType == SearchType.ALL) {
             searchTabLayout.addTab(searchTabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_goods)).setTag(SearchType.GOODS));
-            searchTabLayout.addTab(searchTabLayout.newTab().setText(getResources().getText(R.string.search_tab_title_store)).setTag(SearchType.STORE));
+            searchTabLayout.addTab(searchTabLayout.newTab().setText("店鋪").setTag(SearchType.STORE));
             searchTabLayout.addTab(searchTabLayout.newTab().setText("想要").setTag(SearchType.ARTICLE));
 
             searchTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

@@ -70,7 +70,7 @@ public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHo
 
         ImageView iconThumb = helper.getView(R.id.icon_thumb);
         if (item.isLike == 1) {
-            iconThumb.setImageResource(R.drawable.icon_comment_thumb_blue);
+            iconThumb.setImageResource(R.drawable.icon_thumb_red_64);
         } else {
             iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
         }

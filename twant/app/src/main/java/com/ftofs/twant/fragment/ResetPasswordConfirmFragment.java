@@ -57,6 +57,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
     String areaCode;
     String mobile;
     int smsCodeValidTime;
+    boolean isModifyPaymentPassword;
 
     EditText etSmsCode;
     EditText etPassword;
@@ -69,15 +70,17 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
      * @param areaCode 區號
      * @param mobile 手機號
      * @param smsCodeValidTime 短信驗證碼的過期時間
+     * @param isModifyPaymentPassword 主要用于區分顯示【修改支付密碼】還是【設置支付密碼】
      * @return
      */
-    public static ResetPasswordConfirmFragment newInstance(int usage, String areaCode, String mobile, int smsCodeValidTime) {
+    public static ResetPasswordConfirmFragment newInstance(int usage, String areaCode, String mobile, int smsCodeValidTime, boolean isModifyPaymentPassword) {
         Bundle args = new Bundle();
 
         args.putInt("usage", usage);
         args.putString("areaCode", areaCode);
         args.putString("mobile", mobile);
         args.putInt("smsCodeValidTime", smsCodeValidTime);
+        args.putBoolean("isModifyPaymentPassword", isModifyPaymentPassword);
         ResetPasswordConfirmFragment fragment = new ResetPasswordConfirmFragment();
         fragment.setArguments(args);
 
@@ -102,6 +105,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
         areaCode = args.getString("areaCode");
         mobile = args.getString("mobile");
         smsCodeValidTime = args.getInt("smsCodeValidTime");
+        isModifyPaymentPassword = args.getBoolean("isModifyPaymentPassword");
 
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         if (usage == Constant.USAGE_RESET_PASSWORD) {

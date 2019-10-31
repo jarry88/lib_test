@@ -218,7 +218,7 @@ public class ResetPasswordFragment extends BaseFragment implements
                         if (usage == Constant.USAGE_USER_REGISTER) {
                             start(RegisterConfirmFragment.newInstance(mobileZone.areaCode, mobile, smsCodeValidTime));
                         } else {
-                            start(ResetPasswordConfirmFragment.newInstance(usage, mobileZone.areaCode, mobile, smsCodeValidTime));
+                            // start(ResetPasswordConfirmFragment.newInstance(usage, mobileZone.areaCode, mobile, smsCodeValidTime));
                         }
                     } catch (EasyJSONException e) {
                         e.printStackTrace();

@@ -7,6 +7,7 @@
     <string name="login_fragment_title">登入</string>
     <string name="security_setting_fragment_title">安全設置</string>
     <string name="payment_password_fragment_title">設置支付密碼</string>
+    <string name="modify_payment_password">修改支付密碼</string>
     <string name="payment_password_hint">請輸入6位數字</string>
     <string name="payment_password_text">設置密碼</string>
     <string name="confirm_payment_password_text">再次設置密碼</string>
@@ -218,7 +219,7 @@
     <string name="input_common_used_template_title_hint">請輸入標題</string>
     <string name="input_common_used_template_content_hint">請輸入固定版式內容</string>
 
-    <string name="text_new_arrivals_chinese">最 新 想 要 店</string>
+    <string name="text_new_arrivals_chinese">最&#8197;新&#8197;想&#8197;要&#8197;店</string>
     <string name="text_new_arrivals_english">N E W  A R R I V A L S</string>
 
     <string name="text_new_in_chinese">最 新 產 品</string>
