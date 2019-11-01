@@ -255,4 +255,10 @@ public class Constant {
 
 
     public static final String UMENG_ALIAS_TYPE = "twant";
+
+
+    // 動畫的幾種狀態
+    public static final int ANIM_NOT_SHOWN = 0;
+    public static final int ANIM_SHOWING = 1;
+    public static final int ANIM_SHOWN = 2;
 }

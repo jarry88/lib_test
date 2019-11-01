@@ -49,6 +49,9 @@ public class StoreSearchItem implements MultiItemEntity {
      */
     public List<String> goodsImageList;
 
+    // 最后一項的動畫的顯示狀態
+    public int animShowStatus;
+
     @Override
     public int getItemType() {
         return itemType;

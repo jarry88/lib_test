@@ -1,6 +1,8 @@
 package com.ftofs.twant.adapter;
 
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +17,10 @@ import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
-public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSearchItem, BaseViewHolder> {
+public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSearchItem, BaseViewHolder> implements Animation.AnimationListener  {
+    Animation animation;
+    ImageView animatingImageView;
+
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
      * some initialization data.
@@ -26,7 +31,7 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
         super(data);
 
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.store_search_item);
-        addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.publish_my_want);
+        addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint_new);
     }
 
     @Override
@@ -89,7 +94,40 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
             }
         } else {
             //  加載發表想要的入口，不需要做特別處理
+            if (animation == null) {
+                animation = AnimationUtils.loadAnimation(mContext, R.anim.takewant_message);
+                animation.setAnimationListener(this);
+            }
+            animatingImageView = helper.getView(R.id.img_load_end_hint_bubble);
+            if (item.animShowStatus == Constant.ANIM_SHOWING) {
+                item.animShowStatus = Constant.ANIM_SHOWN;
+                animatingImageView.startAnimation(animation);
+            }
         }
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        SLog.info("onAnimationEnd");
+        if (animatingImageView != null) {
+            animatingImageView.setVisibility(View.VISIBLE);
+            animatingImageView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    animatingImageView.setVisibility(View.INVISIBLE);
+                }
+            }, 1500);
+        }
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 }
 

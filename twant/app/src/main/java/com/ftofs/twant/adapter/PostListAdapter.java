@@ -24,7 +24,7 @@ import com.ftofs.twant.widget.TwProgressBar;
 
 import java.util.List;
 
-public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseViewHolder> implements Animation.AnimationListener  {
+public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseViewHolder> implements Animation.AnimationListener {
     Animation animation;
     ImageView animatingImageView;
 
@@ -68,16 +68,13 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
             }
         } else if (itemType == Constant.ITEM_TYPE_LOAD_END_HINT) {
             // 顯示即可，不用特別處理
-            SLog.info("HERE");
             if (animation == null) {
                 animation = AnimationUtils.loadAnimation(mContext, R.anim.takewant_message);
                 animation.setAnimationListener(this);
             }
             animatingImageView = helper.getView(R.id.img_load_end_hint_bubble);
-            SLog.info("HERE");
-            if (item.animShowStatus == PostItem.ANIM_SHOWING) {
-                SLog.info("HERE");
-                item.animShowStatus = PostItem.ANIM_SHOWN;
+            if (item.animShowStatus == Constant.ANIM_SHOWING) {
+                item.animShowStatus = Constant.ANIM_SHOWN;
                 animatingImageView.startAnimation(animation);
             }
         }

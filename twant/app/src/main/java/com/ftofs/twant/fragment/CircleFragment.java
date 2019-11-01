@@ -196,8 +196,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     if (!hasMore && postItemList.size() > 0) {
                         int lastItemPos = postItemList.size() - 1;
                         PostItem lastItem = postItemList.get(lastItemPos);
-                        if (lastItem.animShowStatus == PostItem.ANIM_NOT_SHOWN) {
-                            lastItem.animShowStatus = PostItem.ANIM_SHOWING;
+                        if (lastItem.animShowStatus == Constant.ANIM_NOT_SHOWN) {
+                            lastItem.animShowStatus = Constant.ANIM_SHOWING;
                             adapter.notifyItemChanged(lastItemPos);
                         }
                     }

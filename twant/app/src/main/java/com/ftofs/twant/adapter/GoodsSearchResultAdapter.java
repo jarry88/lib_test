@@ -3,6 +3,8 @@ package com.ftofs.twant.adapter;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -12,6 +14,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GoodsSearchItem;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
@@ -20,9 +23,12 @@ import java.util.List;
  * 商品搜索結果Adapter
  * @author zwm
  */
-public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSearchItem, BaseViewHolder> {
+public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSearchItem, BaseViewHolder> implements Animation.AnimationListener {
     Context context;
     String currencyTypeSign;
+
+    Animation animation;
+    ImageView animatingImageView;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -35,7 +41,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
         addItemType(Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER, R.layout.double_eleven_header);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.goods_search_item);
-        addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.publish_my_want);
+        addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint_new);
 
         this.context = context;
         currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
@@ -77,7 +83,40 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
             helper.addOnClickListener(R.id.btn_play_game)
                     .addOnClickListener(R.id.btn_back);
         } else {
-
+            // 顯示即可，不用特別處理
+            if (animation == null) {
+                animation = AnimationUtils.loadAnimation(mContext, R.anim.takewant_message);
+                animation.setAnimationListener(this);
+            }
+            animatingImageView = helper.getView(R.id.img_load_end_hint_bubble);
+            if (item.animShowStatus == Constant.ANIM_SHOWING) {
+                item.animShowStatus = Constant.ANIM_SHOWN;
+                animatingImageView.startAnimation(animation);
+            }
         }
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        SLog.info("onAnimationEnd");
+        if (animatingImageView != null) {
+            animatingImageView.setVisibility(View.VISIBLE);
+            animatingImageView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    animatingImageView.setVisibility(View.INVISIBLE);
+                }
+            }, 1500);
+        }
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
     }
 }

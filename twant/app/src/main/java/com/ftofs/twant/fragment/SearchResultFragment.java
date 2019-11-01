@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -320,6 +321,32 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     showFloatButton();
                 }
+
+                if (!hasMore && !rvSearchResultList.canScrollVertically(1)) {
+                    if (searchType == SearchType.GOODS) {
+                        if (goodsItemList.size() > 0) {
+                            int lastItemPos = goodsItemList.size() - 1;
+                            GoodsSearchItem lastItem = goodsItemList.get(lastItemPos);
+                            if (lastItem.animShowStatus == Constant.ANIM_NOT_SHOWN) {
+                                lastItem.animShowStatus = Constant.ANIM_SHOWING;
+                                mGoodsAdapter.notifyItemChanged(lastItemPos);
+                                SLog.info("滑动到底了^________________^");
+                            }
+                        }
+                    } else if (searchType == SearchType.STORE) {
+                        if (storeItemList.size() > 0) {
+                            int lastItemPos = storeItemList.size() - 1;
+                            StoreSearchItem lastItem = storeItemList.get(lastItemPos);
+                            if (lastItem.animShowStatus == Constant.ANIM_NOT_SHOWN) {
+                                lastItem.animShowStatus = Constant.ANIM_SHOWING;
+                                mStoreAdapter.notifyItemChanged(lastItemPos);
+                                SLog.info("滑动到底了^________________^");
+                            }
+                        }
+                    }
+                }
+
+
             }
 
             @Override

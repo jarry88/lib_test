@@ -40,6 +40,9 @@ public class GoodsSearchItem implements MultiItemEntity {
     public boolean hasGift;       // 是否有贈品
     public boolean hasDiscount;   // 是否有折扣
 
+    // 最后一項的動畫的顯示狀態
+    public int animShowStatus;
+
     @Override
     public int getItemType() {
         return itemType;
