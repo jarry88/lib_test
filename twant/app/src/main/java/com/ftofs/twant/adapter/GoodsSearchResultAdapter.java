@@ -74,7 +74,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
             helper.addOnClickListener(R.id.btn_goto_store);
         } else if (itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
-            helper.addOnClickListener(R.id.btn_play_game);
+            helper.addOnClickListener(R.id.btn_play_game)
+                    .addOnClickListener(R.id.btn_back);
         } else {
 
         }

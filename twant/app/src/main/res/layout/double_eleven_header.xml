@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,6 +18,17 @@
         android:layout_alignParentBottom="true"
         android:scaleType="fitXY"
         android:src="@drawable/icon_luck_draw"
+        android:visibility="gone"
         />
+
+    <com.ftofs.twant.widget.ScaledButton
+        android:id="@+id/btn_back"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="7dp"
+        app:icon_src="@drawable/icon_member_info_back">
+
+    </com.ftofs.twant.widget.ScaledButton>
 </RelativeLayout>
 

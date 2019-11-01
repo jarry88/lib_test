@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -169,6 +170,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     int currPage = 0;
     boolean hasMore;
 
+    boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
+    LinearLayout llFloatButtonContainer;
+
     public static SearchResultFragment newInstance(String searchTypeStr, String paramsStr) {
         Bundle args = new Bundle();
 
@@ -200,6 +204,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         twBlack = getResources().getColor(R.color.tw_black, null);
         twRed = getResources().getColor(R.color.tw_red, null);
         twBlue = getResources().getColor(R.color.tw_blue, null);
+
+        llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
 
         if (searchTypeStr.equals(SearchType.GOODS.name())) {
             view.findViewById(R.id.ll_store_filter).setVisibility(View.GONE);
@@ -301,6 +307,26 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         }
 
         rvSearchResultList = view.findViewById(R.id.rv_search_result_list);
+        rvSearchResultList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                SLog.info("__newState[%d]", newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    hideFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    showFloatButton();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
 
         if (searchType == SearchType.GOODS) { // 商品搜索
             try {
@@ -326,8 +352,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     if (goodsSearchItem.itemType == Constant.ITEM_TYPE_NORMAL) {
                         int commonId = goodsSearchItem.commonId;
                         Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                    } else {
+                    } else if (goodsSearchItem.itemType == Constant.ITEM_TYPE_LOAD_END_HINT) {
                         Util.startFragment(AddPostFragment.newInstance());
+                    } else if (goodsSearchItem.itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
+
                     }
                 }
             });
@@ -345,6 +373,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             return;
                         }
                         start(H5GameFragment.newInstance(url));
+                    } else if (id == R.id.btn_back) {
+                        pop();
                     }
                 }
             });
@@ -456,16 +486,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             }
 
                             hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
-                            SLog.info("hasMore[%s]", hasMore);
+                            SLog.info("page[%d], hasMore[%s]", page, hasMore);
 
                             // 如果是加載第一頁的數據，先清除舊數據
                             if (page == 1) {
                                 goodsItemList.clear();
+                                if (isDoubleEleven) {
+                                    goodsItemList.add(new GoodsSearchItem(Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER));
+                                }
                             }
 
-                            if (isDoubleEleven) {
-                                goodsItemList.add(new GoodsSearchItem(Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER));
-                            }
 
                             EasyJSONArray easyJSONArray = responseObj.getArray("datas.goodsList");
                             for (Object object : easyJSONArray) {
@@ -959,5 +989,27 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             return;
         }
         doSearch(searchType, currPage + 1, keyword, currFilter);
+    }
+
+    private void showFloatButton() {
+        if (floatButtonShown){
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = true;
+    }
+
+    private void hideFloatButton() {
+        if (!floatButtonShown) {
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = false;
     }
 }

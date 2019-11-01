@@ -251,14 +251,14 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="2dp"
                                         android:text="真實信息"
-                                        android:textSize="12sp"
+                                        android:textSize="14sp"
                                         android:textColor="#FFF"
                                         />
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Real Info"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         android:textColor="#FFF"
                                         />
                                 </LinearLayout>
@@ -290,14 +290,14 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="2dp"
                                         android:text="真實交易"
-                                        android:textSize="12sp"
+                                        android:textSize="14sp"
                                         android:textColor="#FFF"
                                         />
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Real Trade"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         android:textColor="#FFF"
                                         />
                                 </LinearLayout>
@@ -330,7 +330,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="2dp"
                                         android:text="真實社交"
-                                        android:textSize="12sp"
+                                        android:textSize="14sp"
                                         android:textColor="#FFF"
                                         />
                                     <TextView
@@ -338,7 +338,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="2dp"
                                         android:text="Real Social"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         android:textColor="#FFF"
                                         />
                                 </LinearLayout>

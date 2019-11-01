@@ -280,7 +280,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         // 獲取上次顯示的時間戳
         long doubleElevenPopupShownTimestamp = Hawk.get(SPField.FIELD_DOUBLE_ELEVEN_POPUP_SHOWN_TIMESTAMP, 0L);
-        doubleElevenPopupShownTimestamp = 0;
+        // doubleElevenPopupShownTimestamp = 0;
         long now = System.currentTimeMillis();
         long doubleElevenTimestamp = Jarbon.parse("2019-11-11").getTimestampMillis();
         SLog.info("doubleElevenTimestamp[%s]", doubleElevenTimestamp);
