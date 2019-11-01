@@ -230,13 +230,22 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             for (Object object : conformList) {
                                 EasyJSONObject conform = (EasyJSONObject) object;
 
+                                int giftCount = 0;
+                                EasyJSONArray giftVoList = conform.getArray("giftVoList");
+                                if (!Util.isJsonNull(giftVoList)) {
+                                    giftCount = giftVoList.length();
+                                }
+
                                 StoreConform storeConform = new StoreConform(
+                                        conform.getInt("templateId"),
                                         conform.getInt("storeId"),
                                         conform.getInt("conformId"),
                                         conform.getInt("limitAmount"),
                                         conform.getInt("conformPrice"),
                                         conform.getString("startTime"),
-                                        conform.getString("endTime"));
+                                        conform.getString("endTime"),
+                                        giftCount,
+                                        conform.getInt("isFreeFreight"));
                                 storeConformList.add(storeConform);
                             }
                             conformListAdapter.setData(storeConformList);

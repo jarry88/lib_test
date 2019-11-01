@@ -31,6 +31,7 @@
         android:text="當您在本店單筆訂單消費滿50可享受立減$10現金"
         android:textColor="#fff"
         android:textSize="14sp"
+        android:visibility="gone"
         />
 
     <TextView
