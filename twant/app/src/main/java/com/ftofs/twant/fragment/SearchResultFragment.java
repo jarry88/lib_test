@@ -378,10 +378,6 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     }
                 }
             });
-            mGoodsAdapter.setEnableLoadMore(true);
-            mGoodsAdapter.setOnLoadMoreListener(this, rvSearchResultList);
-
-
             mGoodsAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
@@ -395,6 +391,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     return 1;
                 }
             });
+
+            mGoodsAdapter.setEnableLoadMore(true);
+            mGoodsAdapter.setOnLoadMoreListener(this, rvSearchResultList);
             rvSearchResultList.setAdapter(mGoodsAdapter);
         } else if (searchType == SearchType.STORE) { // 店鋪搜索
             LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity);
@@ -409,9 +408,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                 }
             });
-
-            mStoreAdapter.setEnableLoadMore(true);
-            mStoreAdapter.setOnLoadMoreListener(this, rvSearchResultList);
+            rvSearchResultList.setAdapter(mStoreAdapter);
             mStoreAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -423,8 +420,6 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     }
                 }
             });
-
-            rvSearchResultList.setAdapter(mStoreAdapter);
         } else {
 
         }
@@ -469,7 +464,6 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     public void onFailure(Call call, IOException e) {
                         ToastUtil.showNetworkError(_mActivity, e);
                         loadingPopup.dismiss();
-
                         mGoodsAdapter.loadMoreFail();
                     }
 
@@ -487,6 +481,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                             hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
                             SLog.info("page[%d], hasMore[%s]", page, hasMore);
+                            if (!hasMore) {
+                                mGoodsAdapter.loadMoreEnd();
+                                mGoodsAdapter.setEnableLoadMore(false);
+                            }
 
                             // 如果是加載第一頁的數據，先清除舊數據
                             if (page == 1) {
@@ -531,15 +529,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 goodsItemList.add(goodsSearchItem);
                             }
 
-                            mGoodsAdapter.loadMoreComplete();
+
                             if (!hasMore) {
                                 // 如果全部加載完畢，添加加載完畢的提示
                                 SLog.info("uuuuuuuuuvvvvvvvvvvvvvv");
                                 goodsItemList.add(new GoodsSearchItem(Constant.ITEM_TYPE_LOAD_END_HINT));
-                                mGoodsAdapter.loadMoreEnd();
-                                mGoodsAdapter.setEnableLoadMore(false);
+
                             }
                             SLog.info("goodsItemList.size[%d]", goodsItemList.size());
+                            mGoodsAdapter.loadMoreComplete();
                             mGoodsAdapter.setNewData(goodsItemList);
                             currPage++;
 
@@ -581,7 +579,6 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     public void onFailure(Call call, IOException e) {
                         ToastUtil.showNetworkError(_mActivity, e);
                         loadingPopup.dismiss();
-                        mStoreAdapter.loadMoreFail();
                     }
 
                     @Override
@@ -592,7 +589,6 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
                             if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                mStoreAdapter.loadMoreFail();
                                 return;
                             }
 
@@ -975,21 +971,18 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+
     @Override
     public void onLoadMoreRequested() {
         SLog.info("onLoadMoreRequested, hasMore[%s]", hasMore);
 
         if (!hasMore) {
-            if (searchType == SearchType.GOODS) {
-                mGoodsAdapter.loadMoreComplete();
-            } else {
-                mStoreAdapter.loadMoreComplete();
-            }
-
+            mGoodsAdapter.setEnableLoadMore(false);
             return;
         }
         doSearch(searchType, currPage + 1, keyword, currFilter);
     }
+
 
     private void showFloatButton() {
         if (floatButtonShown){
