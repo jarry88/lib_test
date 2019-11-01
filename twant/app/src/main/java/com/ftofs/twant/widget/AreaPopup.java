@@ -198,7 +198,7 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
             return;
         }
 
-        if (selectedAreaList.size() < 3) {
+        if (selectedAreaList.size() < 2) {
             ToastUtil.error(context, "請選擇區域");
             return;
         }
@@ -212,9 +212,16 @@ addressAreaInfo String 地区全名
          */
         int addressProvinceId = selectedAreaList.get(0).getAreaId();
         int addressCityId = selectedAreaList.get(1).getAreaId();
-        int addressAreaId = selectedAreaList.get(2).getAreaId();
-        final String addressAreaInfo = selectedAreaList.get(0).getAreaName() + " " + selectedAreaList.get(1).getAreaName()
-                + " " + selectedAreaList.get(2).getAreaName();
+        int addressAreaId = 0;
+        if (selectedAreaList.size() > 2) {
+            addressAreaId = selectedAreaList.get(2).getAreaId();
+        }
+
+        String addressAreaInfoTmp = selectedAreaList.get(0).getAreaName() + " " + selectedAreaList.get(1).getAreaName();
+        if (selectedAreaList.size() > 2) {
+            addressAreaInfoTmp += " " + selectedAreaList.get(2).getAreaName();
+        }
+        final String addressAreaInfo = addressAreaInfoTmp;
 
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,

@@ -1,49 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#FFF50057"
-    android:gravity="center_horizontal">
-
-    <ImageView
+    android:orientation="vertical">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/double_eleven_activity_footer"
-        />
+        android:layout_height="match_parent"
+        android:background="#FFF50057"
+        android:visibility="gone">
 
-    <ImageView
-        android:id="@+id/double_eleven_activity_main_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/double_eleven_activity_main_logo"
-        />
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"
-        android:layout_below="@id/double_eleven_activity_main_logo"
-        android:orientation="horizontal">
         <ImageView
-            android:id="@+id/btn_go_shopping"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_go_shopping"
+            android:layout_alignParentBottom="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/double_eleven_activity_footer"
             />
 
         <ImageView
-            android:id="@+id/btn_play_game"
+            android:id="@+id/double_eleven_activity_main_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:src="@drawable/btn_play_game"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/double_eleven_activity_main_logo"
             />
-    </LinearLayout>
-</RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
+            android:layout_below="@id/double_eleven_activity_main_logo"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/btn_go_shopping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_go_shopping"
+                />
+
+            <ImageView
+                android:id="@+id/btn_play_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/btn_play_game"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#f50057"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:background="#fef8e9"
+            />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pre_double_eleven_bg"
+            android:scaleType="fitCenter"
+            />
+    </RelativeLayout>
+
+</LinearLayout>
+

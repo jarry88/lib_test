@@ -51,7 +51,7 @@ public class DoubleElevenPopup extends CenterPopupView implements View.OnClickLi
 
     @Override
     protected int getMaxWidth() {
-        return (int) (XPopupUtils.getWindowWidth(getContext()) * 0.65f);
+        return (int) (XPopupUtils.getWindowWidth(getContext()) * 1f);
     }
 
     @Override

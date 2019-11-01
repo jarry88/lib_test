@@ -58,7 +58,8 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
             // http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test.html
             // start(H5GameFragment.newInstance("http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test2.html?q=1211"));
 
-            Glide.with(_mActivity).load("file:///android_asset/double_eleven/double_eleven_dynamic.gif").into(imageView);
+            // Glide.with(_mActivity).load("file:///android_asset/double_eleven/double_eleven_dynamic.gif").into(imageView);
+            start(DoubleElevenFragment.newInstance());
         }
     }
 

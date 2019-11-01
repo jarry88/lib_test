@@ -150,7 +150,7 @@
     <string name="login_way_password">密碼</string>
     <string name="login_way_dynamic_code">動態碼</string>
     <string name="input_personal_profile_hint">新增個人簡介，讓大家更了解你</string>
-    <string name="text_popularity">訪客</string>
+    <string name="text_popularity">人氣</string>
     <string name="text_article">文章</string>
     <string name="text_mall">商城</string>
     <string name="text_friend">好友</string>
@@ -191,7 +191,7 @@
     <string name="shop_bottom_bar_title_activity">活動</string>
     <string name="shop_bottom_bar_title_customer_service">客服</string>
 
-    <string name="my_bill">想要訂單</string>
+    <string name="my_bill">我的訂單</string>
     <string name="my_bill_to_be_paid">待付款</string>
     <string name="my_bill_to_be_sent">待發貨</string>
     <string name="my_bill_to_be_received">待收貨</string>

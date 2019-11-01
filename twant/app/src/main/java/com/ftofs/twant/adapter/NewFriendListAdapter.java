@@ -15,14 +15,17 @@ import java.util.List;
 public class NewFriendListAdapter extends BaseQuickAdapter<NewFriendItem, BaseViewHolder> {
     public NewFriendListAdapter(int layoutResId, @Nullable List<NewFriendItem> data) {
         super(layoutResId, data);
-
-
     }
 
     @Override
     protected void convert(BaseViewHolder helper, NewFriendItem item) {
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
-        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatarUrl)).centerCrop().into(imgAvatar);
+        if (StringUtil.isEmpty(item.avatarUrl)) {
+            Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgAvatar);
+        } else {
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatarUrl)).centerCrop().into(imgAvatar);
+        }
+
 
         helper.setText(R.id.tv_nickname, item.nickname);
         helper.setText(R.id.tv_remark, item.remark);

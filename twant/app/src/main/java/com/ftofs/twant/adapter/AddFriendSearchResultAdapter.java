@@ -20,7 +20,12 @@ public class AddFriendSearchResultAdapter extends BaseQuickAdapter<AddFriendSear
     @Override
     protected void convert(BaseViewHolder helper, AddFriendSearchResultItem item) {
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
-        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatar)).centerCrop().into(imgAvatar);
+        if (StringUtil.isEmpty(item.avatar)) {
+            Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgAvatar);
+        } else {
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.avatar)).centerCrop().into(imgAvatar);
+        }
+
         helper.setText(R.id.tv_nickname, item.nickname);
         helper.setText(R.id.tv_member_signature, item.memberSignature);
     }
