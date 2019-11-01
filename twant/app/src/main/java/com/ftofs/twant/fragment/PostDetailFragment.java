@@ -323,7 +323,12 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     tvPostTitle.setText(title);
 
                     String avatarUrl = memberVo.getString("avatar");
-                    Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAuthorAvatar);
+                    if (StringUtil.isEmpty(avatarUrl)) {
+                        Glide.with(_mActivity).load(R.drawable.grey_default_avatar).centerCrop().into(imgAuthorAvatar);
+                    } else {
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAuthorAvatar);
+                    }
+
 
                     String nickname = memberVo.getString("nickName");
                     tvNickname.setText(nickname);
@@ -363,7 +368,16 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                start(ImageViewerFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                                if (StringUtil.isEmpty(imageUrl)) {
+                                    return;
+                                }
+
+                                if (imageUrl.endsWith(".gif")) { // 如果是Gif，顯示Gif動圖
+                                    start(GifFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                                } else {
+                                    start(ImageViewerFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                                }
+
                             }
                         });
 

@@ -19,6 +19,8 @@ import org.urllib.Urls;
 
 import java.util.List;
 
+import pl.droidsonroids.gif.GifImageView;
+
 /**
  * 測試用Fragment
  * @author zwm
@@ -59,7 +61,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
             // start(H5GameFragment.newInstance("http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test2.html?q=1211"));
 
             // Glide.with(_mActivity).load("file:///android_asset/double_eleven/double_eleven_dynamic.gif").into(imageView);
-            start(DoubleElevenFragment.newInstance());
+            start(GifFragment.newInstance("https://gfile.oss-cn-hangzhou.aliyuncs.com/takewant/1.gif"));
         }
     }
 
