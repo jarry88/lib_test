@@ -408,7 +408,6 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                 }
             });
-            rvSearchResultList.setAdapter(mStoreAdapter);
             mStoreAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -420,6 +419,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     }
                 }
             });
+
+            mStoreAdapter.setEnableLoadMore(true);
+            mStoreAdapter.setOnLoadMoreListener(this, rvSearchResultList);
+
+            rvSearchResultList.setAdapter(mStoreAdapter);
         } else {
 
         }
@@ -579,6 +583,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     public void onFailure(Call call, IOException e) {
                         ToastUtil.showNetworkError(_mActivity, e);
                         loadingPopup.dismiss();
+                        mStoreAdapter.loadMoreFail();
                     }
 
                     @Override
@@ -589,7 +594,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
                             if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                mStoreAdapter.loadMoreFail();
                                 return;
+                            }
+
+                            hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                            SLog.info("hasMore[%s]", hasMore);
+                            if (!hasMore) {
+                                mStoreAdapter.loadMoreEnd();
+                                mStoreAdapter.setEnableLoadMore(false);
                             }
 
                             // 首次初始化【所在地】列表
@@ -649,7 +662,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             }
 
 
-                            storeItemList.clear();
+                            if (page == 1) {
+                                storeItemList.clear();
+                            }
                             EasyJSONArray easyJSONArray = responseObj.getArray("datas.storeList");
                             for (Object object : easyJSONArray) {
                                 EasyJSONObject store = (EasyJSONObject) object;
@@ -677,10 +692,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                         storeFigureImage, distance, shopDay, likeCount, goodsCommonCount, goodsImageList));
                             }
 
-                            storeItemList.add(new StoreSearchItem());
+                            if (!hasMore) {
+                                // 如果全部加載完畢，添加加載完畢的提示
+                                SLog.info("uuuuuuuuuvvvvvvvvvvvvvv");
+                                storeItemList.add(new StoreSearchItem());
+                            }
 
                             SLog.info("storeItemList.size[%d]", storeItemList.size());
+                            mStoreAdapter.loadMoreComplete();
                             mStoreAdapter.setNewData(storeItemList);
+                            currPage++;
                         } catch (Exception e) {
                             SLog.info("Error!%s", e.getMessage());
                             e.printStackTrace();
@@ -977,7 +998,12 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         SLog.info("onLoadMoreRequested, hasMore[%s]", hasMore);
 
         if (!hasMore) {
-            mGoodsAdapter.setEnableLoadMore(false);
+            if (searchType == SearchType.GOODS) {
+                mGoodsAdapter.setEnableLoadMore(false);
+            } else {
+                mStoreAdapter.setEnableLoadMore(false);
+            }
+
             return;
         }
         doSearch(searchType, currPage + 1, keyword, currFilter);

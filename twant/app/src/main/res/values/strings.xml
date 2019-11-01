@@ -633,7 +633,7 @@
     <string name="store_tab_title_store_open">開店時長</string>
     <string name="store_tab_title_follow">關注量</string>
 
-    <string name="btn_logout_text">安全退出</string>
+    <string name="btn_logout_text">離開城市</string>
     <string name="btn_commit_text">確認提交</string>
 
     <string name="menu_item_shop_home_home">商城首頁</string>
