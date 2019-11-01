@@ -10,7 +10,6 @@
         android:id="@+id/img_activity"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:scaleType="fitXY"
         android:src="@drawable/double_eleven_popup_logo"
         />
 
