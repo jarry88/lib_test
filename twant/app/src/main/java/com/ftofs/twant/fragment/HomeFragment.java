@@ -150,9 +150,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {
-                SLog.info("i = %d", i);
                 WebSliderItem webSliderItem = webSliderItemList.get(i);
                 String linkType = webSliderItem.linkType;
+                SLog.info("i = %d, linkType[%s]", i, linkType);
 
                 switch (linkType) {
                     case "none":
@@ -191,6 +191,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         break;
                     case "voucherCenter":
                         // 领券中心
+                        break;
+                    case "activityUrl":
+                        Util.startDoubleElevenFragment();
                         break;
                     default:
                         break;
@@ -327,7 +330,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             scrollingParent2Layout.scrollTo(0, 0);
             contentView.scrollTo(0, 0);
         } else if (id == R.id.btn_goto_double_eleven) {
-            Util.startFragment(DoubleElevenFragment.newInstance());
+            Util.startDoubleElevenFragment();
         }
     }
 

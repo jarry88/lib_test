@@ -4,16 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -23,7 +21,6 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PostCategory;
@@ -35,7 +32,6 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
 import com.ftofs.twant.widget.PostFilterDrawerPopupView;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
@@ -52,7 +48,6 @@ import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -75,6 +70,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     // 當前要加載第幾頁(從1開始）
     int currPage = 0;
     boolean hasMore;
+
+    boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
+    LinearLayout llFloatButtonContainer;
 
     /**
      * 是否獨立的Fragment，還是依附于MainFragment
@@ -117,6 +115,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         swipeRefreshLayout.setOnRefreshListener(this);
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
 
+        llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
+
         if (isStandalone) { // 獨立的頁面
             view.findViewById(R.id.tool_bar).setVisibility(View.GONE);
             view.findViewById(R.id.tool_bar_standalone).setVisibility(View.VISIBLE);
@@ -130,6 +130,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             Util.setOnClickListener(view, R.id.btn_add_post, this);
         }
 
+        Util.setOnClickListener(view, R.id.btn_publish_want_post, this);
+        Util.setOnClickListener(view, R.id.btn_goto_top, this);
 
         Util.setOnClickListener(view, R.id.btn_post_filter, this);
 
@@ -162,6 +164,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                SLog.info("__newState[%d]", newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    hideFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    showFloatButton();
+                }
             }
 
             @Override
@@ -252,6 +262,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     .show();
         } else if (id == R.id.btn_search_post) {
             Util.startFragment(SearchFragment.newInstance(SearchType.ARTICLE));
+        } else if (id == R.id.btn_publish_want_post) {
+            Util.startFragment(AddPostFragment.newInstance());
+        } else if (id == R.id.btn_goto_top) {
+            rvPostList.scrollToPosition(0);
         }
     }
 
@@ -540,5 +554,27 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         currPage = 0;
         isPostDataLoaded = false;
         loadPostData(currPage + 1);
+    }
+
+    private void showFloatButton() {
+        if (floatButtonShown ){
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = true;
+    }
+
+    private void hideFloatButton() {
+        if (!floatButtonShown) {
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = false;
     }
 }

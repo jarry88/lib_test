@@ -24,6 +24,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.domain.member.PurchaseBuy;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.SpecPair;
@@ -34,6 +35,7 @@ import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.MessageFragment;
+import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.log.SLog;
 import com.umeng.commonsdk.debug.I;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -611,5 +613,10 @@ public class Util {
             return null;
         }
         return "http://wx.twant.com:8080/index?mobile=" + mobile;
+    }
+
+    public static void startDoubleElevenFragment() {
+        EasyJSONObject params = EasyJSONObject.generate("is_double_eleven", true);
+        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(), params.toString()));
     }
 }

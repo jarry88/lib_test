@@ -59,7 +59,7 @@ public class DoubleElevenPopup extends CenterPopupView implements View.OnClickLi
         int id = v.getId();
 
         if (id == R.id.img_activity) {
-            Util.startFragment(DoubleElevenFragment.newInstance());
+            Util.startDoubleElevenFragment();
             dismiss();
         } else if (id == R.id.btn_close) {
             dismiss();
