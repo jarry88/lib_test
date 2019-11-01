@@ -811,7 +811,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             case R.id.btn_biz_circle:
                 togglePopup(PopupType.STORE_FILTER_BIZ_CIRCLE, v, id);
                 break;
-            case R.id.btn_publish_post:
+            case R.id.btn_publish_want_post:
                 Util.startFragment(AddPostFragment.newInstance());
                 break;
             default:

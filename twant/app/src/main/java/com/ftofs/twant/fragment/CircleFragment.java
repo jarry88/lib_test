@@ -193,7 +193,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 if(lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount()-1 ){
                     // Toast.makeText(_mActivity, "滑动到底了", Toast.LENGTH_SHORT).show();
                     SLog.info("滑动到底了^________________^");
-                    if (!hasMore) {
+                    if (!hasMore && postItemList.size() > 0) {
                         int lastItemPos = postItemList.size() - 1;
                         PostItem lastItem = postItemList.get(lastItemPos);
                         if (lastItem.animShowStatus == PostItem.ANIM_NOT_SHOWN) {
