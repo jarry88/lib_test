@@ -71,7 +71,7 @@ public class EditMemberSignatureFragment extends BaseFragment implements View.On
 
             @Override
             public void afterTextChanged(Editable s) {
-                String wordCount = s.length() + "/100";
+                String wordCount = s.length() + "/200";
                 tvWordCount.setText(wordCount);
             }
         });

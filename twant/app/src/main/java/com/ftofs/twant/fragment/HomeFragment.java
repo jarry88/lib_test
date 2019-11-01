@@ -30,6 +30,7 @@ import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -279,9 +280,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         // 獲取上次顯示的時間戳
         long doubleElevenPopupShownTimestamp = Hawk.get(SPField.FIELD_DOUBLE_ELEVEN_POPUP_SHOWN_TIMESTAMP, 0L);
-        // doubleElevenPopupShownTimestamp = 0;
-        // 最多1小時顯示一次活動彈窗
-        if (System.currentTimeMillis() - doubleElevenPopupShownTimestamp > 3600 * 1000) {
+        doubleElevenPopupShownTimestamp = 0;
+        long now = System.currentTimeMillis();
+        long doubleElevenTimestamp = Jarbon.parse("2019-11-11").getTimestampMillis();
+        SLog.info("doubleElevenTimestamp[%s]", doubleElevenTimestamp);
+        // 最多24小時顯示一次活動彈窗，而且要雙11當天后才顯示
+        if (now >= doubleElevenPopupShownTimestamp && now - doubleElevenPopupShownTimestamp > 3600 * 1000 * 24) {
             if (doubleElevenPopup == null) {
                 doubleElevenPopup = (DoubleElevenPopup) new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
