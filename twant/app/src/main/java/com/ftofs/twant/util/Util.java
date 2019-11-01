@@ -301,6 +301,15 @@ public class Util {
     }
 
     /**
+     * 檢測Youtube是否已經安裝
+     * @param context
+     * @return
+     */
+    public static boolean isYoutubeInstalled(Context context) {
+        return isPackageInstalled(context, "com.google.android.youtube");
+    }
+
+    /**
      * 显示软键盘
      */
     public static void showSoftInput(final View view) {

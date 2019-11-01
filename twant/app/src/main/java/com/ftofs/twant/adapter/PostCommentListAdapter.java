@@ -45,7 +45,12 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> {
     @Override
     public void bindView(int position, View itemView, CommentItem itemData) {
         ImageView imgCommenterAvatar = itemView.findViewById(R.id.img_commenter_avatar);
-        Glide.with(context).load(StringUtil.normalizeImageUrl(itemData.commenterAvatar)).centerCrop().into(imgCommenterAvatar);
+        if (StringUtil.isEmpty(itemData.commenterAvatar)) {
+            Glide.with(context).load(R.drawable.grey_default_avatar).centerCrop().into(imgCommenterAvatar);
+        } else {
+            Glide.with(context).load(StringUtil.normalizeImageUrl(itemData.commenterAvatar)).centerCrop().into(imgCommenterAvatar);
+        }
+
 
         TextView tvContent = itemView.findViewById(R.id.tv_content);
         if (StringUtil.isEmpty(itemData.content)) {

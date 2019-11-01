@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -138,7 +139,11 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PostItem postItem = postItemList.get(position);
-                Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
+                if (postItem.getItemType() == Constant.ITEM_TYPE_NORMAL) {
+                    Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
+                } else {
+                    Util.startFragment(AddPostFragment.newInstance());
+                }
             }
         });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -152,6 +157,43 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         });
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvPostList);
+
+        rvPostList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                //得到当前显示的最后一个item的view
+                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount()-1);
+                //得到lastChildView的bottom坐标值
+                int lastChildBottom = lastChildView.getBottom();
+                //得到Recyclerview的底部坐标减去底部padding值，也就是显示内容最底部的坐标
+                int recyclerBottom =  recyclerView.getBottom()-recyclerView.getPaddingBottom();
+                //通过这个lastChildView得到这个view当前的position值
+                int lastPosition  = recyclerView.getLayoutManager().getPosition(lastChildView);
+
+                //判断lastChildView的bottom值跟recyclerBottom
+                //判断lastPosition是不是最后一个position
+                //如果两个条件都满足则说明是真正的滑动到了底部
+                if(lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount()-1 ){
+                    // Toast.makeText(_mActivity, "滑动到底了", Toast.LENGTH_SHORT).show();
+                    SLog.info("滑动到底了^________________^");
+                    if (!hasMore) {
+                        int lastItemPos = postItemList.size() - 1;
+                        PostItem lastItem = postItemList.get(lastItemPos);
+                        if (lastItem.animShowStatus == PostItem.ANIM_NOT_SHOWN) {
+                            lastItem.animShowStatus = PostItem.ANIM_SHOWING;
+                            adapter.notifyItemChanged(lastItemPos);
+                        }
+                    }
+                }
+            }
+        });
 
         // 設置空頁面
         View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
@@ -267,7 +309,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         adapter.setEnableLoadMore(false);
                     }
 
-
                     // 如果未初始化，則初始化分類菜單
                     if (postCategoryList.size() <= 1) {
                         int twBlue = getResources().getColor(R.color.tw_blue, null);
@@ -329,6 +370,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         item.coverImage = post.getString("coverImage");
                         item.postCategory = post.getString("postCategory");
                         item.title = post.getString("title");
+                        item.createTime = post.getString("createTime");
                         item.postReply = post.getInt("postReply");
                         item.postFollow = post.getInt("postLike");
                         item.postView = post.getInt("postView");
@@ -349,7 +391,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         // 如果全部加載完畢，添加加載完畢的提示
                         PostItem item = new PostItem();
                         item.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
-
                         postItemList.add(item);
                     }
 

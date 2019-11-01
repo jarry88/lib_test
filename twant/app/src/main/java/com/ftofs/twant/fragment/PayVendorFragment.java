@@ -239,7 +239,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             // 如果是用錢包支付，先判斷余額
             if (id == R.id.btn_wallet) {
                 if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED) { // 如果錢包未激活，跳轉到激活界面
-                    start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
+                    start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, false));
                     return true;
                 }
                 if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_UNKNOWN) { // 如果錢包狀態未知，則不處理，等到獲取狀態先

@@ -77,7 +77,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         if (id == R.id.btn_back) {
             pop();
         } if (id == R.id.btn_register) {
-            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_USER_REGISTER));
+            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_USER_REGISTER, false));
         }
     }
 

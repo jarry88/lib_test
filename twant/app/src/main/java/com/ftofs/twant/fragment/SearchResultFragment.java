@@ -449,7 +449,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 EasyJSONObject goods = (EasyJSONObject) object;
 
                                 String imageSrc = goods.getString("imageSrc");
-                                String storeAvatarUrl = goods.getString("storeAvatarUrl");
+                                String storeAvatarUrl = goods.getString("storeAvatar");
+                                if (StringUtil.isEmpty(storeAvatarUrl)) {
+                                    storeAvatarUrl = goods.getString("storeAvatarUrl");
+                                }
                                 int storeId = goods.getInt("storeId");
                                 String storeName = goods.getString("storeName");
                                 int commonId = goods.getInt("commonId");
@@ -463,8 +466,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                     price = (float) goods.getDouble("batchPrice2");
                                 }
                                 String nationalFlag = StringUtil.normalizeImageUrl(goods.getString("adminCountry.nationalFlag"));
-                                goodsItemList.add(new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
-                                        storeName, commonId, goodsName, jingle, price, nationalFlag));
+                                GoodsSearchItem goodsSearchItem = new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
+                                        storeName, commonId, goodsName, jingle, price, nationalFlag);
+
+
+                                int isPinkage = goods.getInt("isPinkage");
+                                int isGift = goods.getInt("isGift");
+                                goodsSearchItem.isFreightFree = (isPinkage == 1);
+                                goodsSearchItem.hasGift = (isGift == 1);
+                                goodsSearchItem.hasDiscount = (appUsable == 1);
+                                goodsItemList.add(goodsSearchItem);
                             }
 
                             goodsItemList.add(new GoodsSearchItem(Constant.ITEM_TYPE_LOAD_END_HINT));

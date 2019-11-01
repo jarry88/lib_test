@@ -102,7 +102,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_post_item_thumb"
+                    android:src="@drawable/icon_my_fragment_post_item_thumb"
                     />
                 <TextView
                     android:id="@+id/tv_thumb_count"
@@ -128,7 +128,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_post_item_comment"
+                    android:src="@drawable/icon_my_fragment_post_item_comment"
                     />
                 <TextView
                     android:id="@+id/tv_reply_count"

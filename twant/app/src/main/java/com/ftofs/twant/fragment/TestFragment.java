@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
@@ -22,6 +24,7 @@ import java.util.List;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
+    ImageView imageView;
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -42,6 +45,8 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        imageView = view.findViewById(R.id.image_view);
+
         Util.setOnClickListener(view, R.id.btn_test, this);
     }
 
@@ -52,8 +57,8 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
             // start(H5GameFragment.newInstance("http://gogo.so/1.html"));
             // http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test.html
             // start(H5GameFragment.newInstance("http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test2.html?q=1211"));
-            byte b = 3;
-            SLog.info("b[%d]", b);
+
+            Glide.with(_mActivity).load("file:///android_asset/double_eleven/double_eleven_dynamic.gif").into(imageView);
         }
     }
 

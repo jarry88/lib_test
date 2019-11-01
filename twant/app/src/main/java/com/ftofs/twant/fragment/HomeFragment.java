@@ -97,6 +97,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
 
     DoubleElevenPopup doubleElevenPopup; // 雙十一活動彈窗
+    ImageView iconDoubleElevenEntrance;
 
     public static HomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -249,6 +250,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 animatorArr[0].start();
             }
         }, 500);
+
+        iconDoubleElevenEntrance = view.findViewById(R.id.icon_double_eleven_entrance);
+        Glide.with(_mActivity).load("file:///android_asset/double_eleven/double_eleven_dynamic.gif")
+                .into(iconDoubleElevenEntrance);
     }
 
 

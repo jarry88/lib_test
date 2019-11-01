@@ -65,12 +65,14 @@ public class ResetPasswordFragment extends BaseFragment implements
     EditText etMobile;
     EditText etCaptcha;
     TextView tvAreaName;
+    boolean isModifyPaymentPassword;
 
 
-    public static ResetPasswordFragment newInstance(int usage) {
+    public static ResetPasswordFragment newInstance(int usage, boolean isModifyPaymentPassword) {
         Bundle args = new Bundle();
 
         args.putInt("usage", usage);
+        args.putBoolean("isModifyPaymentPassword", isModifyPaymentPassword);
         ResetPasswordFragment fragment = new ResetPasswordFragment();
         fragment.setArguments(args);
 
@@ -90,6 +92,7 @@ public class ResetPasswordFragment extends BaseFragment implements
 
         Bundle args = getArguments();
         usage = args.getInt("usage");
+        isModifyPaymentPassword = args.getBoolean("isModifyPaymentPassword");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
@@ -101,7 +104,11 @@ public class ResetPasswordFragment extends BaseFragment implements
         } else if (usage == Constant.USAGE_RESET_PASSWORD) {
             tvFragmentTitle.setText(R.string.reset_password_fragment_title);
         } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
-            tvFragmentTitle.setText(R.string.payment_password_fragment_title);
+            if (isModifyPaymentPassword) {
+                tvFragmentTitle.setText(R.string.modify_payment_password);
+            } else {
+                tvFragmentTitle.setText(R.string.payment_password_fragment_title);
+            }
         }
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
@@ -218,7 +225,7 @@ public class ResetPasswordFragment extends BaseFragment implements
                         if (usage == Constant.USAGE_USER_REGISTER) {
                             start(RegisterConfirmFragment.newInstance(mobileZone.areaCode, mobile, smsCodeValidTime));
                         } else {
-                            // start(ResetPasswordConfirmFragment.newInstance(usage, mobileZone.areaCode, mobile, smsCodeValidTime));
+                            start(ResetPasswordConfirmFragment.newInstance(usage, mobileZone.areaCode, mobile, smsCodeValidTime, isModifyPaymentPassword));
                         }
                     } catch (EasyJSONException e) {
                         e.printStackTrace();

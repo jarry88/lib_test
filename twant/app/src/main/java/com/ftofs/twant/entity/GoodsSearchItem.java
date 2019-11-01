@@ -36,6 +36,9 @@ public class GoodsSearchItem implements MultiItemEntity {
     public String jingle;
     public float price;
     public String nationalFlag;
+    public boolean isFreightFree; // 是否包郵
+    public boolean hasGift;       // 是否有贈品
+    public boolean hasDiscount;   // 是否有折扣
 
     @Override
     public int getItemType() {

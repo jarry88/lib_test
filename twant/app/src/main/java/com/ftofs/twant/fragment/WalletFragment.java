@@ -64,7 +64,7 @@ public class WalletFragment extends BaseFragment implements View.OnClickListener
         if (id == R.id.btn_back) {
             pop();
         } else if (id == R.id.btn_activate_now) {
-            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
+            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, false));
         }
     }
 

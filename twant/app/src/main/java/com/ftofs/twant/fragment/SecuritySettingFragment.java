@@ -69,9 +69,9 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS, null);
             popTo(MainFragment.class, false);
         } else if (id == R.id.btn_login_password) {
-            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_RESET_PASSWORD));
+            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_RESET_PASSWORD, false));
         } else if (id == R.id.btn_payment_password) {
-            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
+            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, true));
         }
     }
 

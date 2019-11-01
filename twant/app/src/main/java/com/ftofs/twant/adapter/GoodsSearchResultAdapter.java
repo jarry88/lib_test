@@ -50,7 +50,12 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
             Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(goodsImage);
 
             ImageView imgStoreAvatar = helper.getView(R.id.img_store_avatar);
-            Glide.with(context).load(StringUtil.normalizeImageUrl(item.storeAvatarUrl)).centerCrop().into(imgStoreAvatar);
+            if (StringUtil.isEmpty(item.storeAvatarUrl)) {
+                Glide.with(context).load(R.drawable.grey_default_avatar).centerCrop().into(imgStoreAvatar);
+            } else {
+                Glide.with(context).load(StringUtil.normalizeImageUrl(item.storeAvatarUrl)).centerCrop().into(imgStoreAvatar);
+            }
+
 
             if (!StringUtil.isEmpty(item.nationalFlag)) {
                 ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag);
@@ -62,6 +67,10 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
             helper.setText(R.id.tv_goods_name, item.goodsName);
             helper.setText(R.id.tv_goods_jingle, item.jingle);
             helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context, item.price, 1));
+
+            helper.setGone(R.id.tv_freight_free, item.isFreightFree)
+                    .setGone(R.id.tv_gift, item.hasGift)
+                    .setGone(R.id.tv_discount, item.hasDiscount);
 
             helper.addOnClickListener(R.id.btn_goto_store);
         } else if (itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {

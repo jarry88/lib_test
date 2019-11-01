@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
@@ -42,6 +43,8 @@ public class SplashActivity extends BaseActivity {
     Jarbon jarbon = new Jarbon();
     long appStartTime = System.currentTimeMillis();
 
+    ImageView splashBackground;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +71,8 @@ public class SplashActivity extends BaseActivity {
             SLog.info("【不】需要顯示App引導頁");
             startTargetActivity(MainActivity.class);
         }
+
+        splashBackground = findViewById(R.id.splash_bg);
 
         // 下載App引導頁圖片任務
         TwantApplication.getThreadPool().execute(new Runnable() {

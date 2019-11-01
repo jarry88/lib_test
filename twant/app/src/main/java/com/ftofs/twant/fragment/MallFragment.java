@@ -202,7 +202,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_ACTIVATED) {
             start(WalletFragment.newInstance());
         } else if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED) { // 如果錢包未激活，則重定向到激活頁面
-            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
+            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, false));
         } else if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_UNKNOWN) {
             checkWalletStatus(true);
         }
@@ -241,7 +241,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                         walletStatus = Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED;
                         if (startFragment) {
                             // 如果未激活，啟動激活頁面
-                            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD));
+                            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, false));
                         }
                     } else {
                         walletStatus = Constant.WANT_PAY_WALLET_STATUS_ACTIVATED;

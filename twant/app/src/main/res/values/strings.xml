@@ -57,6 +57,8 @@
     <string name="text_post_detail">想要詳情</string>
     <string name="text_post">貼文</string>
 
+    <string name="install_youtube_player_hint">請先安裝YouTube播放器</string>
+
     <string name="text_message">消息</string>
     <string name="text_logistics_message">交易物流消息</string>
     <string name="text_refund_message">退換貨消息</string>
