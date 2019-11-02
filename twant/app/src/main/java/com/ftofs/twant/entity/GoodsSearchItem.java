@@ -40,8 +40,13 @@ public class GoodsSearchItem implements MultiItemEntity {
     public boolean hasGift;       // 是否有贈品
     public boolean hasDiscount;   // 是否有折扣
 
+    public float extendPrice0; // 折扣數
+    public float batchPrice0;  // 原價
+    public boolean showDiscountLabel;  // 是否顯示折扣標簽
+
     // 最后一項的動畫的顯示狀態
     public int animShowStatus;
+
 
     @Override
     public int getItemType() {

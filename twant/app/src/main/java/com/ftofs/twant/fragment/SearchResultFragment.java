@@ -547,9 +547,30 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 } else {
                                     price = (float) goods.getDouble("batchPrice2");
                                 }
+
+
+
+                                float extendPrice0 = (float) goods.getDouble("extendPrice0");
+                                float batchPrice0 = (float) goods.getDouble("batchPrice0");
+
+                                int promotionState = goods.getInt("promotionState");
+                                int promotionType = goods.getInt("promotionType");
+
+                                /*
+                                    限時折扣條件
+                                    promotionState = 1
+                                    promotionType = 1
+                                    appUsable = 1
+                                 */
+                                boolean showDiscountLabel = appUsable == 1 && promotionState == 1 && promotionType == 1;
+
                                 String nationalFlag = StringUtil.normalizeImageUrl(goods.getString("adminCountry.nationalFlag"));
                                 GoodsSearchItem goodsSearchItem = new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
                                         storeName, commonId, goodsName, jingle, price, nationalFlag);
+
+                                goodsSearchItem.extendPrice0 = extendPrice0;
+                                goodsSearchItem.batchPrice0 = batchPrice0;
+                                goodsSearchItem.showDiscountLabel = showDiscountLabel;
 
 
                                 int isPinkage = goods.getInt("isPinkage");

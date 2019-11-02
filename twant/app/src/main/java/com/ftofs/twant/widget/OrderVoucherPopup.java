@@ -43,9 +43,9 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
      * @param context
      * @param storeId
      * @param storeName
-     * @param couponType 表示storeVoucherVoList是店鋪券還是平臺券
-     * @param storeVoucherVoList 店鋪券列表 或 平臺券列表
-     * @param platformCouponIndex 當前正在使用的平臺券列表Index(-1表示沒有使用)，當couponType為平臺券時才用
+     * @param couponType 表示storeVoucherVoList是店鋪券還是平台券
+     * @param storeVoucherVoList 店鋪券列表 或 平台券列表
+     * @param platformCouponIndex 當前正在使用的平台券列表Index(-1表示沒有使用)，當couponType為平台券時才用
      * @param onSelectedListener
      */
     public OrderVoucherPopup(@NonNull Context context, int storeId, String storeName, int couponType,

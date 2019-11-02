@@ -16,6 +16,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.widget.SlantedWidget;
 
 import java.util.List;
 
@@ -77,6 +78,14 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
             helper.setGone(R.id.tv_freight_free, item.isFreightFree)
                     .setGone(R.id.tv_gift, item.hasGift)
                     .setGone(R.id.tv_discount, item.hasDiscount);
+
+            SlantedWidget slantedWidget = helper.getView(R.id.slanted_widget);
+            if (item.showDiscountLabel) {
+                slantedWidget.setVisibility(View.VISIBLE);
+                slantedWidget.setDiscountInfo(item.extendPrice0, item.batchPrice0);
+            } else {
+                slantedWidget.setVisibility(View.GONE);
+            }
 
             helper.addOnClickListener(R.id.btn_goto_store);
         } else if (itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {

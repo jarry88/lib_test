@@ -35,8 +35,10 @@ import okhttp3.Call;
  * @author zwm
  */
 public class AppGuideActivity extends BaseActivity implements OnSelectedListener {
+    private boolean mIsScrolled;
     ViewPager vpAppGuide;
     List<String> imageList = new ArrayList<>();
+    int currPage = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +91,50 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
     private void showAppGuide() {
         AppGuidePagerAdapter adapter = new AppGuidePagerAdapter(this, imageList, this);
         vpAppGuide.setAdapter(adapter);
+        vpAppGuide.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                currPage = i;
+                SLog.info("currPage[%d]", currPage);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                /*
+                实现ViewPager最后一页向后滑动监听
+                https://www.jianshu.com/p/2d03d06a6adf
+                当滑动ViewPager的时候，如果处于第一页，继续向前滑动的时候不会产生SCROLL_STATE_SETTLING状态，
+                但是如果向下一页方向滑动，则必然会产生SCROLL_STATE_SETTLING状态；如果处于最后一页，继续往后滑动，
+                不会产生SCROLL_STATE_SETTLING状态，但是往前一页滑动，也必然会产生SCROLL_STATE_SETTLING状态。
+                 */
+
+                switch (state) {
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                        mIsScrolled = false;
+                        break;
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        mIsScrolled = true;
+                        break;
+
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        if (!mIsScrolled ) {
+                            // TODO     你想要实现的操作
+                            if (currPage > 0) {
+                                startMainActivity();
+                            }
+
+                        }
+                        mIsScrolled = true;
+                        break;
+                }
+
+            }
+        });
     }
 
 
@@ -103,6 +149,10 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
     public void onSelected(PopupType type, int id, Object extra) {
         // 開始體驗
         SLog.info("開始體驗");
+        startMainActivity();
+    }
+
+    private void startMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

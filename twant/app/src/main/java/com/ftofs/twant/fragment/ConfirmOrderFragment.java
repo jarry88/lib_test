@@ -124,7 +124,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     Map<Integer, StoreAmount> storeAmountMap = new HashMap<>();
 
 
-    int platformCouponIndex = -1; // 當前正在使用的平臺券列表Index(-1表示沒有使用)
+    int platformCouponIndex = -1; // 當前正在使用的平台券列表Index(-1表示沒有使用)
     List<StoreVoucherVo> platformCouponList = new ArrayList<>();
 
     /**
@@ -299,7 +299,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     "isExistTrys", isExistTrys,
                     "storeList", commitStoreList);
 
-            if (platformCouponIndex != -1) { // 如果有選擇平臺券
+            if (platformCouponIndex != -1) { // 如果有選擇平台券
                 StoreVoucherVo platformCoupon = platformCouponList.get(platformCouponIndex);
                 EasyJSONArray couponIdList = EasyJSONArray.generate(String.valueOf(platformCoupon.voucherId));
                 commitBuyData.set("couponIdList", couponIdList);
@@ -847,7 +847,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     // 第3步(請求參數與第2步相同) 計算最終結果
                     calcAmount();
 
-                    // 請求平臺券列表(請求參數與第2步相同)
+                    // 請求平台券列表(請求參數與第2步相同)
                     getPlatformCoupon();
 
                     confirmOrderSummaryItem.platformCouponCount = platformCouponList.size();
@@ -1000,15 +1000,15 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             updateStoreVoucherStatus(voucherUseStatus);
 
             calcAmount();
-        } else if (type == PopupType.SELECT_PLATFORM_COUPON) { // 選擇平臺券
+        } else if (type == PopupType.SELECT_PLATFORM_COUPON) { // 選擇平台券
             SLog.info("platformCouponIndex[%d], id[%d]", platformCouponIndex, id);
             ConfirmOrderSummaryItem confirmOrderSummaryItem = getSummaryItem();
             if (platformCouponIndex == id) { // 再次點擊，表示取消選擇
                 platformCouponIndex = -1;
-                // 沒選中任何平臺券，顯示平臺券數量
+                // 沒選中任何平台券，顯示平台券數量
                 confirmOrderSummaryItem.platformCouponStatus = Util.getAvailableCouponCountDesc(confirmOrderSummaryItem.platformCouponCount);
             } else {
-                // 顯示當前選中的平臺券信息
+                // 顯示當前選中的平台券信息
                 platformCouponIndex = id;
                 StoreVoucherVo platformCoupon = platformCouponList.get(platformCouponIndex);
                 String statusText = StringUtil.formatPrice(_mActivity, platformCoupon.price, 0) + platformCoupon.limitText;

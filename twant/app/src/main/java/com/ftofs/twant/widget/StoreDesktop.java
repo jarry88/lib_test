@@ -13,7 +13,7 @@ import com.ftofs.twant.R;
 
 
 /**
- * 商品展架平臺的灰色桌面
+ * 商品展架平台的灰色桌面
  * @author zwm
  */
 public class StoreDesktop extends View {

@@ -69,7 +69,7 @@ public class CouponFragment extends BaseFragment implements View.OnClickListener
         TabLayout tabLayout = view.findViewById(R.id.coupon_tab_layout);
         ViewPager viewPager = view.findViewById(R.id.vp_coupon_list);
 
-        titleList.add("平臺券");
+        titleList.add("平台券");
         titleList.add("店鋪券");
         SLog.info("here");
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));

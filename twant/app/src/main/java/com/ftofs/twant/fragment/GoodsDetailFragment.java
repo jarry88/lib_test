@@ -105,6 +105,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     String goodsVideoId;
 
+    float promotionDiscountRate;
+    TextView tvPromotionDiscountRate;
+
     /**
      * 限時折扣倒計時是否正在倒數
      */
@@ -193,7 +196,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     LinearLayout llStorageOkContainer;
 
     /**
-     * 店鋪券和平臺券列表
+     * 店鋪券和平台券列表
      */
     List<StoreVoucher> storeVoucherList = new ArrayList<>();
 
@@ -285,6 +288,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvGoodsPriceOriginal.setPaintFlags(tvGoodsPriceOriginal.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         tvGoodsPriceFinal = view.findViewById(R.id.tv_goods_price_final);
+
+        tvPromotionDiscountRate = view.findViewById(R.id.tv_promotion_discount_rate);
 
         tvCountDownDay = view.findViewById(R.id.tv_count_down_day);
         tvCountDownHour = view.findViewById(R.id.tv_count_down_hour);
@@ -631,7 +636,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     /**
-     * 獲取店鋪券和平臺券列表
+     * 獲取店鋪券和平台券列表
      */
     private void loadCouponList() {
         try {
@@ -760,6 +765,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tvGoodsName.setText(goodsName);
                     jingle = goodsDetail.getString("jingle");
                     tvGoodsJingle.setText(jingle);
+
+                    promotionDiscountRate = (float) goodsDetail.getDouble("promotionDiscountRate");
+                    tvPromotionDiscountRate.setText(promotionDiscountRate + "折");
 
                     String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(responseObj.getString("datas.goodsCountry.nationalFlag"));
                     Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);

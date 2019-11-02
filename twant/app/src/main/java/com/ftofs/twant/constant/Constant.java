@@ -234,7 +234,7 @@ public class Constant {
      */
     public static final int COUPON_TYPE_STORE = 1;
     /**
-     * 卡券類型 -- 平臺券
+     * 卡券類型 -- 平台券
      */
     public static final int COUPON_TYPE_PLATFORM = 2;
 

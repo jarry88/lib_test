@@ -54,7 +54,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textSize="16sp"
-            app:stb_text="兌換平臺券"
+            app:stb_text="兌換平台券"
             app:stb_horizontal_padding="0dp">
         </com.ftofs.twant.widget.SimpleTabButton>
 

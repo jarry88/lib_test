@@ -23,8 +23,8 @@ public class OrderVoucherListAdapter extends BaseQuickAdapter<StoreVoucherVo, Ba
      * @param layoutResId
      * @param storeName
      * @param couponType data參數是哪種類型的列表
-     * @param data 店鋪券列表 或 平臺券列表
-     * @param platformCouponIndex 當前正在使用的平臺券列表Index(-1表示沒有使用），當couponType為平臺券時才有意義
+     * @param data 店鋪券列表 或 平台券列表
+     * @param platformCouponIndex 當前正在使用的平台券列表Index(-1表示沒有使用），當couponType為平台券時才有意義
      */
     public OrderVoucherListAdapter(int layoutResId, String storeName, int couponType, @Nullable List<StoreVoucherVo> data, int platformCouponIndex) {
         super(layoutResId, data);

@@ -30,7 +30,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 領取【平臺券】、【店鋪券】Fragment
+ * 領取【平台券】、【店鋪券】Fragment
  * @author zwm
  */
 public class ReceiveCouponFragment extends BaseFragment implements View.OnClickListener {
@@ -93,7 +93,7 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
                 }
 
                 if (id == R.id.tab_platform_coupon) {
-                    SLog.info("平臺券");
+                    SLog.info("平台券");
                     tvCardPassTitle.setText(R.string.text_platform_coupon_card_pass);
                     etCouponCardPass.setHint(R.string.input_platform_coupon_card_pass_hint);
                 } else if (id == R.id.tab_store_coupon) {

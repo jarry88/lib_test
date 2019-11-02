@@ -31,6 +31,7 @@ import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.fragment.DoubleElevenFragment;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
@@ -616,7 +617,10 @@ public class Util {
     }
 
     public static void startDoubleElevenFragment() {
+        Util.startFragment(DoubleElevenFragment.newInstance());
+        /*
         EasyJSONObject params = EasyJSONObject.generate("is_double_eleven", true);
         Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(), params.toString()));
+        */
     }
 }

@@ -100,7 +100,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             tvUnavailableCouponTitle.setText("不可用店鋪券");
             loadStoreCouponData();
         } else if (couponType == Constant.COUPON_TYPE_PLATFORM) {
-            tvUnavailableCouponTitle.setText("不可用平臺券");
+            tvUnavailableCouponTitle.setText("不可用平台券");
             loadPlatformCouponData();
         }
     }
@@ -111,7 +111,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
 
     /**
-     * 獲取平臺券列表
+     * 獲取平台券列表
      */
     private void loadPlatformCouponData() {
         String token = User.getToken();
@@ -139,7 +139,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                         return;
                     }
 
-                    // 平臺券列表
+                    // 平台券列表
                     EasyJSONArray couponList = responseObj.getArray("datas.couponList");
                     for (Object object : couponList) {
                         EasyJSONObject voucher = (EasyJSONObject) object;

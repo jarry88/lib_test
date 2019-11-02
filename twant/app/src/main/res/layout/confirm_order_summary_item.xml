@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="平臺券"
+            android:text="平台券"
             android:textSize="14sp"
             android:textColor="@color/tw_black"
             />
