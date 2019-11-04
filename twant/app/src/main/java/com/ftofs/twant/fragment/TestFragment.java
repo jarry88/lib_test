@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.BadgeUtil;
 import com.ftofs.twant.util.Util;
 
 /**
@@ -68,16 +69,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            if (isShrunk) {
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) llMenu.getLayoutParams();
-                layoutParams.width = menuExpandedWidth;
-                llMenu.setLayoutParams(layoutParams);
-            } else {
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) llMenu.getLayoutParams();
-                layoutParams.width = menuShrunkWidth;
-                llMenu.setLayoutParams(layoutParams);
-            }
-            isShrunk = !isShrunk;
+            new BadgeUtil().setHuaweiBadgeNum(_mActivity, 12);
         }
     }
 
