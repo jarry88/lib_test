@@ -1,40 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_category_menu"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/right_separator_box_white"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_commodity_list"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="100dp"
         android:background="@android:color/white"
         />
-
-    <LinearLayout
-        android:id="@+id/ll_menu_container"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_category_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/right_separator_box_white"
-            />
-
-        <!-- 蒙板 -->
-        <FrameLayout
-            android:id="@+id/fl_mask"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent">
-
-        </FrameLayout>
-    </LinearLayout>
-</RelativeLayout>
-
+</LinearLayout>

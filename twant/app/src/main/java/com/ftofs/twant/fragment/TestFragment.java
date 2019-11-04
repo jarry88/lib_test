@@ -3,30 +3,31 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
-
-import org.urllib.Query;
-import org.urllib.Url;
-import org.urllib.Urls;
-
-import java.util.List;
-
-import pl.droidsonroids.gif.GifImageView;
 
 /**
  * 測試用Fragment
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
-    ImageView imageView;
+    LinearLayout llMenu;
+    TextView tvContent;
+    int screenWidth;
+
+    int menuShrunkWidth;
+    int menuExpandedWidth;
+    int contentWidth;
+
+    boolean isShrunk = true;
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -47,21 +48,36 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        imageView = view.findViewById(R.id.image_view);
-
         Util.setOnClickListener(view, R.id.btn_test, this);
+
+        llMenu = view.findViewById(R.id.ll_menu);
+        tvContent = view.findViewById(R.id.tv_content);
+
+        Pair<Integer, Integer> dim = Util.getScreenDimemsion(_mActivity);
+        screenWidth = dim.first;
+
+        menuShrunkWidth = Util.dip2px(_mActivity, 100);
+        menuExpandedWidth = screenWidth * 2 / 3;
+        contentWidth = screenWidth - menuShrunkWidth;
+
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) tvContent.getLayoutParams();
+        layoutParams.width = contentWidth;
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            // start(H5GameFragment.newInstance("http://gogo.so/1.html"));
-            // http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test.html
-            // start(H5GameFragment.newInstance("http://192.168.240.21:9898/vue/mobile_seller/src/assets/js/test2.html?q=1211"));
-
-            // Glide.with(_mActivity).load("file:///android_asset/double_eleven/double_eleven_dynamic.gif").into(imageView);
-            start(GifFragment.newInstance("https://gfile.oss-cn-hangzhou.aliyuncs.com/takewant/1.gif"));
+            if (isShrunk) {
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) llMenu.getLayoutParams();
+                layoutParams.width = menuExpandedWidth;
+                llMenu.setLayoutParams(layoutParams);
+            } else {
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) llMenu.getLayoutParams();
+                layoutParams.width = menuShrunkWidth;
+                llMenu.setLayoutParams(layoutParams);
+            }
+            isShrunk = !isShrunk;
         }
     }
 

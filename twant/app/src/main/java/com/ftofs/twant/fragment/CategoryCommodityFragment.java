@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,6 @@ import okhttp3.Call;
  * @author zwm
  */
 public class CategoryCommodityFragment extends BaseFragment implements View.OnClickListener {
-    LinearLayout llMenuContainer;
-    FrameLayout flMask;
-
     RecyclerView rvCategoryMenu;
     List<CategoryMenu> categoryMenuList = new ArrayList<>();
     CategoryCommodityMenuAdapter categoryCommodityMenuAdapter;
@@ -54,6 +52,14 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     CategoryCommodityAdapter categoryCommodityAdapter;
 
     HashMap<Integer, CategoryCommodityList> categoryCommodityListMap = new HashMap<>();
+
+    boolean isShrunk = true;
+
+    int screenWidth;
+
+    int menuShrunkWidth;
+    int menuExpandedWidth;
+    int contentWidth;
 
     public static CategoryCommodityFragment newInstance() {
         Bundle args = new Bundle();
@@ -75,10 +81,12 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        llMenuContainer = view.findViewById(R.id.ll_menu_container);
-        flMask = view.findViewById(R.id.fl_mask);
-        flMask.setOnClickListener(this);
+        Pair<Integer, Integer> dim = Util.getScreenDimemsion(_mActivity);
+        screenWidth = dim.first;
 
+        menuShrunkWidth = Util.dip2px(_mActivity, 100);
+        menuExpandedWidth = screenWidth * 2 / 3;
+        contentWidth = screenWidth - menuShrunkWidth;
 
         rvCategoryMenu = view.findViewById(R.id.rv_category_menu);
         rvCommodityList = view.findViewById(R.id.rv_commodity_list);
@@ -90,15 +98,9 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("here");
-                if (!categoryCommodityMenuAdapter.isExpanded()) {
-                    SLog.info("here");
-                    RelativeLayout.LayoutParams rlLayoutParams = (RelativeLayout.LayoutParams) llMenuContainer.getLayoutParams();
-                    rlLayoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-                    llMenuContainer.setLayoutParams(rlLayoutParams);
-
-                    categoryCommodityMenuAdapter.setExpanded(true);
-                    // setNewData刷新一下布局
-                    categoryCommodityMenuAdapter.setNewData(categoryMenuList);
+                if (isShrunk) {
+                    expandMenu();
+                    isShrunk = false;
                     return;
                 }
 
@@ -119,6 +121,10 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
         rvCategoryMenu.setAdapter(categoryCommodityMenuAdapter);
 
         rvCommodityList = view.findViewById(R.id.rv_commodity_list);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) rvCommodityList.getLayoutParams();
+        layoutParams.width = contentWidth;
+
+
         LinearLayoutManager layoutManagerCommodity = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvCommodityList.setLayoutManager(layoutManagerCommodity);
         categoryCommodityAdapter = new CategoryCommodityAdapter(_mActivity, R.layout.category_commodity_row, categoryCommodityRowList);
@@ -161,11 +167,20 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
      * 收縮菜單
      */
     private void shrinkMenu() {
-        RelativeLayout.LayoutParams rlLayoutParams = (RelativeLayout.LayoutParams) llMenuContainer.getLayoutParams();
-        rlLayoutParams.width = Util.dip2px(_mActivity, 100);
-        llMenuContainer.setLayoutParams(rlLayoutParams);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) rvCategoryMenu.getLayoutParams();
+        layoutParams.width = menuShrunkWidth;
+        rvCategoryMenu.setLayoutParams(layoutParams);
+        isShrunk = true;
+    }
 
-        categoryCommodityMenuAdapter.setExpanded(false);
+    private void expandMenu() {
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) rvCategoryMenu.getLayoutParams();
+        layoutParams.width = menuExpandedWidth;
+        rvCategoryMenu.setLayoutParams(layoutParams);
+
+        // setNewData刷新一下布局
+        categoryCommodityMenuAdapter.setNewData(categoryMenuList);
+        isShrunk = false;
     }
 
 
@@ -267,8 +282,6 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.fl_mask) {
-            shrinkMenu();
-        }
+
     }
 }

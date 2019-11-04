@@ -37,12 +37,4 @@ public class CategoryCommodityMenuAdapter extends BaseQuickAdapter<CategoryMenu,
 
         helper.setText(R.id.tv_category_name_chinese, item.categoryNameChinese);
     }
-
-    public boolean isExpanded() {
-        return isExpanded;
-    }
-
-    public void setExpanded(boolean expanded) {
-        isExpanded = expanded;
-    }
 }
