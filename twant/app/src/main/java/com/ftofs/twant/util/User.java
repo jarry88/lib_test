@@ -32,7 +32,7 @@ public class User {
 
         int now = Time.timestamp();
 
-        if (userId > 0 && !StringUtil.isEmpty(token) && !StringUtil.isEmpty(nickname) &&
+        if (userId > 0 && !StringUtil.isEmpty(token) &&
                 now - lastLoginTime < Config.LOGIN_VALID_TIME && !StringUtil.isEmpty(memberName)) {
             // SLog.info("用戶已登錄, token[%s]", token);
             return userId;
