@@ -111,7 +111,11 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                int keyCode = event.getKeyCode();
+                SLog.info("actionId[%d], keyCode[%d]", actionId, keyCode);
+                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                    actionId == EditorInfo.IME_ACTION_UNSPECIFIED || keyCode == KeyEvent.KEYCODE_ENTER // 兼容倉頡中文輸入法
+                ) {
                     doSearch(textView.getText().toString().trim());
                     return true;
                 }
