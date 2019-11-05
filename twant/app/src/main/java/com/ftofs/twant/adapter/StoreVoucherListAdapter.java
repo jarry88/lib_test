@@ -48,6 +48,9 @@ public class StoreVoucherListAdapter extends ViewGroupAdapter<StoreVoucher> {
                 setBackgroundResource(itemView, R.id.rl_left_container, R.drawable.pink_voucher);
                 btnReceiveVoucherNow.setVisibility(View.VISIBLE);
                 btnReceiveVoucherNow.setBackgroundResource(R.drawable.pink_button);
+                if (itemData.received) {
+                    btnReceiveVoucherNow.setText("進店使用");
+                }
             } else {
                 setBackgroundResource(itemView, R.id.rl_left_container, R.drawable.blue_voucher);
                 btnReceiveVoucherNow.setVisibility(View.GONE);

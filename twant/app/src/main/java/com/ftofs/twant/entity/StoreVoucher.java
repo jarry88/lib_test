@@ -28,5 +28,6 @@ public class StoreVoucher {
      * 券是否可用
      */
     public boolean usable;
+    public boolean received;  // 是否已領取，如果已領取-顯示【進店使用】
     public String searchSn;
 }

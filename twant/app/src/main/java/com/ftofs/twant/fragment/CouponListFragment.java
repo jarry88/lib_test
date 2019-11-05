@@ -221,6 +221,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
                                 voucher.getString("endTime"),
                                 true
                         );
+                        storeVoucher.received = true;
                         availableVoucherList.add(storeVoucher);
                     }
                     SLog.info("length[%d]", availableVoucherList.size());
