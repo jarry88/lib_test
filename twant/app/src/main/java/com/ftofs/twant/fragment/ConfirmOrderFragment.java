@@ -444,6 +444,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         if (id == R.id.btn_back) {
             popWithOutRefresh();
         } else if (id == R.id.btn_commit) {
+            hideSoftInput();
             try {
                 EasyJSONObject params = collectParams(true);
                 SLog.info("params[%s]", params);
