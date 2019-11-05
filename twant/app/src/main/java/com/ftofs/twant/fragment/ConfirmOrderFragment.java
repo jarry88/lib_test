@@ -265,7 +265,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
                 .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.text_pay_way),
-                        PopupType.PAY_WAY, payWayItemList, payWayIndex, this))
+                        PopupType.PAY_WAY, payWayItemList, payWayIndex, this, null, false, true))
                 .show();
     }
 

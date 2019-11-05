@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
@@ -24,12 +25,14 @@ import java.util.List;
  */
 public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.ViewHolder> {
     static class ViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout rlListsPopupItemWrapper;
         ImageView imgIcon;
         ImageView checkedImage;
         TextView tvText;
 
         public ViewHolder(View view) {
             super(view);
+            rlListsPopupItemWrapper = view.findViewById(R.id.rl_list_popup_item_wrapper);
             imgIcon = view.findViewById(R.id.img_icon);
             checkedImage = view.findViewById(R.id.checked_image);
             tvText = view.findViewById(R.id.tv_text);
@@ -46,20 +49,26 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
     // 選中高亮文本的顏色
     int highlightedTextColor;
 
+    boolean hasSeparator;
+    boolean showUncheckedIndicator;  // 是否顯示未選中的提示圖標
+
     /**
      * Ctor
      * @param context
      * @param type 數據類型
      * @param itemList
      * @param index 初始選中哪個index
+     * @param hasSeparator 是否顯示分隔線
      */
     public ListPopupAdapter(Context context, PopupType type,
-                            OnSelectedListener onSelectedListener, List<ListPopupItem> itemList, int index) {
+                            OnSelectedListener onSelectedListener, List<ListPopupItem> itemList, int index, boolean hasSeparator, boolean showUncheckedIndicator) {
         this.context = context;
         this.type = type;
         this.onSelectedListener = onSelectedListener;
         this.itemList = itemList;
         this.index = index;
+        this.hasSeparator = hasSeparator;
+        this.showUncheckedIndicator = showUncheckedIndicator;
 
         highlightedTextColor = context.getColor(R.color.tw_blue);
     }
@@ -87,10 +96,21 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
             }
             viewHolder.imgIcon.setVisibility(item.selectedIconResId != 0 ? View.VISIBLE : View.GONE);
         } else {
+            if (showUncheckedIndicator) {
+                viewHolder.checkedImage.setVisibility(View.VISIBLE);
+                viewHolder.checkedImage.setImageResource(R.drawable.icon_cart_item_unchecked);
+            }
+
             if (item.unselectedIconResId != 0) {
                 viewHolder.imgIcon.setImageResource(item.unselectedIconResId);
             }
             viewHolder.imgIcon.setVisibility(item.unselectedIconResId != 0 ? View.VISIBLE : View.GONE);
+        }
+
+        if (hasSeparator) {
+            viewHolder.rlListsPopupItemWrapper.setBackgroundResource(R.drawable.border_type_d);
+        } else {
+            viewHolder.rlListsPopupItemWrapper.setBackground(null);
         }
 
 

@@ -30,15 +30,12 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
     List<ListPopupItem> itemList;
     int index; // 選中的index
     OnSelectedListener onSelectedListener;
+    boolean hasSeparator = true;  // 是否顯示分隔線
+    boolean showUncheckedIndicator;  // 是否顯示未選中的提示圖標
 
     PopupType type;
     Object args; // 傳進來的調用參數
 
-
-    public ListPopup(@NonNull Context context, String title, PopupType type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener, Object args) {
-        this(context, title, type, itemList, index, onSelectedListener);
-        this.args = args;
-    }
 
     /**
      * 列表彈框的構造方法
@@ -61,6 +58,19 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
     }
 
 
+    public ListPopup(@NonNull Context context, String title, PopupType type, List<ListPopupItem> itemList, int index, OnSelectedListener onSelectedListener, Object args) {
+        this(context, title, type, itemList, index, onSelectedListener);
+        this.args = args;
+    }
+
+    public ListPopup(@NonNull Context context, String title, PopupType type, List<ListPopupItem> itemList,
+                     int index, OnSelectedListener onSelectedListener, Object args, boolean hasSeparator, boolean showUncheckedIndicator) {
+        this(context, title, type, itemList, index, onSelectedListener, args);
+        this.hasSeparator = hasSeparator;
+        this.showUncheckedIndicator = showUncheckedIndicator;
+    }
+
+
 
     @Override
     protected int getImplLayoutId() {
@@ -77,7 +87,7 @@ public class ListPopup extends BottomPopupView implements View.OnClickListener, 
         RecyclerView rvList = findViewById(R.id.rv_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvList.setLayoutManager(layoutManager);
-        ListPopupAdapter adapter = new ListPopupAdapter(context, type, this, itemList, index);
+        ListPopupAdapter adapter = new ListPopupAdapter(context, type, this, itemList, index, hasSeparator, showUncheckedIndicator);
         rvList.setAdapter(adapter);
     }
 
