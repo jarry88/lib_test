@@ -419,10 +419,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         tvPhoneNumber.setText(storePhone);
 
                         // 營業時間
-                        String weekDayStart = getStoreBusinessTime(storeInfo, "weekDayStart");
-                        String weekDayEnd = getStoreBusinessTime(storeInfo, "weekDayEnd");
-                        String restDayStart = getStoreBusinessTime(storeInfo, "restDayStart");
-                        String restDayEnd = getStoreBusinessTime(storeInfo, "restDayEnd");
+                        String weekDayStart = storeInfo.getString("weekDayStart") + " " + storeInfo.getString("weekDayStartTime");
+                        String weekDayEnd = storeInfo.getString("weekDayEnd") + " " + storeInfo.getString("weekDayEndTime");
+                        String restDayStart = storeInfo.getString("restDayStart") + " " + storeInfo.getString("restDayStartTime");
+                        String restDayEnd = storeInfo.getString("restDayEnd") + " " + storeInfo.getString("restDayEndTime");
 
                         tvBusinessTimeWorkingDay.setText(weekDayStart + " - " + weekDayEnd);
                         tvBusinessTimeWeekend.setText(restDayStart + " - " + restDayEnd);
@@ -911,23 +911,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvFavoriteCount.setText(String.valueOf(favoriteCount));
     }
 
-
-    /**
-     * 獲取店鋪的營業時間
-     * @param responseObj
-     * @param path
-     * @return
-     */
-    private String getStoreBusinessTime(EasyJSONObject responseObj, String path) throws EasyJSONException {
-        String timeStr = responseObj.getString(path);
-        if (StringUtil.isEmpty(timeStr)) {
-            return "";
-        } else if (timeStr.length() >= 5) {
-            return timeStr.substring(0, 5);
-        } else {
-            return "";
-        }
-    }
 
     @Override
     public boolean onBackPressedSupport() {
