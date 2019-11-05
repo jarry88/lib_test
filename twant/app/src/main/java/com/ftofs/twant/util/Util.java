@@ -623,4 +623,9 @@ public class Util {
         Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(), params.toString()));
         */
     }
+
+
+    public static String getLauncherClassName(Context context) {
+        return context.getPackageName() + ".activity.SplashActivity";
+    }
 }

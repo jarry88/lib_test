@@ -14,6 +14,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.BadgeUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.util.Vendor;
 
 /**
  * 測試用Fragment
@@ -69,7 +70,9 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_test) {
-            new BadgeUtil().setHuaweiBadgeNum(_mActivity, 12);
+            // new BadgeUtil().setHuaweiBadgeNum(_mActivity, 12);
+            BadgeUtil.setBadgeNum(_mActivity, 22);
+            SLog.info("prop[%s]", "prop");
         }
     }
 
