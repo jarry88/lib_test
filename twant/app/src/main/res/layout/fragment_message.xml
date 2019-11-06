@@ -82,11 +82,33 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_message_category_transact"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/icon_message_category_transact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/icon_message_category_transact"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_transact_message_item_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/icon_message_category_transact"
+                    android:layout_marginLeft="-7dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:background="@drawable/red_bubble_bg"
+                    android:gravity="center"
+                    android:text="18"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,11 +126,32 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_message_category_asset"
-                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/icon_message_category_asset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/icon_message_category_asset"
+                    />
+                <TextView
+                    android:id="@+id/tv_asset_message_item_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/icon_message_category_asset"
+                    android:layout_marginLeft="-7dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:background="@drawable/red_bubble_bg"
+                    android:gravity="center"
+                    android:text="18"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -126,11 +169,32 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_message_category_social"
-                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/icon_message_category_social"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/icon_message_category_social"
+                    />
+                <TextView
+                    android:id="@+id/tv_social_message_item_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/icon_message_category_social"
+                    android:layout_marginLeft="-7dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:background="@drawable/red_bubble_bg"
+                    android:gravity="center"
+                    android:text="18"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,11 +212,32 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_message_category_bargain"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/icon_message_category_bargain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/icon_message_category_bargain"
+                    />
+                <TextView
+                    android:id="@+id/tv_bargain_message_item_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/icon_message_category_bargain"
+                    android:layout_marginLeft="-7dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:background="@drawable/red_bubble_bg"
+                    android:gravity="center"
+                    android:text="18"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -170,11 +255,32 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_message_category_notice"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/icon_message_category_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/icon_message_category_notice"
+                    />
+                <TextView
+                    android:id="@+id/tv_notice_message_item_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/icon_message_category_notice"
+                    android:layout_marginLeft="-7dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:background="@drawable/red_bubble_bg"
+                    android:gravity="center"
+                    android:text="18"
+                    android:textColor="@android:color/white"
+                    android:textSize="10sp"
+                    />
+            </RelativeLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

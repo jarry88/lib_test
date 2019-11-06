@@ -391,7 +391,8 @@ public class Api {
     /**
      * 消息列表
      */
-    public static final String PATH_MESSAGE_LIST = "/member/message/list";
+    // public static final String PATH_MESSAGE_LIST = "/member/message/list";
+    public static final String PATH_MESSAGE_LIST = "/member/message/all/list";
 
     /**
      * 個人專頁數據
@@ -885,6 +886,11 @@ public class Api {
      * 店鋪想看列表
      */
     public static final String PATH_STORE_VIDEO_LIST = "/store/video";
+
+    /**
+     * 刪除會員消息
+     */
+    public static final String PATH_DELETE_MESSAGE = "/member/message/delete.json";
 
 
     /**

@@ -28,6 +28,19 @@
             android:textSize="18sp"
             android:textColor="@color/tw_black"
             />
+
+        <TextView
+            android:id="@+id/btn_clear_all"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="清除未讀"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
     </RelativeLayout>
     <!-- END OF 工具欄 -->
 

@@ -18,19 +18,27 @@ import com.ftofs.twant.adapter.NoticeListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.NoticeItem;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwConfirmPopup;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
+import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -92,6 +100,66 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         RecyclerView rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         noticeListAdapter = new NoticeListAdapter(noticeItemList);
+        noticeListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                NoticeItem noticeItem = noticeItemList.get(position);
+
+                if (id == R.id.btn_delete_message_item) {
+                    new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                            // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                            .setPopupCallback(new XPopupCallback() {
+                                @Override
+                                public void onShow() {
+                                }
+                                @Override
+                                public void onDismiss() {
+                                }
+                            }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎?", null, new OnConfirmCallback() {
+                        @Override
+                        public void onYes() {
+                            SLog.info("onYes");
+
+                            String token = User.getToken();
+
+                            EasyJSONObject params = EasyJSONObject.generate(
+                                    "token", token,
+                                    "messageId", noticeItem.id);
+
+                            SLog.info("params[%s]", params);
+
+                            Api.postUI(Api.PATH_DELETE_MESSAGE, params, new UICallback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    ToastUtil.showNetworkError(_mActivity, e);
+                                }
+
+                                @Override
+                                public void onResponse(Call call, String responseStr) throws IOException {
+                                    SLog.info("responseStr[%s]", responseStr);
+                                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                        return;
+                                    }
+
+                                    noticeItemList.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onNo() {
+                            SLog.info("onNo");
+                        }
+                    }))
+                            .show();
+                }
+            }
+        });
         noticeListAdapter.setEnableLoadMore(true);
         noticeListAdapter.setOnLoadMoreListener(this, rvList);
 
@@ -133,7 +201,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
 
         SLog.info("params[%s]", params);
 
-        Api.postUI(Api.PATH_MESSAGE_LIST, params, new UICallback() {
+        Api.getUI(Api.PATH_MESSAGE_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);

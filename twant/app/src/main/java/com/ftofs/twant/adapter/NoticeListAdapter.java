@@ -34,6 +34,8 @@ public class NoticeListAdapter extends BaseMultiItemQuickAdapter<NoticeItem, Bas
                     .setText(R.id.tv_msg_time, item.createTime)
                     .setText(R.id.tv_msg_content, item.content);
 
+            helper.addOnClickListener(R.id.btn_delete_message_item);
+
             ImageView imageView = helper.getView(R.id.img_msg_cover);
             if (item.tplCode.equals("memberReturnUpdate")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_return).centerCrop().into(imageView);
@@ -53,6 +55,4 @@ public class NoticeListAdapter extends BaseMultiItemQuickAdapter<NoticeItem, Bas
             }
         }
     }
-
-
 }
