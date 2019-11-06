@@ -10,12 +10,15 @@ public class NoticeItem implements MultiItemEntity {
     public String createTime;
     public String imageUrl;
     public String content;
+    public boolean isRead;
+
 
     public NoticeItem(int itemType) {
         this.itemType = itemType;
     }
 
-    public NoticeItem(int itemType, int id, String title, String tplCode, String createTime, String imageUrl, String content) {
+    public NoticeItem(int itemType, int id, String title, String tplCode, String createTime,
+                      String imageUrl, String content, boolean isRead) {
         this.itemType = itemType;
         this.id = id;
         this.title = title;
@@ -23,6 +26,7 @@ public class NoticeItem implements MultiItemEntity {
         this.createTime = createTime;
         this.imageUrl = imageUrl;
         this.content = content;
+        this.isRead = isRead;
     }
 
     @Override

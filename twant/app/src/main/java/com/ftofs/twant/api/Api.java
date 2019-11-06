@@ -892,6 +892,16 @@ public class Api {
      */
     public static final String PATH_DELETE_MESSAGE = "/member/message/delete.json";
 
+    /**
+     * 獲取會員所有類型的未讀消息
+     */
+    public static final String PATH_GET_UNREAD_MESSAGE_COUNT = "/member/message/unread.json";
+
+    /**
+     * 修改會員站内信消息為已讀狀態
+     */
+    public static final String PATH_MARK_ALL_MESSAGE_READ = "/member/message/markRead.json";
+
 
     /**
      * 發送Http請求

@@ -23,6 +23,20 @@ public class SPField {
     public static final String FIELD_MEMBER_SIGNATURE = "member_signature";
     public static final String FIELD_MEMBER_BIO = "member_bio";
     public static final String FIELD_AMAP_LOCATION = "amap_location";
+
+    /**
+     * 未讀消息數
+     * 內容結構如下:
+     *{
+     * 	"transact": 1,
+     * 	"asset": 2,
+     * 	"social": 3,
+     * 	"bargain": 4,
+     * 	"notice": 5
+     * }
+     */
+    public static final String FIELD_UNREAD_MESSAGE_COUNT = "unread_message_count";
+
     /**
      * 最近一次顯示App引導頁的日期
      * App引導頁每天顯示一次

@@ -22,6 +22,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.NoticeItem;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.entity.UnreadCount;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -96,6 +97,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         tvFragmentTitle.setText(fragmentTitle);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_clear_all, this);
 
         RecyclerView rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
@@ -147,6 +149,16 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
 
                                     noticeItemList.remove(position);
                                     adapter.notifyItemRemoved(position);
+
+                                    try {
+                                        UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getArray("datas.unreadList"));
+                                        if (unreadCount != null) {
+                                            UnreadCount.save(unreadCount);
+                                        }
+                                    } catch (Exception e) {
+
+                                    }
+
                                 }
                             });
                         }
@@ -179,6 +191,30 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         int id = v.getId();
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_clear_all) {
+            new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                    // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                    .setPopupCallback(new XPopupCallback() {
+                        @Override
+                        public void onShow() {
+                        }
+                        @Override
+                        public void onDismiss() {
+                        }
+                    }).asCustom(new TwConfirmPopup(_mActivity, "是否清除所有未讀數？", null, new OnConfirmCallback() {
+                @Override
+                public void onYes() {
+                    SLog.info("onYes");
+                    clearAllUnreadStatus();
+                }
+
+                @Override
+                public void onNo() {
+                    SLog.info("onNo");
+                }
+            })).show();
         }
     }
 
@@ -187,6 +223,53 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         SLog.info("onBackPressedSupport");
         pop();
         return true;
+    }
+
+
+    private void clearAllUnreadStatus() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "tplClass", tplClass);
+
+        SLog.info("params[%s]", params);
+
+        Api.postUI(Api.PATH_MARK_ALL_MESSAGE_READ, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    for (NoticeItem noticeItem : noticeItemList) {
+                        noticeItem.isRead = true;
+                    }
+
+                    ToastUtil.error(_mActivity, "清除未讀成功");
+
+                    UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getArray("datas.unreadList"));
+                    if (unreadCount != null) {
+                        UnreadCount.save(unreadCount);
+                    }
+
+                    noticeListAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    SLog.info("Error!%s", e.getMessage());
+                }
+            }
+        });
     }
 
     private void loadData(int page) {
@@ -237,10 +320,11 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                         String addTime = message.getString("addTime");
                         String imageUrl = message.getString("imageUrl");
                         String content = message.getString("messageContent");
+                        int isRead = message.getInt("isRead");
 
                         String title = getMessageTitle(tplCode);
 
-                        NoticeItem noticeItem = new NoticeItem(Constant.ITEM_TYPE_NORMAL, messageId, title, tplCode, addTime, imageUrl, content);
+                        NoticeItem noticeItem = new NoticeItem(Constant.ITEM_TYPE_NORMAL, messageId, title, tplCode, addTime, imageUrl, content, isRead == 1);
                         noticeItemList.add(noticeItem);
                     }
 
