@@ -67,6 +67,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     MZBannerView bannerView;
     float density;
 
+    int goodsCommonCount;
+    int wantPostCount;
+    int storeCount;
+
+    TextView tvStoreCount;
+    TextView tvGoodsCount;
+    TextView tvPostCount;
+
     /**
      * 【店鋪形像圖】的寬度
      */
@@ -128,6 +136,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         storeFigureContainerWidth = screenDimension.first -  2 * Util.dip2px(_mActivity, 32.5f); // 屏幕寬度減去兩邊32.5dp
         remainWidth = storeFigureContainerWidth - Util.dip2px(_mActivity, 52);
         SLog.info("storeFigureContainerWidth[%d], remainWidth[%d]", storeFigureContainerWidth, remainWidth);
+
+        tvStoreCount = view.findViewById(R.id.tv_store_count);
+        tvGoodsCount = view.findViewById(R.id.tv_goods_count);
+        tvPostCount = view.findViewById(R.id.tv_post_count);
 
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_category, this);
@@ -481,6 +493,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 try {
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
+                    }
+
+                    goodsCommonCount = responseObj.getInt("datas.goodsCommonCount");
+                    if (goodsCommonCount > 0) {
+                        tvGoodsCount.setText(String.valueOf(goodsCommonCount));
+                        tvGoodsCount.setVisibility(View.VISIBLE);
+                    }
+
+                    wantPostCount = responseObj.getInt("datas.wantPostCount");
+                    if (wantPostCount > 0) {
+                        tvPostCount.setText(String.valueOf(wantPostCount));
+                        tvPostCount.setVisibility(View.VISIBLE);
+                    }
+
+                    storeCount = responseObj.getInt("datas.storeCount");
+                    if (storeCount > 0) {
+                        tvStoreCount.setText(String.valueOf(storeCount));
+                        tvStoreCount.setVisibility(View.VISIBLE);
                     }
 
                     EasyJSONArray itemList = responseObj.getArray("datas.webSliderItem");

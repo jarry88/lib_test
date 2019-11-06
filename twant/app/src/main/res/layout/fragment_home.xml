@@ -78,6 +78,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
                     <LinearLayout
+                        android:id="@+id/ll_category_store"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -99,6 +100,23 @@
                             />
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/tv_store_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/ll_category_store"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="-7dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:background="@drawable/red_bubble_bg"
+                        android:gravity="center"
+                        android:text="18"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp"
+                        android:visibility="gone"
+                        />
+
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/btn_category_goods"
@@ -106,6 +124,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
                     <LinearLayout
+                        android:id="@+id/ll_category_goods"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -126,7 +145,22 @@
                             android:textColor="@android:color/white"
                             />
                     </LinearLayout>
-
+                    <TextView
+                        android:id="@+id/tv_goods_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/ll_category_goods"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="-7dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:background="@drawable/red_bubble_bg"
+                        android:gravity="center"
+                        android:text="18"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp"
+                        android:visibility="gone"
+                        />
                 </RelativeLayout>
                 <RelativeLayout
                     android:id="@+id/btn_category_brand"
@@ -134,6 +168,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
                     <LinearLayout
+                        android:id="@+id/ll_category_post"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -154,7 +189,22 @@
                             android:textColor="@android:color/white"
                             />
                     </LinearLayout>
-
+                    <TextView
+                        android:id="@+id/tv_post_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/ll_category_post"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="-7dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:background="@drawable/red_bubble_bg"
+                        android:gravity="center"
+                        android:text="18"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp"
+                        android:visibility="gone"
+                        />
                 </RelativeLayout>
                 <LinearLayout
                     android:id="@+id/btn_goto_double_eleven"
