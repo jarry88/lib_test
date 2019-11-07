@@ -11,6 +11,7 @@ public class NoticeItem implements MultiItemEntity {
     public String imageUrl;
     public String content;
     public boolean isRead;
+    public String sn;
 
 
     public NoticeItem(int itemType) {

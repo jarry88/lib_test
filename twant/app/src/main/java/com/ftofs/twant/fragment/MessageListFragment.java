@@ -102,6 +102,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         RecyclerView rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         noticeListAdapter = new NoticeListAdapter(noticeItemList);
+
         noticeListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -169,9 +170,24 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                         }
                     }))
                             .show();
+                } else if (id == R.id.ll_swipe_content) {
+                    SLog.info("HERE");
+
+                    SLog.info("tplCode[%s]", noticeItem.tplCode);
+                    if (StringUtil.equalsOne(noticeItem.tplCode, new String[] {
+                            "memberOrdersBookFinalPaymentNotice", "memberOrdersCancel", "memberVirtualOrdersCancel",
+                            "memberOrdersPay", "memberVirtualOrdersPay", "memberOrdersSend", "memberOrdersModifyFreight",
+                            "storeOrdersReceive", "memberOrdersReceive", "memberOrdersEvaluateExplain"
+                    })) {
+                        int ordersId = Integer.valueOf(noticeItem.sn);
+                        SLog.info("ordersId[%d]", ordersId);
+                        start(OrderDetailFragment.newInstance(ordersId));
+                    }
                 }
             }
         });
+
+
         noticeListAdapter.setEnableLoadMore(true);
         noticeListAdapter.setOnLoadMoreListener(this, rvList);
 
@@ -325,6 +341,10 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                         String title = getMessageTitle(tplCode);
 
                         NoticeItem noticeItem = new NoticeItem(Constant.ITEM_TYPE_NORMAL, messageId, title, tplCode, addTime, imageUrl, content, isRead == 1);
+                        if (message.exists("sn")) {
+                            noticeItem.sn = message.getString("sn");
+                        }
+
                         noticeItemList.add(noticeItem);
                     }
 

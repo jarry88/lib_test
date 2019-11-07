@@ -36,7 +36,7 @@ public class NoticeListAdapter extends BaseMultiItemQuickAdapter<NoticeItem, Bas
 
             helper.setGone(R.id.icon_unread_count_indicator, !item.isRead);
 
-            helper.addOnClickListener(R.id.btn_delete_message_item);
+            helper.addOnClickListener(R.id.btn_delete_message_item, R.id.ll_swipe_content);
 
             ImageView imageView = helper.getView(R.id.img_msg_cover);
             if (item.tplCode.equals("memberReturnUpdate")) {

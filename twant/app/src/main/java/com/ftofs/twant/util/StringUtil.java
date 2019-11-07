@@ -431,4 +431,24 @@ public class StringUtil {
 
         return isIntranetAddr(url);
     }
+
+    /**
+     * 給定的字符串符合字符串列表中的其中一個字符串
+     * @param string
+     * @param strings
+     * @return
+     */
+    public static boolean equalsOne(String string, String[] strings) {
+        if (string == null) {
+            return false;
+        }
+
+        for (int i = 0; i < strings.length; i++) {
+            if (string.equals(strings[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
