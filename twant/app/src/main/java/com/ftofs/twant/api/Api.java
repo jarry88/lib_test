@@ -902,6 +902,11 @@ public class Api {
      */
     public static final String PATH_MARK_ALL_MESSAGE_READ = "/member/message/markRead.json";
 
+    /**
+     * 活動頁跳轉
+     */
+    public static final String PATH_ACTIVITY_INFO = "/member/want/activity/info";
+
 
     /**
      * 發送Http請求

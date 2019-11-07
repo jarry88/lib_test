@@ -24,6 +24,8 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.domain.member.PurchaseBuy;
@@ -606,15 +608,31 @@ public class Util {
 
 
     /**
-     * 生成雙11活動H5游戲的URL，如果用戶未登錄，返回null
+     * 生成雙11活動H5游戲或獎品列表的URL，如果用戶未登錄，返回null
      * @return
      */
-    public static String makeDoubleElevenH5GameUrl() {
-        String mobile = User.getUserInfo(SPField.FIELD_MOBILE, null);
-        if (mobile == null) {
+
+
+    /**
+     * 生成H5雙十一活動鏈接，如果用戶未登錄，返回null
+     * @param type 1 -- 抽獎遊戲 2 -- 我的獎品
+     * @return
+     */
+    public static String makeDoubleElevenH5Url(int type) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
             return null;
         }
-        return "http://wx.twant.com:8080/index?mobile=" + mobile;
+
+        String queryString = Api.makeQueryString(EasyJSONObject.generate(
+                "token", token,
+                "activityId", 1,
+                "type", type,
+                "device", "android"));
+
+        String url = Config.API_BASE_URL + Api.PATH_ACTIVITY_INFO + queryString;
+        SLog.info("url[%s]", url);
+        return url;
     }
 
     public static void startDoubleElevenFragment() {

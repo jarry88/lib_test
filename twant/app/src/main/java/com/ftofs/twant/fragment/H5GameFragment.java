@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -79,6 +80,12 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
                     //handler.cancel();// super中默认的处理方式，WebView变成空白页
                     super.onReceivedSslError(view, handler, error);
                 }
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                // return super.shouldOverrideUrlLoading(view, request);
+                return true;
             }
         });
 

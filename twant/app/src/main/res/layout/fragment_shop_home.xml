@@ -358,6 +358,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
+                        <!--
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -365,6 +366,7 @@
                             android:textSize="17sp"
                             android:text="工作日："
                             />
+                        -->
                         <TextView
                             android:id="@+id/tv_business_time_working_day"
                             android:layout_width="wrap_content"
@@ -378,6 +380,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical">
+                        <!--
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -385,6 +388,7 @@
                             android:textSize="17sp"
                             android:text="周&#12288;末："
                             />
+                        -->
                         <TextView
                             android:id="@+id/tv_business_time_weekend"
                             android:layout_width="wrap_content"

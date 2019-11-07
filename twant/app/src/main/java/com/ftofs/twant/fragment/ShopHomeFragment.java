@@ -419,13 +419,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         tvPhoneNumber.setText(storePhone);
 
                         // 營業時間
-                        String weekDayStart = storeInfo.getString("weekDayStart") + " " + storeInfo.getString("weekDayStartTime");
-                        String weekDayEnd = storeInfo.getString("weekDayEnd") + " " + storeInfo.getString("weekDayEndTime");
-                        String restDayStart = storeInfo.getString("restDayStart") + " " + storeInfo.getString("restDayStartTime");
-                        String restDayEnd = storeInfo.getString("restDayEnd") + " " + storeInfo.getString("restDayEndTime");
+                        String weekDayStart = storeInfo.getString("weekDayStart") + "至" + storeInfo.getString("weekDayEnd");
+                        String weekDayEnd = storeInfo.getString("weekDayStartTime") + "-" + storeInfo.getString("weekDayEndTime");
+                        String restDayStart = storeInfo.getString("restDayStart") + "至" + storeInfo.getString("restDayEnd");
+                        String restDayEnd = storeInfo.getString("restDayStartTime") + "-" + storeInfo.getString("restDayEndTime");
 
-                        tvBusinessTimeWorkingDay.setText(weekDayStart + " - " + weekDayEnd);
-                        tvBusinessTimeWeekend.setText(restDayStart + " - " + restDayEnd);
+                        tvBusinessTimeWorkingDay.setText(weekDayStart + "   " + weekDayEnd);
+                        tvBusinessTimeWeekend.setText(restDayStart + "   " + restDayEnd);
 
                         // 店鋪地址
                         storeAddress = storeInfo.getString("chainAreaInfo") + storeInfo.getString("chainAddress");

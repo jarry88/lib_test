@@ -394,7 +394,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                         GoodsSearchItem item = goodsItemList.get(position);
                         Util.startFragment(ShopMainFragment.newInstance(item.storeId));
                     } else if (id == R.id.btn_play_game) {
-                        String url = Util.makeDoubleElevenH5GameUrl();
+                        String url = Util.makeDoubleElevenH5Url(1);
                         if (url == null) {
                             Util.showLoginFragment();
                             return;

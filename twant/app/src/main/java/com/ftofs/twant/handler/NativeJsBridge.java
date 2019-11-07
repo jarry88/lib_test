@@ -19,4 +19,13 @@ public class NativeJsBridge {
     public void activity11(String data) {
         SLog.info("activity11[%s]", data);
     }
+
+    /**
+     * facebook分享
+     * @param data
+     */
+    @JavascriptInterface
+    public void fbShare(String data) {
+        SLog.info("fbShare[%s]", data);
+    }
 }

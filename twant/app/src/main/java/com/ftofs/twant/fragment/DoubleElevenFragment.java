@@ -13,6 +13,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.Util;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -43,11 +44,23 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
-        view.findViewById(R.id.btn_go_shopping).setOnClickListener(this);
-        view.findViewById(R.id.btn_play_game).setOnClickListener(this);
 
-        ImageView preDoubleElevenBg = view.findViewById(R.id.pre_double_eleven_bg);
-        Glide.with(_mActivity).load(R.drawable.pre_double_eleven_bg).into(preDoubleElevenBg);
+        long now = System.currentTimeMillis();
+        long doubleElevenTimestamp = Jarbon.parse("2019-11-11").getTimestampMillis();
+        if (false && now < doubleElevenTimestamp) { // 未到雙十一
+            ImageView preDoubleElevenBg = view.findViewById(R.id.pre_double_eleven_bg);
+            Glide.with(_mActivity).load(R.drawable.pre_double_eleven_bg).into(preDoubleElevenBg);
+
+            view.findViewById(R.id.rl_pre_double_eleven).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.rl_after_double_eleven).setVisibility(View.GONE);
+        } else {
+            view.findViewById(R.id.btn_go_shopping).setOnClickListener(this);
+            view.findViewById(R.id.btn_play_game).setOnClickListener(this);
+            view.findViewById(R.id.btn_view_award).setOnClickListener(this);
+
+            view.findViewById(R.id.rl_pre_double_eleven).setVisibility(View.GONE);
+            view.findViewById(R.id.rl_after_double_eleven).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -58,7 +71,14 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
             EasyJSONObject params = EasyJSONObject.generate("is_double_eleven", true);
             start(SearchResultFragment.newInstance(SearchType.GOODS.name(), params.toString()));
         } else if (id == R.id.btn_play_game) {
-            String url = Util.makeDoubleElevenH5GameUrl();
+            String url = Util.makeDoubleElevenH5Url(1);
+            if (url == null) {
+                Util.showLoginFragment();
+                return;
+            }
+            start(H5GameFragment.newInstance(url));
+        } else if (id == R.id.btn_view_award) {
+            String url = Util.makeDoubleElevenH5Url(2);
             if (url == null) {
                 Util.showLoginFragment();
                 return;
