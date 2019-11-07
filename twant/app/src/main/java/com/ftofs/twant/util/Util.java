@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -627,5 +628,30 @@ public class Util {
 
     public static String getLauncherClassName(Context context) {
         return context.getPackageName() + ".activity.SplashActivity";
+    }
+
+
+    /**
+     * 模板代碼對應的資源Id
+     * @param tplCode
+     * @return
+     */
+    public static Integer tplCodeToResId(String tplCode) {
+        if (tplCode.equals("memberReturnUpdate")) {
+            return R.drawable.icon_notice_return;
+        } else if (tplCode.equals("storeOpen") || tplCode.equals("storeClose") ||
+                tplCode.equals("storeInfoUpdate") || tplCode.equals("storeGoodsCommonNew") || tplCode.equals("storeAnnouncement") ||
+                tplCode.equals("storeGoodsCommonUpdate")) {
+            return R.drawable.icon_notice_store;
+        } else if (tplCode.equals("storeSalesPromotion") || tplCode.equals("memberDiscountCoupon")) {
+            return R.drawable.icon_notice_bargain;
+        } else if (tplCode.equals("memberWantCommentLike") || tplCode.equals("memberStoreWantCommentReply") || tplCode.equals("memberGoodsWantCommentReply")) {
+            return R.drawable.icon_notice_interactive;
+        } else if (tplCode.equals("memberWantPostLike") || tplCode.equals("memberFriendsApply") ||
+                tplCode.equals("memberFollowWantPost") || tplCode.equals("memberAgreeFriendsApply")) {
+            return R.drawable.icon_notice_friend;
+        }
+
+        return null;
     }
 }

@@ -75,7 +75,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     TextView tvPayAmount;
 
 
-    int[] payButtonIdArr = {R.id.btn_wallet, R.id.btn_mpay, /* R.id.btn_taifung_pay, R.id.btn_union_pay, */ R.id.btn_weixin_pay, R.id.btn_ali_pay};
+    int[] payButtonIdArr = {R.id.btn_wallet, R.id.btn_mpay, R.id.btn_taifung_pay, /* R.id.btn_union_pay, */ R.id.btn_weixin_pay, R.id.btn_ali_pay};
     /**
      * 支付商按鈕Id與View的Map
      */
@@ -218,8 +218,8 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 doWalletPay();
             } else if (selectedPayButtonId == R.id.btn_mpay) {
                 doMPay();
-            // } else if (selectedPayButtonId == R.id.btn_taifung_pay || selectedPayButtonId == R.id.btn_union_pay) {
-            //     doTaiFungPay();
+            } else if (selectedPayButtonId == R.id.btn_taifung_pay/* || selectedPayButtonId == R.id.btn_union_pay */) {
+                 doTaiFungPay();
             } else if (selectedPayButtonId == R.id.btn_weixin_pay) {
                 doWeixinPay();
             } else if (selectedPayButtonId == R.id.btn_ali_pay) {

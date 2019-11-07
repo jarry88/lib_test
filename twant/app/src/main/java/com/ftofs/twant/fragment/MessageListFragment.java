@@ -29,6 +29,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ReadMessagePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -182,6 +183,45 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                         int ordersId = Integer.valueOf(noticeItem.sn);
                         SLog.info("ordersId[%d]", ordersId);
                         start(OrderDetailFragment.newInstance(ordersId));
+                    } else if (StringUtil.equalsOne(noticeItem.tplCode, new String[] {
+                            "memberReturnAutoCancelNotice", "memberReturnUpdate"
+                    })) {
+
+                        /*
+                        Util.startFragment(RefundDetailFragment.newInstance(refundItem.refundId, EasyJSONObject.generate(
+                                "action", action,
+                                "goodsFullSpecs", refundItem.goodsFullSpecs,
+                                "goodsPrice", refundItem.goodsPrice,
+                                "buyNum", refundItem.buyNum).toString()));
+                                */
+                    } else if (StringUtil.equalsOne(noticeItem.tplCode, new String[] {
+                            "storeGoodsCommonUpdate", "storeAnnouncement", "storeHr", "storeInfoUpdate",
+                            "storeOpen", "storeClose", "storeSalesPromotion"
+                    })) {
+                        int storeId = Integer.valueOf(noticeItem.sn);
+                        SLog.info("storeId[%d]", storeId);
+                        start(ShopMainFragment.newInstance(storeId));
+                    } else if (StringUtil.equalsOne(noticeItem.tplCode, new String[] {
+                            "memberFriendsApply", "memberAgreeFriendsApply"
+                    })) {
+                        Object iconRes = Util.tplCodeToResId(noticeItem.tplCode);
+                        if (iconRes == null && !StringUtil.isEmpty(noticeItem.imageUrl)) {
+                            iconRes = noticeItem.imageUrl;
+                        }
+
+                        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                                .setPopupCallback(new XPopupCallback() {
+                                    @Override
+                                    public void onShow() {
+                                    }
+                                    @Override
+                                    public void onDismiss() {
+                                    }
+                                }).asCustom(new ReadMessagePopup(_mActivity, noticeItem.title, noticeItem.createTime, iconRes, noticeItem.content))
+                                .show();
                     }
                 }
             }
