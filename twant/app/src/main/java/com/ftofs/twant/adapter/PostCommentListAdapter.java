@@ -89,7 +89,7 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> {
 
         ImageView iconThumb = itemView.findViewById(R.id.icon_thumb);
         if (itemData.isLike == 1) {
-            iconThumb.setImageResource(R.drawable.icon_comment_thumb_blue);
+            iconThumb.setImageResource(R.drawable.icon_thumb_red_60);
         } else {
             iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
         }

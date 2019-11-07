@@ -108,7 +108,7 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
 
         ImageView iconCommentThumb = itemView.findViewById(R.id.icon_comment_thumb);
         if (itemData.isLike == 1) {
-            iconCommentThumb.setImageResource(R.drawable.icon_comment_thumb_blue);
+            iconCommentThumb.setImageResource(R.drawable.icon_thumb_red_60);
         } else {
             iconCommentThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
         }

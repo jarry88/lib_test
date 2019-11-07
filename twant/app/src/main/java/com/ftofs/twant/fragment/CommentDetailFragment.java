@@ -540,7 +540,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
     private void updateThumbState() {
         if (commentItem.isLike == 1) {
-            iconThumb.setImageResource(R.drawable.icon_comment_thumb_blue);
+            iconThumb.setImageResource(R.drawable.icon_thumb_red_60);
         } else {
             iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
         }
