@@ -173,6 +173,45 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                             .show();
                 } else if (id == R.id.ll_swipe_content) {
                     SLog.info("HERE");
+                    String token = User.getToken();
+
+                    EasyJSONObject params = EasyJSONObject.generate(
+                            "token", token,
+                            "messageId", noticeItem.id);
+
+                    Api.postUI(Api.PATH_MARK_ALL_MESSAGE_READ, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(_mActivity, e);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            try {
+                                SLog.info("responseStr[%s]", responseStr);
+
+                                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                    return;
+                                }
+
+                                noticeItem.isRead = true;
+                                adapter.notifyItemChanged(position);
+
+                                try {
+                                    UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getArray("datas.unreadList"));
+                                    if (unreadCount != null) {
+                                        UnreadCount.save(unreadCount);
+                                    }
+                                } catch (Exception e) {
+
+                                }
+                            } catch (Exception e) {
+
+                            }
+                        }
+                    });
+
 
                     SLog.info("tplCode[%s]", noticeItem.tplCode);
                     if (StringUtil.equalsOne(noticeItem.tplCode, new String[] {
