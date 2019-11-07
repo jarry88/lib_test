@@ -2,6 +2,7 @@ package com.ftofs.twant.activity;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PermissionGroupInfo;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 import com.alipay.sdk.app.PayTask;
+import com.facebook.CallbackManager;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
@@ -68,6 +70,8 @@ import okhttp3.Response;
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     long lastBackPressedTime;
     MainFragment mainFragment;
+
+    CallbackManager callbackManager;
 
     private int keyboardState = Constant.KEYBOARD_HIDDEN;
 
@@ -194,6 +198,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 return null;
             }
         });
+
+        callbackManager = CallbackManager.Factory.create();
     }
 
     @Override
@@ -431,5 +437,15 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         };
         // 必须异步调用
         TwantApplication.getThreadPool().execute(payRunnable);
+    }
+
+    public CallbackManager getCallbackManager() {
+        return callbackManager;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

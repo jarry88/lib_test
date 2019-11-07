@@ -11,9 +11,14 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.BadgeUtil;
 import com.ftofs.twant.util.Util;
@@ -24,6 +29,7 @@ import com.ftofs.twant.util.Vendor;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
+    LoginButton loginButton;
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -45,6 +51,28 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_facebook_share, this);
+
+        loginButton = view.findViewById(R.id.btn_facebook_login);
+        loginButton.setReadPermissions("email");
+        // 在fragment中使用
+        loginButton.setFragment(this);
+        // 回调
+        loginButton.registerCallback(((MainActivity) _mActivity).getCallbackManager(), new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
     }
 
     @Override
