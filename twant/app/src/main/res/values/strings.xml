@@ -527,6 +527,7 @@
 
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>
+    <string name="fb_login_protocol_scheme">fb339526026920454</string>
     <string name="facebook_app_secret">68ef5623b8b1201eeef728307d72674e</string>
 
     <string name="umeng_app_key">5cee21bd4ca357016b00068d</string>

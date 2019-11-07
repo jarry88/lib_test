@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.BadgeUtil;
@@ -21,15 +24,6 @@ import com.ftofs.twant.util.Vendor;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
-    LinearLayout llMenu;
-    TextView tvContent;
-    int screenWidth;
-
-    int menuShrunkWidth;
-    int menuExpandedWidth;
-    int contentWidth;
-
-    boolean isShrunk = true;
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -50,29 +44,19 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Util.setOnClickListener(view, R.id.btn_test, this);
-
-        llMenu = view.findViewById(R.id.ll_menu);
-        tvContent = view.findViewById(R.id.tv_content);
-
-        Pair<Integer, Integer> dim = Util.getScreenDimemsion(_mActivity);
-        screenWidth = dim.first;
-
-        menuShrunkWidth = Util.dip2px(_mActivity, 100);
-        menuExpandedWidth = screenWidth * 2 / 3;
-        contentWidth = screenWidth - menuShrunkWidth;
-
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) tvContent.getLayoutParams();
-        layoutParams.width = contentWidth;
+        Util.setOnClickListener(view, R.id.btn_facebook_share, this);
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.btn_test) {
-            // new BadgeUtil().setHuaweiBadgeNum(_mActivity, 12);
-            BadgeUtil.setBadgeNum(_mActivity, 22);
-            SLog.info("prop[%s]", "prop");
+        if (id == R.id.btn_facebook_share) {
+            ShareLinkContent content = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse("https://www.snailpad.cn"))
+                    .build();
+
+            //调用分享弹窗
+            ShareDialog.show(_mActivity, content);
         }
     }
 
