@@ -29,6 +29,10 @@ import com.ftofs.twant.util.Vendor;
  * @author zwm
  */
 public class TestFragment extends BaseFragment implements View.OnClickListener {
+    /**
+     * facebook登錄按鈕
+     * facebook分享、登錄參考  https://blog.csdn.net/qq_41545435/article/details/88601716
+     */
     LoginButton loginButton;
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
