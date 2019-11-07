@@ -48,9 +48,11 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
 
 
             helper.setText(R.id.tv_store_name, item.storeName);
+            String mainBusiness = "";
             if (!StringUtil.isEmpty(item.mainBusiness)) {
-                helper.setText(R.id.tv_main_business, mContext.getString(R.string.text_main_business) + ": " + item.mainBusiness);
+                mainBusiness = mContext.getString(R.string.text_main_business) + ": " + item.mainBusiness;
             }
+            helper.setText(R.id.tv_main_business, mainBusiness);
 
             if (StringUtil.isEmpty(item.className)) {
                 helper.setGone(R.id.tv_store_class, false);
