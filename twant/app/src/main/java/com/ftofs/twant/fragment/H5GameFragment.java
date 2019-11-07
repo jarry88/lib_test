@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -26,13 +27,14 @@ import com.lxj.xpopup.core.BasePopupView;
 public class H5GameFragment extends BaseFragment implements View.OnClickListener {
     BasePopupView loadingPopup;
     String url;
-    boolean ignoreSslError;
+    boolean ignoreSslError = true;
     WebView webView;
 
-    public static H5GameFragment newInstance(String url) {
+    public static H5GameFragment newInstance(String url, boolean ignoreSslError) {
         Bundle args = new Bundle();
 
         args.putString("url", url);
+        args.putBoolean("ignoreSslError", ignoreSslError);
         H5GameFragment fragment = new H5GameFragment();
         fragment.setArguments(args);
 
@@ -62,6 +64,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
         webView.getSettings().setJavaScriptEnabled(true);
         NativeJsBridge nativeJsBridge = new NativeJsBridge();
         webView.addJavascriptInterface(nativeJsBridge, "android");
+        // webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -84,8 +87,10 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                // return super.shouldOverrideUrlLoading(view, request);
-                return true;
+                return super.shouldOverrideUrlLoading(view, request);
+                // SLog.info("url[%s]", url);
+                // view.loadUrl(url);
+                // return false;
             }
         });
 

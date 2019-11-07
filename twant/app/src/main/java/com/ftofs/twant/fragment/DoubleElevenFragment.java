@@ -76,14 +76,15 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
                 Util.showLoginFragment();
                 return;
             }
-            start(H5GameFragment.newInstance(url));
+            start(H5GameFragment.newInstance(url, true));
         } else if (id == R.id.btn_view_award) {
             String url = Util.makeDoubleElevenH5Url(2);
+            // url = "https://www.snailpad.cn/302.php";
             if (url == null) {
                 Util.showLoginFragment();
                 return;
             }
-            start(H5GameFragment.newInstance(url));
+            start(H5GameFragment.newInstance(url, true));
         } else if (id == R.id.btn_back) {
             pop();
         }

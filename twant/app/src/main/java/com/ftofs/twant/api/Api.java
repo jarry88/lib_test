@@ -909,6 +909,12 @@ public class Api {
 
 
     /**
+     * 雙11促銷商品搜索
+     */
+    public static final String PATH_SEARCH_PROMOTION = "/search/promotion";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

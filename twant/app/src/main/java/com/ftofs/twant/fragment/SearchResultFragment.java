@@ -399,7 +399,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             Util.showLoginFragment();
                             return;
                         }
-                        start(H5GameFragment.newInstance(url));
+                        start(H5GameFragment.newInstance(url, true));
                     } else if (id == R.id.btn_back) {
                         pop();
                     }
@@ -490,7 +490,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
             if (searchType == SearchType.GOODS) {
                 SLog.info("params[%s]", params);
-                Api.getUI(Api.PATH_SEARCH_GOODS, params, new UICallback() {
+                String url = Api.PATH_SEARCH_GOODS;
+
+                if (isDoubleEleven) {
+                    url = Api.PATH_SEARCH_PROMOTION;
+                }
+
+                Api.getUI(url, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         ToastUtil.showNetworkError(_mActivity, e);

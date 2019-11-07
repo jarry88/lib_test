@@ -32,7 +32,8 @@
     <RelativeLayout
         android:id="@+id/rl_pre_double_eleven"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
         <View
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -67,10 +68,10 @@
         android:id="@+id/rl_after_double_eleven"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFF50057"
-        android:visibility="gone">
+        android:background="#FFF50057">
 
         <ImageView
+            android:id="@+id/img_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -88,11 +89,11 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="6dp"
-            android:layout_below="@id/double_eleven_activity_main_logo"
+            android:layout_above="@id/img_footer"
             android:orientation="horizontal">
             <RelativeLayout
                 android:layout_width="0dp"
@@ -102,6 +103,7 @@
                     android:id="@+id/btn_go_shopping"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:src="@drawable/btn_go_shopping"
                     />
             </RelativeLayout>
@@ -113,6 +115,7 @@
                     android:id="@+id/btn_play_game"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:src="@drawable/btn_play_game"
                     />
             </RelativeLayout>
@@ -124,6 +127,7 @@
                     android:id="@+id/btn_view_award"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:src="@drawable/btn_view_my_award"
                     />
             </RelativeLayout>
