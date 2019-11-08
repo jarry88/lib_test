@@ -296,8 +296,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         long now = System.currentTimeMillis();
         long doubleElevenTimestamp = Jarbon.parse("2019-11-11").getTimestampMillis();
         SLog.info("doubleElevenTimestamp[%s]", doubleElevenTimestamp);
-        // 最多24小時顯示一次活動彈窗，而且要雙11當天后才顯示
-        if (now >= doubleElevenTimestamp && now - doubleElevenPopupShownTimestamp > 3600 * 1000 * 24) {
+        // 最多只顯示一次活動彈窗，而且要雙11當天后才顯示
+        if (now >= doubleElevenTimestamp && doubleElevenPopupShownTimestamp == 0) {
             if (doubleElevenPopup == null) {
                 doubleElevenPopup = (DoubleElevenPopup) new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
