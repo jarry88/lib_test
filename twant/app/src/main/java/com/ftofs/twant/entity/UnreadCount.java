@@ -15,7 +15,7 @@ import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
- * 未讀消息數
+ * 站內未讀消息數
  * @author zwm
  */
 public class UnreadCount {

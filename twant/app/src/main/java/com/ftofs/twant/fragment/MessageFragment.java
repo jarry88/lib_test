@@ -25,6 +25,7 @@ import com.ftofs.twant.entity.UnreadCount;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.util.BadgeUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -72,7 +73,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
     LinearLayout llMessageListContainer;
 
-    int totalUnreadCount;  // 未讀消息總數
+    int totalIMUnreadCount;  // 未讀IM消息總數
     UnreadCount unreadCount;
 
 
@@ -167,8 +168,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
                 if (chatConversation.unreadCount > 0) {
                     // 從未讀總數中減去這條會話的未讀數
-                    totalUnreadCount -= chatConversation.unreadCount;
-                    displayUnreadCount(totalUnreadCount);
+                    totalIMUnreadCount -= chatConversation.unreadCount;
+                    displayUnreadCount();
                 }
 
                 Util.startFragment(ChatFragment.newInstance(conversation, chatConversation.friendInfo));
@@ -254,7 +255,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
     private void loadData() {
         try {
-            totalUnreadCount = 0;
+            totalIMUnreadCount = 0;
             chatConversationList.clear();
 
             // 獲取環信所有會話列表
@@ -297,11 +298,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 chatConversation.lastMessageType = ChatUtil.getIntMessageType(lastMessage);
                 chatConversation.lastMessage = lastMessage.getBody().toString();
                 chatConversation.timestamp = lastMessage.getMsgTime();
-                totalUnreadCount += chatConversation.unreadCount;
+                totalIMUnreadCount += chatConversation.unreadCount;
 
                 chatConversationList.add(chatConversation);
             }
-            displayUnreadCount(totalUnreadCount);
+            displayUnreadCount();
 
             adapter.setNewData(chatConversationList);
         } catch (Exception e) {
@@ -348,13 +349,24 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         });
     }
 
-    private void displayUnreadCount(int totalUnreadCount) {
+    /**
+     * 更新未讀數提示
+     */
+    private void displayUnreadCount() {
+        int totalUnreadCount = totalIMUnreadCount;
+        UnreadCount unreadCount = UnreadCount.get();
+        if (unreadCount != null) {
+            totalUnreadCount += (unreadCount.transact);
+        }
+
         MainFragment mainFragment = MainFragment.getInstance();
         if (mainFragment != null) {
             mainFragment.setMessageItemCount(totalUnreadCount);
         }
-    }
 
+
+        BadgeUtil.setBadgeNum(_mActivity, totalUnreadCount);
+    }
 
     @Override
     public void onClick(View v) {
@@ -481,5 +493,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         } else {
             tvNoticeMessageItemCount.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * 更新角標總數
+     */
+    private void updateTotalBadge() {
+
     }
 }
