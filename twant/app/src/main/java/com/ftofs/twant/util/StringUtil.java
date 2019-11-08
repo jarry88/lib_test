@@ -97,7 +97,7 @@ public class StringUtil {
         for (int i = 0; i < spaceCount; i++) {
             sb.append(" ");
         }
-        sb.append(String.format("%.2f", price));
+        sb.append(String.format("%2f", price));
         return sb.toString();
     }
 

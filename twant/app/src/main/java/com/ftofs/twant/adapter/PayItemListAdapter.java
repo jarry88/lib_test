@@ -148,7 +148,7 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
             if (item.showPayButton) {
                 // 子View點擊事件
                 helper.addOnClickListener(R.id.btn_pay_order);
-                helper.setText(R.id.btn_pay_order, "支付訂單 " + String.format("%.2f", item.payAmount));
+                helper.setText(R.id.btn_pay_order, "支付訂單 " + String.format("%2f", item.payAmount));
                 helper.setGone(R.id.btn_pay_order, true);
             } else {
                 helper.setGone(R.id.btn_pay_order, false);

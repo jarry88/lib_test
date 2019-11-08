@@ -787,14 +787,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         allowSend = responseObj.getInt("datas.freight.allowSend");
                         float freightAmount = (float) responseObj.getDouble("datas.freight.freightAmount");
                         if (allowSend == 1) {
-                            tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
+                            tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%2f", freightAmount));
                         } else {
                             tvFreightAmount.setText(getString(R.string.text_not_allow_send));
                         }
                     }
 
                     float goodsPrice = Util.getSpuPrice(goodsDetail);
-                    tvGoodsPrice.setText(String.format("%.2f", goodsPrice));
+                    tvGoodsPrice.setText(String.format("%2f", goodsPrice));
 
                     // 是否点赞
                     isLike = goodsDetail.getInt("isLike");
@@ -1390,7 +1390,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     allowSend = freight.getInt("allowSend");
                     if (allowSend == 1) {
                         float freightAmount = (float) freight.getDouble("freightAmount");
-                        tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%.2f", freightAmount));
+                        tvFreightAmount.setText(getString(R.string.text_freight) + String.format("%2f", freightAmount));
                     } else {
                         tvFreightAmount.setText(getString(R.string.text_not_allow_send));
                     }
