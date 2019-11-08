@@ -202,7 +202,7 @@
                             android:text="@string/text_time_limited_offer"
                             android:textColor="#fff"
                             android:textSize="12sp"
-                            android:background="@color/tw_red"
+                            android:background="@color/tw_yellow"
                             />
                     </LinearLayout>
                 </LinearLayout>
@@ -410,9 +410,8 @@
                         android:layout_centerVertical="true"
                         android:padding="3dp"
                         android:text="@string/text_receive_voucher"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"
-                        android:background="#FEB809"
+                        android:textColor="@color/tw_dark_grey"
+                        android:textSize="14sp"
                         />
                     <ImageView
                         android:id="@+id/icon_expand_voucher"
@@ -422,21 +421,22 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/expand_button_red"
                         />
-                    <TextView
-                        android:id="@+id/tv_voucher_text"
-                        android:layout_width="match_parent"
+
+                    <HorizontalScrollView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_toRightOf="@id/text_receive_voucher"
                         android:layout_toLeftOf="@id/icon_expand_voucher"
-                        android:layout_centerVertical="true"
-                        android:text=""
-                        android:textSize="14sp"
-                        android:textColor="@color/tw_red"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        />
+                        android:layout_centerVertical="true">
+                        <LinearLayout
+                            android:id="@+id/ll_voucher_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                        </LinearLayout>
+                    </HorizontalScrollView>
                 </RelativeLayout>
 
 
@@ -502,9 +502,8 @@
                         android:layout_centerVertical="true"
                         android:padding="3dp"
                         android:text="@string/text_promotion"
-                        android:textColor="@android:color/white"
-                        android:textSize="11sp"
-                        android:background="#FEB809"
+                        android:textColor="@color/tw_dark_grey"
+                        android:textSize="14sp"
                         />
                     <ImageView
                         android:id="@+id/icon_expand_conform"
@@ -528,14 +527,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:paddingTop="1dp"
-                            android:paddingBottom="1dp"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
                             android:text="贈品"
-                            android:textSize="14sp"
-                            android:textColor="@color/tw_red"
-                            android:background="@drawable/tv_gift_hint_bg"
+                            android:textSize="12sp"
+                            android:textColor="@android:color/white"
+                            android:background="@drawable/icon_goods_bargain_bg"
                             android:visibility="gone"
                             />
 
@@ -544,14 +543,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:paddingTop="1dp"
-                            android:paddingBottom="1dp"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
                             android:text="滿優惠"
-                            android:textSize="14sp"
-                            android:textColor="@color/tw_red"
-                            android:background="@drawable/tv_gift_hint_bg"
+                            android:textSize="12sp"
+                            android:textColor="@android:color/white"
+                            android:background="@drawable/icon_goods_bargain_bg"
                             android:visibility="gone"
                             />
                     </LinearLayout>

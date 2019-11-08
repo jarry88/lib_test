@@ -160,7 +160,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     List<Integer> selSpecValueIdList = new ArrayList<>();
 
     RelativeLayout btnShowVoucher;
-    TextView tvVoucherText;
 
     RelativeLayout btnShowConform;
     TextView tvConformHint;
@@ -211,6 +210,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     CountDownHandler countDownHandler;
 
     boolean isDataValid;
+
+    LinearLayout llVoucherContainer;
 
     static class CountDownHandler extends Handler {
         WeakReference<GoodsDetailFragment> weakReference;
@@ -318,9 +319,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         Util.setOnClickListener(view, R.id.btn_goods_share, this);
 
+        llVoucherContainer = view.findViewById(R.id.ll_voucher_container);
         btnShowVoucher = view.findViewById(R.id.btn_show_voucher);
         btnShowVoucher.setOnClickListener(this);
-        tvVoucherText = view.findViewById(R.id.tv_voucher_text);
 
         btnShowConform = view.findViewById(R.id.btn_show_conform);
         btnShowConform.setOnClickListener(this);
@@ -661,29 +662,32 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     try {
-                        boolean first;
                         // 【領券】優惠
                         storeVoucherList.clear();
                         EasyJSONArray couponList = responseObj.getArray("datas.list");
                         if (couponList.length() > 0) {
-                            first = true;
-                            StringBuilder voucherText = new StringBuilder();
                             for (Object object : couponList) {
-                                if (!first) {
-                                    voucherText.append(" / ");
-                                }
+                                TextView tvVoucher = new TextView(_mActivity);
+                                tvVoucher.setTextSize(12);
+                                tvVoucher.setTextColor(getResources().getColor(android.R.color.white, null));
+                                tvVoucher.setGravity(Gravity.CENTER);
+                                tvVoucher.setBackgroundResource(R.drawable.yellow_coupon_bg);
+                                tvVoucher.setPadding(Util.dip2px(_mActivity, 5.5f), Util.dip2px(_mActivity, 4),
+                                        Util.dip2px(_mActivity, 5.5f), Util.dip2px(_mActivity, 4));
+                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                layoutParams.rightMargin = Util.dip2px(_mActivity, 10);
+
                                 EasyJSONObject voucher = (EasyJSONObject) object;
                                 int limitAmount = (int) voucher.getDouble("searchCouponActivityVo.limitAmount");
                                 int couponPrice = (int) voucher.getDouble("searchCouponActivityVo.couponPrice");
 
                                 if (limitAmount == 0) {
                                     // 如果為0，表示無門檻
-                                    voucherText.append(String.format("$%d無門檻", couponPrice));
+                                    tvVoucher.setText(String.format("$%d無門檻", couponPrice));
                                 } else {
-                                    voucherText.append(String.format("滿%d減%d", limitAmount, couponPrice));
+                                    tvVoucher.setText(String.format("滿%d減%d", limitAmount, couponPrice));
                                 }
-
-                                first = false;
+                                llVoucherContainer.addView(tvVoucher, layoutParams);
 
                                 String useGoodsRangeExplain = voucher.getString("searchCouponActivityVo.useGoodsRangeExplain");
                                 int memberIsReceive = voucher.getInt("memberIsReceive");
@@ -699,7 +703,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 storeVoucherList.add(storeVoucher);
                             }
 
-                            tvVoucherText.setText(voucherText);
                             btnShowVoucher.setVisibility(VISIBLE);
                         }
                     } catch (Exception e) {
