@@ -339,7 +339,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getArray("datas.unreadList"));
                     if (unreadCount != null) {
                         UnreadCount.save(unreadCount);
-                        refreshUnreadCount();
+                        displayUnreadCount();
                     }
 
                 } catch (Exception e) {
@@ -354,10 +354,51 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
      */
     private void displayUnreadCount() {
         int totalUnreadCount = totalIMUnreadCount;
+
+
         UnreadCount unreadCount = UnreadCount.get();
-        if (unreadCount != null) {
-            totalUnreadCount += (unreadCount.transact);
+        if (unreadCount == null) {
+            unreadCount = new UnreadCount();
         }
+
+        if (unreadCount.transact > 0) {
+            tvTransactMessageItemCount.setText(String.valueOf(unreadCount.transact));
+            tvTransactMessageItemCount.setVisibility(View.VISIBLE);
+        } else {
+            tvTransactMessageItemCount.setVisibility(View.GONE);
+        }
+
+        if (unreadCount.asset > 0) {
+            tvAssetMessageItemCount.setText(String.valueOf(unreadCount.asset));
+            tvAssetMessageItemCount.setVisibility(View.VISIBLE);
+        } else {
+            tvAssetMessageItemCount.setVisibility(View.GONE);
+        }
+
+        if (unreadCount.social > 0) {
+            tvSocialMessageItemCount.setText(String.valueOf(unreadCount.social));
+            tvSocialMessageItemCount.setVisibility(View.VISIBLE);
+        } else {
+            tvSocialMessageItemCount.setVisibility(View.GONE);
+        }
+
+        if (unreadCount.bargain > 0) {
+            tvBargainMessageItemCount.setText(String.valueOf(unreadCount.bargain));
+            tvBargainMessageItemCount.setVisibility(View.VISIBLE);
+        } else {
+            tvBargainMessageItemCount.setVisibility(View.GONE);
+        }
+
+        if (unreadCount.notice > 0) {
+            tvNoticeMessageItemCount.setText(String.valueOf(unreadCount.notice));
+            tvNoticeMessageItemCount.setVisibility(View.VISIBLE);
+        } else {
+            tvNoticeMessageItemCount.setVisibility(View.GONE);
+        }
+
+
+        totalUnreadCount += (unreadCount.transact + unreadCount.asset + unreadCount.social + unreadCount.bargain + unreadCount.notice);
+
 
         MainFragment mainFragment = MainFragment.getInstance();
         if (mainFragment != null) {
@@ -444,61 +485,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         SqliteUtil.imLogin();
 
         loadData();
-
-        refreshUnreadCount();
+        displayUnreadCount();
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
-    }
-
-    private void refreshUnreadCount() {
-        unreadCount = UnreadCount.get();
-        if (unreadCount == null) {
-            unreadCount = new UnreadCount();
-        }
-
-        if (unreadCount.transact > 0) {
-            tvTransactMessageItemCount.setText(String.valueOf(unreadCount.transact));
-            tvTransactMessageItemCount.setVisibility(View.VISIBLE);
-        } else {
-            tvTransactMessageItemCount.setVisibility(View.GONE);
-        }
-
-        if (unreadCount.asset > 0) {
-            tvAssetMessageItemCount.setText(String.valueOf(unreadCount.asset));
-            tvAssetMessageItemCount.setVisibility(View.VISIBLE);
-        } else {
-            tvAssetMessageItemCount.setVisibility(View.GONE);
-        }
-
-        if (unreadCount.social > 0) {
-            tvSocialMessageItemCount.setText(String.valueOf(unreadCount.social));
-            tvSocialMessageItemCount.setVisibility(View.VISIBLE);
-        } else {
-            tvSocialMessageItemCount.setVisibility(View.GONE);
-        }
-
-        if (unreadCount.bargain > 0) {
-            tvBargainMessageItemCount.setText(String.valueOf(unreadCount.bargain));
-            tvBargainMessageItemCount.setVisibility(View.VISIBLE);
-        } else {
-            tvBargainMessageItemCount.setVisibility(View.GONE);
-        }
-
-        if (unreadCount.notice > 0) {
-            tvNoticeMessageItemCount.setText(String.valueOf(unreadCount.notice));
-            tvNoticeMessageItemCount.setVisibility(View.VISIBLE);
-        } else {
-            tvNoticeMessageItemCount.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * 更新角標總數
-     */
-    private void updateTotalBadge() {
-
     }
 }
