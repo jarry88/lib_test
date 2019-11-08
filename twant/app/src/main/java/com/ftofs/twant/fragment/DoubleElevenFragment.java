@@ -47,7 +47,7 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
 
         long now = System.currentTimeMillis();
         long doubleElevenTimestamp = Jarbon.parse("2019-11-11").getTimestampMillis();
-        if (now < doubleElevenTimestamp) { // 未到雙十一
+        if (false && now < doubleElevenTimestamp) { // 未到雙十一
             ImageView preDoubleElevenBg = view.findViewById(R.id.pre_double_eleven_bg);
             Glide.with(_mActivity).load(R.drawable.pre_double_eleven_bg).into(preDoubleElevenBg);
 
