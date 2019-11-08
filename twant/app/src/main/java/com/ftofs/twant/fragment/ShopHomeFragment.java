@@ -616,7 +616,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
 
                             if (index % 2 == 0) {
-                                storeGoodsPair = new StoreGoodsPair();
+                                storeGoodsPair = new StoreGoodsPair(StoreGoodsPair.TYPE_NEW);
                                 storeNewInItemList.add(storeGoodsPair);
 
                                 storeGoodsPair.leftItem = storeGoodsItem;
@@ -668,7 +668,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
 
                             if (index % 2 == 0) {
-                                storeGoodsPair = new StoreGoodsPair();
+                                storeGoodsPair = new StoreGoodsPair(StoreGoodsPair.TYPE_HOT);
                                 storeHotItemList.add(storeGoodsPair);
 
                                 storeGoodsPair.leftItem = storeGoodsItem;

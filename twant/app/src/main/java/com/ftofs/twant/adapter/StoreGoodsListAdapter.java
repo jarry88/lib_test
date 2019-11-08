@@ -34,6 +34,13 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
 
             ImageView leftGoodsImage = itemView.findViewById(R.id.left_goods_image);
             Glide.with(context).load(itemData.leftItem.imageSrc).centerCrop().into(leftGoodsImage);
+
+            ImageView leftGoodsProp = itemView.findViewById(R.id.left_goods_prop);
+            if (itemData.type == StoreGoodsPair.TYPE_NEW) {
+                leftGoodsProp.setImageResource(R.drawable.icon_goods_new);
+            } else {
+                leftGoodsProp.setImageResource(R.drawable.icon_goods_hot);
+            }
         } else {
             ((ViewGroup) itemView.findViewById(R.id.ll_left_item_container)).removeAllViews();
         }
@@ -45,6 +52,13 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
 
             ImageView rightGoodsImage = itemView.findViewById(R.id.right_goods_image);
             Glide.with(context).load(itemData.rightItem.imageSrc).centerCrop().into(rightGoodsImage);
+
+            ImageView rightGoodsProp = itemView.findViewById(R.id.right_goods_prop);
+            if (itemData.type == StoreGoodsPair.TYPE_NEW) {
+                rightGoodsProp.setImageResource(R.drawable.icon_goods_new);
+            } else {
+                rightGoodsProp.setImageResource(R.drawable.icon_goods_hot);
+            }
         } else {
             ((ViewGroup) itemView.findViewById(R.id.ll_right_item_container)).removeAllViews();
         }
