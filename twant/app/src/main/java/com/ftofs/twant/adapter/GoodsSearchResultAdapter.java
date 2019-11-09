@@ -15,6 +15,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GoodsSearchItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.widget.SlantedWidget;
 
@@ -91,6 +92,12 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
         } else if (itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
             helper.addOnClickListener(R.id.btn_play_game)
                     .addOnClickListener(R.id.btn_back);
+            long now = System.currentTimeMillis();
+            long doubleElevenTimestamp = Jarbon.parse("2019-11-11").getTimestampMillis();
+
+            if (now > doubleElevenTimestamp) {
+                helper.setGone(R.id.btn_play_game, true);
+            }
         } else {
             // 顯示即可，不用特別處理
             if (animation == null) {
