@@ -14,8 +14,8 @@ android {
         applicationId "com.ftofs.twant"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 15
-        versionName "1.2.2.80"
+        versionCode 16
+        versionName "1.2.2.81"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
