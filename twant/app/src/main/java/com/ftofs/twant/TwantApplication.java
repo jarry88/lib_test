@@ -42,6 +42,7 @@ import com.orhanobut.hawk.Hawk;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
@@ -260,7 +261,10 @@ public class TwantApplication extends Application {
         // 参数三：渠道名称；
         // 参数四：设备类型，必须参数，传参数为UMConfigure.DEVICE_TYPE_PHONE则表示手机；传参数为UMConfigure.DEVICE_TYPE_BOX则表示盒子；默认为手机；
         // 参数五：Push推送业务的secret 填充Umeng Message Secret对应信息（需替换）
-        UMConfigure.init(this, getString(R.string.umeng_push_app_key), "Umeng", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret));
+        UMConfigure.init(this, getString(R.string.umeng_push_app_key), "official", UMConfigure.DEVICE_TYPE_PHONE, getString(R.string.umeng_push_message_secret));
+
+        // 友盟統計：选用AUTO页面采集模式
+        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
 
         //获取消息推送代理示例
         mPushAgent = PushAgent.getInstance(this);
