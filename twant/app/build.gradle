@@ -24,6 +24,15 @@ android {
 
         resConfigs "zh", "en"
     }
+    flavorDimensions "channel"
+    productFlavors {
+        // Google Play渠道
+        google {
+        }
+        // 官網渠道
+        official {
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
