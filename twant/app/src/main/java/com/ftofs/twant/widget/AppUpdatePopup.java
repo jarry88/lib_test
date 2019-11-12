@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.health.SystemHealthManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -22,16 +24,19 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PathUtil;
+import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 import com.orhanobut.hawk.Hawk;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
 
@@ -67,7 +72,7 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
         this.isForceUpdate = isForceUpdate;
 
         if (Config.DEVELOPER_MODE) {
-            appUrl = "https://gfile.oss-cn-hangzhou.aliyuncs.com/takewant/twant_12250_app_update_test.apk";
+            // appUrl = "https://gfile.oss-cn-hangzhou.aliyuncs.com/takewant/twant_12250_app_update_test.apk";
         }
         this.appUrl = appUrl;
     }
@@ -123,50 +128,73 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
             通过配置Flavors和自定义buildConfigField进行多个服务器地址打包
             https://blog.csdn.net/qxf5777404/article/details/51580431
              */
-            SLog.info("flavor[%s]", BuildConfig.FLAVOR);
+
             if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_GOOGLE)) {
                 // 跳轉到Google Play
                 Util.gotoGooglePlay(activity);
             } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_OFFICIAL)) {
-                TaskObserver taskObserver = new TaskObserver() {
+                PermissionUtil.actionWithPermission(getContext(), new String[] {Permission.WRITE_EXTERNAL_STORAGE,
+                        Permission.READ_EXTERNAL_STORAGE}, "下載升級包需要授予", new CommonCallback() {
+
                     @Override
-                    public void onMessage() {
-                        String path = (String) message; // 成功時，返回安裝包的路徑；失敗返回null
-                        MainActivity.getInstance().installUpdate(path);
+                    public String onSuccess(@Nullable String data) {
+                        downloadApk();
+                        return null;
                     }
-                };
 
-                TaskObservable taskObservable = new TaskObservable(taskObserver) {
                     @Override
-                    public Object doWork() {
-                        String filename = PathUtil.getFilename(appUrl);
-                        String path = "app_update/" + filename;
-                        SLog.info("path[%s]", path);
+                    public String onFailure(@Nullable String data) {
 
-                        File file = FileUtil.getCacheFile(activity, path);
-                        if (file == null) {
-                            return null;
-                        }
-                        SLog.info("file[%s]", file.getAbsolutePath());
-
-                        long now = System.currentTimeMillis();
-                        long downloadApp = Hawk.get(SPField.FIELD_DOWNLOAD_APP, 0);
-                        if (now - downloadApp < 10 * 60 * 1000) { // 如果10分鐘內下載過，不再重復下載
-                            SLog.info("如果10分鐘內下載過，不再重復下載");
-                            return null;
-                        }
-
-                        Hawk.put(SPField.FIELD_DOWNLOAD_APP, now);
-                        SLog.info("開始下載, appUrl[%s]", appUrl);
-                        boolean success =  Api.syncDownloadFile(appUrl, file);
-                        SLog.info("下載完成, success[%s], file size[%s]", success, file.length());
-                        Hawk.delete(SPField.FIELD_DOWNLOAD_APP);
-                        return path;
+                        return null;
                     }
-                };
-                TwantApplication.getThreadPool().execute(taskObservable);
+                });
             }
         }
         dismiss();
+    }
+
+    private void downloadApk() {
+        SLog.info("flavor[%s]", BuildConfig.FLAVOR);
+        if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_GOOGLE)) {
+            // 跳轉到Google Play
+            Util.gotoGooglePlay(activity);
+        } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_OFFICIAL)) {
+            TaskObserver taskObserver = new TaskObserver() {
+                @Override
+                public void onMessage() {
+                    String path = (String) message; // 成功時，返回安裝包的路徑；失敗返回null
+                    MainActivity.getInstance().installUpdate(path);
+                }
+            };
+
+            TaskObservable taskObservable = new TaskObservable(taskObserver) {
+                @Override
+                public Object doWork() {
+                    String apkFilename = PathUtil.getFilename(appUrl);
+
+                    // 存放apk包的路徑
+                    String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/takewant/app_update";
+                    SLog.info("dir[%s]", dir);
+
+                    FileUtil.createOrExistsDir(new File(dir));
+                    File apkFile = new File(dir + "/" + apkFilename);
+
+                    long now = System.currentTimeMillis();
+                    long downloadApp = Hawk.get(SPField.FIELD_DOWNLOAD_APP, 0);
+                    if (now - downloadApp < 10 * 60 * 1000) { // 如果10分鐘內下載過，不再重復下載
+                        SLog.info("如果10分鐘內下載過，不再重復下載");
+                        return null;
+                    }
+
+                    Hawk.put(SPField.FIELD_DOWNLOAD_APP, now);
+                    SLog.info("開始下載, appUrl[%s]", appUrl);
+                    boolean success =  Api.syncDownloadFile(appUrl, apkFile);
+                    SLog.info("下載完成, success[%s], file size[%s]", success, apkFile.length());
+                    Hawk.delete(SPField.FIELD_DOWNLOAD_APP);
+                    return apkFile.getAbsolutePath();
+                }
+            };
+            TwantApplication.getThreadPool().execute(taskObservable);
+        }
     }
 }

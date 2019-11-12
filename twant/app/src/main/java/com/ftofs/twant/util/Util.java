@@ -692,6 +692,11 @@ public class Util {
         }
     }
 
+    /**
+     * 獲取一個文件的MIME描述
+     * @param file
+     * @return
+     */
     public static String getMIMEType(File file) {
         String var1 = "";
         String var2 = file.getName();

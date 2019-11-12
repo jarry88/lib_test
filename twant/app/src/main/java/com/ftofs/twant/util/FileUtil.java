@@ -229,7 +229,7 @@ public class FileUtil {
     }
 
     /**
-     * 创建目录，并添加nomedia文件
+     * 创建目录
      * @param dir
      */
     public static boolean createDir(File dir) throws IOException {

@@ -221,7 +221,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         SLog.info("popupShownTimestamp[%s]", popupShownTimestamp);
 
         // 最近一次顯示時間超過一天，則進行檢查更新(主要用于前后臺切換時，不要重復顯示)
-        if (true || System.currentTimeMillis() - popupShownTimestamp > 24 * 3600 * 1000) {
+        if (System.currentTimeMillis() - popupShownTimestamp > 24 * 3600 * 1000) {
             EasyJSONObject params = EasyJSONObject.generate("version", BuildConfig.VERSION_NAME);
             SLog.info("params[%s]", params);
             Api.getUI(Api.PATH_CHECK_UPDATE, params, new UICallback() {
@@ -272,7 +272,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
                             String today = new Jarbon().toDateString();
                             String appUpdatePopupShownDate = Hawk.get(SPField.FIELD_APP_UPDATE_POPUP_SHOWN_DATE);
-                            if (false && !isForceUpdate && today.equals(appUpdatePopupShownDate)) { // 如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示
+                            if (!isForceUpdate && today.equals(appUpdatePopupShownDate)) { // 如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示
                                 SLog.info("如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示");
                                 return;
                             }
@@ -489,23 +489,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             startActivityForResult(intent, RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal());
             return;
         }
+        File apkFile = new File(path);
 
-
-        String dest = Environment.getExternalStorageDirectory().getAbsolutePath() + "/1/twant_12250_app_update_test.apk";
-        SLog.info("dest[%s]", dest);
-        File destFile = new File(dest);
-
-
-        File file = FileUtil.getCacheFile(this, path);
-
-        try {
-            FileUtil.copyFile(file, destFile);
-        } catch (Exception e) {
-
-        }
-
-
-        SLog.info("file size[%s]", destFile.length());
-        Util.openApkFile(destFile, this);
+        SLog.info("file size[%s]", apkFile.length());
+        Util.openApkFile(apkFile, this);
     }
 }
