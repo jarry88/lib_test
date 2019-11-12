@@ -120,7 +120,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         walletBalance = args.getFloat("walletBalance");
 
         tvPayAmount = view.findViewById(R.id.tv_pay_amount);
-        tvPayAmount.setText(String.format("%2f", payAmount));
+        tvPayAmount.setText(StringUtil.formatFloat(payAmount));
         tvWalletBalance = view.findViewById(R.id.tv_wallet_balance);
         tvWalletBalance.setText("(未激活)");
 

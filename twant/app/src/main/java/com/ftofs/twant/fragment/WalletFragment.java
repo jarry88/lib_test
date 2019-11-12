@@ -121,7 +121,7 @@ public class WalletFragment extends BaseFragment implements View.OnClickListener
 
                         // 獲取余額
                         float balance = (float) responseObj.getDouble("datas.memberInfo.predepositAvailable");
-                        tvAccountBalance.setText(String.format("%2f", balance));
+                        tvAccountBalance.setText(StringUtil.formatFloat(balance));
                     }
                 } catch (Exception e) {
                     SLog.info("Error!%s", e.getMessage());

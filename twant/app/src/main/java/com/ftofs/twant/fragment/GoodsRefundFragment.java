@@ -701,7 +701,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         }
 
                         maxRefundAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
-                        etRefundAmount.setText(String.format("%2f", maxRefundAmount));
+                        etRefundAmount.setText(StringUtil.formatFloat(maxRefundAmount));
 
                         tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
