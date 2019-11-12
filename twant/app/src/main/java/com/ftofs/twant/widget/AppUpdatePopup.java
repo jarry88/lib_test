@@ -72,7 +72,7 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
         this.isForceUpdate = isForceUpdate;
 
         if (Config.DEVELOPER_MODE) {
-            // appUrl = "https://gfile.oss-cn-hangzhou.aliyuncs.com/takewant/twant_12250_app_update_test.apk";
+            appUrl = "https://gfile.oss-cn-hangzhou.aliyuncs.com/takewant/twant_12250_app_update_test.apk";
         }
         this.appUrl = appUrl;
     }

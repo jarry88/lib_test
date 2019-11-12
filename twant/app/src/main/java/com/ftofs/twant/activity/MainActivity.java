@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     /**
      * App升級文件的路徑
      */
-    private String appUpdatePath;
+    private String updateApkPath;
 
     // TODO: 2019/8/19 處理HandlerLeak
     @SuppressLint("HandlerLeak")
@@ -459,9 +459,10 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
-        SLog.info("requestCode[%d], resultCode[%d]", requestCode, requestCode);
-        if (requestCode == RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal() && resultCode == RESULT_OK) {
-            installUpdate(appUpdatePath);
+        SLog.info("__requestCode[%d], resultCode[%d]", requestCode, resultCode);
+        if (requestCode == RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal()) { // 不用判斷resultCode，因為有時候是按返回鍵的
+            SLog.info("here_0");
+            installUpdate(updateApkPath);
         }
     }
 
@@ -473,6 +474,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
      * @param path 升級文件的路徑
      */
     public void installUpdate(String path) {
+        updateApkPath = path;
         if (path == null) {
             SLog.info("Error!下載升級包失敗");
             ToastUtil.error(this, "下載升級包失敗");
@@ -485,6 +487,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         }
 
         if (!haveInstallPermission) {
+            ToastUtil.info(this, "升級App需要開啟應用更新權限");
             Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
             startActivityForResult(intent, RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal());
             return;
