@@ -103,4 +103,9 @@ public enum RequestCode {
      * 修改個性簽名
      */
     EDIT_MEMBER_SIGNATURE,
+
+    /**
+     * 請求安裝APP的權限
+     */
+    REQUEST_INSTALL_APP_PERMISSION,
 }

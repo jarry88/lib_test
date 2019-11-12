@@ -40,6 +40,10 @@
     <uses-permission android:name="com.sonyericsson.home.action.UPDATE_BADGE" />
 
 
+    <!-- 安裝應用權限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+
     <application
         android:name=".TwantApplication"
         android:allowBackup="true"

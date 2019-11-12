@@ -1071,6 +1071,7 @@ public class Api {
     public static boolean syncDownloadFile(String url, File file) {
         FileOutputStream fos = null;
         InputStream is = null;
+        boolean result = true;
         try {
             OkHttpClient client = getOkHttpClient();
             Request request = new Request.Builder().url(url).build();
@@ -1093,7 +1094,8 @@ public class Api {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            SLog.info("Error!下載失敗");
+            result = false;
         } finally {
             try {
                 if (fos != null) {
@@ -1107,7 +1109,7 @@ public class Api {
             }
         }
 
-        return true;
+        return result;
     }
 
 

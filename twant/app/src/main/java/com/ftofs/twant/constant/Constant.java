@@ -261,4 +261,8 @@ public class Constant {
     public static final int ANIM_NOT_SHOWN = 0;
     public static final int ANIM_SHOWING = 1;
     public static final int ANIM_SHOWN = 2;
+
+    // 各種渠道
+    public static final String FLAVOR_GOOGLE = "google";
+    public static final String FLAVOR_OFFICIAL = "official";
 }

@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.content.pm.PermissionGroupInfo;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
@@ -33,6 +36,7 @@ import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
@@ -54,6 +58,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -76,6 +81,11 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     private int keyboardState = Constant.KEYBOARD_HIDDEN;
 
     private static MainActivity instance;
+
+    /**
+     * App升級文件的路徑
+     */
+    private String appUpdatePath;
 
     // TODO: 2019/8/19 處理HandlerLeak
     @SuppressLint("HandlerLeak")
@@ -211,7 +221,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         SLog.info("popupShownTimestamp[%s]", popupShownTimestamp);
 
         // 最近一次顯示時間超過一天，則進行檢查更新(主要用于前后臺切換時，不要重復顯示)
-        if (System.currentTimeMillis() - popupShownTimestamp > 24 * 3600 * 1000) {
+        if (true || System.currentTimeMillis() - popupShownTimestamp > 24 * 3600 * 1000) {
             EasyJSONObject params = EasyJSONObject.generate("version", BuildConfig.VERSION_NAME);
             SLog.info("params[%s]", params);
             Api.getUI(Api.PATH_CHECK_UPDATE, params, new UICallback() {
@@ -251,6 +261,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
                             String version = responseObj.getString("datas.version");
                             String versionDesc = responseObj.getString("datas.remarks");
+                            String appUrl = responseObj.getString("datas.appUrl");
 
                             // isForceUpdate = true;
                             // 如果是強制升級，點擊對話框外的區域或按下返回鍵，也不能關閉對話框
@@ -261,7 +272,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
                             String today = new Jarbon().toDateString();
                             String appUpdatePopupShownDate = Hawk.get(SPField.FIELD_APP_UPDATE_POPUP_SHOWN_DATE);
-                            if (!isForceUpdate && today.equals(appUpdatePopupShownDate)) { // 如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示
+                            if (false && !isForceUpdate && today.equals(appUpdatePopupShownDate)) { // 如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示
                                 SLog.info("如果不是強制升級，并且今天已經顯示過升級對話框，則不再顯示");
                                 return;
                             }
@@ -271,7 +282,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                     .dismissOnTouchOutside(isDismissOnTouchOutside) // 点击外部是否关闭弹窗，默认为true
                                     // 如果不加这个，评论弹窗会移动到软键盘上面
                                     .moveUpToKeyboard(false)
-                                    .asCustom(new AppUpdatePopup(MainActivity.this, version, versionDesc, isForceUpdate))
+                                    .asCustom(new AppUpdatePopup(MainActivity.this, version, versionDesc, isForceUpdate, appUrl))
                                     .show();
                         }
                     } catch (Exception e) {
@@ -447,5 +458,54 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
+        SLog.info("requestCode[%d], resultCode[%d]", requestCode, requestCode);
+        if (requestCode == RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal() && resultCode == RESULT_OK) {
+            installUpdate(appUpdatePath);
+        }
+    }
+
+
+    /**
+     * 安裝升級apk
+     * 參考:
+     * Android8.0未知来源应用安装权限最好的适配方案  https://zhuanlan.zhihu.com/p/32386135
+     * @param path 升級文件的路徑
+     */
+    public void installUpdate(String path) {
+        if (path == null) {
+            SLog.info("Error!下載升級包失敗");
+            ToastUtil.error(this, "下載升級包失敗");
+            return;
+        }
+        boolean haveInstallPermission = true;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            haveInstallPermission = getPackageManager().canRequestPackageInstalls();
+        }
+
+        if (!haveInstallPermission) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+            startActivityForResult(intent, RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal());
+            return;
+        }
+
+
+        String dest = Environment.getExternalStorageDirectory().getAbsolutePath() + "/1/twant_12250_app_update_test.apk";
+        SLog.info("dest[%s]", dest);
+        File destFile = new File(dest);
+
+
+        File file = FileUtil.getCacheFile(this, path);
+
+        try {
+            FileUtil.copyFile(file, destFile);
+        } catch (Exception e) {
+
+        }
+
+
+        SLog.info("file size[%s]", destFile.length());
+        Util.openApkFile(destFile, this);
     }
 }

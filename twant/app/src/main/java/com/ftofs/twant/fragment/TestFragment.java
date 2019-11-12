@@ -77,6 +77,8 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
                 // App code
             }
         });
+
+        Util.setOnClickListener(view, R.id.btn_test, this);
     }
 
     @Override
@@ -89,6 +91,8 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
 
             //调用分享弹窗
             ShareDialog.show(_mActivity, content);
+        } else if (id == R.id.btn_test) {
+            ((MainActivity) _mActivity).installUpdate("app_update/twant_12250_app_update_test.apk");
         }
     }
 

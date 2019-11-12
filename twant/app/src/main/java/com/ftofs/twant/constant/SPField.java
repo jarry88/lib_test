@@ -74,4 +74,9 @@ public class SPField {
      * 支付寶支付訂單的PayId
      */
     public static final String FIELD_ALI_PAY_ID = "ali_pay_id_%d";
+
+    /**
+     * 下載App安裝包
+     */
+    public static final String FIELD_DOWNLOAD_APP = "download_app";
 }

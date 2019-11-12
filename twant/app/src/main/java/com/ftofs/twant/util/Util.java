@@ -12,13 +12,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentationMagician;
+import android.support.v4.content.FileProvider;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -47,6 +50,7 @@ import com.uuzuche.lib_zxing.activity.CodeUtils;
 import org.urllib.Query;
 import org.urllib.Urls;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -608,12 +612,6 @@ public class Util {
 
 
     /**
-     * 生成雙11活動H5游戲或獎品列表的URL，如果用戶未登錄，返回null
-     * @return
-     */
-
-
-    /**
      * 生成H5雙十一活動鏈接，如果用戶未登錄，返回null
      * @param type 1 -- 抽獎遊戲 2 -- 我的獎品
      * @return
@@ -672,4 +670,36 @@ public class Util {
 
         return null;
     }
+
+
+    public static void openApkFile(File apkFile, Context context) {
+        Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setAction(Intent.ACTION_VIEW);
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N){
+            Uri uriForFile = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".fileprovider", apkFile);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(uriForFile, context.getContentResolver().getType(uriForFile));
+        }else{
+            intent.setDataAndType(Uri.fromFile(apkFile), getMIMEType(apkFile));
+        }
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(context, "没有找到打开此类文件的程序", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static String getMIMEType(File file) {
+        String var1 = "";
+        String var2 = file.getName();
+        String var3 = var2.substring(var2.lastIndexOf(".") + 1, var2.length()).toLowerCase();
+        var1 = MimeTypeMap.getSingleton().getMimeTypeFromExtension(var3);
+        SLog.info("mimeType[%s]", var1);
+        return var1;
+    }
 }
+
+
