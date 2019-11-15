@@ -27,12 +27,10 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHolder> {
-    String myAvatarUrl;
     String yourAvatarUrl;  // 讀圖片文件讀出來的數據
     public ChatMessageAdapter(int layoutResId, @Nullable List<ChatMessage> data, String yourAvatarUrl) {
         super(layoutResId, data);
 
-        myAvatarUrl = StringUtil.normalizeImageUrl(User.getUserInfo(SPField.FIELD_AVATAR, ""));
         this.yourAvatarUrl = yourAvatarUrl;
     }
 
@@ -63,6 +61,7 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
         if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
             // 設置頭像
             ImageView imgMyAvatar = helper.getView(R.id.img_my_avatar);
+            String myAvatarUrl = StringUtil.normalizeImageUrl(User.getUserInfo(SPField.FIELD_AVATAR, ""));
             Glide.with(mContext).load(myAvatarUrl).centerCrop().into(imgMyAvatar);
             helper.setGone(R.id.img_your_avatar, false);
             helper.setGone(R.id.img_my_avatar, true);

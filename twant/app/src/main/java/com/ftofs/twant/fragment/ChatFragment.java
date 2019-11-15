@@ -274,6 +274,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
 
             messageListScrollToBottom();
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_CHANGE_MEMBER_AVATAR) {
+            chatMessageAdapter.notifyDataSetChanged();
         }
     }
 

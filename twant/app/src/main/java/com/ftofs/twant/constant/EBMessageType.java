@@ -90,6 +90,11 @@ public enum EBMessageType {
      * 想付錢包支付成功
      */
     MESSAGE_TYPE_WALLET_PAY_SUCCESS,
+
+    /**
+     * 修改會員頭像
+     */
+    MESSAGE_TYPE_CHANGE_MEMBER_AVATAR,
 }
 
 

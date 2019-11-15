@@ -20,6 +20,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
@@ -35,6 +36,7 @@ import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.DateSelectPopup;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
+import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -364,6 +366,8 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_DATA, null);
 
                 ToastUtil.success(_mActivity, "設置頭像成功");
+                Hawk.put(SPField.FIELD_AVATAR, url);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_CHANGE_MEMBER_AVATAR, null);
                 Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(url))
                         .centerCrop().into(imgAvatar);
             }
