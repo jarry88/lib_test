@@ -416,7 +416,7 @@ public class StringUtil {
             return false;
         }
 
-        return url.startsWith("http://192") || url.startsWith("https://192");
+        return url.startsWith("http://192") || url.startsWith("https://192") || url.startsWith("http://localhost");
     }
 
     /**
