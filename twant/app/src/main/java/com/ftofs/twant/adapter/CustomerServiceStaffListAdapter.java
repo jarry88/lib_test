@@ -1,6 +1,7 @@
 package com.ftofs.twant.adapter;
 
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -59,6 +60,16 @@ public class CustomerServiceStaffListAdapter extends BaseQuickAdapter<CustomerSe
             tvWelcomeMessage.startAnimation(animation);
         } else {
             tvWelcomeMessage.setVisibility(View.INVISIBLE);
+        }
+
+
+        int itemCount = getItemCount();
+        int position = helper.getAdapterPosition();
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
+        if (position == itemCount - 1 || (itemCount % 2 == 0 && position == itemCount - 2)) { // 最后一行，設置大一點的bottomMargin
+            layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
+        } else {
+            layoutParams.bottomMargin = 0;
         }
     }
 
