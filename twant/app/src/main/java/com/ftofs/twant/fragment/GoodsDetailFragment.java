@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
@@ -887,7 +888,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                     start(ImageViewerFragment.newInstance(imageUrl));
                                 }
                             });
-                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).into(imageView);
+                            // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
+                            // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
+                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
                             llGoodsDetailImageContainer.addView(imageView);
                         } else if (goodsMobileBodyVo.getType().equals("text")) {
                             TextView textView = new TextView(_mActivity);
