@@ -430,7 +430,7 @@
     <string name="text_refund_amount">退款金額</string>
     <string name="text_most_refund_amount">最多可退金額</string>
     <string name="text_refund_desc">退款說明</string>
-    <string name="input_refund_desc_hint">請輸入您要退貨的說明文字（選填）</string>
+    <string name="input_refund_desc_hint">請輸入您要退貨的說明文字</string>
     <string name="text_upload_evidence">上傳憑證</string>
     <string name="text_complain_evidence">投訴憑證</string>
     <string name="text_return_count">退貨數量</string>

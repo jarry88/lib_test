@@ -102,6 +102,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         Bundle args = new Bundle();
 
         args.putString("paramsIn", paramsIn);
+        SLog.info("paramsIn[%s]", paramsIn);
 
         GoodsRefundFragment fragment = new GoodsRefundFragment();
         fragment.setArguments(args);
@@ -261,6 +262,10 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             }
 
             final String buyerMessage = etRefundDesc.getText().toString().trim();
+            if (StringUtil.isEmpty(buyerMessage)) {
+                ToastUtil.error(_mActivity, "請填寫退款說明");
+                return;
+            }
 
             final List<String> imagePathList = new ArrayList<>();
             int childCount = sglImageContainer.getChildCount();

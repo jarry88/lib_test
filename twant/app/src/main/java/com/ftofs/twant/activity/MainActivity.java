@@ -261,7 +261,11 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
                             String version = responseObj.getString("datas.version");
                             String versionDesc = responseObj.getString("datas.remarks");
-                            String appUrl = responseObj.getString("datas.appUrl");
+                            String appUrl = null;
+                            if (responseObj.exists("datas.appUrl")) {
+                                appUrl = responseObj.getString("datas.appUrl");
+                            }
+
 
                             // isForceUpdate = true;
                             // 如果是強制升級，點擊對話框外的區域或按下返回鍵，也不能關閉對話框
