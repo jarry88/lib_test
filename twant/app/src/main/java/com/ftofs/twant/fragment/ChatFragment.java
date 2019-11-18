@@ -305,6 +305,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             startMsgId = emMessage.getMsgId();
             SLog.info("message[%s]", emMessage.toString());
             lastMessage = emMessage;
+
+            chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
 
         //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
@@ -312,15 +314,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         int pagesize = 20;
         messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
         for (EMMessage emMessage : messages) {
-            // SLog.info("message[%s]", emMessage.toString());
+            SLog.info("message[%s]", emMessage.toString());
             chatMessageList.add(emMessageToChatMessage(emMessage));
         }
 
+        /*
         if (lastMessage != null) {
+            SLog.info("lastMessage[%s]", lastMessage.toString());
             chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
+        */
 
         setShowTimestamp(chatMessageList);
+        SLog.info("_chatMessageList.size = %d", chatMessageList.size());
         chatMessageAdapter.setNewData(chatMessageList);
     }
 
@@ -354,7 +360,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             SLog.info("chatMessage.content[%s]", chatMessage.content);
         }
 
-        if (emMessage.getFrom().equals(myMemberName)) {
+        String from = emMessage.getFrom();
+        SLog.info("FROM[%s]", from);
+        if (from.equals(myMemberName) ||
+                StringUtil.isEmpty(from)) { // 如果from為空，也當作是自己的消息
             chatMessage.origin = ChatMessage.MY_MESSAGE;
         } else {
             chatMessage.origin = ChatMessage.YOUR_MESSAGE;
@@ -769,7 +778,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 @Override
                 public void onError(int i, String s) {
                     SLog.info("onError, i[%d], s[%s]", i, s);
-                    ToastUtil.error(_mActivity, s);
+                    // ToastUtil.error(_mActivity, s);
                 }
 
                 @Override

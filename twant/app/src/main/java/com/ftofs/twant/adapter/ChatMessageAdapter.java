@@ -58,6 +58,7 @@ public class ChatMessageAdapter extends BaseQuickAdapter<ChatMessage, BaseViewHo
         LinearLayout llGoodsMessageContainer = helper.getView(R.id.ll_goods_message_container);
         LinearLayout llOrderMessageContainer = helper.getView(R.id.ll_order_message_container);
 
+        SLog.info("item.origin[%d]", item.origin);
         if (item.origin == ChatMessage.MY_MESSAGE) { // 是我的消息
             // 設置頭像
             ImageView imgMyAvatar = helper.getView(R.id.img_my_avatar);

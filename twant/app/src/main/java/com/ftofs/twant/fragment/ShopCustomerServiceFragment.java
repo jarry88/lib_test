@@ -224,6 +224,9 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
      * 當前歡迎語動畫播放完成
      */
     public void onWelcomeMessageAnimationEnd() {
+        if (animDoneCount >= welcomeMessageAnimOrder.size()) {
+            return;
+        }
         int position = welcomeMessageAnimOrder.get(animDoneCount);
         customerServiceStaffList.get(position).showWelcomeMessageAnimation = false;
         animDoneCount++;
