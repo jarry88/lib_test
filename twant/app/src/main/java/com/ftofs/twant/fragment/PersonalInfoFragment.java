@@ -104,6 +104,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         imgAvatar = view.findViewById(R.id.img_avatar);
         tvMemberLocation = view.findViewById(R.id.tv_member_location);
         tvMemberSignature = view.findViewById(R.id.tv_member_signature);
+        tvBirthday = view.findViewById(R.id.tv_birthday);
 
         contentView = view;
     }
@@ -226,7 +227,6 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
 
                     birthday = memberInfo.getString("birthday");
                     if (!StringUtil.isEmpty(birthday)) {
-                        tvBirthday = view.findViewById(R.id.tv_birthday);
                         tvBirthday.setText(birthday);
                     }
 

@@ -29,8 +29,8 @@ public class Config {
     /**
      * 是否為開發模式
      */
-    public static final boolean DEVELOPER_MODE = false;
-    public static final boolean USE_28 = true;   // 開發模式下: true -- 使用28服務器  false -- 使用29服務器
+    public static final boolean DEVELOPER_MODE = true;
+    public static final boolean USE_28 = false;   // 開發模式下: true -- 使用28服務器  false -- 使用29服務器
     public static final boolean USE_F2 = true;  // 生產模式下: true -- 使用F2服務器  false -- 使用www服務器
 
 
