@@ -56,7 +56,6 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
     int twBlack;
 
     LinearLayout llAreaContainer;
-    TextView btnOk;
 
     public AreaPopup(@NonNull Context context, PopupType popupType, OnSelectedListener onSelectedListener) {
         super(context);
@@ -98,13 +97,14 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                 int depth = area.getAreaDeep();
                 if (selectedAreaList.size() >= depth) {
                     SLog.info("已经是最后一级, SIZE[%d], DEPTH[%d]", areaList.size(), depth);
+                    setAddress();
                     return;
                 }
                 selectedAreaList.add(area);
 
                 // 將之前的AreaItemView取消高亮
                 for (AreaItemView itemView : areaItemViewList) {
-                    itemView.setStatus(Constant.STATUS_UNSELECTED);
+                    // itemView.setStatus(Constant.STATUS_UNSELECTED);
                 }
                 areaItemView.setText(area.getAreaName());
                 areaItemView.setStatus(Constant.STATUS_SELECTED);
@@ -113,24 +113,31 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                 areaItemView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // 如果點擊自己，將后面的數據出隊列，重新加載本級的地址列表
+                        // 如果點擊自己，將自己和后面的數據出隊列，重新加載上一級的地址列表
                         AreaItemView itemView = (AreaItemView) v;
                         int depth = itemView.getDepth();
-                        for (int i = selectedAreaList.size() - 1; i >= depth ; i--) {
+                        SLog.info("depth[%d]", depth);
+                        int index = depth - 1;  // 點擊到的item的索引，從0開始
+                        for (int i = selectedAreaList.size() - 1; i >= index ; i--) {
                             selectedAreaList.remove(i);
                         }
 
-                        for (int i = areaItemViewList.size() - 1; i >= depth ; i--) {
+                        for (int i = areaItemViewList.size() - 1; i >= index ; i--) {
                             areaItemViewList.remove(i);
                         }
 
                         int childCount = llAreaContainer.getChildCount();
-                        if (childCount - depth > 0) {
-                            llAreaContainer.removeViews(depth, childCount - depth);
+                        if (childCount - index > 0) {
+                            llAreaContainer.removeViews(index, childCount - index);
                         }
 
-                        itemView.setStatus(Constant.STATUS_SELECTED);
-                        loadAreaData(itemView.getAreaId());
+                        int parentIndex = index - 1;
+                        if (parentIndex == -1) {
+                            loadAreaData(0);
+                        } else {
+                            Area parentArea = selectedAreaList.get(parentIndex);
+                            loadAreaData(parentArea.getAreaId());
+                        }
                     }
                 });
                 areaItemViewList.add(areaItemView);
@@ -142,12 +149,6 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
                 loadAreaData(area.getAreaId());
             }
         });
-
-        View emptyView = LayoutInflater.from(context).inflate(R.layout.area_popup_empty_view, null, false);
-        btnOk = emptyView.findViewById(R.id.btn_ok);
-        btnOk.setOnClickListener(this);
-        adapter.setEmptyView(emptyView);
-
 
         rvList.setAdapter(adapter);
         loadAreaData(0);
@@ -178,17 +179,17 @@ public class AreaPopup extends BottomPopupView implements View.OnClickListener {
             case R.id.btn_dismiss:
                 dismiss();
                 break;
-            case R.id.btn_ok:
-                if (popupType == PopupType.MEMBER_ADDRESS) {
-                    setMemberAddress();
-                } else {
-                    onSelectedListener.onSelected(popupType, 0, selectedAreaList);
-                    dismiss();
-                }
-
-                break;
             default:
                 break;
+        }
+    }
+
+    private void setAddress() {
+        if (popupType == PopupType.MEMBER_ADDRESS) {
+            setMemberAddress();
+        } else {
+            onSelectedListener.onSelected(popupType, 0, selectedAreaList);
+            dismiss();
         }
     }
 
@@ -273,13 +274,17 @@ addressAreaInfo String 地区全名
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
 
-                if (ToastUtil.isError(responseObj)) {
-                    areaList.clear();
-                    adapter.setNewData(areaList);
-                    return;
-                }
+
 
                 try {
+                    if (ToastUtil.isError(responseObj)) {
+                        int code = responseObj.getInt("code");
+                        String error = responseObj.getString("datas.error");
+                        if (code == 400 && "无下级".equals(error)) {
+                            setAddress();
+                        }
+                    }
+
                     EasyJSONArray easyJSONArray = responseObj.getArray("datas.areaList");
                     areaList.clear();
                     for (Object object : easyJSONArray) {
