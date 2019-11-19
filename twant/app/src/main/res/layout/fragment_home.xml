@@ -424,18 +424,13 @@
                 </LinearLayout>
 
                 <!-- 最新入駐店鋪列表 -->
-                <LinearLayout
-                    android:id="@+id/ll_new_arrivals_container"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_new_arrivals_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                </LinearLayout>
-
-                <!-- 這個View防止底部導航條擋住內容區 -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/bottom_toolbar_max_height"
-                    />
+                    android:layout_height="500dp"
+                    android:orientation="vertical"
+                    android:background="#ffa">
+                </android.support.v7.widget.RecyclerView>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </com.ftofs.twant.widget.NestedScrollingParent2Layout>

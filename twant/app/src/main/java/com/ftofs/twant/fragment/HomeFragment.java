@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.NewArrivalsStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -25,8 +29,10 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.WebSliderItem;
+import com.ftofs.twant.entity.order.NewArrivalsStoreItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -62,8 +68,9 @@ import okhttp3.Call;
  * 首頁
  * @author zwm
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener, NestedScrollingCallback {
-    LinearLayout llNewArrivalsContainer;
+public class HomeFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener, NestedScrollingCallback,
+        BaseQuickAdapter.RequestLoadMoreListener {
+    RecyclerView rvNewArrivalsList;
     MZBannerView bannerView;
     float density;
 
@@ -74,6 +81,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     TextView tvStoreCount;
     TextView tvGoodsCount;
     TextView tvPostCount;
+
+    // 當前要加載第幾頁(從1開始）
+    int currPage = 0;
+    boolean hasMore;
+
+    NewArrivalsStoreAdapter newArrivalsStoreAdapter;
+    List<NewArrivalsStoreItem> newArrivalsStoreItemList = new ArrayList<>();
 
     /**
      * 【店鋪形像圖】的寬度
@@ -93,7 +107,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     NestedScrollView contentView;
 
     boolean carouselLoaded;
-    boolean newArrivalsLoaded;
+    boolean newArrivalsLoaded; // 最新想要店的數據是否已加載
 
     /*
     用于記錄滑動狀態，以處理浮動按鈕的顯示與隱藏
@@ -158,7 +172,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         contentView = view.findViewById(R.id.content_view);
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
 
-        llNewArrivalsContainer = view.findViewById(R.id.ll_new_arrivals_container);
+        rvNewArrivalsList = view.findViewById(R.id.rv_new_arrivals_list);
         bannerView = view.findViewById(R.id.banner_view);
         bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
@@ -270,6 +284,38 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         iconDoubleElevenEntrance = view.findViewById(R.id.icon_double_eleven_entrance);
         Glide.with(_mActivity).load("file:///android_asset/double_eleven/double_eleven_dynamic.gif")
                 .into(iconDoubleElevenEntrance);
+
+        rvNewArrivalsList = view.findViewById(R.id.rv_new_arrivals_list);
+        rvNewArrivalsList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        newArrivalsStoreAdapter = new NewArrivalsStoreAdapter(R.layout.store_view, newArrivalsStoreItemList);
+        newArrivalsStoreAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                NewArrivalsStoreItem item = newArrivalsStoreItemList.get(position);
+                Util.startFragment(ShopMainFragment.newInstance(item.storeId));
+            }
+        });
+        newArrivalsStoreAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                NewArrivalsStoreItem item = newArrivalsStoreItemList.get(position);
+                int id = view.getId();
+                int commonId = 0;
+                if (id == R.id.goods_image_left_container) {
+                    commonId = item.goodsList.get(0).id;
+                } else if (id == R.id.goods_image_middle_container) {
+                    commonId = item.goodsList.get(1).id;
+                } else {
+                    commonId = item.goodsList.get(2).id;
+                }
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+            }
+        });
+
+        newArrivalsStoreAdapter.setEnableLoadMore(true);
+        newArrivalsStoreAdapter.setOnLoadMoreListener(this, rvNewArrivalsList);
+
+        rvNewArrivalsList.setAdapter(newArrivalsStoreAdapter);
     }
 
 
@@ -285,7 +331,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
         // 加載最新入駐
         if (!newArrivalsLoaded) {
-            loadNewArrivals();
+            loadNewArrivals(1);
         }
 
         bannerView.start();
@@ -397,6 +443,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
         llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = false;
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        if (!hasMore) {
+            newArrivalsStoreAdapter.setEnableLoadMore(false);
+            return;
+        }
+        loadNewArrivals(currPage + 1);
     }
 
     public static class BannerViewHolder implements MZViewHolder<WebSliderItem> {
@@ -545,24 +600,28 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     /**
-     * 加載最新入駐
+     * 加載最新想要店
+     * @param page 第幾頁，從1開始
      */
-    private void loadNewArrivals() {
+    private void loadNewArrivals(int page) {
         SLog.info("loadNewArrivals");
 
         String token = User.getToken();
         SLog.info("token[%s]", token);
 
         try {
-            EasyJSONObject params = EasyJSONObject.generate();
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "page", page
+            );
             if (!StringUtil.isEmpty(token)) {
                 params.set("token", token);
             }
 
-            Api.postUI(Api.PATH_NEW_ARRIVALS, params, new UICallback() {
+            Api.getUI(Api.PATH_HOME_NEW_LIST, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
+                    newArrivalsStoreAdapter.loadMoreFail();
                 }
 
                 @Override
@@ -573,128 +632,56 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     // SLog.info("responseObj[%s]", responseObj);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         SLog.info("Error!responseObj is invalid");
+                        newArrivalsStoreAdapter.loadMoreFail();
                         return;
                     }
 
                     try {
-                        float ratio = density / 2.5f;
-                        if (ratio < 1) {
-                            ratio = 0.95f;
+                        hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                        SLog.info("hasMore[%s]", hasMore);
+                        if (!hasMore) {
+                            newArrivalsStoreAdapter.loadMoreEnd();
+                            newArrivalsStoreAdapter.setEnableLoadMore(false);
                         }
-                        ratio = 1;
-                        SLog.info("__ratio[%s]", ratio);
+
 
                         EasyJSONArray storeList = responseObj.getArray("datas.storeList");
                         SLog.info("storeList size[%d]", storeList.length());
 
-                        llNewArrivalsContainer.removeAllViews();
                         for (Object object : storeList) {
-                            View storeView = LayoutInflater.from(_mActivity).inflate(R.layout.store_view, llNewArrivalsContainer, false);
-
                             EasyJSONObject store = (EasyJSONObject) object;
 
                             // 獲取店鋪Id
-                            final int storeId = store.getInt("storeVo.storeId");
+                            int storeId = store.getInt("storeId");
 
                             // 設置店鋪名稱
-                            String storeName = store.getString("storeVo.storeName");
-                            TextView tvStoreName = storeView.findViewById(R.id.tv_store_name);
-                            tvStoreName.setText(storeName);
+                            String storeName = store.getString("storeName");
 
                             // 設置店鋪類別
-                            TextView tvStoreClass = storeView.findViewById(R.id.tv_store_class);
-                            String className = store.getString("storeVo.className");
+                            String className = store.getString("className");
                             String[] classNameArr = className.split(",");  // 拆分中英文
-                            tvStoreClass.setText(classNameArr[0]);
-
 
                             // 店鋪形象圖
-                            String storeFigureImageUrl = StringUtil.normalizeImageUrl(store.getString("storeVo.storeFigureImage"));
-                            ImageView imgStoreFigure = storeView.findViewById(R.id.img_store_figure);
-                            Glide.with(_mActivity).load(storeFigureImageUrl).centerCrop().into(imgStoreFigure);
+                            String storeFigureImageUrl = StringUtil.normalizeImageUrl(store.getString("storeFigureImage"));
 
-                            int index = 0;
+                            List<Goods> goodsList = new ArrayList<>();
                             // 店鋪的3個商品展示
-                            for (Object object2 : store.getArray("goodsList")) {
+                            for (Object object2 : store.getArray("goodsCommonVoList")) {
                                 EasyJSONObject goodsObject = (EasyJSONObject) object2;
-                                String imageSrc = goodsObject.getString("imageSrc");
+                                String imageSrc = goodsObject.getString("goodsImage");
                                 int commonId = goodsObject.getInt("commonId");
-                                String uri = StringUtil.normalizeImageUrl(imageSrc);
-                                LinearLayout llGoodsImageContainer = null;
 
-                                int dimen;
-                                if (index == 0) {
-                                    dimen = (int) (ratio * remainWidth * 79 / 258);
-                                    // SLog.info("__dimen[%d]", dimen);
-                                    ImageView goodsImageLeft = storeView.findViewById(R.id.goods_image_left);
-                                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageLeft.getLayoutParams();
-                                    layoutParams.width = dimen;
-                                    layoutParams.height = dimen;
-                                    goodsImageLeft.setLayoutParams(layoutParams);
-                                    Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageLeft);
-                                    llGoodsImageContainer = storeView.findViewById(R.id.goods_image_left_container);
-                                    if (density < 2.5f) {
-                                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) llGoodsImageContainer.getLayoutParams();
-                                        layoutParams1.leftMargin = (int) (0.5 * layoutParams1.leftMargin);
-                                        llGoodsImageContainer.setLayoutParams(layoutParams1);
-                                    }
-                                } else if (index == 1) {
-                                    dimen = (int) (ratio * remainWidth * 100 / 258);
-                                    // SLog.info("__dimen[%d]", dimen);
-                                    ImageView goodsImageMiddle = storeView.findViewById(R.id.goods_image_middle);
-                                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageMiddle.getLayoutParams();
-                                    layoutParams.width = dimen;
-                                    layoutParams.height = dimen;
-                                    goodsImageMiddle.setLayoutParams(layoutParams);
-                                    Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageMiddle);
-                                    llGoodsImageContainer = storeView.findViewById(R.id.goods_image_middle_container);
-                                } else if (index == 2) {
-                                    dimen = (int) (ratio * remainWidth * 79 / 258);
-                                    // SLog.info("__dimen[%d]", dimen);
-                                    ImageView goodsImageRight = storeView.findViewById(R.id.goods_image_right);
-                                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) goodsImageRight.getLayoutParams();
-                                    layoutParams.width = dimen;
-                                    layoutParams.height = dimen;
-                                    goodsImageRight.setLayoutParams(layoutParams);
-                                    Glide.with(_mActivity).load(uri).centerCrop().into(goodsImageRight);
-                                    llGoodsImageContainer = storeView.findViewById(R.id.goods_image_right_container);
-                                    if (density < 2.5f) {
-                                        RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) llGoodsImageContainer.getLayoutParams();
-                                        layoutParams1.rightMargin = (int) (0.5 * layoutParams1.rightMargin);
-                                        SLog.info("_____RIGHT[%d]", layoutParams1.rightMargin);
-                                        llGoodsImageContainer.setLayoutParams(layoutParams1);
-                                    }
-                                }
-
-                                llGoodsImageContainer.setVisibility(View.VISIBLE);
-                                llGoodsImageContainer.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                                    }
-                                });
-
-                                ++index;
+                                goodsList.add(new Goods(commonId, imageSrc, null, null, 0));
                             }
 
-                            // 添加控件到容器中
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                            int marginTop = Util.dip2px(_mActivity, 15);
-                            int marginBottom = Util.dip2px(_mActivity, 20);
-                            layoutParams.setMargins(0, marginTop, 0, marginBottom);
-
-                            storeView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Util.startFragment(ShopMainFragment.newInstance(storeId));
-                                }
-                            });
-                            llNewArrivalsContainer.addView(storeView, layoutParams);
-
-                            newArrivalsLoaded = true;
+                            NewArrivalsStoreItem item = new NewArrivalsStoreItem(storeId, classNameArr[0], storeName, storeFigureImageUrl, goodsList);
+                            newArrivalsStoreItemList.add(item);
                         }
+
+                        newArrivalsStoreAdapter.loadMoreComplete();
+                        newArrivalsStoreAdapter.setNewData(newArrivalsStoreItemList);
+                        newArrivalsLoaded = true;
+                        currPage++;
                     } catch (Exception e) {
                         SLog.info("Error!%s", e.getMessage());
                     }

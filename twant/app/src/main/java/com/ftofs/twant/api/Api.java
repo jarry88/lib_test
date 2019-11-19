@@ -913,6 +913,11 @@ public class Api {
      */
     public static final String PATH_SEARCH_PROMOTION = "/search/promotion";
 
+    /**
+     * 首頁最新想要店
+     */
+    public static final String PATH_HOME_NEW_LIST = "/app/home/new/list";
+
 
     /**
      * 發送Http請求

@@ -30,6 +30,7 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
     NestedScrollingCallback callback;
 
 
+
     private NestedScrollingParentHelper mNestedScrollingParentHelper = new NestedScrollingParentHelper(this);
 
     public NestedScrollingParent2Layout(Context context) {
