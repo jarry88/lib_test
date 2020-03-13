@@ -338,27 +338,27 @@ public class Orders implements Serializable, Cloneable {
     private int shipTimeType;
 
     /**
-     * 订单下的商品实际使用的满优惠和店铺券总金额
+     * 订单下的產品实际使用的满优惠和店铺券总金额
      */
     private BigDecimal storeDiscountAmount = new BigDecimal(0);
 
     /**
-     * 订单下的商品实际使用的平台券总金额
+     * 订单下的產品实际使用的平台券总金额
      */
     private BigDecimal couponAmount = new BigDecimal(0);
 
     /**
-     * 订单的商品使用的平台券总金额中平台应承担的总金额
+     * 订单的產品使用的平台券总金额中平台应承担的总金额
      */
     private BigDecimal shopCommitmentAmount = BigDecimal.ZERO;
 
     /**
-     * 预定订单尾款实际付款金额(尾款金额 - 促销)，预定商品可退最大值
+     * 预定订单尾款实际付款金额(尾款金额 - 促销)，预定產品可退最大值
      */
     private BigDecimal finalAmount = new BigDecimal(0);
 
     /**
-     * 海外购商品税费
+     * 海外购產品税费
      */
     private BigDecimal taxAmount = new BigDecimal(0);
 

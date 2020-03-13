@@ -45,23 +45,23 @@ public class Refund implements Serializable {
     private String memberName = "";
 
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
 
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int commonId;
 
     /**
-     * 订单商品编号
+     * 订单產品编号
      * 主键、自增
      */
     private int ordersGoodsId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
@@ -76,13 +76,13 @@ public class Refund implements Serializable {
     private BigDecimal refundAmount = new BigDecimal(0);
 
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImage;
 
     /**
      * 订单类型类型
-     * 类型:1默认2团购商品3限时折扣商品4组合套装
+     * 类型:1默认2团购產品3限时折扣產品4组合套装
      */
     private int orderGoodsType = 1;
 

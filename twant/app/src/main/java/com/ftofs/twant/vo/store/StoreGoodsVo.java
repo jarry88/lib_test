@@ -5,17 +5,17 @@ import com.ftofs.twant.vo.goods.GoodsVo;
 import java.util.List;
 
 /**
- * @Description: 首頁店鋪模塊視圖對象
+ * @Description: 首頁商店模塊視圖對象
  * @Auther: yangjian
  * @Date: 2018/10/25 11:26
  */
 public class StoreGoodsVo {
     /**
-     * 店鋪
+     * 商店
      */
     private StoreVo storeVo;
     /**
-     * 商品
+     * 產品
      */
     private List<GoodsVo> goodsList;
 

@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  * 訂單列表Adapter(顯示地方: 訂單列表的【全部】、【待付款】和查詢訂單Fragment中顯示)
- * 每個支付單號一個PayItem，一個PayItem包含一個或多個OrderItem(OrderItem與店鋪是一一對應的關系)，一個OrderItem包含若干個SkuItem(不直接包含SpuItem)
+ * 每個支付單號一個PayItem，一個PayItem包含一個或多個OrderItem(OrderItem與商店是一一對應的關系)，一個OrderItem包含若干個SkuItem(不直接包含SpuItem)
  * @author zwm
  */
 public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseViewHolder> {
@@ -149,7 +149,7 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
             if (item.showPayButton) {
                 // 子View點擊事件
                 helper.addOnClickListener(R.id.btn_pay_order);
-                helper.setText(R.id.btn_pay_order, "支付訂單 " + StringUtil.formatFloat(item.payAmount));
+                helper.setText(R.id.btn_pay_order, "支付訂單 $" + StringUtil.formatFloat(item.payAmount));
                 helper.setGone(R.id.btn_pay_order, true);
             } else {
                 helper.setGone(R.id.btn_pay_order, false);

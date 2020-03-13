@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/title_padding_bg">
+    <TextView
+        android:id="@+id/btn_change"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="更換封面圖片"
+        android:textColor="@color/tw_black"
+        android:textSize="18sp"
+        android:gravity="center"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/tw_light_grey"
+        />
+    <TextView
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="取消"
+        android:textColor="@color/tw_black"
+        android:textSize="18sp"
+        android:gravity="center"
+        />
+</LinearLayout>

@@ -1,12 +1,11 @@
 package com.ftofs.twant.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.PackageItem;
-import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.Util;
 
 import java.util.List;

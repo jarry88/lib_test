@@ -1,21 +1,14 @@
 package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
+import android.app.MediaRouteButton;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -27,46 +20,57 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.ChatMessageAdapter;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.UnicodeEmoji;
+import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.CommonUsedSpeech;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.entity.ImStoreOrderItem;
+import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.FriendInfo;
-import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.CommonUsedSpeechPopup;
+import com.ftofs.twant.vo.member.MemberVo;
+import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.ImStoreGoodsPopup;
 import com.ftofs.twant.widget.ImStoreOrderPopup;
-import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
+import com.ftofs.twant.widget.ImagePreviewPopup;
 import com.ftofs.twant.widget.SizeChangedRecyclerView;
 import com.ftofs.twant.widget.SmoothInputLayout;
 import com.ftofs.twant.widget.TwConfirmPopup;
@@ -78,19 +82,22 @@ import com.hyphenate.chat.EMMessage;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.orhanobut.hawk.Hawk;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.litepal.LitePal;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 聊天會話Fragment
@@ -98,13 +105,15 @@ import cn.snailpad.easyjson.EasyJSONObject;
  */
 public class ChatFragment extends BaseFragment implements View.OnClickListener,
         View.OnTouchListener, TextWatcher, SmoothInputLayout.OnVisibilityChangeListener, ViewSizeChangedListener,
-        OnSelectedListener {
+        OnSelectedListener, SimpleCallback {
     /**
      * 自定義文本消息的類型
      */
     public static final String CUSTOM_MESSAGE_TYPE_TXT = "txt";  // 普通文本消息
-    public static final String CUSTOM_MESSAGE_TYPE_GOODS = "goods"; // 商品文本消息
+    public static final String CUSTOM_MESSAGE_TYPE_GOODS = "goods"; // 產品文本消息
     public static final String CUSTOM_MESSAGE_TYPE_ORDERS = "orders"; // 訂單文本消息
+    public static final String CUSTOM_MESSAGE_TYPE_ENC = "memberCard";  //  電子名片
+    public static final String CUSTOM_MESSAGE_TYPE_IMG = "img";//img 圖片
 
 
     /**
@@ -150,6 +159,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
      * 拍照的圖片文件
      */
     File captureImageFile;
+    public int isFriend;
+    private boolean hasCard;
+    private String yourTrueName;
+    private boolean yourTrueNameLoaded;
+    private String myTrueName;
+    //這裏的role指商城角色
+    private int myRole;
+    private LinearLayout btnSendGoods;
+    private LinearLayout btnSendOrder;
 
     public static ChatFragment newInstance(EMConversation conversation, FriendInfo friendInfo) {
         Bundle args = new Bundle();
@@ -175,11 +193,48 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         EventBus.getDefault().register(this);
 
+        // 檢查imToken是否已經過期
+        long imTokenExpire = Hawk.get(SPField.FIELD_IM_TOKEN_EXPIRE, 0L);
+        long now = System.currentTimeMillis();
+        SLog.info("imTokenExpire[%s], now[%s]", imTokenExpire, now);
+        if (now >= imTokenExpire) {  // 如果已經過期，則獲取最新的imToken並更新
+            SLog.info("here______");
+            String token = User.getToken();
+            EasyJSONObject params = EasyJSONObject.generate("token", token);
+            Api.postUI(Api.PATH_GET_IM_TOKEN, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    SLog.info("responseStr_________[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    try {
+                        String imToken = responseObj.getSafeString("datas.imToken");
+                        long expiresTime = responseObj.getLong("datas.expiresTime");
+
+                        SLog.info("imToken[%s], expiresTime[%s]", imToken, expiresTime);
+                        Hawk.put(SPField.FIELD_IM_TOKEN, imToken);
+                        Hawk.put(SPField.FIELD_IM_TOKEN_EXPIRE, expiresTime);
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+
+                }
+            });
+        }
+
         // 指定会话消息未读数清零(進入會話處)
         conversation.markAllMessagesAsRead();
 
         String ext = conversation.getExtField();
-        EasyJSONObject extObj = (EasyJSONObject) EasyJSONObject.parse(ext);
+        EasyJSONObject extObj = EasyJSONObject.parse(ext);
 
         try {
             yourMemberName = conversation.conversationId();
@@ -191,7 +246,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         } catch (Exception e) {
 
         }
-
+        updateYourInfo();
+        loadMemberInfo();
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvNickname.setOnClickListener(this);
 
@@ -211,34 +267,94 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         view.findViewById(R.id.rv_message_list).setOnTouchListener(this);
 
         myMemberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
+        myRole = TwantApplication.getInstance().getMemberVo().role;
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_menu, this);
         Util.setOnClickListener(view, R.id.btn_send_image, this);
         Util.setOnClickListener(view, R.id.btn_capture_image, this);
-        LinearLayout btnSendGoods = view.findViewById(R.id.btn_send_goods);
+        Util.setOnClickListener(view, R.id.btn_send_enc, this);
+        btnSendGoods = view.findViewById(R.id.btn_send_goods);
         btnSendGoods.setOnClickListener(this);
-        LinearLayout btnSendOrder = view.findViewById(R.id.btn_send_order);
+        btnSendOrder = view.findViewById(R.id.btn_send_order);
         btnSendOrder.setOnClickListener(this);
         // 常用語 暫時屏蔽 Util.setOnClickListener(view, R.id.btn_send_common_used_speech, this);
         // 定位 暫時屏蔽 Util.setOnClickListener(view, R.id.btn_send_location, this);
 
         // 檢測對方是否是客服，有s的表示是客服
-        if (yourMemberName.indexOf('s') == -1) {
-            // 如果不是客服，則隱藏發送【商品】、【訂單】按鈕
-            btnSendGoods.setVisibility(View.GONE);
-            btnSendOrder.setVisibility(View.GONE);
-        }
+//這裏是就判別方法        if (yourMemberName.indexOf('s') == -1) {
+//            // 如果不是客服，則隱藏發送【產品】、【訂單】按鈕
+//            btnSendGoods.setVisibility(View.GONE);
+//            btnSendOrder.setVisibility(View.GONE);
+//        }
 
         initEmojiPage(view);
         loadEmojiData();
 
         initChatUI(view);
         loadChatData();
+        initGoodInfo();
 
         messageListScrollToBottom();
 
         bindFriendInfo();
+        showGoodsAndOrder();
+    }
+
+    private void showGoodsAndOrder() {
+        if (yourRole == 0 && myRole == 0) {
+            btnSendGoods.setVisibility(View.GONE);
+            btnSendOrder.setVisibility(View.GONE);
+        } else {
+            btnSendGoods.setVisibility(View.VISIBLE);
+            btnSendOrder.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateYourInfo() {
+
+        if (!TwantApplication.getInstance().getMemberVo().getFromInterface) {
+            TwantApplication.getInstance().updateCurrMemberInfo();
+        }
+        ApiUtil.getImInfo(_mActivity,yourMemberName,memberVo ->{
+            MemberVo yourInfo = (MemberVo)memberVo;
+            //指对话框标题
+            yourNickname = yourInfo.getNickName();
+            yourAvatarUrl = yourInfo.getAvatarUrl();
+            yourRole = yourInfo.role;
+            if (yourInfo.role > ChatUtil.ROLE_MEMBER) {
+                yourNickname = yourInfo.storeName+" "+yourInfo.staffName;
+                yourAvatarUrl = yourInfo.storeAvatar;
+            }
+            showGoodsAndOrder();
+            tvNickname.setText(yourNickname);
+            chatMessageAdapter.setYourAvatarUrl(yourAvatarUrl);
+            chatMessageAdapter.notifyDataSetChanged();
+        });
+    }
+
+    private void initGoodInfo() {
+        if (friendInfo.goodsInfo != null) {
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.messageType = Constant.CHAT_MESSAGE_TYPE_GOODS;
+            SLog.info("chatMessage.messageType[%d]", chatMessage.messageType);
+
+            chatMessage.origin = ChatMessage.MY_MESSAGE;
+
+
+            chatMessage.timestamp = Calendar.getInstance().getTimeInMillis();
+
+            String goodsImage = friendInfo.goodsInfo.imageSrc;
+            int commonId = friendInfo.goodsInfo.commonId;
+            String goodsName = friendInfo.goodsInfo.goodsName;
+
+            Boolean showSendBtn=friendInfo.goodsInfo.showSendBtn;
+            chatMessage.content = EasyJSONObject.generate("goodsImage", goodsImage, "commonId", commonId, "goodsName", goodsName,"showSendBtn",showSendBtn).toString();
+
+            SLog.info("chatMessage.content[%s]", chatMessage.content);
+
+            chatMessageList.add(chatMessage);
+        }
     }
 
     private void bindFriendInfo() {
@@ -260,14 +376,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE) {
-            SLog.info("收到新消息");
+            SLog.info("收到新消息,message[%s]",message.data.toString());
             ChatMessage chatMessage = (ChatMessage) message.data;
             if (yourMemberName.equals(chatMessage.fromMemberName)) {
+                if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ENC) {
+                    chatMessage.trueName = yourTrueName;
+                    hasCard = true;
+                }
                 SLog.info("是對方發來的消息");
                 chatMessageList.add(chatMessage);
                 // chatMessageAdapter.notifyItemInserted(chatMessageList.size() - 1);
                 setShowTimestamp(chatMessageList);
-                chatMessageAdapter.notifyDataSetChanged();
+                chatMessageAdapter.setNewData(chatMessageList);
                 messageListScrollToBottom();
             } else {
                 SLog.info("是另一個人發來的消息");
@@ -286,9 +406,110 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         rvMessageList.scrollToPosition(chatMessageAdapter.getItemCount() - 1);
     }
 
+    /**
+     * 查看聊天對象信息
+     * 目前主要用於主動獲取對方真實姓名
+     */
+    private void loadMemberInfo() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+        String pureYourMemberName; // 去掉s之後的memberName
+        pureYourMemberName = StringUtil.getPureMemberName(yourMemberName);
 
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "friendMemberName", pureYourMemberName
+        );
 
+        SLog.info("params[%s]", params.toString());
+
+        Api.postUI(Api.PATH_FRIEND_INFO, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+                try {
+                    EasyJSONObject memberInfo = responseObj.getSafeObject("datas.memberInfo");
+                    yourTrueName = memberInfo.getSafeString("trueName");
+                    updateList();
+                    yourTrueNameLoaded = true;
+                    SLog.info("trueName%s",yourTrueName);
+//
+//                    isFriend = memberCardVo.getInt("isFriend");
+
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
+
+    private void updateList() {
+        if (yourTrueNameLoaded) {
+            return;
+        }
+        for (ChatMessage chatMessage : chatMessageList) {
+            if(chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ENC){
+                if (chatMessage.origin == ChatMessage.YOUR_MESSAGE) {
+                    chatMessage.trueName = yourTrueName;
+                }
+            }
+        }
+        chatMessageAdapter.notifyDataSetChanged();
+    }
+
+    private void myTrueName() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "friendMemberName", User.getUserInfo(SPField.FIELD_MEMBER_NAME,"")
+        );
+
+        SLog.info("params[%s]", params.toString());
+
+        Api.postUI(Api.PATH_FRIEND_INFO, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+                try {
+                    EasyJSONObject memberInfo = responseObj.getSafeObject("datas.memberInfo");
+                    myTrueName = memberInfo.getSafeString("trueName");
+                    SLog.info("trueName%s",myMemberName);
+//
+//                    isFriend = memberCardVo.getInt("isFriend");
+
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
     private void loadChatData() {
+        SLog.info("trueName%s",yourTrueName);
+
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName);
         if (conversation == null) {
             return;
@@ -301,21 +522,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         EMMessage lastMessage = null;
 
+        if (messages.size() == 0) {
+            return;
+        }
+
         for (EMMessage emMessage : messages) {
-            startMsgId = emMessage.getMsgId();
             SLog.info("message[%s]", emMessage.toString());
             lastMessage = emMessage;
 
             chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
-
+        startMsgId = messages.get(0).getMsgId();
         //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
         //获取startMsgId之前的pagesize条消息，此方法获取的messages SDK会自动存入到此会话中，APP中无需再次把获取到的messages添加到会话中
+        int i=0;
         int pagesize = 20;
         messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
         for (EMMessage emMessage : messages) {
             SLog.info("message[%s]", emMessage.toString());
-            chatMessageList.add(emMessageToChatMessage(emMessage));
+            chatMessageList.add(i++,emMessageToChatMessage(emMessage));
         }
 
         /*
@@ -324,6 +549,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
         */
+
 
         setShowTimestamp(chatMessageList);
         SLog.info("_chatMessageList.size = %d", chatMessageList.size());
@@ -335,6 +561,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         chatMessage.messageType = ChatUtil.getIntMessageType(emMessage);
         chatMessage.messageId = emMessage.getMsgId();
         SLog.info("chatMessage.messageType[%d]", chatMessage.messageType);
+
+        String from = emMessage.getFrom();
+        SLog.info("FROM[%s]", from);
+        if (from.equals(myMemberName) ||
+                StringUtil.isEmpty(from)) { // 如果from為空，也當作是自己的消息
+            chatMessage.origin = ChatMessage.MY_MESSAGE;
+        } else {
+            chatMessage.origin = ChatMessage.YOUR_MESSAGE;
+        }
+
+        chatMessage.timestamp = emMessage.getMsgTime();
         if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
             // 去除 txt:" 前綴
             chatMessage.content = StringUtil.getEMMessageText(emMessage.getBody().toString());
@@ -342,6 +579,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             String goodsImage = emMessage.getStringAttribute("goodsImage", "");
             int commonId = emMessage.getIntAttribute("commonId", 0);
             String goodsName = emMessage.getStringAttribute("goodsName", "");
+            boolean btnSend = emMessage.getBooleanAttribute("btnSendShow", false);
 
             chatMessage.content = EasyJSONObject.generate("goodsImage", goodsImage, "commonId", commonId, "goodsName", goodsName).toString();
         } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ORDER) {
@@ -358,17 +596,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             chatMessage.content = EasyJSONObject.generate("imgUrl", imgUrl, "absolutePath", absolutePath).toString();
             SLog.info("chatMessage.content[%s]", chatMessage.content);
+        } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ENC) {
+            SLog.info(emMessage.toString());
+            chatMessage.trueName = yourTrueName;
+            String avatar = emMessage.getStringAttribute("avatar", "");
+            String nickname = emMessage.getStringAttribute("nickName", "");
+            if (emMessage.ext() != null) {
+                avatar = emMessage.ext().get("avatar").toString();
+                nickname = emMessage.ext().get("nickName").toString();
+                chatMessage.ext=emMessage.ext();
+            }
+            chatMessage.content = EasyJSONObject.generate("nickname", nickname,"avatar",avatar,"memberName",from).toString();
+            chatMessage.fromMemberName = emMessage.getFrom();
+            if (chatMessage.origin != ChatMessage.MY_MESSAGE) {
+                hasCard = true;
+            }
+            SLog.info("chatMessage.content[%s]", chatMessage.content);
         }
-
-        String from = emMessage.getFrom();
-        SLog.info("FROM[%s]", from);
-        if (from.equals(myMemberName) ||
-                StringUtil.isEmpty(from)) { // 如果from為空，也當作是自己的消息
-            chatMessage.origin = ChatMessage.MY_MESSAGE;
-        } else {
-            chatMessage.origin = ChatMessage.YOUR_MESSAGE;
-        }
-        chatMessage.timestamp = emMessage.getMsgTime();
 
         return chatMessage;
     }
@@ -379,10 +623,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         switch (id) {
             case R.id.btn_back:
-                pop();
+                hideSoftInputPop();
                 break;
             case R.id.btn_menu:
-                start(MemberInfoFragment.newInstance(yourMemberName));
+                new XPopup.Builder(_mActivity)
+                        .offsetX(-Util.dip2px(_mActivity, 11))
+                        .offsetY(-Util.dip2px(_mActivity, 8))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                        .hasShadowBg(false) // 去掉半透明背景
+                        .atView(view)
+                        .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_CHAT))
+                        .show();
                 break;
             case R.id.btn_send_image:
                 openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal());
@@ -418,6 +669,38 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         .moveUpToKeyboard(false)
                         .asCustom(new ImStoreOrderPopup(_mActivity, storeId, yourMemberName,this))
                         .show();
+                break;
+            case R.id.btn_send_enc:
+                new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                        .setPopupCallback(new XPopupCallback() {
+                            @Override
+                            public void onShow() {
+                            }
+                            @Override
+                            public void onDismiss() {
+                            }
+                        }).asCustom(new TwConfirmPopup(_mActivity, "您確認要發送電子名片?","由於電子名片涉及個人隱私", "確認", "取消",new OnConfirmCallback() {
+                    @Override
+                    public void onYes() {
+                        SLog.info("onYes");
+                        EasyJSONObject extra = EasyJSONObject.generate(
+                                "avatar", User.getUserInfo(SPField.FIELD_AVATAR, ""),
+                                "nickName", User.getUserInfo(SPField.FIELD_NICKNAME, ""),
+                                "memberName", User.getUserInfo(SPField.FIELD_MEMBER_NAME, "")
+                        );
+                        sendTextMessage("", CUSTOM_MESSAGE_TYPE_ENC, extra);
+                    }
+
+                    @Override
+                    public void onNo() {
+                        SLog.info("onNo");
+                    }
+                }))
+                        .show();
+
                 break;
                 /* 常用語 和 定位 暫時屏蔽
             case R.id.btn_send_common_used_speech:
@@ -505,7 +788,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         return;
                     }
 
-                    EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(chatMessage.content);
+                    EasyJSONObject easyJSONObject = EasyJSONObject.parse(chatMessage.content);
                     if (easyJSONObject == null) {
                         return;
                     }
@@ -513,8 +796,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     String absolutePath = null;
                     String imgUrl = null;
                     try {
-                        absolutePath = easyJSONObject.getString("absolutePath");
-                        imgUrl = easyJSONObject.getString("imgUrl");
+                        absolutePath = easyJSONObject.getSafeString("absolutePath");
+                        imgUrl = easyJSONObject.getSafeString("imgUrl");
                     } catch (Exception e) {
 
                     }
@@ -529,34 +812,55 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         imageUri = StringUtil.normalizeImageUrl(imgUrl);
                     }
 
-                    Util.startFragment(ImageViewerFragment.newInstance(imageUri));
+//                    Util.startFragment(ImageViewerFragment.newInstance(imageUri));
+
+                    List<String> imageList = new ArrayList<>();
+                    imageList.add(imageUri);
+                    Util.startFragment(ViewPagerFragment.newInstance(imageList));
 
                 } else if (id == R.id.img_your_avatar) {
+                    hideSoftInput();
                     Util.startFragment(MemberInfoFragment.newInstance(yourMemberName));
                 } else if (id == R.id.img_my_avatar) {
                     start(PersonalInfoFragment.newInstance());
+                } else if(id ==R.id.btn_send&&friendInfo.goodsInfo!=null){
+                    SLog.info("發送商品%d",position);
+                    EasyJSONObject goodsInfo = EasyJSONObject.generate(
+                            "goodsName", friendInfo.goodsInfo.goodsName,
+                            "commonId", friendInfo.goodsInfo.commonId,
+                            "goodsImage", friendInfo.goodsInfo.imageSrc);
+                    sendTextMessage("",CUSTOM_MESSAGE_TYPE_GOODS,goodsInfo);
                 } else if (id == R.id.ll_goods_message_container) {
                     ChatMessage chatMessage = chatMessageList.get(position);
 
                     SLog.info("chatMessage.content[%s]", chatMessage.content);
-                    EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(chatMessage.content);
+                    EasyJSONObject easyJSONObject = EasyJSONObject.parse(chatMessage.content);
 
                     try {
                         int commonId = easyJSONObject.getInt("commonId");
                         start(GoodsDetailFragment.newInstance(commonId, 0));
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 } else if (id == R.id.ll_order_message_container) {
                     ChatMessage chatMessage = chatMessageList.get(position);
 
                     SLog.info("chatMessage.content[%s]", chatMessage.content);
-                    EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse(chatMessage.content);
+                    EasyJSONObject easyJSONObject = EasyJSONObject.parse(chatMessage.content);
 
                     try {
                         int ordersId = easyJSONObject.getInt("ordersId");
                         start(OrderDetailFragment.newInstance(ordersId));
-                    } catch (EasyJSONException e) {
+                    } catch (Exception e) {
+
+                    }
+                } else if (id == R.id.ll_enc_message_container) {
+                    ChatMessage chatMessage = chatMessageList.get(position);
+
+                    try {
+                        String memberName = chatMessage.fromMemberName;
+                        start(ENameCardFragment.newInstance(memberName));
+                    } catch (Exception e) {
 
                     }
                 }
@@ -629,8 +933,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                     int index = 0;
                     for (int btnId : EmojiPageAdapter.btnIds) {
                         if (btnId == id) {
-                            Emoji emoji = emojiPage.emojiList.get(index);
-                            SLog.info("emojiId[%d], emojiCode[%s]", emoji.emojiId, emoji.emojiCode);
+                            if (index >= emojiPage.emojiList.size()) {
+                                return;
+                            }
+                            UnicodeEmojiItem emojiItem = emojiPage.emojiList.get(index);
 
                             Editable message = etMessage.getEditableText();
                             SLog.info("message[%s]", message);
@@ -639,14 +945,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                             int start = etMessage.getSelectionStart();
                             int end = etMessage.getSelectionEnd();
 
-                            Bitmap bitmap = BitmapFactory.decodeFile(emoji.absolutePath);
-                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                            drawable.setBounds(0, 0,
-                                    ((int) etMessage.getTextSize() + 12), ((int) etMessage.getTextSize() + 12));
-                            QMUIAlignMiddleImageSpan span = new QMUIAlignMiddleImageSpan(drawable, QMUIAlignMiddleImageSpan.ALIGN_MIDDLE);
-
-
-                            String emoticon = emoji.emojiCode;
                             // Insert the emoticon.
                             if (start < 0) {
                                 start = 0;
@@ -654,15 +952,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                             if (end < 0) {
                                 end = 0;
                             }
-                            message.replace(start, end, emoticon);
+                            message.replace(start, end, emojiItem.emoji);
                             SLog.info("message[%s]", message);
 
-
-                            SLog.info("start[%d], stop[%d]", start, start + emoticon.length());
-                            message.setSpan(span, start, start + emoticon.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             etMessage.setText(message);
                             // 重新定位光標
-                            etMessage.setSelection(start + emoticon.length());
+                            etMessage.setSelection(start + emojiItem.emoji.length());
                             break;
                         }
                         index++;
@@ -674,12 +969,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void loadEmojiData() {
-        List<Emoji> emojiList = LitePal.findAll(Emoji.class);
-        if (emojiList == null) {
-            return;
-        }
         // 表情數
-        int emojiCount = emojiList.size();
+        int emojiCount = UnicodeEmoji.emojiList.length;
         // 表情頁數
         int pageCount = (emojiCount + EmojiPage.EMOJI_PER_PAGE - 1) / EmojiPage.EMOJI_PER_PAGE;
 
@@ -694,7 +985,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             EmojiPage emojiPage = new EmojiPage();
             for (int j = start; j < stop; j++) {
-                emojiPage.emojiList.add(emojiList.get(j));
+                emojiPage.emojiList.add(new UnicodeEmojiItem(UnicodeEmoji.emojiList[j]));
             }
 
             emojiPageList.add(emojiPage);
@@ -703,25 +994,33 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     /**
      * 發送文本消息
-     * @param content 如果是普通文本消息，是文本内容， 如果是商品或訂單，傳空即可，然后在方法體里面生成商品或訂單的信息JSON字符串
+     * @param content 如果是普通文本消息，是文本内容， 如果是產品或訂單，傳空即可，然后在方法體里面生成產品或訂單的信息JSON字符串
      * @param messageType 消息類型
      *                    txt -- 普通文本消息
-     *                    goods -- 商品文本消息
+     *                    goods -- 產品文本消息
      *                    orders -- 訂單文本消息
+     *                    enc -- 電子名片
      * @param extra 附加數據
      */
     private void sendTextMessage(String content, String messageType, Object extra) {
+        //Im發送消息的源頭方法
         SLog.info("content[%s], messageType[%s], extra[%s]", content, messageType, extra);
-
         try {
+            String pushContent = content;
+
             //创建一条文本消息，content为消息文字内容，toChatUsername为对方用户或者群聊的id，后文皆是如此
-            if (CUSTOM_MESSAGE_TYPE_GOODS.equals(messageType)) {
-                EasyJSONObject goodsInfo = (EasyJSONObject) extra;
-                content = EasyJSONObject.generate(
-                        "goodsName", goodsInfo.getString("goodsName"),
+            if (CUSTOM_MESSAGE_TYPE_IMG.equals(messageType)) {
+                pushContent = "[圖片]";
+            }else if (CUSTOM_MESSAGE_TYPE_GOODS.equals(messageType)) {
+                /*
+                   這種結構
+                   {
+                        "goodsName", goodsInfo.getSafeString("goodsName"),
                         "commonId", goodsInfo.getInt("commonId"),
-                        "goodsImage", goodsInfo.getString("goodsImage")
-                ).toString();
+                        "goodsImage", goodsInfo.getSafeString("goodsImage")
+                    }
+                 */
+                content = extra.toString();
             } else if (CUSTOM_MESSAGE_TYPE_ORDERS.equals(messageType)) {
                 ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
                 content = EasyJSONObject.generate(
@@ -730,15 +1029,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         "goodsImage", imStoreOrderItem.goodsImage,
                         "goodsName", imStoreOrderItem.goodsName
                 ).toString();
+            } else if (CUSTOM_MESSAGE_TYPE_ENC.equals(messageType)) {
+                content = extra.toString();
             }
             EMMessage message = EMMessage.createTxtSendMessage(content, yourMemberName);
             message.setAttribute("messageType", messageType);
             if (CUSTOM_MESSAGE_TYPE_GOODS.equals(messageType)) {
                 EasyJSONObject goodsInfo = (EasyJSONObject) extra;
 
-                message.setAttribute("goodsName", goodsInfo.getString("goodsName"));
+                message.setAttribute("goodsName", goodsInfo.getSafeString("goodsName"));
                 message.setAttribute("commonId", goodsInfo.getInt("commonId"));
-                message.setAttribute("goodsImage", goodsInfo.getString("goodsImage"));
+                message.setAttribute("goodsImage", goodsInfo.getSafeString("goodsImage"));
+                pushContent = ChatConversation.LAST_MESSAGE_DESC_GOODS;
+//                message.setAttribute("showSendBtn", goodsInfo.getBoolean("showSendBtn"));
             } else if (CUSTOM_MESSAGE_TYPE_ORDERS.equals(messageType)) {
                 ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
 
@@ -746,12 +1049,26 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 message.setAttribute("ordersSn", imStoreOrderItem.ordersSn);
                 message.setAttribute("goodsImage", imStoreOrderItem.goodsImage);
                 message.setAttribute("goodsName", imStoreOrderItem.goodsName);
+                pushContent = ChatConversation.LAST_MESSAGE_DESC_ORDERS;
+
+            } else if (CUSTOM_MESSAGE_TYPE_ENC.equals(messageType)) {
+                EasyJSONObject encInfo = (EasyJSONObject) extra;
+//                message.ext().put("avatar", encInfo.getSafeString("avatar))"));
+//                message.ext().put("nickName", encInfo.getSafeString("nickName))"));
+                message.setAttribute("nickName",encInfo.getSafeString("nickName"));
+                message.setAttribute("avatar",encInfo.getSafeString("avatar"));
+                SLog.info(message.ext().toString());
+                message.setFrom(((EasyJSONObject) extra).getSafeString("memberName"));
+                pushContent = ChatConversation.LAST_MESSAGE_DESC_ENC;
+
             }
-            ChatUtil.setMessageCommonAttr(message, ChatUtil.ROLE_MEMBER);
-            SLog.info("message[%s], yourMemberName[%s]", message, yourMemberName);
+
+            ChatUtil.setMessageCommonAttr(message, messageType,pushContent);
+            SLog.info("message[%s],ext[%s], yourMemberName[%s]", message,message.ext().toString(), yourMemberName);
 
             //发送消息
             EMClient.getInstance().chatManager().sendMessage(message);
+            ChatUtil.getConversation(yourMemberName, yourNickname, yourAvatarUrl, yourRole);
             message.setMessageStatusCallback(new EMCallBack(){
                 @Override
                 public void onSuccess() {
@@ -759,16 +1076,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     try {
                         if (CUSTOM_MESSAGE_TYPE_TXT.equals(messageType)) {
-                            Api.imSendMessage(yourMemberName, "txt", message.getMsgId(), message.getBody().toString(),
+                            Api.imSendMessage(yourMemberName, messageType, message.getMsgId(), message.getBody().toString(),
                                     null, null, 0, null, null, 0, null);
                         } else if (CUSTOM_MESSAGE_TYPE_GOODS.equals(messageType)) {
                             EasyJSONObject goods = (EasyJSONObject) extra;
-                            Api.imSendMessage(yourMemberName, "txt", message.getMsgId(), message.getBody().toString(),
-                                    null, null, goods.getInt("commonId"), goods.getString("goodsName"), goods.getString("goodsImage"), 0, null);
+                            Api.imSendMessage(yourMemberName, messageType, message.getMsgId(), message.getBody().toString(),
+                                    null, null, goods.getInt("commonId"), goods.getSafeString("goodsName"), goods.getSafeString("goodsImage"), 0, null);
                         } else if (CUSTOM_MESSAGE_TYPE_ORDERS.equals(messageType)) {
                             ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
-                            Api.imSendMessage(yourMemberName, "txt", message.getMsgId(), message.getBody().toString(),
+                            Api.imSendMessage(yourMemberName, messageType, message.getMsgId(), message.getBody().toString(),
                                     null, null, 0, imStoreOrderItem.goodsName, imStoreOrderItem.goodsImage, imStoreOrderItem.ordersId, imStoreOrderItem.ordersSn);
+                        } else if (CUSTOM_MESSAGE_TYPE_ENC.equals(messageType)) {
+                            Api.imSendMessage(yourMemberName, messageType, message.getMsgId(), message.ext().toString(),
+                                    null, null, 0, null, null, 0, null);
                         }
                     } catch (Exception e) {
 
@@ -794,9 +1114,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             chatMessage.content = content;
             if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_GOODS) {
                 EasyJSONObject easyJSONObject = (EasyJSONObject) extra;
-                String goodsName = easyJSONObject.getString("goodsName");
+                String goodsName = easyJSONObject.getSafeString("goodsName");
                 int commonId = easyJSONObject.getInt("commonId");
-                String goodsImage = easyJSONObject.getString("goodsImage");
+                String goodsImage = easyJSONObject.getSafeString("goodsImage");
                 chatMessage.content = EasyJSONObject.generate("goodsName", goodsName, "commonId", commonId, "goodsImage", goodsImage).toString();
             } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ORDER) {
                 ImStoreOrderItem imStoreOrderItem = (ImStoreOrderItem) extra;
@@ -804,6 +1124,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 chatMessage.content = EasyJSONObject.generate(
                         "ordersId", imStoreOrderItem.ordersId, "ordersSn", imStoreOrderItem.ordersSn,
                         "goodsImage", imStoreOrderItem.goodsImage, "goodsName", imStoreOrderItem.goodsName).toString();
+            } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ENC) {
+                chatMessage.trueName = myTrueName;
             }
 
             chatMessage.origin = ChatMessage.MY_MESSAGE;
@@ -815,7 +1137,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             chatMessageAdapter.notifyDataSetChanged();
             messageListScrollToBottom();
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -911,7 +1233,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             iconEmoji.setImageResource(R.drawable.icon_emoji);
             return true;
         }
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -973,6 +1295,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
 
     @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        ((MainActivity) getActivity()).setCurrChatMemberName(yourMemberName);
+        ((MainActivity) getActivity()).setMessageFragmentsActivity(true);
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        ((MainActivity) getActivity()).setCurrChatMemberName(null);
+        ((MainActivity) getActivity()).setMessageFragmentsActivity(false);
+
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -988,79 +1325,96 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
                 Uri uri = data.getData();
                 absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
+
+                new XPopup.Builder(_mActivity)
+                        .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
+                        .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new ImagePreviewPopup(_mActivity, this, absolutePath))
+                        .show();
             } else {
                 absolutePath = captureImageFile.getAbsolutePath();  // 拍照得到的文件路徑
+                SLog.info("absolutePath[%s]", absolutePath);
+
+                sendImageMessage(absolutePath);
             }
-            SLog.info("absolutePath[%s]", absolutePath);
-
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.messageType = Constant.CHAT_MESSAGE_TYPE_IMAGE;
-            chatMessage.origin = ChatMessage.MY_MESSAGE;
-            chatMessage.content = EasyJSONObject.generate("absolutePath", absolutePath).toString();
-            chatMessage.timestamp = System.currentTimeMillis();
-            chatMessageList.add(chatMessage);
-
-            setShowTimestamp(chatMessageList);
-            chatMessageAdapter.notifyDataSetChanged();
-            messageListScrollToBottom();
-
-            TaskObserver taskObserver = new TaskObserver() {
-                @Override
-                public void onMessage() {
-                    Pair<String, String> result = (Pair<String, String>) message;
-                    if (result == null) {
-                        SLog.info("Error!Upload failed");
-                        return;
-                    }
-
-                    SLog.info("ossUrl[%s], absoluteUrl[%s]", result.first, result.second);
-
-                    //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
-                    EMMessage message = EMMessage.createImageSendMessage(absolutePath, false, yourMemberName);
-                    chatMessage.messageId = message.getMsgId();
-                    message.setAttribute("messageType", "img");
-                    ChatUtil.setMessageCommonAttr(message, ChatUtil.ROLE_MEMBER);
-
-                    message.setAttribute("ossUrl", result.first);
-                    message.setAttribute("absolutePath", result.second);
-
-                    SLog.info("ossUrl[%s], absolutePath[%s]", result.first, result.second);
-
-                    //发送消息
-                    EMClient.getInstance().chatManager().sendMessage(message);
-                    message.setMessageStatusCallback(new EMCallBack(){
-                        @Override
-                        public void onSuccess() {
-                            SLog.info("onSuccess, body[%s]", message.getBody().toString());
-
-                            EMImageMessageBody imageMessageBody = (EMImageMessageBody) message.getBody();
-                            Api.imSendMessage(yourMemberName, "img", message.getMsgId(), message.getBody().toString(),
-                                    result.first, imageMessageBody.getRemoteUrl(), 0, null, null, 0, null);
-                        }
-
-                        @Override
-                        public void onError(int i, String s) {
-                            SLog.info("onError, i[%d], s[%s]", i, s);
-                        }
-
-                        @Override
-                        public void onProgress(int i, String s) {
-                            // SLog.info("onProgress, i[%d], s[%s]", i, s);
-                        }
-                    });
-                }
-            };
-
-            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
-                @Override
-                public Object doWork() {
-                    File file = new File(absolutePath);
-                    String name = Api.syncUploadFile(file);
-                    return new Pair<>(name, absolutePath);
-                }
-            });
         }
     }
+
+    /**
+     * 發送圖片
+     * @param absolutePath 圖片的本地絕對路徑
+     */
+    private void sendImageMessage(String absolutePath) {
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.messageType = Constant.CHAT_MESSAGE_TYPE_IMAGE;
+        chatMessage.origin = ChatMessage.MY_MESSAGE;
+        chatMessage.content = EasyJSONObject.generate("absolutePath", absolutePath).toString();
+        chatMessage.timestamp = System.currentTimeMillis();
+        chatMessageList.add(chatMessage);
+
+        setShowTimestamp(chatMessageList);
+        chatMessageAdapter.notifyDataSetChanged();
+        messageListScrollToBottom();
+
+        TaskObserver taskObserver = new TaskObserver() {
+            @Override
+            public void onMessage() {
+                Pair<String, String> result = (Pair<String, String>) message;
+                if (result == null) {
+                    SLog.info("Error!Upload failed");
+                    return;
+                }
+
+                SLog.info("ossUrl[%s], absoluteUrl[%s]", result.first, result.second);
+
+                //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），需要发送原图传true
+                EMMessage message = EMMessage.createImageSendMessage(absolutePath, false, yourMemberName);
+                chatMessage.messageId = message.getMsgId();
+                message.setAttribute("messageType", CUSTOM_MESSAGE_TYPE_IMG);
+                ChatUtil.setMessageCommonAttr(message, CUSTOM_MESSAGE_TYPE_IMG, ChatConversation.LAST_MESSAGE_DESC_IMAGE);
+
+                message.setAttribute("ossUrl", result.first);
+                message.setAttribute("absolutePath", result.second);
+
+                SLog.info("ossUrl[%s], absolutePath[%s]", result.first, result.second);
+
+                //发送消息
+                EMClient.getInstance().chatManager().sendMessage(message);
+                message.setMessageStatusCallback(new EMCallBack(){
+                    @Override
+                    public void onSuccess() {
+                        SLog.info("onSuccess, body[%s]", message.getBody().toString());
+
+                        EMImageMessageBody imageMessageBody = (EMImageMessageBody) message.getBody();
+                        Api.imSendMessage(yourMemberName, "img", message.getMsgId(), message.getBody().toString(),
+                                result.first, imageMessageBody.getRemoteUrl(), 0, null, null, 0, null);
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+                        SLog.info("onError, i[%d], s[%s]", i, s);
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+                        // SLog.info("onProgress, i[%d], s[%s]", i, s);
+                    }
+                });
+            }
+        };
+
+        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            @Override
+            public Object doWork() {
+                File file = new File(absolutePath);
+                String name = Api.syncUploadFile(file);
+                return new Pair<>(name, absolutePath);
+            }
+        });
+    }
+
 
     public void setConversation(EMConversation conversation) {
         this.conversation = conversation;
@@ -1104,6 +1458,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             sendTextMessage("", CUSTOM_MESSAGE_TYPE_GOODS, extra);
         } else if (type == PopupType.IM_CHAT_SEND_ORDER) {
             sendTextMessage("", CUSTOM_MESSAGE_TYPE_ORDERS, extra);
+        }
+    }
+
+    public String getYourMemberName() {
+        return yourMemberName;
+    }
+
+    public boolean getCard() {
+        return hasCard;
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        EasyJSONObject dataObj = (EasyJSONObject) data;
+        try {
+            int action = dataObj.getInt("action");
+            if (action == SimpleCallback.ACTION_SELECT_IMAGE) {
+                String absolutePath = dataObj.getSafeString("absolute_path");
+                sendImageMessage(absolutePath);
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 /**
- * 分類店鋪數據結構
+ * 分類商店數據結構
  * @author zwm
  */
 public class CategoryShop {

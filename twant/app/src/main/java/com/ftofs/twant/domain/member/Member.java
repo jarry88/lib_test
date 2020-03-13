@@ -21,7 +21,7 @@ public class Member implements Serializable,Cloneable {
 
     /**
      * 会员昵称
-     * Modify By yangjian 2018/9/19 16:48 description 增加會員暱稱
+     * Modify By yangjian 2018/9/19 16:48 description 增加城友暱稱
      */
     private String nickName = "";
 
@@ -243,12 +243,12 @@ public class Member implements Serializable,Cloneable {
     private String idCard;
 
     /**
-     * 會員個性簽名
+     * 城友個性簽名
      */
     private String memberSignature;
 
     /**
-     * 會員簡介
+     * 城友簡介
      */
     private String memberBio;
 

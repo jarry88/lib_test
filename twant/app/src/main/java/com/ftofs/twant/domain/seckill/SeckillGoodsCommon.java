@@ -9,12 +9,12 @@ public class SeckillGoodsCommon {
     private int seckillCommonId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice = BigDecimal.ZERO;
 

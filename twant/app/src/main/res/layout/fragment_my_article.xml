@@ -21,6 +21,7 @@
             />
 
         <TextView
+            android:id="@+id/tv_my_article"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -40,11 +41,11 @@
     </RelativeLayout>
     <!-- END OF 工具欄 -->
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_post_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>
 

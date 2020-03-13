@@ -10,9 +10,9 @@ public class Constant {
     /**
      * 分類相關的常量定義
      */
-    // 店鋪分類
+    // 商店分類
     public static final int CATEGORY_TYPE_SHOP = 1;
-    // 商品分類
+    // 產品分類
     public static final int CATEGORY_TYPE_COMMODITY = 2;
     // 品牌分類
     public static final int CATEGORY_TYPE_BRAND = 3;
@@ -86,7 +86,7 @@ public class Constant {
     public static final int ACTION_SELECT_SPEC = 3; // 選擇規格
 
     /**
-     * 帖文類型
+     * 想要帖類型
      * 1 -- 通用 2 -- 求購
      */
     public static final int POST_TYPE_COMMON = 1;
@@ -124,7 +124,7 @@ public class Constant {
     public static final String AREA_CODE_MACAO = "00853";
 
     /**
-     * 店鋪距離閾值
+     * 商店距離閾值
      */
     public static final float STORE_DISTANCE_THRESHOLD = 0.0000001f;
 
@@ -192,6 +192,7 @@ public class Constant {
     public static final int CHAT_MESSAGE_TYPE_GOODS = 2;
     public static final int CHAT_MESSAGE_TYPE_ORDER = 3;
     public static final int CHAT_MESSAGE_TYPE_IMAGE = 4;
+    public static final int CHAT_MESSAGE_TYPE_ENC = 5; // 電子名片
 
     // 摄像头动作类型
     public static final int CAMERA_ACTION_IMAGE = 1;  // 用Camera拍照片
@@ -230,7 +231,7 @@ public class Constant {
     public static final int WANT_PAY_WALLET_STATUS_NOT_ACTIVATED = 2;
 
     /**
-     * 卡券類型 -- 店鋪券
+     * 卡券類型 -- 商店券
      */
     public static final int COUPON_TYPE_STORE = 1;
     /**
@@ -265,4 +266,30 @@ public class Constant {
     // 各種渠道
     public static final String FLAVOR_GOOGLE = "google";
     public static final String FLAVOR_OFFICIAL = "official";
+
+    /**
+     * 微信授權的用途
+     */
+    public static final int WEIXIN_AUTH_USAGE_LOGIN = 1;  // 用于登錄
+    public static final int WEIXIN_AUTH_USAGE_UNBIND = 2; // 用于解綁
+    public static final int WEIXIN_AUTH_USAGE_BIND = 3; // 用于綁定
+
+
+    /**
+     * 優惠券狀態
+     */
+    public static final int COUPON_STATE_UNRECEIVED = 1;  // 未領取
+    public static final int COUPON_STATE_RECEIVED = 2;   // 已領取
+    public static final int COUPON_STATE_RUN_OUT_OF = 3; // 已搶完
+    public static final int COUPON_STATE_USED = 4;       // 已使用
+    public static final int COUPON_STATE_OUT_OF_DATE = 5; // 已過期
+    public static final int COUPON_STATE_DISCARDED = 6;  // 已作廢
+
+
+    /**
+     * INT類型的true | false 定義
+     */
+    public static final int TRUE_INT = 1;
+    public static final int FALSE_INT = 0;
+    public static final String MSG_NOTIFY_HXID ="hId" ;
 }

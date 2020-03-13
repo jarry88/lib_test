@@ -7,7 +7,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
  * @author zwm
  */
 public class InStorePersonItem implements MultiItemEntity {
-    public static final int TYPE_LABEL = 1;  // 分類標簽名: 好友 店友
+    public static final int TYPE_LABEL = 1;  // 分類標簽名: 好友 城友
     public static final int TYPE_ITEM = 2;
     public static final int TYPE_EMPTY_HINT = 3;  // 進店人員列表為空的提示
 
@@ -21,6 +21,10 @@ public class InStorePersonItem implements MultiItemEntity {
         this.memberName = memberName;
         this.avatarUrl = avatarUrl;
         this.nickname = nickname;
+    }
+    public StoreFriendsItem toStoreFriendItem(){
+        StoreFriendsItem item = new StoreFriendsItem(memberName,avatarUrl);
+        return  item;
     }
 
     @Override

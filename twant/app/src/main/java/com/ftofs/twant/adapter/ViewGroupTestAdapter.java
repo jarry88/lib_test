@@ -17,7 +17,6 @@ public class ViewGroupTestAdapter extends ViewGroupAdapter<String> {
         super(context, container, itemLayoutId);
 
         // 添加可點擊的childView Id
-        addClickableChildrenId(R.id.btn_receive_voucher_now, R.id.tv_store_name);
     }
 
     @Override

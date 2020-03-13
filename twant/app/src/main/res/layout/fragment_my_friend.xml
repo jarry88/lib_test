@@ -15,7 +15,7 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="18sp"
-            android:text="@string/text_my_friend"
+            android:text="社交"
             android:textColor="@color/tw_black"
             />
 
@@ -34,15 +34,119 @@
             android:id="@+id/btn_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="12dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
             android:src="@drawable/icon_contact_menu"
             />
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_message_search"
+            android:layout_width="31dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="7dp"
+            android:layout_toLeftOf="@id/btn_menu"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_shop_search">
+        </com.ftofs.twant.widget.ScaledButton>
     </RelativeLayout>
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="107dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:id="@+id/ll_amount_container">
+        <LinearLayout
+            android:id="@+id/btn_my_like"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/icon_message_category_transact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/icon_my_like"
+                    />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="我的讚想"
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_my_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/icon_message_category_asset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/icon_my_comment"
+                    />
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="我的說說"
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_my_follow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/icon_message_category_social"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/icon_my_follow"
+                    />
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="我的關注"
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F1F1F1">
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

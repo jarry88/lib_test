@@ -82,7 +82,7 @@ public class AdvertorialArticleVo {
      */
     private String categoryName;
     /**
-     * 文章状态
+     * 想要帖状态
      */
 
     private int state;
@@ -149,7 +149,7 @@ public class AdvertorialArticleVo {
     private int likeNum;
 
     /**
-     * 商品数量
+     * 產品数量
      */
     private int goodsCount;
 
@@ -171,22 +171,22 @@ public class AdvertorialArticleVo {
     private String typeText = "";
 
     /**
-     * 包含的商品id
+     * 包含的產品id
      */
     private String commonIdList = "";
 
     /**
-     * 商品图片
+     * 產品图片
      */
     private String commonImageList = "" ;
 
     /**
-     * 商品列表 ,id与商品对应
+     * 產品列表 ,id与產品对应
      */
     private HashMap<Integer, ArticleGoodsCommonVo> goodsCommonHashMap = new HashMap<>();
 
     /**
-     * 推广商品
+     * 推广產品
      */
     private HashMap<Integer, Integer> distributorGoodsHashMap = new HashMap<>();
 
@@ -205,7 +205,7 @@ public class AdvertorialArticleVo {
      */
     private List<AdvertorialArticleItemVo> normalContentJson  = new ArrayList<>() ;
     /**
-     * 文章评论总数
+     * 想要帖评论总数
      */
     private int commentAmount ;
 

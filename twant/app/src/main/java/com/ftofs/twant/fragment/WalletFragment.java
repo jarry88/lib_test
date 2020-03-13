@@ -1,8 +1,10 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +64,7 @@ public class WalletFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_activate_now) {
             start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, false));
         }
@@ -71,7 +73,7 @@ public class WalletFragment extends BaseFragment implements View.OnClickListener
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -107,7 +109,7 @@ public class WalletFragment extends BaseFragment implements View.OnClickListener
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -120,12 +122,12 @@ public class WalletFragment extends BaseFragment implements View.OnClickListener
                         btnActivateNow.setVisibility(View.GONE); // 已激活，隱藏激活按鈕
 
                         // 獲取余額
-                        float balance = (float) responseObj.getDouble("datas.memberInfo.predepositAvailable");
+                        double balance = responseObj.getDouble("datas.memberInfo.predepositAvailable");
+                        SLog.info("__balance[%s], __balance2[%s]", balance, StringUtil.formatFloat(balance));
                         tvAccountBalance.setText(StringUtil.formatFloat(balance));
                     }
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
-                    e.printStackTrace();
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

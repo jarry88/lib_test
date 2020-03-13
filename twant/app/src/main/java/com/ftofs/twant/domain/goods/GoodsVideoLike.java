@@ -9,12 +9,12 @@ public class GoodsVideoLike {
     private String goodsVideoUrl;
 
     /**
-     * 店鋪ID
+     * 商店ID
      */
     private int storeId;
 
     /**
-     * 會員名稱
+     * 城友名稱
      */
     private String memberName;
 

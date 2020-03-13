@@ -3,8 +3,6 @@ package com.ftofs.twant.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -104,14 +105,15 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_view) {
             start(MyFeedbackFragment.newInstance());
         } else if (id == R.id.btn_add_image) {
             openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
         } else if (id == R.id.btn_commit) {
             String token = User.getToken();
-            if (token == null) {
+            if (StringUtil.isEmpty(token)) {
+                ToastUtil.error(_mActivity,"檢查登錄狀態");
                 return;
             }
 
@@ -145,7 +147,7 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
                 @Override
                 public void onMessage() {
                     String responseStr = (String) message;
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -154,7 +156,7 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
                     buttonClickInfo.canClick = true; // 操作成功后，恢復可點擊
 
                     ToastUtil.success(_mActivity, "提交成功");
-                    pop();
+                    hideSoftInputPop();
                 }
             };
 
@@ -230,7 +232,7 @@ public class CommitFeedbackFragment extends BaseFragment implements View.OnClick
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

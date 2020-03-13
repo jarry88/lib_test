@@ -81,7 +81,7 @@ public class Discount implements Serializable {
 	private String promotionCountDownTimeText="";
 
 	/**
-	 * 参数商品数量
+	 * 参数產品数量
 	 */
 	private long goodsCount=0;
 

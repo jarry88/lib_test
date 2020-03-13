@@ -1,5 +1,7 @@
 package com.ftofs.twant.entity;
 
+import androidx.annotation.NonNull;
+
 /**
  * 彈出框的數據項
  * @author zwm
@@ -32,4 +34,10 @@ public class ListPopupItem {
     public int unselectedIconResId;
     public String title;
     public Object data;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return title;
+    }
 }

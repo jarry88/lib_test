@@ -12,12 +12,12 @@ public class CartBundling {
     private int cartId;
 
     /**
-     * 商品(sku)ID
+     * 產品(sku)ID
      */
     private int goodsId = 0;
 
     /**
-     * 商品(spu)ID
+     * 產品(spu)ID
      */
     private int commonId = 0;
 

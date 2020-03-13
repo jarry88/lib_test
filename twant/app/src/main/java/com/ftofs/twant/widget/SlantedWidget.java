@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 
 /**
@@ -51,9 +52,9 @@ public class SlantedWidget extends RelativeLayout {
     }
 
 
-    public void setDiscountInfo(float discount, float originalPrice) {
+    public void setDiscountInfo(Context context, float discount, float originalPrice) {
         tvDiscount.setText(String.valueOf(discount));
-        tvOriginalPrice.setText(String.valueOf(originalPrice));
+        tvOriginalPrice.setText(StringUtil.formatPrice(context, originalPrice, 1,false));
     }
 }
 

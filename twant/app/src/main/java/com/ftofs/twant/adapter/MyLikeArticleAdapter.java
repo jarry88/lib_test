@@ -1,6 +1,6 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;

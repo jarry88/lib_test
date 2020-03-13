@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.ftofs.twant.widget.SoftToolPaneLayout
+    android:id="@+id/stpl_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:stpl_tool_pane="@id/ll_emoji_pane">
     <!-- 工具欄 -->
     <RelativeLayout
         android:id="@+id/tool_bar"
@@ -36,328 +38,364 @@
 
         <TextView
             android:id="@+id/btn_commit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
-            android:layout_alignParentRight="true"
+            android:layout_width="51dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:text="@string/text_commit"
+            android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="14sp"
+            android:text="@string/text_publish"
             android:background="@drawable/micro_blue_button"
             />
     </RelativeLayout>
     <!-- END OF 工具欄 -->
+
     <ScrollView
+        android:id="@+id/sv_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/img_christmas_activity"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:background="@drawable/border_type_d">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="@string/text_title"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/btn_input_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="30dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/tv_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/input_hint"
-                        />
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/expand_button_grey"
-                        />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:background="@drawable/border_type_d">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="@string/text_keyword"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/btn_input_keyword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="30dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/tv_keyword"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/input_hint"
-                        />
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/expand_button_grey"
-                        />
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:background="@drawable/border_type_d">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="@string/text_article_category"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/btn_article_category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="30dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/tv_article_category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/input_hint"
-                        />
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/expand_button_grey"
-                        />
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:background="@drawable/border_type_d">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="@string/text_deadline"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/btn_deadline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="30dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/tv_deadline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text=""
-                        />
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/expand_button_grey"
-                        />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:background="@drawable/border_type_d">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="@string/text_budget_price"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/btn_budget_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="30dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:id="@+id/tv_budget_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/input_hint"
-                        />
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/expand_button_grey"
-                        />
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
+                android:layout_height="49.5dp"
+                android:visibility="gone"
+                />
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/tw_black"
-                    android:text="@string/text_cover_image"
-                    />
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="9dp"
+                android:paddingBottom="9dp"
+                android:text="發表您的想要，讓全城一起幫助您成真~"
+                android:textColor="#FFAA9264"
+                android:textSize="13sp"
+                android:background="#FFFEF7E4"
+                />
 
-                <ImageView
-                    android:id="@+id/btn_add_post_cover_image"
-                    android:layout_width="145dp"
-                    android:layout_height="90dp"
-                    android:layout_marginTop="9dp"
-                    android:layout_marginBottom="9dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/btn_add_post_cover_image"
-                    />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:id="@+id/rl_post_cover_image_container"
-                    android:layout_width="145dp"
-                    android:layout_height="90dp"
-                    android:layout_marginTop="9dp"
-                    android:layout_marginBottom="9dp"
-                    android:layout_alignParentRight="true"
-                    android:visibility="gone">
-                    <ImageView
-                        android:id="@+id/post_cover_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/border_type_d">
+                    <com.ftofs.twant.widget.TouchEditText
+                        android:id="@+id/et_title"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_black"
+                        android:hint="@string/text_title"
+                        android:background="@null"
                         />
-                    <com.ftofs.twant.widget.ScaledButton
-                        android:id="@+id/btn_remove_cover_image"
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
+
+                    <TextView
+                        android:id="@+id/tv_title_word_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        app:icon_src="@drawable/icon_remove_post_image"
-                        app:icon_width="15dp"
-                        app:icon_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:textSize="12sp"
+                        android:textColor="#BEBEBE"
+                        android:text="0/60"
                         />
+
                 </RelativeLayout>
-            </RelativeLayout>
-            <!-- 分隔條 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="@color/tw_light_grey"
-                />
+            </LinearLayout>
 
             <!-- 正文 -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingBottom="15dp"
                 android:orientation="vertical">
-                <RelativeLayout
+                <!-- 正文內容 -->
+                <com.ftofs.twant.widget.TouchEditText
+                    android:id="@+id/et_content"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/et_content"
+                    android:layout_height="0dp"
+                    android:minHeight="154dp"
+                    android:layout_weight="1"
+                    android:padding="15dp"
+                    android:gravity="top"
+                    android:hint="內容"
+                    android:background="@null"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_black"
+                    />
+
+                <!-- 圖片 -->
+                <com.ftofs.twant.widget.SquareGridLayout
+                    android:id="@+id/post_content_image_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/toolbar_margin_left"
+                    android:layout_marginRight="@dimen/toolbar_margin_left"
+                    app:sgl_column_count="3">
+                    <ImageView
+                        android:id="@+id/btn_add_post_content_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="3dp"
+                        android:src="@drawable/btn_add_post_content_image_new"
+                        android:scaleType="fitXY"
+                        />
+                </com.ftofs.twant.widget.SquareGridLayout>
+
+                <!-- 產品 -->
+                <LinearLayout
+                    android:id="@+id/ll_post_goods_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="@dimen/toolbar_margin_left"
+                    android:layout_marginRight="@dimen/toolbar_margin_right"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:background="@drawable/post_list_item_bg"
+                    android:visibility="gone">
+                    <ImageView
+                        android:id="@+id/post_goods_image"
+                        android:layout_width="87.5dp"
+                        android:layout_height="87.5dp"
+                        android:src="@drawable/cs_avatar_160"
+                        />
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="top"
-                        android:hint="@string/input_post_content_hint"
-                        android:minHeight="150dp"
-                        android:background="@null"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tv_post_goods_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/tw_black"
+                            android:text="Yueaeow香薰精油香氛淡薰香家用新留香"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+                            <TextView
+                                android:id="@+id/tv_goods_price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="$ 298"
+                                android:textSize="18sp"
+                                android:textColor="@color/tw_red"
+                                />
+
+                            <com.ftofs.twant.widget.ScaledButton
+                                android:id="@+id/btn_delete_post_goods"
+                                android:layout_width="31dp"
+                                android:layout_height="31dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                app:icon_src="@drawable/icon_delete"
+                                />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- 店鋪 -->
+                <LinearLayout
+                    android:id="@+id/ll_post_store_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="@dimen/toolbar_margin_left"
+                    android:layout_marginRight="@dimen/toolbar_margin_right"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:background="@drawable/post_list_item_bg"
+                    android:visibility="gone">
+                    <ImageView
+                        android:id="@+id/post_store_image"
+                        android:layout_width="154dp"
+                        android:layout_height="87dp"
+                        android:src="@drawable/cs_avatar_160"
                         />
-                    <TextView
-                        android:id="@+id/tv_word_count"
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tv_post_store_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:textColor="@color/tw_black"
+                            android:text="澳雅美美容養護連鎖中心(新馬路店)"
+                            android:maxLines="2"
+                            android:ellipsize="end"
+                            />
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp">
+                            <TextView
+                                android:id="@+id/tv_store_signature"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text=""
+                                android:textSize="14sp"
+                                android:textColor="@color/tw_dark_grey"
+                                />
+
+                            <com.ftofs.twant.widget.ScaledButton
+                                android:id="@+id/btn_delete_post_store"
+                                android:layout_width="31dp"
+                                android:layout_height="31dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                app:icon_src="@drawable/icon_delete"
+                                android:visibility="gone"
+                                />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/btn_add_post_goods"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="@dimen/toolbar_margin_left"
+                    android:paddingLeft="17dp"
+                    android:paddingRight="17dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/package_type_btn_bg">
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:text="0/500"
+                        android:src="@drawable/icon_add_post_select_goods"
                         />
-                </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="選擇產品"
+                        android:textColor="@color/tw_dark_grey"
+                        android:textSize="14sp"
+                        />
+                </LinearLayout>
             </LinearLayout>
 
-
-            <com.ftofs.twant.widget.SquareGridLayout
-                android:id="@+id/post_content_image_container"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                app:sgl_column_count="3">
-                <ImageView
-                    android:id="@+id/btn_add_post_content_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    android:src="@drawable/btn_add_post_content_image"
-                    android:scaleType="fitXY"
+                android:layout_height="60dp"
+                android:layout_marginLeft="@dimen/toolbar_margin_left"
+                android:layout_marginRight="@dimen/toolbar_margin_right"
+                android:layout_marginBottom="50dp"
+                android:background="@drawable/border_type_f">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="想要類型"
+                    android:textColor="#FF929292"
+                    android:textSize="16sp"
                     />
-            </com.ftofs.twant.widget.SquareGridLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_select_post_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_post_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:textSize="16sp"
+                        android:textColor="#FF929292"
+                        android:text=""
+                        />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/expand_button_grey"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tool_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/border_type_e">
+            <ImageView
+                android:id="@+id/btn_insert_post_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16.5dp"
+                android:src="@drawable/icon_add_post_insert_emoji"
+                />
+        </LinearLayout>
+        <!-- 底部表情面板 -->
+        <LinearLayout
+            android:id="@+id/ll_emoji_pane"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/border_type_e">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_emoji_page_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+    </LinearLayout>
+</com.ftofs.twant.widget.SoftToolPaneLayout>

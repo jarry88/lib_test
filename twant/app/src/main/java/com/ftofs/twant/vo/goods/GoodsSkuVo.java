@@ -7,18 +7,18 @@ import java.math.BigDecimal;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品sku
+ * 產品sku
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:11
  */
 public class GoodsSkuVo {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
     /**
@@ -27,15 +27,15 @@ public class GoodsSkuVo {
      */
     private String goodsFullSpecs;
     /**
-     * 商品价格0
+     * 產品价格0
      */
     private BigDecimal goodsPrice0;
     /**
-     * 商品价格1
+     * 產品价格1
      */
     private BigDecimal goodsPrice1;
     /**
-     * 商品价格2
+     * 產品价格2
      */
     private BigDecimal goodsPrice2;
     /**
@@ -43,7 +43,7 @@ public class GoodsSkuVo {
      */
     private String goodsPriceAll;
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial;
     /**

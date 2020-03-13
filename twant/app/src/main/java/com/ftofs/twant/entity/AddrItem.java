@@ -2,8 +2,11 @@ package com.ftofs.twant.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.ArrayList;
@@ -80,7 +83,7 @@ public class AddrItem implements Parcelable {
     public AddrItem(EasyJSONObject easyJSONObject) {
         try {
             addressId = easyJSONObject.getInt("addressId");
-            realName = easyJSONObject.getString("realName");
+            realName = easyJSONObject.getSafeString("realName");
             areaIdList = new ArrayList<>();
             areaIdList.add(easyJSONObject.getInt("areaId1"));
             areaIdList.add(easyJSONObject.getInt("areaId2"));
@@ -88,14 +91,14 @@ public class AddrItem implements Parcelable {
             areaIdList.add(easyJSONObject.getInt("areaId4"));
 
             areaId = easyJSONObject.getInt("areaId");
-            areaInfo = easyJSONObject.getString("areaInfo");
-            address = easyJSONObject.getString("address");
-            mobileAreaCode = easyJSONObject.getString("mobileAreaCode");
-            mobPhone = easyJSONObject.getString("mobPhone");
+            areaInfo = easyJSONObject.getSafeString("areaInfo");
+            address = easyJSONObject.getSafeString("address");
+            mobileAreaCode = easyJSONObject.getSafeString("mobileAreaCode");
+            mobPhone = easyJSONObject.getSafeString("mobPhone");
             isDefault = easyJSONObject.getInt("isDefault");
 
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 

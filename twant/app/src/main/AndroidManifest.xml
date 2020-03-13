@@ -54,16 +54,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.AppGuideActivity"></activity>
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".activity.SplashActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!--需要添加下面的intent-filter配置-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="@string/app_uri_scheme"/>
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTask"/>
 
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -156,6 +166,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoDisplay" />
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="@string/umeng_app_key" />
@@ -164,7 +181,7 @@
             android:value="umengshare" />
 
 
-        <service android:name="com.amap.api.location.APSService" />
+        <meta-data android:name="TencentMapSDK" android:value="@string/tencent_map_key" />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -198,7 +215,7 @@
             android:required="false" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.ftofs.twant.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

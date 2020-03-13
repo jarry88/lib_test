@@ -9,12 +9,12 @@ public class Gift implements Serializable {
     private int giftId;
 
     /**
-     * 商品SKU
+     * 產品SKU
      */
     private int goodsId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
@@ -24,17 +24,17 @@ public class Gift implements Serializable {
     private int giftNum;
 
     /**
-     * 赠品类型，1满优惠赠品、2商品赠品
+     * 赠品类型，1满优惠赠品、2產品赠品
      */
     private int giftType;
 
     /**
-     * 项目编号，如满优惠编号、主商品编号
+     * 项目编号，如满优惠编号、主產品编号
      */
     private int itemId;
 
     /**
-     * 项目编号，记录商品赠品的主商品SPU
+     * 项目编号，记录產品赠品的主產品SPU
      */
     private Integer itemCommonId;
 

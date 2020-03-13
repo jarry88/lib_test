@@ -59,9 +59,10 @@
 
     <LinearLayout
         android:id="@+id/ll_content_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
+        <!-- 產品頁 -->
         <LinearLayout
             android:id="@+id/ll_page_1"
             android:layout_width="match_parent"
@@ -69,7 +70,6 @@
             android:orientation="vertical">
             <!-- 綜合、銷量、上新、價格Tab -->
             <LinearLayout
-                android:id="@+id/goods_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border_type_d"
@@ -83,6 +83,7 @@
                     app:stb_stroke_width="2dp"
                     app:stb_horizontal_padding="9dp"
                     app:stb_use_cap="true"
+                    app:stb_draw_underline="false"
                     />
 
                 <com.ftofs.twant.widget.SimpleTabButton
@@ -94,6 +95,7 @@
                     app:stb_stroke_width="2dp"
                     app:stb_horizontal_padding="9dp"
                     app:stb_use_cap="true"
+                    app:stb_draw_underline="false"
                     />
 
 
@@ -106,6 +108,7 @@
                     app:stb_stroke_width="2dp"
                     app:stb_horizontal_padding="9dp"
                     app:stb_use_cap="true"
+                    app:stb_draw_underline="false"
                     />
 
 
@@ -138,26 +141,50 @@
                             />
                     </LinearLayout>
                 </RelativeLayout>
+
+                <com.ftofs.twant.widget.ScaledButton
+                    android:id="@+id/btn_change_view_style"
+                    android:layout_width="31dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="21dp"
+                    app:icon_src="@drawable/icon_store_goods_view_style_list"
+                    />
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_goods_list"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#fff">
-            </android.support.v7.widget.RecyclerView>
+                android:orientation="horizontal">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_category_list"
+                    android:layout_width="94dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/tw_slight_grey">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_goods_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#fff">
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
         </LinearLayout>
 
+        <!-- 視頻頁 -->
         <LinearLayout
             android:id="@+id/ll_page_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <android.support.v7.widget.RecyclerView
+            android:orientation="vertical"
+            android:visibility="gone">
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_video_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-            </android.support.v7.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

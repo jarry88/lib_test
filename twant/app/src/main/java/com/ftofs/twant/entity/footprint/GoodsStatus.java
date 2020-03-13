@@ -2,7 +2,7 @@ package com.ftofs.twant.entity.footprint;
 
 
 /**
- * 【瀏覽記憶】商品狀態模型
+ * 【瀏覽記憶】產品狀態模型
  * @author zwm
  */
 public class GoodsStatus extends BaseStatus {

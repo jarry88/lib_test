@@ -2,6 +2,9 @@ package com.ftofs.twant.task;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+
+import com.ftofs.twant.log.SLog;
 
 /**
  * 耗時的任務
@@ -41,8 +44,8 @@ public abstract class TaskObservable implements Runnable {
             TaskObserver anotherObserver = (TaskObserver) taskObserver.clone();
             anotherObserver.setMessage(message);
             handler.post(anotherObserver);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 }

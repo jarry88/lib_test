@@ -10,12 +10,12 @@ import java.util.List;
 
 public class Goods implements Serializable,Cloneable {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
@@ -43,17 +43,17 @@ public class Goods implements Serializable,Cloneable {
     private String specValueIds="";
 
     /**
-     * 商品价格0
+     * 產品价格0
      */
     private BigDecimal goodsPrice0 = BigDecimal.ZERO;
 
     /**
-     * 商品价格1
+     * 產品价格1
      */
     private BigDecimal goodsPrice1 = BigDecimal.ZERO;
 
     /**
-     * 商品价格2
+     * 產品价格2
      */
     private BigDecimal goodsPrice2 = BigDecimal.ZERO;
 
@@ -153,7 +153,7 @@ public class Goods implements Serializable,Cloneable {
     private String promotionTitle="";
 
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial="";
 
@@ -189,7 +189,7 @@ public class Goods implements Serializable,Cloneable {
     private Integer isGift;
 
     /**
-     * 拼团商品标记
+     * 拼团產品标记
      */
     private Integer isGroup;
 
@@ -204,7 +204,7 @@ public class Goods implements Serializable,Cloneable {
     private int limitAmount = 0;
 
     /**
-     * 秒杀商品标记
+     * 秒杀產品标记
      */
     private int isSeckill;
 

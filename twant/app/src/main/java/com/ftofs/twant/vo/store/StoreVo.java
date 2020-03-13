@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.store;
 import java.util.List;
 
 /**
- * @Description: 店鋪視圖對象
+ * @Description: 商店視圖對象
  * @Auther: yangjian
  * @Date: 2018/10/25 11:30
  */
@@ -33,7 +33,7 @@ public class StoreVo {
      */
     private String storeAvatar = "";
     /**
-     * 店铺主营商品
+     * 店铺主营產品
      */
     private String storeZy = "";
     /**
@@ -63,7 +63,7 @@ public class StoreVo {
      */
     private Integer companyAreaId = 0;
     /**
-     * 店鋪形象圖(店內局部圖)
+     * 商店形象圖(店內局部圖)
      */
     private String storeFigureImage;
     /**
@@ -114,13 +114,13 @@ public class StoreVo {
 
     /**
      * Modify By yangjian 2018/11/26 18:38
-     * 店鋪首頁視頻地址
+     * 商店首頁視頻地址
      */
     private String videoUrl = "";
 
     /**
-     * Modify By yangjian 2018/12/1 18:37 description 修改店鋪客服數據結構
-     * 店鋪客服
+     * Modify By yangjian 2018/12/1 18:37 description 修改商店客服數據結構
+     * 商店客服
      */
     private List<ServiceVo> storePresalesList;
 
@@ -130,11 +130,11 @@ public class StoreVo {
      */
     private String shopDay;
     /**
-     * 店鋪簽名
+     * 商店簽名
      */
     private String storeSignature;
     /**
-     * 店鋪介紹
+     * 商店介紹
      */
     private String storeIntroduce;
 
@@ -144,7 +144,7 @@ public class StoreVo {
     private int isFavorite = 0;
 
     /**
-     * 是否點讚
+     * 是否讚想
      */
     private int isLike = 0;
 
@@ -168,12 +168,12 @@ public class StoreVo {
     private String latString = "";
 
     /**
-     * 店鋪形象圖(店內全景圖)
+     * 商店形象圖(店內全景圖)
      */
     private String storeFigureImageInner;
 
     /**
-     * 店鋪形象圖(店外全景圖)
+     * 商店形象圖(店外全景圖)
      */
     private String storeFigureImageOuter;
 
@@ -220,12 +220,12 @@ public class StoreVo {
      */
     private String restDayEnd;
     /**
-     * 店鋪logo地址
+     * 商店logo地址
      */
     private String storeLogoUrl;
 
     /**
-     * 商品spu數量
+     * 產品spu數量
      */
     private long goodsCommonCount = 0;
 

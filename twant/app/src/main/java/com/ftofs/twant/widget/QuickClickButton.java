@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.ftofs.twant.log.SLog;
 
-public class QuickClickButton extends android.support.v7.widget.AppCompatTextView {
+public class QuickClickButton extends androidx.appcompat.widget.AppCompatTextView {
     public interface OnQuickClickListener {
         void onQuickClick(View view);
     }

@@ -1,21 +1,20 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
-
 
 import java.util.List;
 
@@ -64,7 +63,7 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
         Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).centerCrop().into(holder.goodsImage);
         holder.tvGoodsName.setText(item.goodsName);
         holder.tvGoodsJingle.setText(item.jingle);
-        holder.tvGoodsPrice.setText(StringUtil.formatPrice(context, item.price, 1));
+        holder.tvGoodsPrice.setText(StringUtil.formatPrice(context, item.price, 1,false));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

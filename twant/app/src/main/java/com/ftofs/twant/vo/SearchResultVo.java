@@ -9,7 +9,7 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品搜索返回结果Vo
+ * 產品搜索返回结果Vo
  *
  * @author dqw
  * Created 2017/6/7 14:00

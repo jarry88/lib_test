@@ -11,7 +11,7 @@ import com.ftofs.twant.vo.member.MemberVo;
 public class FriendRequestVo extends FriendRequest {
 
     /**
-     * 申請發起方會員信息
+     * 申請發起方城友信息
      */
     private MemberVo memberInfo;
 

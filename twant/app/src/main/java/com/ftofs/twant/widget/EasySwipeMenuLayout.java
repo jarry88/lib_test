@@ -14,6 +14,7 @@ import android.widget.Scroller;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EasySwipeMenuState;
+import com.ftofs.twant.log.SLog;
 
 import java.util.ArrayList;
 
@@ -96,7 +97,7 @@ public class EasySwipeMenuLayout extends ViewGroup {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         } finally {
             typedArray.recycle();
         }

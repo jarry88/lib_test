@@ -5,18 +5,18 @@ package com.ftofs.twant.vo;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品规格实体，用于搜索引擎建立索引
+ * 產品规格实体，用于搜索引擎建立索引
  *
  * @author dqw
  * Created 2017/6/1 11:56
  */
 public class SearchGoodsSpecVo {
     /**
-     * 商品sku编号
+     * 產品sku编号
      */
     private int goodsId;
     /**
-     * 商品sku规格
+     * 產品sku规格
      */
     private String spec;
 

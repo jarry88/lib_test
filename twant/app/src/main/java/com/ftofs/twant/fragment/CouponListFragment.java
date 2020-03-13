@@ -1,8 +1,10 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +99,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         unavailableCouponAdapter = new StoreVoucherListAdapter(_mActivity, llUnavailableStoreCouponContainer, R.layout.store_voucher_item);
 
         if (couponType == Constant.COUPON_TYPE_STORE) {
-            tvUnavailableCouponTitle.setText("不可用店鋪券");
+            tvUnavailableCouponTitle.setText("不可用商店券");
             loadStoreCouponData();
         } else if (couponType == Constant.COUPON_TYPE_PLATFORM) {
             tvUnavailableCouponTitle.setText("不可用平台券");
@@ -133,28 +135,41 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
                     // 平台券列表
-                    EasyJSONArray couponList = responseObj.getArray("datas.couponList");
+                    EasyJSONArray couponList = responseObj.getSafeArray("datas.couponList");
                     for (Object object : couponList) {
                         EasyJSONObject voucher = (EasyJSONObject) object;
 
+                        // 状态 0表示未使用 1表示已用 2表示作废
                         int couponState = voucher.getInt("couponState");
+
+                        // 轉換一下
+                        int state;
+                        if (couponState == 0) {
+                            state = Constant.COUPON_STATE_UNRECEIVED;
+                        } else if (couponState == 1) {
+                            state = Constant.COUPON_STATE_USED;
+                        } else {
+                            state = Constant.COUPON_STATE_DISCARDED;
+                        }
+
                         StoreVoucher storeVoucher = new StoreVoucher(
                                 0,
                                 0,
-                                voucher.getString("useGoodsRangeExplain"),
+                                voucher.getSafeString("useGoodsRangeExplain"),
+                                null,
                                 voucher.getInt("couponPrice"),
-                                voucher.getString("limitAmountText"),
-                                voucher.getString("usableClientTypeText"),
-                                voucher.getString("useStartTimeText"),
-                                voucher.getString("useEndTimeText"),
-                                couponState == 0
+                                voucher.getSafeString("limitAmountText"),
+                                voucher.getSafeString("usableClientTypeText"),
+                                voucher.getSafeString("useStartTimeText"),
+                                voucher.getSafeString("useEndTimeText"),
+                                state
                         );
                         if (couponState == 0) {
                             availableVoucherList.add(storeVoucher);
@@ -169,7 +184,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
                     emptyDataHandler(availableVoucherList.size(), unavailableVoucherList.size());
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -177,7 +192,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
 
     /**
-     * 獲取店鋪券列表
+     * 獲取商店券列表
      */
     private void loadStoreCouponData() {
         String token = User.getToken();
@@ -189,6 +204,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token);
 
+        SLog.info("params[%s]", params);
         Api.postUI(Api.PATH_STORE_COUPON_LIST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -199,49 +215,50 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
                     // 可用的優惠券
-                    EasyJSONArray usableList = responseObj.getArray("datas.useable");  // useable服務器端拼寫錯誤
+                    EasyJSONArray usableList = responseObj.getSafeArray("datas.useable");  // useable服務器端拼寫錯誤
                     for (Object object : usableList) {
                         EasyJSONObject voucher = (EasyJSONObject) object;
 
                         StoreVoucher storeVoucher = new StoreVoucher(
                                 voucher.getInt("store.storeId"),
                                 voucher.getInt("templateId"),
-                                voucher.getString("store.storeName"),
+                                voucher.getSafeString("store.storeName"),
+                                voucher.getSafeString("store.storeAvatar"),
                                 voucher.getInt("price"),
-                                voucher.getString("limitAmountText"),
-                                voucher.getString("voucherUsableClientTypeText"),
-                                voucher.getString("startTime"),
-                                voucher.getString("endTime"),
-                                true
+                                voucher.getSafeString("limitAmountText"),
+                                voucher.getSafeString("voucherUsableClientTypeText"),
+                                voucher.getSafeString("startTime"),
+                                voucher.getSafeString("endTime"),
+                                Constant.COUPON_STATE_RECEIVED
                         );
-                        storeVoucher.received = true;
                         availableVoucherList.add(storeVoucher);
                     }
                     SLog.info("length[%d]", availableVoucherList.size());
                     availableCouponAdapter.setData(availableVoucherList);
 
                     // 不可用的優惠券
-                    EasyJSONArray unusableList = responseObj.getArray("datas.unUseable");
+                    EasyJSONArray unusableList = responseObj.getSafeArray("datas.unUseable");
                     for (Object object : unusableList) {
                         EasyJSONObject voucher = (EasyJSONObject) object;
 
                         StoreVoucher storeVoucher = new StoreVoucher(
                                 voucher.getInt("store.storeId"),
                                 voucher.getInt("templateId"),
-                                voucher.getString("store.storeName"),
+                                voucher.getSafeString("store.storeName"),
+                                voucher.getSafeString("store.storeAvatar"),
                                 voucher.getInt("price"),
-                                voucher.getString("limitAmountText"),
-                                voucher.getString("voucherUsableClientTypeText"),
-                                voucher.getString("startTime"),
-                                voucher.getString("endTime"),
-                                false
+                                voucher.getSafeString("limitAmountText"),
+                                voucher.getSafeString("voucherUsableClientTypeText"),
+                                voucher.getSafeString("startTime"),
+                                voucher.getSafeString("endTime"),
+                                Constant.COUPON_STATE_USED
                         );
                         unavailableVoucherList.add(storeVoucher);
                     }
@@ -251,7 +268,7 @@ public class CouponListFragment extends BaseFragment implements View.OnClickList
 
                     emptyDataHandler(availableVoucherList.size(), unavailableVoucherList.size());
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

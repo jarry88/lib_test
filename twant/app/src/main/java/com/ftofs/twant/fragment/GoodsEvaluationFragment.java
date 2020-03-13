@@ -3,10 +3,10 @@ package com.ftofs.twant.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +46,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
- * 訂單商品評價
+ * 訂單產品評價
  * @author zwm
  */
 public class GoodsEvaluationFragment extends BaseFragment implements View.OnClickListener {
@@ -125,7 +125,7 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
         int id = v.getId();
         switch (id) {
             case R.id.btn_back:
-                pop();
+                hideSoftInputPop();
                 break;
             case R.id.btn_commit:
                 commitComment();
@@ -148,16 +148,14 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
             }
         }
 
-        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                .asLoading(getString(R.string.text_committing))
-                .show();
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         TaskObserver taskObserver = new TaskObserver() {
             @Override
             public void onMessage() {
                 loadingPopup.dismiss();
 
                 String responseStr = (String) message;
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
@@ -167,7 +165,7 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
 
                 ToastUtil.success(_mActivity, "提交成功");
-                pop();
+                hideSoftInputPop();
             }
         };
 
@@ -232,7 +230,7 @@ public class GoodsEvaluationFragment extends BaseFragment implements View.OnClic
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 

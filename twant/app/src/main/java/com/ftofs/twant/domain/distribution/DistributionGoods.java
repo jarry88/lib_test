@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 public class DistributionGoods implements Serializable {
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 

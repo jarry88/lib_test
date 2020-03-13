@@ -9,17 +9,17 @@ public class Trys {
     private int trysId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
     /**
-     * 商品ID
+     * 產品ID
      */
     private int goodsId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
@@ -59,7 +59,7 @@ public class Trys {
     private int maxNum;
 
     /**
-     * 商品价值
+     * 產品价值
      */
     private BigDecimal goodsPrice;
 
@@ -94,7 +94,7 @@ public class Trys {
     private String content;
 
     /**
-     * 详情类型 1-使用原商品详情,0-自定义商品详情
+     * 详情类型 1-使用原產品详情,0-自定义產品详情
      */
     private int contentType = 1;
 
@@ -109,7 +109,7 @@ public class Trys {
     private String imageName;
 
     /**
-     * 试用商品分类
+     * 试用產品分类
      */
     private int categoryId;
 

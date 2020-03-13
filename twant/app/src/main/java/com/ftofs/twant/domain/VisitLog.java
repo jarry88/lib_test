@@ -19,7 +19,7 @@ public class VisitLog {
     private BigInteger relateId;
 
     /**
-     * 渠道  1貼文  2專頁
+     * 渠道  1想要帖  2專頁
      */
     private int channel;
 

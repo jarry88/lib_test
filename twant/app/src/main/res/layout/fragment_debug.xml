@@ -79,7 +79,39 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="軟鍵盤高度"
+                    />
+
+                <EditText
+                    android:id="@+id/et_soft_input_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <Button
+                    android:id="@+id/btn_get_soft_input_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="獲取軟鍵盤高度"
+                    />
+                <Button
+                    android:id="@+id/btn_delete_soft_input_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="刪除軟鍵盤高度"
+                    />
                 <Button
                     android:id="@+id/btn_has_storage_permission"
                     android:layout_width="match_parent"

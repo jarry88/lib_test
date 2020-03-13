@@ -7,7 +7,7 @@ import com.ftofs.twant.domain.goods.GoodsCommon;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 平台券可使用的商品
+ * 平台券可使用的產品
  *
  * @author zxy
  * Created 2017/9/1 10:46
@@ -22,7 +22,7 @@ public class CouponUseGoodsVo {
      */
     private int activityId = 0;
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId = 0;
     /**
@@ -50,15 +50,15 @@ public class CouponUseGoodsVo {
      */
     private String categoryName3 = "";
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId = 0;
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId = 0;
     /**
-     * 商品Spu详情
+     * 產品Spu详情
      */
     private GoodsCommon goodsCommon = null;
 

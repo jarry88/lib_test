@@ -2,13 +2,20 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+
+import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
@@ -20,6 +27,7 @@ import com.ftofs.twant.util.ImageProcess;
 import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 import com.ftofs.twant.util.WeixinUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BottomPopupView;
@@ -28,20 +36,26 @@ import com.lxj.xpopup.util.XPopupUtils;
 
 import java.io.File;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+
 
 /**
  * 分享底部彈窗
  * @author zwm
  */
 public class SharePopup extends BottomPopupView implements View.OnClickListener {
+    public static final int SHARE_TYPE_STORE = 1;
+    public static final int SHARE_TYPE_GOODS = 2;
+
+
     /**
-     * 分享店鋪的鏈接格式(1234為店鋪Id)
+     * 分享商店的鏈接格式(1234為商店Id)
      * Config.WEB_BASE_URL + /store/1234
      *
-     * 分享商品的鏈接格式(1234為spuId, 5678為skuId)
+     * 分享產品的鏈接格式(1234為spuId, 5678為skuId)
      * Config.WEB_BASE_URL + /goods/1234?goodsId=5678
      *
-     * 分享貼文的鏈接格式(1234為貼文Id)
+     * 分享想要帖的鏈接格式(1234為想要帖Id)
      * Config.WEB_BASE_URL + /wantpost/detail/1234
      */
 
@@ -54,7 +68,10 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     String description;
     String coverUrl; // 分享的封面圖片的URL
 
-    public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl) {
+    Object data; // 當shareType為SHARE_TYPE_STORE或SHARE_TYPE_GOODS才使用此數據
+
+
+    public SharePopup(@NonNull Context context, String shareUrl, String title, String description, String coverUrl, Object data) {
         super(context);
 
         this.context = context;
@@ -62,7 +79,9 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         this.title = title;
         this.description = description;
         this.coverUrl = StringUtil.normalizeImageUrl(coverUrl);
+        this.data = data;
     }
+
 
     @Override
     protected int getImplLayoutId() {
@@ -77,7 +96,13 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 
         findViewById(R.id.btn_share_to_friend).setOnClickListener(this);
         findViewById(R.id.btn_share_to_timeline).setOnClickListener(this);
+        findViewById(R.id.btn_share_to_facebook).setOnClickListener(this);
         findViewById(R.id.btn_copy_link).setOnClickListener(this);
+        if (data != null) {
+            findViewById(R.id.btn_share_to_takewant_circle).setOnClickListener(this);
+        } else {
+            findViewById(R.id.btn_share_to_takewant_circle).setVisibility(GONE);
+        }
     }
 
     //完全可见执行
@@ -152,6 +177,15 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                     }
                 }
             });
+        } else if (id == R.id.btn_share_to_facebook) {
+            ShareLinkContent content = new ShareLinkContent.Builder()
+                    .setContentTitle(title)
+                    .setContentDescription(description)
+                    .setContentUrl(Uri.parse(shareUrl))
+                    .build();
+
+            //调用分享弹窗
+            ShareDialog.show(MainActivity.getInstance(), content);
         } else if (id == R.id.btn_copy_link) {
             ClipboardUtils.copyText(context, shareUrl);
             new XPopup.Builder(context)
@@ -159,26 +193,30 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         // 设置弹窗显示和隐藏的回调监听
 //                         .autoDismiss(false)
                     .setPopupCallback(new XPopupCallback() {
-            @Override
-            public void onShow() {
-            }
-            @Override
-            public void onDismiss() {
-            }
-        }).asCustom(new TwConfirmPopup(context, "分享鏈接已復制", shareUrl, new OnConfirmCallback() {
-            @Override
-            public void onYes() {
-                SLog.info("onYes");
-            }
+                @Override
+                public void onShow() {
+                }
+                @Override
+                public void onDismiss() {
+                }
+            }).asCustom(new TwConfirmPopup(context, "分享鏈接已復制", shareUrl, new OnConfirmCallback() {
+                @Override
+                public void onYes() {
+                    SLog.info("onYes");
+                }
 
-            @Override
-            public void onNo() {
-                SLog.info("onNo");
-            }
-        }))
-                .show();
+                @Override
+                public void onNo() {
+                    SLog.info("onNo");
+                }
+            }))
+                    .show();
+        } else if (id == R.id.btn_share_to_takewant_circle) { // 分享到想要圈
+            EasyJSONObject dataObj = (EasyJSONObject) data;
+            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
+            dismiss();
+        }
     }
-}
 
     /**
      * 分享到微信

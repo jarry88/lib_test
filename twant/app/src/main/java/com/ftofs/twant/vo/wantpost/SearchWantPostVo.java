@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * @author liusf
  * @create 2019/3/18 18:27
- * @description 貼文視圖類，用於搜索引擎建立索引
+ * @description 想要帖視圖類，用於搜索引擎建立索引
  */
 public class SearchWantPostVo {
     /**
-     * 貼文id
+     * 想要帖id
      */
     private BigInteger postId;
     /**
@@ -54,7 +54,7 @@ public class SearchWantPostVo {
      */
     private String createBy;
     /**
-     * 貼文狀態 0審核中 1審核通過 2審核不通過
+     * 想要帖狀態 0審核中 1審核通過 2審核不通過
      */
     private int isPublish;
     /**
@@ -74,7 +74,7 @@ public class SearchWantPostVo {
      */
     private int postView;
     /**
-     * 點讚
+     * 讚想
      */
     private int postLike;
     /**
@@ -86,7 +86,7 @@ public class SearchWantPostVo {
      */
     private int postFavor;
     /**
-     * 回復個數
+     * 回覆個數
      */
     private int postReply;
     /**
@@ -108,12 +108,12 @@ public class SearchWantPostVo {
 
     //以下屬性不存在於搜索引擎
     /**
-     * 點讚狀態
+     * 讚想狀態
      */
     private int isLike = 0;
 
     /**
-     * 會員信息
+     * 城友信息
      */
     private MemberVo memberVo;
 

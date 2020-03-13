@@ -1,13 +1,14 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
@@ -15,8 +16,6 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.enums.PopupAnimation;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,7 +40,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     public static final int MY_FRAGMENT = 4;
 
     TextView tvMessageItemCount; // 顯示未讀消息條數的紅點
-    TextView tvCartItemCount;    // 顯示購物袋中商品數的紅點
+    TextView tvCartItemCount;    // 顯示購物袋中產品數的紅點
 
     private SupportFragment[] mFragments = new SupportFragment[5];
     private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_message, R.id.btn_circle,
@@ -108,7 +107,10 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         bottomBarIcons[CART_FRAGMENT] = view.findViewById(R.id.icon_cart);
         bottomBarIcons[MY_FRAGMENT] = view.findViewById(R.id.icon_my);
     }
-
+    public HomeFragment getHomeFragment() {
+        HomeFragment homeFragment = (HomeFragment) mFragments[HOME_FRAGMENT];
+        return homeFragment;
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -202,18 +204,19 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) {
             showHideFragment(HOME_FRAGMENT);
             setMessageItemCount(0); // 未讀消息數置0
-            setCartItemCount(0); // 購物袋商品數置0
+            setCartItemCount(0); // 購物袋產品數置0
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_SHOW_FRAGMENT) {
             int fragmentIndex = (int) message.data;
             if (HOME_FRAGMENT <= fragmentIndex && fragmentIndex <= MY_FRAGMENT) {
                 showHideFragment(fragmentIndex);
             }
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_WALLET_PAY_SUCCESS) {
-            SLog.info("EBMessageType.MESSAGE_TYPE_WALLET_PAY_SUCCESS");
+            int payId = (int) message.data;
+            SLog.info("EBMessageType.MESSAGE_TYPE_WALLET_PAY_SUCCESS, payId[%d]", payId);
             tvMessageItemCount.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    start(PaySuccessFragment.newInstance(""));
+                    start(PaySuccessFragment.newInstance(payId));
                 }
             }, 250);
         }
@@ -238,6 +241,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             tvCartItemCount.setVisibility(View.VISIBLE);
         }
     }
+
 }
 
 

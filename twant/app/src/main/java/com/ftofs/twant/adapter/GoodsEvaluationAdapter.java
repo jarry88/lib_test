@@ -1,14 +1,13 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
@@ -16,7 +15,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
-import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.widget.SquareGridLayout;
@@ -39,7 +37,7 @@ public class GoodsEvaluationAdapter extends BaseQuickAdapter<EvaluationGoodsItem
         helper.addOnClickListener(R.id.btn_add_image);
 
         int position = helper.getAdapterPosition();
-        if (position == 0) { // 首項才顯示店鋪名
+        if (position == 0) { // 首項才顯示商店名
             helper.setGone(R.id.ll_store_name_container, true);
         } else {
             helper.setGone(R.id.ll_store_name_container, false);

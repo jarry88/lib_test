@@ -3,13 +3,13 @@ package com.ftofs.twant.vo.member;
 import java.util.List;
 
 /**
- * @Description: 進店店鋪記錄視圖對象
+ * @Description: 進店商店記錄視圖對象
  * @Auther: yangjian
  * @Date: 2018/10/22 16:11
  */
 public class MemberAccessStatVo {
     /**
-     * 在店會員集合
+     * 在店城友集合
      */
     private List<MemberVo> members;
     /**
@@ -17,19 +17,19 @@ public class MemberAccessStatVo {
      */
     private List<MemberVo> friends;
     /**
-     * 店鋪Id
+     * 商店Id
      */
     private int storeId;
     /**
-     * 在店會員數量
+     * 在店城友數量
      */
     private int onlineCount;
     /**
-     * 已購買會員數量
+     * 已購買城友數量
      */
     private int purchasedCount;
     /**
-     * 總訪問會員人數
+     * 總訪問城友人數
      */
     private int allVisitCount;
     /**

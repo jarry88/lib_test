@@ -7,7 +7,7 @@
     android:layout_marginLeft="7.5dp"
     android:layout_marginRight="7.5dp"
     android:orientation="vertical">
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="9dp"
@@ -25,12 +25,26 @@
             app:riv_border_width="1dp"
             android:src="@drawable/cs_avatar_160"
             />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.ftofs.twant.widget.StoreDesktop
         android:layout_width="match_parent"
         android:layout_height="9dp"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
+        />
+    <TextView
+        android:id="@+id/tv_goods_price"
+        android:layout_width="match_parent"
+        android:layout_marginTop="-20dp"
+        android:layout_height="25dp"
+        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="20dp"
+        android:text="$"
+        android:background="@drawable/price_grey_bg"
+        android:textSize="16sp"
+        android:textColor="@color/tw_white"
+        android:textStyle="bold"
         />
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,10 +59,11 @@
             android:id="@+id/tv_goods_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="vochain雪地靴女高筒靴..."
+            android:text="vochain"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
             android:singleLine="true"
+            android:gravity="center"
             android:ellipsize="end"
             />
         <TextView
@@ -62,16 +77,6 @@
             android:fontFamily="sans-serif-light"
             android:maxLines="1"
             android:ellipsize="end"
-            />
-        <TextView
-            android:id="@+id/tv_goods_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="$ 129.00"
-            android:textSize="16sp"
-            android:textColor="@color/tw_red"
-            android:textStyle="bold"
             />
     </LinearLayout>
 </LinearLayout>

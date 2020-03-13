@@ -6,59 +6,90 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentationMagician;
-import android.support.v4.content.FileProvider;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentationMagician;
+
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.facebook.AccessToken;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
-import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
-import com.ftofs.twant.domain.member.PurchaseBuy;
 import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.entity.Location;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ChatFragment;
 import com.ftofs.twant.fragment.DoubleElevenFragment;
+import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
+import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
-import com.umeng.commonsdk.debug.I;
+import com.ftofs.twant.widget.TwLoadingPopup;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
+import com.orhanobut.hawk.Hawk;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.urllib.Query;
 import org.urllib.Urls;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import cn.snailpad.easyjson.json.JSONObject;
 import me.yokeyword.fragmentation.ISupportFragment;
+import me.yokeyword.fragmentation.SupportFragment;
+import okhttp3.Call;
 
 
 /**
@@ -77,7 +108,6 @@ public class Util {
         needLoginFragmentName.add(ChatFragment.class.getSimpleName());
         needLoginFragmentName.add(ArrivalNoticeFragment.class.getSimpleName());
     }
-
     /**
      * 进入全屏模式
      * 参考
@@ -349,7 +379,23 @@ public class Util {
             if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                 String result = bundle.getString(CodeUtils.RESULT_STRING);
                 SLog.info("解析结果[%s]", result);
-                if (result.startsWith("tw_member_")) {
+                if (StringUtil.isUrlString(result)) {
+                    /*
+                    https://192.168.5.29/web/store/85
+                    如果是這種模式的url，則跳轉到店鋪頁
+                     */
+                    Pattern pattern = Pattern.compile("/web/store/(\\d+)");
+
+                    Matcher matcher = pattern.matcher(result);
+                    if (matcher.find()) {
+                        String storeIdStr = matcher.group(1);
+                        SLog.info("storeIdStr[%s]", storeIdStr);
+                        int storeId = Integer.valueOf(storeIdStr);
+                        Util.startFragment(ShopMainFragment.newInstance(storeId));
+                    }
+
+
+                } else if (result.startsWith("tw_member_")) {
                     // 添加好友
                     String memberName = result.substring(10);
                     SLog.info("memberName[%s]", memberName);
@@ -399,11 +445,11 @@ public class Util {
         try {
             staff.storeId = storeServiceStaffVo.getInt("storeId");
             staff.staffId = storeServiceStaffVo.getInt("staffId");
-            staff.staffName = storeServiceStaffVo.getString("staffName");
-            staff.memberName = storeServiceStaffVo.getString("memberName");
-            staff.imName = storeServiceStaffVo.getString("imName");
-            staff.avatar = storeServiceStaffVo.getString("avatar");
-            staff.welcomeMessage = storeServiceStaffVo.getString("welcome");
+            staff.staffName = storeServiceStaffVo.getSafeString("staffName");
+            staff.memberName = storeServiceStaffVo.getSafeString("memberName");
+            staff.imName = storeServiceStaffVo.getSafeString("imName");
+            staff.avatar = storeServiceStaffVo.getSafeString("avatar");
+            staff.welcomeMessage = storeServiceStaffVo.getSafeString("welcome");
             staff.staffType = storeServiceStaffVo.getInt("staffType");
         } catch (Exception e) {
 
@@ -465,7 +511,8 @@ public class Util {
                     //没有Google Play 也没有浏览器
                 }
             }
-        } catch (ActivityNotFoundException activityNotFoundException1) {
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -531,6 +578,7 @@ public class Util {
 
     /**
      * 獲取指定層的Fragment
+     * 引用時一定要加判空處理！！！
      * @param activity 所在的Activity
      * @param layer 第幾層，從0開始，棧頂的layer為0
      * @return
@@ -559,8 +607,71 @@ public class Util {
         return null;
     }
 
+
+    public static int getFragmentCount(FragmentActivity activity) {
+        List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(activity.getSupportFragmentManager());
+        if (fragmentList == null) {
+            return 0;
+        }
+
+        String packageName = activity.getPackageName();
+        int fragmentCount = 0;
+        for (Fragment fragment : fragmentList) {
+            // SLog.info("fragment[%s][%s]", fragment, fragment.getClass().getName());
+            String className = fragment.getClass().getName();
+            if (className.startsWith(packageName)) {
+                fragmentCount++;
+            }
+        }
+
+        return fragmentCount;
+    }
+
+
+    public static void popToMainFragment(FragmentActivity activity) {
+        SupportFragment topFragment = (SupportFragment) getFragmentByLayer(activity, 0);
+        int fragmentCount = getFragmentCount(activity);
+        SLog.info("fragmentCount[%d]", fragmentCount);
+        if (fragmentCount < 2) {
+            return;
+        }
+
+
+        Fragment targetFragment = getFragmentByLayer(activity, fragmentCount - 1);
+        if (targetFragment != null) {
+            topFragment.popTo(targetFragment.getClass(), false);
+
+        }
+    }
+
     public static String getAvailableCouponCountDesc(int count) {
         return "可用" + count + "張";
+    }
+
+    public static void getMemberToken(Context context) {
+        SLog.info("當前禁用了請求membertoken的方法20200220");
+        return;
+//        String token = User.getToken();
+//        if (!StringUtil.isEmpty(token)) {
+//            EasyJSONObject params=EasyJSONObject.generate("token", token);
+//            Api.getUI(Api.PATH_GET_MEMBER_TOKEN, params, new UICallback() {
+//                @Override
+//                public void onFailure(Call call, IOException e) {
+//                    ToastUtil.showNetworkError(context, e);
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, String responseStr) throws IOException {
+//                    SLog.info("responseStr[%s]",responseStr);
+//                    EasyJSONBase responseObj = EasyJSONObject.parse(responseStr);
+//                    try {
+//                        Hawk.put(SPField.FIELD_MEMBER_TOKEN, responseObj.get("datas.memberToken"));
+//                    } catch (Exception e) {
+//                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+//                    }
+//                }
+//            });
+//        }
     }
 
     /**
@@ -633,12 +744,44 @@ public class Util {
         return url;
     }
 
+    public static String makeChristmasH5Url() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return null;
+        }
+
+        String queryString = Api.makeQueryString(EasyJSONObject.generate(
+                "token", token,
+                "device", "android"));
+
+        String url = "https://www.twant.com/activities/spring/#/20191226/index" + queryString;
+        SLog.info("url[%s]", url);
+        return url;
+    }
+
     public static void startDoubleElevenFragment() {
         Util.startFragment(DoubleElevenFragment.newInstance());
-        /*
+    }
+
+    /**
+     * 打开活动专场购物
+     */
+    public static void startActivityShopping() {
         EasyJSONObject params = EasyJSONObject.generate("is_double_eleven", true);
         Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(), params.toString()));
-        */
+    }
+
+
+    public static final String CHRISTMAS_APP_INFO = "/want/activity/springInfo";
+    public static final String CHRISTMAS_APP_GAME = "/want/activity/christmas/appGame";
+    public static final String ACTIVITY_SPRING = "/activities/spring/#/20191226/index";
+    public static final String DATA_IMAGE_PNG_PREFIX = "data:image/png;base64,";
+
+    public static void startChristmasFragment() {
+        String url = Config.WEB_BASE_URL + CHRISTMAS_APP_INFO + "?device=android";
+        SLog.info("url[%s]",url);
+        // String url = "http://192.168.240.5:8080/web" + CHRISTMAS_APP_INFO + "?device=android";
+        Util.startFragment(H5GameFragment.newInstance(url, true));
     }
 
 
@@ -687,11 +830,10 @@ public class Util {
         try {
             context.startActivity(intent);
         } catch (Exception e) {
-            e.printStackTrace();
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             Toast.makeText(context, "没有找到打开此类文件的程序", Toast.LENGTH_SHORT).show();
         }
     }
-
     /**
      * 獲取一個文件的MIME描述
      * @param file
@@ -704,6 +846,311 @@ public class Util {
         var1 = MimeTypeMap.getSingleton().getMimeTypeFromExtension(var3);
         SLog.info("mimeType[%s]", var1);
         return var1;
+    }
+
+    public static void showPickerView(Context context, String title,
+                                      List<ListPopupItem> list1, List<ListPopupItem> list2, List<ListPopupItem> list3,
+                                      OnOptionsSelectListener onOptionsSelectListener) {
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(context, onOptionsSelectListener)
+                .isDialog(false)
+                .setTitleText(title)
+                .setContentTextSize(20)//设置滚轮文字大小
+                .setDividerColor(Color.LTGRAY)//设置分割线的颜色
+                /*
+                .setSelectOptions(0, 1)//默认选中项
+                .setBgColor(Color.BLACK)
+                .setTitleBgColor(Color.DKGRAY)
+                .setTitleColor(Color.LTGRAY)
+                .setCancelColor(Color.YELLOW)
+                .setSubmitColor(Color.YELLOW)
+                .setTextColorCenter(Color.LTGRAY)
+                .isRestoreItem(true)//切换时是否还原，设置默认选中第一项。
+
+                 */
+
+                // .setDecorView(flSalaryPickerContainer)//非dialog模式下,设置ViewGroup, pickerView将会添加到这个ViewGroup中
+                //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .isCenterLabel(false)
+                //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .isCenterLabel(false)
+                .setOptionsSelectChangeListener(new OnOptionsSelectChangeListener() {
+                    @Override
+                    public void onOptionsSelectChanged(int options1, int options2, int options3) {
+                        SLog.info("onOptionsSelectChanged: %d, %d, %d", options1, options2, options3);
+                    }
+                })
+                .build();
+
+//        pvOptions.setSelectOptions(1,1);
+        //一级选择器
+        /*pvOptions.setPicker(options1Items);*/
+        //二级选择器
+        pvOptions.setNPicker(list1, list2, list3);
+        pvOptions.show();
+    }
+
+    public static void showPickerView(Context context, String title,
+                                      List<ListPopupItem> list1, List<ListPopupItem> list2, List<ListPopupItem> list3,
+                                      int index1,int index2,int index3,
+                                      OnOptionsSelectListener onOptionsSelectListener) {
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(context, onOptionsSelectListener)
+                .isDialog(false)
+                .setTitleText(title)
+                //设置滚轮文字大小
+                .setContentTextSize(20)
+                //设置分割线的颜色
+                .setDividerColor(Color.LTGRAY)
+                .setSelectOptions(index1, index2)
+                /*
+                .setSelectOptions(0, 1)//默认选中项
+                .setBgColor(Color.BLACK)
+                .setTitleBgColor(Color.DKGRAY)
+                .setTitleColor(Color.LTGRAY)
+                .setCancelColor(Color.YELLOW)
+                .setSubmitColor(Color.YELLOW)
+                .setTextColorCenter(Color.LTGRAY)
+                .isRestoreItem(true)//切换时是否还原，设置默认选中第一项。
+
+                 */
+
+                // .setDecorView(flSalaryPickerContainer)//非dialog模式下,设置ViewGroup, pickerView将会添加到这个ViewGroup中
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .setOptionsSelectChangeListener(new OnOptionsSelectChangeListener() {
+                    @Override
+                    public void onOptionsSelectChanged(int options1, int options2, int options3) {
+                        SLog.info("onOptionsSelectChanged: %d, %d, %d", options1, options2, options3);
+                    }
+                })
+                .build();
+
+//        pvOptions.setSelectOptions(1,1);
+        /*pvOptions.setPicker(options1Items);//一级选择器*/
+        pvOptions.setNPicker(list1, list2, list3);//二级选择器
+        pvOptions.show();
+    }
+
+
+    /**
+     * 將圖片文件添加到系統相冊
+     * 參考:
+     * android 保存图片到相册并正常显示
+     * https://blog.csdn.net/a394268045/article/details/51645411
+     * @param context
+     * @param file
+     */
+    public static void addImageToGallery(Context context, File file) {
+        // 其次把文件插入到系统图库
+        String path = file.getAbsolutePath();
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), path, file.getName(), null);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+        // 最后通知图库更新
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(file);
+        intent.setData(uri);
+        context.sendBroadcast(intent);
+        SLog.info("HERE");
+    }
+
+    public static boolean makeParentDirectory(String absolutePath) {
+        return makeParentDirectory(new File(absolutePath));
+    }
+
+    /**
+     * 創建file的父目錄（如果不存在的話)
+     * @param file
+     * @return 如果創建成功或已經存在，返回 true; 創建失敗返回 false
+     */
+    public static boolean makeParentDirectory(File file) {
+        File parentFile = file.getParentFile();
+        if (parentFile.exists()) {
+            return true;
+        }
+
+        return parentFile.mkdirs();
+    }
+
+    /**
+     * 修改購物車內容，比如添加購物車，刪除購物車，修改數量等
+     * @param context
+     * @param goodsId
+     * @param buyNum
+     * @param simpleCallback  成功時的回調
+     */
+    public static void changeCartContent(Context context, int goodsId, int buyNum, SimpleCallback simpleCallback) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONArray buyData = EasyJSONArray.generate(EasyJSONObject.generate("buyNum", buyNum, "goodsId", goodsId));
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "buyData", buyData.toString(),
+                "clientType", Constant.CLIENT_TYPE_ANDROID);
+        SLog.info("buyData[%s]", buyData.toString());
+
+        SLog.info("params[%s]", params.toString());
+        Api.postUI(Api.PATH_ADD_CART, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(context, responseObj)) {
+                    return;
+                }
+
+                // 通知更新購物袋紅點提示
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE, null);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_ADD_CART, null);
+
+                // 如果要添加各種自定義動作，寫在simpleCallback裏面
+                if (simpleCallback != null) {
+                    simpleCallback.onSimpleCall(null);
+                }
+            }
+        });
+    }
+
+    /**
+     * 啟用/禁用按鈕
+     * @param context
+     * @param button
+     * @param enable true -- 啟用  false -- 禁用
+     */
+    public static void setButtonStatus(Context context, TextView button, boolean enable) {
+        if (button == null) {
+            return;
+        }
+        SLog.info("setButtonStatus, enable[%s], button[%s]", enable, button);
+        int color = context.getColor(enable ? R.color.tw_black : R.color.tw_light_grey);
+        button.setTextColor(color);
+    }
+
+    /**
+     * 檢查Facebook是否已登錄
+     * @return
+     */
+    public static boolean isFacebookLoggedIn() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        return isLoggedIn;
+    }
+
+    public static BasePopupView createLoadingPopup(Context context) {
+        return new XPopup.Builder(context)
+                .hasShadowBg(false)
+                .asCustom(new TwLoadingPopup(context));
+    }
+
+
+    public static String makeSpringH5Url() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return null;
+        }
+
+//        String queryString = Api.makeQueryString(EasyJSONObject.generate(
+////                "token", token,
+////                "device", "android"));
+//
+        String url = Config.BASE_URL + "/activities/spring/#/20191226/index"+"?token="+User.getUserInfo(SPField.FIELD_MEMBER_TOKEN,"");
+        return url;
+    }
+
+    /**
+     * 判斷接收到的json數組是否為空
+     * @param list
+     * @return
+     */
+    public static boolean isJsonArrayEmpty(EasyJSONArray list) {
+        if (list == null) {
+            return true;
+        }
+        if (list.length() == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 判斷接收到的json對象是否為空
+     * @param object
+     * @return
+     */
+    public static boolean isJsonObjectEmpty(EasyJSONObject object) {
+        if (object == null) {
+            return true;
+        }
+        if (object.getHashMap().isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 判斷String、JSONObject、JSONArray是否為空
+     * @param val
+     * @return
+     */
+    public static boolean isEmpty(Object val) {
+        if (val == null) {
+            return true;
+        }
+
+        if (val instanceof String) {
+            return StringUtil.isEmpty((String) val);
+        }
+        if (val instanceof EasyJSONObject) {
+            return isJsonObjectEmpty((EasyJSONObject) val);
+        }
+        if (val instanceof EasyJSONArray) {
+            return isJsonArrayEmpty((EasyJSONArray) val);
+        }
+
+        return false; // 默認值
+    }
+
+    /**
+     * 為參數添加最新的坐標值
+     * @param params
+     * @return
+     */
+    public static EasyJSONObject upLocation(EasyJSONObject params)  {
+        String locationStr = Hawk.get(SPField.FIELD_AMAP_LOCATION, "");
+        SLog.info("locationStr[%s]", locationStr);
+
+        if (!StringUtil.isEmpty(locationStr)) {
+            Location location = null;
+            try {
+                location = (Location) EasyJSONBase.jsonDecode(Location.class, locationStr);
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+
+            // 1小時內的定位才考慮
+            if (System.currentTimeMillis() - location.timestamp < Config.LOCATION_EXPIRE) {
+                try {
+                    params.set("lng", location.longitude);
+                    params.set("lat", location.latitude);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+                SLog.info("定位數據有效");
+            } else {
+                SLog.info("定位數據過期");
+            }
+        }
+        return params;
     }
 }
 

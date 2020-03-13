@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.wantpost;
 
 public class WantPostType {
     /**
-     * 貼文id
+     * 想要帖id
      */
     private int postTypeId;
 

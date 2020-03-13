@@ -1,17 +1,17 @@
 package com.ftofs.twant.vo.comment;
 
 /**
- * @Description: 回復的評論
+ * @Description: 回覆的說說
  * @Auther: yangjian
  * @Date: 2019/2/15 11:26
  */
 public class WantCommentReplyVo {
     /**
-     * 被回復的暱稱
+     * 被回覆的暱稱
      */
     private String nickName;
     /**
-     * 被評論類容
+     * 被說說類容
      */
     private String content;
 

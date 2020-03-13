@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 文章评论回复vo
+ * 想要帖评论回复vo
  *
  * @author cj
  * Created 2017-10-10 下午 3:13
@@ -22,11 +22,11 @@ public class AdvertorialArticleCommentReplyVo implements Serializable {
      */
     private int commentId;
     /**
-     * 文章id
+     * 想要帖id
      */
     private int articleId;
     /**
-     * 文章 标题
+     * 想要帖 标题
      */
     private String  articleTitle;
 

@@ -1,14 +1,15 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -35,7 +36,7 @@ import okhttp3.Call;
 
 
 /**
- * 店鋪分類Fragment
+ * 商店分類Fragment
  * @author zwm
  */
 public class ShopCategoryFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
@@ -129,7 +130,7 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
@@ -137,24 +138,24 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
                 ShopCategoryFragment.this.responseStr = responseStr;
 
                 try {
-                    EasyJSONArray storeCategoryList = responseObj.getArray("datas.storeCategoryList");
+                    EasyJSONArray storeCategoryList = responseObj.getSafeArray("datas.storeCategoryList");
                     for (Object object : storeCategoryList) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                         StoreLabel storeLabel = new StoreLabel();
                         storeLabel.setStoreLabelId(easyJSONObject.getInt("storeLabelId"));
-                        storeLabel.setStoreLabelName(easyJSONObject.getString("storeLabelName"));
+                        storeLabel.setStoreLabelName(easyJSONObject.getSafeString("storeLabelName"));
                         storeLabel.setParentId(easyJSONObject.getInt("parentId"));
                         storeLabel.setStoreId(easyJSONObject.getInt("storeId"));
                         storeLabel.setIsFold(Constant.ONE);
 
-                        EasyJSONArray storeLabelList = easyJSONObject.getArray("storeLabelList");
+                        EasyJSONArray storeLabelList = easyJSONObject.getSafeArray("storeLabelList");
                         if (storeLabelList != null && storeLabelList.length() > 0) {
                             List<StoreLabel> storeLabels = new ArrayList<>();
                             for (Object object2 : storeLabelList) {
                                 EasyJSONObject easyJSONObject2 = (EasyJSONObject) object2;
                                 StoreLabel storeLabel2 = new StoreLabel();
                                 storeLabel2.setStoreLabelId(easyJSONObject2.getInt("storeLabelId"));
-                                storeLabel2.setStoreLabelName(easyJSONObject2.getString("storeLabelName"));
+                                storeLabel2.setStoreLabelName(easyJSONObject2.getSafeString("storeLabelName"));
                                 storeLabel2.setParentId(easyJSONObject2.getInt("parentId"));
                                 storeLabel2.setStoreId(easyJSONObject2.getInt("storeId"));
 
@@ -172,8 +173,8 @@ public class ShopCategoryFragment extends BaseFragment implements View.OnClickLi
                     }
 
                     adapter.setNewData(shopStoreLabelList);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

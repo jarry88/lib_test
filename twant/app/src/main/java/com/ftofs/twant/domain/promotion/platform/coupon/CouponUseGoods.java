@@ -14,7 +14,7 @@ public class CouponUseGoods implements Serializable,Cloneable {
     private int activityId = 0;
 
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId = 0;
 
@@ -49,7 +49,7 @@ public class CouponUseGoods implements Serializable,Cloneable {
     private String categoryName3 = "";
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId = 0;
 

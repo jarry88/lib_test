@@ -24,7 +24,7 @@ public class ChainReturnItem {
      */
     private Integer ordersId;
     /**
-     * 訂單商品編號
+     * 訂單產品編號
      */
     private Integer ordersGoodsId;
     /**

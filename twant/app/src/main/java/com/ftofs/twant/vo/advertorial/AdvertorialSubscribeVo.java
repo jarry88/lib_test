@@ -7,7 +7,7 @@ import com.ftofs.twant.domain.advertorial.AdvertorialAuthor;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 文章作者关注
+ * 想要帖作者关注
  *
  * @author cj
  * Created 2017-9-25 下午 5:44
@@ -41,12 +41,12 @@ public class AdvertorialSubscribeVo {
     private AdvertorialAuthor authorInfo ;
 
     /**
-     * 该作者发布的最后一篇文章 标题
+     * 该作者发布的最后一篇想要帖 标题
      */
     private  String lastArticleTitle;
 
     /**
-     * 该作者发布的最后一篇文章 时间
+     * 该作者发布的最后一篇想要帖 时间
      */
     private String lastArticleAddTime ;
 

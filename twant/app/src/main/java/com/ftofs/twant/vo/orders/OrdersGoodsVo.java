@@ -10,14 +10,14 @@ import java.util.List;
  * @license    http://www.shopnc.net
  * @link       http://www.shopnc.net
  *
- * 订单商品
+ * 订单產品
  * 
  * @author hbj
  * Created 2017/4/13 14:46
  */
 public class OrdersGoodsVo {
     /**
-     * 订单商品编号
+     * 订单產品编号
      */
     private int ordersGoodsId;
     /**
@@ -25,23 +25,23 @@ public class OrdersGoodsVo {
      */
     private int ordersId;
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品(购买时的)单价
+     * 產品(购买时的)单价
      */
     private BigDecimal goodsPrice;
     /**
-     * (该商品)实付支付总金额
+     * (该產品)实付支付总金额
      */
     private BigDecimal goodsPayAmount;
     /**
@@ -49,15 +49,15 @@ public class OrdersGoodsVo {
      */
     private int buyNum;
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImage;
     /**
-     * 商品图片带URL
+     * 產品图片带URL
      */
     private String imageSrc;
     /**
-     * 商品类型
+     * 產品类型
      */
     private int goodsType = 0;
     /**
@@ -73,7 +73,7 @@ public class OrdersGoodsVo {
      */
     private int commissionRate;
     /**
-     * 商品分类ID
+     * 產品分类ID
      */
     private int categoryId;
     /**
@@ -106,7 +106,7 @@ public class OrdersGoodsVo {
     private int categoryId3;
 
     /**
-     * cj[ 商品是否显示退款]
+     * cj[ 產品是否显示退款]
      * 1.显示 ， 2 不显示
      */
     private int showRefund = 0 ;
@@ -134,11 +134,11 @@ public class OrdersGoodsVo {
      */
     private long refundSn;
     /**
-     * 商品原价
+     * 產品原价
      */
     private BigDecimal basePrice;
     /**
-     * 促销价比原价节省金额(商品级)
+     * 促销价比原价节省金额(產品级)
      */
     private BigDecimal savePrice;
     /**
@@ -150,7 +150,7 @@ public class OrdersGoodsVo {
      */
     private String promotionTitle = "";
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial;
     /**
@@ -162,11 +162,11 @@ public class OrdersGoodsVo {
      */
     private List<GoodsContractVo> goodsContractVoList = new ArrayList<>();
     /**
-     * 海外购商品税率
+     * 海外购產品税率
      */
     private BigDecimal taxRate;
     /**
-     * 海外购商品税费
+     * 海外购產品税费
      */
     private BigDecimal taxAmount = new BigDecimal(0);
     /**

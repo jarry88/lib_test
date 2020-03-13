@@ -119,17 +119,17 @@ public class TrysApply {
     private String reportFailReason;
 
     /**
-     * 商品ID
+     * 產品ID
      */
     private int commonId;
 
     /**
-     * 商品ID
+     * 產品ID
      */
     private int goodsId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
@@ -144,12 +144,12 @@ public class TrysApply {
     private int trysType = 1;
 
     /**
-     * 是否以试用资格购买过商品，0-否，1-是
+     * 是否以试用资格购买过產品，0-否，1-是
      */
     private int buyState = 0;
 
     /**
-     * 试用资格购买商品的最后期限
+     * 试用资格购买產品的最后期限
      */
     private String buyEndTime;
 
@@ -174,7 +174,7 @@ public class TrysApply {
     private String avatar = "";
 
     /**
-     * 试用商品分类
+     * 试用產品分类
      */
     private int categoryId;
 
@@ -249,7 +249,7 @@ public class TrysApply {
     private int showMemberViewReportState;
 
     /**
-     * 会员中心试用申请列表 是否显示购买试用商品按钮
+     * 会员中心试用申请列表 是否显示购买试用產品按钮
      */
     private int showMemberBuyState;
 

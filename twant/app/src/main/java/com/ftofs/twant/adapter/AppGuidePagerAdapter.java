@@ -1,8 +1,8 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,13 +52,7 @@ public class AppGuidePagerAdapter extends PagerAdapter {
             View lastAppGuide = LayoutInflater.from(context).inflate(R.layout.last_app_guide, container, false);
             ImageView iv = lastAppGuide.findViewById(R.id.img_background);
 
-            if (imageFile.exists()) { // 引導頁圖片文件已存在本地
-                SLog.info("___app_guide exists");
-                Glide.with(context).load(imageFile).centerCrop().into(iv);
-            } else { // 引導頁圖片需要在網上下載
-                SLog.info("___app_guide not exists");
-                Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
-            }
+            Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
 
             lastAppGuide.findViewById(R.id.btn_start_main_activity).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,13 +67,7 @@ public class AppGuidePagerAdapter extends PagerAdapter {
             return lastAppGuide;
         } else {
             ImageView iv = new ImageView(context);
-            if (imageFile.exists()) { // 引導頁圖片文件已存在本地
-                SLog.info("___app_guide exists");
-                Glide.with(context).load(imageFile).centerCrop().into(iv);
-            } else { // 引導頁圖片需要在網上下載
-                SLog.info("___app_guide not exists");
-                Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
-            }
+            Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
             container.addView(iv);
             return iv;
         }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 店鋪狀態
+ * 商店狀態
  * @author zwm
  */
 public class StoreStatus extends BaseStatus {

@@ -1,7 +1,5 @@
 package com.ftofs.twant.entity.cart;
 
-import android.widget.ImageView;
-
 import com.ftofs.twant.R;
 import com.ftofs.twant.widget.ScaledButton;
 
@@ -19,6 +17,7 @@ public class BaseStatus {
     public static final int PHRASE_TARGET = 2;   // 自己處理，然后，雙向傳播
     public static final int PHRASE_BUBBLE = 3;   // 狀態傳播方向 sku => spu => store => total
 
+
     protected ScaledButton radio;
     protected boolean checked;
 
@@ -34,6 +33,7 @@ public class BaseStatus {
         } else {
             radio.setIconResource(R.drawable.icon_cart_item_unchecked);
         }
+
     }
 
     public ScaledButton getRadio() {
@@ -43,8 +43,9 @@ public class BaseStatus {
     public void setRadio(ScaledButton radio) {
         this.radio = radio;
     }
-
     public boolean isChecked() {
         return checked;
     }
+
+
 }

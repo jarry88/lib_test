@@ -1,6 +1,6 @@
 package com.ftofs.twant.entity;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Im聊天時，選擇發送的訂單項

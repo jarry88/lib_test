@@ -2,17 +2,17 @@ package com.ftofs.twant.domain.goods;
 
 public class GoodsCommonBody {
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 
     /**
-     * 商品描述
+     * 產品描述
      */
     private String goodsBody;
 
     /**
-     * 移动端商品描述
+     * 移动端產品描述
      */
     private String mobileBody;
 

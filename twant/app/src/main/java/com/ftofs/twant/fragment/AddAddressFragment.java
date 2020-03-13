@@ -1,13 +1,16 @@
 package com.ftofs.twant.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
@@ -37,7 +40,6 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 地址添加Fragment
@@ -59,6 +61,8 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     int mIsDefaultAddr;
 
     int action;  // 標記是編輯還是添加
+    private int DETAIL_ADDRESS_MAXLENTH=100;
+    private int REAL_NAME_MAXLENTH=50;
 
     public static AddAddressFragment newInstance(int action, AddrItem addrItem) {
         Bundle args = new Bundle();
@@ -94,7 +98,23 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
 
         tvMobileZone = view.findViewById(R.id.tv_mobile_zone);
         etReceiverName = view.findViewById(R.id.et_receiver_name);
+        etReceiverName.setOnClickListener((v)-> {
+            ((TextView) view.findViewById(R.id.tv_receiver_name)).setTextColor(Color.GRAY);
+        });
+        etReceiverName.setOnFocusChangeListener((v,b)->{
+            if (b) {
+                ((TextView) view.findViewById(R.id.tv_receiver_name)).setTextColor(Color.BLACK);
+            }
+        });
         etMobile = view.findViewById(R.id.et_mobile);
+        etMobile.setOnClickListener((v)-> {
+            ((TextView) view.findViewById(R.id.tv_phone_number)).setTextColor(Color.GRAY);
+        });
+        etMobile.setOnFocusChangeListener((v,b)->{
+            if (b) {
+                ((TextView) view.findViewById(R.id.tv_phone_number)).setTextColor(Color.BLACK);
+            }
+        });
         tvArea = view.findViewById(R.id.tv_area);
         etDetailAddress = view.findViewById(R.id.et_detail_address);
         mSbDefaultAddr = view.findViewById(R.id.sb_default_addr);
@@ -138,7 +158,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         int id = v.getId();
         SLog.info("id[%d]", id);
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_select_mobile_zone) {
             hideSoftInput();
             List<ListPopupItem> itemList = new ArrayList<>();
@@ -176,6 +196,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     }
 
     private void saveAddress() {
+
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             return;
@@ -186,6 +207,9 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             final String realName = etReceiverName.getText().toString().trim();
             if (realName.length() < 1) {
                 ToastUtil.error(_mActivity, getResources().getText(R.string.hint_input_receiver_name).toString());
+                return;
+            } else if (realName.length() > REAL_NAME_MAXLENTH){
+                ToastUtil.error(_mActivity,"姓名長度超過上限");
                 return;
             }
 
@@ -217,6 +241,9 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             final String detailAddress = etDetailAddress.getText().toString().trim();
             if (detailAddress.length() < 1) {
                 ToastUtil.error(_mActivity, getResources().getText(R.string.hint_input_detail_address).toString());
+                return;
+            } else if (detailAddress.length() > DETAIL_ADDRESS_MAXLENTH){
+                ToastUtil.error(_mActivity,"詳細地址長度超過上限");
                 return;
             }
 
@@ -262,7 +289,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                 public void onResponse(Call call, String responseStr) throws IOException {
                     try {
                         SLog.info("responseStr[%s]", responseStr);
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
@@ -283,15 +310,14 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                             ToastUtil.success(_mActivity, "地址編輯成功");
                         }
 
-                        pop();
+                        hideSoftInputPop();
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -352,7 +378,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

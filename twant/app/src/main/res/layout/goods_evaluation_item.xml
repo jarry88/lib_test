@@ -39,7 +39,7 @@
             />
     </LinearLayout>
 
-    <!-- 商品 -->
+    <!-- 產品 -->
     <LinearLayout
         android:id="@+id/ll_goods_container"
         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
             android:gravity="top"
             android:textSize="16sp"
             android:textColor="@color/tw_medium_grey"
-            android:hint="點擊輸入您對該商品的評論"
+            android:hint="點擊發表說說"
             android:background="@null"
             />
         <com.ftofs.twant.widget.SquareGridLayout

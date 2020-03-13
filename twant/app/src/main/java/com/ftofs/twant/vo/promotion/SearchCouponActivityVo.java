@@ -214,19 +214,19 @@ public class SearchCouponActivityVo {
      */
     private int searchUseGoodsRange = 0;
     /**
-     * 搜索引擎中适用品类范围一级商品分类ID
+     * 搜索引擎中适用品类范围一级產品分类ID
      */
     private List<Integer> searchCategoryId1 = new ArrayList<>();
     /**
-     * 搜索引擎中适用品类范围末级商品分类ID（仅平台券时使用）
+     * 搜索引擎中适用品类范围末级產品分类ID（仅平台券时使用）
      */
     private List<Integer> searchCategoryId = new ArrayList<>();
     /**
-     * 搜索引擎中使用部分商品范围commonId（仅平台券时使用）
+     * 搜索引擎中使用部分產品范围commonId（仅平台券时使用）
      */
     private List<Integer> searchCommonId = new ArrayList<>();
     /**
-     * 搜索引擎中适用商品详细信息Json（目前仅存储商品图片名称）
+     * 搜索引擎中适用產品详细信息Json（目前仅存储產品图片名称）
      */
     private String searchGoodsCommonShort = "";
     /**
@@ -244,7 +244,7 @@ public class SearchCouponActivityVo {
 
     //不需要向搜索引擎推送以下字段，仅便于程序处理使用
     /**
-     * 搜索引擎中适用商品详细信息列表（目前仅存储商品图片名称）
+     * 搜索引擎中适用產品详细信息列表（目前仅存储產品图片名称）
      */
     private List<HashMap<String,Object>> searchGoodsCommonShortList = new ArrayList<>();
     /**

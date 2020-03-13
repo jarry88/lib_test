@@ -7,26 +7,26 @@ import java.math.BigDecimal;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 推荐商品
+ * 推荐產品
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:06
  */
 public class GoodsCommendVo {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice;
     /**
-     * 商品图
+     * 產品图
      */
     private String imageSrc;
     

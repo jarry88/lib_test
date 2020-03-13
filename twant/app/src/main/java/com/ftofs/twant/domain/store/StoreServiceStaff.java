@@ -4,7 +4,7 @@ public class StoreServiceStaff {
     private int staffId;
 
     /**
-     * 店鋪ID
+     * 商店ID
      */
     private int storeId;
 
@@ -14,7 +14,7 @@ public class StoreServiceStaff {
     private String staffName;
 
     /**
-     * 關聯的會員名稱
+     * 關聯的城友名稱
      */
     private String memberName;
 

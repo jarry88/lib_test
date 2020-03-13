@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:textColor="@color/tw_black"
+            android:text="添加產品"
+            />
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_search"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="7dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_shop_search"
+            />
+    </RelativeLayout>
+    <!-- END OF 工具欄 -->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:orientation="horizontal"
+        android:background="@drawable/border_type_d">
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/tab_cart"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            app:stb_text="購物袋"
+            app:stb_stroke_width="2dp"
+            app:stb_horizontal_padding="9dp"
+            app:stb_use_cap="true">
+        </com.ftofs.twant.widget.SimpleTabButton>
+
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/tab_buy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            app:stb_text="最近購買"
+            app:stb_stroke_width="2dp"
+            app:stb_horizontal_padding="9dp"
+            app:stb_use_cap="true">
+        </com.ftofs.twant.widget.SimpleTabButton>
+
+        <com.ftofs.twant.widget.SimpleTabButton
+            android:id="@+id/tab_visit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            app:stb_text="瀏覽記憶"
+            app:stb_stroke_width="2dp"
+            app:stb_horizontal_padding="9dp"
+            app:stb_use_cap="true">
+        </com.ftofs.twant.widget.SimpleTabButton>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="9dp"
+        android:paddingRight="9dp">
+    </androidx.recyclerview.widget.RecyclerView>
+</LinearLayout>

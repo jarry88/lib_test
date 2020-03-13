@@ -10,9 +10,9 @@ public class Footprint {
      */
     // 沒選中任何東西
     public static final int SELECT_STATUS_NONE = 0;
-    // 選中了商品項
+    // 選中了產品項
     public static final int SELECT_STATUS_GOODS = 1;
-    // 選中了店鋪項
+    // 選中了商店項
     public static final int SELECT_STATUS_STORE = 2;
     // 選中了日期項
     public static final int SELECT_STATUS_DATE = 4;

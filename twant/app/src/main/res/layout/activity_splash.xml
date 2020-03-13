@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/rl_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context=".activity.SplashActivity">
-
-
+    <EditText
+        android:id="@+id/et_stub"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        />
     
     <View
         android:layout_width="match_parent"
@@ -16,7 +22,7 @@
         android:background="#03B9FF"
         />
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
@@ -28,7 +34,7 @@
             app:layout_constraintDimensionRatio="1500:2228"
             android:src="@drawable/splash_bg"
             />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <TextView

@@ -7,22 +7,22 @@ import java.math.BigDecimal;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 文章中的商品Vo
+ * 想要帖中的產品Vo
  *
  * @author cj
  * Created 2017-10-24 下午 2:10
  */
 public class ArticleGoodsCommonVo {
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品卖点
+     * 產品卖点
      */
     private String jingle;
     /**
@@ -34,17 +34,17 @@ public class ArticleGoodsCommonVo {
      */
     private String storeName = "";
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin;
 
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin;
 
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin;
 

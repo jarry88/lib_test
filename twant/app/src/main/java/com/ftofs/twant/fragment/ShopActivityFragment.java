@@ -1,13 +1,16 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreConformListAdapter;
@@ -17,6 +20,7 @@ import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.StoreConform;
 import com.ftofs.twant.entity.StoreDiscount;
 import com.ftofs.twant.entity.StoreVoucher;
@@ -25,22 +29,22 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 
 
 /**
- * 店鋪活動Fragment
+ * 商店活動Fragment
  * @author zwm
  */
 public class ShopActivityFragment extends BaseFragment implements View.OnClickListener {
@@ -70,6 +74,11 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
 
     boolean isStoreActivityDataLoaded;
 
+
+    ScrollView svContainer;
+    LinearLayout llPlaceholderContainer;
+    TextView tvEmptyHint;
+    Timer timer;
     public static ShopActivityFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -91,21 +100,23 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
 
+        tvEmptyHint = view.findViewById(R.id.tv_empty_hint);
+        svContainer = view.findViewById(R.id.sv_container);
+        llPlaceholderContainer = view.findViewById(R.id.ll_placeholder_container);
         llOuterContainer = view.findViewById(R.id.ll_outer_container);
 
         llVoucherWrapper = view.findViewById(R.id.ll_voucher_wrapper);
         llVoucherContainer = view.findViewById(R.id.ll_voucher_container);
         voucherListAdapter = new StoreVoucherListAdapter(_mActivity, llVoucherContainer, R.layout.store_voucher_item);
-        voucherListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
+        voucherListAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
             @Override
             public void onClick(ViewGroupAdapter adapter, View view, int position) {
                 int id = view.getId();
-                if (id == R.id.btn_receive_voucher_now) {
-                    StoreVoucher storeVoucher = storeVoucherList.get(position);
-                    // 檢查未領取才調用領取接口
-                    if (storeVoucher.usable) {
-                        receiveVoucher(position, storeVoucher.templateId);
-                    }
+                StoreVoucher storeVoucher = storeVoucherList.get(position);
+                SLog.info("storeVoucher.isUsable[%s]", storeVoucher.isUsable());
+                // 檢查未領取才調用領取接口
+                if (storeVoucher.isUsable()) {
+                    receiveVoucher(position, storeVoucher.templateId);
                 }
             }
         });
@@ -144,7 +155,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
-        loadStoreActivityData();
+        // loadStoreActivityData();
     }
 
 
@@ -161,7 +172,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
     }
 
     /**
-     * 加載店鋪活動數據
+     * 加載商店活動數據
      */
     private void loadStoreActivityData() {
         try {
@@ -175,11 +186,9 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                     "storeId", parentFragment.getStoreId(),
                     "token", token);
 
-            SLog.info("params[%s]", params);
+            SLog.info("_11params[%s]", params);
 
-            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                    .asLoading(getString(R.string.text_loading))
-                    .show();
+            final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             Api.postUI(Api.PATH_STORE_ACTIVITY, params, new UICallback() {
                 @Override
@@ -193,7 +202,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                     loadingPopup.dismiss();
                     SLog.info("loadStoreActivityData.responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -201,21 +210,29 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                     // 記錄有多少種空數據
                     int emptyDataCount = 0;
                     try {
-                        EasyJSONArray voucherList = responseObj.getArray("datas.voucherList");
+                        // 優惠券
+                        EasyJSONArray voucherList = responseObj.getSafeArray("datas.voucherList");
+                        storeVoucherList.clear();
                         if (voucherList.length() > 0) {
                             for (Object object : voucherList) {
                                 EasyJSONObject voucher = (EasyJSONObject) object;
 
+                                int memberIsReceive = voucher.getInt("memberIsReceive");
+                                int state = Constant.COUPON_STATE_UNRECEIVED;
+                                if (memberIsReceive == 1) {
+                                    state = Constant.COUPON_STATE_RECEIVED;
+                                }
                                 StoreVoucher storeVoucher = new StoreVoucher(
                                         voucher.getInt("storeId"),
                                         voucher.getInt("templateId"),
-                                        voucher.getString("storeName"),
+                                        voucher.getSafeString("storeName"),
+                                        voucher.getSafeString("storeAvatar"),
                                         voucher.getInt("templatePrice"),
-                                        voucher.getString("limitAmountText"),
-                                        voucher.getString("usableClientTypeText"),
-                                        voucher.getString("useStartTime"),
-                                        voucher.getString("useEndTime"),
-                                        voucher.getInt("memberIsReceive") == 0);
+                                        voucher.getSafeString("limitAmountText"),
+                                        voucher.getSafeString("usableClientTypeText"),
+                                        voucher.getSafeString("useStartTime"),
+                                        voucher.getSafeString("useEndTime"),
+                                        state);
                                 storeVoucherList.add(storeVoucher);
                             }
                             voucherListAdapter.setData(storeVoucherList);
@@ -225,16 +242,26 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                         }
 
 
-                        EasyJSONArray conformList = responseObj.getArray("datas.conformList");
+                        // 滿減優惠
+
+                        EasyJSONArray conformList = responseObj.getSafeArray("datas.conformList");
+                        storeConformList.clear();
                         if (conformList.length() > 0) {
                             for (Object object : conformList) {
                                 EasyJSONObject conform = (EasyJSONObject) object;
 
-                                int giftCount = 0;
-                                EasyJSONArray giftVoList = conform.getArray("giftVoList");
-                                if (!Util.isJsonNull(giftVoList)) {
-                                    giftCount = giftVoList.length();
+                                EasyJSONArray giftVoList = conform.getSafeArray("giftVoList");
+                                List<GiftItem> giftItemList = new ArrayList<>();
+
+                                for (Object object2 : giftVoList) {
+                                    EasyJSONObject giftVo = (EasyJSONObject) object2;
+
+                                    GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, giftVo.toString());
+
+                                    giftItemList.add(giftItem);
                                 }
+                                int giftCount = giftVoList.length();
+
 
                                 StoreConform storeConform = new StoreConform(
                                         conform.getInt("templateId"),
@@ -242,10 +269,12 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                                         conform.getInt("conformId"),
                                         conform.getInt("limitAmount"),
                                         conform.getInt("conformPrice"),
-                                        conform.getString("startTime"),
-                                        conform.getString("endTime"),
+                                        conform.getSafeString("startTime"),
+                                        conform.getSafeString("endTime"),
+                                        conform.getSafeString("contentCartRule"),
                                         giftCount,
                                         conform.getInt("isFreeFreight"));
+                                storeConform.setGiftList(giftItemList);
                                 storeConformList.add(storeConform);
                             }
                             conformListAdapter.setData(storeConformList);
@@ -254,8 +283,9 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             emptyDataCount++;
                         }
 
-
-                        EasyJSONArray discountList = responseObj.getArray("datas.discountList");
+                        // 限時折扣
+                        storeDiscountList.clear();
+                        EasyJSONArray discountList = responseObj.getSafeArray("datas.discountList");
                         if (discountList.length() > 0) {
                             for (Object object : discountList) {
                                 EasyJSONObject discount = (EasyJSONObject) object;
@@ -263,8 +293,10 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                                 StoreDiscount storeDiscount = new StoreDiscount(
                                         discount.getInt("storeId"),
                                         discount.getInt("discountId"),
+                                        discount.getSafeString("discountName"),
                                         (float) discount.getDouble("discountRate"),
-                                        discount.getInt("goodsCount"));
+                                        discount.getInt("goodsCount"),
+                                        discount.getInt("promotionCountDownTime"));
                                 storeDiscountList.add(storeDiscount);
                             }
                             discountListAdapter.setData(storeDiscountList);
@@ -275,22 +307,19 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
 
                         // 如果3種數據都為空，顯示沒有數據的提示
                         if (emptyDataCount == 3) {
-                            llOuterContainer.removeAllViews();
-
-                            View root = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, llOuterContainer, true);
-                            TextView tvEmptyHint = root.findViewById(R.id.tv_empty_hint);
+                            svContainer.setVisibility(View.GONE);
+                            llPlaceholderContainer.setVisibility(View.VISIBLE);
                             tvEmptyHint.setText(R.string.no_store_activity_hint);
                         }
 
                         isStoreActivityDataLoaded = true;
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
-                        SLog.info("Error!loadStoreActivityData failed");
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -316,14 +345,14 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
                 ToastUtil.success(_mActivity, "領取成功");
                 StoreVoucher storeVoucher = storeVoucherList.get(position);
-                storeVoucher.usable = false;
+                storeVoucher.state = Constant.COUPON_STATE_RECEIVED;
                 voucherListAdapter.setData(storeVoucherList);
             }
         });
@@ -332,9 +361,7 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if (!isStoreActivityDataLoaded) {
-            loadStoreActivityData();
-        }
+        loadStoreActivityData();
     }
 
     @Override

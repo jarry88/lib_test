@@ -11,17 +11,17 @@ import java.util.List;
 /**
  * @author liusf
  * @create 2019/1/9 16:02
- * @description 商品详情视图类
+ * @description 產品详情视图类
  * @params
  * @return
  */
 public class GoodsInfoVo {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
     /**
@@ -44,15 +44,15 @@ public class GoodsInfoVo {
      */
     private String specValueIds="";
     /**
-     * 商品价格0
+     * 產品价格0
      */
     private BigDecimal goodsPrice0 = BigDecimal.ZERO;
     /**
-     * 商品价格1
+     * 產品价格1
      */
     private BigDecimal goodsPrice1 = BigDecimal.ZERO;
     /**
-     * 商品价格2
+     * 產品价格2
      */
     private BigDecimal goodsPrice2 = BigDecimal.ZERO;
     /**
@@ -132,7 +132,7 @@ public class GoodsInfoVo {
      */
     private String promotionTitle="";
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial="";
     /**
@@ -161,7 +161,7 @@ public class GoodsInfoVo {
      */
     private Integer isGift;
     /**
-     * 拼团商品标记
+     * 拼团產品标记
      */
     private Integer isGroup;
     /**
@@ -173,7 +173,7 @@ public class GoodsInfoVo {
      */
     private int limitAmount = 0;
     /**
-     * 秒杀商品标记
+     * 秒杀產品标记
      */
     private int isSeckill;
     /**
@@ -186,12 +186,12 @@ public class GoodsInfoVo {
     private String barCode;
 
     /**
-     * 商品图片列表
+     * 產品图片列表
      */
     private List<GoodsImage> goodsImageList = new ArrayList<>();
 
     /**
-     * 商品SPU信息
+     * 產品SPU信息
      */
     private String goodsName;
     private String jingle;

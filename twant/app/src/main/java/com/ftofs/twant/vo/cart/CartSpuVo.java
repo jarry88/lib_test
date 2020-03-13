@@ -23,7 +23,7 @@ public class CartSpuVo {
      */
     private int commonId;
     /**
-     * 商品名
+     * 產品名
      */
     private String goodsName;
 
@@ -56,13 +56,13 @@ public class CartSpuVo {
      */
     private int batchNum1End = 0;
     /**
-     * 商品状态
+     * 產品状态
      */
     private int goodsStatus;
     /**
      * 购物车spu状态(有效/无效)
-     * 商品下架 -> 无效
-     * 商品正处于预定状态 -> 无效
+     * 產品下架 -> 无效
+     * 產品正处于预定状态 -> 无效
      */
     private int isValid;
     /**
@@ -78,11 +78,11 @@ public class CartSpuVo {
      */
     private int chainId;
     /**
-     * spu ID，当商品为门店商品时，该值为真正的commonId[仅购物车列表使用]
+     * spu ID，当產品为门店產品时，该值为真正的commonId[仅购物车列表使用]
      */
     private int realCommonId;
     /**
-     * 商品类型，详见CartItemVo.goodsType
+     * 產品类型，详见CartItemVo.goodsType
      */
     private int goodsType;
 

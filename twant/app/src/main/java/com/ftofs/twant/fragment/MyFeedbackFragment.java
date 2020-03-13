@@ -1,10 +1,10 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,6 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.SquareGridLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,14 +69,13 @@ public class MyFeedbackFragment extends BaseFragment implements View.OnClickList
         });
 
         // 設置空頁面
-        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
+        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.layout_placeholder_no_data, null, false);
         // 設置空頁面的提示語
         TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
         tvEmptyHint.setText(R.string.no_data_hint);
         adapter.setEmptyView(emptyView);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
-        rvFeedbackList.setLayoutManager(layoutManager);
+        rvFeedbackList.setLayoutManager(new LinearLayoutManager(_mActivity));
         rvFeedbackList.setAdapter(adapter);
 
         loadData();
@@ -103,24 +101,24 @@ public class MyFeedbackFragment extends BaseFragment implements View.OnClickList
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    EasyJSONArray suggestList = responseObj.getArray("datas.suggestList");
+                    EasyJSONArray suggestList = responseObj.getSafeArray("datas.suggestList");
                     for (Object object : suggestList) {
                         EasyJSONObject feedback = (EasyJSONObject) object;
                         FeedbackItem feedbackItem = new FeedbackItem();
                         feedbackItem.suggestId = feedback.getInt("suggestId");
-                        feedbackItem.suggestContent = feedback.getString("suggestContent");
+                        feedbackItem.suggestContent = feedback.getSafeString("suggestContent");
                         feedbackItem.createTime = feedback.getLong("createTime");
-                        EasyJSONArray imageList = feedback.getArray("imageList");
+                        EasyJSONArray imageList = feedback.getSafeArray("imageList");
                         feedbackItem.imageList = new ArrayList<>();
                         for (Object object2 : imageList) {
                             EasyJSONObject image = (EasyJSONObject) object2;
-                            feedbackItem.imageList.add(image.getString("imageUrl"));
+                            feedbackItem.imageList.add(image.getSafeString("imageUrl"));
                         }
                         feedbackItemList.add(feedbackItem);
                     }
@@ -138,7 +136,7 @@ public class MyFeedbackFragment extends BaseFragment implements View.OnClickList
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 
@@ -146,7 +144,7 @@ public class MyFeedbackFragment extends BaseFragment implements View.OnClickList
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

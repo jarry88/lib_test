@@ -52,7 +52,7 @@ public class Bundling implements Serializable {
     private List<GoodsCommon> goodsCommonList;
 
     /**
-     * 推荐组合商品列表
+     * 推荐组合產品列表
      */
     private List<BundlingGoods> bundlingGoodsList;
 

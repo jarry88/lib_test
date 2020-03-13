@@ -1,14 +1,8 @@
 package com.ftofs.twant.fragment;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +10,37 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.ShopGoodsAdapter;
+import com.ftofs.twant.adapter.ShopGoodsGridAdapter;
+import com.ftofs.twant.adapter.ShopGoodsListAdapter;
+import com.ftofs.twant.adapter.StoreCategoryListAdapter;
 import com.ftofs.twant.adapter.VideoListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.Goods;
-import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.entity.VideoItem;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SimpleTabManager;
+import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,18 +53,28 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 店鋪商品Fragment
+ * 商店產品Fragment
  * @author zwm
  */
-public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener {
+public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     public static final int ANIM_COUNT = 2;
     ShopMainFragment parentFragment;
 
     RecyclerView rvGoodsList;
     ImageView imgPriceOrderIndicator;
-    ShopGoodsAdapter adapter;
 
-    List<Goods> goodsList = new ArrayList<>();
+    ShopGoodsListAdapter shopGoodsListAdapter;
+    ShopGoodsGridAdapter shopGoodsGridAdapter;
+    LinearLayoutManager layoutManager;
+
+
+    StoreCategoryListAdapter storeCategoryListAdapter;
+
+    List<Goods> goodsList = new ArrayList<>();  // 每行顯示一個產品
+    List<GoodsPair> goodsPairList = new ArrayList<>();  // 每行顯示兩個產品
+    GoodsPair currGoodsPair;  // 當前處理的goodsPair，考慮到分頁時，加載到奇數個產品，所以要預存一下GoodsPair
+
+    List<StoreLabel> shopStoreLabelList = new ArrayList<>();
 
     boolean isStandalone;
     int storeId;
@@ -70,11 +89,18 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     int currVideoPage = 0;
     boolean videoHasMore;
 
+    ScaledButton btnChangeViewStyle;
+
     LinearLayout llPage1;
     LinearLayout llPage2;
     private int currAnimIndex;
     VideoListAdapter videoListAdapter;
     List<VideoItem> videoItemList = new ArrayList<>();
+
+
+    public static final int VIEW_STYLE_LIST = 0;  // 以列表形式查看
+    public static final int VIEW_STYLE_GRID = 1;  // 以網格形式查看
+    int currentViewStyle = VIEW_STYLE_GRID;
 
     /**
      * 新建一個實例
@@ -110,14 +136,12 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         Bundle args = getArguments();
         isStandalone = args.getBoolean("isStandalone");
         String paramsStr = args.getString("paramsStr");
-        paramsOriginal = (EasyJSONObject) EasyJSONObject.parse(paramsStr);
+        paramsOriginal = EasyJSONObject.parse(paramsStr);
         try {
             storeId = paramsOriginal.getInt("storeId");
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
-
-
 
         if (isStandalone) {
             view.findViewById(R.id.tool_bar).setVisibility(View.VISIBLE);
@@ -153,18 +177,21 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 if (id == R.id.btn_order_general) { // 綜合
                     SLog.info("btn_order_general");
                     goodsList.clear();
+                    goodsPairList.clear();
                     mExtra = null;
                     currPage = 0;
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_sale) { // 銷量
                     SLog.info("btn_order_sale");
                     goodsList.clear();
+                    goodsPairList.clear();
                     currPage = 0;
                     mExtra = EasyJSONObject.generate("sort", "sale_desc");
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_new) { // 上新
                     SLog.info("btn_order_new");
                     goodsList.clear();
+                    goodsPairList.clear();
                     currPage = 0;
                     mExtra = EasyJSONObject.generate("sort", "new_desc");
                     loadStoreGoods(paramsOriginal, mExtra, 1);
@@ -188,6 +215,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
                     SLog.info("btn_order_price");
                     goodsList.clear();
+                    goodsPairList.clear();
                     currPage = 0;
                     mExtra = EasyJSONObject.generate("sort", sort);
                     loadStoreGoods(paramsOriginal, mExtra, 1);
@@ -202,61 +230,128 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
         imgPriceOrderIndicator = view.findViewById(R.id.img_price_order_indicator);
 
-        GridLayoutManager layoutManagerCommodity = new GridLayoutManager(_mActivity, 2);
-        layoutManagerCommodity.setOrientation(GridLayoutManager.VERTICAL);
-        rvGoodsList.setLayoutManager(layoutManagerCommodity);
-        adapter = new ShopGoodsAdapter(_mActivity, goodsList);
-        adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
+        layoutManager = new LinearLayoutManager(_mActivity);
+        rvGoodsList.setLayoutManager(layoutManager);
+        rvGoodsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
-                Goods goods = goodsList.get(position);
-                if (goods.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
-                    // padding占滿整個列的寬度
-                    return 2;
-                } else {
-                    return 1;
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (parentFragment != null) {
+                        parentFragment.onCbStopNestedScroll();
+                    }
+                } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    if (parentFragment != null) {
+                        parentFragment.onCbStartNestedScroll();
+                    }
                 }
             }
         });
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        shopGoodsGridAdapter = new ShopGoodsGridAdapter(_mActivity, goodsPairList);
+        shopGoodsGridAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Goods goods = goodsList.get(position);
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                GoodsPair goodsPair = goodsPairList.get(position);
                 // padding忽略點擊
-                if (goods.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
+                if (goodsPair.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
                     return;
                 }
-                Util.startFragment(GoodsDetailFragment.newInstance(goods.id, 0));
+
+                Goods goods;
+                int commonId = -1;
+                int id = view.getId();
+                if (id == R.id.img_left_goods || id == R.id.btn_add_to_cart_left) {
+                    goods = goodsPair.leftGoods;
+                    commonId = goods.id;
+                } else if (id == R.id.img_right_goods || id == R.id.btn_add_to_cart_right) {
+                    goods = goodsPair.rightGoods;
+                    commonId = goods.id;
+                }
+
+                int userId = User.getUserId();
+
+                if (id == R.id.btn_add_to_cart_left || id == R.id.btn_add_to_cart_right) {
+                    if (userId > 0) {
+                        showSpecSelectPopup(commonId);
+                    } else {
+                        Util.showLoginFragment();
+                    }
+                    return;
+                }
+                if (commonId != -1) {
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                }
             }
         });
-        adapter.setEnableLoadMore(true);
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+        shopGoodsGridAdapter.setEnableLoadMore(true);
+        shopGoodsGridAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 SLog.info("onLoadMoreRequested");
 
                 if (!hasMore) {
-                    adapter.setEnableLoadMore(false);
+                    shopGoodsGridAdapter.setEnableLoadMore(false);
                     return;
                 }
                 loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
             }
         }, rvGoodsList);
 
+        shopGoodsListAdapter = new ShopGoodsListAdapter(_mActivity, goodsList);
+        shopGoodsListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Goods goods = goodsList.get(position);
+                int commonId = goods.id;
 
-        rvGoodsList.setAdapter(adapter);
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+            }
+        });
+        shopGoodsListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+
+                Goods goods = goodsList.get(position);
+                int commonId = goods.id;
+                int userId = User.getUserId();
+                if (id == R.id.btn_add_to_cart) {
+                    if (userId > 0) {
+                        showSpecSelectPopup(commonId);
+                    } else {
+                        Util.showLoginFragment();
+                    }
+                }
+            }
+        });
+
+        shopGoodsListAdapter.setEnableLoadMore(true);
+        shopGoodsListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                SLog.info("onLoadMoreRequested");
+
+                if (!hasMore) {
+                    shopGoodsListAdapter.setEnableLoadMore(false);
+                    return;
+                }
+                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
+            }
+        }, rvGoodsList);
+
+        rvGoodsList.setAdapter(shopGoodsGridAdapter);
 
         if (paramsOriginal.exists("sort")) {
             String sort = null;
             try {
-                sort = paramsOriginal.getString("sort");
-            } catch (EasyJSONException e) {
-                e.printStackTrace();
+                sort = paramsOriginal.getSafeString("sort");
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
 
-            if ("new_desc".equals(sort)) {  // 最新商品
+            if ("new_desc".equals(sort)) {  // 最新產品
                 simpleTabManager.performClick(2);
-            } else if ("sale_desc".equals(sort)) { // 店鋪熱賣
+            } else if ("sale_desc".equals(sort)) { // 商店熱賣
                 simpleTabManager.performClick(1);
             }
         } else {
@@ -268,10 +363,10 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         videoListAdapter = new VideoListAdapter(videoItemList);
 
         // 設置空頁面
-        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
+        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.layout_placeholder_no_data, null, false);
         // 設置空頁面的提示語
         TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
-        tvEmptyHint.setText(R.string.no_order_hint);
+        tvEmptyHint.setText(R.string.no_data_hint);
         videoListAdapter.setEmptyView(emptyView);
 
         videoListAdapter.setEnableLoadMore(true);
@@ -305,11 +400,68 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         });
         rvVideoList.setAdapter(videoListAdapter);
 
+        RecyclerView rvCategoryList = view.findViewById(R.id.rv_category_list);
+        rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        storeCategoryListAdapter = new StoreCategoryListAdapter(_mActivity, R.layout.store_category_list_item, shopStoreLabelList, this);
+        storeCategoryListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                int prevSelectedItemIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+
+                SLog.info("prevSelectedItemIndex[%d]", prevSelectedItemIndex);
+                if (prevSelectedItemIndex != -1) {
+                    StoreLabel prevSelectedItem = shopStoreLabelList.get(prevSelectedItemIndex);
+                    // 設置為收合狀態
+                    prevSelectedItem.setIsFold(1);
+
+                    prevSelectedItem.setIsFold(Constant.TRUE_INT);  // 設置為收合狀態
+                    storeCategoryListAdapter.notifyItemChanged(prevSelectedItemIndex);
+                }
+
+                StoreLabel storeLabel = shopStoreLabelList.get(position);
+                storeLabel.setIsFold(Constant.FALSE_INT);  // 設置為展開狀態
+                storeCategoryListAdapter.notifyItemChanged(position);
+
+                storeCategoryListAdapter.setPrevSelectedItemIndex(position);
+
+                loadCategoryGoods(storeLabel.getStoreLabelId());
+            }
+        });
+        rvCategoryList.setAdapter(storeCategoryListAdapter);
+
         loadVideoCover(currPage + 1);
+        loadShopCategoryData();
+
+        btnChangeViewStyle = view.findViewById(R.id.btn_change_view_style);
+        btnChangeViewStyle.setOnClickListener(this);
     }
 
     /**
-     * 加載店鋪商品
+     * 加載指定分類的產品
+     * @param labelId  分類Id
+     */
+    private void loadCategoryGoods(int labelId) {
+        SLog.info("loadCategoryGoods");
+        goodsList.clear();
+        goodsPairList.clear();
+        currPage = 0;
+
+        mExtra = EasyJSONObject.generate(
+                "storeId", storeId);
+
+        if (labelId != 0) { // labelId為0表示全部產品
+            try {
+                mExtra.set("labelId", labelId);
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+        }
+        SLog.info("mExtra[%s]", mExtra.toString());
+        loadStoreGoods(paramsOriginal, mExtra, 1);
+    }
+
+    /**
+     * 加載商店產品
      * @param paramsOriginal
      * @param extra 額外的搜索參數
      * @param page 第幾頁
@@ -330,67 +482,180 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
             params.set("page", page);
 
-            SLog.info("店鋪內商品搜索,params[%s]", params.toString());
+            final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
+            SLog.info("商店內產品搜索,params[%s]", params.toString());
             Api.getUI(Api.PATH_SEARCH_GOODS_IN_STORE, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    loadingPopup.dismiss();
+
                     ToastUtil.showNetworkError(_mActivity, e);
-                    adapter.loadMoreFail();
+                    shopGoodsGridAdapter.loadMoreFail();
+                    shopGoodsListAdapter.loadMoreFail();
                 }
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
+                    loadingPopup.dismiss();
                     SLog.info("responseStr[%s]", responseStr);
                     try {
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
-                            adapter.loadMoreFail();
+                            shopGoodsGridAdapter.loadMoreFail();
+                            shopGoodsListAdapter.loadMoreFail();
                             return;
                         }
 
                         hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
                         SLog.info("hasMore[%s]", hasMore);
                         if (!hasMore) {
-                            adapter.loadMoreEnd();
-                            adapter.setEnableLoadMore(false);
+                            shopGoodsGridAdapter.loadMoreEnd();
+                            shopGoodsGridAdapter.setEnableLoadMore(false);
+                            shopGoodsListAdapter.loadMoreEnd();
+                            shopGoodsListAdapter.setEnableLoadMore(false);
                         }
 
-                        EasyJSONArray goodsArray = responseObj.getArray("datas.goodsCommonList");
+                        EasyJSONArray goodsArray = responseObj.getSafeArray("datas.goodsCommonList");
                         for (Object object : goodsArray) {
                             EasyJSONObject goodsObject = (EasyJSONObject) object;
 
                             int id = goodsObject.getInt("commonId");
-                            // 商品圖片
-                            String goodsImageUrl = goodsObject.getString("imageSrc");
-                            // 商品名稱
-                            String goodsName = goodsObject.getString("goodsName");
+                            // 產品圖片
+                            String goodsImageUrl = goodsObject.getSafeString("imageSrc");
+                            // 產品名稱
+                            String goodsName = goodsObject.getSafeString("goodsName");
                             // 賣點
-                            String jingle = goodsObject.getString("jingle");
+                            String jingle = goodsObject.getSafeString("jingle");
                             // 獲取價格
                             double price = Util.getSpuPrice(goodsObject);
 
                             Goods goods = new Goods(id, goodsImageUrl, goodsName, jingle, price);
                             goodsList.add(goods);
+
+                            if (currGoodsPair == null) {
+                                currGoodsPair = new GoodsPair();
+                            }
+
+                            if (currGoodsPair.leftGoods == null) {
+                                currGoodsPair.leftGoods = goods;
+                            } else {
+                                currGoodsPair.rightGoods = goods;
+                                goodsPairList.add(currGoodsPair);
+
+                                currGoodsPair = null;
+                            }
+                        }
+
+                        // 如果剛好奇數個，可能沒添加到列表中
+                        if (currGoodsPair != null) {
+                            goodsPairList.add(currGoodsPair);
                         }
 
                         if (!hasMore && goodsList.size() > 0) {
                             // 如果全部加載完畢，添加加載完畢的提示
                             Goods goods = new Goods();
                             goodsList.add(goods);
+
+                            GoodsPair loadEndGoodsPair = new GoodsPair();
+                            loadEndGoodsPair.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
+                            goodsPairList.add(loadEndGoodsPair);
                         }
 
-                        adapter.setNewData(goodsList);
-                        adapter.loadMoreComplete();
+                        shopGoodsGridAdapter.setNewData(goodsPairList);
+                        shopGoodsGridAdapter.loadMoreComplete();
+                        shopGoodsListAdapter.setNewData(goodsList);
+                        shopGoodsListAdapter.loadMoreComplete();
 
                         currPage++;
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-            SLog.info("Error!%s", e.getMessage());
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+
+    /**
+     * 加載商店分類產品數據
+     */
+    private void loadShopCategoryData() {
+        EasyJSONObject params = EasyJSONObject.generate(
+                "storeId", storeId
+        );
+
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_STORE_CATEGORY, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    // 添加一個【全部產品】的分類
+                    StoreLabel storeLabel = new StoreLabel();
+                    storeLabel.setStoreLabelId(0); // 0 表示全部產品
+                    storeLabel.setStoreLabelName("全部產品");
+                    storeLabel.setIsFold(Constant.FALSE_INT); //默認選中【全部產品】
+                    storeLabel.setStoreLabelList(new ArrayList<>());
+                    shopStoreLabelList.add(storeLabel);
+
+                    int goodsCountTotal = 0;
+                    EasyJSONArray storeCategoryList = responseObj.getSafeArray("datas.storeCategoryList");
+                    for (Object object : storeCategoryList) {
+                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                        storeLabel = new StoreLabel();
+                        storeLabel.setStoreLabelId(easyJSONObject.getInt("storeLabelId"));
+                        int goodsCount = easyJSONObject.getInt("goodsCount");
+                        storeLabel.setGoodsCount(goodsCount);
+                        storeLabel.setStoreLabelName(easyJSONObject.getSafeString("storeLabelName"));
+                        storeLabel.setParentId(easyJSONObject.getInt("parentId"));
+                        storeLabel.setStoreId(easyJSONObject.getInt("storeId"));
+                        storeLabel.setIsFold(Constant.TRUE_INT);
+
+                        EasyJSONArray storeLabelList = easyJSONObject.getSafeArray("storeLabelList");
+                        if (storeLabelList != null && storeLabelList.length() > 0) {
+                            List<StoreLabel> storeLabels = new ArrayList<>();
+                            for (Object object2 : storeLabelList) {
+                                EasyJSONObject easyJSONObject2 = (EasyJSONObject) object2;
+                                StoreLabel storeLabel2 = new StoreLabel();
+                                storeLabel2.setStoreLabelId(easyJSONObject2.getInt("storeLabelId"));
+                                storeLabel2.setStoreLabelName(easyJSONObject2.getSafeString("storeLabelName"));
+                                storeLabel2.setParentId(easyJSONObject2.getInt("parentId"));
+                                storeLabel2.setStoreId(easyJSONObject2.getInt("storeId"));
+                                storeLabel2.setIsFold(Constant.TRUE_INT);
+
+                                storeLabels.add(storeLabel2);
+                            }
+
+                            storeLabel.setStoreLabelList(storeLabels);
+                        }
+
+                        if (storeLabel.getStoreLabelList() == null) { // 保證不為null
+                            storeLabel.setStoreLabelList(new ArrayList<>());
+                        }
+
+                        goodsCountTotal += goodsCount;
+                        shopStoreLabelList.add(storeLabel);
+                    }
+                    shopStoreLabelList.get(0).setGoodsCount(goodsCountTotal);  // 添加【全部產品】的項數
+                    storeCategoryListAdapter.setNewData(shopStoreLabelList);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     private void loadVideoCover(int page) {
@@ -411,7 +676,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
                 try {
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         videoListAdapter.loadMoreFail();
                         return;
@@ -424,22 +689,22 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         videoListAdapter.setEnableLoadMore(false);
                     }
 
-                    EasyJSONArray videoVoList = responseObj.getArray("datas.videoVoList");
+                    EasyJSONArray videoVoList = responseObj.getSafeArray("datas.videoVoList");
                     for (Object object : videoVoList) {
                         EasyJSONObject videoVo = (EasyJSONObject) object;
 
                         VideoItem videoItem = new VideoItem(Constant.ITEM_TYPE_NORMAL);
-                        String videoUrl = videoVo.getString("videoUrl");
+                        String videoUrl = videoVo.getSafeString("videoUrl");
                         videoItem.videoId = Util.getYoutubeVideoId(videoUrl);
                         videoItem.playCount = videoVo.getInt("playTimes");
-                        videoItem.updateTime = videoVo.getString("updateTime");
+                        videoItem.updateTime = videoVo.getSafeString("updateTime");
 
-                        EasyJSONArray goodsCommonList = videoVo.getArray("goodsCommonList");
+                        EasyJSONArray goodsCommonList = videoVo.getSafeArray("goodsCommonList");
                         for (Object object2 : goodsCommonList) {
                             EasyJSONObject goodsCommon = (EasyJSONObject) object2;
                             Goods goods = new Goods();
                             goods.id = goodsCommon.getInt("commonId");
-                            goods.imageUrl = goodsCommon.getString("goodsImage");
+                            goods.imageUrl = goodsCommon.getSafeString("goodsImage");
 
                             videoItem.goodsList.add(goods);
                         }
@@ -459,9 +724,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
                     SLog.info("videoItemList.size[%d]", videoItemList.size());
                     videoListAdapter.setNewData(videoItemList);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -484,9 +748,11 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_search_goods) {
             Util.startFragment(ShopSearchFragment.newInstance(storeId, null));
+        } else if (id == R.id.btn_change_view_style) {
+            changeViewStyle();
         }
     }
 
@@ -497,10 +763,43 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             // 如果父Fragment不為空，表明是依附在父Fragment中的，pop出父Fragment
             parentFragment.pop();
         } else {
-            pop();
+            hideSoftInputPop();
         }
 
         return true;
+    }
+
+    @Override
+    public void onSelected(PopupType type, int id, Object extra) {
+        SLog.info("onSelected, type[%s], id[%d]", type, id);
+        if (PopupType.DEFAULT == type) {
+            storeCategoryListAdapter.notifyItemChanged(id);
+
+            int subCategoryId = (int) extra;  // 二級分類Id
+            loadCategoryGoods(subCategoryId);
+        }
+    }
+
+    private void changeViewStyle() {
+        if (currentViewStyle == VIEW_STYLE_LIST) {
+            btnChangeViewStyle.setIconResource(R.drawable.icon_store_goods_view_style_list);
+
+            rvGoodsList.setAdapter(shopGoodsGridAdapter);
+        } else {
+            btnChangeViewStyle.setIconResource(R.drawable.icon_store_goods_view_style_grid);
+
+            rvGoodsList.setAdapter(shopGoodsListAdapter);
+        }
+
+        currentViewStyle = 1 - currentViewStyle;
+    }
+
+    private void showSpecSelectPopup(int commonId) {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null))
+                .show();
     }
 }
 

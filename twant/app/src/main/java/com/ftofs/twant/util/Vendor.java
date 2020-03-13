@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import android.os.Build;
+import android.util.Log;
 
 import com.ftofs.twant.log.SLog;
 
@@ -34,14 +35,15 @@ public class Vendor {
             input = new BufferedReader(new InputStreamReader(p.getInputStream()), 1024);
             line = input.readLine();
             input.close();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            SLog.info("Error!message[%s], trace[%s]", ex.getMessage(), Log.getStackTraceString(ex));
             return null;
         } finally {
             if (input != null) {
                 try {
                     input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         }

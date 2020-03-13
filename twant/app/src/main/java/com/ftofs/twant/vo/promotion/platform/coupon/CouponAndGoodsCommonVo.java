@@ -12,7 +12,7 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 平台券、商品Spu列表实体
+ * 平台券、產品Spu列表实体
  *
  * @author zxy
  * Created 2017/9/4 11:12
@@ -23,7 +23,7 @@ public class CouponAndGoodsCommonVo {
      */
     private Coupon coupon = null;
     /**
-     * 下单时单个商品信息列表
+     * 下单时单个產品信息列表
      */
     private List<BuyGoodsItemVo> buyGoodsItemVoList = new ArrayList<>();
     /**

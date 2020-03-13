@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 public class StatOrdersGoods implements Serializable {
     /**
-     * 订单商品编号
+     * 订单產品编号
      */
     private int ordersGoodsId;
 
@@ -15,32 +15,32 @@ public class StatOrdersGoods implements Serializable {
     private int ordersId;
 
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
     /**
-     * 商品(购买时的)原价
+     * 產品(购买时的)原价
      */
     private BigDecimal basePrice = new BigDecimal(0);
 
     /**
-     * 商品(购买时的)单价
+     * 產品(购买时的)单价
      */
     private BigDecimal goodsPrice = new BigDecimal(0);
 
     /**
-     * (该商品)实付支付总金额
+     * (该產品)实付支付总金额
      */
     private BigDecimal goodsPayAmount = new BigDecimal(0);
 
@@ -50,12 +50,12 @@ public class StatOrdersGoods implements Serializable {
     private int buyNum;
 
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImage;
 
     /**
-     * 商品促销类型 GoodsPromotionType 对应
+     * 產品促销类型 GoodsPromotionType 对应
      */
     private int goodsType = 0;
 
@@ -75,7 +75,7 @@ public class StatOrdersGoods implements Serializable {
     private int commissionRate;
 
     /**
-     * 商品分类ID
+     * 產品分类ID
      */
     private int categoryId;
 

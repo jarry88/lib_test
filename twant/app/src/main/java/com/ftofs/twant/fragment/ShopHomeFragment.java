@@ -1,12 +1,10 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.util.Pair;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
-import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,100 +12,131 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
-import com.ftofs.twant.adapter.FeaturesGoodsAdapter;
+import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.adapter.GoodsGalleryAdapter;
+import com.ftofs.twant.adapter.NestedScrollingFragmentAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
-import com.ftofs.twant.adapter.StoreGoodsListAdapter;
-import com.ftofs.twant.adapter.TestAdapter;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.InStorePersonItem;
-import com.ftofs.twant.entity.Location;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
-import com.ftofs.twant.entity.StoreGoodsItem;
-import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AmapPopup;
+import com.ftofs.twant.widget.DataImageView;
+import com.ftofs.twant.widget.ImagePopup;
 import com.ftofs.twant.widget.InStorePersonPopup;
 import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
-import com.ftofs.twant.widget.StoreWantedPopup;
+import com.ftofs.twant.widget.TwQRCodePopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
-import com.orhanobut.hawk.Hawk;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.rd.PageIndicatorView;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-import cn.snailpad.easyjson.json.JSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 
+import static android.view.View.VISIBLE;
+
 
 /**
- * 店鋪首頁Fragment
+ * 商店首頁Fragment
  * @author zwm
  */
 public class ShopHomeFragment extends BaseFragment implements View.OnClickListener, AutoVerticalScrollTextViewUtil.OnMyClickListener {
     ShopMainFragment parentFragment;
-
+    @BindView(R.id.img_store_status)
     ImageView imgStoreStatus;
-    ImageView imgShopAvatar;
+    @BindView(R.id.img_store_figure)
+    ImageView imgShopLogo;
+    @BindView(R.id.tv_store_name)
+    TextView tvStoreName;
+    @BindView(R.id.tv_shop_signature)
     TextView tvShopSignature;
+    @BindView(R.id.tv_shop_open_day)
     TextView tvShopOpenDay;
-    ImageView imgShopFigure;
+    @BindView(R.id.viewpager)
+    ViewPager viewpager;
 
-    TextView tvPhoneNumber;
-    TextView tvBusinessTimeWorkingDay;
-    TextView tvBusinessTimeWeekend;
-    TextView tvShopAddress;
-
+    @BindView(R.id.smartTabLayout)
+    SmartTabLayout smartTabLayout;
+    @BindView(R.id.ll_sns_container)
     LinearLayout llSnsContainer;
-    LinearLayout llPayWayContainer;
 
+    @BindView(R.id.pageIndicatorView)
+    PageIndicatorView pageIndicatorView;
+    private int currGalleryPosition;
+    @BindView(R.id.rv_gallery_image_list)
+    RecyclerView rvGalleryImageList;
 
-    TextView tvCommentSummary;
-    ImageView imgAuthorAvatar;
-    TextView tvAuthorNickname;
-    TextView tvCommentContent;
-
+    @BindView(R.id.tv_like_count)
     TextView tvLikeCount;
     int likeCount;
     TextView tvFavoriteCount;
     int favoriteCount;
+    int isFavorite;
+    ImageView btnStoreFavorite;
+
+    int isLike;
+    ImageView btnStoreThumb;
+
+    TextView btnShopMap;
+
+    private LinearLayout llPayWayContainer;
 
     LinearLayout llFirstCommentContainer;
     LinearLayout llShopAnnouncementContainer;
 
+
+    private TextView tvBusinessTimeWorkingDay;
+    private TextView tvBusinessTimeWeekend;
+
     int storeId;
-    double storeDistance;  // 我與店鋪的距離
+    double storeDistance;  // 我與商店的距離
+    StoreMapInfo storeMapInfo;
     String storeName;
     String storeSignature;
     String storeAvatarUrl;
@@ -116,23 +145,18 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     double storeLongitude;
     double storeLatitude;
 
-    int isFavorite;
-    ImageView btnStoreFavorite;
+    private TextView tvPhoneNumber;
+    private TextView tvShopAddress;
 
-    int isLike;
-    ImageView btnStoreThumb;
-
-    List<StoreGoodsPair> storeHotItemList = new ArrayList<>();
-    List<StoreGoodsPair> storeNewInItemList = new ArrayList<>();
-    LinearLayout llHotItemList;
-    LinearLayout llNewInItemList;
+    @BindView(R.id.container_view)
+    NestedScrollView containerView;
+    int containerViewHeight;
 
     List<StoreAnnouncement> storeAnnouncementList = new ArrayList<>();
     private ArrayList<CharSequence> announcementTextList = new ArrayList<>();
     private AutoVerticalScrollTextViewUtil verticalScrollUtil;
     AutoVerticalScrollTextView tvVerticalScroll;
 
-    Bundle savedInstanceState;
     String merchantIntroduction;
 
     StoreFriendsAdapter adapter;
@@ -141,22 +165,50 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     TextView tvVisitorCount;
 
     List<WantedPostItem> wantedPostItemList = new ArrayList<>();
-    LinearLayout llStoreWantedContainer;
-    View vwSeparatorStoreWanted;
-
-    RelativeLayout rl2ndStoreWanted;
-    TextView tvJobTitle1;
-    TextView tvJobSalary1;
-    TextView tvJobTitle2;
-    TextView tvJobSalary2;
-
-    RecyclerView rvFeaturesGoodsList;
-    LinearLayout llFeaturesGoodsContainer;
-    PagerSnapHelper pagerSnapHelper;
-    LinearLayoutManager featuresGoodsLayoutManager;
 
     int inStorePersonCount;
+
+
+    private List<Fragment> fragments;
+    private CommonFragmentPagerAdapter fragmentAdapter;
+    private List<String> tabs;
+    private int tabCount = 4;
+    /** 首頁 */
+    public static final int HOME_FRAGMENT = 0;
+    /** 簡介 */
+    public static final int INTRODUCTION_FRAGMENT = 1;
+    /** 商店說說 */
+    public static final int COMMENT_FRAGMENT = 2;
+    /** 公告 */
+    public static final int NOTICE_FRAGMENT = 3;
+
     List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
+    private Unbinder unbinder;
+    private GoodsGalleryAdapter goodsGalleryAdapter;
+    private List<String> currGalleryImageList=new ArrayList<>();
+    private Timer timer;
+    private boolean bannerStart;
+    private CountDownHandler countDownHandler;
+    private String storeBusInfo;
+
+    static class CountDownHandler extends Handler {
+
+        private PageIndicatorView pageIndicatorView;
+        private RecyclerView rvGalleryImageList;
+
+        public CountDownHandler(PageIndicatorView indicatorView,RecyclerView rvGalleryImageList) {
+            this.rvGalleryImageList = rvGalleryImageList;
+            this.pageIndicatorView = indicatorView;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            int currGalleryPosition = msg.arg1;
+            pageIndicatorView.setSelection(currGalleryPosition);
+            rvGalleryImageList.scrollToPosition(currGalleryPosition);
+        }
+    }
 
     public static ShopHomeFragment newInstance() {
         Bundle args = new Bundle();
@@ -170,7 +222,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shop_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_store_home, container, false);
+        unbinder= ButterKnife.bind(this, view);
         return view;
     }
 
@@ -178,30 +231,20 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
+        storeId = parentFragment.storeId;
 
-        imgStoreStatus = view.findViewById(R.id.img_store_status);
-        imgShopAvatar = view.findViewById(R.id.img_shop_avatar);
-        imgShopAvatar.setOnClickListener(this);
-        tvShopSignature = view.findViewById(R.id.tv_shop_signature);
-        tvShopOpenDay = view.findViewById(R.id.tv_shop_open_day);
-        imgShopFigure = view.findViewById(R.id.img_shop_figure);
+        viewpager.setOffscreenPageLimit(tabCount-1);
 
-        tvPhoneNumber = view.findViewById(R.id.tv_phone_number);
-        tvBusinessTimeWorkingDay = view.findViewById(R.id.tv_business_time_working_day);
-        tvBusinessTimeWeekend = view.findViewById(R.id.tv_business_time_weekend);
-        tvShopAddress = view.findViewById(R.id.tv_shop_address);
-
-        llSnsContainer = view.findViewById(R.id.ll_sns_container);
-        llPayWayContainer = view.findViewById(R.id.ll_pay_way_container);
-        tvCommentSummary = view.findViewById(R.id.tv_comment_summary);
-
-        imgAuthorAvatar = view.findViewById(R.id.img_author_avatar);
-        tvAuthorNickname = view.findViewById(R.id.tv_author_nickname);
-        tvCommentContent = view.findViewById(R.id.tv_comment_content);
+        imgShopLogo.setOnClickListener(this);
 
         tvLikeCount = view.findViewById(R.id.tv_like_count);
         btnStoreThumb = view.findViewById(R.id.btn_store_thumb);
         Util.setOnClickListener(view, R.id.ll_uo_thumb_up_container, this);
+
+        llPayWayContainer = view.findViewById(R.id.ll_pay_way_container);
+
+        tvBusinessTimeWorkingDay = view.findViewById(R.id.tv_business_time_working_day);
+        tvBusinessTimeWeekend = view.findViewById(R.id.tv_business_time_weekend);
 
         tvFavoriteCount = view.findViewById(R.id.tv_favorite_count);
         btnStoreFavorite = view.findViewById(R.id.btn_store_favorite);
@@ -211,36 +254,18 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         Util.setOnClickListener(view, R.id.ll_uo_share_container, this);
 
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
-        llHotItemList = view.findViewById(R.id.ll_hot_item_list);
-        llNewInItemList = view.findViewById(R.id.ll_new_in_item_list);
         llShopAnnouncementContainer = view.findViewById(R.id.ll_shop_announcement_container);
         llShopAnnouncementContainer.setOnClickListener(this);
 
         tvVerticalScroll = view.findViewById(R.id.tv_vertical_scroll);
+        tvPhoneNumber = view.findViewById(R.id.tv_phone_number);
+        tvShopAddress = view.findViewById(R.id.tv_shop_address);
 
-        llStoreWantedContainer = view.findViewById(R.id.ll_store_wanted_container);
-        llStoreWantedContainer.setOnClickListener(this);
-        vwSeparatorStoreWanted = view.findViewById(R.id.vw_separator_store_wanted);
-        rl2ndStoreWanted = view.findViewById(R.id.rl_2nd_store_wanted);
+        btnShopMap = view.findViewById(R.id.btn_shop_map);
+        btnShopMap.setOnClickListener(this);
 
-        tvJobTitle1 = view.findViewById(R.id.tv_job_title1);
-        tvJobSalary1 = view.findViewById(R.id.tv_job_salary1);
-        tvJobTitle2 = view.findViewById(R.id.tv_job_title2);
-        tvJobSalary2 = view.findViewById(R.id.tv_job_salary2);
-
-        Util.setOnClickListener(view, R.id.btn_shop_map, this);
         Util.setOnClickListener(view, R.id.rl_shop_comment_container, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
-
-        llFeaturesGoodsContainer = view.findViewById(R.id.ll_features_goods_container);
-        rvFeaturesGoodsList = view.findViewById(R.id.rv_features_goods_list);
-        featuresGoodsLayoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
-        rvFeaturesGoodsList.setLayoutManager(featuresGoodsLayoutManager);
-        // rvFeaturesGoodsList.setAdapter(new TestAdapter());
-        // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
-        // https://www.jianshu.com/p/e54db232df62
-        pagerSnapHelper = new PagerSnapHelper();
-        pagerSnapHelper.attachToRecyclerView(rvFeaturesGoodsList);
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
@@ -255,42 +280,116 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         });
         rvStoreFriendsList.setAdapter(adapter);
 
-        this.savedInstanceState = savedInstanceState;
-
+        initTableData();
         loadStoreData();
+        setImageBanner();
+
+        containerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                int rvPostListY = Util.getYOnScreen(smartTabLayout);
+                int containerViewY = Util.getYOnScreen(containerView);
+
+                // SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
+                broadcastNestedScrollingEnabled(rvPostListY <= containerViewY);  // 如果列表滑动到顶部，则启用嵌套滚动
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
+
+    private void broadcastNestedScrollingEnabled(boolean enable) {
+        for (int i = 0; i < fragments.size(); i++) {
+            ((ScrollableBaseFragment) fragments.get(i)).setScrollable(enable);
+        }
+    }
+
+    private void initTableData() {
+        tabs = new ArrayList<>();
+        tabs.add(getString(R.string.shop_bottom_bar_title_home));
+        tabs.add("簡介");
+        tabs.add("說說");
+        tabs.add("公告");
+        fragments = new ArrayList<>();
+        fragments.add(StoreHomeFragment.newInstance());
+
+        fragments.add(StoreAboutFragment.newInstance(storeId));
+
+        fragments.add(StoreCommentFragment.newInstance(storeId));
+
+        fragments.add(StoreNoticeFragment.newInstance());
+        initView();
+        initListener();
+    }
+
+
+    private void initView() {
+        fragmentAdapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), tabs, fragments);
+        viewpager.setAdapter(fragmentAdapter);
+
+        smartTabLayout.setCustomTabView(new MyTabProvider());
+        smartTabLayout.setViewPager(viewpager);
+        for (int i = 0; i < tabCount; i++) {
+            ((TextView)smartTabLayout.getTabAt(i).findViewById(R.id.tvTabText))
+                    .setTextColor(getContext().getColor(i == 0 ? R.color.tw_black : R.color.tw_text_dark));
+        }
+    }
+    private void initListener(){
+        smartTabLayout.setOnTabClickListener(new SmartTabLayout.OnTabClickListener() {
+            @Override
+            public void onTabClicked(int position) {
+                for (int i = 0; i < tabCount; i++) {
+                    ((TextView)smartTabLayout.getTabAt(i).findViewById(R.id.tvTabText))
+                            .setTextColor(getContext().getColor(i == position ? R.color.tw_black : R.color.tw_text_dark));
+                }
+            }
+        });
+        viewpager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                SLog.info("changePageHere");
+            }
+        });
+    }
+
+    private class MyTabProvider implements SmartTabLayout.TabProvider{
+        private LayoutInflater inflater;
+
+        public MyTabProvider(){
+            inflater = LayoutInflater.from(_mActivity);
+        }
+
+        @Override
+        public View createTabView(ViewGroup container, int position, PagerAdapter adapter) {
+            View view = inflater.inflate(R.layout.category_tab,container,false);
+            TextView textView = view.findViewById(R.id.tvTabText);
+            textView.setText(tabs.get(position));
+            return view;
+        }
     }
 
 
     private void loadStoreData() {
-        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                .asLoading(getString(R.string.text_loading))
-                .show();
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
         try {
-            // 獲取店鋪首頁信息
+            // 獲取商店首頁信息
             String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getStoreId();
             String token = User.getToken();
             EasyJSONObject params = EasyJSONObject.generate();
             if (!StringUtil.isEmpty(token)) {
                 params.set("token", token);
             }
-
-            String locationStr = Hawk.get(SPField.FIELD_AMAP_LOCATION, "");
-            SLog.info("locationStr[%s]", locationStr);
-            if (!StringUtil.isEmpty(locationStr)) {
-                Location location = (Location) EasyJSONBase.jsonDecode(Location.class, locationStr);
-
-                if (System.currentTimeMillis() - location.timestamp < 3600 * 1000) { // 1小時內的定位才考慮
-                    params.set("lng", location.longitude);
-                    params.set("lat", location.latitude);
-                    SLog.info("定位數據有效");
-                } else {
-                    SLog.info("定位數據過期");
-                }
-            }
+            //上傳用戶位置
+            params = Util.upLocation(params);
 
             SLog.info("path[%s], params[%s]", path, params.toString());
-            Api.postUI(path, params, new UICallback() {
+            Api.getUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
@@ -303,207 +402,368 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                     try {
                         SLog.info("responseStr[%s]", responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        EasyJSONObject storeInfo = responseObj.getObject("datas.storeInfo");
-
-                        storeId = storeInfo.getInt("storeId");
-                        storeName = storeInfo.getString("storeName");
-                        parentFragment.setShopName(storeName);
-
-                        storeAvatarUrl = StringUtil.normalizeImageUrl(storeInfo.getString("storeAvatar"));
-                        SLog.info("storeAvatarUrl[%s]", storeAvatarUrl);
-                        // 店鋪頭像
-                        if (StringUtil.isEmpty(storeAvatarUrl)) {
-                            Glide.with(ShopHomeFragment.this).load(R.drawable.default_store_avatar).centerCrop().into(imgShopAvatar);
-                        } else {
-                            Glide.with(ShopHomeFragment.this).load(storeAvatarUrl).centerCrop().into(imgShopAvatar);
+                        EasyJSONObject storeInfo = responseObj.getSafeObject("datas.storeInfo");
+                        SLog.info(String.format("storeInfo[%s]",storeInfo.toString()));
+                        setStoreInfo(storeInfo);
+                        boolean hasSlider = storeInfo.exists("storeSlider");
+                        SLog.info("hasSlider,%s",hasSlider);
+                        if (hasSlider) {
+                            EasyJSONArray storeSlider = storeInfo.getSafeArray("storeSlider");
+                            currGalleryImageList.clear();
+                            for (Object object2 : storeSlider) {
+                                currGalleryImageList.add(object2.toString());
+                            }
                         }
-                        // 將店鋪頭像設置到工具欄按鈕
-                        parentFragment.setImgBottomBarShopAvatar(storeAvatarUrl);
+                        updateBanner(hasSlider);
 
-                        int storeOpen = storeInfo.getInt("isOpen");
-                        if (storeOpen == 1) {
-                            imgStoreStatus.setImageResource(R.drawable.store_open);
-                        } else {
-                            imgStoreStatus.setImageResource(R.drawable.store_closed);
+                         //好友
+                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, TwantApplication.getStringRes(R.string.text_friend)));
+                        EasyJSONArray friends = null;
+                        if (responseObj.exists("datas.friendList")) {
+                            friends = responseObj.getArray("datas.friendList");
                         }
-
-                        // 店鋪簽名
-                        storeSignature = storeInfo.getString("storeSignature");
-                        tvShopSignature.setText(storeSignature);
-
-                        // 商家介紹
-                        merchantIntroduction = storeInfo.getString("storeIntroduce");
-
-                        // 開店天數
-                        tvShopOpenDay.setText(getString(R.string.text_store_open_day_prefix) + storeInfo.getString("shopDay"));
-
-                        // 店鋪形象圖
-                        String shopFigureUrl = StringUtil.normalizeImageUrl(storeInfo.getString("storeFigureImage"));
-                        Glide.with(ShopHomeFragment.this).load(shopFigureUrl).into(imgShopFigure);
-
-                        likeCount = storeInfo.getInt("likeCount");
-                        tvLikeCount.setText(String.valueOf(likeCount));
-                        favoriteCount = storeInfo.getInt("collectCount");
-                        tvFavoriteCount.setText(String.valueOf(favoriteCount));
-
-                        isLike = storeInfo.getInt("isLike");
-                        isFavorite = storeInfo.getInt("isFavorite");
-                        SLog.info("isLike[%d], isFavorite[%d]", isLike, isFavorite);
-
-                        updateThumbView();
-                        updateFavoriteView();
-
-
-                        // 好友
-                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_friend)));
-                        EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.friends");
                         if (!Util.isJsonNull(friends)) {
                             if (friends.length() > 0) {
                                 for (Object object : friends) {
                                     EasyJSONObject friend = (EasyJSONObject) object;
-
-                                    String memberName = friend.getString("memberName");
-                                    String avatar = friend.getString("avatar");
-                                    String nickname = friend.getString("nickName");
-
+                                    String memberName = friend.getSafeString("memberName");
+                                    String avatar = friend.getSafeString("avatar");
+                                    String nickname = friend.getSafeString("nickName");
                                     InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
                                     inStorePersonItemList.add(inStorePersonItem);
                                 }
-                                inStorePersonCount += friends.length();
-                            } else { // 為空則添加提示
-                                inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
                             }
-
+                            inStorePersonCount += friends.length();
+                        } else { // 為空則添加提示
+                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
                         }
 
-                        // 店友
+                        // 居民
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
-                        EasyJSONArray members = responseObj.getArray("datas.memberAccessStatVo.members");
+                        EasyJSONArray members = responseObj.getArray("datas.memberList");
                         if (!Util.isJsonNull(members)) {
                             if (members.length() > 0) {
                                 for (Object object : members) {
                                     EasyJSONObject friend = (EasyJSONObject) object;
-
-                                    String memberName = friend.getString("memberName");
-                                    String avatar = friend.getString("avatar");
-                                    String nickname = friend.getString("nickName");
-
-                                    StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
-                                    storeFriendsItemList.add(storeFriendsItem);
-
+                                    String memberName = friend.getSafeString("memberName");
+                                    String avatar = friend.getSafeString("avatar");
+                                    String nickname = friend.getSafeString("nickName");
+                                    SLog.info("name:%s,isfriend:%d",nickname,friend.getInt("isFriend"));
                                     InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
                                     inStorePersonItemList.add(inStorePersonItem);
+                                    StoreFriendsItem sfitem = new StoreFriendsItem(memberName,avatar);
+                                    storeFriendsItemList.add(sfitem);
                                 }
-                                inStorePersonCount += members.length();
-                            } else { // 為空則添加提示
-                                inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
                             }
-
+                            inStorePersonCount += members.length();
+                        } else { // 為空則添加提示
+                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
                         }
+
                         adapter.setNewData(storeFriendsItemList);
 
 
-                        // 顯示店友數量
+                        // 顯示遊客數量
                         int storeFriendsCount = responseObj.getInt("datas.visitorNum");
                         String storeFriendsCountDesc = String.format(getString(R.string.text_store_friends_count_template), storeFriendsCount);
                         tvVisitorCount.setText(storeFriendsCountDesc);
 
-                        // 店鋪電話
-                        storePhone = storeInfo.getString("chainPhone");
-                        tvPhoneNumber.setText(storePhone);
-
-                        // 營業時間
-                        String weekDayStart = storeInfo.getString("weekDayStart") + "至" + storeInfo.getString("weekDayEnd");
-                        String weekDayEnd = storeInfo.getString("weekDayStartTime") + "-" + storeInfo.getString("weekDayEndTime");
-                        String restDayStart = storeInfo.getString("restDayStart") + "至" + storeInfo.getString("restDayEnd");
-                        String restDayEnd = storeInfo.getString("restDayStartTime") + "-" + storeInfo.getString("restDayEndTime");
-
-                        tvBusinessTimeWorkingDay.setText(weekDayStart + "   " + weekDayEnd);
-                        tvBusinessTimeWeekend.setText(restDayStart + "   " + restDayEnd);
-
-                        // 店鋪地址
-                        storeAddress = storeInfo.getString("chainAreaInfo") + storeInfo.getString("chainAddress");
-                        tvShopAddress.setText(storeAddress);
-
-                        Object lngObj = storeInfo.get("lng");
-                        if (!Util.isJsonNull(lngObj)) {
-                            storeLongitude = (double) lngObj;
-                        }
-                        Object latObj = storeInfo.get("lat");
-                        if (!Util.isJsonNull(latObj)) {
-                            storeLatitude = (double) latObj;
-                        }
-
-                        String storeDistanceStr = storeInfo.getString("distance");
-                        storeDistance = Double.valueOf(storeDistanceStr);
-                        SLog.info("storeDistance[%.2f]", storeDistance);
-
 
                         // 社交分享
-                        EasyJSONArray snsArray = responseObj.getArray("datas.socialList");
-                        for (Object object : snsArray) {
-                            EasyJSONObject snsObject = (EasyJSONObject) object;
-                            String snsImageUrl = StringUtil.normalizeImageUrl(snsObject.getString("socialLogoChecked"));
-                            ImageView snsImage = new ImageView(_mActivity);
+                        EasyJSONArray snsArray = responseObj.getSafeArray("datas.socialList");
+                        setStoreSnsInfo(snsArray);
 
-                            LinearLayout.LayoutParams layoutParams =
-                                    new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 34), Util.dip2px(_mActivity, 34));
-                            layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
-                            Glide.with(ShopHomeFragment.this).load(snsImageUrl).into(snsImage);
-                            llSnsContainer.addView(snsImage, layoutParams);
-                        }
-
+//
                         // 支付方式
-                        EasyJSONArray paymentArray = responseObj.getArray("datas.storePaymentList");
-                        for (Object object : paymentArray) {
-                            EasyJSONObject paymentObject = (EasyJSONObject) object;
-                            String payWayImageUrl = StringUtil.normalizeImageUrl(paymentObject.getString("paymentLogo"));
-                            // SLog.info("payWayImageUrl[%s]", payWayImageUrl);
-                            ImageView payWayImage = new ImageView(_mActivity);
-
-                            LinearLayout.LayoutParams layoutParams =
-                                    new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 30), Util.dip2px(_mActivity, 21));
-                            layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
-                            Glide.with(ShopHomeFragment.this).load(payWayImageUrl).into(payWayImage);
-                            llPayWayContainer.addView(payWayImage, layoutParams);
-                        }
-
-                        // 評論條數
-                        int commentCount = responseObj.getInt("datas.wantCommentVoInfoCount");
-                        String commentSummary = getResources().getString(R.string.text_shop_comment) + "(" + commentCount + ")";
-                        tvCommentSummary.setText(commentSummary);
-
-                        if (commentCount > 0) { // 如果有評論，顯示第1條評論
-                            // 取第1條評論
-                            EasyJSONObject firstComment = responseObj.getObject("datas.wantCommentVoInfoList[0]");
-                            SLog.info("firstComment[%s]", firstComment);
-
-                            // 評論者的頭像
-                            String authorAvatarUrl = StringUtil.normalizeImageUrl(firstComment.getString("memberVo.avatar"));
-                            SLog.info("authorAvatarUrl[%s]", authorAvatarUrl);
-                            // 評論者的昵稱
-                            String authorNickname = firstComment.getString("memberVo.nickName");
-                            // 評論內容
-                            String content = firstComment.getString("content");
-                            if (content == null) {
-                                content = "";
+                        EasyJSONArray paymentArray = responseObj.getSafeArray("datas.storePaymentList");
+                        setStorePaymentInfo(paymentArray);
+//
+                        // 鎮店之寶
+                        if (responseObj.exists("datas.townShopGoods")) {
+                            EasyJSONArray featuresGoodsVoList = responseObj.getSafeArray("datas.townShopGoods");
+                            if (featuresGoodsVoList.length() > 0){
+                                ((StoreHomeFragment) fragments.get(HOME_FRAGMENT)).setGoodsListDate(featuresGoodsVoList);
                             }
-
-                            Glide.with(ShopHomeFragment.this).load(authorAvatarUrl).into(imgAuthorAvatar);
-                            tvAuthorNickname.setText(authorNickname);
-                            tvCommentContent.setText(StringUtil.translateEmoji(_mActivity, content, (int) tvCommentContent.getTextSize()));
-                        } else { // 如果沒有評論，則隱藏相應的控件
-                            llFirstCommentContainer.setVisibility(View.GONE);
                         }
 
-                        // 店鋪招聘
-                        EasyJSONArray hrPostList = responseObj.getArray("datas.hrPostList");
+
+                        // 最新產品
+                        EasyJSONArray newGoodsVoList = responseObj.getSafeArray("datas.newGoods");
+
+                        ((StoreHomeFragment)fragments.get(HOME_FRAGMENT)).newGoodsListData(newGoodsVoList);
+
+                        // 商店熱賣
+                        EasyJSONArray hotGoodsVoList = responseObj.getSafeArray("datas.hotSaleGoods");
+
+                        ((StoreHomeFragment) fragments.get(HOME_FRAGMENT)).hotGoodsListData(hotGoodsVoList);
+
+                        // 商店公告
+                        EasyJSONArray announcements = responseObj.getSafeArray("datas.announcements");
+                        setAnnouncements(announcements);
+
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
+    public void setStoreSnsInfo(EasyJSONArray snsArray) {
+        try {
+            SLog.info("__setStoreSnsInfo[%s]", snsArray);
+            // 添加一个显示店铺二维码的按钮
+            DataImageView snsImage = new DataImageView(_mActivity);
+            snsImage.setOnClickListener(this);
+            snsImage.setId(R.id.btn_show_store_qr_code);
+            snsImage.setCustomData(EasyJSONObject.generate("socialName", "takewant"));
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 31), Util.dip2px(_mActivity, 31));
+            layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
+            Glide.with(this).load(R.drawable.app_logo).into(snsImage);
+            llSnsContainer.addView(snsImage, layoutParams);
+
+            for (Object object : snsArray) {
+                EasyJSONObject snsObject = (EasyJSONObject) object;
+                String snsImageUrl = StringUtil.normalizeImageUrl(snsObject.getSafeString("socialLogoChecked"));
+
+                snsImage = new DataImageView(_mActivity);
+                snsImage.setOnClickListener(this);
+                snsImage.setCustomData(snsObject);
+
+                layoutParams = new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 31), Util.dip2px(_mActivity, 31));
+                layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
+                Glide.with(this).load(snsImageUrl).into(snsImage);
+                llSnsContainer.addView(snsImage, layoutParams);
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
+    public void setStorePaymentInfo(EasyJSONArray paymentArray) {
+        if (paymentArray != null && paymentArray.length() > 0) {
+            for (Object object : paymentArray) {
+                EasyJSONObject paymentObject = (EasyJSONObject) object;
+                String payWayImageUrl = null;
+                try {
+                    payWayImageUrl = StringUtil.normalizeImageUrl(paymentObject.getSafeString("paymentLogo"));
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+                ImageView payWayImage = new ImageView(_mActivity);
+
+                LinearLayout.LayoutParams layoutParams =
+                        new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 30), Util.dip2px(_mActivity, 21));
+                layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
+                Glide.with(this).load(payWayImageUrl).into(payWayImage);
+                llPayWayContainer.addView(payWayImage, layoutParams);
+            }
+        }
+    }
+
+    private void updateBanner(boolean hasSlider) {
+        if (!hasSlider || currGalleryImageList.size() < 1) {
+            currGalleryImageList.clear();
+            currGalleryImageList.add("placeholder");  // 如果沒有圖片，加一張默認的空櫥窗占位圖
+        }
+        goodsGalleryAdapter.setNewData(currGalleryImageList);
+        if (currGalleryImageList.size() > 1) {
+            rvGalleryImageList.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // 先去到大概中間的位置
+                    int targetPosition = Integer.MAX_VALUE / 2;
+                    // 然后去到倍數開始的位置
+                    targetPosition -= (targetPosition % currGalleryImageList.size());
+
+                    currGalleryPosition = targetPosition;
+                    rvGalleryImageList.scrollToPosition(currGalleryPosition);
+                    SLog.info("currGalleryPosition[%d]", currGalleryPosition);
+
+                    pageIndicatorView.setCount(currGalleryImageList.size());
+                    pageIndicatorView.setSelection(0);
+                }
+            }, 50);
+            pageIndicatorView.setVisibility(View.VISIBLE);
+        } else {
+            pageIndicatorView.setCount(1);
+            pageIndicatorView.setVisibility(VISIBLE);
+        }
+    }
+
+    private void setStoreInfo(EasyJSONObject storeInfo) {
+        try {
+            storeName = storeInfo.getSafeString("storeName");
+            tvStoreName.setText(storeName);
+            parentFragment.setShopName(storeName);
+
+            storeAvatarUrl = StringUtil.normalizeImageUrl(storeInfo.getSafeString("storeAvatar"));
+            String storeLogoUrl=StringUtil.normalizeImageUrl(storeInfo.getSafeString("storeLogoUrl"));
+            // 商店頭像
+            if (StringUtil.isEmpty(storeLogoUrl)) {
+                Glide.with(ShopHomeFragment.this).load(R.drawable.default_store_avatar).centerCrop().into(imgShopLogo);
+            } else {
+                Glide.with(ShopHomeFragment.this).load(storeLogoUrl).centerCrop().into(imgShopLogo);
+            }
+            // 將商店頭像設置到工具欄按鈕
+            parentFragment.setImgBottomBarShopAvatar(storeAvatarUrl);
+            //設置營業狀態
+            int storeOpen = storeInfo.getInt("isOpen");
+            switchStoreOpenState(storeOpen);
+
+            // 商店簽名
+            storeSignature = storeInfo.getSafeString("storeSignature");
+            if (StringUtil.isEmpty(storeSignature)) {
+                tvShopSignature.setText("該店鋪還沒有簽名喲~");
+            } else {
+                tvShopSignature.setText(storeSignature);
+            }
+
+            // 開店天數
+            tvShopOpenDay.setText(getString(R.string.text_store_open_day_prefix) + storeInfo.getSafeString("shopDay"));
+
+            // 商店形象圖
+            String shopFigureUrl = StringUtil.normalizeImageUrl(storeInfo.getSafeString("storeFigureImage"));
+            likeCount = storeInfo.getInt("likeCount");
+            tvLikeCount.setText(String.valueOf(likeCount));
+            favoriteCount = storeInfo.getInt("collectCount");
+            tvFavoriteCount.setText(String.valueOf(favoriteCount));
+
+            isLike = storeInfo.getInt("isLike");
+            isFavorite = storeInfo.getInt("isFavorite");
+            SLog.info("isLike[%d], isFavorite[%d]", isLike, isFavorite);
+            updateFavoriteView();
+            updateThumbView();
+            // 營業時間
+            setWorkTime(storeInfo.getSafeString("weekDayStart"), storeInfo.getSafeString("weekDayStartTime"), storeInfo.getSafeString("weekDayEnd"), storeInfo.getSafeString("weekDayEndTime"),
+                    storeInfo.getSafeString("restDayStart"), storeInfo.getSafeString("restDayStartTime"), storeInfo.getSafeString("restDayEnd"), storeInfo.getSafeString("restDayEndTime"));
+            // 商店電話
+            storePhone = storeInfo.getSafeString("chainPhone");
+            // 商店地址
+            storeAddress = storeInfo.getSafeString("chainAreaInfo") + storeInfo.getSafeString("chainAddress");
+            // 商家介紹
+            merchantIntroduction = storeInfo.getSafeString("storeIntroduce");
+            ((StoreAboutFragment) fragments.get(INTRODUCTION_FRAGMENT)).setIntroduction(merchantIntroduction); // 关于我们
+
+            setStoreContact(storePhone, storeAddress);
+            storeBusInfo = storeInfo.getSafeString("chainTrafficLine");
+
+            Object lngObj = storeInfo.get("lng");
+            if (!Util.isJsonNull(lngObj)) {
+                storeLongitude = (double) lngObj;
+            }
+            Object latObj = storeInfo.get("lat");
+            if (!Util.isJsonNull(latObj)) {
+                storeLatitude = (double) latObj;
+            }
+
+            String storeDistanceStr = storeInfo.getSafeString("distance");
+            storeDistance = Double.valueOf(storeDistanceStr);
+            SLog.info("storeDistance[%.2f]", storeDistance);
+
+            storeMapInfo = new StoreMapInfo(storeLongitude, storeLatitude, storeDistance, 0, 0,
+                    storeName, storeAddress, storePhone,storeBusInfo);
+            showStoreMapButton();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
+    public void setWorkTime(String weekDayStart, String weekDayStartTime, String weekDayEnd, String weekDayEndTime,
+                            String restDayStart, String restDayStartTime, String restDayEnd, String restDayEndTime) {
+        SLog.info("weekDayStart[%s], weekDayStartTime[%s], weekDayEnd[%s], weekDayEndTime[%s], restDayStart[%s], restDayStartTime[%s], restDayEnd[%s], restDayEndTime[%s]",
+                weekDayStart, weekDayStartTime, weekDayEnd, weekDayEndTime, restDayStart, restDayStartTime, restDayEnd, restDayEndTime);
+
+        String weekDayRange = weekDayStart + "至" + weekDayEnd;
+        String weekDayRangeTime = weekDayStartTime + "-" + weekDayEndTime;
+        String restDayRange = restDayStart + "至" + restDayEnd;
+        String restDayRangeTime = restDayStartTime + "-" + restDayEndTime;
+
+        if (StringUtil.isEmpty(weekDayStart)) {
+            tvBusinessTimeWeekend.setVisibility(View.GONE);
+            tvBusinessTimeWorkingDay.setText(weekDayRangeTime);
+        } else {
+            tvBusinessTimeWorkingDay.setText(weekDayRange + "   " + weekDayRangeTime);
+        }
+
+        if (StringUtil.isEmpty(restDayStart)) {
+            tvBusinessTimeWeekend.setVisibility(View.GONE);
+        } else {
+            tvBusinessTimeWeekend.setText(restDayRange + "   " + restDayRangeTime);
+        }
+    }
+
+    public void setStoreContact(String storePhone, String storeAddress) {
+        tvPhoneNumber.setText(storePhone);
+        tvShopAddress.setText(storeAddress);
+    }
+
+    private void setAnnouncements(EasyJSONArray announcements) {
+        SLog.info("_announcements[%s]", announcements.toString());
+        for (Object object : announcements) {
+            EasyJSONObject announcement = (EasyJSONObject) object;
+            String title;
+            String content;
+            try {
+                title = announcement.getSafeString("announcementsTitle");
+                content = announcement.getSafeString("announcementContent");
+                StoreAnnouncement storeAnnouncement = new StoreAnnouncement(
+                        announcement.getInt("id"), title, content);
+                storeAnnouncement.createTime = announcement.getLong("createTime");
+                storeAnnouncementList.add(storeAnnouncement);
+                announcementTextList.add(Html.fromHtml("<font color='#FFFFFF'>" + title + "</font>"));
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+        }
+
+        // 初始化
+        verticalScrollUtil = new AutoVerticalScrollTextViewUtil(tvVerticalScroll, announcementTextList);
+        verticalScrollUtil.setDuration(3000)// 设置上下滚动時間间隔
+                .start();   // 如果只有一條，是否可以不調用start ?
+        // 点击事件监听
+        verticalScrollUtil.setOnMyClickListener(ShopHomeFragment.this);
+
+        // 如果沒有公告，則隱藏
+        if (storeAnnouncementList.size() < 1) {
+            llShopAnnouncementContainer.setVisibility(View.GONE);
+            return;
+        }
+        ((StoreNoticeFragment) fragments.get(NOTICE_FRAGMENT)).setAnnouncementData(storeAnnouncementList);
+    }
+
+    private void switchStoreOpenState(int storeOpen) {
+        if (storeOpen == 1) {
+            imgStoreStatus.setImageResource(R.drawable.store_open);
+        } else {
+            imgStoreStatus.setImageResource(R.drawable.store_closed);
+        }
+    }
+
+
+    private void loadStoreHrPost(){
+        try{
+            String path = Api.PATH_STORE_HRPOST+"/"+parentFragment.getStoreId();
+            EasyJSONObject parse = EasyJSONObject.generate();
+            Api.getUI(path, parse, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity,e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        EasyJSONArray hrPostList = responseObj.getSafeArray("datas.hrPostList");
                         if (hrPostList != null && hrPostList.length() > 0) {
                             SLog.info("hrPostList.length[%d]", hrPostList.length());
                             int index = 0;
@@ -512,237 +772,61 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                                 WantedPostItem item = new WantedPostItem();
                                 item.postId = hrPost.getInt("postId");
-                                item.postTitle = hrPost.getString("postTitle");
-                                item.postType = hrPost.getString("postType");
-                                item.postArea = hrPost.getString("postArea");
-                                item.salaryType = hrPost.getString("salaryType");
-                                item.salaryRange = hrPost.getString("salaryRange");
-                                item.currency = hrPost.getString("currency");
-                                item.postDescription = hrPost.getString("postDescription");
-                                item.mailbox = hrPost.getString("mailbox");
+                                item.postTitle = hrPost.getSafeString("postTitle");
+                                item.postType = hrPost.getSafeString("postType");
+                                item.postArea = hrPost.getSafeString("postArea");
+                                item.salaryType = hrPost.getSafeString("salaryType");
+                                item.salaryRange = hrPost.getSafeString("salaryRange");
+                                item.currency = hrPost.getSafeString("currency");
+                                item.postDescription = hrPost.getSafeString("postDescription");
+                                item.mailbox = hrPost.getSafeString("mailbox");
                                 item.isFavor = hrPost.getInt("isFavor");
-
-                                // 首頁最多顯示2條招聘信息
-                                if (index == 0) {
-                                    tvJobTitle1.setText(item.postTitle);
-                                    tvJobSalary1.setText(item.salaryRange + "/" + item.salaryType);
-                                } else if (index == 1) {
-                                    tvJobTitle2.setText(item.postTitle);
-                                    tvJobSalary2.setText(item.salaryRange + "/" + item.salaryType);
-                                    rl2ndStoreWanted.setVisibility(View.VISIBLE);
-                                }
 
                                 wantedPostItemList.add(item);
                                 index++;
                             }
-                        } else {
-                            // 如果沒有招聘數據，則隱藏【店鋪招聘】欄
-                            SLog.info("如果沒有招聘數據，則隱藏【店鋪招聘】欄");
-                            llStoreWantedContainer.setVisibility(View.GONE);
-                            vwSeparatorStoreWanted.setVisibility(View.GONE);
                         }
-
-                        // 鎮店之寶
-                        boolean showFeaturesGoods = false; // 是否顯示鎮店之寶
-                        if (responseObj.exists("datas.featuresGoodsVoList")) {
-                            EasyJSONArray featuresGoodsVoList = responseObj.getArray("datas.featuresGoodsVoList");
-                            if (!Util.isJsonNull(featuresGoodsVoList) && featuresGoodsVoList.length() > 0) {
-                                showFeaturesGoods = true;
-
-                                List<StoreGoodsItem> storeGoodsItemList = new ArrayList<>();
-                                for (Object object : featuresGoodsVoList) {
-                                    EasyJSONObject featuresGoodsVo = (EasyJSONObject) object;
-                                    StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
-
-                                    storeGoodsItem.commonId = featuresGoodsVo.getInt("commonId");
-                                    storeGoodsItem.imageSrc = featuresGoodsVo.getString("imageSrc");
-                                    storeGoodsItem.goodsName = featuresGoodsVo.getString("goodsName");
-                                    storeGoodsItem.jingle = featuresGoodsVo.getString("jingle");
-                                    storeGoodsItem.price = Util.getSpuPrice(featuresGoodsVo);
-
-                                    storeGoodsItemList.add(storeGoodsItem);
-                                }
-
-                                FeaturesGoodsAdapter featuresGoodsAdapter = new FeaturesGoodsAdapter(_mActivity, storeGoodsItemList);
-                                rvFeaturesGoodsList.setAdapter(featuresGoodsAdapter);
-
-                                rvFeaturesGoodsList.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        int targetPosition = Integer.MAX_VALUE / 2;
-                                        rvFeaturesGoodsList.scrollToPosition(targetPosition);
-                                        /*
-                                        解決PagerSnapHelper的scrollToPosition不能居中的問題
-                                        https://stackoverflow.com/questions/42988016/how-to-programmatically-snap-to-position-on-recycler-view-with-linearsnaphelper
-                                         */
-                                        rvFeaturesGoodsList.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                View view = featuresGoodsLayoutManager.findViewByPosition(targetPosition);
-                                                if (view == null) {
-                                                    SLog.info("Error!Cant find target View for initial Snap");
-                                                    return;
-                                                }
-
-                                                int[] snapDistance = pagerSnapHelper.calculateDistanceToFinalSnap(featuresGoodsLayoutManager, view);
-                                                if (snapDistance[0] != 0 || snapDistance[1] != 0) {
-                                                    rvFeaturesGoodsList.scrollBy(snapDistance[0], snapDistance[1]);
-                                                }
-                                            }
-                                        });
-                                    }
-                                }, 50);
-                            }
-                        }
-
-                        if (showFeaturesGoods) {
-                            llFeaturesGoodsContainer.setVisibility(View.VISIBLE);
-                        } else {
-                            llFeaturesGoodsContainer.setVisibility(View.GONE);
-                        }
-
-                        // 最新商品
-                        EasyJSONArray newGoodsVoList = responseObj.getArray("datas.newGoodsVoList");
-                        int index = 0;
-                        StoreGoodsPair storeGoodsPair = null;
-                        for (Object object : newGoodsVoList) {
-                            EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-
-                            StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
-                            storeGoodsItem.commonId = easyJSONObject.getInt("commonId");
-                            storeGoodsItem.imageSrc = easyJSONObject.getString("imageSrc");
-                            storeGoodsItem.goodsName = easyJSONObject.getString("goodsName");
-                            storeGoodsItem.jingle = easyJSONObject.getString("jingle");
-                            storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
-
-                            if (index % 2 == 0) {
-                                storeGoodsPair = new StoreGoodsPair(StoreGoodsPair.TYPE_NEW);
-                                storeNewInItemList.add(storeGoodsPair);
-
-                                storeGoodsPair.leftItem = storeGoodsItem;
-                            } else {
-                                storeGoodsPair.rightItem = storeGoodsItem;
-                            }
-
-                            ++index;
-                        }
-
-                        StoreGoodsListAdapter newInGoodsAdapter = new StoreGoodsListAdapter(_mActivity, llNewInItemList, R.layout.store_goods_list_item);
-                        newInGoodsAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
-                            @Override
-                            public void onClick(ViewGroupAdapter adapter, View view, int position) {
-                                SLog.info("onClick");
-                                StoreGoodsPair pair = storeNewInItemList.get(position);
-                                int commonId;
-                                int id = view.getId();
-                                if (id == R.id.ll_left_item_container) {
-                                    if (pair.leftItem == null) {
-                                        return;
-                                    }
-                                    commonId = pair.leftItem.commonId;
-                                } else {
-                                    if (pair.rightItem == null) {
-                                        return;
-                                    }
-                                    commonId = pair.rightItem.commonId;
-                                }
-
-                                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                            }
-                        });
-                        newInGoodsAdapter.setData(storeNewInItemList);
-
-
-                        // 店鋪熱賣
-                        EasyJSONArray hotGoodsVoList = responseObj.getArray("datas.commendGoodsVoList");
-                        index = 0;
-                        storeGoodsPair = null;
-                        for (Object object : hotGoodsVoList) {
-                            EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-
-                            StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
-                            storeGoodsItem.commonId = easyJSONObject.getInt("commonId");
-                            storeGoodsItem.imageSrc = easyJSONObject.getString("imageSrc");
-                            storeGoodsItem.goodsName = easyJSONObject.getString("goodsName");
-                            storeGoodsItem.jingle = easyJSONObject.getString("jingle");
-                            storeGoodsItem.price = Util.getSpuPrice(easyJSONObject);
-
-                            if (index % 2 == 0) {
-                                storeGoodsPair = new StoreGoodsPair(StoreGoodsPair.TYPE_HOT);
-                                storeHotItemList.add(storeGoodsPair);
-
-                                storeGoodsPair.leftItem = storeGoodsItem;
-                            } else {
-                                storeGoodsPair.rightItem = storeGoodsItem;
-                            }
-
-                            ++index;
-                        }
-
-
-                        StoreGoodsListAdapter hotGoodsAdapter = new StoreGoodsListAdapter(_mActivity, llHotItemList, R.layout.store_goods_list_item);
-                        hotGoodsAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
-                            @Override
-                            public void onClick(ViewGroupAdapter adapter, View view, int position) {
-                                SLog.info("onClick");
-                                StoreGoodsPair pair = storeHotItemList.get(position);
-                                int commonId;
-                                int id = view.getId();
-                                if (id == R.id.ll_left_item_container) {
-                                    if (pair.leftItem == null) {
-                                        return;
-                                    }
-                                    commonId = pair.leftItem.commonId;
-                                } else {
-                                    if (pair.rightItem == null) {
-                                        return;
-                                    }
-                                    commonId = pair.rightItem.commonId;
-                                }
-
-                                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                            }
-                        });
-                        hotGoodsAdapter.setData(storeHotItemList);
-
-                        // 店鋪公告
-                        EasyJSONArray announcements = responseObj.getArray("datas.announcements");
-                        for (Object object : announcements) {
-                            EasyJSONObject announcement = (EasyJSONObject) object;
-                            String title = announcement.getString("announcementsTitle");
-                            StoreAnnouncement storeAnnouncement = new StoreAnnouncement(
-                                    announcement.getInt("id"), title);
-                            storeAnnouncementList.add(storeAnnouncement);
-                            announcementTextList.add(Html.fromHtml("<font color='#FFFFFF'>" + title + "</font>"));
-                        }
-
-                        // 初始化
-                        verticalScrollUtil = new AutoVerticalScrollTextViewUtil(tvVerticalScroll, announcementTextList);
-                        verticalScrollUtil.setDuration(3000)// 设置上下滚动時間间隔
-                                .start();   // 如果只有一條，是否可以不調用start ?
-                        // 点击事件监听
-                        verticalScrollUtil.setOnMyClickListener(ShopHomeFragment.this);
-
-                        // 如果沒有公告，則隱藏
-                        if (storeAnnouncementList.size() < 1) {
-                            llShopAnnouncementContainer.setVisibility(View.GONE);
-                        }
-                    } catch (EasyJSONException e) {
-                        SLog.info("Error!%s", e.getMessage());
-                        e.printStackTrace();
+                    }catch (Exception e){
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
-        } catch (Exception e) {
-            e.printStackTrace();
-            SLog.info("Error!%s", e.getMessage());
+        } catch (Exception e){
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
-
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
+
+        if (v instanceof DataImageView) {
+            DataImageView dataImageView = (DataImageView) v;
+            Object customData = dataImageView.getCustomData();
+            if (customData instanceof EasyJSONObject) {
+                EasyJSONObject dataObject = (EasyJSONObject) customData;
+
+                try {
+                    String socialName = dataObject.getSafeString("socialName");
+                    SLog.info("socialName[%s]", socialName);
+                    if (socialName.equals("WeChat")) {  // 如果是微信，显示微信二维码
+                        String accountImageAddress = dataObject.getSafeString("accountImageAddress");
+                        new XPopup.Builder(_mActivity)
+                                .asCustom(new ImagePopup(_mActivity, accountImageAddress))
+                                .show();
+                    } else if (socialName.equals("Facebook") || socialName.equals("Instagram") || socialName.equals("WhatsApp")) { // 打开社交网址用户主页
+                        Intent intent =new Intent(Intent.ACTION_VIEW);
+                        String accountAddress = dataObject.getSafeString("accountAddress");
+                        Uri uri = Uri.parse(accountAddress);
+                        intent.setData(uri);
+
+                        _mActivity.startActivity(intent);
+                    }
+                } catch (EasyJSONException e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        }
 
         switch (id) {
             case R.id.ll_uo_thumb_up_container:
@@ -752,12 +836,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 switchFavoriteState();
                 break;
             case R.id.btn_shop_map:
-                StoreMapInfo storeMapInfo = new StoreMapInfo(storeLongitude, storeLatitude, storeDistance, 0, 0,
-                        storeName, storeAddress, storePhone);
+                if (storeMapInfo == null) {
+                    return;
+                }
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new AmapPopup(_mActivity, storeMapInfo, savedInstanceState))
+                        .asCustom(new AmapPopup(_mActivity, storeMapInfo))
                         .show();
                 break;
             case R.id.img_shop_avatar:
@@ -771,19 +856,25 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new SharePopup(_mActivity, SharePopup.generateStoreShareLink(storeId), storeName, storeSignature, storeAvatarUrl))
+                        .asCustom(new SharePopup(_mActivity, SharePopup.generateStoreShareLink(storeId), storeName, storeSignature, storeAvatarUrl, EasyJSONObject.generate(
+                                "shareType", SharePopup.SHARE_TYPE_STORE,
+                                "storeId", storeId,
+                                "storeAvatar", storeAvatarUrl,
+                                "storeName", storeName,
+                                "storeSignature", storeSignature
+                        )))
                         .show();
                 break;
             case R.id.rl_shop_comment_container:
                 Util.startFragment(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
                 break;
-            case R.id.ll_store_wanted_container:
-                new XPopup.Builder(_mActivity)
-                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                        .moveUpToKeyboard(false)
-                        .asCustom(new StoreWantedPopup(_mActivity, wantedPostItemList))
-                        .show();
-                break;
+//            case R.id.ll_store_wanted_container:
+//                new XPopup.Builder(_mActivity)
+//                        // 如果不加这个，评论弹窗会移动到软键盘上面
+//                        .moveUpToKeyboard(false)
+//                        .asCustom(new StoreWantedPopup(_mActivity, wantedPostItemList))
+//                        .show();
+//                break;
             case R.id.ll_shop_announcement_container:
                 showAnnouncementPopup();
                 break;
@@ -794,11 +885,21 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         .asCustom(new InStorePersonPopup(_mActivity, inStorePersonCount, inStorePersonItemList))
                         .show();
                 break;
+            case R.id.img_store_figure:
+                if (Config.DEVELOPER_MODE) {
+                    tvShopSignature.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.btn_show_store_qr_code:
+                String storeUrl = Config.WEB_BASE_URL + "/store/" + storeId;
+                new XPopup.Builder(_mActivity)
+                        .asCustom(new TwQRCodePopup(_mActivity, storeUrl))
+                        .show();
+                break;
             default:
                 break;
         }
     }
-
     private void switchThumbState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
@@ -824,7 +925,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -837,7 +938,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     }
                     updateThumbView();
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -874,7 +975,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -887,12 +988,40 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     }
                     updateFavoriteView();
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
     }
 
+    private void setImageBanner() {
+        // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
+        // https://www.jianshu.com/p/e54db232df62
+        countDownHandler = new CountDownHandler(pageIndicatorView, rvGalleryImageList);
+        rvGalleryImageList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
+        (new PagerSnapHelper()).attachToRecyclerView(rvGalleryImageList);
+        goodsGalleryAdapter = new GoodsGalleryAdapter(_mActivity, currGalleryImageList);
+
+        rvGalleryImageList.setAdapter(goodsGalleryAdapter);
+        rvGalleryImageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                    SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
+                    int position = currGalleryPosition % currGalleryImageList.size();
+                    pageIndicatorView.setSelection(position);
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+    }
     private void updateThumbView() {
         if (isLike == Constant.ONE) {
             btnStoreThumb.setImageResource(R.drawable.icon_store_thumb_red);
@@ -944,13 +1073,71 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     public void onSupportVisible() {
         super.onSupportVisible();
 
+        if (containerViewHeight == 0) {
+            containerViewHeight = containerView.getHeight();
+            SLog.info("containerViewHeight[%d]", containerViewHeight);
+
+            int tabHeight = smartTabLayout.getHeight();
+
+            ViewGroup.LayoutParams layoutParams = viewpager.getLayoutParams();
+            layoutParams.height = containerViewHeight - tabHeight;
+            viewpager.setLayoutParams(layoutParams);
+        }
+
+        startCountDown();
+
         if (PermissionUtil.hasPermission(new String[] {Permission.ACCESS_COARSE_LOCATION, Permission.ACCESS_FINE_LOCATION})) {
-            TwantApplication.getTwLocation().startLocation();
+            TencentLocationTask.doLocation(_mActivity);
+        }
+
+        showStoreMapButton();
+    }
+
+    private void showStoreMapButton() {
+        if (storeMapInfo != null && storeMapInfo.storeLatitude > 0.1 && storeMapInfo.storeLongitude > 0.1) {
+            btnShopMap.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+        stopCountDown();
+    }
+    private void startCountDown() {
+        if (timer == null) {
+            timer = new Timer();
+        }
+
+        if (bannerStart) {
+            return;
+        }
+        // 定时服务
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+//                SLog.info("threadId[%s]", Thread.currentThread().getId());
+
+                Message message = new Message();
+                int position = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//                SLog.info("position [%d],sum[%d]",position,currGalleryImageList.size());
+                int size = currGalleryImageList.size();
+                if (size > 0) {
+                    currGalleryPosition = (position+1) % currGalleryImageList.size();
+                    message.arg1 = currGalleryPosition;
+                    if (countDownHandler != null) {
+                        countDownHandler.sendMessage(message);
+                    }
+                }
+            }
+        }, 500, 3000);  // 0.5秒后启动，每隔2秒运行一次
+    }
+
+    private void stopCountDown() {
+        bannerStart = false;
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 }

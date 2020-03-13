@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class TrysCategory implements Serializable {
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId;
 
     /**
-     * 商品分类名称
+     * 產品分类名称
      */
     private String categoryName;
 

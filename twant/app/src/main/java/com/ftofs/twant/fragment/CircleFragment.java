@@ -1,17 +1,22 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -28,6 +33,7 @@ import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -36,6 +42,7 @@ import com.ftofs.twant.widget.PostFilterDrawerPopupView;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
 
 import org.greenrobot.eventbus.EventBus;
@@ -61,11 +68,14 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     List<PostItem> postItemList = new ArrayList<>();
 
     LinearLayout llTabButtonContainer;
+    BasePopupView loadingPopup;
 
     PostListAdapter adapter;
     SearchPostParams searchPostParams = new SearchPostParams();
     RecyclerView rvPostList;
     SwipeRefreshLayout swipeRefreshLayout;
+
+    EditText etKeyword;
 
     // 當前要加載第幾頁(從1開始）
     int currPage = 0;
@@ -73,6 +83,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     LinearLayout llFloatButtonContainer;
+    ImageView btnPublishWantPost;
+    ImageView btnGotoTop;
 
     /**
      * 是否獨立的Fragment，還是依附于MainFragment
@@ -115,12 +127,28 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         swipeRefreshLayout.setOnRefreshListener(this);
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
 
+        etKeyword = view.findViewById(R.id.et_keyword);
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    currPage = 0;
+                    searchPostParams.keyword = textView.getText().toString();
+                    loadPostData(currPage + 1);
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
 
         if (isStandalone) { // 獨立的頁面
             view.findViewById(R.id.tool_bar).setVisibility(View.GONE);
             view.findViewById(R.id.tool_bar_standalone).setVisibility(View.VISIBLE);
 
+            Util.setOnClickListener(view, R.id.btn_clear_all, this);
             Util.setOnClickListener(view, R.id.btn_back, this);
         } else { // 附加在MainFragment上的頁面
             view.findViewById(R.id.tool_bar).setVisibility(View.VISIBLE);
@@ -130,13 +158,16 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             Util.setOnClickListener(view, R.id.btn_add_post, this);
         }
 
-        Util.setOnClickListener(view, R.id.btn_publish_want_post, this);
-        Util.setOnClickListener(view, R.id.btn_goto_top, this);
+        btnPublishWantPost = view.findViewById(R.id.btn_publish_want_post);
+//        Glide.with(_mActivity).load("file:///android_asset/christmas/publish_want_post_dynamic.gif").centerCrop().into(btnPublishWantPost);
+        btnPublishWantPost.setOnClickListener(this);
+        btnGotoTop = view.findViewById(R.id.btn_goto_top);
+        btnGotoTop.setOnClickListener(this);
 
         Util.setOnClickListener(view, R.id.btn_post_filter, this);
 
         rvPostList = view.findViewById(R.id.rv_post_list);
-        adapter = new PostListAdapter(postItemList);
+        adapter = new PostListAdapter(_mActivity, postItemList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -144,7 +175,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 if (postItem.getItemType() == Constant.ITEM_TYPE_NORMAL) {
                     Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
                 } else {
-                    Util.startFragment(AddPostFragment.newInstance());
+                    Util.startFragment(AddPostFragment.newInstance(false));
                 }
             }
         });
@@ -206,7 +237,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         });
 
         // 設置空頁面
-        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
+        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.layout_placeholder_no_data, null, false);
         // 設置空頁面的提示語
         TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
         tvEmptyHint.setText(R.string.no_post_hint);
@@ -215,6 +246,11 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvPostList.setLayoutManager(layoutManager);
         rvPostList.setAdapter(adapter);
+        // 添加前面固定的Item
+        PostCategory followItem = new PostCategory();
+        followItem.categoryId = -2;
+        followItem.categoryName = "關注";
+        postCategoryList.add(followItem);
 
         // 添加前面固定的Item
         PostCategory item = new PostCategory();
@@ -241,7 +277,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     public void onEBMessage(EBMessage message) {
         // SLog.info("onEBMessage, messageType[%s]", message.messageType);
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_POST) {
-            SLog.info("收到添加貼文消息");
+            SLog.info("收到添加想要帖消息");
             isPostDataLoaded = false;
         }
     }
@@ -251,9 +287,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_add_post) {
-            Util.startFragment(AddPostFragment.newInstance());
+            Util.startFragment(AddPostFragment.newInstance(false));
         } else if (id == R.id.btn_post_filter) {
             new XPopup.Builder(_mActivity)
                     .popupPosition(PopupPosition.Right)//右边
@@ -261,20 +297,25 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     .asCustom(new PostFilterDrawerPopupView(_mActivity, this, filterSelectedIndex))
                     .show();
         } else if (id == R.id.btn_search_post) {
-            Util.startFragment(SearchFragment.newInstance(SearchType.ARTICLE));
+            Util.startFragment(CategoryFragment.newInstance(SearchType.POST, "想要"));
         } else if (id == R.id.btn_publish_want_post) {
-            Util.startFragment(AddPostFragment.newInstance());
+            Util.startFragment(AddPostFragment.newInstance(false));
         } else if (id == R.id.btn_goto_top) {
             rvPostList.scrollToPosition(0);
+        } else if (id == R.id.btn_clear_all) {
+            etKeyword.setText("");
         }
     }
 
     private void loadPostData(int page) {
+        // SLog.bt();
         // 組裝篩選參數
         EasyJSONObject params = EasyJSONObject.generate();
 
         try {
             params.set("page", page);
+            params.set("follow", searchPostParams.follow);
+
 
             if (!StringUtil.isEmpty(searchPostParams.category)) {
                 params.set("category", searchPostParams.category);
@@ -286,6 +327,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 params.set("keyword", searchPostParams.keyword);
             }
 
+
             String token = User.getToken();
             if (!StringUtil.isEmpty(token)) {
                 params.set("token", token);
@@ -294,23 +336,33 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         }
 
-        SLog.info("params[%s]", params);
+        SLog.info("url[%s],params[%s]",Api.PATH_SEARCH_POST, params);
+        if (page == 1) {
+            loadingPopup = Util.createLoadingPopup(_mActivity).show();
+        }
         Api.postUI(Api.PATH_SEARCH_POST, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
+                searchPostParams.follow=0;
                 adapter.loadMoreFail();
+                if (page == 1) {
+                    loadingPopup.dismiss();
+                }
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
+                if (page == 1) {
+                    loadingPopup.dismiss();
+                }
                 try {
                     if (StringUtil.isEmpty(responseStr)) {
                         return;
                     }
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         adapter.loadMoreFail();
                         return;
@@ -324,28 +376,39 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     }
 
                     // 如果未初始化，則初始化分類菜單
-                    if (postCategoryList.size() <= 1) {
+                    if (postCategoryList.size() <= 2) {
                         int twBlue = getResources().getColor(R.color.tw_blue, null);
-                        EasyJSONArray wantPostCategoryList = responseObj.getArray("datas.wantPostCategoryList");
+                        EasyJSONArray wantPostCategoryList = responseObj.getSafeArray("datas.wantPostCategoryList");
 
                         for (Object object : wantPostCategoryList) {
                             PostCategory postCategory = (PostCategory) EasyJSONBase.jsonDecode(PostCategory.class, object.toString());
                             postCategoryList.add(postCategory);
                         }
 
-                        SimpleTabManager tabManager = new SimpleTabManager(0) {
+                        SimpleTabManager tabManager = new SimpleTabManager(1) {
                             @Override
                             public void onClick(View v) {
-                                boolean isRepeat = onSelect(v);
                                 int id = v.getId();
+                                if (id==-2&&!User.isLogin()) {
+                                    Util.startFragment(LoginFragment.newInstance());
+                                    return;
+                                }
+                                boolean isRepeat = onSelect(v);
                                 SLog.info("id[%d]", id);
                                 if (isRepeat) {
                                     return;
                                 }
+                                if (id == -2) { // 點擊關注
+                                    searchPostParams.follow = 1;
 
-                                if (id == -1) { // 點擊全部
+                                }else if (id == -1) { // 點擊全部
                                     searchPostParams.category = null;
+                                    searchPostParams.follow = 0;
+
                                 } else {
+                                    searchPostParams.follow = 0;
+                                    SLog.info("AAAAAAAAAAAAAAAAAAAAAAAA");
+
                                     searchPostParams.category = getCategoryName(id);
                                 }
 
@@ -355,15 +418,22 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                 loadPostData(currPage + 1);
                             }
                         };
+                        int count = postCategoryList.size();
                         for (PostCategory postCategory : postCategoryList) {
+                            count--;
                             SimpleTabButton button = new SimpleTabButton(_mActivity);
                             button.setId(postCategory.categoryId);
                             button.setText(postCategory.categoryName);
                             button.setSelectedColor(twBlue);
-                            ViewGroup.MarginLayoutParams layoutParams =
-                                    new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                            layoutParams.leftMargin = Util.dip2px(_mActivity, 10);
-                            layoutParams.rightMargin = Util.dip2px(_mActivity, 10);
+                            LinearLayout.LayoutParams layoutParams =
+                                    new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+                            layoutParams.leftMargin = Util.dip2px(_mActivity, 8);
+                            layoutParams.rightMargin = Util.dip2px(_mActivity, 8);
+                            if (count == 0) {
+                                layoutParams.weight = 1.3f;
+                            } else {
+                                layoutParams.weight = 1;
+                            }
                             llTabButtonContainer.addView(button, layoutParams);
 
                             tabManager.add(button);
@@ -374,27 +444,43 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     if (page == 1) {
                         postItemList.clear();
                     }
-                    EasyJSONArray wantPostList = responseObj.getArray("datas.wantPostList");
+                    EasyJSONArray wantPostList = responseObj.getSafeArray("datas.wantPostList");
                     for (Object object : wantPostList) {
                         EasyJSONObject post = (EasyJSONObject) object;
                         PostItem item = new PostItem();
 
                         item.itemType = Constant.ITEM_TYPE_NORMAL;
                         item.postId = post.getInt("postId");
-                        item.coverImage = post.getString("coverImage");
-                        item.postCategory = post.getString("postCategory");
-                        item.title = post.getString("title");
-                        item.createTime = post.getString("createTime");
+
+                        // 從想要帖內容中獲取第一張圖片為封面圖片
+                        EasyJSONArray wantPostImages = post.getSafeArray("wantPostImages");
+                        if (wantPostImages.length() > 0) {
+                            EasyJSONObject postImageObj = wantPostImages.getObject(0);
+
+                            item.coverImage = postImageObj.getSafeString("imageUrl");
+                        } else {
+                            wantPostImages=post.getSafeArray("wantPostGoodsVoList");
+                            if (wantPostImages.length() > 0) {
+                                EasyJSONObject postImageObj = wantPostImages.getObject(0);
+
+                                item.coverImage = postImageObj.getSafeString("goodsImage");
+                            }
+                        }
+                        item.postCategory = post.getSafeString("postCategory");
+                        item.title = post.getSafeString("title");
+                        item.content = post.getSafeString("content");
+                        item.createTime = post.getSafeString("createTime");
                         item.postReply = post.getInt("postReply");
                         item.postFollow = post.getInt("postLike");
                         item.postView = post.getInt("postView");
-                        item.deadline = post.getString("expiresDate");
+                        item.deadline = post.getSafeString("expiresDate");
+                        item.comeTrueState = post.getInt("comeTrueState");
 
-                        EasyJSONObject memberVo = post.getObject("memberVo");
+                        EasyJSONObject memberVo = post.getSafeObject("memberVo");
                         // SLog.info("memberVo[%s]", memberVo);
-                        if (memberVo != null) {
-                            item.authorAvatar = memberVo.getString("avatar");
-                            item.authorNickname = memberVo.getString("nickName");
+                        if (!Util.isJsonObjectEmpty(memberVo)) {
+                            item.authorAvatar = memberVo.getSafeString("avatar");
+                            item.authorNickname = memberVo.getSafeString("nickName");
                         }
                         item.postFollow = post.getInt("postLike");
 
@@ -414,8 +500,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     adapter.setNewData(postItemList);
                     currPage++;
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -424,6 +509,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("type[%s], id[%d], extra[%s]", type, id, extra);
+
         if (type == PopupType.POST_FILTER) {
             filterSelectedIndex = id;
             searchPostParams.sort = (String) extra;
@@ -489,7 +575,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
@@ -515,6 +601,10 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         if (this.searchPostParams == null) {
             this.searchPostParams = new SearchPostParams();
         }
+
+        if (!StringUtil.isEmpty(this.searchPostParams.keyword)) {
+            SearchHistoryUtil.saveSearchHistory(SearchType.POST.ordinal(), searchPostParams.keyword);
+        }
     }
 
     public void setStandalone(boolean standalone) {
@@ -525,7 +615,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
         if (isStandalone) {
-            pop();
+            hideSoftInputPop();
             return true;
         }
         return false;
@@ -561,9 +651,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             return;
         }
 
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
-        llFloatButtonContainer.setLayoutParams(layoutParams);
+        llFloatButtonContainer.setTranslationX(0);
         floatButtonShown = true;
     }
 
@@ -572,9 +660,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             return;
         }
 
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
-        llFloatButtonContainer.setLayoutParams(layoutParams);
+        llFloatButtonContainer.setTranslationX(Util.dip2px(_mActivity, 31));
         floatButtonShown = false;
     }
 }

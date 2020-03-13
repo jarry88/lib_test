@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginStart="@dimen/toolbar_margin_left"
+    android:layout_marginEnd="@dimen/toolbar_margin_right"
+    android:layout_marginBottom="@dimen/length_15dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp">
+        <TextView
+            android:id="@+id/text_voucher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_centerInParent="true"
+            android:text="@string/text_hot_push"
+            android:textColor="@color/tw_black"
+            android:textSize="21sp"
+            />
+        <View
+            android:layout_width="60dp"
+            android:layout_height="1dp"
+            android:layout_toLeftOf="@id/text_voucher"
+            android:layout_centerVertical="true"
+            android:background="@color/tw_black"
+            />
+        <View
+            android:layout_width="60dp"
+            android:layout_height="1dp"
+            android:layout_toRightOf="@id/text_voucher"
+            android:layout_centerVertical="true"
+            android:background="@color/tw_black"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_hot_push_english"
+        android:layout_gravity="center_horizontal"/>
+
+</LinearLayout>

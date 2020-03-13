@@ -1,14 +1,15 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -68,19 +69,18 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_new_friend, this);
         Util.setOnClickListener(view, R.id.btn_contact_menu, this);
+        Util.setOnClickListener(view, R.id.btn_contact_find, this);
 
         RecyclerView rvContactList = view.findViewById(R.id.rv_contact_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvContactList.setLayoutManager(layoutManager);
         adapter = new FriendItemListAdapter(R.layout.layout_friend_item, friendInfoList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                FriendInfo friendInfo = friendInfoList.get(position);
-                EMConversation conversation = ChatUtil.getConversation(friendInfo.memberName,
-                        friendInfo.nickname, friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
-                Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
-            }
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
+            FriendInfo friendInfo = friendInfoList.get(position);
+            EMConversation conversation = ChatUtil.getConversation(friendInfo.memberName,
+                    friendInfo.nickname, friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
+            FriendInfo.upsertFriendInfo(friendInfo.memberName, friendInfo.nickname, friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
+            Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
         });
         rvContactList.setAdapter(adapter);
 
@@ -92,7 +92,7 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_new_friend) {
             start(NewFriendFragment.newInstance());
         } else if (id == R.id.btn_contact_menu) {
@@ -104,13 +104,15 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
                     .atView(v)
                     .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_CONTACT))
                     .show();
+        } else if (id == R.id.btn_contact_find) {
+            Util.startFragment(SearchFriendFragment.newInstance());
         }
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -133,14 +135,14 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
                 try {
-                    EasyJSONArray friendList = responseObj.getArray("datas.friendList");
-                    EasyJSONArray groupList = responseObj.getArray("datas.groupList");
+                    EasyJSONArray friendList = responseObj.getSafeArray("datas.friendList");
+                    EasyJSONArray groupList = responseObj.getSafeArray("datas.groupList");
                     int contactCount = friendList.length() + groupList.length();
                     String fragmentTitle = getString(R.string.text_contact) + "(" + contactCount + ")";
                     tvFragmentTitle.setText(fragmentTitle);
@@ -148,9 +150,9 @@ public class ContactFragment extends BaseFragment implements View.OnClickListene
                     for (Object object : friendList) {
                         EasyJSONObject friend = (EasyJSONObject) object;
                         FriendInfo friendInfo = new FriendInfo();
-                        friendInfo.memberName = friend.getString("memberName");
-                        friendInfo.avatarUrl = friend.getString("avatar");
-                        friendInfo.nickname = friend.getString("nickName");
+                        friendInfo.memberName = friend.getSafeString("memberName");
+                        friendInfo.avatarUrl = friend.getSafeString("avatar");
+                        friendInfo.nickname = friend.getSafeString("nickName");
 
                         friendInfoList.add(friendInfo);
                     }

@@ -1,7 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +45,7 @@ public class ReadMessagePopup extends CenterPopupView implements View.OnClickLis
         findViewById(R.id.btn_ok).setOnClickListener(this);
 
         ((TextView) findViewById(R.id.tv_title)).setText(title);
+        ((TextView) findViewById(R.id.tv_content)).setText(content);
         ((TextView) findViewById(R.id.tv_create_time)).setText(createTime);
         ImageView goodsImage = findViewById(R.id.goods_image);
         if (iconRes instanceof String) {

@@ -9,7 +9,7 @@ import com.ftofs.twant.vo.store.StoreVo;
  */
 public class HrPostVo {
     /**
-     * 招聘文章id
+     * 招聘想要帖id
      */
     private int postId;
     /**
@@ -85,7 +85,7 @@ public class HrPostVo {
      */
     private String createTime;
     /**
-     * 店鋪id
+     * 商店id
      */
     private int storeId;
     /**
@@ -106,7 +106,7 @@ public class HrPostVo {
     private String approveReason;
 
     /**
-     * 店鋪信息
+     * 商店信息
      */
     private StoreVo storeVo;
 

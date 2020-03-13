@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class HrPostFavor implements Serializable {
 
     /**
-     * 文章id
+     * 想要帖id
      */
     private int postId;
 
     /**
-     * 會員名稱
+     * 城友名稱
      */
     private  String memberName;
 

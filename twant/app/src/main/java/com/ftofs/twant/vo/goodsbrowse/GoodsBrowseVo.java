@@ -9,7 +9,7 @@ import com.ftofs.twant.vo.store.StoreVo;
  * @license    http://www.shopnc.net
  * @link       http://www.shopnc.net
  *
- * 商品浏览历史
+ * 產品浏览历史
  * 
  * @author zxy
  * Created 2017/4/13 11:01
@@ -20,7 +20,7 @@ public class GoodsBrowseVo {
      */
     private int browseId = 0;
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId = 0;
     /**
@@ -37,35 +37,35 @@ public class GoodsBrowseVo {
      */
     private String addTimeText = "";
     /**
-     * 商品分类ID
+     * 產品分类ID
      */
     private int goodsCategoryId = 0;
     /**
-     * 商品一级分类
+     * 產品一级分类
      */
     private int goodsCategoryId1 = 0;
     /**
-     * 商品二级分类
+     * 產品二级分类
      */
     private int goodsCategoryId2 = 0;
     /**
-     * 商品三级分类
+     * 產品三级分类
      */
     private int goodsCategoryId3 = 0;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName = "";
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private GoodsCommon goodsCommon = null;
     /**
-     * 商品产地
+     * 產品产地
      */
     private AdminCountry adminCountry;
     /**
-     * 当前商品的店铺信息
+     * 当前產品的店铺信息
      */
     private StoreVo storeVo = null;
 

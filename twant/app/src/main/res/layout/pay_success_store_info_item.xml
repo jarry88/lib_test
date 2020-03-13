@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:paddingTop="15dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingBottom="20dp"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_store_avatar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            />
+        <TextView
+            android:id="@+id/tv_store_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="澳門花藝"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            />
+
+        <TextView
+            android:id="@+id/tv_store_biz_status"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:text="營業中"
+            android:textColor="@color/tw_red"
+            android:textSize="12sp"
+            android:background="@drawable/pay_success_store_status_bg_biz"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_goods_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/goods_image"
+            android:layout_width="87.5dp"
+            android:layout_height="87.5dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/tw_black"
+                android:text="Yueaeow香薰精油香氛淡薰香家用新留香"
+                android:maxLines="2"
+                android:ellipsize="end"
+                />
+
+            <TextView
+                android:id="@+id/tv_goods_spec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:text="顏色：白色"
+                android:textSize="13sp"
+                android:textColor="#767777"
+                />
+
+            <LinearLayout
+                android:id="@+id/ll_conform_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/tw_yellow_box"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="送券"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white"
+                    android:background="@color/tw_yellow">
+                </TextView>
+                <TextView
+                    android:id="@+id/tv_conform_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:textColor="@color/tw_black"
+                    android:textSize="11sp"
+                    android:text="送 $50 店舖券一張">
+
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_self_take_code_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13.5dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="自提碼："
+            android:textColor="@color/tw_black"
+            android:textSize="18sp"
+            />
+        <TextView
+            android:id="@+id/tv_self_take_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="1T2A"
+            android:textColor="@color/tw_blue"
+            android:textSize="18sp"
+            />
+    </LinearLayout>
+
+    <!-- 分隔線 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="14.5dp"
+        android:background="@color/tw_light_grey"
+
+        />
+
+    <!-- 商店信息 -->
+    <LinearLayout
+        android:id="@+id/ll_shop_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <!-- 手機號 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/icon_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_mobile" />
+
+            <TextView
+                android:id="@+id/tv_store_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/icon_mobile"
+                android:text="134177585707"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <!-- 店鋪地址 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/icon_shop_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/icon_shop_location" />
+
+            <TextView
+                android:id="@+id/btn_shop_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_shop_map"
+                android:paddingLeft="9dp"
+                android:paddingTop="3dp"
+                android:paddingRight="9dp"
+                android:paddingBottom="3dp"
+                android:text="@string/text_map"
+                android:textColor="@color/tw_blue"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_store_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@id/btn_shop_map"
+                android:layout_toRightOf="@id/icon_shop_location"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+
+        <!-- 營業時間 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/icon_work_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/icon_work_time" />
+
+            <!-- 营业时间 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/icon_work_time"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <!--
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:textSize="14sp"
+                        android:text="工作日："
+                        />
+                    -->
+                    <TextView
+                        android:id="@+id/tv_business_time_working_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <!--
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:textSize="14sp"
+                        android:text="周&#12288;末："
+                        />
+                    -->
+                    <TextView
+                        android:id="@+id/tv_business_time_weekend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+        <!-- 交通指引 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/icon_transport_instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_transport_instruction" />
+
+            <TextView
+                android:id="@+id/tv_transport_instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/icon_transport_instruction"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                android:text="乘坐A908路到提督馬路下車，祐順工業大廈方向步"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+    <!-- END OF 商店信息 -->
+</LinearLayout>
+

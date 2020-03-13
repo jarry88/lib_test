@@ -78,7 +78,7 @@ public class Renew {
     private String payCertStateText;
 
     /**
-     * 发布海外购商品
+     * 发布海外购產品
      */
     private int allowForeignGoods;
 

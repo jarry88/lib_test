@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class SearchOrdersVo {
     /**
-     * 订单商品列表
+     * 订单產品列表
      */
     private List<SearchOrdersGoodsVo> ordersGoodsVoList = new ArrayList<>();
     /**
@@ -277,7 +277,7 @@ public class SearchOrdersVo {
      */
     private String chainName = "";
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**

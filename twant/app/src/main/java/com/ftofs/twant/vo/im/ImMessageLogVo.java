@@ -70,32 +70,32 @@ public class ImMessageLogVo {
     private int toUserType;
 
     /**
-     * 發送人店鋪ID
+     * 發送人商店ID
      */
     private int fromUserStoreId = 0;
 
     /**
-     * 發送人店鋪名稱
+     * 發送人商店名稱
      */
     private String fromUserStoreName = "";
 
     /**
-     * 接收人店鋪ID
+     * 接收人商店ID
      */
     private int toUserStoreId = 0;
 
     /**
-     * 接收人店鋪名稱
+     * 接收人商店名稱
      */
     private String toUserStoreName = "";
 
     /**
-     * 群店鋪信息
+     * 群商店信息
      */
     private StoreVo storeInfo;
 
     /**
-     * 商品
+     * 產品
      */
     private GoodsImVo goodsImVo;
 

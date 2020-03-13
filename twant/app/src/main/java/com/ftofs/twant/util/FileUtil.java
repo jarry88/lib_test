@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
+import android.util.Log;
+
+import androidx.core.content.FileProvider;
 
 import com.ftofs.twant.log.SLog;
 
@@ -75,8 +77,8 @@ public class FileUtil {
             if (fileList != null && fileList.size() > 0) {
                 return fileList.get(0);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         return null;
@@ -154,10 +156,8 @@ public class FileUtil {
             FileInputStream fis = new FileInputStream(file);
             fis.read(buffer);
             return buffer;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         return null;
@@ -222,8 +222,8 @@ public class FileUtil {
     public static boolean createOrExistsDir(File file) {
         try {
             return file != null && (file.exists() ? file.isDirectory() : createDir(file));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         return false;
     }
@@ -568,8 +568,8 @@ public class FileUtil {
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(content);
             bufferedWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 }

@@ -5,7 +5,7 @@ package com.ftofs.twant.vo;
  * @license    http://www.shopnc.net
  * @link       http://www.shopnc.net
  *
- * 文章分类Vo
+ * 想要帖分类Vo
  * 
  * @author hbj
  * Created 2017/4/13 16:14
@@ -33,7 +33,7 @@ public class ArticleCategoryVo {
      */
     private String positionTitle;
     /**
-     * 文章类型
+     * 想要帖类型
      */
     private int type = 3;
 

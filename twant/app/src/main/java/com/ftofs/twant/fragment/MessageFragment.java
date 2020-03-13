@@ -1,28 +1,34 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.ChatConversationAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.UnreadCount;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.BadgeUtil;
@@ -50,9 +56,12 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -67,14 +76,21 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
      * 是否獨立的Fragment，還是依附于MainFragment
      */
     boolean isStandalone;
+    /**
+     * 是否為平台客服列表頁
+     */
+    boolean isPlatformCustomer;
     ScaledButton btnBack;
     ScaledButton btnContact;
+    ScaledButton btnPlatformCustomer;
     ChatConversationAdapter adapter;
+    ChatConversation platformCustomer;
 
     LinearLayout llMessageListContainer;
 
     int totalIMUnreadCount;  // 未讀IM消息總數
     UnreadCount unreadCount;
+
 
 
     TextView tvTransactMessageItemCount;
@@ -84,14 +100,26 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     TextView tvNoticeMessageItemCount;
 
 
+    boolean isImLogin =false;
 
     List<ChatConversation> chatConversationList = new ArrayList<>();
+    public static int PLATFORM_CUSTOM_STORE_ID=41;//平臺客服店鋪常數
 
     public static MessageFragment newInstance(boolean isStandalone) {
         Bundle args = new Bundle();
 
         args.putBoolean("isStandalone", isStandalone);
         MessageFragment fragment = new MessageFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static MessageFragment newInstance(boolean isStandalone,boolean isPlatformCustomer) {
+        Bundle args = new Bundle();
+
+        args.putBoolean("isStandalone", isStandalone);
+        MessageFragment fragment = new MessageFragment();
+        fragment.isPlatformCustomer = isPlatformCustomer;
         fragment.setArguments(args);
 
         return fragment;
@@ -115,8 +143,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
         Util.setOnClickListener(view, R.id.btn_message_search, this);
         Util.setOnClickListener(view, R.id.btn_message_menu, this);
-        Util.setOnClickListener(view, R.id.btn_view_logistics_message, this);
-        Util.setOnClickListener(view, R.id.btn_view_refund_message, this);
+        //Util.setOnClickListener(view, R.id.btn_view_logistics_message, this);
+        //Util.setOnClickListener(view, R.id.btn_view_refund_message, this);
 
         Util.setOnClickListener(view, R.id.btn_transact_message, this);
         Util.setOnClickListener(view, R.id.btn_asset_message, this);
@@ -126,6 +154,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
         btnBack = view.findViewById(R.id.btn_back);
         btnContact = view.findViewById(R.id.btn_contact);
+
+        btnPlatformCustomer = view.findViewById(R.id.btn_switch_customer);
+        btnPlatformCustomer.setOnClickListener(this);
 
         if (isStandalone) {
             btnBack.setOnClickListener(this);
@@ -146,25 +177,31 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         tvNoticeMessageItemCount = view.findViewById(R.id.tv_notice_message_item_count);
 
         MaxHeightRecyclerView rvChatConversationList = view.findViewById(R.id.rv_chat_conversation_list);
-        llMessageListContainer.post(new Runnable() {
-            @Override
-            public void run() {
-                int height = llMessageListContainer.getHeight();
-                rvChatConversationList.setMaxHeight(height);
-            }
+        llMessageListContainer.post(() -> {
+            int height = llMessageListContainer.getHeight();
+            rvChatConversationList.setMaxHeight(height);
         });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvChatConversationList.setLayoutManager(layoutManager);
+
+        if (isPlatformCustomer) {
+            initPlatformCustomer(view);
+            loadPlatformCustomerData();
+        }
         adapter = new ChatConversationAdapter(R.layout.chat_conversation_im, chatConversationList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ChatConversation chatConversation = chatConversationList.get(position);
-
+                if (!isPlatformCustomer&&position == 0) {
+                    SLog.info("點擊了平台客服");
+                    Util.startFragment(newInstance(true,true));
+                    return;
+                }
                 SLog.info("friendInfo[%s]", chatConversation.friendInfo);
                 EMConversation conversation = ChatUtil.getConversation(chatConversation.friendInfo.memberName,
-                        chatConversation.friendInfo.nickname, chatConversation.friendInfo.avatarUrl, ChatUtil.ROLE_MEMBER);
+                        chatConversation.friendInfo.nickname, chatConversation.friendInfo.avatarUrl, ChatUtil.ROLE_CS_AVAILABLE);
 
                 if (chatConversation.unreadCount > 0) {
                     // 從未讀總數中減去這條會話的未讀數
@@ -202,6 +239,19 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         loadUnreadMessageCount();
     }
 
+    private void initPlatformCustomer(View view) {
+        TextView textView = view.findViewById(R.id.tv_fragment_title);
+        textView.setText(getString(R.string.text_platform_customer));
+        view.findViewById(R.id.ll_amount_container).setVisibility(View.GONE);
+
+        view.findViewById(R.id.btn_switch_customer).setVisibility(View.GONE);
+        view.findViewById(R.id.btn_message_search).setVisibility(View.GONE);
+        view.findViewById(R.id.btn_message_menu).setVisibility(View.GONE);
+        view.findViewById(R.id.vw_separator).setVisibility(View.GONE);
+    }
+
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -214,7 +264,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         if (message.messageType == EBMessageType.MESSAGE_TYPE_NEW_CHAT_MESSAGE ||
                 message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE ||
                 message.messageType == EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS) {
-            loadData();
+            if (isPlatformCustomer) {
+
+            } else {
+                loadData();
+            }
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) { // 如果用戶退出登錄，重新加載數據
+            isImLogin = false;
         }
     }
 
@@ -258,29 +314,45 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             totalIMUnreadCount = 0;
             chatConversationList.clear();
 
-            // 獲取環信所有會話列表
             Map<String, EMConversation> conversationMap = EMClient.getInstance().chatManager().getAllConversations();
             SLog.info("會話數[%d]", conversationMap.size());
+
             for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
+                //此處要增加帶s標識member Name和平臺客服的過濾
                 String memberName = entry.getKey();
                 EMConversation conversation = entry.getValue();
+                if (memberName.indexOf("s") != -1) {//存在s的舊對話
+                    EMClient.getInstance().chatManager().deleteConversation(memberName, true);
+                    continue;
+                };
+                SLog.info("%s,%s",entry.getValue(),User.getUserInfo(SPField.FIELD_MEMBER_NAME,""));
 
                 EMMessage lastMessage = conversation.getLastMessage();
                 if (lastMessage == null) {
                     continue;
                 }
                 long timestamp = lastMessage.getMsgTime();
+                //不是每條都在數據庫保存過，直接取數據庫不可以了 gzp
                 FriendInfo friendInfo = new FriendInfo();
-
+//                FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
                 friendInfo.memberName = memberName;
                 String extField = conversation.getExtField();
                 SLog.info("extField[%s]", extField);
                 if (EasyJSONBase.isJSONString(extField)) {
-                    EasyJSONObject extFieldObj = (EasyJSONObject) EasyJSONObject.parse(extField);
+                    EasyJSONObject extFieldObj = EasyJSONObject.parse(extField);
 
-                    friendInfo.nickname = extFieldObj.getString("nickName");
-                    friendInfo.avatarUrl = extFieldObj.getString("avatarUrl");
+                    friendInfo.nickname = extFieldObj.getSafeString("nickName");
+                    friendInfo.avatarUrl = extFieldObj.getSafeString("avatarUrl");
                     friendInfo.role = extFieldObj.getInt("role");
+                    SLog.info("會話框數據從extFied得到");
+//                    friendInfo.storeName = extFieldObj.getSafeString("storeName");
+                } else {
+                    // 如果没有扩展字段，并且数据库有保存，则从数据库中拿
+                    SLog.info("會話框數據從數據庫得到");
+                    FriendInfo savedFriendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
+                    if (savedFriendInfo != null) {
+                        friendInfo = savedFriendInfo;
+                    }
                 }
 
 
@@ -299,15 +371,102 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 chatConversation.lastMessage = lastMessage.getBody().toString();
                 chatConversation.timestamp = lastMessage.getMsgTime();
                 totalIMUnreadCount += chatConversation.unreadCount;
+                SLog.info("here!!storeid%d, platId%d",friendInfo.storeId,PLATFORM_CUSTOM_STORE_ID);
+               if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID) {
+                    //過濾平臺客服鏈接
+                   chatConversationList.add(chatConversation);
+               }else{
 
-                chatConversationList.add(chatConversation);
+               }
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                chatConversationList.sort((o1, o2) -> o1.timestamp>o2.timestamp?-1:0);
+            }
+            // 獲取環信所有會話列表
+            if (!isPlatformCustomer) {
+                if (platformCustomer == null) {
+                    platformCustomer = new ChatConversation();
+                    platformCustomer.friendInfo = FriendInfo.newInstance("", "平台想想", "", ChatUtil.ROLE_CS_PLATFORM);
+                    platformCustomer.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                    platformCustomer.lastMessage = "     歡迎來到想要城～有什麼想要了解...";
+                    platformCustomer.isPlatformCustomer = true;
+                }
+
+                chatConversationList.add(0,platformCustomer);
             }
             displayUnreadCount();
 
             adapter.setNewData(chatConversationList);
+
         } catch (Exception e) {
-            SLog.info("Error!%s", e.getMessage());
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+    private void loadPlatformCustomerData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+        EasyJSONObject params=EasyJSONObject.generate("token",token);
+
+        SLog.info("token[%s]", token);
+        Api.getUI(Api.ADMIN_STAFF, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    EasyJSONArray adminStaffList = responseObj.getSafeArray("datas.adminStaffList");
+                    chatConversationList.clear();
+                    SLog.info("responseStr11");
+
+                    for (Object object : adminStaffList) {
+                        EasyJSONObject admin = (EasyJSONObject) object;
+                        String memberName = admin.getSafeString("memberName");
+                        String storeName = admin.getSafeString("storeName");
+                        String nickName = admin.getSafeString("nickName");
+                        String groupName = admin.getSafeString("groupName");
+                        String avatar = admin.getSafeString("avatar");
+                        FriendInfo friendInfo = FriendInfo.newInstance(memberName, nickName, avatar, ChatUtil.ROLE_CS_PLATFORM);
+                        friendInfo.storeName = storeName;
+                        friendInfo.groupName = groupName;
+                        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(memberName,
+                                EMConversation.EMConversationType.Chat, true);
+
+                        ChatConversation chatConversation = new ChatConversation();
+                        chatConversation.friendInfo = friendInfo;
+                        chatConversation.unreadCount = conversation.getUnreadMsgCount();
+                        EMMessage lastMessage = conversation.getLastMessage();
+                        if (lastMessage != null) {
+                            chatConversation.lastMessageType = ChatUtil.getIntMessageType(lastMessage);
+                            chatConversation.lastMessage = lastMessage.getBody().toString();
+                            chatConversation.timestamp = lastMessage.getMsgTime();
+                        }
+//
+
+
+                        SLog.info("friendInfo[%s]", friendInfo);
+
+                        totalIMUnreadCount += chatConversation.unreadCount;
+
+                        chatConversationList.add(chatConversation);
+                    }
+                    displayUnreadCount();
+
+                    // 消息排序
+                    Collections.sort(chatConversationList, (o1, o2) -> (int) (o1.timestamp - o2.timestamp));
+
+                    adapter.setNewData(chatConversationList);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     private void loadUnreadMessageCount() {
@@ -330,13 +489,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
 
-                    UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getArray("datas.unreadList"));
+                    UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getSafeArray("datas.unreadList"));
                     if (unreadCount != null) {
                         UnreadCount.save(unreadCount);
                         displayUnreadCount();
@@ -362,42 +521,47 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         }
 
         if (unreadCount.transact > 0) {
-            tvTransactMessageItemCount.setText(String.valueOf(unreadCount.transact));
+            //tvTransactMessageItemCount.setText(String.valueOf(unreadCount.transact));
             tvTransactMessageItemCount.setVisibility(View.VISIBLE);
+            //tvTransactMessageItemCount.setTextSize(10);
         } else {
             tvTransactMessageItemCount.setVisibility(View.GONE);
         }
 
         if (unreadCount.asset > 0) {
-            tvAssetMessageItemCount.setText(String.valueOf(unreadCount.asset));
+            //tvAssetMessageItemCount.setText(String.valueOf(unreadCount.asset));
             tvAssetMessageItemCount.setVisibility(View.VISIBLE);
+            //tvAssetMessageItemCount.setTextSize(10);
         } else {
             tvAssetMessageItemCount.setVisibility(View.GONE);
         }
 
         if (unreadCount.social > 0) {
-            tvSocialMessageItemCount.setText(String.valueOf(unreadCount.social));
+            //tvSocialMessageItemCount.setText(String.valueOf(unreadCount.social));
             tvSocialMessageItemCount.setVisibility(View.VISIBLE);
+            //tvSocialMessageItemCount.setTextSize(10);
         } else {
             tvSocialMessageItemCount.setVisibility(View.GONE);
         }
 
         if (unreadCount.bargain > 0) {
-            tvBargainMessageItemCount.setText(String.valueOf(unreadCount.bargain));
+            //tvBargainMessageItemCount.setText(String.valueOf(unreadCount.bargain));
+            //tvBargainMessageItemCount.setTextSize(10);
             tvBargainMessageItemCount.setVisibility(View.VISIBLE);
         } else {
             tvBargainMessageItemCount.setVisibility(View.GONE);
         }
 
         if (unreadCount.notice > 0) {
-            tvNoticeMessageItemCount.setText(String.valueOf(unreadCount.notice));
+            //tvNoticeMessageItemCount.setText(String.valueOf(unreadCount.notice));
+            //tvNoticeMessageItemCount.setTextSize(10);
             tvNoticeMessageItemCount.setVisibility(View.VISIBLE);
         } else {
             tvNoticeMessageItemCount.setVisibility(View.GONE);
         }
 
 
-        totalUnreadCount += (unreadCount.transact + unreadCount.asset + unreadCount.social + unreadCount.bargain + unreadCount.notice);
+        //totalUnreadCount += (unreadCount.transact + unreadCount.asset + unreadCount.social + unreadCount.bargain + unreadCount.notice);
 
 
         MainFragment mainFragment = MainFragment.getInstance();
@@ -414,7 +578,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_message_search) {
             Util.startFragment(SearchFriendFragment.newInstance());
         } else if (id == R.id.btn_message_menu) {
@@ -431,6 +595,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         } else if (id == R.id.btn_transact_message || id == R.id.btn_asset_message || id == R.id.btn_social_message ||
                     id == R.id.btn_bargain_message || id == R.id.btn_notice_message) {
             Util.startFragment(MessageListFragment.newInstance(getMessageTplClass(id)));
+        }
+        else if (id == R.id.btn_switch_customer) {
+            if (!isPlatformCustomer) {
+                SLog.info("點擊了平台客服按鈕");
+                Util.startFragment(newInstance(true,true));
+            }
         }
     }
 
@@ -458,7 +628,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
         if (isStandalone) {
-            pop();
+            hideSoftInputPop();
             return true;
         }
         return false;
@@ -481,15 +651,45 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     public void onSupportVisible() {
         super.onSupportVisible();
 
-        // 每次顯示時，登錄一下環信
-        SqliteUtil.imLogin();
+        int userId = User.getUserId();
+        if (userId < 1) { // 用戶未登錄，顯示登錄頁面
+            Util.showLoginFragment();
+            return;
+        }
+        ((MainActivity) getActivity()).setMessageFragmentsActivity(true);
 
-        loadData();
+
+        // 每次顯示時，登錄一下環信
+//        SqliteUtil.imLogin(new SimpleCallback() {
+//            @Override
+//            public void onSimpleCall(Object data) {
+//                if (!isImLogin) {
+//                    loadData();
+//                    isImLogin = true;
+//                    if (isPlatformCustomer) {
+//                        SLog.info("onSupportVisible");
+//                        loadPlatformCustomerData();
+//                    } else {
+//                        loadData();
+//                    }
+//                    displayUnreadCount();
+//                }
+//            }
+//        });
+        SqliteUtil.imLogin();
+        if (isPlatformCustomer) {
+            SLog.info("onSupportVisible");
+            loadPlatformCustomerData();
+        } else {
+            loadData();
+        }
         displayUnreadCount();
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+        ((MainActivity) getActivity()).setMessageFragmentsActivity(false);
+
     }
 }

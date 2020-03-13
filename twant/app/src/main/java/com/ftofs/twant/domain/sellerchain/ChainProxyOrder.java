@@ -16,7 +16,7 @@ public class ChainProxyOrder {
 
     //支付方式
     private String paymentCode;
-    //商品列表
+    //產品列表
     private List<CashierOrderGoodsItem> goodsItems;
     //收貨人
     private String receiverName;

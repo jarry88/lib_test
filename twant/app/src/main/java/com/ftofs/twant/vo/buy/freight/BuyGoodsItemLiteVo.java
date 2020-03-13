@@ -5,18 +5,18 @@ package com.ftofs.twant.vo.buy.freight;
  * @license    http://www.shopnc.net
  * @link       http://www.shopnc.net
  *
- * 简化版的商品sku Vo
+ * 简化版的產品sku Vo
  * 
  * @author hbj
  * Created 2017/4/13 14:43
  */
 public class BuyGoodsItemLiteVo {
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品规格
+     * 產品规格
      */
     private String goodsFullSpecs;
     /**

@@ -7,39 +7,39 @@ import java.math.BigDecimal;
 /**
  * @author liusf
  * @create 2018/11/22 10:46
- * @description 猜你喜歡商品數據
+ * @description 猜你喜歡產品數據
  */
 public class GoodsLikeVo {
     /**
-     * 商品SPU編號
+     * 產品SPU編號
      */
     private int commonId;
 
     /**
-     * 商品名稱
+     * 產品名稱
      */
     private String goodsName;
 
     /**
-     * 商品APP价格，等同于AppPrice用于后台显示
+     * 產品APP价格，等同于AppPrice用于后台显示
      */
     private BigDecimal goodsPrice;
     /**
-     * 商品APP价格
+     * 產品APP价格
      */
     private BigDecimal appPriceMin;
     /**
-     * 商品微信价格
+     * 產品微信价格
      */
     private BigDecimal wechatPriceMin;
 
     /**
-     * 商品圖片
+     * 產品圖片
      */
     private String imageUrl;
 
     /**
-     * 商品所在店鋪
+     * 產品所在商店
      */
     private StoreVo storeVo;
 

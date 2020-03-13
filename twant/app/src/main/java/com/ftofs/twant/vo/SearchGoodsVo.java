@@ -13,42 +13,42 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品实体，用于搜索引擎建立索引
+ * 產品实体，用于搜索引擎建立索引
  *
  * @author dqw
  * Created 2017/4/17 11:56
  */
 public class SearchGoodsVo {
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品卖点
+     * 產品卖点
      */
     private String jingle;
     /**
-     * 商品规格字符串
+     * 產品规格字符串
      */
     private String specString;
     /**
-     * 商品sku规格列表
+     * 產品sku规格列表
      */
     private List<SearchGoodsSpecVo> goodsSpecList;
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId;
     /**
-     * 商品分类编号（三级）
+     * 產品分类编号（三级）
      */
     private List<Integer> categoryIds;
     /**
-     * 商品分类名称
+     * 產品分类名称
      */
     private String categoryName = "";
     /**
@@ -68,7 +68,7 @@ public class SearchGoodsVo {
      */
     private String brandEnglish = "";
     /**
-     * 店铺商品分类
+     * 店铺產品分类
      */
     private List<Integer> labelIdList;
     /**
@@ -77,7 +77,7 @@ public class SearchGoodsVo {
      */
     private int joinBigSale;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 0下架，1正常，10违规禁售
      */
     private int goodsState;
@@ -87,7 +87,7 @@ public class SearchGoodsVo {
      */
     private int goodsVerify;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 可以购买1，不可购买0
      */
     private int goodsStatus = 0;
@@ -96,7 +96,7 @@ public class SearchGoodsVo {
      */
     private String areaInfo;
     /**
-     * 商品运费
+     * 產品运费
      */
     private BigDecimal goodsFreight;
     /**
@@ -152,7 +152,7 @@ public class SearchGoodsVo {
      */
     private BigDecimal webPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin;
     /**
@@ -172,7 +172,7 @@ public class SearchGoodsVo {
      */
     private BigDecimal appPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin;
     /**
@@ -192,7 +192,7 @@ public class SearchGoodsVo {
      */
     private BigDecimal wechatPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin;
     /**
@@ -253,7 +253,7 @@ public class SearchGoodsVo {
      */
     private String imageSrc;
     /**
-     * 商品sku图片列表
+     * 產品sku图片列表
      */
     private List<GoodsImage> goodsImageList;
     /**
@@ -310,7 +310,7 @@ public class SearchGoodsVo {
      */
     private List<Integer> attr;
     /**
-     * 是否为分销商品
+     * 是否为分销產品
      */
     private int isDistribution;
     /**
@@ -342,7 +342,7 @@ public class SearchGoodsVo {
     private int extendInt1 = 0;
 
     /**
-     * 1是0否含有商品視頻
+     * 1是0否含有產品視頻
      */
     private int extendInt2 = 0;
 
@@ -364,7 +364,7 @@ public class SearchGoodsVo {
     private BigDecimal extendPrice8 = BigDecimal.ZERO;
     private BigDecimal extendPrice9 = BigDecimal.ZERO;
 
-    //Modify By liusf 2019/1/2 14:58 商品創建時間
+    //Modify By liusf 2019/1/2 14:58 產品創建時間
     private String extendTime0;
 
     private String extendTime1;

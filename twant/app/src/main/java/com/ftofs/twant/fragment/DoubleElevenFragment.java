@@ -1,8 +1,8 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
@@ -68,8 +67,7 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
         int id = v.getId();
 
         if (id == R.id.btn_go_shopping) {
-            EasyJSONObject params = EasyJSONObject.generate("is_double_eleven", true);
-            start(SearchResultFragment.newInstance(SearchType.GOODS.name(), params.toString()));
+            Util.startActivityShopping();
         } else if (id == R.id.btn_play_game) {
             String url = Util.makeDoubleElevenH5Url(1);
             if (url == null) {
@@ -86,14 +84,14 @@ public class DoubleElevenFragment extends BaseFragment implements View.OnClickLi
             }
             start(H5GameFragment.newInstance(url, true));
         } else if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

@@ -17,13 +17,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_biz_circle_menu_list"
             android:layout_width="95dp"
             android:layout_height="300dp"
             android:background="@color/tw_slight_grey">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
         <com.nex3z.flowlayout.FlowLayout
             android:id="@+id/fl_biz_circle_container"
             android:layout_width="match_parent"

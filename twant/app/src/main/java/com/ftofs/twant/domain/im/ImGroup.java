@@ -42,7 +42,7 @@ public class ImGroup {
     private long created;
 
     /**
-     * 店鋪信息
+     * 商店信息
      */
     private StoreVo storeInfo;
 

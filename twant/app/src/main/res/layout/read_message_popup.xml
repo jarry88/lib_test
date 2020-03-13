@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="尾款支付提醒"
+            android:text=""
             android:textSize="16sp"
             android:textColor="@color/tw_black"
             />
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="2019/08/15 09:38"
+            android:text=""
             android:textSize="13sp"
             android:textColor="#666"
             />
@@ -42,14 +42,13 @@
             android:id="@+id/goods_image"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:src="@drawable/cs_avatar_160"
             />
         <TextView
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="您的訂單:訂單單號4450000000467400已於2019-10-2814:17:44發貨，運單號：TW157224346"
+            android:text=""
             android:textColor="@color/tw_black"
             android:textSize="14sp"
             />

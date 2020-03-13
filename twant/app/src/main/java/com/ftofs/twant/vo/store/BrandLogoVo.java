@@ -7,7 +7,7 @@ package com.ftofs.twant.vo.store;
  */
 public class BrandLogoVo {
     /**
-     * 店鋪id
+     * 商店id
      */
     private int storeId;
     /**

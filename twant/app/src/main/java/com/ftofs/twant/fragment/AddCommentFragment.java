@@ -3,8 +3,10 @@ package com.ftofs.twant.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,6 @@ import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -62,6 +63,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
     String content;
 
     public static AddCommentFragment newInstance(int bindId, int commentChannel) {
+        SLog.info("onClickhere2");
         Bundle args = new Bundle();
 
         args.putInt("bindId", bindId);
@@ -77,22 +79,24 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_comment, container, false);
+        SLog.info("__onCreateView");
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SLog.info("__onViewCreate");
 
         EventBus.getDefault().register(this);
-
+        SLog.info("__onViewCreate");
         Bundle args = getArguments();
         bindId = args.getInt("bindId");
         commentChannel = args.getInt("commentChannel");
 
         btnAddImage = view.findViewById(R.id.btn_add_image);
         btnAddImage.setOnClickListener(this);
-
+        SLog.info("__onViewCreate");
         btnRemoveImage = view.findViewById(R.id.btn_remove_image);
         btnRemoveImage.setOnClickListener(this);
 
@@ -100,14 +104,16 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         commentImageContainer = view.findViewById(R.id.comment_image_container);
 
         etContent = view.findViewById(R.id.et_content);
-
+        SLog.info("__onViewCreate");
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
+        SLog.info("__onViewCreate");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        SLog.info("onDestroy");
         EventBus.getDefault().unregister(this);
     }
 
@@ -124,7 +130,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_add_image) {
             openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
         } else if (id == R.id.btn_remove_image) {
@@ -139,7 +145,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -231,13 +237,13 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                         return;
                     }
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    EasyJSONObject wantCommentVo = responseObj.getObject("datas.wantCommentVo");
-                    EasyJSONObject memberVo = wantCommentVo.getObject("memberVo");
+                    EasyJSONObject wantCommentVo = responseObj.getSafeObject("datas.wantCommentVo");
+                    EasyJSONObject memberVo = wantCommentVo.getSafeObject("memberVo");
 
 
                     CommentItem commentItem = new CommentItem();
@@ -248,13 +254,13 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                     commentItem.isLike = 0;
                     commentItem.commentLike = 0;
                     commentItem.commentReply = 0;
-                    commentItem.commenterAvatar = memberVo.getString("avatar");
-                    commentItem.nickname = memberVo.getString("nickName");
-                    commentItem.commentTime = wantCommentVo.getString("commentStartTime");
+                    commentItem.commenterAvatar = memberVo.getSafeString("avatar");
+                    commentItem.nickname = memberVo.getSafeString("nickName");
+                    commentItem.commentTime = wantCommentVo.getSafeString("commentStartTime");
 
-                    EasyJSONArray images = wantCommentVo.getArray("images");
-                    if (!Util.isJsonNull(images) && images.length() > 0) {
-                        commentItem.imageUrl = images.getObject(0).getString("imageUrl");
+                    EasyJSONArray images = wantCommentVo.getSafeArray("images");
+                    if (images.length() > 0) {
+                        commentItem.imageUrl = images.getObject(0).getSafeString("imageUrl");
                     }
 
                     if (commentChannel == Constant.COMMENT_CHANNEL_GOODS) {
@@ -274,10 +280,9 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                     bundle.putParcelable("commentItem", commentItem);
                     setFragmentResult(RESULT_OK, bundle);
 
-                    hideSoftInput();
-                    pop();
+                    hideSoftInputPop();
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

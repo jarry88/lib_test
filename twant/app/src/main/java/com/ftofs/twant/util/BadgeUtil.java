@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
@@ -57,9 +58,7 @@ public class BadgeUtil {
             method.invoke(extraNotification, num);
 
         } catch (Exception e) {
-
-            e.printStackTrace();
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         mNotificationManager.notify(0,notification);
@@ -108,7 +107,7 @@ public class BadgeUtil {
                 context.sendBroadcast(intent);
                 return;
             } catch (Exception e1) {
-                e1.printStackTrace();
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 return;
             }
         }

@@ -1,7 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -27,7 +27,7 @@ import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
- * 商品搜索結果列表的篩選彈窗
+ * 產品搜索結果列表的篩選彈窗
  * @author zwm
  */
 public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.OnClickListener {
@@ -39,8 +39,11 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
     String highestPrice;
     boolean giftEnable;
     boolean discountEnable;
-    int categoryId; // 當前選中的category的Id
-    int categoryIndex;  // 當前選中的category的索引
+    private boolean disFreeShipping;
+    // 當前選中的category的Id
+    int categoryId;
+    // 當前選中的category的索引
+    int categoryIndex;
 
     List<TextView> tvCategoryButtonArr = new ArrayList<>();
 
@@ -53,6 +56,7 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
 
     int twBlue;
     int twBlack;
+    private TextView btnFilterShip;
 
     public GoodsFilterDrawerPopupView(@NonNull Context context, List<FilterCategoryGroup> filterCategoryGroupList,
                                       OnSelectedListener onSelectedListener) {
@@ -85,6 +89,9 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
 
         btnReset = findViewById(R.id.btn_reset);
         btnReset.setOnClickListener(this);
+
+        btnFilterShip = findViewById(R.id.btn_filter_free_shipping);
+        btnFilterShip.setOnClickListener(this);
 
         btnOk = findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(this);
@@ -132,6 +139,7 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
 
         giftEnable = false;
         discountEnable = false;
+        disFreeShipping = false;
         setActivityButton(btnFilterGift, false);
         setActivityButton(btnFilterDiscount, false);
 
@@ -212,6 +220,9 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
         } else if (id == R.id.btn_filter_discount) {
             setActivityButton(btnFilterDiscount, !discountEnable);
             discountEnable = !discountEnable;
+        } else if (id==R.id.btn_filter_free_shipping) {
+            setActivityButton(btnFilterShip,!disFreeShipping);
+            disFreeShipping = !disFreeShipping;
         } else if (id == R.id.btn_reset) {
             reset();
         } else if (id == R.id.btn_ok) {
@@ -255,17 +266,19 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
                 }
 
 
-
                 if (giftEnable) {
                     params.set("gift", 1);
                 }
                 if (discountEnable) {
                     params.set("promotion", 1);
                 }
+                if (disFreeShipping) {
+                    params.set("express", 1);
+                }
                 if (categoryId != -1) {
                     params.set("cat", categoryId);
                 }
-            } catch (EasyJSONException e) {
+            } catch (Exception e) {
 
             }
             SLog.info("params[%s]", params.toString());

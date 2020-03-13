@@ -7,7 +7,7 @@ public class StoreOfflinePayment {
     private int id;
 
     /**
-     * 店鋪ID
+     * 商店ID
      */
     private int storeId;
 

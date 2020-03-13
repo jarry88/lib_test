@@ -12,12 +12,12 @@ public class StoreSocialAccount {
     private int socialId;
 
     /**
-     * 店鋪id
+     * 商店id
      */
     private int storeId;
 
     /**
-     * 店鋪社交賬號
+     * 商店社交賬號
      */
     private String account;
 

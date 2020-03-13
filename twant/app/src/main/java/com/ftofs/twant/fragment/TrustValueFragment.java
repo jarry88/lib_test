@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,14 +92,14 @@ public class TrustValueFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -128,7 +130,7 @@ public class TrustValueFragment extends BaseFragment implements View.OnClickList
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -150,19 +152,19 @@ public class TrustValueFragment extends BaseFragment implements View.OnClickList
 
                     tvFragmentTitle.setText(fragmentTitle);
 
-                    EasyJSONArray logList = responseObj.getArray("datas.logList");
+                    EasyJSONArray logList = responseObj.getSafeArray("datas.logList");
                     for (Object object : logList) {
                         EasyJSONObject log = (EasyJSONObject) object;
 
                         trustValueItemList.add(new TrustValueItem(
-                                log.getString("description"),
-                                log.getString("operationStageText"),
+                                log.getSafeString("description"),
+                                log.getSafeString("operationStageText"),
                                 log.getInt("points"),
-                                log.getString("addTime")));
+                                log.getSafeString("addTime")));
                     }
                     adapter.setNewData(trustValueItemList);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

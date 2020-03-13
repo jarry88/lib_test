@@ -29,7 +29,7 @@ public class GoodsRecommond implements Serializable,Cloneable {
     private int commonId = 0;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName = "";
 
@@ -39,7 +39,7 @@ public class GoodsRecommond implements Serializable,Cloneable {
     private String goodsImageName = "";
 
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int goodsCategoryId = 0;
 

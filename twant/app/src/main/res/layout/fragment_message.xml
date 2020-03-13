@@ -18,8 +18,8 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
-            android:layout_alignParentLeft="true"
+            android:layout_marginStart="7dp"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             android:visibility="gone"
@@ -28,11 +28,22 @@
             android:id="@+id/btn_contact"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
-            android:layout_alignParentLeft="true"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_contact"
             />
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_switch_customer"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="43.5dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_switch_cs_chat"
+            android:visibility="gone"
+            />
+
+
 
         <TextView
             android:id="@+id/tv_fragment_title"
@@ -51,8 +62,9 @@
             android:layout_marginRight="7dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            app:icon_src="@drawable/icon_shop_menu">
-
+            app:icon_width="15dp"
+            app:icon_height="15dp"
+            app:icon_src="@drawable/icon_circle_add">
         </com.ftofs.twant.widget.ScaledButton>
 
         <com.ftofs.twant.widget.ScaledButton
@@ -63,10 +75,7 @@
             android:layout_toLeftOf="@id/btn_message_menu"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_shop_search">
-
         </com.ftofs.twant.widget.ScaledButton>
-
-
     </RelativeLayout>
     <!-- END OF 工具欄 -->
 
@@ -74,7 +83,8 @@
         android:layout_width="match_parent"
         android:layout_height="107dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:id="@+id/ll_amount_container">
         <LinearLayout
             android:id="@+id/btn_transact_message"
             android:layout_width="0dp"
@@ -97,15 +107,15 @@
                     android:id="@+id/tv_transact_message_item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/icon_message_category_transact"
-                    android:layout_marginLeft="-15dp"
+                    android:layout_toEndOf="@id/icon_message_category_transact"
+                    android:layout_marginStart="-15dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:background="@drawable/red_bubble_bg"
                     android:gravity="center"
-                    android:text="188"
+                    android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"
+                    android:textSize="6sp"
                     />
             </RelativeLayout>
 
@@ -141,15 +151,15 @@
                     android:id="@+id/tv_asset_message_item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/icon_message_category_asset"
-                    android:layout_marginLeft="-15dp"
+                    android:layout_toEndOf="@id/icon_message_category_asset"
+                    android:layout_marginStart="-15dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:background="@drawable/red_bubble_bg"
                     android:gravity="center"
-                    android:text="188"
+                    android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"
+                    android:textSize="6sp"
                     />
             </RelativeLayout>
             <TextView
@@ -184,15 +194,15 @@
                     android:id="@+id/tv_social_message_item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/icon_message_category_social"
-                    android:layout_marginLeft="-15dp"
+                    android:layout_toEndOf="@id/icon_message_category_social"
+                    android:layout_marginStart="-15dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:background="@drawable/red_bubble_bg"
                     android:gravity="center"
-                    android:text="188"
+                    android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"
+                    android:textSize="6sp"
                     />
             </RelativeLayout>
             <TextView
@@ -226,15 +236,15 @@
                     android:id="@+id/tv_bargain_message_item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/icon_message_category_bargain"
-                    android:layout_marginLeft="-15dp"
+                    android:layout_toEndOf="@id/icon_message_category_bargain"
+                    android:layout_marginStart="-15dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:background="@drawable/red_bubble_bg"
                     android:gravity="center"
-                    android:text="188"
+                    android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"
+                    android:textSize="6sp"
                     />
             </RelativeLayout>
 
@@ -269,15 +279,15 @@
                     android:id="@+id/tv_notice_message_item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/icon_message_category_notice"
-                    android:layout_marginLeft="-15dp"
+                    android:layout_toEndOf="@id/icon_message_category_notice"
+                    android:layout_marginStart="-15dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:background="@drawable/red_bubble_bg"
                     android:gravity="center"
-                    android:text="188"
+                    android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="10sp"
+                    android:textSize="6sp"
                     />
             </RelativeLayout>
 
@@ -294,6 +304,7 @@
 
     <!-- 分隔條 -->
     <View
+        android:id="@+id/vw_separator"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@color/tw_slight_grey"
@@ -303,7 +314,8 @@
     <LinearLayout
         android:id="@+id/ll_message_list_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:background="@color/tw_slight_grey">
         <com.ftofs.twant.widget.MaxHeightRecyclerView
@@ -313,4 +325,7 @@
             android:background="@android:color/white">
         </com.ftofs.twant.widget.MaxHeightRecyclerView>
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="45dp"/>
 </LinearLayout>

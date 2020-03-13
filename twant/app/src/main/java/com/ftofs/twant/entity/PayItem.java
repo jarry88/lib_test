@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * 訂單列表里面的支付Item
- * 里面包含一個或多個店鋪Item
+ * 里面包含一個或多個商店Item
  * @author zwm
  */
 public class PayItem implements MultiItemEntity {

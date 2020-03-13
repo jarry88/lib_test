@@ -3,25 +3,25 @@ package com.ftofs.twant.vo.store;
 import java.io.Serializable;
 
 /**
- * @Description: 點讚視圖對象
+ * @Description: 讚想視圖對象
  * @Auther: yangjian
  * @Date: 2018/12/21 14:18
  */
 public class StoreLikeVo implements Serializable {
     /**
-     * 點讚id
+     * 讚想id
      */
     private int id;
     /**
-     * 會員id
+     * 城友id
      */
     private int memberId;
     /**
-     * 店鋪id
+     * 商店id
      */
     private int storeId;
     /**
-     * 點讚狀態
+     * 讚想狀態
      */
     private int state;
     /**
@@ -29,7 +29,7 @@ public class StoreLikeVo implements Serializable {
      */
     private String createTime;
     /**
-     * 會員名
+     * 城友名
      */
     private String memberName;
     /**

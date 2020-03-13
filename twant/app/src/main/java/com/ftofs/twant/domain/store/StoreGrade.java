@@ -14,7 +14,7 @@ public class StoreGrade implements Serializable {
     private String name;
 
     /**
-     * 商品限制
+     * 產品限制
      */
     private int goodsLimit;
 
@@ -24,7 +24,7 @@ public class StoreGrade implements Serializable {
     private int albumLimit;
 
     /**
-     * 推荐商品限制
+     * 推荐產品限制
      */
     private int recommendLimit;
 

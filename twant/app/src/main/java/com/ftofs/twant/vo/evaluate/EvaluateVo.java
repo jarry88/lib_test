@@ -23,7 +23,7 @@ public class EvaluateVo {
      */
     private int ordersType;
     /**
-     * 订单商品编号
+     * 订单產品编号
      */
     private List<Integer> ordersGoodsIdList = new ArrayList<>();
     /**

@@ -4,10 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/toolbar_margin_left"
-    android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:layout_marginStart="@dimen/toolbar_margin_left"
+    android:layout_marginEnd="@dimen/toolbar_margin_right"
+    android:background="@drawable/border_type_d"
+    android:paddingBottom="5dp"
     android:layout_marginTop="15dp"
-    android:layout_marginBottom="15dp">
+    android:layout_marginBottom="10dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="會員登錄"
+            android:text="城友登錄"
             android:textColor="@color/tw_black"
             android:textSize="16sp"
             />
@@ -42,7 +44,7 @@
             android:layout_centerVertical="true"
             android:textSize="13sp"
             android:textColor="@color/tw_dark_grey"
-            android:text="會員登錄"
+            android:text="城友登錄"
             />
         <TextView
             android:id="@+id/tv_timestamp"

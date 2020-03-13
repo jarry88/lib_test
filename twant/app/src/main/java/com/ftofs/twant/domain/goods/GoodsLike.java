@@ -10,17 +10,17 @@ public class GoodsLike implements Serializable {
     private int goodsLikeId;
 
     /**
-     * 會員ID
+     * 城友ID
      */
     private int memberId;
 
     /**
-     * 商品SPU編號
+     * 產品SPU編號
      */
     private int commonId;
 
     /**
-     * 點讚狀態 1是0否
+     * 讚想狀態 1是0否
      */
     private int state;
 

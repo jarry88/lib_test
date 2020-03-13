@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class BuyStoreVo {
     /**
-     * 店铺下商品列表集合
+     * 店铺下產品列表集合
      */
     private List<BuyGoodsItemVo> buyGoodsItemVoList = new ArrayList<>();
     /**
@@ -53,15 +53,15 @@ public class BuyStoreVo {
      */
     private List<VoucherVo> voucherVoList = new ArrayList<>();
     /**
-     * 店铺商品总价[不含运费、促销],在Vo内自动计算
+     * 店铺產品总价[不含运费、促销],在Vo内自动计算
      */
     private BigDecimal buyItemAmount = new BigDecimal(0);
     /**
-     * 店铺商品总价[不参加促销的被排除在外][不含运费、促销],在Vo内自动计算
+     * 店铺產品总价[不参加促销的被排除在外][不含运费、促销],在Vo内自动计算
      */
     private BigDecimal buyItemExcludejoinBigSaleAmount = new BigDecimal(0);
     /**
-     * 店铺商品减去满优惠后的总价[不参加促销的被排除在外][不含运费]
+     * 店铺產品减去满优惠后的总价[不参加促销的被排除在外][不含运费]
      */
     private BigDecimal buyStoreExcludejoinBigSaleAmount = new BigDecimal(0);
     /**
@@ -77,7 +77,7 @@ public class BuyStoreVo {
      */
     private List<CartBundlingVo> cartBundlingVoList = new ArrayList<>();
     /**
-     * 海外购商品税费
+     * 海外购產品税费
      */
     private BigDecimal foreignTaxAmount = BigDecimal.ZERO;
 

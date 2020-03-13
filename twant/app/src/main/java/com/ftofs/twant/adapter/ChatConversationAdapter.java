@@ -1,27 +1,27 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ChatConversation;
-import com.ftofs.twant.entity.MyLikeGoodsItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
-import com.hyphenate.chat.EMMessage;
 
 import java.util.List;
 
 /**
  * 會話列表Adapter
+ *
  * @author zwm
  */
 public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, BaseViewHolder> {
@@ -41,11 +41,22 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
 
     @Override
     protected void convert(BaseViewHolder helper, ChatConversation chatConversation) {
-        if (!StringUtil.isEmpty(chatConversation.friendInfo.avatarUrl)) {
-            ImageView imgAvatar = helper.getView(R.id.img_avatar);
+        ImageView imgAvatar = helper.getView(R.id.img_avatar);
+        String avatarUrl = chatConversation.friendInfo.avatarUrl;
+        if (StringUtil.isEmpty(avatarUrl)) {
+            if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
+                Glide.with(mContext).load(R.drawable.icon_twant_loge).centerCrop().into(imgAvatar);
+            } else {
+                Glide.with(mContext).load(R.drawable.icon_default_avatar).centerCrop().into(imgAvatar);
+            }
+        } else {
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(chatConversation.friendInfo.avatarUrl)).centerCrop().into(imgAvatar);
         }
 
+        if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM && !StringUtil.isEmpty(chatConversation.friendInfo.groupName)) {
+            helper.setGone(R.id.tv_group_name, true);
+            helper.setText(R.id.tv_group_name, chatConversation.friendInfo.groupName);
+        }
         helper.setText(R.id.tv_nickname, chatConversation.friendInfo.nickname);
         TextView tvLastMessage = helper.getView(R.id.tv_last_message);
         if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
@@ -56,6 +67,10 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_ORDERS);
         } else if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_TXT) {
             tvLastMessage.setText(StringUtil.getSpannableMessageText(mContext, chatConversation.lastMessage, (int) tvLastMessage.getTextSize()));
+        } else if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_ENC) {
+            tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_ENC);
+        } else {
+            tvLastMessage.setText("");
         }
 
 
@@ -79,12 +94,22 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         int position = helper.getAdapterPosition();
         if (position == itemCount - 1) {
             llMessageItemContainer.setBackground(null);
-        } else {
+        }
+        else if(position==0&&chatConversation.isPlatformCustomer){
+            //3797平台客服置頂新增淺灰底色
+            helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_light_grey));
+        }else {
             llMessageItemContainer.setBackgroundResource(R.drawable.border_type_d);
+        }
+        if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
+
         }
     }
 
     private String formatMessageTime(long timestampMillis) {
+        if (timestampMillis < 1) {
+            return "";
+        }
         Jarbon jarbon = new Jarbon(timestampMillis);
 
         int diffInDays = jarbon.diffInDays(now);

@@ -1,8 +1,8 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +69,7 @@ public class AddFriendVerifyFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_ok) {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
@@ -93,13 +93,13 @@ public class AddFriendVerifyFragment extends BaseFragment implements View.OnClic
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
                         ToastUtil.success(_mActivity, "發送成功");
-                        pop();
+                        hideSoftInputPop();
                     } catch (Exception e) {
 
                     }
@@ -111,7 +111,7 @@ public class AddFriendVerifyFragment extends BaseFragment implements View.OnClic
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

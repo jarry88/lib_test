@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 文章中的图集vo
+ * 想要帖中的图集vo
  * 
  * @author cj
  * Created 2017-9-29 下午 5:10
@@ -26,15 +26,15 @@ public class AdvertorialArticleItemAlbumVo {
      */
     private String imageName  ="";
     /**
-     * 商品commonId
+     * 產品commonId
      */
     private int commonId ;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName = "" ;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal price=new BigDecimal(0)  ;
     /**
@@ -50,7 +50,7 @@ public class AdvertorialArticleItemAlbumVo {
      */
     private String imageUrl ="";
     /**
-     * 推广商品id
+     * 推广產品id
      */
     private int distributorGoodsId;
 

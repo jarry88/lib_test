@@ -1,6 +1,6 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -25,7 +25,7 @@ public class MyLikeGoodsAdapter extends BaseQuickAdapter<MyLikeGoodsItem, BaseVi
         helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_goods_name, item.goodsName)
                 .setText(R.id.tv_jingle, item.jingle)
-                .setText(R.id.tv_price, StringUtil.formatPrice(mContext, item.price, 1))
+                .setText(R.id.tv_price, StringUtil.formatPrice(mContext, item.price, 1,false))
                 .setText(R.id.tv_like_count, String.valueOf(item.likeCount));
     }
 }

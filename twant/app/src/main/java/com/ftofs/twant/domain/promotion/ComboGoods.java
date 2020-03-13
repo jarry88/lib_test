@@ -7,12 +7,12 @@ public class ComboGoods {
 	private Integer id;
 
 	/**
-	 * 主商品SPU ID 
+	 * 主產品SPU ID
 	 */
 	private Integer commonId;
 
 	/**
-	 * 组合商品SPU ID
+	 * 组合產品SPU ID
 	 */
 	private Integer comboCommonId;
 
@@ -22,7 +22,7 @@ public class ComboGoods {
 	private Integer storeId;
 
 	/**
-	 * 组合商品分类名称
+	 * 组合產品分类名称
 	 */
 	private String comboClass;
 

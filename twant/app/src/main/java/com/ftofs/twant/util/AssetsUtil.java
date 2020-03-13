@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ftofs.twant.log.SLog;
 
@@ -44,8 +45,8 @@ public class AssetsUtil {
 
             SLog.info("file[%s], [%d], [%s]", outFile.getAbsolutePath(), outFile.length(), outFile.exists());
             return true;
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         return false;

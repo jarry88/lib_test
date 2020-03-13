@@ -12,7 +12,7 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 优惠套装商品购物车
+ * 优惠套装產品购物车
  *
  * @author hbj
  * Created 2017/4/13 14:44
@@ -23,7 +23,7 @@ public class BuyBundlingItemVo {
      */
     private int cartId;
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
     /**
@@ -31,7 +31,7 @@ public class BuyBundlingItemVo {
      */
     private int commonId;
     /**
-     * 商品名
+     * 產品名
      */
     private String goodsName;
     /**
@@ -43,7 +43,7 @@ public class BuyBundlingItemVo {
      */
     private BigDecimal goodsPrice;
     /**
-     * 商品图
+     * 產品图
      */
     private String imageName;
     /**
@@ -51,15 +51,15 @@ public class BuyBundlingItemVo {
      */
     private int buyNum;
     /**
-     * 商品小计[单价 * 数量]
+     * 產品小计[单价 * 数量]
      */
     private BigDecimal itemAmount;
     /**
-     * 商品库存
+     * 產品库存
      */
     private int goodsStorage;
     /**
-     * 商品状态
+     * 產品状态
      */
     private int goodsStatus;
     /**

@@ -17,7 +17,7 @@ public class MemberSuggest implements Serializable {
     private String suggestContent;
 
     /**
-     * 反饋會員名稱
+     * 反饋城友名稱
      */
     private String memberName;
 
@@ -32,7 +32,7 @@ public class MemberSuggest implements Serializable {
     private List<MemberSuggestImage> imageList = new ArrayList<>(3);
 
     /**
-     * 反饋回復
+     * 反饋回覆
      */
     private List<MemberSuggestReply> replyList = new ArrayList<>(2);
 

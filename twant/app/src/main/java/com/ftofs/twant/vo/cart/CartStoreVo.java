@@ -56,7 +56,7 @@ public class CartStoreVo implements Cloneable {
      */
     private int isOnline = 0;
     /**
-     * 购物车商品种类(sku)数量
+     * 购物车產品种类(sku)数量
      */
     private int buyNum;
     /**

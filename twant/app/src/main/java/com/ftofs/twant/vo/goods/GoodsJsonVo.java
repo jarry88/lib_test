@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品SKU，商品发布使用
+ * 產品SKU，產品发布使用
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:07

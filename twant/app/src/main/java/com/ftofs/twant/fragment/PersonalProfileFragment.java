@@ -1,8 +1,8 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,9 +15,11 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
+import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -36,11 +38,28 @@ import okhttp3.Call;
 public class PersonalProfileFragment extends BaseFragment implements View.OnClickListener {
     EditText etPersonalProfile;
     TextView tvWordCount;
+    boolean isUser;
+
+
+    public static PersonalProfileFragment newInstance() {
+        String profile = HawkUtil.getUserData(SPField.USER_DATA_KEY_BIO, "");
+        return newInstance(profile);
+    }
 
     public static PersonalProfileFragment newInstance(String profile) {
         Bundle args = new Bundle();
 
         args.putString("profile", profile);
+        PersonalProfileFragment fragment = new PersonalProfileFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static PersonalProfileFragment newInstance(String profile,String memberName) {
+        Bundle args = new Bundle();
+
+        args.putString("profile", profile);
+        args.putString("memberName",memberName);
         PersonalProfileFragment fragment = new PersonalProfileFragment();
         fragment.setArguments(args);
 
@@ -59,6 +78,7 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
         super.onViewCreated(view, savedInstanceState);
 
         Bundle args = getArguments();
+        isUser = !args.containsKey("memberName");
         String profile = args.getString("profile");
 
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -69,25 +89,32 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
         etPersonalProfile = view.findViewById(R.id.et_personal_profile);
         etPersonalProfile.setText(profile);
         // 字數計數
-        etPersonalProfile.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if(isUser){
+            etPersonalProfile.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            }
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                int len = s.length();
-                updateWordCount(len);
-            }
-        });
-        EditTextUtil.cursorSeekToEnd(etPersonalProfile);
-        showSoftInput(etPersonalProfile);
+                @Override
+                public void afterTextChanged(Editable s) {
+                    int len = s.length();
+                    updateWordCount(len);
+                }
+            });
+            EditTextUtil.cursorSeekToEnd(etPersonalProfile);
+            showSoftInput(etPersonalProfile);
+        }else {
+            view.findViewById(R.id.btn_ok).setVisibility(View.GONE);
+            etPersonalProfile.setFocusableInTouchMode(false);
+        }
+
+
     }
 
 
@@ -96,18 +123,17 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            hideSoftInput();
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_ok) {
-            savePersonalProfile();
+            if(isUser)
+                savePersonalProfile();
         }
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        hideSoftInput();
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -140,17 +166,16 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
                     ToastUtil.success(_mActivity, getString(R.string.text_personal_profile) + "保存成功");
-                    hideSoftInput();
+                    HawkUtil.setUserData(SPField.USER_DATA_KEY_BIO, profile);
 
-                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_REFRESH_DATA, null);
-                    pop();
+                    hideSoftInputPop();
                 } catch (Exception e) {
 
                 }
@@ -159,6 +184,6 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
     }
 
     private void updateWordCount(int wordCount) {
-        tvWordCount.setText(String.format("%d/200", wordCount));
+        tvWordCount.setText(String.format("%d/500", wordCount));
     }
 }

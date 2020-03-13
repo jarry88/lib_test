@@ -1,41 +1,27 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
-import com.ftofs.twant.adapter.StoreVoucherListAdapter;
-import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.SimpleTabManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONObject;
-import okhttp3.Call;
-
 
 /**
- * 店鋪券Fragment
+ * 商店券Fragment
  * @author zwm
  */
 public class CouponFragment extends BaseFragment implements View.OnClickListener {
@@ -70,7 +56,7 @@ public class CouponFragment extends BaseFragment implements View.OnClickListener
         ViewPager viewPager = view.findViewById(R.id.vp_coupon_list);
 
         titleList.add("平台券");
-        titleList.add("店鋪券");
+        titleList.add("商店券");
         SLog.info("here");
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
@@ -92,7 +78,7 @@ public class CouponFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_receive_store_coupon) {
             start(ReceiveCouponFragment.newInstance(couponType));
         }
@@ -102,7 +88,7 @@ public class CouponFragment extends BaseFragment implements View.OnClickListener
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

@@ -9,12 +9,12 @@ public class ArrivalNotice implements Serializable {
     private int arrivalId;
 
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 

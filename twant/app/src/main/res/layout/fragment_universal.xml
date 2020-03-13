@@ -19,7 +19,7 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />
@@ -40,19 +40,83 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:paddingLeft="@dimen/toolbar_margin_left"
-        android:paddingRight="@dimen/toolbar_margin_right"
+        android:paddingStart="@dimen/toolbar_margin_left"
+        android:paddingEnd="@dimen/toolbar_margin_right"
         android:background="@android:color/white"
         android:orientation="vertical">
         <RelativeLayout
             android:id="@+id/btn_personal_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/img_avatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="13.5dp"
+                android:layout_marginBottom="13.5dp"
+
+                android:layout_centerVertical="true"/>
+            <LinearLayout
+                android:baselineAligned="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/img_avatar"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical"
+                android:layout_centerVertical="true">
+                <TextView
+                    android:id="@+id/tv_member_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/personal_info_fragment_title"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"
+                    />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:text="@string/mobile_phone_number"
+                        android:textColor="@color/tw_dark_grey"
+                        android:textSize="14sp"
+                        />
+                    <TextView
+                        android:id="@+id/tv_member_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_dark_grey"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tw_light_grey"
+            />
+        <RelativeLayout
+            android:id="@+id/btn_my_e_name_card"
             android:layout_width="match_parent"
             android:layout_height="50dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/personal_info_fragment_title"
+                android:text="@string/text_my_e_name_card"
                 android:textColor="@color/tw_black"
                 android:textSize="16sp"
                 />
@@ -86,7 +150,33 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tw_light_grey"
+            />
+        <RelativeLayout
+            android:id="@+id/btn_notification_setting"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/new_notification_setting"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/expand_button_big"
                 />
@@ -116,6 +206,35 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/expand_button_big"
                 />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/btn_member_document"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/tw_light_grey"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/text_my_document"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+
         </RelativeLayout>
     </LinearLayout>
 
@@ -123,8 +242,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:paddingLeft="@dimen/toolbar_margin_left"
-        android:paddingRight="@dimen/toolbar_margin_right"
+        android:visibility="gone"
+        android:paddingStart="@dimen/toolbar_margin_left"
+        android:paddingEnd="@dimen/toolbar_margin_right"
         android:background="@android:color/white"
         android:orientation="vertical">
         <RelativeLayout
@@ -154,8 +274,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:paddingLeft="@dimen/toolbar_margin_left"
-        android:paddingRight="@dimen/toolbar_margin_right"
+        android:paddingStart="@dimen/toolbar_margin_left"
+        android:paddingEnd="@dimen/toolbar_margin_right"
         android:background="@android:color/white"
         android:orientation="vertical">
         <RelativeLayout
@@ -174,12 +294,21 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/expand_button_big"
                 />
         </RelativeLayout>
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/dp_10"
+        android:textColor="@color/text_blue"
+        android:text="當前環境："
+        android:id="@+id/text_build"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

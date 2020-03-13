@@ -3,29 +3,41 @@
 
     <string name="copyright">© %d 想要城Takewant 版權所有</string>
 
+    <string name="app_uri_scheme">takewantandroid</string>
+
     <string name="register_fragment_title">注冊賬號</string>
     <string name="login_fragment_title">登入</string>
     <string name="security_setting_fragment_title">安全設置</string>
+    <string name="new_notification_setting">新消息提醒</string>
+    <string name="_setting_fragment_title">安全設置</string>
     <string name="payment_password_fragment_title">設置支付密碼</string>
     <string name="modify_payment_password">修改支付密碼</string>
     <string name="payment_password_hint">請輸入6位數字</string>
-    <string name="payment_password_text">設置密碼</string>
-    <string name="confirm_payment_password_text">再次設置密碼</string>
     <string name="reset_password_fragment_title">重置密碼</string>
     <string name="reset_password_confirm_password_hint">請再次輸入密碼</string>
     <string name="input_pay_password_hint">請輸入付款密碼</string>
 
+    <string name="text_my_status">我的狀態</string>
+
     <string name="personal_info_fragment_title">個人信息</string>
+    <string name="mobile_phone_number">手機號</string>
     <string name="text_avatar">頭像</string>
     <string name="text_user_name">用戶名</string>
-    <string name="text_real_name">真實姓名</string>
     <string name="text_nickname">暱稱</string>
     <string name="text_gender">性別</string>
     <string name="text_birthday">出生日期</string>
+    <string name="text_age">年齡</string>
+    <string name="text_marriage">婚姻</string>
     <string name="text_location">所在地</string>
     <string name="text_advisory_service">咨詢客服</string>
     <string name="text_dial">撥打電話</string>
     <string name="text_not_set">未設置</string>
+    <string name="text_secret">保密</string>
+    <string name="text_single">未婚</string>
+    <string name="text_married">已婚</string>
+    <string name="text_marry_status">婚姻狀況</string>
+    <string name="text_divorce">離婚</string>
+    <string name="text_others_marry_status">其他</string>
     <string name="text_not_login">您未登錄</string>
 
     <string name="text_contact">通訊錄</string>
@@ -38,9 +50,50 @@
     <string name="text_scan_qr_code_add_friend">用想要掃描二維碼，加我為朋友吧～</string>
     <string name="text_member_signature">個性簽名</string>
 
+    <string name="text_my_e_name_card">我的名片</string>
     <string name="text_security_setting">安全設置</string>
     <string name="text_logistics_address_setting">收貨地址設置</string>
     <string name="text_about_takewant">關於想要城</string>
+    <string name="text_my_document">我的檔案</string>
+    <string name="text_basic_info">基礎信息</string>
+
+    <string name="text_size_assistant">尺碼助手</string>
+    <string name="text_height">身高(cm):</string>
+    <string name="text_weight">體重(kg):</string>
+    <string name="text_foot_size">腳底長(cm):</string>
+    <string name="text_breast_size">胸圍(cm):</string>
+    <string name="text_waistline">腰圍(cm):</string>
+    <string name="text_hip_line">臀圍(cm):</string>
+    <string name="text_eyes_radio">眼睛度數:</string>
+    <string name="text_left_eye">左眼:</string>
+    <string name="text_right_eye">右眼:</string>
+    <string name="text_size_assistant_desc">您的資料不會公開，僅用於產品的選購推薦</string>
+    <string name="text_education_experience">教育與工作</string>
+
+    <string name="text_my_resume">我的簡歷</string>
+    <string name="text_open_resume">您的簡歷當前為公開狀態</string>
+    <string name="text_init_resume">簡歷公開</string>
+    <string name="text_select_current_status">請選擇您的當前狀態</string>
+    <string name="text_work_time">工作時長:</string>
+    <string name="text_select_work_time">請選擇您的工作時長</string>
+    <string name="text_eduction">學歷</string>
+    <string name="text_select_education">請選擇您的學歷</string>
+
+    <string name="text_expect_position">期望職位:</string>
+    <string name="text_expect_position_title">期望職位</string>
+    <string name="text_input_expect_position">請輸入您的期望職位</string>
+    <string name="text_select_position_key_word">請選擇您的職位關鍵詞</string>
+    <string name="text_position_key_word">職位關鍵詞:</string>
+    <string name="text_position_category">職位類型:</string>
+    <string name="text_select_position_category">請選擇您的職位類型</string>
+    <string name="text_expect_salary">期望薪資</string>
+    <string name="text_position_info">職位介紹</string>
+    <string name="text_curr_status">當前狀態:</string>
+
+    <string name="text_work_experience">工作經歷</string>
+    <string name="text_work_experience_init">當前工作經歷為空</string>
+
+    
 
     <string name="text_takewant_introduction">想要城Takewant介紹</string>
     <string name="text_check_update">檢測更新</string>
@@ -51,11 +104,10 @@
     <string name="text_phone">電話</string>
     <string name="text_distance">距離</string>
     <string name="text_create_post">發表想要</string>
-    <string name="text_reply">回復</string>
-    <string name="text_comment_detail">評論詳情</string>
-    <string name="text_create_comment">發表評論</string>
+    <string name="text_reply">回覆</string>
+    <string name="text_comment_detail">說說詳情</string>
+    <string name="text_create_comment">發表說說</string>
     <string name="text_post_detail">想要詳情</string>
-    <string name="text_post">貼文</string>
 
     <string name="install_youtube_player_hint">請先安裝YouTube播放器</string>
 
@@ -70,11 +122,11 @@
 
     <string name="text_platform_coupon_card_pass">平台券卡密</string>
     <string name="input_platform_coupon_card_pass_hint">請輸入平台券卡密</string>
-    <string name="text_store_coupon_card_pass">店鋪券卡密</string>
-    <string name="input_store_coupon_card_pass_hint">請輸入店鋪券卡密</string>
+    <string name="text_store_coupon_card_pass">商店券卡密</string>
+    <string name="input_store_coupon_card_pass_hint">請輸入商店券卡密</string>
     <string name="text_captcha">驗證碼</string>
 
-    <string name="text_receive_store_coupon_hint">请输入已获得的店铺券卡密领取店铺券\n領取成功后可在购买商品时抵扣订单金额使用</string>
+    <string name="text_receive_store_coupon_hint">請輸入已獲得的商店券卡密領取商店券\n領取成功后可在購買產品時抵扣訂單金額使用</string>
 
     <string name="text_confidentiality">保密</string>
     <string name="text_male">男</string>
@@ -83,14 +135,13 @@
     <string name="trust_value_fragment_title">真實值明細(%d)</string>
     <string name="bonus_fragment_title">積分明細(%d)</string>
     <string name="footprint_fragment_title">瀏覽記憶</string>
-    <string name="text_goods_evaluation">商品評價</string>
-    <string name="input_goods_evaluation_hint">點擊輸入您對該商品的評論</string>
+    <string name="text_goods_evaluation">產品評價</string>
 
     <string name="text_order_no">訂單編號:</string>
-    <string name="text_time_create_order">生成訂單:</string>
-    <string name="text_time_pay_order">完成付款:</string>
+    <string name="text_time_create_order">下單時間:</string>
+    <string name="text_time_pay_order">支付時間:</string>
     <string name="text_pay_sn">支付單號:</string>
-    <string name="text_time_ship_order">完成發貨:</string>
+    <string name="text_time_ship_order">完成時間:</string>
     <string name="text_order_num">訂單編號</string>
 
     <string name="text_common_used_speech_setting">常用語設置</string>
@@ -98,7 +149,7 @@
 
     <!-- 訂單詳情的按鈕 -->
     <string name="text_cancel_order">取消訂單</string>
-    <string name="text_order_comment">訂單評論</string>
+    <string name="text_order_comment">訂單說說</string>
     <string name="text_refund_in_progress">退款中</string>
     <string name="text_have_received">確認收貨</string>
     <string name="text_buy_again">再次購買</string>
@@ -112,8 +163,6 @@
     <string name="input_receipt_header_hint">請輸入單據抬頭</string>
     <string name="text_receipt_content">單據內容</string>
     <string name="input_receipt_content_hint">請輸入單據內容</string>
-    <string name="text_taxpayer_id">納稅人識別號</string>
-    <string name="input_taxpayer_id_hint">請填寫納稅人識別號</string>
     <string name="text_does_not_need_receipt">不開單據</string>
     <string name="text_save_and_use">保存使用</string>
     <string name="order_detail_fragment_title">訂單詳情</string>
@@ -124,21 +173,21 @@
     <string name="text_receive_voucher">領券</string>
     <string name="text_promotion">促銷</string>
 
-    <string name="text_unavailable_store_coupon">不可用店鋪券</string>
+    <string name="text_unavailable_store_coupon">不可用商店券</string>
 
 
     <string name="mobile_zone_text">地區選擇</string>
     <string name="ok">確定</string>
     <string name="input_mobile_hint">請輸入手機號碼</string>
 
-    <string name="input_sms_code_hint">請輸入動態碼</string>
+    <string name="input_sms_code_hint">請輸入基因碼</string>
     <string name="input_captcha_hint">請輸入驗證碼</string>
 
     <string name="input_password_hint">請輸入6%s20位英文字母，符號或數字</string>
     <string name="input_password_confirm_hint">再次輸入想要設置的密碼</string>
     <string name="input_nickname_hint">請輸入您的暱稱</string>
     <string name="input_login_password_hint">請輸入密碼</string>
-    <string name="get_sms_code">獲取動態碼</string>
+    <string name="get_sms_code">獲取基因碼</string>
     <string name="text_sms_code_validate_hint">短信已發送至%s，請在%d分鐘內完成驗證</string>
     <string name="text_second">秒</string>
 
@@ -148,31 +197,37 @@
     <string name="weixin_not_installed_hint">使用本功能需要先安裝微信</string>
 
     <string name="login_way_password">密碼</string>
-    <string name="login_way_dynamic_code">動態碼</string>
+    <string name="login_way_dynamic_code">基因碼</string>
     <string name="input_personal_profile_hint">新增個人簡介，讓大家更了解你</string>
-    <string name="text_popularity">人氣</string>
-    <string name="text_article">文章</string>
+    <string name="member_signature">我還在認真思考我的個性簽名</string>
+    <string name="text_popularity">人緣</string>
+    <string name="text_article">想要帖</string>
     <string name="text_mall">商城</string>
     <string name="text_friend">好友</string>
     <string name="text_interactive">互動</string>
     <string name="text_recruitment">招聘</string>
+    <string name="text_want_job">事業</string>
     <string name="text_personal_profile">個人簡介</string>
     <string name="text_my_page">個人專頁</string>
+    <!--求職專頁-->
+    <string name="text_edit_resume">編輯簡歷</string>
+    <string name="text_my_application">我的投遞</string>
+    <string name="text_contact_me">與我溝通</string>
+    <!--好友專頁-->
+    <string name="text_about">關於</string>
+    <string name="text_want_chat">想聊</string>
+    <string name="text_follow_him_square">關注他的</string>
 
-    <string name="category_shop">店鋪</string>
-    <string name="category_commodity">商品</string>
-    <string name="category_brand">品牌</string>
-    <string name="text_store_announcement">店鋪公告</string>
+    <string name="category_shop">商店</string>
+    <string name="category_commodity">產品</string>
+    <string name="category_brand">想要貼</string>
+    <string name="text_store_announcement">商店公告</string>
     <string name="text_merchant_introduction">商家介紹</string>
 
     <string name="text_register">註冊</string>
     <string name="text_register_now">立即注冊</string>
     <string name="text_next_step">下一步</string>
     <string name="text_ok">確認</string>
-
-    <string name="slogan_real">真實Real</string>
-    <string name="slogan_social">社交Social</string>
-    <string name="slogan_best">優選Best</string>
 
     <string name="text_forget_password">忘記密碼？</string>
     <string name="text_universal">通用</string>
@@ -184,133 +239,106 @@
     <string name="bottom_bar_title_cart">購物袋</string>
     <string name="bottom_bar_title_my">我的</string>
 
-    <!-- 店鋪的底部工具欄 -->
+    <!-- 商店的底部工具欄 -->
     <string name="shop_bottom_bar_title_home">首頁</string>
-    <string name="shop_bottom_bar_title_commodity">商品</string>
+    <string name="shop_bottom_bar_title_commodity">產品</string>
     <string name="shop_bottom_bar_title_category">分類</string>
     <string name="shop_bottom_bar_title_activity">活動</string>
     <string name="shop_bottom_bar_title_customer_service">客服</string>
 
+    <string name="store_sale_after">售後</string>
+    <string name="store_sale_before">售前</string>
+
     <string name="my_bill">我的訂單</string>
-    <string name="my_bill_to_be_paid">待付款</string>
-    <string name="my_bill_to_be_sent">待發貨</string>
-    <string name="my_bill_to_be_received">待收貨</string>
-    <string name="my_bill_to_be_commented">待評價</string>
     <string name="my_bill_return_or_exchange">退換/售後</string>
+    <string name="text_exchange">兌換</string>
 
-    <string name="my_coupon">我的優惠券</string>
-    <string name="my_follow">我的關注</string>
-    <string name="my_footprint">瀏覽記憶</string>
-    <string name="my_address">我的收貨地址</string>
-    <string name="my_bonus">我的積分</string>
-    <string name="my_trust_value">我的真實值</string>
+    <string name="text_takewant_circle">想要圈</string>
 
-    <string name="setting_personal_info">個人資料</string>
-    <string name="setting_personal_info_hint">設置個人詳細資料</string>
     <string name="setting_login_password">登入密碼</string>
-    <string name="setting_login_password_hint">可通過手機動態碼修改登入密碼</string>
+    <string name="setting_login_password_hint">可通過手機基因碼修改登入密碼</string>
     <string name="setting_change_mobile">手機修改</string>
     <string name="setting_change_mobile_hint">若您的手機已丟失或停用，請立即修改更換</string>
     <string name="setting_payment_password">支付密碼</string>
-    <string name="setting_payment_password_hint">通過手機動態碼可在此設置支付密碼</string>
-    <string name="setting_realname_authentication">實名認證</string>
-    <string name="setting_realname_authentication_hint">您認證的實名信息</string>
+    <string name="setting_payment_password_hint">通過手機基因碼可在此設置支付密碼</string>
 
     <string name="input_custom_package_type_hint">請補充其他物品名稱</string>
     <string name="input_common_used_speech_hint">請輸入常用語</string>
     <string name="input_common_used_template_title_hint">請輸入標題</string>
     <string name="input_common_used_template_content_hint">請輸入固定版式內容</string>
 
-    <string name="text_new_arrivals_chinese">最&#8197;新&#8197;想&#8197;要&#8197;店</string>
-    <string name="text_new_arrivals_english">N E W  A R R I V A L S</string>
-
     <string name="text_new_in_chinese">最 新 產 品</string>
-    <string name="text_new_in_english">N E W   I N</string>
     <string name="text_store_hot_item_chinese">熱 賣 產 品</string>
-    <string name="text_store_hot_item_english">H O T   S A L E</string>
-
-    <string name="text_features_goods_chinese">鎮 店 之 寶</string>
-    <string name="text_features_goods_english">U n i q u e   P r o d u c t</string>
 
     <string name="text_platform_coupon">平台券</string>
     <string name="text_voucher">優惠券</string>
     <string name="text_conform">滿減優惠</string>
-    <string name="text_conform_short">滿優惠</string>
     <string name="text_time_limited_discount">限時折扣</string>
 
     <string name="text_conform_desc_template">單筆訂單滿$%d可享受以下優惠</string>
     <string name="text_free_freight">包郵</string>
-    <string name="text_free_freight_desc">訂單免郵費</string>
     <string name="text_instant_discount">立減</string>
     <string name="text_instant_discount_desc">滿%d元，減%d元</string>
     <string name="text_present_voucher">送券</string>
-    <string name="text_present_voucher_desc">滿%d元，送%d元店鋪券</string>
+    <string name="text_present_voucher_desc">滿%d元，送%d元商店券</string>
 
     <string name="text_pay_success">訂單支付成功</string>
     <string name="text_view_order">查看訂單</string>
     <string name="text_goto_home">返回首頁</string>
-    <string name="text_continue_shopping">繼續逛逛</string>
-    <string name="text_pay_type">支付類型</string>
     <string name="text_want_pay_wallet">想付錢包</string>
-    <string name="text_balance">余額</string>
-    <string name="text_balance_not_enough">余額不足</string>
-    <string name="text_account_balance">賬戶餘額</string>
 
     <string name="text_receive_now">立即領取</string>
-    <string name="text_use_now">立即使用</string>
     <string name="text_been_received">已領取</string>
     <string name="text_valid_time">有效期</string>
     <string name="text_participate_activity">參與活動</string>
-    <string name="text_conform_title_template">訂單滿%d減%d</string>
-    <string name="text_conform_content_template">當您在本店單筆訂單消費滿%d可享受立減$%d現金</string>
-    <string name="text_discount_title_template">優品%s折,共%d件商品</string>
+    <string name="text_conform_content_template">單筆訂單消費滿 $%d 可享受 立減 $%d 現金</string>
+    <string name="text_discount_title_template">優品%s折,共%d件產品</string>
 
-    <string name="text_order_list_sku_count_template">共 %d 件商品</string>
+    <string name="text_order_list_sku_count_template">共 %d 件產品</string>
 
-    <string name="text_like">點讚</string>
     <string name="text_follow">關注</string>
     <string name="text_main_business">主營</string>
     <string name="text_add_friend_simplify">加好友</string>
     <string name="text_chat_with_him">與他聊天</string>
     <string name="text_user_not_login">用戶未登錄</string>
+    <string name="text_homepage">主頁</string>
 
-    <string name="text_store">店鋪</string>
-    <string name="text_goods">商品</string>
+    <string name="text_store">商店</string>
+    <string name="text_goods">產品</string>
     <string name="text_cart">購物袋</string>
     <string name="text_edit">編輯</string>
-    <string name="text_search">搜索</string>
     <string name="text_quantity">數量</string>
     <string name="text_finish">完成</string>
     <string name="text_delete">刪除</string>
     <string name="text_order">訂單</string>
+    <string name="text_enc">名片</string>
     <string name="text_image">圖片</string>
     <string name="text_take_photo">拍攝</string>
     <string name="text_common_used_speech">常用語</string>
     <string name="text_common_used_template">常用版式</string>
-    <string name="text_locate">定位</string>
 
     <string name="text_loading">正在加載</string>
     <string name="text_committing">正在提交</string>
-    <string name="text_visit_my_home">訪問專頁</string>
 
     <string name="text_history_search">歷史搜索</string>
     <string name="text_hot_search">熱門搜索</string>
-    <string name="text_follow_me">粉絲</string>
+    <string name="text_follow_me">想粉</string>
 
     <string name="text_store_open_day_prefix">開業時長</string>
-    <string name="text_store_friend">居民</string>
+    <string name="text_store_friend">城友</string>
+    <string name="text_customer">客服</string>
+    <string name="text_boss">店主</string>
     <string name="text_share">分享</string>
     <string name="text_map">地圖</string>
-    <string name="text_shop_comment">店鋪評論</string>
+    <string name="text_shop_comment">說說</string>
     <string name="text_view_all">查看全部</string>
-    <string name="text_delete_friend">刪除好友</string>
 
     <string name="text_wx_chat">微信好友</string>
     <string name="text_wx_timeline">微信朋友圈</string>
     <string name="text_url">鏈接</string>
 
-    <string name="text_search_goods">搜索商品</string>
-    <string name="text_all_goods">全部商品</string>
+    <string name="text_search_goods">搜索產品</string>
+    <string name="text_all_goods">全部產品</string>
 
     <string name="text_want_to_buy">想要購買</string>
     <string name="text_want_to_add_to_cart">放購物袋</string>
@@ -321,16 +349,16 @@
     <string name="text_followed">已關注</string>
     <string name="text_spec">規格</string>
     <string name="text_send_to">送至</string>
-    <string name="text_comment">評論</string>
+    <string name="text_comment">說說</string>
     <string name="text_select_spec_hint">選擇顏色分類</string>
-    <string name="text_goods_detail">商品詳情</string>
+    <string name="text_goods_detail">產品詳情</string>
     <string name="text_select_all">全選</string>
     <string name="text_settlement">結算</string>
     <string name="text_receiver">收貨人</string>
     <string name="text_monthly_sale">月銷量</string>
     <string name="text_monthly_sale_unit">筆</string>
-    <string name="text_fans">粉絲</string>
-    <string name="text_comment_list">評論列表</string>
+    <string name="text_fans">想粉</string>
+    <string name="text_comment_list">說說列表</string>
     <string name="text_publish">發表</string>
     <string name="text_send">發送</string>
 
@@ -338,26 +366,23 @@
     <string name="text_add_shipping_address">新增收貨地址</string>
     <string name="text_leave_message">留言</string>
     <string name="text_leave_message_hint">給商家留言，100字以內（選填）</string>
-    <string name="text_receipt">單據</string>
     <string name="text_receipt_info">單據信息</string>
     <string name="text_coupon">優惠券</string>
-    <string name="text_shipping_time">配送時間</string>
+    <string name="text_shipping_time">發貨時間</string>
     <string name="text_pay_way">支付方式</string>
-    <string name="text_goods_price">商品金額</string>
+    <string name="text_transact_way">交易方式</string>
     <string name="text_freight">運費</string>
-    <string name="text_store_freight">店鋪運費</string>
-    <string name="text_goods_freight">商品運費</string>
-    <string name="text_store_discount">店鋪優惠</string>
-    <string name="text_mall_discount">商城優惠</string>
+    <string name="text_store_freight">商店運費</string>
+    <string name="text_store_discount">商店優惠</string>
     <string name="text_commit_bill">提交訂單</string>
-    <string name="text_order_amount">訂單金額</string>
+    <string name="text_order_amount">應付金額</string>
+    <string name="text_goods_amount">產品總額</string>
     <string name="text_order_total_amount">訂單總額</string>
     <string name="text_commit">提交</string>
-    <string name="text_commit_comment">提交評論</string>
     <string name="text_title">標題</string>
     <string name="input_hint">請輸入</string>
     <string name="text_keyword">關鍵字</string>
-    <string name="text_article_category">文章分類</string>
+    <string name="text_article_category">想要帖分類</string>
     <string name="text_deadline">選擇日期</string>
     <string name="text_budget_price">預算價格</string>
     <string name="text_cover_image">封面圖</string>
@@ -365,25 +390,20 @@
     <string name="input_budget_price_hint">請輸入預算價格</string>
     <string name="text_dead_line">截止</string>
     <string name="text_budget">預算</string>
-    <string name="text_category">分類</string>
     <string name="no_store_friend_hint">暫時沒有進店好友</string>
 
-    <string name="text_store_service_staff">店鋪服務人員</string>
-    <string name="text_comment_content_can_not_be_empty">評論內容不能為空</string>
+    <string name="text_comment_content_can_not_be_empty">發表說說的內容不能為空</string>
 
 
     <string name="currency_type_macao">葡幣</string>
-    <string name="currency_type_hongkong">港幣</string>
-    <string name="currency_type_rmb">人民幣</string>
     <string name="text_send_invitation">發出邀請</string>
     <string name="text_all_order">全部訂單</string>
 
     <!--支付-->
-    <string name="text_pay_online">在線支付</string>
+    <string name="text_pay_online">物流配送</string>
     <string name="text_pay_delivery">貨到付款</string>
-    <string name="text_pay_fetch">門店自提</string>
+    <string name="text_pay_fetch">到店自提</string>
     <string name="text_pay_result_success">訂單支付成功</string>
-    <string name="text_pay_result_fail">訂單支付失敗</string>
     <string name="self_take_hint">*門店自提不需要收貨地址，請輸入手機號確保及時獲得兌換碼</string>
     <string name="self_taker">自提人</string>
     <string name="input_self_take_nickname_hint">請填寫自提人姓名</string>
@@ -396,8 +416,6 @@
     <string name="text_return_tab">退貨</string>
     <string name="text_complain_tab">投訴</string>
     <string name="text_refund_list">退款列表</string>
-    <string name="text_return_list">售後服務</string>
-    <string name="text_complain_list">投訴列表</string>
     <string name="text_view_complaint">查看投訴</string>
     <string name="select_refund_reason_hint">请选择退款原因</string>
     <string name="input_refund_amount_hint">请输入退款金额</string>
@@ -423,9 +441,9 @@
     <string name="text_logistics_order_no">物流單號</string>
     <string name="text_merchant">商家</string>
 
-    <string name="text_goods_refund">商品退款</string>
-    <string name="text_goods_return">商品退貨</string>
-    <string name="text_goods_complain">商品投訴</string>
+    <string name="text_goods_refund">產品退款</string>
+    <string name="text_goods_return">產品退貨</string>
+    <string name="text_goods_complain">產品投訴</string>
     <string name="text_refund_reason">退款原因</string>
     <string name="text_refund_amount">退款金額</string>
     <string name="text_most_refund_amount">最多可退金額</string>
@@ -442,7 +460,7 @@
     <string name="text_cancel_complain">取消投訴</string>
 
 
-    <string name="text_goods_info">商品信息</string>
+    <string name="text_goods_info">產品信息</string>
     <string name="text_refund_application">退款申請</string>
     <string name="text_refund_status">退款狀態</string>
     <string name="text_return_no">退貨編號</string>
@@ -522,13 +540,12 @@
     <string name="express_query_fragment_title">快遞信息查詢</string>
     <string name="input_express_no_hint">請輸入快遞單號</string>
 
-    <string name="text_my_article">我的文章</string>
-
+    <string name="text_my_article">我的想要帖</string>
+    <string name="text_him_article">他的想要帖</string>
 
     <!--社交-->
     <string name="facebook_app_id">339526026920454</string>
     <string name="fb_login_protocol_scheme">fb339526026920454</string>
-    <string name="facebook_app_secret">68ef5623b8b1201eeef728307d72674e</string>
 
     <string name="umeng_app_key">5cee21bd4ca357016b00068d</string>
     <string name="weixin_app_id">wx84188f248249aa37</string>
@@ -537,11 +554,14 @@
     <!--高德-->
     <string name="amap_key">1486f43a90e9fc41b0d555a355aeaaa6</string>
 
+    <!-- 騰訊地圖 -->
+    <string name="tencent_map_key">GKBBZ-3ENKW-64SRC-RW6JP-QLFR6-MOBXG</string>
+
     <!-- 友盟推送 -->
     <string name="umeng_push_app_key">5cefabce0cafb289ab0000a2</string>
     <string name="umeng_push_message_secret">ac61bf046b5cd3a62387ae4c3687e70a</string>
 
-    <string name="text_goods_bill">商品訂單</string>
+    <string name="text_goods_bill">產品訂單</string>
     <string name="text_bill_all">全部</string>
     <string name="text_bill_to_be_paid">待付款</string>
     <string name="text_bill_to_be_shipped">待發貨</string>
@@ -549,16 +569,12 @@
     <string name="text_bill_to_be_commented">待評價</string>
 
     <string name="text_my_logistics">我的快遞</string>
-    <string name="text_store_coupon">店鋪券</string>
-    <string name="text_footprint">足跡</string>
-    <string name="text_address">地址</string>
+    <string name="text_store_coupon">商店券</string>
+    <string name="text_footprint">瀏覽記憶</string>
     <string name="text_bonus">積分</string>
     <string name="text_trust_value">真實值</string>
+    <string name="text_my_coupon">我的卡券</string>
 
-    <string name="text_my_store_coupon">我的店鋪券</string>
-    <string name="text_receive_store_coupon">領取店鋪券</string>
-
-    <string name="text_address_management">地址管理</string>
     <string name="text_shipping_address">收貨地址</string>
     <string name="text_add">添加</string>
     <string name="text_add_address">地址添加</string>
@@ -573,15 +589,14 @@
     <string name="hint_input_detail_address">請輸入詳細地址</string>
     <string name="text_default_address">默認地址</string>
     <string name="text_select_big_area">區域選擇</string>
-    <string name="text_shipping_to">配送至</string>
     <string name="text_set_as_default">設為默認</string>
 
     <string name="text_accept">接受</string>
     <string name="text_added">已添加</string>
-    <string name="text_search_store_goods">搜索店鋪商品</string>
+    <string name="text_search_store_goods">搜索商店產品</string>
 
     <string name="text_filter">篩選</string>
-    <string name="text_goods_filter">商品篩選</string>
+    <string name="text_goods_filter">產品篩選</string>
     <string name="text_price_room">價格區間</string>
     <string name="text_lowest_price">最低價</string>
     <string name="text_highest_price">最高價</string>
@@ -595,44 +610,48 @@
 
     <string name="text_condition">條件</string>
     <string name="text_date">日期</string>
-    <string name="text_viewed_most">查看最多</string>
+    <string name="text_viewed_most">查看數量</string>
     <string name="text_focused_most">最受關注</string>
-    <string name="text_thumbed_most">點讚最多</string>
-    <string name="text_commented_most">評論最多</string>
+    <string name="text_thumbed_most">讚想數量</string>
+    <string name="text_commented_most">說說數量</string>
 
-    <string name="no_post_hint">暫無符合條件的貼文數據！</string>
+    <string name="no_post_hint">暫無符合條件的想要帖數據！</string>
     <string name="no_data_hint">暫無符合條件的數據！</string>
-    <string name="no_store_activity_hint">店鋪沒有設置活動，逛逛別的吧</string>
+    <string name="no_store_activity_hint">商店沒有設置活動，逛逛別的吧</string>
     <string name="no_order_hint">還沒有相關訂單哦~</string>
 
 
-    <string name="text_member">會員</string>
-    <string name="text_my_like">我的點讚</string>
-    <string name="text_my_like_desc">我點讚過的歷史紀錄</string>
-    <string name="text_my_comment">我的評論</string>
-    <string name="text_my_comment_desc">我評論過的歷史紀錄</string>
+    <string name="text_member">城友</string>
+    <string name="text_my_like">我的讚想</string>
+    <string name="text_like_me">獲得讚想</string>
+    <string name="text_my_like_desc">我讚想過的歷史紀錄</string>
+    <string name="text_my_comment">我的說說</string>
+    <string name="text_comment_me">收到的說說</string>
+    <string name="text_my_comment_desc">我發表說說的歷史紀錄</string>
     <string name="text_my_follow">我的關注</string>
+    <string name="text_my_fans">我的想粉</string>
     <string name="text_my_follow_desc">我關注過的相關信息</string>
     <string name="text_my_friend">我的好友</string>
+    <string name="text_him_like">他的讚想</string>
+    <string name="text_him_like_desc">他讚想過的歷史紀錄</string>
+    <string name="text_him_comment">他的說說</string>
+    <string name="text_him_comment_desc">他發表說說的歷史紀錄</string>
+    <string name="text_him_follow">他的關注</string>
+    <string name="text_his_fans">他的想粉</string>
+    <string name="text_him_friend">他的好友</string>
+    <string name="text_delete_follow">取消關注</string>
 
     <string name="text_buy_limit">限購</string>
 
     <string name="text_conform_simplify">滿優惠</string>
-    <string name="text_store_customer_service">店鋪客服</string>
+    <string name="text_store_customer_service">商店客服</string>
 
-    <string name="search_tab_title_goods">商品</string>
-    <string name="search_tab_title_store">商店</string>
-    <string name="search_tab_title_article">文章</string>
+    <string name="search_tab_title_goods">產品</string>
 
     <string name="goods_tab_title_general">綜合</string>
     <string name="goods_tab_title_sale">銷量</string>
     <string name="goods_tab_title_new">上新</string>
     <string name="goods_tab_title_price">價格</string>
-
-    <string name="store_tab_title_general">綜合</string>
-    <string name="store_tab_title_sale">銷量</string>
-    <string name="store_tab_title_store_open">開店時長</string>
-    <string name="store_tab_title_follow">關注量</string>
 
     <string name="btn_logout_text">離開城市</string>
     <string name="btn_commit_text">確認提交</string>
@@ -655,22 +674,18 @@
     <string name="text_logistics_state_desc_finished">已完成</string>
 
     <string name="input_search_friend_hint">昵稱/用戶號</string>
-    <string name="text_taifung_pay">大豐銀行電子支付</string>
-    <string name="text_weixin_pay">微信支付</string>
-    <string name="text_ali_pay">支付寶</string>
 
     <string name="text_store_friends_count_template">—· 當前店內%d名遊客 ·—</string>
-    <string name="input_order_search_hint">請輸入商品標題或訂單號進行搜索</string>
+    <string name="input_order_search_hint">請輸入產品標題或訂單號進行搜索</string>
     <string name="input_post_comment_hint">想要說點什麼...</string>
 
     <string name="text_view_count">瀏覽%d次</string>
-    <string name="text_view_reply_count">查看%d條回復</string>
-    <string name="text_view_comment_count">查看%d條評論</string>
+    <string name="text_view_reply_count">查看%d條回覆</string>
+    <string name="text_view_comment_count">查看%d條說說</string>
     <string name="text_publish_post">發表想要...</string>
     <string name="text_publish_new">發表</string>
     <string name="text_guess_your_like">猜你喜歡</string>
-    <string name="text_store_wanted">店鋪招聘</string>
-    <string name="text_wanted_job">招聘崗位</string>
+    <string name="text_store_wanted">商店招聘</string>
     <string name="text_job_desc">職位描述</string>
     <string name="text_mail_box">郵箱</string>
     <string name="text_in_store_person_list">進店人員列表</string>
@@ -678,12 +693,15 @@
     <string name="text_seller_phone_not_set">商家未設置電話</string>
     <string name="text_upload_file_too_large">上傳文件太大</string>
     <string name="text_arrival_notice">到貨通知</string>
-    <string name="arrival_notice_hint">若商品在30日內到貨，我們會通過短信通知您</string>
+    <string name="arrival_notice_hint">若產品在30日內到貨，我們會通過短信通知您</string>
 
     <string name="data_load_end_hint">已經全部加載完畢</string>
 
     <string name="select_pay_vendor">選擇支付</string>
 
+    <string name="text_bind_mobile">綁定手機號</string>
+
+    <string name="text_latest_version_message">您的App已經是最新版本</string>
 
     <!-- 貨幣種類標志 -->
     <string name="currency_type_sign">$</string>
@@ -691,4 +709,45 @@
     <string name="times_sign">X</string>
 
     <string name="text_confirm_order_total_item_count">共%d件, 合計:</string>
+    <string name="text_eduction_experience">教育經歷</string>
+    <string name="text_education_experience_init">當前教育經歷為空</string>
+    <string name="text_certificate">資格證書</string>
+    <string name="text_certificate_init">當前資格證書為空</string>
+    <string name="text_honor_init">當前獲獎經歷為空</string>
+    <string name="text_honor_experience">獲獎經歷</string>
+    <string name="text_skill_good">擅長技能</string>
+    <string name="text_skill_good_init">當前擅長技能為空</string>
+    <string name="base_info_fragment_title">基礎信息</string>
+    <string name="hint_input_receiver_expect_position">請輸入期望職位</string>
+    <string name="text_add_email">添加郵箱</string>
+    <string name="text_email_init">请输入您的邮箱</string>
+    <string name="text_size_compare_table">尺碼對照表</string>
+    <string name="text_secret_info">當前信息不會公開，僅用於產品的選購推薦</string>
+    <string name="text_hot_push">熱門推薦</string>
+    <string name="text_hot_push_english">Hot recommended</string>
+    <string name="text_save_success">保存成功</string>
+    <string name="text_error_null">不能為空</string>
+    <string name="edit_skill_hint">請編輯你的擅長技能</string>
+    <string name="edit_winning_hint">請編輯你的獲獎經歷</string>
+    <string name="edit_certificaion_hint">請編輯你的資格證書</string>
+    <string name="text_delete_success">刪除成功</string>
+    <string name="text_author_info">作者介紹</string>
+    <string name="text_author_other_artical">作者相關想要帖</string>
+    <string name="text_free_shipping">包郵</string>
+    <string name="text_details">詳情</string>
+    <string name="text_platform_welfare">平台優惠</string>
+    <string name="text_store_welfare">商店優惠</string>
+    <string name="text_pay_type">支付方式</string>
+    <string name="text_store_send_info">商家發貨備註：</string>
+    <string name="text_unuseful">已失效</string>
+    <string name="text_platform_customer">平台客服</string>
+    <string name="text_switch_env">切換環境</string>
+    <string name="text_push">發表</string>
+    <string name="text_wechat">微信</string>
+
+    <string name="text_goods_take_off">該產品已下架或售完，可以看看店內其它產品</string>
+    <string name="text_goto_enc">查看名片</string>
+    <string name="text_goto_member_info">查看資料</string>
+    <string name="text_report">舉報</string>
+    <string name="text_short_want">想要</string>
 </resources>

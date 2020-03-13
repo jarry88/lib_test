@@ -2,10 +2,9 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -13,7 +12,7 @@ import com.ftofs.twant.R;
 
 
 /**
- * 商品展架平台的灰色桌面
+ * 產品展架平台的灰色桌面
  * @author zwm
  */
 public class StoreDesktop extends View {

@@ -1,16 +1,19 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -21,11 +24,9 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
-import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.cart.BaseStatus;
-import com.ftofs.twant.entity.cart.SkuStatus;
 import com.ftofs.twant.entity.cart.SpuStatus;
 import com.ftofs.twant.entity.cart.StoreStatus;
 import com.ftofs.twant.entity.cart.TotalStatus;
@@ -55,7 +56,6 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 
 /**
@@ -87,6 +87,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
      * 是否獨立的Fragment，還是依附于MainFragment
      */
     boolean isStandalone;
+
+    ScrollView svItemContainer;
+    int svItemContainerHeight = -1;
 
     public static CartFragment newInstance(boolean isStandalone) {
         Bundle args = new Bundle();
@@ -134,6 +137,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         btnSettlement.setOnClickListener(this);
         tvTotalPrice = view.findViewById(R.id.tv_total_price);
 
+        svItemContainer = view.findViewById(R.id.sv_item_container);
+
         llTotalOperationContainer = view.findViewById(R.id.ll_total_operation_container);
 
         btnBack = view.findViewById(R.id.btn_back);
@@ -164,6 +169,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         super.onSupportVisible();
         SLog.info("onSupportVisible");
 
+        if (svItemContainerHeight == -1) {
+            svItemContainerHeight = svItemContainer.getHeight();
+        }
+
+        int userId = User.getUserId();
+        if (userId < 1) { // 用戶未登錄，顯示登錄頁面
+            Util.showLoginFragment();
+            return;
+        }
+
         if (needReloadData) {
             reloadList();
             totalStatus.changeCheckStatus(false, BaseStatus.PHRASE_TARGET);
@@ -182,6 +197,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+
+
     }
 
     private void loadCartData() {
@@ -190,9 +207,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             return;
         }
 
-        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                .asLoading(getString(R.string.text_loading))
-                .show();
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
@@ -211,20 +226,21 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                 loadingPopup.dismiss();
 
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
                 try {
-                    String cartText = getResources().getString(R.string.text_cart);
+                    String cartText = _mActivity.getResources().getString(R.string.text_cart);
                     int cartItemCount = responseObj.getInt("datas.skuCount");
-                    cartText = String.format(cartText + "(%d)", cartItemCount);
+                    cartText = String.format(cartText + "(%d/50)", cartItemCount);
                     tvFragmentTitle.setText(cartText);
 
-                    EasyJSONArray cartStoreVoList = responseObj.getArray("datas.cartStoreVoList");
+                    EasyJSONArray cartStoreVoList = responseObj.getSafeArray("datas.cartStoreVoList");
 
+                    int storeCount = 0;
                     totalCartItemCount = 0;
                     cartStoreItemContainer.removeAllViews();
                     for (Object object : cartStoreVoList) { // store LOOP
@@ -239,7 +255,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                         setCheckButtonOnClickListener(btnCheckStore);
                         storeStatus.setRadio(btnCheckStore);
 
-                        // 點擊店鋪標題，跳轉到具體的店鋪
+                        // 點擊商店標題，跳轉到具體的商店
                         final int storeId = cartStoreVo.getInt("storeId");
                         cartStoreItem.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -247,71 +263,78 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 Util.startFragment(ShopMainFragment.newInstance(storeId));
                             }
                         });
-                        tvStoreName.setText(cartStoreVo.getString("storeName"));
+                        tvStoreName.setText(cartStoreVo.getSafeString("storeName"));
 
-                        EasyJSONArray cartSpuVoList = cartStoreVo.getArray("cartSpuVoList");
-                        LinearLayout cartSpuItemContainer = cartStoreItem.findViewById(R.id.ll_cart_spu_item_container);
+                        EasyJSONArray cartSpuVoList = cartStoreVo.getSafeArray("cartSpuVoList");
+                        int spuCount=0;
+                        spuCount++;
                         for (Object object2 : cartSpuVoList) { // spu LOOP
                             EasyJSONObject cartSpuVo = (EasyJSONObject) object2;
-                            SpuStatus spuStatus = new SpuStatus();
-                            spuStatus.parent = storeStatus;
-                            View cartSpuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_spu_item, null, false);
-
-                            TextView tvGoodsName = cartSpuItem.findViewById(R.id.tv_goods_name);
-                            ImageView goodsImage = cartSpuItem.findViewById(R.id.goods_image);
-                            ScaledButton btnCheckSpu = cartSpuItem.findViewById(R.id.btn_check_spu);
-                            btnCheckSpu.setTag(spuStatus);
-                            setCheckButtonOnClickListener(btnCheckSpu);
-                            spuStatus.setRadio(btnCheckSpu);
-
-                            // 點擊Spu，跳轉到對應的商品詳情頁面
-                            final int commonId = cartSpuVo.getInt("commonId");
-                            cartSpuItem.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                                }
-                            });
-
-
-                            tvGoodsName.setText(cartSpuVo.getString("goodsName"));
-                            Glide.with(CartFragment.this).load(cartSpuVo.getString("imageSrc")).centerCrop().into(goodsImage);
-
-                            EasyJSONArray cartItemVoList = cartSpuVo.getArray("cartItemVoList");
-                            LinearLayout cartSkuItemContainer = cartSpuItem.findViewById(R.id.ll_cart_sku_item_container);
+                            EasyJSONArray cartItemVoList = cartSpuVo.getSafeArray("cartItemVoList");
+                            int skuCount=0;
                             for (Object object3 : cartItemVoList) { // sku LOOP
-                                ++totalCartItemCount;
-                                SkuStatus skuStatus = new SkuStatus();
-                                skuStatus.parent = spuStatus;
+                                LinearLayout cartSpuItemContainer = cartStoreItem.findViewById(R.id.ll_cart_spu_item_container);
+                                SpuStatus spuStatus = new SpuStatus();
+                                spuStatus.parent = storeStatus;
+                                View cartSpuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_spu_item, null, false);
+                                SLog.info("spu%d spulenth%d,sku%d,skulenth%d",spuCount,cartSpuVoList.length(),skuCount,cartItemVoList.length());
+                                skuCount++;
+                                if (spuCount == cartSpuVoList.length()&&skuCount==cartItemVoList.length()) {
+                                    cartSpuItem.findViewById(R.id.line).setVisibility(View.GONE);
+                                }
+                                LinearLayout cartSkuItemContainer = cartSpuItem.findViewById(R.id.ll_cart_sku_item_container);
                                 View cartSkuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_sku_item, cartSkuItemContainer, false);
+
+                                ImageView goodsImage = cartSpuItem.findViewById(R.id.goods_image);
+                                ScaledButton btnCheckSpu = cartSpuItem.findViewById(R.id.btn_check_spu);
+
+                                btnCheckSpu.setTag(spuStatus);
+                                setCheckButtonOnClickListener(btnCheckSpu);
+                                spuStatus.setRadio(btnCheckSpu);
+
+                                // 點擊Spu，跳轉到對應的產品詳情頁面
+                                final int commonId = cartSpuVo.getInt("commonId");
+                                cartSpuItem.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                                    }
+                                });
+                                TextView tvGoodsName = cartSkuItem.findViewById(R.id.tv_goods_name);
+                                tvGoodsName.setText(cartSpuVo.getSafeString("goodsName"));
+                                Glide.with(CartFragment.this).load(cartSpuVo.getSafeString("imageSrc")).centerCrop().into(goodsImage);
+
+                                ++totalCartItemCount;
+//                                SkuStatus skuStatus = new SkuStatus();
+//                                skuStatus.parent = spuStatus;
                                 TextView tvGoodsFullSpecs = cartSkuItem.findViewById(R.id.tv_goods_full_specs);
                                 TextView tvPriceSum = cartSkuItem.findViewById(R.id.tv_price_sum);
-                                ScaledButton btnCheckSku = cartSkuItem.findViewById(R.id.btn_check_sku);
-                                btnCheckSku.setTag(skuStatus);
+//                                ScaledButton btnCheckSku = cartSkuItem.findViewById(R.id.btn_check_sku);
+//                                btnCheckSku.setTag(skuStatus);
 
                                 // 購買數量調節按鈕
                                 CartAdjustButton abQuantity = cartSkuItem.findViewById(R.id.ab_quantity);
                                 abQuantity.setMinValue(1, null);  // 調節數量不能小于1
-                                abQuantity.setSkuStatus(skuStatus);
-                                setCheckButtonOnClickListener(btnCheckSku);
-                                skuStatus.setRadio(btnCheckSku);
+                                abQuantity.setSpuStatus(spuStatus);
+                                setCheckButtonOnClickListener(btnCheckSpu);
+                                spuStatus.setRadio(btnCheckSpu);
 
                                 EasyJSONObject cartSkuVo = (EasyJSONObject) object3;
 
-                                skuStatus.setGoodsId(cartSkuVo.getInt("goodsId"));
-                                skuStatus.setCartId(cartSkuVo.getInt("cartId"));
-                                tvGoodsFullSpecs.setText(cartSkuVo.getString("goodsFullSpecs"));
+                                spuStatus.setGoodsId(cartSkuVo.getInt("goodsId"));
+                                spuStatus.setCartId(cartSkuVo.getInt("cartId"));
+                                tvGoodsFullSpecs.setText(cartSkuVo.getSafeString("goodsFullSpecs"));
                                 float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
                                 int buyNum = cartSkuVo.getInt("buyNum");
                                 tvPriceSum.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
                                 abQuantity.setValue(buyNum);
 
-                                skuStatus.setPrice(goodsPrice);
-                                skuStatus.setCount(buyNum);
+                                spuStatus.setPrice(goodsPrice);
+                                spuStatus.setCount(buyNum);
 
                                 // 贈品列表
-                                EasyJSONArray giftVoList = cartSkuVo.getArray("giftVoList");
-                                if (!Util.isJsonNull(giftVoList) && giftVoList.length() > 0) {
+                                EasyJSONArray giftVoList = cartSkuVo.getSafeArray("giftVoList");
+                                if (giftVoList.length() > 0) {
                                     LinearLayout llGiftListContainer = cartSkuItem.findViewById(R.id.ll_gift_list_container);
                                     ConfirmOrderGiftListAdapter adapter = new ConfirmOrderGiftListAdapter(_mActivity, llGiftListContainer, R.layout.cart_gift_item);
                                     List<GiftItem> giftItemList = new ArrayList<>();
@@ -331,30 +354,39 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                     llGiftListContainer.setVisibility(View.VISIBLE);
                                 }
 
-                                spuStatus.skuStatusList.add(skuStatus);
+//                                spuStatus.skuStatusList.add(skuStatus);
                                 cartSkuItemContainer.addView(cartSkuItem);
+
+                                ImageView maskImage = cartSpuItem.findViewById(R.id.mask_image);
+                                if (cartSkuVo.getInt("goodsStatus") == 0) {
+                                    Glide.with(_mActivity).load(R.drawable.icon_take_off).into(maskImage);
+                                } else if(cartSkuVo.getInt("goodsStorage")<=0){
+                                    Glide.with(_mActivity).load(R.drawable.icon_no_storage).into(maskImage);
+                                }else if(cartSkuVo.getInt("goodsStorage")<=2){
+                                    Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
+                                }
+                                storeStatus.spuStatusList.add(spuStatus);
+                                cartSpuItemContainer.addView(cartSpuItem);
                             } // END OF sku LOOP
 
-                            storeStatus.spuStatusList.add(spuStatus);
-                            cartSpuItemContainer.addView(cartSpuItem);
                         } // END OF spu LOOP
+
 
                         totalStatus.storeStatusList.add(storeStatus);
                         cartStoreItemContainer.addView(cartStoreItem);
+
+                        storeCount++;
                     } // END OF store LOOP
 
+                    if (storeCount == 0 && svItemContainerHeight != -1) { // 如果購物車內沒東西，則顯示空白頁面的占位符
+                        View placeholderCartEmpty = LayoutInflater.from(_mActivity).inflate(R.layout.layout_placeholder_cart_empty, null, false);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, svItemContainerHeight);
+                        cartStoreItemContainer.addView(placeholderCartEmpty, layoutParams);
+                    }
+
                     displayCartItemCount(cartItemCount);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (java.lang.InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -365,22 +397,48 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         int id = v.getId();
         switch (id) {
             case R.id.btn_back:
-                pop();
+                hideSoftInputPop();
                 break;
             case R.id.btn_edit:
                 switchMode();
                 break;
             case R.id.btn_settlement:
-                EasyJSONArray buyData = totalStatus.getBuyData();
+                EasyJSONArray buyData = totalStatus.getBuyDataNew();
                 if (buyData.length() < 1) {
                     // 如果沒有勾選什么數據，返回
                     return;
                 }
 
-                Util.startFragmentForResult(ConfirmOrderFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
+                if (totalStatus.getTotalDataNew().first >= 20000) {
+                    new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                            // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                            .setPopupCallback(new XPopupCallback() {
+                                @Override
+                                public void onShow() {
+                                }
+
+                                @Override
+                                public void onDismiss() {
+                                }
+                            }).asCustom(new TwConfirmPopup(_mActivity, "每次交易總金額不的超過￥20,000，請調整購物數量再提交", null, new OnConfirmCallback() {
+                        @Override
+                        public void onYes() {
+                            SLog.info("onYes");
+                        }
+
+                        @Override
+                        public void onNo() {
+                            SLog.info("onNo");
+                        }
+                    })).show();
+                } else {
+                    Util.startFragmentForResult(ConfirmOrderFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
+                }
                 break;
             case R.id.btn_delete:
-                buyData = totalStatus.getBuyData();
+                buyData = totalStatus.getBuyDataNew();
                 if (buyData.length() < 1) {
                     // 如果沒有勾選什么數據，返回
                     SLog.info("如果沒有勾選什么數據，返回");
@@ -449,7 +507,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                         return;
                     }
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -459,7 +517,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                 }
             });
         } catch (Exception e) {
-            SLog.info("Error!%s", e.getMessage());
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -494,7 +552,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         }
 
         if (isStandalone) {
-            pop();
+            hideSoftInputPop();
             return true;
         }
         return false;
@@ -516,7 +574,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
      * 更新合計數據
      */
     private void updateTotalData() {
-        Pair<Float, Integer> totalData = totalStatus.getTotalData();
+        Pair<Float, Integer> totalData = totalStatus.getTotalDataNew();
 
         float totalPrice = totalData.first;  // 總價錢
         int totalCount = totalData.second;  // 總件數

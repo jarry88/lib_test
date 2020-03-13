@@ -19,6 +19,7 @@ public class PayUtil {
     public static final int VENDOR_TAIFUNG = 1;
     public static final int VENDOR_WEIXIN = 2;
     public static final int VENDOR_ALI = 3;
+    public static final int VENDOR_ALI_HK = 4;
 
     public static String getVendorName(int vendor) {
         if (vendor == VENDOR_TAIFUNG) {
@@ -27,24 +28,33 @@ public class PayUtil {
             return "微信";
         } else if (vendor == VENDOR_ALI) {
             return "支付寶";
+        } else if (vendor == VENDOR_ALI_HK) {
+            return "支付寶香港";
         }
 
         return null;
     }
 
     /**
-     * 支付成功處理(大豐、微信、支付寶)
+     * 支付成功處理(大豐、微信、支付寶、支付寶香港)
      * @param notifyServer  是否通知服務器端
+     * @param startPaySuccessFragment 是否要顯示支付成功頁面
      */
-    public static void onPaySuccess(boolean notifyServer, int payId, int vendor) {
+    public static void onPaySuccess(boolean notifyServer, boolean startPaySuccessFragment, int payId, int vendor) {
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
 
-        Util.startFragment(PaySuccessFragment.newInstance(""));
+        if (startPaySuccessFragment) {
+            Util.startFragment(PaySuccessFragment.newInstance(payId));
+        }
 
         if (notifyServer) {
             paySuccessNotify(payId, vendor);
         }
+    }
+
+    public static void onPaySuccess(boolean notifyServer, int payId, int vendor) {
+        onPaySuccess(notifyServer, true, payId, vendor);
     }
 
 
@@ -67,6 +77,8 @@ public class PayUtil {
             path = Api.PATH_WXPAY_FINISH;
         } else if (vendor == VENDOR_ALI) {
             path = Api.PATH_ALIPAY_FINISH;
+        } else if (vendor == VENDOR_ALI_HK) {
+            path = Api.PATH_ALIPAY_HK_FINISH;
         }
 
         SLog.info("path[%s], params[%s]", path, params);
@@ -82,7 +94,7 @@ public class PayUtil {
                     String responseStr = response.body().string();
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
                         SLog.info("%s支付成功，通知服務器失敗", getVendorName(vendor));
                         return;

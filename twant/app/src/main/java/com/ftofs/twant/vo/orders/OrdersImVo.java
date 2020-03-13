@@ -19,7 +19,7 @@ public class OrdersImVo {
      */
     private String imageSrc;
     /**
-     * 商品名稱
+     * 產品名稱
      */
     private String goodsName;
 

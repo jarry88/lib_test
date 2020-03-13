@@ -1,5 +1,6 @@
 package com.ftofs.twant.entity;
 
+import android.util.Log;
 import android.util.SizeF;
 
 import com.ftofs.twant.constant.Constant;
@@ -35,7 +36,7 @@ public class UnreadCount {
             SLog.info("jsonStr[%s]", jsonStr);
             Hawk.put(SPField.FIELD_UNREAD_MESSAGE_COUNT, jsonStr);
         } catch (Exception e) {
-            e.printStackTrace();
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -50,7 +51,7 @@ public class UnreadCount {
             UnreadCount unreadCount = (UnreadCount) EasyJSONBase.jsonDecode(UnreadCount.class, jsonStr);
             return unreadCount;
         } catch (Exception e) {
-            e.printStackTrace();
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             return null;
         }
     }

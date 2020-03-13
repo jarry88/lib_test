@@ -13,7 +13,7 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 单条商品信息
+ * 单条產品信息
  *
  * @author hbj
  * Created 2017/4/13 14:44
@@ -24,7 +24,7 @@ public class CartItemVo {
      */
     private int cartId;
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
     /**
@@ -32,7 +32,7 @@ public class CartItemVo {
      */
     private int commonId;
     /**
-     * 商品名
+     * 產品名
      */
     private String goodsName;
     /**
@@ -44,7 +44,7 @@ public class CartItemVo {
      */
     private BigDecimal goodsPrice;
     /**
-     * 商品图
+     * 產品图
      */
     private String imageName;
     /**
@@ -52,15 +52,15 @@ public class CartItemVo {
      */
     private int buyNum;
     /**
-     * 商品小计[单价 * 数量]
+     * 產品小计[单价 * 数量]
      */
     private BigDecimal itemAmount;
     /**
-     * 商品库存
+     * 產品库存
      */
     private int goodsStorage;
     /**
-     * 商品状态
+     * 產品状态
      */
     private int goodsStatus;
     /**
@@ -72,7 +72,7 @@ public class CartItemVo {
      */
     private String storeName;
     /**
-     * 商品库存是否足够
+     * 產品库存是否足够
      */
     private int storageStatus;
     /**
@@ -194,15 +194,15 @@ public class CartItemVo {
      */
     private String promotionTitle;
     /**
-     * 商品价格0
+     * 產品价格0
      */
     private BigDecimal goodsPrice0;
     /**
-     * 商品价格1
+     * 產品价格1
      */
     private BigDecimal goodsPrice1;
     /**
-     * 商品价格2
+     * 產品价格2
      */
     private BigDecimal goodsPrice2;
     /**
@@ -210,7 +210,7 @@ public class CartItemVo {
      */
     private int promotionType;
     /**
-     * 是否正处于预定商品状态（定金+尾款）
+     * 是否正处于预定產品状态（定金+尾款）
      */
     private int isBook = 0;
     /**
@@ -226,7 +226,7 @@ public class CartItemVo {
      */
     private int bundlingId = 0;
     /**
-     * 优惠套装商品
+     * 优惠套装產品
      */
     private List<BuyBundlingItemVo> buyBundlingItemVoList;
     /**
@@ -286,15 +286,15 @@ public class CartItemVo {
      */
     private String chainName;
     /**
-     * 商品ID，当商品为门店商品时，该值为真正的goodsId[仅购物车列表使用]
+     * 產品ID，当產品为门店產品时，该值为真正的goodsId[仅购物车列表使用]
      */
     private int realGoodsId;
     /**
-     * spu ID，当商品为门店商品时，该值为真正的commonId[仅购物车列表使用]
+     * spu ID，当產品为门店產品时，该值为真正的commonId[仅购物车列表使用]
      */
     private int realCommonId;
     /**
-     * 门店商品Id
+     * 门店產品Id
      */
     private int chainGoodsId;
     /**
@@ -306,7 +306,7 @@ public class CartItemVo {
      */
     private int isSecKill;
     /**
-     * 移杀商品Id
+     * 移杀產品Id
      */
     private int seckillGoodsId;
     /**
@@ -314,11 +314,11 @@ public class CartItemVo {
      */
     private int isForeign;
     /**
-     * 是否是门店商品
+     * 是否是门店產品
      */
     private int isChain;
     /**
-     * 商品类型 3-海外购、2-虚拟、1-门店、0-除前3种之外的所有商品
+     * 產品类型 3-海外购、2-虚拟、1-门店、0-除前3种之外的所有產品
      */
     private int goodsType;
 

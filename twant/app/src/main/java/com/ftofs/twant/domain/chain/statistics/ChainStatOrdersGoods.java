@@ -16,27 +16,27 @@ public class ChainStatOrdersGoods implements Serializable {
     private int ordersId;
 
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
 
     /**
-     * 门店商品Id
+     * 门店產品Id
      */
     private int chainGoodsId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
     /**
-     * 商品(购买时的)单价
+     * 產品(购买时的)单价
      */
     private BigDecimal goodsPrice = BigDecimal.ZERO;
 
@@ -46,7 +46,7 @@ public class ChainStatOrdersGoods implements Serializable {
     private int buyNum;
 
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImage;
 
@@ -72,7 +72,7 @@ public class ChainStatOrdersGoods implements Serializable {
     private String goodsFullSpecs;
 
     /**
-     * 商品分类ID
+     * 產品分类ID
      */
     private int categoryId;
 
@@ -97,12 +97,12 @@ public class ChainStatOrdersGoods implements Serializable {
     private String unitName;
 
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial;
 
     /**
-     * 商品服务
+     * 產品服务
      */
     private String goodsServices;
 

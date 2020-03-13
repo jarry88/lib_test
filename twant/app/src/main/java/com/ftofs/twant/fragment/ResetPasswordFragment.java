@@ -2,24 +2,29 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.text.Layout;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.entity.ListPopupItem;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
+import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -34,11 +39,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 
 /**
@@ -66,6 +69,7 @@ public class ResetPasswordFragment extends BaseFragment implements
     EditText etCaptcha;
     TextView tvAreaName;
     boolean isModifyPaymentPassword;
+    private LinearLayout trueNoticeLoge;
 
 
     public static ResetPasswordFragment newInstance(int usage, boolean isModifyPaymentPassword) {
@@ -97,10 +101,11 @@ public class ResetPasswordFragment extends BaseFragment implements
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_next, this);
-
+        trueNoticeLoge = view.findViewById(R.id.item_logo);
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         if (usage == Constant.USAGE_USER_REGISTER) {
             tvFragmentTitle.setText(R.string.register_fragment_title);
+            trueNoticeLoge.setVisibility(View.VISIBLE);
         } else if (usage == Constant.USAGE_RESET_PASSWORD) {
             tvFragmentTitle.setText(R.string.reset_password_fragment_title);
         } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
@@ -126,7 +131,7 @@ public class ResetPasswordFragment extends BaseFragment implements
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_mobile_zone) {
             List<ListPopupItem> itemList = new ArrayList<>();
             for (MobileZone mobileZone : mobileZoneList) {
@@ -192,6 +197,7 @@ public class ResetPasswordFragment extends BaseFragment implements
                     "captchaVal", captchaText);
 
 
+
             if (usage == Constant.USAGE_USER_REGISTER) {
                 params.set("sendType", Sms.SEND_TYPE_REGISTER);
             } else if (usage == Constant.USAGE_RESET_PASSWORD) {
@@ -199,7 +205,6 @@ public class ResetPasswordFragment extends BaseFragment implements
             } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
                 params.set("sendType", Sms.SEND_TYPE_SECURITY_VERIFY);
             }
-
             SLog.info("params[%s]", params);
             Api.getUI(Api.PATH_SEND_SMS_CODE, params, new UICallback() {
                 @Override
@@ -210,13 +215,13 @@ public class ResetPasswordFragment extends BaseFragment implements
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("responseStr[%s]", responseStr);
-                    final EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    final EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
                             // 如果出錯，刷新驗證碼
                             refreshCaptcha();
-                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
                             return;
                         }
 
@@ -227,13 +232,13 @@ public class ResetPasswordFragment extends BaseFragment implements
                         } else {
                             start(ResetPasswordConfirmFragment.newInstance(usage, mobileZone.areaCode, mobile, smsCodeValidTime, isModifyPaymentPassword));
                         }
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-            SLog.info("Error!%s", e.getMessage());
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -289,7 +294,19 @@ public class ResetPasswordFragment extends BaseFragment implements
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
+    }
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        SLog.info("__onSupportVisible");
+        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        SLog.info("__onSupportInvisible");
+        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 }

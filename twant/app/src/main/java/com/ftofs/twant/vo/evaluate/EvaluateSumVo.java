@@ -5,7 +5,7 @@ package com.ftofs.twant.vo.evaluate;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品评价汇总数据Vo
+ * 產品评价汇总数据Vo
  *
  * @author dqw
  * Created 2017/10/19 17:38

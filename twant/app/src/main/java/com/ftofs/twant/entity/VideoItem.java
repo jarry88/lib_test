@@ -10,7 +10,7 @@ public class VideoItem implements MultiItemEntity {
     public String videoId;
     public int playCount;
     public String updateTime;
-    public List<Goods> goodsList; // 商品列表
+    public List<Goods> goodsList; // 產品列表
 
     public VideoItem(int itemType) {
         this.itemType = itemType;

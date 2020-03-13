@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <!--  工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@android:color/white">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:textColor="@color/tw_black"
+            android:text="@string/text_my_resume"
+            />
+
+    </RelativeLayout>
+
+    <!-- RecyclerView外套一層NestedScrollView，以支持整體滑動 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/tw_light_grey"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_avatar"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginTop="31dp"
+                android:src="@mipmap/ic_launcher"
+                />
+            <LinearLayout
+                android:id="@+id/btn_edit_personal_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/length_15dp"
+                    android:layout_marginBottom="@dimen/length_15dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:textSize="18sp"
+                    android:textColor="@color/tw_black"
+                    android:text=""/>
+                <ImageView
+                    android:layout_marginStart="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_blue_edit"
+                    android:layout_gravity="center"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_member_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_job_phone"
+                />
+
+                <TextView
+                    android:id="@+id/tv_member_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text=""
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_dark_grey"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_mailbox_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_job_mailbox"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_member_mail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text=""
+                    android:textSize="13sp"
+                    android:layout_marginBottom="@dimen/length_15dp"
+                    android:textColor="@color/tw_dark_grey"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    />
+            </LinearLayout>
+            <View
+                android:id="@+id/line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/tw_light_grey"
+                android:layout_below="@id/ll_mailbox_container"
+                android:layout_marginStart="@dimen/toolbar_margin_left"
+                android:layout_marginEnd="@dimen/toolbar_margin_right"
+                android:layout_marginTop="@dimen/length_15dp"/>
+            <RelativeLayout
+                android:id="@+id/rv_show_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/length_15dp"
+                android:layout_below="@id/line"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_black"
+                    android:text="@string/text_init_resume"/>
+                <com.kyleduo.switchbutton.SwitchButton
+                    android:id="@+id/sb_show_personal_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    app:kswBackColor="@color/switch_button_background_color"
+                    app:kswThumbColor="@color/tw_white"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_expect_position"
+                android:layout_below="@id/rv_show_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/tw_grey_F3F3"
+                    />
+
+                <include layout="@layout/expect_position" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_my_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/tw_grey_F3F3"/>
+                <include layout="@layout/my_status" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/tw_grey_F3F3"/>
+                <include layout="@layout/educate_work" />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

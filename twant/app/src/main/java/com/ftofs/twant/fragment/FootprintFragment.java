@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +34,6 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.OnConfirmListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
@@ -143,7 +144,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_edit) {
             mode = 1 - mode;
             adapter.setMode(mode);
@@ -227,7 +228,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -279,7 +280,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -292,29 +293,29 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                     footprintList.clear();
                     positionTypeStatusMap.clear();
 
-                    for (Object object : responseObj.getArray("datas.browseList")) {
+                    for (Object object : responseObj.getSafeArray("datas.browseList")) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-                        EasyJSONObject goodsCommon = easyJSONObject.getObject("goodsCommon");
+                        EasyJSONObject goodsCommon = easyJSONObject.getSafeObject("goodsCommon");
 
                         int footprintId = easyJSONObject.getInt("browseId");
-                        String date = easyJSONObject.getString("addTime").substring(0, 10);
+                        String date = easyJSONObject.getSafeString("addTime").substring(0, 10);
                         int storeId = easyJSONObject.getInt("storeVo.storeId");
 
                         footprintList.add(new Footprint(
                                 footprintId,
                                 date,
                                 storeId,
-                                easyJSONObject.getString("storeVo.storeName"),
+                                easyJSONObject.getSafeString("storeVo.storeName"),
                                 easyJSONObject.getInt("commonId"),
-                                goodsCommon.getString("imageSrc"),
-                                goodsCommon.getString("goodsName"),
-                                goodsCommon.getString("jingle"),
+                                goodsCommon.getSafeString("imageSrc"),
+                                goodsCommon.getSafeString("goodsName"),
+                                goodsCommon.getSafeString("jingle"),
                                 Util.getSpuPrice(goodsCommon)
                         ));
 
 
                         if (position > 0) {
-                            // 查看前一項，日期或店鋪是否相同
+                            // 查看前一項，日期或商店是否相同
                             Footprint prevFootprint = footprintList.get(position - 1);
 
                             boolean isDifferentDate = false;
@@ -328,7 +329,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
                                 positionTypeStatusMap.put(key, dateStatus);
                             }
 
-                            // 如果與前一項不同一天或與前一項不同一家店鋪，則顯示店鋪名信息
+                            // 如果與前一項不同一天或與前一項不同一家商店，則顯示商店名信息
                             if (prevFootprint.storeId != storeId || isDifferentDate) {
                                 storeStatus = new StoreStatus();
                                 dateStatus.storeStatusList.add(storeStatus);
@@ -367,7 +368,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
 
                     adapter.setNewData(footprintList);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -376,7 +377,7 @@ public class FootprintFragment extends BaseFragment implements View.OnClickListe
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

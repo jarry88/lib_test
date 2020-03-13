@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/toolbar_margin_left"
-    android:layout_marginRight="@dimen/toolbar_margin_right"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="@dimen/toolbar_margin_left"
+    android:layout_marginEnd="@dimen/toolbar_margin_right"
     android:paddingTop="15dp"
     android:paddingBottom="15dp"
     android:background="@drawable/border_type_d">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_container">
+    <com.ftofs.twant.widget.ScaledButton
+        android:id="@+id/btn_select"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        app:icon_src="@drawable/icon_cart_item_unchecked"
+        />
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_store_avatar"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_toEndOf="@id/btn_select"
         android:layout_centerVertical="true"
         android:src="@drawable/cs_avatar_160"
         />
@@ -35,21 +50,23 @@
                 android:text="Apple旗艦店"
                 />
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:textColor="#666"
                 android:textSize="14sp"
                 android:text="691"
                 />
             <ImageView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/tv_like_count"
+                android:layout_toStartOf="@id/tv_like_count"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="6dp"
+                android:layout_marginEnd="6dp"
                 android:src="@drawable/icon_follow_small"
                 />
         </RelativeLayout>
@@ -78,4 +95,42 @@
                 />
         </LinearLayout>
     </LinearLayout>
+    </RelativeLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_container"
+        android:layout_marginTop="10dp">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@id/img_store_figure"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:riv_corner_radius_top_right="3dp"
+            app:riv_corner_radius_bottom_left="3dp"
+            app:riv_corner_radius_bottom_right="3dp"
+            />
+        <TextView
+            android:id="@+id/tv_store_class"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:background="@drawable/store_class_bg"
+            android:textSize="14sp"
+            android:textColor="#fff"
+            android:text=""
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </RelativeLayout>

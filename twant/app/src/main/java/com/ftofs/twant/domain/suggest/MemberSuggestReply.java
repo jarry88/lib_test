@@ -2,22 +2,22 @@ package com.ftofs.twant.domain.suggest;
 
 public class MemberSuggestReply {
     /**
-     * 回復id
+     * 回覆id
      */
     private int replyId;
 
     /**
-     * 回復的反饋id
+     * 回覆的反饋id
      */
     private int suggestId;
 
     /**
-     * 回復內容
+     * 回覆內容
      */
     private String replyContent;
 
     /**
-     * 回復時間
+     * 回覆時間
      */
     private String createTime;
 

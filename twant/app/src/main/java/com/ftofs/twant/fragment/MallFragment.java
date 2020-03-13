@@ -1,10 +1,14 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +22,13 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.GoodsSearchItem;
+import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-
-import org.w3c.dom.Text;
+import com.ftofs.twant.widget.MaxHeightRecyclerView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,16 +46,17 @@ import okhttp3.Call;
 public class MallFragment extends BaseFragment implements View.OnClickListener {
     int walletStatus = Constant.WANT_PAY_WALLET_STATUS_UNKNOWN;
 
+    NestedScrollView containerView;
+    int containerViewHeight = -1;
 
-    ScrollView svContainer;
 
     /**
      * 猜你喜歡列表
      */
-    RecyclerView rvGuessList;
+    MaxHeightRecyclerView rvGuessList;
 
     GoodsSearchResultAdapter goodsAdapter;
-    List<GoodsSearchItem> goodsItemList = new ArrayList<>();
+    List<GoodsSearchItemPair> goodsItemPairList = new ArrayList<>();
 
     // id: tv_to_be_paid_count, tv_to_be_shipped_count, tv_to_be_received_count, tv_to_be_commented_count;
     TextView tvToBePaidCount, tvToBeShippedCount, tvToBeReceivedCount, tvToBeCommentedCount;
@@ -97,39 +102,50 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_my_bonus, this);
         Util.setOnClickListener(view, R.id.btn_my_trust_value, this);
 
-        svContainer = view.findViewById(R.id.sv_container);
-        rvGuessList = view.findViewById(R.id.rv_guess_list);
-        svContainer.post(new Runnable() {
-            @Override
-            public void run() {
-                int height = svContainer.getHeight();
-                ViewGroup.LayoutParams layoutParams = rvGuessList.getLayoutParams();
-                layoutParams.height = height;
-                rvGuessList.setLayoutParams(layoutParams);
-            }
-        });
 
-        GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, GridLayoutManager.VERTICAL, false);
-        rvGuessList.setLayoutManager(layoutManager);
-        goodsAdapter = new GoodsSearchResultAdapter(_mActivity, goodsItemList);
+        rvGuessList = view.findViewById(R.id.rv_guess_list);
+        rvGuessList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        goodsAdapter = new GoodsSearchResultAdapter(_mActivity, goodsItemPairList);
         goodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
-                if (id == R.id.btn_goto_store) {
-                    GoodsSearchItem goodsSearchItem = goodsItemList.get(position);
-                    start(ShopMainFragment.newInstance(goodsSearchItem.storeId));
+                GoodsSearchItemPair pair = goodsItemPairList.get(position);
+
+                if (id == R.id.btn_goto_store_left || id == R.id.btn_goto_store_right) {
+                    int storeId;
+                    if (id == R.id.btn_goto_store_left) {
+                        storeId = pair.left.storeId;
+                    } else {
+                        storeId = pair.right.storeId;
+                    }
+                    start(ShopMainFragment.newInstance(storeId));
+                } else if (id == R.id.cl_container_left || id == R.id.cl_container_right) {
+                    int commonId;
+                    if (id == R.id.cl_container_left) {
+                        commonId = pair.left.commonId;
+                    } else {
+                        commonId = pair.right.commonId;
+                    }
+                    start(GoodsDetailFragment.newInstance(commonId, 0));
                 }
             }
         });
-        goodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                GoodsSearchItem goodsSearchItem = goodsItemList.get(position);
-                start(GoodsDetailFragment.newInstance(goodsSearchItem.commonId, 0));
+        rvGuessList.setAdapter(goodsAdapter);
+
+        rvGuessList.setNestedScrollingEnabled(false);
+
+        containerView = view.findViewById(R.id.container_view);
+        containerView.setOnScrollChangeListener((View.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            int rvListY = Util.getYOnScreen(rvGuessList);
+            int containerViewY = Util.getYOnScreen(containerView);
+
+            if (rvListY <= containerViewY) {
+                rvGuessList.setNestedScrollingEnabled(true);
+            } else {
+                rvGuessList.setNestedScrollingEnabled(false);
             }
         });
-        rvGuessList.setAdapter(goodsAdapter);
 
         loadGuessData();
         loadOrderCountData();
@@ -143,7 +159,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
 
         switch (id) {
             case R.id.btn_back:
-                pop();
+                hideSoftInputPop();
                 break;
             case R.id.btn_my_bill:
                 Util.startFragment(OrderFragment.newInstance(Constant.ORDER_STATUS_ALL, OrderFragment.USAGE_LIST));
@@ -230,7 +246,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -250,8 +266,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                         }
                     }
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
-                    e.printStackTrace();
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -277,13 +292,14 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
                 try {
-                    EasyJSONArray goodsLiteVoList = responseObj.getArray("datas.goodsLiteVoList");
+                    EasyJSONArray goodsLiteVoList = responseObj.getSafeArray("datas.goodsLiteVoList");
+                    GoodsSearchItemPair pair = null;
                     for (Object object : goodsLiteVoList) {
                         EasyJSONObject goodsLiteVo = (EasyJSONObject) object;
 
@@ -293,23 +309,33 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
                          */
 
                         GoodsSearchItem item = new GoodsSearchItem(
-                                goodsLiteVo.getString("imageName"),
-                                goodsLiteVo.getString("storeAvatarUrl"),
+                                goodsLiteVo.getSafeString("imageName"),
+                                goodsLiteVo.getSafeString("storeAvatarUrl"),
                                 goodsLiteVo.getInt("storeId"),
-                                goodsLiteVo.getString("storeName"),
+                                goodsLiteVo.getSafeString("storeName"),
                                 goodsLiteVo.getInt("commonId"),
-                                goodsLiteVo.getString("goodsName"),
-                                goodsLiteVo.getString("jingle"),
+                                goodsLiteVo.getSafeString("goodsName"),
+                                goodsLiteVo.getSafeString("jingle"),
                                 Util.getSpuPrice(goodsLiteVo),
-                                goodsLiteVo.getString("adminCountry.nationalFlag"));
+                                goodsLiteVo.getSafeString("adminCountry.nationalFlag"));
 
-                        goodsItemList.add(item);
-
-                        goodsAdapter.setNewData(goodsItemList);
+                        if (pair == null) {
+                            pair = new GoodsSearchItemPair(Constant.ITEM_TYPE_NORMAL);
+                            pair.left = item;
+                        } else {
+                            pair.right = item;
+                            goodsItemPairList.add(pair);
+                            pair = null;
+                        }
                     }
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
+                    if (pair != null) { // 如果是奇数项， 并且是最后一项，则满足这个条件
+                        goodsItemPairList.add(pair);
+                        pair = null;
+                    }
+
+                    goodsAdapter.setNewData(goodsItemPairList);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -335,7 +361,7 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
@@ -390,7 +416,23 @@ public class MallFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        if (containerViewHeight == -1) {
+            containerViewHeight = containerView.getHeight();
+            SLog.info("containerViewHeight[%d]", containerViewHeight);
+            rvGuessList.setMaxHeight(containerViewHeight);
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

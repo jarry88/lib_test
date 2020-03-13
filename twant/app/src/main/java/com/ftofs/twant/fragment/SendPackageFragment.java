@@ -1,8 +1,8 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,7 +126,7 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
 
         switch (id) {
             case R.id.btn_back:
-                pop();
+                hideSoftInputPop();
                 break;
             case R.id.btn_query_package:
                 Util.startFragment(QueryPackageFragment.newInstance());
@@ -277,14 +277,14 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
                     ToastUtil.success(_mActivity, "提交成功");
 
-                    pop();
+                    hideSoftInputPop();
                 } catch (Exception e) {
 
                 }
@@ -295,7 +295,7 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 

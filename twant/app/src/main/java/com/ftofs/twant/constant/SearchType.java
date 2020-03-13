@@ -10,15 +10,15 @@ public enum SearchType {
      */
     ALL,
     /**
-     * 僅能搜索商品
+     * 僅能搜索產品
      */
     GOODS,
     /**
-     * 僅能搜索店鋪
+     * 僅能搜索商店
      */
     STORE,
     /**
-     * 僅能搜索文章
+     * 僅能搜索想要帖
      */
-    ARTICLE
+    POST
 }

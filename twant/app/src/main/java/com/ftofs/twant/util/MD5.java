@@ -1,5 +1,9 @@
 package com.ftofs.twant.util;
 
+import android.util.Log;
+
+import com.ftofs.twant.log.SLog;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,8 +24,8 @@ public class MD5 {
             byte[] input = text.getBytes();  // 2 将消息变成byte数组
             byte[] buff = md.digest(input);  // 3 计算后获得字节数组,这就是那128位了
             md5 = Binary.toHexString(buff);  // 4 把数组每一字节（一个字节占八位）换成16进制连成md5字符串
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         return md5;
@@ -46,24 +50,16 @@ public class MD5 {
             }
 
             md5 =  Binary.toHexString(md.digest());
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-
-        }
-        catch (IOException e2) {
-            e2.printStackTrace();
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         finally {
             try {
                 if (fileInputStream != null) {
                     fileInputStream.close();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
         return md5;

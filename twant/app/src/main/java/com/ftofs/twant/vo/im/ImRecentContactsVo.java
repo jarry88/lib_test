@@ -37,7 +37,7 @@ public class ImRecentContactsVo {
      */
     private String nickName;
     /**
-     * 聯繫人會員名稱
+     * 聯繫人城友名稱
      */
     private String memberName;
     /**
@@ -75,7 +75,7 @@ public class ImRecentContactsVo {
     private List<ImGroupDetail> imGroupDetailList;
 
     /**
-     * 店鋪群信息
+     * 商店群信息
      */
     private StoreVo storeInfo;
 

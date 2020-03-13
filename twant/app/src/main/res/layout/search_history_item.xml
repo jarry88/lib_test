@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="15dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
+    <TextView
+        android:id="@+id/tv_history"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="測試商品"
+        android:textColor="@color/tw_black"
+        android:textSize="14sp"
+        android:background="@drawable/category_search_history_item_bg"
+        android:gravity="center"
+        />
+</LinearLayout>

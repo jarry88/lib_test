@@ -1,15 +1,14 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -36,7 +35,6 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 
 /**
@@ -243,7 +241,7 @@ addressAreaInfo String 地区全名
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(context, responseObj)) {
                         return;
@@ -253,7 +251,7 @@ addressAreaInfo String 地区全名
                     onSelectedListener.onSelected(popupType, 0, addressAreaInfo);
                     dismiss();
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -272,37 +270,37 @@ addressAreaInfo String 地区全名
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
 
 
                 try {
                     if (ToastUtil.isError(responseObj)) {
                         int code = responseObj.getInt("code");
-                        String error = responseObj.getString("datas.error");
+                        String error = responseObj.getSafeString("datas.error");
                         if (code == 400 && "无下级".equals(error)) {
                             setAddress();
                         }
                     }
 
-                    EasyJSONArray easyJSONArray = responseObj.getArray("datas.areaList");
+                    EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.areaList");
                     areaList.clear();
                     for (Object object : easyJSONArray) {
                         // {"areaId":36,"areaName":"北京市","areaParentId":1,"areaDeep":2,"areaRegion":null,"areaCode":"110100"}
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                         Area area = new Area();
                         area.setAreaId(easyJSONObject.getInt("areaId"));
-                        area.setAreaName(easyJSONObject.getString("areaName"));
+                        area.setAreaName(easyJSONObject.getSafeString("areaName"));
                         area.setAreaParentId(easyJSONObject.getInt("areaParentId"));
                         area.setAreaDeep(easyJSONObject.getInt("areaDeep"));
-                        area.setAreaRegion(easyJSONObject.getString("areaRegion"));
-                        area.setAreaCode(easyJSONObject.getString("areaCode"));
+                        area.setAreaRegion(easyJSONObject.getSafeString("areaRegion"));
+                        area.setAreaCode(easyJSONObject.getSafeString("areaCode"));
                         areaList.add(area);
                     }
 
                     adapter.setNewData(areaList);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

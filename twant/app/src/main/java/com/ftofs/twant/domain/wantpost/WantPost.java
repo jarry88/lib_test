@@ -5,7 +5,7 @@ import java.math.BigInteger;
 
 public class WantPost {
     /**
-     * 貼文id
+     * 想要帖id
      */
     private BigInteger postId;
 
@@ -55,7 +55,7 @@ public class WantPost {
     private String createBy;
 
     /**
-     * 貼文狀態 0審核中 1審核通過 2審核不通過
+     * 想要帖狀態 0審核中 1審核通過 2審核不通過
      */
     private int isPublish;
 
@@ -80,7 +80,7 @@ public class WantPost {
     private int postView;
 
     /**
-     * 點讚
+     * 讚想
      */
     private int postLike;
 
@@ -95,7 +95,7 @@ public class WantPost {
     private int postFavor;
 
     /**
-     * 回復個數
+     * 回覆個數
      */
     private int postReply;
 

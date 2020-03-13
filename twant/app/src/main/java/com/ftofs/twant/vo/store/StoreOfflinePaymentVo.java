@@ -5,7 +5,7 @@ import com.ftofs.twant.domain.OfflinePayment;
 /**
  * @author liusf
  * @create 2018/12/10 22:11
- * @description 店鋪綫下支付類型
+ * @description 商店綫下支付類型
  */
 public class StoreOfflinePaymentVo {
     private int storePaymentId;

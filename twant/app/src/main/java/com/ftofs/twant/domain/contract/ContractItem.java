@@ -31,7 +31,7 @@ public class ContractItem implements java.io.Serializable {
 	private String ctiIcon;
 	
 	/**
-	 * 内容介绍文章地址
+	 * 内容介绍想要帖地址
 	 */
 	private String ctiDescurl;
 	

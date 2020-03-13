@@ -1,14 +1,15 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.EmojiPage;
-import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.orm.Emoji;
 
 import java.util.List;
@@ -34,13 +35,17 @@ public class EmojiPageAdapter extends BaseQuickAdapter<EmojiPage, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder helper, EmojiPage emojiPage) {
-        for (int i = 0; i < emojiPage.emojiList.size(); i++) {
-            Emoji emoji = emojiPage.emojiList.get(i);
-            ImageView imageView = helper.getView(emojiIds[i]);
-            // SLog.info("emoji.absolutePath[%s]", emoji.absolutePath);
-            Glide.with(mContext).load(emoji.absolutePath).centerCrop().into(imageView);
+        for (int i = 0; i < emojiIds.length; i++) {
+            TextView textView = helper.getView(emojiIds[i]);
+            if (i < emojiPage.emojiList.size()) {
+                UnicodeEmojiItem emojiItem = emojiPage.emojiList.get(i);
+                textView.setText(emojiItem.emoji);
+                // SLog.info("emoji.absolutePath[%s]", emoji.absolutePath);
 
-            helper.addOnClickListener(btnIds[i]);
+                helper.addOnClickListener(btnIds[i]);
+            } else {
+                textView.setText("");
+            }
         }
 
         helper.addOnClickListener(R.id.btn_delete_emoji);

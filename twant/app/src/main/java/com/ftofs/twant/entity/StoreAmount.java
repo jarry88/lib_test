@@ -2,7 +2,7 @@ package com.ftofs.twant.entity;
 
 public class StoreAmount {
     /**
-     * 店鋪優惠額
+     * 商店優惠額
      */
     public float storeDiscountAmount;
     /**

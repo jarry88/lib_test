@@ -7,4 +7,6 @@ public class MyLikeStoreItem {
     public String storeAddress;
     public String storeDistanceStr;
     public int likeCount;
+    public String className;
+    public String storeFigureImageUrl;
 }

@@ -15,7 +15,7 @@ import com.ftofs.twant.util.Util;
 
 /**
  * 訂單列表里面的訂單項
- * 跟店鋪一一對應
+ * 跟商店一一對應
  * @author zwm
  */
 public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {

@@ -22,7 +22,7 @@ public class AdvertorialArticleItemVo {
     private String content  = "" ;
 
     /**
-     * 商品id
+     * 產品id
      */
     private int commonId ;
 

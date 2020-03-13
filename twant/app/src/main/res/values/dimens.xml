@@ -9,4 +9,6 @@
 
     <dimen name="emoji_icon_width">32dp</dimen>
     <dimen name="emoji_icon_height">32dp</dimen>
+
+    <dimen name="length_15dp">15dp</dimen>
 </resources>

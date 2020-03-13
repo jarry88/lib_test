@@ -30,141 +30,207 @@
             />
     </RelativeLayout>
 
-    <HorizontalScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp">
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/btn_share_to_friend"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp">
-            <!-- 暫時屏蔽 Facebook和Twitter
-            <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_share_facebook"
-                    />
+                android:src="@drawable/icon_share_wx_chat"
+                />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Facebook"
-                    android:textColor="@color/tw_black"
-                    android:textSize="14sp"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_share_twitter"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Twitter"
-                    android:textColor="@color/tw_black"
-                    android:textSize="14sp"
-                    />
-            </LinearLayout>
-            -->
-            <LinearLayout
-                android:id="@+id/btn_share_to_friend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_share_wx_chat"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/text_wx_chat"
-                    android:textColor="@color/tw_black"
-                    android:textSize="14sp"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_share_to_timeline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_share_wx_timeline"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/text_wx_timeline"
-                    android:textColor="@color/tw_black"
-                    android:textSize="14sp"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_copy_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_share_url"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/text_url"
-                    android:textColor="@color/tw_black"
-                    android:textSize="14sp"
-                    />
-            </LinearLayout>
+                android:layout_marginTop="15dp"
+                android:text="@string/text_wx_chat"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
         </LinearLayout>
-    </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/btn_share_to_timeline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share_wx_timeline"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/text_wx_timeline"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_share_to_facebook"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share_facebook"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Facebook"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_copy_link"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share_url"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/text_url"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
+
+        <LinearLayout
+            android:id="@+id/btn_share_to_takewant_circle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share_takewant_circle"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/text_takewant_circle"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="invisible">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share_wx_timeline"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/text_wx_timeline"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="invisible">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share_facebook"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Facebook"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="invisible">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_share_url"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/text_url"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
 

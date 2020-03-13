@@ -1,6 +1,6 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +19,7 @@ public class MyFriendListAdapter extends BaseQuickAdapter<MyFriendListItem, Base
 
     @Override
     protected void convert(BaseViewHolder helper, MyFriendListItem item) {
-        helper.addOnClickListener(R.id.btn_delete_friend, R.id.img_avatar);
+        helper.addOnClickListener(R.id.btn_delete_friend, R.id.ll_swipe_content);
 
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
         if (StringUtil.useDefaultAvatar(item.avatarUrl)) {
@@ -29,7 +29,7 @@ public class MyFriendListAdapter extends BaseQuickAdapter<MyFriendListItem, Base
         }
 
         helper.setText(R.id.tv_nickname, item.nickname);
-        String memberLevel = String.format("V%d會員", item.level);
+        String memberLevel = String.format("V%d城友", item.level);
         helper.setText(R.id.tv_member_level, memberLevel);
 
         helper.setText(R.id.tv_nickname, item.nickname);

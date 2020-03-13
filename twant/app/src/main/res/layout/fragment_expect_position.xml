@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@drawable/border_type_d">
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="7dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:textColor="@color/tw_black"
+            android:text="@string/text_expect_position_title"
+            />
+    </RelativeLayout>
+    <include layout="@layout/expect_position"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tool_bar"/>
+    <TextView
+        android:id="@+id/btn_ok"
+        android:layout_width="265dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/blue_button"
+        android:text="@string/text_ok"
+        android:textSize="16sp"
+        android:textColor="#fff"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        />
+
+</RelativeLayout>

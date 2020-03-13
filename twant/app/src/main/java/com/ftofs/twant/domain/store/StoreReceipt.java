@@ -29,7 +29,7 @@ public class StoreReceipt implements Serializable{
     private int companyLogoDisplay;
 
     /**
-     * 是否顯示商品編號(1:顯示 0:不顯示)
+     * 是否顯示產品編號(1:顯示 0:不顯示)
      */
     private int goodsNoDisplay;
 

@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 
-public class MyFollowGoodsItem {
+public class MyFollowGoodsItem extends MyFollowItem{
     public int storeId;
     public int commonId;
     public String storeName;
@@ -10,4 +10,6 @@ public class MyFollowGoodsItem {
     public String jingle;
     public float price;
     public int goodsFavorite;
+    public String storeAvatarUrl;
+    public int likeCount;
 }

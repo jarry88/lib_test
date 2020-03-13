@@ -1,13 +1,16 @@
 package com.ftofs.twant.entity;
 
 /**
- * 店鋪公告數據結構
+ * 商店公告數據結構
  * @author zwm
  */
 public class StoreAnnouncement {
-    public StoreAnnouncement(int id, String title) {
+    public long createTime;
+
+    public StoreAnnouncement(int id, String title, String content) {
         this.id = id;
         this.title = title;
+        this.content = content;
     }
 
     /**
@@ -15,4 +18,5 @@ public class StoreAnnouncement {
      */
     public int id;
     public String title;
+    public String content;
 }

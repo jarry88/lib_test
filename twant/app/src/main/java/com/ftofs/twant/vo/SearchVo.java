@@ -16,37 +16,37 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 搜索商品
+ * 搜索產品
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:00
  */
 public class SearchVo {
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     
     private String goodsName;
     /**
-     * 商品產地
+     * 產品產地
      */
     private Integer goodsCountry=0;
     /**
-     * 商品名称[带关键词高亮]
+     * 產品名称[带关键词高亮]
      */
     private String goodsNameHighlight;
     /**
-     * 商品卖点
+     * 產品卖点
      */
     
     private String jingle;
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     
     private int categoryId;
@@ -61,7 +61,7 @@ public class SearchVo {
     
     private int brandId;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 0下架，1正常，10违规禁售
      */
     
@@ -73,7 +73,7 @@ public class SearchVo {
     
     private int goodsVerify;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 可以购买1，不可购买0
      */
     
@@ -84,7 +84,7 @@ public class SearchVo {
     
     private String areaInfo;
     /**
-     * 商品运费
+     * 產品运费
      */
     
     private double goodsFreight;
@@ -147,7 +147,7 @@ public class SearchVo {
     
     private double webPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     
     private double webPriceMin;
@@ -172,7 +172,7 @@ public class SearchVo {
     
     private double appPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     
     private double appPriceMin;
@@ -197,7 +197,7 @@ public class SearchVo {
     
     private double wechatPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     
     private double wechatPriceMin;
@@ -281,7 +281,7 @@ public class SearchVo {
     
     private int isGift;
     /**
-     * 商品分类名称
+     * 產品分类名称
      */
     
     private String categoryName="";
@@ -303,7 +303,7 @@ public class SearchVo {
      */
     private List<ServiceVo> storePresalesList;
     /**
-     * 商品产地
+     * 產品产地
      * Modify By yangjian 2019/1/9 17:29
      */
     private AdminCountry adminCountry;
@@ -359,16 +359,16 @@ public class SearchVo {
      */
     private int isOnline = 0;
     /**
-     * 商品sku编号
+     * 產品sku编号
      */
     private int goodsId;
     /**
-     * 商品sku规格字符串
+     * 產品sku规格字符串
      */
     private String goodsSpec;
 
     /**
-     * 商品門店所在地區(不存在於搜索引擎)
+     * 產品門店所在地區(不存在於搜索引擎)
      */
     private String chainAreaInfo;
     /**
@@ -388,10 +388,10 @@ public class SearchVo {
     //Modify By liusf 2019/3/5 18:26 國家產地ID
     private int extendInt0 = 0;
 
-    //Modify By liusf 2019/4/2 18:58 商品評論
+    //Modify By liusf 2019/4/2 18:58 產品評論
     private int extendInt1 = 0;
 
-    //Modify By liusf 2019/4/3 17:01 1是0否有商品視頻
+    //Modify By liusf 2019/4/3 17:01 1是0否有產品視頻
     private int extendInt2 = 0;
 
     private int extendInt3 = 0;
@@ -412,7 +412,7 @@ public class SearchVo {
     private double extendPrice8 = 0.0;
     private double extendPrice9 = 0.0;
 
-    //Modify By liusf 2019/1/2 14:58 商品創建時間
+    //Modify By liusf 2019/1/2 14:58 產品創建時間
     private String extendTime0 = "";
 
     private String extendTime1 = "";
@@ -426,7 +426,7 @@ public class SearchVo {
     private String extendTime9 = "";
 
     /**
-     * 商品图片列表
+     * 產品图片列表
      */
     private List<GoodsImage> goodsImageList=new ArrayList<>();
     /**

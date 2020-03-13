@@ -2,12 +2,12 @@ package com.ftofs.twant.domain.orders;
 
 public class OrdersSeckill {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int ordersSeckillId;
 
     /**
-     * 秒杀活动商品 主键
+     * 秒杀活动產品 主键
      */
     private int seckillGoodsId;
 

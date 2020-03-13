@@ -40,27 +40,27 @@ public class StatCategoryGeneral implements Serializable {
     private int categoryId3;
 
     /**
-     * 商品销量
+     * 產品销量
      */
     private long ordersNum = 0L;
 
     /**
-     * 商品销售额
+     * 產品销售额
      */
     private BigDecimal ordersAmount = new BigDecimal(0);
 
     /**
-     * 有销量商品数
+     * 有销量產品数
      */
     private long haveOrdersGoodsCount = 0L;
 
     /**
-     * 商品总数
+     * 產品总数
      */
     private long goodsCount = 0L;
 
     /**
-     * 无销量商品数
+     * 无销量產品数
      */
     private long noOrdersGoodsCount = 0L;
 

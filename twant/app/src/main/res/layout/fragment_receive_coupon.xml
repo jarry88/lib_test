@@ -31,11 +31,11 @@
             android:id="@+id/btn_ok"
             android:layout_width="52dp"
             android:layout_height="26dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:text="@string/ok"
+            android:text="@string/text_exchange"
             android:textSize="14sp"
             android:textColor="@android:color/white"
             android:background="@drawable/micro_blue_button"
@@ -64,14 +64,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:textSize="16sp"
-            app:stb_text="兌換店鋪券"
+            app:stb_text="兌換商店券"
             app:stb_horizontal_padding="0dp">
         </com.ftofs.twant.widget.SimpleTabButton>
     </LinearLayout>
 
-    <!-- 領取店鋪券 -->
+    <!-- 領取商店券 -->
     <LinearLayout
-        android:id="@+id/ll_receive_store_coupon_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="15dp"
@@ -171,5 +170,5 @@
         </LinearLayout>
 
     </LinearLayout>
-    <!-- END OF 領取店鋪券 -->
+    <!-- END OF 領取商店券 -->
 </LinearLayout>

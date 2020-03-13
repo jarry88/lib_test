@@ -1,26 +1,18 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CategoryBrand;
-import com.ftofs.twant.entity.CategoryShop;
-import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
@@ -73,10 +65,12 @@ public class CategoryBrandAdapter extends BaseQuickAdapter<CategoryBrand, BaseVi
         }
 
         int itemCount = getItemCount();
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
         if (position == itemCount - 1) {
             // 最后一項，設置大一點的bottomMargin
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
             layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
+        } else {
+            layoutParams.bottomMargin = 0;
         }
     }
 }

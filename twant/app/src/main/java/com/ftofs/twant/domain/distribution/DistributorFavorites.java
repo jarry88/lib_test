@@ -9,7 +9,7 @@ public class DistributorFavorites implements Serializable {
     private int distributorFavoritesId;
 
     /**
-     * 推广商品id
+     * 推广產品id
      */
     private int distributorId;
 

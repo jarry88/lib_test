@@ -18,7 +18,7 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />
@@ -35,10 +35,10 @@
 
         <TextView
             android:id="@+id/btn_ok"
-            android:layout_width="52dp"
-            android:layout_height="26dp"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
-            android:layout_alignParentRight="true"
+            android:layout_width="51dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
             android:text="@string/text_ok"
@@ -57,8 +57,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/toolbar_margin_left"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
             android:paddingTop="16dp"
             android:paddingBottom="20dp"
             android:paddingLeft="5dp"
@@ -71,6 +71,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
                 android:text="@string/text_receiver_name"
+                android:id="@+id/tv_receiver_name"
                 />
             <EditText
                 android:id="@+id/et_receiver_name"
@@ -93,8 +94,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/toolbar_margin_left"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
             android:paddingTop="16dp"
             android:paddingBottom="20dp"
             android:paddingLeft="5dp"
@@ -107,6 +108,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
                 android:text="@string/text_mobile"
+                android:id="@+id/tv_phone_number"
                 />
 
             <RelativeLayout
@@ -174,6 +176,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
                 android:text="@string/text_select_area"
+                android:id="@id/tv_area"
                 />
 
             <RelativeLayout
@@ -220,6 +223,7 @@
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
                 android:text="@string/text_detail_address"
+                android:id="@id/tv_address"
                 />
 
             <RelativeLayout
@@ -230,6 +234,7 @@
                     android:id="@+id/et_detail_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/btn_clear_detail_address"
                     android:layout_centerVertical="true"
                     android:inputType="text"
                     android:imeOptions="actionDone"
@@ -245,7 +250,7 @@
                     android:id="@+id/btn_clear_detail_address"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     app:icon_src="@drawable/icon_clear_all"
                     />

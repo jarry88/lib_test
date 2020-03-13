@@ -19,23 +19,23 @@ public class GoodsCommonVo implements Serializable{
 	private BigDecimal goodsPrice2;//最高价
 
 	/**
-	 * 商品产地
+	 * 產品产地
 	 * Modify By yangjian 2019/1/17 18:04
 	 */
 	private Integer goodsCountry;
 	/**
-	 * 商品产地对象
+	 * 產品产地对象
 	 * Modify By yangjian 2019/1/17 18:04
 	 */
 	private AdminCountry adminCountry;
 
     /**
-     * 店鋪ID
+     * 商店ID
      */
 	private Integer storeId = 0;
 
     /**
-     * 商品視頻
+     * 產品視頻
      */
 	private String goodsVideo = "";
 
@@ -45,7 +45,7 @@ public class GoodsCommonVo implements Serializable{
 	private String updateTime = "";
 
     /**
-     * 商品一級分類
+     * 產品一級分類
      */
 	private int categoryId1;
 
@@ -60,12 +60,12 @@ public class GoodsCommonVo implements Serializable{
 	private BigInteger goodsSaleNum = new BigInteger("0");
 
     /**
-     * 點讚數量
+     * 讚想數量
      */
 	private long goodsLike;
 
     /**
-     * 點讚狀態
+     * 讚想狀態
      */
 	private int isLike;
 

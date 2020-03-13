@@ -2,10 +2,10 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.interfaces.CommonCallback;
@@ -39,8 +39,20 @@ public class BaseFragment extends SupportFragment {
      * 調起掃描二維碼的Activity
      */
     public void startCaptureActivity() {
-        Intent intent = new Intent(_mActivity, CaptureActivity.class);
-        startActivityForResult(intent, RequestCode.SCAN_QR_CODE.ordinal());
+        PermissionUtil.actionWithPermission(_mActivity, new String[] {Permission.CAMERA}, "掃一掃需要授予", new CommonCallback() {
+            @Override
+            public String onSuccess(@Nullable String data) {
+                Intent intent = new Intent(_mActivity, CaptureActivity.class);
+                startActivityForResult(intent, RequestCode.SCAN_QR_CODE.ordinal());
+                return null;
+            }
+
+            @Override
+            public String onFailure(@Nullable String data) {
+                ToastUtil.error(_mActivity, "您拒絕了授權，無法使用本功能>_<");
+                return null;
+            }
+        });
     }
 
     /**
@@ -62,5 +74,20 @@ public class BaseFragment extends SupportFragment {
                 return null;
             }
         });
+    }
+
+    /**
+     * 先隱藏軟鍵盤，再關閉頁面
+     */
+    public void hideSoftInputPop() {
+        hideSoftInput();
+        pop();
+    }
+
+    /**
+     * 查找整形屬性並賦值
+     */
+    public void setIntAttribute(String attributeName, int follow) {
+        
     }
 }

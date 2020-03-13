@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.wantpost;
 /**
  * @author liusf
  * @create 2019/2/18 11:39
- * @description 貼文分類視圖類
+ * @description 想要帖分類視圖類
  */
 public class WantPostCategoryVo  {
     /**
@@ -37,7 +37,7 @@ public class WantPostCategoryVo  {
     private String parentName = "";
 
     /**
-     * 分類下貼文數量
+     * 分類下想要帖數量
      */
     private long wantPostCount = 0;
 

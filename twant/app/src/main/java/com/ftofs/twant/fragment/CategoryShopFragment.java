@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +36,9 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
- * 店鋪分類Fragment
+ * 商店分類Fragment
  * @author zwm
  */
 public class CategoryShopFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
@@ -111,7 +112,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -120,7 +121,7 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
                     int defaultCategoryId = -1;
                     boolean first = true;
                     List<CategoryMenu> categoryMenuList = new ArrayList<>();
-                    EasyJSONArray easyJSONArray = responseObj.getArray("datas.storeClassNav");
+                    EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.storeClassNav");
                     for (Object object : easyJSONArray) {
                         EasyJSONObject item = (EasyJSONObject) object;
                         int categoryId = item.getInt("id");
@@ -128,19 +129,19 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
                             defaultCategoryId = categoryId;
                             first = false;
                         }
-                        String categoryName = item.getString("name");
+                        String categoryName = item.getSafeString("name");
                         String[] categoryNameArr = categoryName.split(" ");
 
                         CategoryMenu categoryMenu = new CategoryMenu(categoryId, categoryNameArr[0], categoryNameArr[1]);
                         categoryMenuList.add(categoryMenu);
 
                         List<CategoryShop> categoryShopList = new ArrayList<>();
-                        EasyJSONArray shopListArray = item.getArray("children");
+                        EasyJSONArray shopListArray = item.getSafeArray("children");
                         for (Object shopObject : shopListArray) {
                             EasyJSONObject shopItem = (EasyJSONObject) shopObject;
                             int shopId = shopItem.getInt("id");
-                            String coverUrl = shopItem.getString("imageUrl");
-                            String shopParentName = shopItem.getString("parentCnName");
+                            String coverUrl = shopItem.getSafeString("imageUrl");
+                            String shopParentName = shopItem.getSafeString("parentCnName");
                             int shopCount = shopItem.getInt("storeListCount");
                             int commodityCount = shopItem.getInt("goodsListCount");
 
@@ -155,8 +156,8 @@ public class CategoryShopFragment extends BaseFragment implements View.OnClickLi
                     rvCategoryMenu.setAdapter(adapter);
 
                     loadCategoryShopData(defaultCategoryId);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

@@ -3,8 +3,10 @@ package com.ftofs.twant.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,6 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
-import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -52,7 +53,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 商品退款、退貨、投訴Fragment
+ * 產品退款、退貨、投訴Fragment
  * @author zwm
  */
 public class GoodsRefundFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
@@ -125,13 +126,13 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         String paramsIn = args.getString("paramsIn");
         SLog.info("paramsIn[%s]", paramsIn);
 
-        paramsInObj = (EasyJSONObject) EasyJSONObject.parse(paramsIn);
+        paramsInObj = EasyJSONObject.parse(paramsIn);
         try {
             action = paramsInObj.getInt("action");
             ordersId = paramsInObj.getInt("ordersId");
             ordersGoodsId = paramsInObj.getInt("ordersGoodsId");
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         llGoodsOuterContainer = view.findViewById(R.id.ll_goods_outer_container);
@@ -206,7 +207,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_select_refund_reason) {
             hideSoftInput();
 
@@ -282,7 +283,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 @Override
                 public void onMessage() {
                     String responseStr = (String) message;
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -291,7 +292,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
                     ToastUtil.success(_mActivity, "提交成功");
-                    pop();
+                    hideSoftInputPop();
                 }
             };
 
@@ -384,7 +385,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 @Override
                 public void onMessage() {
                     String responseStr = (String) message;
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -393,7 +394,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
                     ToastUtil.success(_mActivity, "提交成功");
-                    pop();
+                    hideSoftInputPop();
                 }
             };
 
@@ -431,7 +432,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     return responseStr;
                 }
             });
-        } else { // 商品投訴
+        } else { // 產品投訴
             if (reasonIndex == -1) {
                 ToastUtil.error(_mActivity, getString(R.string.select_complain_subject_hint));
                 return;
@@ -458,7 +459,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 @Override
                 public void onMessage() {
                     String responseStr = (String) message;
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -467,7 +468,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
                     ToastUtil.success(_mActivity, "提交成功");
-                    pop();
+                    hideSoftInputPop();
                 }
             };
 
@@ -531,46 +532,46 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        String storeName = responseObj.getString("datas.ordersVo.storeName");
+                        String storeName = responseObj.getSafeString("datas.ordersVo.storeName");
                         tvStoreName.setText(storeName);
 
-                        EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
+                        EasyJSONObject ordersGoodsVo = responseObj.getSafeObject("datas.ordersGoodsVo");
 
 
                         List<RefundGoodsItem> refundGoodsItemList = new ArrayList<>();
 
                         RefundGoodsItem refundGoodsItem = new RefundGoodsItem();
-                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
-                        refundGoodsItem.goodsName = ordersGoodsVo.getString("goodsName");
-                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
+                        refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
+                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
                         refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
                         refundGoodsItem.goodsNum = ordersGoodsVo.getInt("buyNum");
                         refundGoodsItemList.add(refundGoodsItem);
                         adapter.setData(refundGoodsItemList);
 
-                        EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");
+                        EasyJSONArray refundReasonList = responseObj.getSafeArray("datas.refundReasonList");
                         for (Object object : refundReasonList) {
                             EasyJSONObject reason = (EasyJSONObject) object;
                             reasonItemList.add(new ListPopupItem(
                                     reason.getInt("reasonId"),
-                                    reason.getString("reasonInfo"),
+                                    reason.getSafeString("reasonInfo"),
                                     null));
                         }
 
                         maxRefundAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
                         tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-            SLog.info("Error!%s", e.getMessage());
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -598,23 +599,23 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        String storeName = responseObj.getString("datas.ordersVo.storeName");
+                        String storeName = responseObj.getSafeString("datas.ordersVo.storeName");
                         tvStoreName.setText(storeName);
 
-                        EasyJSONArray ordersGoodsVoList = responseObj.getArray("datas.ordersVo.ordersGoodsVoList");
+                        EasyJSONArray ordersGoodsVoList = responseObj.getSafeArray("datas.ordersVo.ordersGoodsVoList");
                         List<RefundGoodsItem> refundGoodsItemList = new ArrayList<>();
                         for (Object object : ordersGoodsVoList) {
                             EasyJSONObject ordersGoodsVo = (EasyJSONObject) object;
 
                             RefundGoodsItem refundGoodsItem = new RefundGoodsItem();
-                            refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
-                            refundGoodsItem.goodsName = ordersGoodsVo.getString("goodsName");
-                            refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                            refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
+                            refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
+                            refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
                             refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
                             refundGoodsItem.goodsNum = ordersGoodsVo.getInt("buyNum");
                             refundGoodsItemList.add(refundGoodsItem);
@@ -622,7 +623,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         adapter.setData(refundGoodsItemList);
 
                         /*
-                        EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");
+                        EasyJSONArray refundReasonList = responseObj.getSafeArray("datas.refundReasonList");
                         for (Object object : refundReasonList) {
                             EasyJSONObject reason = (EasyJSONObject) object;
                             reasonItemList.add(new ListPopupItem(
@@ -635,12 +636,12 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         maxRefundAmount = (float) responseObj.getDouble("datas.ordersVo.ordersAmount");
                         tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-            SLog.info("Error!%s", e.getMessage());
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -669,22 +670,22 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        String storeName = responseObj.getString("datas.ordersVo.storeName");
+                        String storeName = responseObj.getSafeString("datas.ordersVo.storeName");
                         tvStoreName.setText(storeName);
 
-                        EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
+                        EasyJSONObject ordersGoodsVo = responseObj.getSafeObject("datas.ordersGoodsVo");
 
                         List<RefundGoodsItem> refundGoodsItemList = new ArrayList<>();
 
                         RefundGoodsItem refundGoodsItem = new RefundGoodsItem();
-                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
-                        refundGoodsItem.goodsName = ordersGoodsVo.getString("goodsName");
-                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
+                        refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
+                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
                         refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
                         refundGoodsItem.goodsNum = goodsNum;
@@ -696,12 +697,12 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         abReturnCount.setMaxValue(maxReturnCount, null);
                         abReturnCount.setValue(goodsNum);
 
-                        EasyJSONArray refundReasonList = responseObj.getArray("datas.refundReasonList");
+                        EasyJSONArray refundReasonList = responseObj.getSafeArray("datas.refundReasonList");
                         for (Object object : refundReasonList) {
                             EasyJSONObject reason = (EasyJSONObject) object;
                             reasonItemList.add(new ListPopupItem(
                                     reason.getInt("reasonId"),
-                                    reason.getString("reasonInfo"),
+                                    reason.getSafeString("reasonInfo"),
                                     null));
                         }
 
@@ -710,8 +711,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
                         tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
@@ -746,22 +746,22 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        String storeName = responseObj.getString("datas.ordersVo.storeName");
+                        String storeName = responseObj.getSafeString("datas.ordersVo.storeName");
                         tvStoreName.setText(storeName);
 
-                        EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
+                        EasyJSONObject ordersGoodsVo = responseObj.getSafeObject("datas.ordersGoodsVo");
 
                         List<RefundGoodsItem> refundGoodsItemList = new ArrayList<>();
 
                         RefundGoodsItem refundGoodsItem = new RefundGoodsItem();
-                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getString("goodsImage"));
-                        refundGoodsItem.goodsName = ordersGoodsVo.getString("goodsName");
-                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                        refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
+                        refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
+                        refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
                         refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
                         refundGoodsItem.goodsNum = goodsNum;
@@ -771,25 +771,24 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         maxReturnCount = ordersGoodsVo.getInt("buyNum");
                         // tvGoodsNum.setText(getString(R.string.times_sign) + " " + goodsNum);
 
-                        EasyJSONArray refundReasonList = responseObj.getArray("datas.complainSubjectList");
+                        EasyJSONArray refundReasonList = responseObj.getSafeArray("datas.complainSubjectList");
                         for (Object object : refundReasonList) {
                             EasyJSONObject reason = (EasyJSONObject) object;
                             reasonItemList.add(new ListPopupItem(
                                     reason.getInt("subjectId"),
-                                    reason.getString("title"),
+                                    reason.getSafeString("title"),
                                     null));
                         }
 
                         maxRefundAmount = (float) ordersGoodsVo.getDouble("goodsPayAmount");
                         tvMaxRefundAmount.setText(StringUtil.formatPrice(_mActivity, maxRefundAmount, 0));
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
-            SLog.info("Error!%s", e.getMessage());
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -841,7 +840,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

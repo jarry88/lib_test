@@ -1,18 +1,10 @@
 package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PagerSnapHelper;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,6 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -33,22 +31,19 @@ import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.UnicodeEmoji;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.entity.EmojiPage;
+import com.ftofs.twant.entity.UnicodeEmojiItem;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
 import com.ftofs.twant.widget.SmoothInputLayout;
-
-import org.litepal.LitePal;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,11 +61,15 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     CommentItem commentItem;
 
     public static class QuoteReply {
-        public boolean isQuoteReply;  // 是否為引用回復，如果是引用回復時，下面的字段才有用
+        public boolean isQuoteReply;  // 是否為引用回覆，如果是引用回覆時，下面的字段才有用
         public String quoteNickname;  // 引用評論作者的昵稱
         public String quoteContent;   // 引用評論的內容
     }
 
+    /**
+     * canCommit用於防止快速點擊重覆提交
+     */
+    boolean canCommit = true;
     QuoteReply quoteReply = new QuoteReply();
 
     ImageView imgCommenterAvatar;
@@ -92,7 +91,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     EmojiPageAdapter emojiPageAdapter;
     List<EmojiPage> emojiPageList = new ArrayList<>();
 
-    int replyCommentId;  // 當前要回復的主題Id或二級評論Id
+    int replyCommentId;  // 當前要回覆的主題Id或二級評論Id
     CommentReplyListAdapter commentReplyListAdapter;
     List<CommentReplyItem> commentReplyItemList = new ArrayList<>();
 
@@ -134,6 +133,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         tvCommenterNickname = view.findViewById(R.id.tv_commenter_nickname);
         tvCommentTime = view.findViewById(R.id.tv_comment_time);
         tvContent = view.findViewById(R.id.tv_content);
+        tvContent.setMovementMethod(LinkMovementMethod.getInstance());
         imageView = view.findViewById(R.id.image_view);
         imageView.setOnClickListener(this);
         iconThumb = view.findViewById(R.id.icon_thumb);
@@ -155,14 +155,14 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                     int userId = User.getUserId();
                     if (userId == item.memberId) { // 如果是自己頭像，顯示自己個人信息
                         start(PersonalInfoFragment.newInstance());
-                    } else { // 如果是別人，顯示別人的會員信息
+                    } else { // 如果是別人，顯示別人的城友信息
                         start(MemberInfoFragment.newInstance(item.memberName));
                     }
                 } else if (id == R.id.btn_reply_comment) {
                     replyCommentId = item.commentId;
                     setReplyContentHint(item.nickname);
 
-                    // 是引用回復
+                    // 是引用回覆
                     quoteReply.isQuoteReply = true;
                     quoteReply.quoteNickname = item.nickname;
                     quoteReply.quoteContent = item.content;
@@ -214,7 +214,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -244,7 +244,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 silMainContainer.closeKeyboard(true);
                 silMainContainer.closeInputPane();
 
-                // 切換為回復當前的一級評論
+                // 切換為回覆當前的一級評論
                 replyCommentId = commentItem.commentId;
                 setReplyContentHint(commentItem.nickname);
                 quoteReply.isQuoteReply = false;
@@ -267,7 +267,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_thumb) {
             if (!User.isLogin()) {
                 start(LoginFragment.newInstance());
@@ -280,16 +280,22 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 return;
             }
 
-            String replyContent = etReplyContent.getText().toString().trim();
-            if (StringUtil.isEmpty(replyContent)) {
-                ToastUtil.error(_mActivity, "回復不能為空");
+            if (!canCommit) {
+                // 不能重覆提交，返回
                 return;
             }
 
+            String replyContent = etReplyContent.getText().toString().trim();
+            if (StringUtil.isEmpty(replyContent)) {
+                ToastUtil.error(_mActivity, "回覆不能為空");
+                return;
+            }
+
+            String filteredReplyContent = StringUtil.filterCommentContent(replyContent);
             EasyJSONObject params = EasyJSONObject.generate(
                     "commentChannel", commentItem.commentChannel,
                     "deep", 2,
-                    "content", StringUtil.filterCommentContent(replyContent),
+                    "content", filteredReplyContent,
                     "parentCommentId", commentItem.commentId,
                     "replyCommentId", replyCommentId);
 
@@ -310,35 +316,41 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             String token = User.getToken();
             String path = Api.PATH_PUBLISH_COMMENT + Api.makeQueryString(EasyJSONObject.generate("token", token));
             SLog.info("path[%s], params[%s]", path, params.toString());
+            canCommit = false;
             Api.postJsonUi(path, params.toString(), new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
+                    canCommit = true;
                 }
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
                     try {
+                        canCommit = true;
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        ToastUtil.success(_mActivity, "回復成功");
+                        ToastUtil.success(_mActivity, "回覆成功");
 
-                        EasyJSONObject wantCommentVo = responseObj.getObject("datas.wantCommentVo");
-                        EasyJSONObject memberVo = wantCommentVo.getObject("memberVo");
+                        EasyJSONObject wantCommentVo = responseObj.getSafeObject("datas.wantCommentVo");
+                        EasyJSONObject memberVo = wantCommentVo.getSafeObject("memberVo");
 
                         CommentReplyItem commentReplyItem = new CommentReplyItem();
                         commentReplyItem.memberId = memberVo.getInt("memberId");
-                        commentReplyItem.memberName = memberVo.getString("memberName");
+                        commentReplyItem.memberName = memberVo.getSafeString("memberName");
                         commentReplyItem.commentId = wantCommentVo.getInt("commentId");
-                        commentReplyItem.avatarUrl = memberVo.getString("avatar");
-                        commentReplyItem.nickname = memberVo.getString("nickName");
+                        commentReplyItem.avatarUrl = memberVo.getSafeString("avatar");
+                        commentReplyItem.nickname = memberVo.getSafeString("nickName");
                         commentReplyItem.createTime = wantCommentVo.getLong("createTime");
-                        commentReplyItem.content = wantCommentVo.getString("content");
+                        // commentReplyItem.content = wantCommentVo.getSafeString("content"); 这里获取过来的Unicode表情有问题
+                        // SLog.info("commentReplyItem.content[%s]", commentReplyItem.content);
+                        commentReplyItem.content = filteredReplyContent;
+                        SLog.info("commentReplyItem.content[%s]", commentReplyItem.content);
                         commentReplyItem.isLike = wantCommentVo.getInt("isLike");
                         commentReplyItem.commentLike = wantCommentVo.getInt("commentLike");
 
@@ -401,7 +413,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -429,7 +441,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
@@ -437,7 +449,13 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(commentItem.commenterAvatar)).centerCrop().into(imgCommenterAvatar);
                         tvCommenterNickname.setText(commentItem.nickname);
                         tvCommentTime.setText(commentItem.commentTime);
-                        tvContent.setText(StringUtil.translateEmoji(_mActivity, commentItem.content, (int) tvContent.getTextSize()));
+                        tvContent.setText(StringUtil.translateEmoji(_mActivity, commentItem.content, (int) tvContent.getTextSize(), new SimpleCallback() {
+                            @Override
+                            public void onSimpleCall(Object data) {
+                                String url = (String) data;
+                                StringUtil.parseCustomUrl(_mActivity, url);
+                            }
+                        }));
                         if (commentItem.commentType == Constant.COMMENT_TYPE_TEXT || StringUtil.isEmpty(commentItem.imageUrl)) {
                             imageView.setVisibility(View.GONE);
                         } else {
@@ -450,48 +468,45 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                         tvReplyCount.setText(String.format(getString(R.string.text_view_reply_count), commentItem.commentReply));
 
 
-                        // 回復列表
-                        EasyJSONArray replyList = responseObj.getArray("datas.replyList");
+                        // 回覆列表
+                        EasyJSONArray replyList = responseObj.getSafeArray("datas.replyList");
                         for (Object object : replyList) {
                             EasyJSONObject reply = (EasyJSONObject) object;
 
                             CommentReplyItem item = new CommentReplyItem();
                             item.memberId = reply.getInt("memberVo.memberId");
-                            item.memberName = reply.getString("memberVo.memberName");
+                            item.memberName = reply.getSafeString("memberVo.memberName");
                             item.commentId = reply.getInt("commentId");
-                            item.avatarUrl = reply.getString("memberVo.avatar");
-                            item.nickname = reply.getString("memberVo.nickName");
+                            item.avatarUrl = reply.getSafeString("memberVo.avatar");
+                            item.nickname = reply.getSafeString("memberVo.nickName");
                             item.createTime = reply.getLong("createTime");
-                            item.content = reply.getString("content");
+                            item.content = reply.getSafeString("content");
+                            item.commentRole = reply.getInt("commentRole");
                             if (StringUtil.isEmpty(item.content)) {
                                 item.content = "";
                             }
-                            EasyJSONArray images = reply.getArray("images");
-                            if (!Util.isJsonNull(images)) {
-                                for (Object object2 : images) {
-                                    EasyJSONObject image = (EasyJSONObject) object2;
-                                    item.imageList.add(image.getString("imageUrl"));
-                                }
+                            EasyJSONArray images = reply.getSafeArray("images");
+                            for (Object object2 : images) {
+                                EasyJSONObject image = (EasyJSONObject) object2;
+                                item.imageList.add(image.getSafeString("imageUrl"));
                             }
-
 
                             item.commentLike = reply.getInt("commentLike");
                             item.isLike = reply.getInt("isLike");
 
-                            EasyJSONObject wantCommentReplyVo = reply.getObject("wantCommentReplyVo");
-                            if (wantCommentReplyVo != null) {
+                            EasyJSONObject wantCommentReplyVo = reply.getSafeObject("wantCommentReplyVo");
+                            SLog.info("wantCommentReplyVo[%s]", wantCommentReplyVo);
+                            if (!Util.isJsonObjectEmpty(wantCommentReplyVo)) {
                                 item.isQuoteReply = true;
-                                item.quoteNickname = wantCommentReplyVo.getString("nickName");
-                                item.quoteContent = wantCommentReplyVo.getString("content");
+                                item.quoteNickname = wantCommentReplyVo.getSafeString("nickName");
+                                item.quoteContent = wantCommentReplyVo.getSafeString("content");
                             }
 
                             commentReplyItemList.add(item);
                         }
-                        SLog.info("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
                         commentReplyListAdapter.setData(commentReplyItemList);
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
@@ -522,7 +537,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -588,8 +603,10 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                     int index = 0;
                     for (int btnId : EmojiPageAdapter.btnIds) {
                         if (btnId == id) {
-                            Emoji emoji = emojiPage.emojiList.get(index);
-                            SLog.info("emojiId[%d], emojiCode[%s]", emoji.emojiId, emoji.emojiCode);
+                            if (index >= emojiPage.emojiList.size()) {
+                                return;
+                            }
+                            UnicodeEmojiItem emojiItem = emojiPage.emojiList.get(index);
 
                             Editable message = etReplyContent.getEditableText();
                             SLog.info("message[%s]", message);
@@ -598,14 +615,6 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                             int start = etReplyContent.getSelectionStart();
                             int end = etReplyContent.getSelectionEnd();
 
-                            Bitmap bitmap = BitmapFactory.decodeFile(emoji.absolutePath);
-                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                            drawable.setBounds(0, 0,
-                                    ((int) etReplyContent.getTextSize() + 12), ((int) etReplyContent.getTextSize() + 12));
-                            QMUIAlignMiddleImageSpan span = new QMUIAlignMiddleImageSpan(drawable, QMUIAlignMiddleImageSpan.ALIGN_MIDDLE);
-
-
-                            String emoticon = emoji.emojiCode;
                             // Insert the emoticon.
                             if (start < 0) {
                                 start = 0;
@@ -613,15 +622,13 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                             if (end < 0) {
                                 end = 0;
                             }
-                            message.replace(start, end, emoticon);
+                            message.replace(start, end, emojiItem.emoji);
                             SLog.info("message[%s]", message);
 
 
-                            SLog.info("start[%d], stop[%d]", start, start + emoticon.length());
-                            message.setSpan(span, start, start + emoticon.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             etReplyContent.setText(message);
                             // 重新定位光標
-                            etReplyContent.setSelection(start + emoticon.length());
+                            etReplyContent.setSelection(start + emojiItem.emoji.length());
                             break;
                         }
                         index++;
@@ -633,12 +640,8 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     }
 
     private void loadEmojiData() {
-        List<Emoji> emojiList = LitePal.findAll(Emoji.class);
-        if (emojiList == null) {
-            return;
-        }
         // 表情數
-        int emojiCount = emojiList.size();
+        int emojiCount = UnicodeEmoji.emojiList.length;
         // 表情頁數
         int pageCount = (emojiCount + EmojiPage.EMOJI_PER_PAGE - 1) / EmojiPage.EMOJI_PER_PAGE;
 
@@ -653,7 +656,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
             EmojiPage emojiPage = new EmojiPage();
             for (int j = start; j < stop; j++) {
-                emojiPage.emojiList.add(emojiList.get(j));
+                emojiPage.emojiList.add(new UnicodeEmojiItem(UnicodeEmoji.emojiList[j]));
             }
 
             emojiPageList.add(emojiPage);

@@ -106,7 +106,7 @@ public class Bill implements Serializable {
     private BigDecimal bookAmount = new BigDecimal(0);
 
     /**
-     * bycj-- 商品推广需要扣除的佣金
+     * bycj-- 產品推广需要扣除的佣金
      */
     private BigDecimal distributionAmount = new BigDecimal(0);
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ftofs.twant.widget.LockableNestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sv_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/length_15dp"
+        android:layout_marginEnd="@dimen/length_15dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:layout_marginTop="@dimen/length_15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            android:text="關於我們"/>
+
+        <TextView
+            android:id="@+id/tv_introduction"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_toolbar_max_height"/>
+    </LinearLayout>
+</com.ftofs.twant.widget.LockableNestedScrollView>

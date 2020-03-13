@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 /**
- * 帖文分类
+ * 想要帖分类
  * @author zwm
  */
 public class ArticleCategory {

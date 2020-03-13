@@ -1,12 +1,10 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.fragment.DoubleElevenFragment;
-import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;

@@ -2,13 +2,12 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.util.Util;
 
-public class AreaItemView extends android.support.v7.widget.AppCompatTextView {
+public class AreaItemView extends androidx.appcompat.widget.AppCompatTextView {
     int areaId;
     int depth;
 

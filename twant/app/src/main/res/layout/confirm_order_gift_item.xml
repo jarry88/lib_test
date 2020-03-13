@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:background="#FEB809"
+            android:background="@color/tw_yellow"
             android:gravity="center"
             android:text="@string/text_gift_simplify"
             android:textColor="@android:color/white"

@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +79,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     int currPage = 0;
     boolean hasMore;
     int selTabId; // 当前选中的Tab的Id
-    String keyword;  // 搜索關鍵字（商品標題或訂單號），訂單搜索時才用到
+    String keyword;  // 搜索關鍵字（產品標題或訂單號），訂單搜索時才用到
 
     RecyclerView rvOrderList;
 
@@ -201,11 +203,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         });
 
         // 設置空頁面
-        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
-        // 設置空頁面的提示語
-        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
-        tvEmptyHint.setText(R.string.no_order_hint);
-        payItemListAdapter.setEmptyView(emptyView);
+        payItemListAdapter.setEmptyView(R.layout.layout_placeholder_no_order, rvOrderList);
         rvOrderList.setAdapter(payItemListAdapter);
 
         if (usage == USAGE_LIST) {
@@ -235,7 +233,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back_list || id == R.id.btn_back_search) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.tv_fragment_title) {
             if (Config.DEVELOPER_MODE) {
                 EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
@@ -291,7 +289,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
@@ -375,9 +373,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
             SLog.info("params[%s]", params);
 
-            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                    .asLoading(getString(R.string.text_loading))
-                    .show();
+            final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             Api.postUI(Api.PATH_ORDER_LIST, params, new UICallback() {
                 @Override
@@ -391,7 +387,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                     loadingPopup.dismiss();
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -408,7 +404,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                         if (page == 1) {  // 如果是第1頁，清空原有數據
                             payItemList.clear();
                         }
-                        EasyJSONArray ordersPayVoList = responseObj.getArray("datas.ordersPayVoList");
+                        EasyJSONArray ordersPayVoList = responseObj.getSafeArray("datas.ordersPayVoList");
                         for (Object object : ordersPayVoList) { // PayObject
                             EasyJSONObject ordersPayVo = (EasyJSONObject) object;
 
@@ -427,16 +423,16 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                 payItem = new PayItem(payId, payAmount, true);
                             }
 
-                            EasyJSONArray ordersVoList = ordersPayVo.getArray("ordersVoList");
-                            for (Object object2 : ordersVoList) { // OrderVo 一一對應于店鋪
+                            EasyJSONArray ordersVoList = ordersPayVo.getSafeArray("ordersVoList");
+                            for (Object object2 : ordersVoList) { // OrderVo 一一對應于商店
                                 if (!showPayButton) {
                                     payItem = new PayItem(payId, payAmount, false);
                                 }
                                 EasyJSONObject ordersVo = (EasyJSONObject) object2;
 
                                 int ordersId = ordersVo.getInt("ordersId");
-                                String ordersStateName = ordersVo.getString("ordersStateName");
-                                String storeName = ordersVo.getString("storeName");
+                                String ordersStateName = ordersVo.getSafeString("ordersStateName");
+                                String storeName = ordersVo.getSafeString("storeName");
                                 float freightAmount = (float) ordersVo.getDouble("freightAmount");
                                 float ordersAmount = (float) ordersVo.getDouble("ordersAmount");
 
@@ -452,16 +448,16 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
                                 List<OrderSkuItem> orderSkuItemList = new ArrayList<>();
                                 // 獲取Sku列表
-                                EasyJSONArray ordersGoodsVoList = ordersVo.getArray("ordersGoodsVoList");
+                                EasyJSONArray ordersGoodsVoList = ordersVo.getSafeArray("ordersGoodsVoList");
                                 for (Object object3 : ordersGoodsVoList) { // Sku
                                     EasyJSONObject ordersGoodsVo = (EasyJSONObject) object3;
 
                                     int commonId = ordersGoodsVo.getInt("commonId");
                                     int goodsId = ordersGoodsVo.getInt("goodsId");
-                                    String goodsName = ordersGoodsVo.getString("goodsName");
-                                    String imageSrc = ordersGoodsVo.getString("imageSrc");
+                                    String goodsName = ordersGoodsVo.getSafeString("goodsName");
+                                    String imageSrc = ordersGoodsVo.getSafeString("imageSrc");
                                     float goodsPrice = (float) ordersGoodsVo.getDouble("goodsPrice");
-                                    String goodsFullSpecs = ordersGoodsVo.getString("goodsFullSpecs");
+                                    String goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
                                     int buyNum = ordersGoodsVo.getInt("buyNum");
 
                                     orderSkuItemList.add(new OrderSkuItem(commonId, goodsId, goodsName, imageSrc, goodsPrice, goodsFullSpecs, buyNum));
@@ -469,19 +465,18 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
                                 // 獲取贈品列表
                                 List<GiftItem> giftItemList = new ArrayList<>();
-                                EasyJSONArray ordersGiftVoList = ordersVo.getArray("ordersGiftVoList");
-                                if (!Util.isJsonNull(ordersGiftVoList) && ordersGiftVoList.length() > 0) {
-                                    for (Object object3 : ordersGiftVoList) {
-                                        EasyJSONObject ordersGiftVo = (EasyJSONObject) object3;
-                                        GiftItem giftItem = new GiftItem();
-                                        giftItem.commonId = ordersGiftVo.getInt("commonId");
-                                        giftItem.goodsId = ordersGiftVo.getInt("goodsId");
-                                        giftItem.giftNum = ordersGiftVo.getInt("giftNum");
-                                        giftItem.goodsName = ordersGiftVo.getString("goodsName");
+                                EasyJSONArray ordersGiftVoList = ordersVo.getSafeArray("ordersGiftVoList");
+                                for (Object object3 : ordersGiftVoList) {
+                                    EasyJSONObject ordersGiftVo = (EasyJSONObject) object3;
+                                    GiftItem giftItem = new GiftItem();
+                                    giftItem.commonId = ordersGiftVo.getInt("commonId");
+                                    giftItem.goodsId = ordersGiftVo.getInt("goodsId");
+                                    giftItem.giftNum = ordersGiftVo.getInt("giftNum");
+                                    giftItem.goodsName = ordersGiftVo.getSafeString("goodsName");
 
-                                        giftItemList.add(giftItem);
-                                    }
+                                    giftItemList.add(giftItem);
                                 }
+
 
 
                                 OrderItem orderItem = new OrderItem(ordersId, storeName, ordersStateName, freightAmount, ordersAmount,
@@ -508,9 +503,8 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                         payItemListAdapter.loadMoreComplete();
 
                         currPage++;
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
-                        SLog.info("Error!loadOrderData failed");
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
@@ -541,7 +535,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -624,7 +618,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
@@ -679,7 +673,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }

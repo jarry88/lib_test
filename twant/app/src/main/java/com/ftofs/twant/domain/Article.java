@@ -2,17 +2,17 @@ package com.ftofs.twant.domain;
 
 public class Article {
     /**
-     * 文章主键、自增
+     * 想要帖主键、自增
      */
     private int articleId;
 
     /**
-     * 文章标题
+     * 想要帖标题
      */
     private String title;
 
     /**
-     * 文章分类ID
+     * 想要帖分类ID
      */
     private int categoryId;
 
@@ -22,7 +22,7 @@ public class Article {
     private String url;
 
     /**
-     * 文章内容
+     * 想要帖内容
      */
     private String content = "";
 

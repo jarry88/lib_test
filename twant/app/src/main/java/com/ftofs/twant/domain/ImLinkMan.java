@@ -66,7 +66,7 @@ public class ImLinkMan implements Serializable {
     private Integer sellerDel = 1;
 
     /**
-     * 商品spu编号
+     * 產品spu编号
      */
     private int commonId;
 

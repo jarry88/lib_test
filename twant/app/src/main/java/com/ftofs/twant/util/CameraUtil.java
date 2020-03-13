@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
@@ -71,9 +73,8 @@ public class CameraUtil {
             File photoFile = new File(FileUtil.getTodayImageRoot() + "/" + filename);
             try {
                 FileUtil.createDirNomedia(new File(FileUtil.getTodayImageRoot()));
-            } catch (IOException e) {
-                e.printStackTrace();
-                SLog.info("Error!%s", e.getMessage());
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
 
             // Uri imageUri = Uri.fromFile(photoFile);
@@ -120,8 +121,8 @@ public class CameraUtil {
 
             SLog.info("photoFile[%s]", photoFile.getAbsoluteFile());
             return photoFile;
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         return null;
     }

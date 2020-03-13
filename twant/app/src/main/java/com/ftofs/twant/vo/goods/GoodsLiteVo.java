@@ -3,32 +3,32 @@ package com.ftofs.twant.vo.goods;
 import java.math.BigDecimal;
 
 /**
- * 接口专题项目商品数据Vo
+ * 接口专题项目產品数据Vo
  * Created by dqw on 2016/04/13.
  */
 public class GoodsLiteVo {
     /**
-     * 商品编号
+     * 產品编号
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品APP价格，等同于AppPrice用于后台显示
+     * 產品APP价格，等同于AppPrice用于后台显示
      */
     private BigDecimal goodsPrice;
     /**
-     * 商品APP价格
+     * 產品APP价格
      */
     private BigDecimal appPriceMin;
     /**
-     * 商品微信价格
+     * 產品微信价格
      */
     private BigDecimal wechatPriceMin;
     /**
-     * 商品图片Url
+     * 產品图片Url
      */
     private String imageUrl;
 

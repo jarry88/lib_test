@@ -7,7 +7,7 @@
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:orientation="vertical">
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
@@ -23,7 +23,7 @@
             app:layout_constraintDimensionRatio="16:9"
             app:riv_corner_radius="3dp"
             />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.ftofs.twant.widget.StoreDesktop
         android:layout_width="match_parent"
@@ -44,8 +44,9 @@
             android:id="@+id/tv_shop_parent_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
             android:textSize="13sp"
             android:textColor="@color/tw_black"
             />
@@ -53,17 +54,18 @@
             android:id="@+id/tv_category_name_english"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_shop_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/tw_dark_grey"
+                android:textColor="@color/tw_red"
                 android:textSize="10sp"
                 />
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_commodity_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

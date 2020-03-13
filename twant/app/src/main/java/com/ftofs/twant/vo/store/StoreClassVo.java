@@ -18,11 +18,11 @@ public class StoreClassVo extends StoreClass {
     private String parentCnName = ""; //父類名稱
     private String parentEnName = ""; //英文名稱
     private int deep = 1; //目前級別（1,2)
-    private long storeListCount;//該分類店鋪總數量
-    //Modify By liusf 2018/12/24 14:38 該分類商品總數量
+    private long storeListCount;//該分類商店總數量
+    //Modify By liusf 2018/12/24 14:38 該分類產品總數量
     private long goodsListCount;
     private List<StoreClassVo> children = new ArrayList<>();//下級菜單
-    private List<Store> storeList = new ArrayList<>();//店鋪列表
+    private List<Store> storeList = new ArrayList<>();//商店列表
 
     public String getParentCnName() {
         return parentCnName;

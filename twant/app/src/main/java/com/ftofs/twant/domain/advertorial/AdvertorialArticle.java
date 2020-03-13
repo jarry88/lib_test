@@ -59,7 +59,7 @@ public class AdvertorialArticle implements Serializable {
     private int categoryId;
 
     /**
-     * 文章状态
+     * 想要帖状态
      */
     private int state;
 
@@ -114,7 +114,7 @@ public class AdvertorialArticle implements Serializable {
     private int likeNum;
 
     /**
-     * 商品数量
+     * 產品数量
      */
     private int goodsCount;
 
@@ -124,7 +124,7 @@ public class AdvertorialArticle implements Serializable {
     private int followNum;
 
     /**
-     * 商品id列表","分割
+     * 產品id列表","分割
      */
     private String commonIdList = "";
 
@@ -149,7 +149,7 @@ public class AdvertorialArticle implements Serializable {
     private String stateText = "";
 
     /**
-     * 文章类型文字
+     * 想要帖类型文字
      */
     private String typeText = "";
 

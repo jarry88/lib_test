@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,7 +116,7 @@ public class SearchFriendFragment extends BaseFragment implements View.OnClickLi
 
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
-                "type", 1, // 0全部1好友3店鋪群
+                "type", 1, // 0全部1好友3商店群
                 "name", keyword);
 
         SLog.info("params[%s]", params);
@@ -128,21 +130,21 @@ public class SearchFriendFragment extends BaseFragment implements View.OnClickLi
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    EasyJSONArray friends = responseObj.getArray("datas.friendList");
+                    EasyJSONArray friends = responseObj.getSafeArray("datas.friendList");
                     for (Object object : friends) {
                         EasyJSONObject friend = (EasyJSONObject) object;
                         UniversalMemberItem item = new UniversalMemberItem();
 
-                        item.memberName = friend.getString("memberName");
-                        item.nickname = friend.getString("nickName");
-                        item.avatarUrl = friend.getString("avatar");
-                        item.memberSignature = friend.getString("memberSignature");
+                        item.memberName = friend.getSafeString("memberName");
+                        item.nickname = friend.getSafeString("nickName");
+                        item.avatarUrl = friend.getSafeString("avatar");
+                        item.memberSignature = friend.getSafeString("memberSignature");
 
                         friendList.add(item);
                     }
@@ -150,7 +152,7 @@ public class SearchFriendFragment extends BaseFragment implements View.OnClickLi
 
                     hideSoftInput();
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -162,14 +164,14 @@ public class SearchFriendFragment extends BaseFragment implements View.OnClickLi
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

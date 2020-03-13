@@ -1,6 +1,6 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 
 /**
- * 店鋪客服人員彈窗列表
+ * 商店客服人員彈窗列表
  * @author zwm
  */
 public class StoreServiceStaffListAdapter extends BaseQuickAdapter<CustomerServiceStaff, BaseViewHolder> {

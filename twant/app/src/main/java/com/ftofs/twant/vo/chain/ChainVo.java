@@ -94,7 +94,7 @@ public class ChainVo {
      */
     private int chainCriterion = 5;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice = BigDecimal.ZERO;
     /**

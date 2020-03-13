@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class CategoryBrand implements Serializable {
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId;
 

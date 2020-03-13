@@ -1,27 +1,34 @@
 package com.ftofs.twant.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.GoodsGalleryAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -52,6 +59,7 @@ import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.InStorePersonPopup;
 import com.ftofs.twant.widget.SharePopup;
+import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.StoreGiftPopup;
@@ -60,6 +68,7 @@ import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.rd.PageIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -75,6 +84,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -85,16 +96,19 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 /**
- * 商品詳情頁面
+ * 產品詳情頁面
+ *
  * @author zwm
  */
 public class GoodsDetailFragment extends BaseFragment implements View.OnClickListener {
-    // 商品Id
+    private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800;
+    Unbinder unbinder;
+    // 產品Id
     int commonId;
     // 當前選中的goodsId
     int currGoodsId;
 
-    // 店鋪Id
+    // 商店Id
     int storeId;
     // 購買數量
     int buyNum = 1;
@@ -116,7 +130,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int discountEndTime;
     Timer timer;
 
-    ImageView goodsImage;
+    RecyclerView rvGalleryImageList;
+
+
     TextView tvGoodsPrice;
     TextView tvGoodsPriceFinal;
     TextView tvGoodsPriceOriginal;
@@ -128,19 +144,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvShipTo;
     TextView tvFreightAmount;
     TextView tvFansCount;
+    TextView tvViewCount;
     TextView tvGoodsSale;
 
     ImageView iconFollow;
     TextView tvFollow;
     int isFavorite;  // 是否關注
 
-    // 當前選中規格的商品名稱和賣點
+    // 當前選中規格的產品名稱和賣點
     String goodsName;
     String jingle;
-    String currImageSrc;
 
     ImageView btnGoodsThumb;
-    int isLike; // 是否點讚
+    int isLike; // 是否讚想
     int goodsLike;
 
     int allowSend;
@@ -160,7 +176,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     // 當前選中的SpecValueId列表
     List<Integer> selSpecValueIdList = new ArrayList<>();
 
-    RelativeLayout btnShowVoucher;
+    // skuId與sku圖片輪播列表的映射關系
+    Map<Integer, List<String>> skuGoodsGalleryMap = new HashMap<>();
+    GoodsGalleryAdapter goodsGalleryAdapter;
+    int currGalleryPosition;
+    List<String> currGalleryImageList = new ArrayList<>();
+    PageIndicatorView pageIndicatorView;
+
+    RelativeLayout rlVoucherList;
 
     RelativeLayout btnShowConform;
     TextView tvConformHint;
@@ -181,7 +204,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     ImageView btnPlay;
 
-    // 商品評論條數
+    // 產品說說條數
     int commentCount = 0;
     TextView tvCommentCount;
     LinearLayout llCommentContainer;
@@ -196,7 +219,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     LinearLayout llStorageOkContainer;
 
     /**
-     * 店鋪券和平台券列表
+     * 商店券和平台券列表
      */
     List<StoreVoucher> storeVoucherList = new ArrayList<>();
 
@@ -213,6 +236,60 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     boolean isDataValid;
 
     LinearLayout llVoucherContainer;
+    ScrollView scrollViewContainer;
+    RelativeLayout rlTopBarContainer;
+    private SimpleTabManager simpleTabManager;
+    CommentListFragment commentListFragment;
+    ConstraintLayout llPage1;
+    LinearLayout llPage2;
+    LinearLayout llPage3;
+    LinearLayout bootomBar;
+    int discountState;//0沒有折扣信息、1未開始、2已開始、3以結束
+    LinearLayout llFloatButton;
+    private int commentChannel = Constant.COMMENT_CHANNEL_GOODS;//產品
+    private Handler mHandler;
+    private boolean showFloatButton = true;
+    private boolean isScrolling = false;
+    private int discountStartTime;
+    private ViewPagerFragment viewPagerFragment;
+    private int goodsStatus=1;
+    private RelativeLayout preTopBarContainer;
+
+    float goodsPrice;
+
+    static class scrollStateHandler extends Handler {
+        ScrollView scrollViewContainer;
+        GoodsDetailFragment fragment;
+        int lastY = -1;
+        private boolean showFloatButton = true;
+
+        public scrollStateHandler(GoodsDetailFragment fragment) {
+            this.fragment = fragment;
+            this.scrollViewContainer = fragment.scrollViewContainer;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0) {// 打印 每次 Y坐标 滚动的距离
+//Slog.info(scrollView.getScrollY() + "");
+//    获取到 滚动的 Y 坐标距离
+                int scrollY = scrollViewContainer.getScrollY();
+// 如果 滚动 的Y 坐标 的 最后一次 滚动到的Y坐标 一致说明  滚动已经完成
+                if (scrollY == lastY) {
+//  ScrollView滚动完成  处理相应的事件
+                    fragment.isScrolling = false;
+                    fragment.showFloatButton();
+                } else {
+                    // 滚动的距离 和 之前的不相等 那么 再发送消息 判断一次
+// 将滚动的 Y 坐标距离 赋值给 lastY
+                    lastY = scrollY;
+                    this.sendEmptyMessageDelayed(0, 10);
+                }
+            }
+        }
+
+
+    }
 
     static class CountDownHandler extends Handler {
         WeakReference<GoodsDetailFragment> weakReference;
@@ -227,7 +304,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
             TimeInfo timeInfo = (TimeInfo) msg.obj;
             GoodsDetailFragment goodsDetailFragment = weakReference.get();
-            goodsDetailFragment.tvCountDownDay.setText("距結束 " + timeInfo.day + " 天");
+            if (goodsDetailFragment.discountState == 2) {
+                goodsDetailFragment.tvCountDownDay.setText(String.format("距結束 %d 天", timeInfo.day));
+            } else if (goodsDetailFragment.discountState == 1) {
+                goodsDetailFragment.tvCountDownDay.setText(String.format("距開始 %d 天", timeInfo.day));
+            }
             goodsDetailFragment.tvCountDownHour.setText(String.format("%02d", timeInfo.hour));
             goodsDetailFragment.tvCountDownMinute.setText(String.format("%02d", timeInfo.minute));
             goodsDetailFragment.tvCountDownSecond.setText(String.format("%02d", timeInfo.second));
@@ -235,9 +316,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     /**
-     * 構建商品詳情頁面
-     * @param commonId  spuId
-     * @param goodsId   skuId, 用于選中指定的sku，如果傳0,表示默認選中第一個sku
+     * 構建產品詳情頁面
+     *
+     * @param commonId spuId
+     * @param goodsId  skuId, 用于選中指定的sku，如果傳0,表示默認選中第一個sku
      * @return
      */
     public static GoodsDetailFragment newInstance(int commonId, int goodsId) {
@@ -255,9 +337,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_goods_detail, container, false);
+        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -269,8 +353,77 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         commonId = args.getInt("commonId");
         currGoodsId = args.getInt("goodsId");
         SLog.info("commonId[%d], currGoodsId[%d]", commonId, currGoodsId);
+        scrollViewContainer = view.findViewById(R.id.sv_content);
+        scrollViewContainer.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            isScrolling = true;
+        });
+        mHandler = new scrollStateHandler(this);
+        scrollViewContainer.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                mHandler.sendEmptyMessageDelayed(0, 10);
+            }
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                hideFloatButton();
+            }
+            return false;
+        });
+        //  用于 存储 上一次 滚动的Y坐标
+        rlTopBarContainer = view.findViewById(R.id.tool_bar);
+        preTopBarContainer = view.findViewById(R.id.rv_pre_tool_bar);
+        llFloatButton = view.findViewById(R.id.ll_float_button_container);
+        scrollViewContainer.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            int fadingHeight = 255;
+            int initHeight = 20;
+            if (llPage1.getVisibility() == VISIBLE) {
+                if (scrollY > initHeight) {
+                    view.findViewById(R.id.btn_back).setVisibility(VISIBLE);
+                    view.findViewById(R.id.btn_menu).setVisibility(VISIBLE);
+                    view.findViewById(R.id.btn_search).setVisibility(VISIBLE);
+                    if (scrollY > fadingHeight) {
+                        rlTopBarContainer.setAlpha(1.0f);
+                        preTopBarContainer.setAlpha(0);
 
-        goodsImage = view.findViewById(R.id.goods_image);
+                    } else {
+                        rlTopBarContainer.setAlpha((float) scrollY / fadingHeight);
+                        preTopBarContainer.setAlpha(1.0f-(float) scrollY / fadingHeight);
+
+                        //rlTopBarContainer.getBackground().setAlpha(scrollY);
+                    }
+                } else {
+                    view.findViewById(R.id.btn_back).setVisibility(View.INVISIBLE);
+                    view.findViewById(R.id.btn_menu).setVisibility(View.INVISIBLE);
+                    view.findViewById(R.id.btn_search).setVisibility(View.INVISIBLE);
+                    rlTopBarContainer.setAlpha(0.0f);
+                    preTopBarContainer.setAlpha(1.0f);
+                }
+            } else {
+                rlTopBarContainer.setAlpha(1.0f);
+            }
+        });
+        simpleTabManager = new SimpleTabManager(0) {
+            @Override
+            public void onClick(View v) {
+                boolean isRepeat = onSelect(v);
+                if (isRepeat) {
+                    return;
+                }
+                int id = v.getId();
+                SLog.info("id[%d]", id);
+                switchPage(id);
+
+            }
+        };
+        llPage1 = view.findViewById(R.id.ll_page_1);
+        llPage2 = view.findViewById(R.id.ll_page_2);
+        llPage3 = view.findViewById(R.id.ll_page_3);
+        bootomBar = view.findViewById(R.id.rl_bottom_bar_container);
+
+        Util.setOnClickListener(view, R.id.rl_price_tag, this);
+        simpleTabManager.add(view.findViewById(R.id.stb_good_home));
+        simpleTabManager.add(view.findViewById(R.id.stb_good_detail));
+        simpleTabManager.add(view.findViewById(R.id.stb_good_comment));
+        rvGalleryImageList = view.findViewById(R.id.rv_gallery_image_list);
+
         tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
         tvGoodsName = view.findViewById(R.id.tv_goods_name);
         tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
@@ -309,6 +462,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         iconFollow = view.findViewById(R.id.icon_follow);
         tvFollow = view.findViewById(R.id.tv_follow);
         tvFansCount = view.findViewById(R.id.tv_fans_count);
+        tvViewCount = view.findViewById(R.id.tv_view_count);
         tvGoodsSale = view.findViewById(R.id.tv_goods_sale);
 
         llGoodsDetailImageContainer = view.findViewById(R.id.ll_goods_detail_image_container);
@@ -321,8 +475,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_goods_share, this);
 
         llVoucherContainer = view.findViewById(R.id.ll_voucher_container);
-        btnShowVoucher = view.findViewById(R.id.btn_show_voucher);
-        btnShowVoucher.setOnClickListener(this);
+        rlVoucherList = view.findViewById(R.id.rl_voucher_list);
+
+        Util.setOnClickListener(view, R.id.ll_voucher_container, this);
 
         btnShowConform = view.findViewById(R.id.btn_show_conform);
         btnShowConform.setOnClickListener(this);
@@ -340,8 +495,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvComment = view.findViewById(R.id.tv_comment);
 
         Util.setOnClickListener(view, R.id.btn_back_round, this);
+        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_search_round, this);
+        Util.setOnClickListener(view, R.id.btn_search, this);
         Util.setOnClickListener(view, R.id.btn_menu_round, this);
+        Util.setOnClickListener(view, R.id.btn_menu, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
         Util.setOnClickListener(view, R.id.btn_add_to_cart, this);
         Util.setOnClickListener(view, R.id.btn_buy, this);
@@ -351,19 +509,113 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_bottom_bar_shop, this);
         Util.setOnClickListener(view, R.id.btn_goto_cart, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_customer_service, this);
+        Util.setOnClickListener(view, R.id.btn_comment, this);
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
         rvStoreFriendsList.setLayoutManager(layoutManager);
         adapter = new StoreFriendsAdapter(R.layout.store_friends_item, storeFriendsItemList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                StoreFriendsItem item = storeFriendsItemList.get(position);
-                Util.startFragment(MemberInfoFragment.newInstance(item.memberName));
-            }
+        adapter.setOnItemClickListener((adapter, view1, position) -> {
+            StoreFriendsItem item = storeFriendsItemList.get(position);
+            Util.startFragment(MemberInfoFragment.newInstance(item.memberName));
         });
         rvStoreFriendsList.setAdapter(adapter);
+
+        pageIndicatorView = view.findViewById(R.id.pageIndicatorView);
+        setImageBanner(rvGalleryImageList);
+    }
+
+    private void setImageBanner(RecyclerView rvGalleryImageList) {
+        // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
+        // https://www.jianshu.com/p/e54db232df62
+        rvGalleryImageList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
+        (new PagerSnapHelper()).attachToRecyclerView(rvGalleryImageList);
+        goodsGalleryAdapter = new GoodsGalleryAdapter(_mActivity, currGalleryImageList);
+
+        goodsGalleryAdapter.setOnItemClickListener(v -> {
+            int position = currGalleryPosition % currGalleryImageList.size();
+            if (viewPagerFragment == null) {
+                viewPagerFragment = ViewPagerFragment.newInstance(currGalleryImageList);
+            }
+            SLog.info(currGalleryImageList.toString());
+            Util.startFragment(viewPagerFragment);
+            SLog.info("currPosition[%d][%d]", currGalleryPosition,position);
+
+        });
+        rvGalleryImageList.setAdapter(goodsGalleryAdapter);
+        rvGalleryImageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    currGalleryPosition = getCurrPosition();
+                    SLog.info("currPosition[%d]", currGalleryPosition);
+                    int position = currGalleryPosition % currGalleryImageList.size();
+                    pageIndicatorView.setSelection(position);
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+    }
+
+    private void hideFloatButton() {
+        if (showFloatButton) {
+            SLog.info("調用隱藏");
+            showFloatButton = false;
+            llFloatButton.postDelayed(() -> {
+                        llFloatButton.setTranslationX(60);
+                        SLog.info("執行隱藏");
+                    }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY
+            );
+            SLog.info("執行隱藏完畢");
+        }
+    }
+
+    private void showFloatButton() {
+        if (!showFloatButton) {
+            if (isScrolling) {
+                return;
+            }
+            llFloatButton.postDelayed(() -> {
+                SLog.info("執行顯示");
+                llFloatButton.setTranslationX(0);
+                showFloatButton = true;
+            }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY);
+        }
+    }
+
+    private void switchPage(int id) {
+        llPage1.setVisibility(GONE);
+        llPage2.setVisibility(GONE);
+        llPage3.setVisibility(GONE);
+        if (id == R.id.stb_good_home) {
+            llPage1.setVisibility(VISIBLE);
+            llPage2.setVisibility(VISIBLE);
+            bootomBar.setVisibility(VISIBLE);
+        } else if (id == R.id.stb_good_detail) {
+            llPage2.setVisibility(VISIBLE);
+            bootomBar.setVisibility(GONE);
+        } else if (id == R.id.stb_good_comment) {
+            updateComment();
+        }
+    }
+
+    private void updateComment() {
+        if (commentListFragment != null) {
+            commentListFragment.resetData();
+        } else {
+            SLog.info("switch here");
+
+            commentListFragment = CommentListFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS, false);
+        }
+        bootomBar.setVisibility(GONE);
+        getFragmentManager().beginTransaction().replace(R.id.ll_page_3, commentListFragment).commit();
+        getView().findViewById(R.id.ll_page_3).setVisibility(VISIBLE);
     }
 
 
@@ -374,13 +626,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         switch (id) {
             case R.id.btn_back_round:
-                pop();
+            case R.id.btn_back:
+                hideSoftInputPop();
                 break;
             case R.id.btn_search_round:
+            case R.id.btn_search:
+
                 start(ShopSearchFragment.newInstance(storeId, null));
                 break;
             case R.id.btn_menu_round:
-                SLog.info("here");
+            case R.id.btn_menu:
                 new XPopup.Builder(_mActivity)
                         .offsetX(-Util.dip2px(_mActivity, 11))
                         .offsetY(-Util.dip2px(_mActivity, 1))
@@ -390,6 +645,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_GOODS))
                         .show();
                 break;
+            case R.id.btn_comment:
+                if (userId == 0) {
+                    Util.showLoginFragment();
+                    return;
+                }
+                Util.startFragmentForResult(AddCommentFragment.newInstance(commonId, Constant.COMMENT_CHANNEL_GOODS), RequestCode.ADD_COMMENT.ordinal());
+                break;
+
             case R.id.btn_show_all_store_friends:
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -398,6 +661,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .show();
                 break;
             case R.id.btn_add_to_cart:
+                if(goodsStatus==0){
+                    ToastUtil.error(_mActivity,"商品已下架");
+                    return;
+                }
                 if (userId > 0) {
                     showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
                 } else {
@@ -412,6 +679,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
                 break;
             case R.id.btn_buy:
+                if(goodsStatus==0){
+                    ToastUtil.error(_mActivity,"商品已下架");
+                    return;
+                }
                 if (userId > 0) {
                     if (allowSend == 0) {
                         ToastUtil.error(_mActivity, getString(R.string.not_allow_send_hint));
@@ -441,7 +712,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_bottom_bar_shop:
                 Util.startFragment(ShopMainFragment.newInstance(storeId));
                 break;
-            case R.id.btn_show_voucher:
+            case R.id.ll_voucher_container:
                 if (userId < 1) {
                     start(LoginFragment.newInstance());
                     return;
@@ -476,10 +747,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .show();
                 break;
             case R.id.btn_goods_share:
+                SLog.info("goodsPrice[%s]", goodsPrice);
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName, jingle, currImageSrc))
+                        .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
+                                jingle, currGalleryImageList.get(0), EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
+                                                                        "commonId", commonId, "goodsName", goodsName,
+                                                                        "goodsImage", currGalleryImageList.get(0), "goodsPrice", goodsPrice)))
                         .show();
                 break;
             case R.id.ll_comment_container:
@@ -510,14 +785,18 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new StoreCustomerServicePopup(_mActivity, storeId))
+                .asCustom(new StoreCustomerServicePopup(_mActivity, storeId,goodsInfoMap.get(currGoodsId)))
                 .show();
     }
 
     /**
-     * 商品關注/取消關注
+     * 產品關注/取消關注
      */
     private void switchFavoriteState() {
+        if(goodsStatus==0){
+            ToastUtil.success(_mActivity,"商品已下架");
+            return;
+        }
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             Util.showLoginFragment();
@@ -542,7 +821,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -551,14 +830,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     updateFavoriteView();
 
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
     }
 
     /**
-     * 商品點讚/取消點讚
+     * 產品讚想/取消讚想
      */
     private void switchThumbState() {
         String token = User.getToken();
@@ -585,7 +864,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -622,7 +901,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     private void updateThumbView() {
         if (isLike == Constant.ONE) {
-            btnGoodsThumb.setImageResource(R.drawable.icon_goods_thumb_red);
+            btnGoodsThumb.setImageResource(R.drawable.icon_good_like_red_mini);
         } else {
             btnGoodsThumb.setImageResource(R.drawable.icon_goods_thumb_grey);
         }
@@ -630,15 +909,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void showSpecSelectPopup(int action) {
+
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap))
+                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList))
                 .show();
     }
 
     /**
-     * 獲取店鋪券和平台券列表
+     * 獲取商店券和平台券列表
      */
     private void loadCouponList() {
         try {
@@ -647,6 +927,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             if (!StringUtil.isEmpty(token)) {
                 params.set("token", token);
             }
+
+            SLog.info("__params[%s]", params);
+
             Api.postUI(Api.PATH_GOODS_DETAIL_COUPON_LIST, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -656,7 +939,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -665,18 +948,32 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     try {
                         // 【領券】優惠
                         storeVoucherList.clear();
-                        EasyJSONArray couponList = responseObj.getArray("datas.list");
+                        EasyJSONArray couponList = responseObj.getSafeArray("datas.list");
                         if (couponList.length() > 0) {
                             for (Object object : couponList) {
+                                LinearLayout linearLayout = new LinearLayout(_mActivity);
+                                linearLayout.setBackgroundResource(R.color.tw_yellow);
+                                // linearLayout.setPadding(2,2,2,2);
+                                linearLayout.setGravity(Gravity.CENTER_VERTICAL);
+                                TextView textView = new TextView(_mActivity);
+                                textView.setHeight(Util.dip2px(_mActivity, 21));
+                                textView.setWidth(Util.dip2px(_mActivity, 20));
+                                textView.setGravity(Gravity.CENTER);
+                                textView.setText("領");
+                                textView.setTextColor(getResources().getColor(android.R.color.white, null));
+                                textView.setTextSize(12);
+                                textView.setBackgroundResource(R.color.tw_yellow);
                                 TextView tvVoucher = new TextView(_mActivity);
                                 tvVoucher.setTextSize(12);
-                                tvVoucher.setTextColor(getResources().getColor(android.R.color.white, null));
+                                tvVoucher.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
                                 tvVoucher.setGravity(Gravity.CENTER);
-                                tvVoucher.setBackgroundResource(R.drawable.yellow_coupon_bg);
-                                tvVoucher.setPadding(Util.dip2px(_mActivity, 5.5f), Util.dip2px(_mActivity, 4),
-                                        Util.dip2px(_mActivity, 5.5f), Util.dip2px(_mActivity, 4));
+                                tvVoucher.setBackgroundResource(R.drawable.yellow_voucher_bg);
+                                tvVoucher.setPadding(Util.dip2px(_mActivity, 5.5f), 0,
+                                        Util.dip2px(_mActivity, 5.5f), 0);
                                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                                 layoutParams.rightMargin = Util.dip2px(_mActivity, 10);
+                                linearLayout.addView(textView);
+                                linearLayout.addView(tvVoucher, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
                                 EasyJSONObject voucher = (EasyJSONObject) object;
                                 int limitAmount = (int) voucher.getDouble("searchCouponActivityVo.limitAmount");
@@ -684,35 +981,43 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                                 if (limitAmount == 0) {
                                     // 如果為0，表示無門檻
-                                    tvVoucher.setText(String.format("$%d無門檻", couponPrice));
+                                    // tvVoucher.setText(String.format("$%d無門檻", couponPrice));
+                                    tvVoucher.setText(String.format("%d圓券", couponPrice));
                                 } else {
-                                    tvVoucher.setText(String.format("滿%d減%d", limitAmount, couponPrice));
+                                    // tvVoucher.setText(String.format("滿%d減%d", limitAmount, couponPrice));
+                                    tvVoucher.setText(String.format("%d圓券", couponPrice));
                                 }
-                                llVoucherContainer.addView(tvVoucher, layoutParams);
+                                llVoucherContainer.addView(linearLayout, layoutParams);
 
-                                String useGoodsRangeExplain = voucher.getString("searchCouponActivityVo.useGoodsRangeExplain");
+                                String useGoodsRangeExplain = voucher.getSafeString("searchCouponActivityVo.useGoodsRangeExplain");
                                 int memberIsReceive = voucher.getInt("memberIsReceive");
                                 int storeId = voucher.getInt("searchCouponActivityVo.storeId");
-                                String limitAmountText = voucher.getString("searchCouponActivityVo.limitAmountText");
-                                String usableClientTypeText = voucher.getString("searchCouponActivityVo.usableClientTypeText");
-                                String useStartTime = voucher.getString("searchCouponActivityVo.useStartTime");
-                                String useEndTime = voucher.getString("searchCouponActivityVo.useEndTime");
-                                StoreVoucher storeVoucher = new StoreVoucher(storeId, 0, useGoodsRangeExplain, couponPrice,
-                                        limitAmountText, usableClientTypeText, useStartTime, useEndTime, memberIsReceive == 0);
-                                storeVoucher.searchSn = voucher.getString("searchCouponActivityVo.searchSn");
+                                String limitAmountText = voucher.getSafeString("searchCouponActivityVo.limitAmountText");
+                                String usableClientTypeText = voucher.getSafeString("searchCouponActivityVo.usableClientTypeText");
+                                String useStartTime = voucher.getSafeString("searchCouponActivityVo.useStartTime");
+                                String useEndTime = voucher.getSafeString("searchCouponActivityVo.useEndTime");
+                                String storeAvatar = voucher.getSafeString("searchCouponActivityVo.storeAvatar");
+
+                                int state = Constant.COUPON_STATE_UNRECEIVED;
+                                if (memberIsReceive == 1) {
+                                    state = Constant.COUPON_STATE_RECEIVED;
+                                }
+                                StoreVoucher storeVoucher = new StoreVoucher(storeId, 0, useGoodsRangeExplain, storeAvatar, couponPrice,
+                                        limitAmountText, usableClientTypeText, useStartTime, useEndTime, state);
+                                storeVoucher.searchSn = voucher.getSafeString("searchCouponActivityVo.searchSn");
 
                                 storeVoucherList.add(storeVoucher);
                             }
 
-                            btnShowVoucher.setVisibility(VISIBLE);
+                            rlVoucherList.setVisibility(VISIBLE);
                         }
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -724,18 +1029,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         storeFriendsItemList.clear();
         goodsConformItemList.clear();
         inStorePersonItemList.clear();
-
         String token = User.getToken();
-        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                .asLoading(getString(R.string.text_loading))
-                .show();
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         String path = Api.PATH_GOODS_DETAIL + "/" + commonId;
         EasyJSONObject params = EasyJSONObject.generate();
         if (!StringUtil.isEmpty(token)) {
             try {
                 params.set("token", token);
-            } catch (EasyJSONException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
 
@@ -752,34 +1054,34 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 loadingPopup.dismiss();
 
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
                 try {
-                    EasyJSONObject goodsDetail = responseObj.getObject("datas.goodsDetail");
+                    EasyJSONObject goodsDetail = responseObj.getSafeObject("datas.goodsDetail");
                     SLog.info("goodsDetail[%s]", goodsDetail);
 
-                    String goodsImageUrl = goodsDetail.getString("imageSrc");
-                    Glide.with(GoodsDetailFragment.this).load(goodsImageUrl).centerCrop().into(goodsImage);
-
-                    goodsName = goodsDetail.getString("goodsName");
+                    goodsName = goodsDetail.getSafeString("goodsName");
                     tvGoodsName.setText(goodsName);
-                    jingle = goodsDetail.getString("jingle");
+                    jingle = goodsDetail.getSafeString("jingle");
                     tvGoodsJingle.setText(jingle);
+                    //產品状态 可以购买1，下架0
+                    int status = goodsDetail.getInt("goodsStatus");
+                    setGoodsStatus(status);
 
                     promotionDiscountRate = (float) goodsDetail.getDouble("promotionDiscountRate");
-                    tvPromotionDiscountRate.setText(promotionDiscountRate + "折");
+                    tvPromotionDiscountRate.setText("限時" + promotionDiscountRate + "折");
 
-                    String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(responseObj.getString("datas.goodsCountry.nationalFlag"));
+                    String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(responseObj.getSafeString("datas.goodsCountry.nationalFlag"));
                     Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
 
-                    tvGoodsCountryName.setText(responseObj.getString("datas.goodsCountry.countryCn"));
+                    tvGoodsCountryName.setText(responseObj.getSafeString("datas.goodsCountry.countryCn"));
 
                     if (responseObj.exists("datas.address.areaInfo")) {
-                        String areaInfo = responseObj.getString("datas.address.areaInfo");
+                        String areaInfo = responseObj.getSafeString("datas.address.areaInfo");
                         tvShipTo.setText(areaInfo);
                     }
 
@@ -794,7 +1096,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         }
                     }
 
-                    float goodsPrice = Util.getSpuPrice(goodsDetail);
+                    goodsPrice = Util.getSpuPrice(goodsDetail);
                     tvGoodsPrice.setText(StringUtil.formatFloat(goodsPrice));
 
                     // 是否点赞
@@ -808,9 +1110,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     // 月銷量
                     int goodsSaleNum = goodsDetail.getInt("goodsSaleNum");
-                    // 粉絲數
+                    // 想粉數
                     int goodsFavorite = goodsDetail.getInt("goodsFavorite");
                     storeId = responseObj.getInt("datas.storeInfo.storeId");
+
+                    int goodsClick = goodsDetail.getInt("goodsClick");
+                    String goodsClickText = "瀏覽" + StringUtil.formatPostView(goodsClick) + "次";
+                    tvViewCount.setText(goodsClickText);
 
                     tvFansCount.setText(getString(R.string.text_fans) + goodsFavorite);
                     tvGoodsSale.setText(getString(R.string.text_monthly_sale) + goodsSaleNum + getString(R.string.text_monthly_sale_unit));
@@ -818,7 +1124,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tvGoodsSale.setVisibility(View.INVISIBLE);
 
                     // 下面開始組裝規格數據列表
-                    EasyJSONArray specJson = goodsDetail.getArray("specJson");
+                    EasyJSONArray specJson = goodsDetail.getSafeArray("specJson");
                     SLog.info("specJson[%s]", specJson);
                     for (Object object : specJson) {
                         EasyJSONObject specObj = (EasyJSONObject) object;
@@ -826,16 +1132,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         Spec specItem = new Spec();
 
                         specItem.specId = specObj.getInt("specId");
-                        specItem.specName = specObj.getString("specName");
+                        specItem.specName = specObj.getSafeString("specName");
 
-                        EasyJSONArray specValueList = specObj.getArray("specValueList");
+                        EasyJSONArray specValueList = specObj.getSafeArray("specValueList");
 
                         boolean first = true;
                         for (Object object2 : specValueList) {
                             EasyJSONObject specValue = (EasyJSONObject) object2;
                             int specValueId = specValue.getInt("specValueId");
-                            String specValueName = specValue.getString("specValueName");
-                            String imageSrc = specValue.getString("imageSrc");
+                            String specValueName = specValue.getSafeString("specValueName");
+                            String imageSrc = specValue.getSafeString("imageSrc");
 
                             SpecValue specValueItem = new SpecValue(specValueId, specValueName, imageSrc);
                             specItem.specValueList.add(specValueItem);
@@ -851,13 +1157,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     SLog.info("fullSpecs[%s]", Util.formatSpecString(specPairList));
                     tvCurrentSpecs.setText(Util.formatSpecString(specPairList));
 
-                    String goodsSpecValues = goodsDetail.getString("goodsSpecValues");
+                    String goodsSpecValues = goodsDetail.getSafeString("goodsSpecValues");
                     EasyJSONArray goodsSpecValueArr = (EasyJSONArray) EasyJSONArray.parse(goodsSpecValues);
                     for (Object object : goodsSpecValueArr) {
                         EasyJSONObject mapItem = (EasyJSONObject) object;
-                        SLog.info("kkkkey[%s], vvvalue[%s]", mapItem.getString("specValueIds"), mapItem.getInt("goodsId"));
-                        // 有些沒有規格的商品，只有一個goodsId，且specValueIds字符串為空串
-                        specValueIdMap.put(mapItem.getString("specValueIds"), mapItem.getInt("goodsId"));
+                        SLog.info("kkkkey[%s], vvvalue[%s]", mapItem.getSafeString("specValueIds"), mapItem.getInt("goodsId"));
+                        // 有些沒有規格的產品，只有一個goodsId，且specValueIds字符串為空串
+                        specValueIdMap.put(mapItem.getSafeString("specValueIds"), mapItem.getInt("goodsId"));
                     }
 
                     SLog.info("specList.size[%d]", specList.size());
@@ -865,18 +1171,18 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         SLog.info("SPEC_DUMP[%s]", spec);
                     }
 
-                    // 商品詳情圖片
-                    EasyJSONArray easyJSONArray = responseObj.getArray("datas.goodsMobileBodyVoList");
+                    // 產品詳情圖片
+                    EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.goodsMobileBodyVoList");
                     for (Object object : easyJSONArray) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                         GoodsMobileBodyVo goodsMobileBodyVo = new GoodsMobileBodyVo();
-                        goodsMobileBodyVo.setType(easyJSONObject.getString("type"));
-                        goodsMobileBodyVo.setValue(easyJSONObject.getString("value"));
+                        goodsMobileBodyVo.setType(easyJSONObject.getSafeString("type"));
+                        goodsMobileBodyVo.setValue(easyJSONObject.getSafeString("value"));
                         goodsMobileBodyVo.setWidth(easyJSONObject.getInt("width"));
                         goodsMobileBodyVo.setHeight(easyJSONObject.getInt("height"));
 
                         if (goodsMobileBodyVo.getType().equals("image")) {
-                            String imageUrl = StringUtil.normalizeImageUrl(easyJSONObject.getString("value"));
+                            String imageUrl = StringUtil.normalizeImageUrl(easyJSONObject.getSafeString("value"));
 
                             ImageView imageView = new ImageView(_mActivity);
                             imageView.setAdjustViewBounds(true);
@@ -885,7 +1191,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 @Override
                                 public void onClick(View v) {
                                     SLog.info("imageUrl[%s]", imageUrl);
-                                    start(ImageViewerFragment.newInstance(imageUrl));
+                                    Util.startFragment(ImageViewerFragment.newInstance(imageUrl));
                                 }
                             });
                             // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
@@ -913,7 +1219,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     // 視頻
                     boolean hasGoodsVideo = false;
                     if (goodsDetail.exists("detailVideo")) {
-                        String goodsVideoUrl = goodsDetail.getString("detailVideo");
+                        String goodsVideoUrl = goodsDetail.getSafeString("detailVideo");
                         if (!StringUtil.isEmpty(goodsVideoUrl)) {
                             goodsVideoId = Util.getYoutubeVideoId(goodsVideoUrl);
                             if (!StringUtil.isEmpty(goodsVideoId)) {
@@ -927,27 +1233,41 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     } else {
                         btnPlay.setVisibility(GONE);
                     }
-
+                    SLog.info("goodsDetail exists,discount[%s]", goodsDetail.exists("discount"));
                     // 限時折扣
                     EasyJSONObject discount = goodsDetail.getObject("discount");
                     if (discount != null) {
                         // 表明有限時折扣活動
-                        String endTime = discount.getString("endTime");
-                        SLog.info("endTime[%s]", endTime);
+                        String startTime = discount.getSafeString("startTime");
+                        String endTime = discount.getSafeString("endTime");
                         Date date = DateTimeUtils.formatDate(endTime);
+                        Date startDate = DateTimeUtils.formatDate(startTime);
+                        discountStartTime = (int) (startDate.getTime() / 1000);
+                        SLog.info("startTime[%s],endTime[%s],discountStart[%s]", startTime, endTime, discountState);
                         discountEndTime = (int) (date.getTime() / 1000);
-                        SLog.info("discountEndTime[%d]", discountEndTime);
+                        float time = System.currentTimeMillis() / 1000 - discountStartTime;
+                        if (time < 0) {
+                            discountState = 1;
+                        } else {
+                            time = System.currentTimeMillis() / 1000 - discountEndTime;
+                            if (time < 0) {
+                                discountState = 2;
+                            } else {
+                                discountState = 3;
+                            }
+                        }
+                        SLog.info("discountStartTime[%d],discountEndTime[%d]", discountStartTime, discountEndTime);
                     }
 
                     // 【贈品】優惠
                     boolean first = true;
-                    EasyJSONArray goodsInfoVoList = responseObj.getArray("datas.goodsDetail.goodsInfoVoList");
+                    EasyJSONArray goodsInfoVoList = responseObj.getSafeArray("datas.goodsDetail.goodsInfoVoList");
                     for (Object object : goodsInfoVoList) {
                         GoodsInfo goodsInfo = new GoodsInfo();
 
                         EasyJSONObject goodsInfoVo = (EasyJSONObject) object;
                         int goodsId = goodsInfoVo.getInt("goodsId");
-                        EasyJSONArray giftVoList = goodsInfoVo.getArray("giftVoList");
+                        EasyJSONArray giftVoList = goodsInfoVo.getSafeArray("giftVoList");
 
                         List<GiftItem> giftItemList = new ArrayList<>();
                         for (Object object2 : giftVoList) {
@@ -964,18 +1284,30 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             SLog.info("默認選中第一項sku, goodsId[%d]", goodsId);
                         }
 
+                        // 獲取每個sku對應的輪播圖列表
+                        List<String> goodsGalleryImageList = new ArrayList<>();
+                        EasyJSONArray goodsImageList = goodsInfoVo.getSafeArray("goodsImageList");
+                        for (Object object2 : goodsImageList) {
+                            EasyJSONObject goodsImageObj = (EasyJSONObject) object2;
+                            String imageName = goodsImageObj.getSafeString("imageName");
+                            goodsGalleryImageList.add(imageName);
+                        }
+
+                        skuGoodsGalleryMap.put(goodsId, goodsGalleryImageList);
+
                         goodsInfo.goodsId = goodsId;
                         goodsInfo.commonId = commonId;
-                        goodsInfo.goodsFullSpecs = goodsInfoVo.getString("goodsFullSpecs");
-                        goodsInfo.specValueIds = goodsInfoVo.getString("specValueIds");
+                        goodsInfo.goodsFullSpecs = goodsInfoVo.getSafeString("goodsFullSpecs");
+                        goodsInfo.specValueIds = goodsInfoVo.getSafeString("specValueIds");
                         goodsInfo.goodsPrice0 = (float) goodsInfoVo.getDouble("goodsPrice0");
                         goodsInfo.price = Util.getSkuPrice(goodsInfoVo);
                         SLog.info("__goodsInfo.price[%s], goodsInfoVo[%s]", goodsInfo.price, goodsInfoVo.toString());
-                        goodsInfo.imageSrc = goodsInfoVo.getString("imageSrc");
+                        goodsInfo.imageSrc = goodsInfoVo.getSafeString("imageSrc");
                         goodsInfo.goodsStorage = goodsInfoVo.getInt("goodsStorage");
                         goodsInfo.reserveStorage = goodsInfoVo.getInt("reserveStorage");
                         goodsInfo.limitAmount = goodsInfoVo.getInt("limitAmount");
-                        goodsInfo.unitName = goodsInfoVo.getString("unitName");
+                        goodsInfo.unitName = goodsInfoVo.getSafeString("unitName");
+                        goodsInfo.goodsName = goodsName;
 
                         goodsInfoMap.put(goodsId, goodsInfo);
 
@@ -983,7 +1315,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     // 【滿減】優惠
-                    EasyJSONArray conformList = responseObj.getArray("datas.goodsDetail.conformList");
+                    EasyJSONArray conformList = responseObj.getSafeArray("datas.goodsDetail.conformList");
                     if (conformList.length() > 0) {
                         first = true;
                         StringBuilder conformText = new StringBuilder();
@@ -993,19 +1325,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             }
 
                             EasyJSONObject conform = (EasyJSONObject) object;
-                            conformText.append(conform.getString("shortRule"));
+                            conformText.append(conform.getSafeString("shortRule"));
 
                             GoodsConformItem goodsConformItem = new GoodsConformItem();
                             goodsConformItem.conformId = conform.getInt("conformId");
-                            goodsConformItem.startTime = conform.getString("startTime");
-                            goodsConformItem.endTime = conform.getString("endTime");
+                            goodsConformItem.startTime = conform.getSafeString("startTime");
+                            goodsConformItem.endTime = conform.getSafeString("endTime");
                             goodsConformItem.limitAmount = conform.getInt("limitAmount");
                             goodsConformItem.conformPrice = conform.getInt("conformPrice");
                             goodsConformItem.isFreeFreight = conform.getInt("isFreeFreight");
                             goodsConformItem.templateId = conform.getInt("templateId");
                             goodsConformItem.templatePrice = conform.getInt("templatePrice");
 
-                            EasyJSONArray giftVoList = conform.getArray("giftVoList");
+                            EasyJSONArray giftVoList = conform.getSafeArray("giftVoList");
                             if (giftVoList.length() > 0) {
                                 goodsConformItem.giftVoList = new ArrayList<>();
                                 for (Object object2 : giftVoList) {
@@ -1032,77 +1364,88 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     SLog.info("commentCount[%d]", commentCount);
                     if (commentCount > 0) {
-                        // 如果有評論，顯示首條評論
-                        EasyJSONObject wantCommentVoInfo = responseObj.getObject("datas.wantCommentVoInfoList[0]");
+                        // 如果有說說，顯示首條說說
+                        EasyJSONObject wantCommentVoInfo = responseObj.getSafeObject("datas.wantCommentVoInfoList[0]");
 
-                        String commenterAvatarUrl = StringUtil.normalizeImageUrl(wantCommentVoInfo.getString("memberVo.avatar"));
-                        Glide.with(_mActivity).load(commenterAvatarUrl).centerCrop().into(imgCommenterAvatar);
-                        tvCommenterNickname.setText(wantCommentVoInfo.getString("memberVo.nickName"));
-                        String comment = wantCommentVoInfo.getString("content");
-                        if (StringUtil.isEmpty(comment)) {  // 如果評論內容為空，表明為圖片評論
+                        String commenterAvatarUrl = StringUtil.normalizeImageUrl(wantCommentVoInfo.getSafeString("memberVo.avatar"));
+                        SLog.info("commenterAvatarUrl[%s]", commenterAvatarUrl);
+                        if (StringUtil.useDefaultAvatar(commenterAvatarUrl)) {
+                            Glide.with(_mActivity).load(R.drawable.grey_default_avatar).centerCrop().into(imgCommenterAvatar);
+                        } else {
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(commenterAvatarUrl)).centerCrop().into(imgCommenterAvatar);
+                        }
+
+                        tvCommenterNickname.setText(wantCommentVoInfo.getSafeString("memberVo.nickName"));
+                        String comment = wantCommentVoInfo.getSafeString("content");
+                        if (StringUtil.isEmpty(comment)) {  // 如果說說內容為空，表明為圖片說說
                             comment = "[圖片]";
                         }
                         tvComment.setText(StringUtil.translateEmoji(_mActivity, comment, (int) tvComment.getTextSize()));
                     } else {
-                        // 如果沒有評論，隱藏相應的控件
+                        // 如果沒有說說，隱藏相應的控件
                         llFirstCommentContainer.setVisibility(GONE);
                     }
 
                     // 好友
                     inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_friend)));
-                    EasyJSONArray friends = responseObj.getArray("datas.memberAccessStatVo.friends");
-                    if (!Util.isJsonNull(friends)) {
-                        if (friends.length() > 0) {
-                            for (Object object : friends) {
-                                EasyJSONObject friend = (EasyJSONObject) object;
+                    EasyJSONArray friends = responseObj.getSafeArray("datas.memberAccessStatVo.friends");
+                    if (friends.length() > 0) {
+                        for (Object object : friends) {
+                            EasyJSONObject friend = (EasyJSONObject) object;
 
-                                String memberName = friend.getString("memberName");
-                                String avatar = friend.getString("avatar");
-                                String nickname = friend.getString("nickName");
+                            String memberName = friend.getSafeString("memberName");
+                            String avatar = friend.getSafeString("avatar");
+                            String nickname = friend.getSafeString("nickName");
 
-                                InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
-                                inStorePersonItemList.add(inStorePersonItem);
-                            }
-                            inStorePersonCount += friends.length();
-                        } else {
-                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
+                            InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                            inStorePersonItemList.add(inStorePersonItem);
                         }
+                        inStorePersonCount += friends.length();
+                    } else {
+                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
                     }
 
 
-                    // 店友
+                    // 城友
                     inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
-                    EasyJSONArray members = responseObj.getArray("datas.memberAccessStatVo.members");
-                    if (!Util.isJsonNull(members)) {
-                        if (members.length() > 0) {
-                            for (Object object : members) {
-                                EasyJSONObject friend = (EasyJSONObject) object;
+                    EasyJSONArray members = responseObj.getSafeArray("datas.memberAccessStatVo.members");
+                    if (members.length() > 0) {
+                        for (Object object : members) {
+                            EasyJSONObject friend = (EasyJSONObject) object;
 
-                                String memberName = friend.getString("memberName");
-                                String avatar = friend.getString("avatar");
-                                String nickname = friend.getString("nickName");
+                            String memberName = friend.getSafeString("memberName");
+                            String avatar = friend.getSafeString("avatar");
+                            String nickname = friend.getSafeString("nickName");
 
-                                StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
-                                storeFriendsItemList.add(storeFriendsItem);
+                            StoreFriendsItem storeFriendsItem = new StoreFriendsItem(memberName, avatar);
+                            storeFriendsItemList.add(storeFriendsItem);
 
-                                InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
-                                inStorePersonItemList.add(inStorePersonItem);
-                            }
-                            inStorePersonCount += members.length();
-                        } else {
-                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
+                            InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
+                            inStorePersonItemList.add(inStorePersonItem);
                         }
-
+                        inStorePersonCount += members.length();
+                    } else {
+                        inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
                     }
+
 
                     isDataValid = true;
                     adapter.setNewData(storeFriendsItemList);
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
+    }
+
+    private void setGoodsStatus(int status) {
+        goodsStatus = status;
+        if (goodsStatus == 0) {
+            getView().findViewById(R.id.ll_goods_take_off).setVisibility(VISIBLE);
+            getView().findViewById(R.id.btn_buy).setBackgroundResource(R.drawable.icon_take_off_buy);
+            getView().findViewById(R.id.btn_add_to_cart).setBackgroundResource(R.drawable.icon_take_off_cart);
+
+        }
     }
 
     private void showGiftHint(List<GiftItem> giftItemList) {
@@ -1116,6 +1459,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        unbinder.unbind();
         SLog.info("onDestroyView");
         EventBus.getDefault().unregister(this);
     }
@@ -1123,7 +1467,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -1133,7 +1477,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             // 選擇規則完成
             SLog.info("data[%s]", message.data);
             try {
-                EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse((String) message.data);
+                EasyJSONObject easyJSONObject = EasyJSONObject.parse((String) message.data);
                 int goodsId = easyJSONObject.getInt("goodsId");
                 buyNum = easyJSONObject.getInt("quantity");
                 selectSku(goodsId);
@@ -1148,6 +1492,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     /**
      * 根據當前選中的specValueId列表，生成規格字符串
+     *
      * @return
      */
     public String getFullSpecs() {
@@ -1174,6 +1519,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         super.onFragmentResult(requestCode, resultCode, data);
 
         if (data == null) {
+            return;
+        }
+        if(resultCode!=RESULT_OK){
+            return;
+        }
+        if (requestCode == RequestCode.ADD_COMMENT.ordinal()) {
+            SLog.info("updateComment");
+            updateComment();
             return;
         }
         // 從哪個Fragment返回
@@ -1203,8 +1556,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
-        if (discountEndTime > 0) {
+        SLog.info("here onsupport");
+        if (discountState > 0 && discountState < 3) {
             startCountDown();
         }
 
@@ -1236,7 +1589,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 long threadId = Thread.currentThread().getId();
                 // SLog.info("threadId[%d]", threadId);
 
-                TimeInfo timeInfo = Time.diff((int) (System.currentTimeMillis() / 1000), discountEndTime);
+                TimeInfo timeInfo = Time.diff((int) (System.currentTimeMillis() / 1000), discountState == 2 ? discountEndTime : discountStartTime);
                 if (timeInfo == null) {
                     return;
                 }
@@ -1262,6 +1615,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     /**
      * 選擇當前Sku
+     *
      * @param goodsId
      */
     private void selectSku(int goodsId) {
@@ -1271,6 +1625,22 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         if (goodsInfo == null) {
             return;
         }
+
+        // 設置產品輪播圖
+        currGalleryImageList = skuGoodsGalleryMap.get(goodsId);
+        if (currGalleryImageList == null) {
+            return;
+        }
+
+        goodsGalleryAdapter.setNewData(currGalleryImageList);
+        pageIndicatorView.setVisibility(View.VISIBLE);
+        if (currGalleryImageList.size() > 1) {
+            resetGalleryPosition();
+        } else {
+            pageIndicatorView.setCount(1);
+            pageIndicatorView.setVisibility(VISIBLE);
+        }
+
 
         // 滿優惠數
         conformCount = goodsConformItemList.size();
@@ -1307,17 +1677,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         SLog.info("fullSpecs[%s]", fullSpecs);
         tvCurrentSpecs.setText(fullSpecs);
 
-        currImageSrc = goodsInfo.imageSrc;
-        if (!StringUtil.isEmpty(currImageSrc)) {
-            Glide.with(_mActivity).load(currImageSrc).centerCrop().into(goodsImage);
-        }
-
-        if (discountEndTime > 0 &&
-                Math.abs(goodsInfo.goodsPrice0 - goodsInfo.price) > Constant.STORE_DISTANCE_THRESHOLD) {  // 原價與最終價格有差值才算是折扣活動
+        SLog.info("goodsPrice0[]%f,goodsprice[%f] ", goodsInfo.goodsPrice0, goodsInfo.price);
+        if (discountState > 0 && discountState < 3) {  // 原價與最終價格有差值才算是折扣活動
+            SLog.info("1596here");
             showPriceTag(false);
 
             tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
-            tvGoodsPriceOriginal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
+            tvGoodsPriceOriginal.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
         } else {
             showPriceTag(true);
 
@@ -1338,6 +1704,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     /**
      * 是顯示價格標簽還是顯示折扣活動信息
+     *
      * @param show
      */
     private void showPriceTag(boolean show) {
@@ -1382,14 +1749,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
                 try {
-                    EasyJSONObject freight = responseObj.getObject("datas.freight");
+                    EasyJSONObject freight = responseObj.getSafeObject("datas.freight");
                     allowSend = freight.getInt("allowSend");
                     if (allowSend == 1) {
                         float freightAmount = (float) freight.getDouble("freightAmount");
@@ -1399,9 +1766,39 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
+    }
+
+    private void resetGalleryPosition() {
+        rvGalleryImageList.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 先去到大概中間的位置
+                int targetPosition = Integer.MAX_VALUE / 2;
+                // 然后去到倍數開始的位置
+                targetPosition -= (targetPosition % currGalleryImageList.size());
+
+                currGalleryPosition = targetPosition;
+                rvGalleryImageList.scrollToPosition(currGalleryPosition);
+                SLog.info("currGalleryPosition[%d]", currGalleryPosition);
+
+                pageIndicatorView.setCount(currGalleryImageList.size());
+                pageIndicatorView.setSelection(0);
+            }
+        }, 50);
+    }
+
+    /**
+     * 获取当前显示的图片的position
+     *
+     * @return
+     */
+    private int getCurrPosition() {
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) rvGalleryImageList.getLayoutManager();
+        int position = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+        return position;
     }
 }

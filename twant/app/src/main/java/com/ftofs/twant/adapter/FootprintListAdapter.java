@@ -1,9 +1,10 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,7 +16,6 @@ import com.ftofs.twant.entity.footprint.BaseStatus;
 import com.ftofs.twant.entity.footprint.DateStatus;
 import com.ftofs.twant.entity.footprint.GoodsStatus;
 import com.ftofs.twant.entity.footprint.StoreStatus;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.widget.ScaledButton;
 
@@ -48,7 +48,7 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
         // SLog.info("position[%d]", position);
         List<Footprint> footprintList = getData();
         if (position > 0) {
-            // 查看前一項，日期或店鋪是否相同
+            // 查看前一項，日期或商店是否相同
             Footprint prevFootprint = footprintList.get(position - 1);
 
             boolean isDifferentDate = false;
@@ -60,7 +60,7 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
                 isDifferentDate = true;
             }
 
-            // 如果與前一項不同一天或與前一項不同一家店鋪，則顯示店鋪名信息
+            // 如果與前一項不同一天或與前一項不同一家商店，則顯示商店名信息
             if (prevFootprint.storeId != item.storeId || isDifferentDate) {
                 helper.setGone(R.id.ll_store_name_container, true);
             } else {
@@ -132,7 +132,7 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
                 .setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_goods_name, item.goodsName)
                 .setText(R.id.tv_goods_jingle, item.jingle)
-                .setText(R.id.tv_goods_price, StringUtil.formatPrice(context, item.price, 1));
+                .setText(R.id.tv_goods_price, StringUtil.formatPrice(context, item.price, 1,false));
 
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(context).load(item.imageSrc).centerCrop().into(goodsImage);

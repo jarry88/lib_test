@@ -35,12 +35,12 @@ public class CartBundlingVo {
     private String bundlingName;
 
     /**
-     * 优惠套装单价(各商品单价之和)
+     * 优惠套装单价(各產品单价之和)
      */
     private BigDecimal goodsPrice;
 
     /**
-     * 商品图
+     * 產品图
      */
     private String imageName;
 
@@ -50,17 +50,17 @@ public class CartBundlingVo {
     private int buyNum;
 
     /**
-     * 商品小计[单价 * 数量]
+     * 產品小计[单价 * 数量]
      */
     private BigDecimal itemAmount;
 
     /**
-     * 商品库存
+     * 產品库存
      */
     private int goodsStorage;
 
     /**
-     * 商品状态
+     * 產品状态
      */
     private int goodsStatus;
 
@@ -75,7 +75,7 @@ public class CartBundlingVo {
     private String storeName;
 
     /**
-     * 商品库存是否足够
+     * 產品库存是否足够
      */
     private int storageStatus;
 
@@ -85,7 +85,7 @@ public class CartBundlingVo {
     private int memberId;
 
     /**
-     * 优惠套装商品列表
+     * 优惠套装產品列表
      */
     private List<BuyBundlingItemVo> buyBundlingItemVoList = new ArrayList<>();
 

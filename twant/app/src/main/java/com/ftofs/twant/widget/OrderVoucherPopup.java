@@ -1,9 +1,9 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,7 +12,6 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.OrderVoucherListAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.StoreVoucherVo;
 import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -20,7 +19,6 @@ import com.ftofs.twant.log.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,8 +41,8 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
      * @param context
      * @param storeId
      * @param storeName
-     * @param couponType 表示storeVoucherVoList是店鋪券還是平台券
-     * @param storeVoucherVoList 店鋪券列表 或 平台券列表
+     * @param couponType 表示storeVoucherVoList是商店券還是平台券
+     * @param storeVoucherVoList 商店券列表 或 平台券列表
      * @param platformCouponIndex 當前正在使用的平台券列表Index(-1表示沒有使用)，當couponType為平台券時才用
      * @param onSelectedListener
      */

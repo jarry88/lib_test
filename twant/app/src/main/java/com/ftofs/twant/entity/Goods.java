@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
 
 /**
- * 商品數據結構
+ * 產品數據結構
  * @author zwm
  */
 public class Goods implements MultiItemEntity {

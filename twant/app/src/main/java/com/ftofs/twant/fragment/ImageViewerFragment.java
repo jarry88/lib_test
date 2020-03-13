@@ -2,14 +2,16 @@ package com.ftofs.twant.fragment;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator;
 import com.github.piasy.biv.view.BigImageView;
 
@@ -20,7 +22,7 @@ import com.github.piasy.biv.view.BigImageView;
  */
 public class ImageViewerFragment extends BaseFragment implements View.OnClickListener {
     String imagePath;
-
+    boolean clickEnable;
     public static ImageViewerFragment newInstance(String imagePath) {
         Bundle args = new Bundle();
 
@@ -28,6 +30,17 @@ public class ImageViewerFragment extends BaseFragment implements View.OnClickLis
         SLog.info("imagePath[%s]", imagePath);
         ImageViewerFragment fragment = new ImageViewerFragment();
         fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static ImageViewerFragment newInstance(String imagePath,boolean click) {
+        Bundle args = new Bundle();
+
+        args.putString("imagePath", imagePath);
+        SLog.info("imagePath[%s]", imagePath);
+        ImageViewerFragment fragment = new ImageViewerFragment();
+        fragment.setArguments(args);
+        fragment.clickEnable=click;
 
         return fragment;
     }
@@ -50,7 +63,8 @@ public class ImageViewerFragment extends BaseFragment implements View.OnClickLis
         if (imagePath.startsWith("/")) {
             imagePath = "file://" + imagePath;
         }
-
+        Util.setOnClickListener(view,R.id.ll_container,this);
+        Util.setOnClickListener(view,R.id.btn_back,this);
         BigImageView bigImageView = view.findViewById(R.id.big_image_view);
         bigImageView.setProgressIndicator(new ProgressPieIndicator());
         bigImageView.showImage(Uri.parse(imagePath));
@@ -59,13 +73,23 @@ public class ImageViewerFragment extends BaseFragment implements View.OnClickLis
     
     @Override
     public void onClick(View v) {
-        
+
+        int id = v.getId();
+        SLog.info("點擊事件");
+        if (id == R.id.ll_container) {
+            if (clickEnable) {
+                hideSoftInputPop();
+            }
+        } else if (id == R.id.btn_back) {
+            pop();
+        }
+
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

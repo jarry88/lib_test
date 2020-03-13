@@ -1,8 +1,10 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,13 +108,13 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
         Bundle args = getArguments();
         refundId = args.getInt("refundId");
         String paramsIn = args.getString("paramsIn");
-        paramsInObj = (EasyJSONObject) EasyJSONObject.parse(paramsIn);
+        paramsInObj = EasyJSONObject.parse(paramsIn);
 
 
         try {
             action = paramsInObj.getInt("action");
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         if (action == Constant.ACTION_REFUND || action == Constant.ACTION_RETURN) {
             view = inflater.inflate(R.layout.fragment_refund_detail, container, false);
@@ -189,7 +191,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 
@@ -230,7 +232,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
@@ -255,7 +257,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                     }
 
                     if (action == Constant.ACTION_REFUND || action == Constant.ACTION_RETURN) {
-                        EasyJSONObject refundItemVo = responseObj.getObject("datas.refundItemVo");
+                        EasyJSONObject refundItemVo = responseObj.getSafeObject("datas.refundItemVo");
 
                         int sellerState = refundItemVo.getInt("sellerState");
                         if (sellerState > 1) { // 商家已處理
@@ -269,28 +271,28 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                         long ordersSn = refundItemVo.getLong("ordersSn");
                         tvOrderNo.setText(String.valueOf(ordersSn));
 
-                        String goodsImageUrl = refundItemVo.getString("goodsImage");
+                        String goodsImageUrl = refundItemVo.getSafeString("goodsImage");
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
 
-                        tvGoodsName.setText(refundItemVo.getString("goodsName"));
-                        tvGoodsFullSpecs.setText(paramsInObj.getString("goodsFullSpecs"));
+                        tvGoodsName.setText(refundItemVo.getSafeString("goodsName"));
+                        tvGoodsFullSpecs.setText(paramsInObj.getSafeString("goodsFullSpecs"));
 
                         tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, (float) paramsInObj.getDouble("goodsPrice"), 0));
                         tvBuyNum.setText(getString(R.string.times_sign) + " " + paramsInObj.getInt("buyNum"));
 
-                        String refundStatus = refundItemVo.getString("currentStateText");
+                        String refundStatus = refundItemVo.getSafeString("currentStateText");
                         tvRefundStatus.setText(refundStatus);
 
                         long refundSn = refundItemVo.getLong("refundSn");
                         tvReturnNo.setText(String.valueOf(refundSn));
 
-                        tvReturnReason.setText(refundItemVo.getString("reasonInfo"));
+                        tvReturnReason.setText(refundItemVo.getSafeString("reasonInfo"));
                         float refundAmount = (float) refundItemVo.getDouble("refundAmount");
                         tvReturnAmount.setText(StringUtil.formatPrice(_mActivity, refundAmount, 0));
 
-                        tvReturnDesc.setText(refundItemVo.getString("buyerMessage"));
+                        tvReturnDesc.setText(refundItemVo.getSafeString("buyerMessage"));
 
-                        String picJson = refundItemVo.getString("picJson");
+                        String picJson = refundItemVo.getSafeString("picJson");
                         String[] picJsonArr = picJson.split(",");
 
                         if (picJsonArr.length > 0) {
@@ -306,32 +308,32 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                             Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(picJsonArr[2])).centerCrop().into(imgEvidence3);
                         }
 
-                        tvAuditStatus.setText(refundItemVo.getString("sellerStateText"));
-                        String sellerMessage = refundItemVo.getString("sellerMessage");
+                        tvAuditStatus.setText(refundItemVo.getSafeString("sellerStateText"));
+                        String sellerMessage = refundItemVo.getSafeString("sellerMessage");
                         if (!StringUtil.isEmpty(sellerMessage)) {
                             tvSellerRemark.setText(sellerMessage);
                         }
 
 
-                        tvPlatformAudit.setText(refundItemVo.getString("refundStateText"));
-                        String adminMessage = refundItemVo.getString("adminMessage");
+                        tvPlatformAudit.setText(refundItemVo.getSafeString("refundStateText"));
+                        String adminMessage = refundItemVo.getSafeString("adminMessage");
                         if (!StringUtil.isEmpty(adminMessage)) {
                             tvPlatformRemark.setText(adminMessage);
                         }
 
                         tvRefundStatus2.setText(refundStatus);
                     } else {
-                        EasyJSONObject complain = responseObj.getObject("datas.complain");
-                        String complainTime = complain.getString("accuserTime");
+                        EasyJSONObject complain = responseObj.getSafeObject("datas.complain");
+                        String complainTime = complain.getSafeString("accuserTime");
                         tvComplainTime.setText(complainTime);
 
-                        String complainSubject = complain.getString("subjectTitle");
+                        String complainSubject = complain.getSafeString("subjectTitle");
                         tvComplainSubject.setText(complainSubject);
 
-                        String complainContent = complain.getString("accuserContent");
+                        String complainContent = complain.getSafeString("accuserContent");
                         tvComplainContent.setText(complainContent);
 
-                        String accuserImages = complain.getString("accuserImages");
+                        String accuserImages = complain.getSafeString("accuserImages");
 
                         String[] evidenceArr = accuserImages.split(",");
                         if (evidenceArr.length > 0) {
@@ -348,21 +350,21 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
                         }
 
 
-                        String goodsName = complain.getString("goodsName");
+                        String goodsName = complain.getSafeString("goodsName");
                         tvGoodsName.setText(goodsName);
 
-                        String goodsImageUrl = complain.getString("goodsImage");
+                        String goodsImageUrl = complain.getSafeString("goodsImage");
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
 
-                        String goodsFullSpecs = complain.getString("goodsFullSpecs");
+                        String goodsFullSpecs = complain.getSafeString("goodsFullSpecs");
                         tvGoodsFullSpecs.setText(goodsFullSpecs);
 
-                        EasyJSONObject ordersVo = responseObj.getObject("datas.ordersVo");
-                        // EasyJSONObject ordersGoodsVo = ordersVo.getObject("ordersGoodsVoList[0]");
+                        EasyJSONObject ordersVo = responseObj.getSafeObject("datas.ordersVo");
+                        // EasyJSONObject ordersGoodsVo = ordersVo.getSafeObject("ordersGoodsVoList[0]");
                         float freightAmount = (float) ordersVo.getDouble("freightAmount");
                         float ordersAmount = (float) ordersVo.getDouble("ordersAmount");
 
-                        EasyJSONObject ordersGoodsVo = responseObj.getObject("datas.ordersGoodsVo");
+                        EasyJSONObject ordersGoodsVo = responseObj.getSafeObject("datas.ordersGoodsVo");
                         float goodsPrice = (float) ordersGoodsVo.getDouble("goodsPrice");
                         tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
                         int buyNum = ordersGoodsVo.getInt("buyNum");
@@ -370,14 +372,14 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
 
                         tvFreightAmount.setText(StringUtil.formatPrice(_mActivity, freightAmount, 1));
                         tvOrderTotalAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1));
-                        tvOrderNum.setText(ordersVo.getString("ordersSnStr"));
-                        tvLogisticsOrderNo.setText(ordersVo.getString("shipSn"));
-                        tvMerchant.setText(ordersVo.getString("storeName"));
+                        tvOrderNum.setText(ordersVo.getSafeString("ordersSnStr"));
+                        tvLogisticsOrderNo.setText(ordersVo.getSafeString("shipSn"));
+                        tvMerchant.setText(ordersVo.getSafeString("storeName"));
                     }
 
                     indicator.setData(progressList, currentStep);
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -386,7 +388,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

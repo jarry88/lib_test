@@ -1,17 +1,17 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -39,7 +39,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 商品分類Fragment
+ * 產品分類Fragment
  * @author zwm
  */
 public class CategoryCommodityFragment extends BaseFragment implements View.OnClickListener {
@@ -198,7 +198,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -206,15 +206,15 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
 
                     int defaultCategoryId = -1;
                     boolean first = true;
-                    EasyJSONArray easyJSONArray = responseObj.getArray("datas.CategoryNavVo");
+                    EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.CategoryNavVo");
                     for (Object object : easyJSONArray) { // 每個菜單項
                         EasyJSONObject item = (EasyJSONObject) object;
                         int categoryId = item.getInt("categoryId");
                         if (first) {
                             defaultCategoryId = categoryId;
                         }
-                        String categoryName = item.getString("categoryName");
-                        String imageUrl = item.getString("appImageUrl");
+                        String categoryName = item.getSafeString("categoryName");
+                        String imageUrl = item.getSafeString("appImageUrl");
 
                         CategoryMenu categoryMenu = new CategoryMenu(categoryId, categoryName, null);
                         if (first) {
@@ -226,19 +226,19 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                         CategoryCommodityList categoryCommodityList = new CategoryCommodityList();
                         categoryCommodityList.head = new CategoryCommodity(categoryId, categoryName, imageUrl);
 
-                        EasyJSONArray categoryList = item.getArray("categoryList");
+                        EasyJSONArray categoryList = item.getSafeArray("categoryList");
                         List<CategoryCommodityRow> categoryCommodityRows = new ArrayList<>();
                         int i = 0;
                         CategoryCommodityRow categoryCommodityRow = null;
                         for (Object subObject : categoryList) {
-                            if (i % CategoryCommodityRow.COLUMN_COUNT == 0) {  // 每3個商品放一行
+                            if (i % CategoryCommodityRow.COLUMN_COUNT == 0) {  // 每3個產品放一行
                                 categoryCommodityRow = new CategoryCommodityRow();
                                 categoryCommodityRows.add(categoryCommodityRow);
                             }
                             EasyJSONObject subItem = (EasyJSONObject) subObject;
                             int subCategoryId = subItem.getInt("categoryId");
-                            String subCategoryName = subItem.getString("categoryName");
-                            String subImageUrl = subItem.getString("appImageUrl");
+                            String subCategoryName = subItem.getSafeString("categoryName");
+                            String subImageUrl = subItem.getSafeString("appImageUrl");
 
                             categoryCommodityRow.categoryCommodityList.add(new CategoryCommodity(subCategoryId, subCategoryName, subImageUrl));
 
@@ -257,8 +257,8 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
                     categoryCommodityMenuAdapter.setNewData(categoryMenuList);
 
                     loadCategoryCommodityData(defaultCategoryId);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

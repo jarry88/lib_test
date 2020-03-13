@@ -84,7 +84,7 @@
                     />
             </LinearLayout>
 
-            <!-- 商品列表 -->
+            <!-- 產品列表 -->
             <LinearLayout
                 android:id="@+id/ll_goods_list_container"
                 android:layout_width="match_parent"

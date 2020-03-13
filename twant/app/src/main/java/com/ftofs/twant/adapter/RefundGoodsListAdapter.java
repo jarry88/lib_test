@@ -13,7 +13,7 @@ import com.ftofs.twant.entity.RefundGoodsItem;
 import com.ftofs.twant.util.StringUtil;
 
 /**
- * 退款、退貨、投訴商品列表Adapter
+ * 退款、退貨、投訴產品列表Adapter
  * @author zwm
  */
 public class RefundGoodsListAdapter extends ViewGroupAdapter<RefundGoodsItem> {
@@ -43,7 +43,7 @@ public class RefundGoodsListAdapter extends ViewGroupAdapter<RefundGoodsItem> {
         tvGoodsFullSpecs.setText(itemData.goodsFullSpecs);
 
         TextView tvPrice = itemView.findViewById(R.id.tv_price);
-        tvPrice.setText(StringUtil.formatPrice(context, itemData.price, 0));
+        tvPrice.setText(StringUtil.formatPrice(context, itemData.price, 0,false));
 
         TextView tvGoodsNum = itemView.findViewById(R.id.tv_goods_num);
         tvGoodsNum.setText(context.getString(R.string.times_sign) + " " + itemData.goodsNum);

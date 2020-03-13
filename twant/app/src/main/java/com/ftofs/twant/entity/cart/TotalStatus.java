@@ -1,7 +1,6 @@
 package com.ftofs.twant.entity.cart;
 
 import android.util.Pair;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,14 +50,35 @@ public class TotalStatus extends BaseStatus {
                         continue;
                     }
 
-                    totalCount += skuStatus.getCount();
-                    totalPrice += skuStatus.getCount() * skuStatus.getPrice();
+//                    totalCount += skuStatus.getCount();
+//                    totalPrice += skuStatus.getCount() * skuStatus.getPrice();
                 }
             }
         }
 
         return new Pair<>(totalPrice, totalCount);
     }
+    /**
+     * 獲取合計數據
+     * @return
+     */
+    public Pair<Float, Integer> getTotalDataNew() {
+        float totalPrice = 0f;
+        int totalCount = 0;
+        for (StoreStatus storeStatus : storeStatusList) {
+            for (SpuStatus spuStatus : storeStatus.spuStatusList) {
+                if (!spuStatus.isChecked()) {
+                    continue;
+                }
+
+                totalCount += spuStatus.getCount();
+                totalPrice += spuStatus.getCount() * spuStatus.getPrice();
+            }
+        }
+
+        return new Pair<>(totalPrice, totalCount);
+    }
+
 
     /**
      * 獲取要購買的Sku的數據，用于提交訂單 或 刪除購物袋
@@ -72,12 +92,35 @@ public class TotalStatus extends BaseStatus {
                     if (!skuStatus.isChecked()) {
                         continue;
                     }
+//
+//                    buyData.append(EasyJSONObject.generate(
+//                            "buyNum", skuStatus.getCount(),
+//                            "goodsId", skuStatus.getCartId(),
+//                            "cartId", skuStatus.getCartId()));
+                }
+            }
+        }
+
+        return buyData;
+    }
+    /**
+     * 獲取要購買的Sku的數據，用于提交訂單 或 刪除購物袋
+     * @return
+     */
+    public EasyJSONArray getBuyDataNew() {
+        EasyJSONArray buyData = EasyJSONArray.generate();
+        for (StoreStatus storeStatus : storeStatusList) {
+            for (SpuStatus spuStatus : storeStatus.spuStatusList) {
+
+                    if (!spuStatus.isChecked()) {
+                        continue;
+                    }
 
                     buyData.append(EasyJSONObject.generate(
-                            "buyNum", skuStatus.getCount(),
-                            "goodsId", skuStatus.getCartId(),
-                            "cartId", skuStatus.getCartId()));
-                }
+                            "buyNum", spuStatus.getCount(),
+                            "goodsId", spuStatus.getCartId(),
+                            "cartId", spuStatus.getCartId()));
+
             }
         }
 

@@ -2,8 +2,8 @@ package com.ftofs.twant.fragment;
 
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,9 +90,7 @@ public class ExplorerFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
-        loadingPopup = new XPopup.Builder(_mActivity)
-                .asLoading(getString(R.string.text_loading))
-                .show();
+        loadingPopup = Util.createLoadingPopup(_mActivity).show();
         webView.loadUrl(url);
     }
     
@@ -100,14 +98,14 @@ public class ExplorerFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

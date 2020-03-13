@@ -5,17 +5,22 @@ import java.util.List;
 
 public class StoreLabel implements Serializable {
     /**
-     * 店内商品分类编号
+     * 店内產品分类编号
      */
     private int storeLabelId;
 
     /**
-     * 店内商品分类名称
+     * 對應分類下的商品數
+     */
+    private int goodsCount;
+
+    /**
+     * 店内產品分类名称
      */
     private String storeLabelName;
 
     /**
-     * 店内商品分类排序
+     * 店内產品分类排序
      */
     private int storeLabelSort = 0;
 
@@ -55,6 +60,14 @@ public class StoreLabel implements Serializable {
 
     public void setStoreLabelId(int storeLabelId) {
         this.storeLabelId = storeLabelId;
+    }
+
+    public int getGoodsCount() {
+        return goodsCount;
+    }
+
+    public void setGoodsCount(int goodsCount) {
+        this.goodsCount = goodsCount;
     }
 
     public String getStoreLabelName() {

@@ -1,7 +1,6 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -213,5 +212,9 @@ public abstract class ViewGroupAdapter<T> {
         }
 
         bindView(position, itemView, dataList.get(position));
+    }
+
+    public List<T> getDataList() {
+        return dataList;
     }
 }

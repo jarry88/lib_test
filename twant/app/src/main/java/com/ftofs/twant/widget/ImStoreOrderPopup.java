@@ -1,9 +1,11 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -101,14 +103,14 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(context, responseObj)) {
                     return;
                 }
 
                 try {
-                    EasyJSONArray ordersList = responseObj.getArray("datas.ordersList");
+                    EasyJSONArray ordersList = responseObj.getSafeArray("datas.ordersList");
 
                     for (Object object : ordersList) {
                         ImStoreOrderItem imStoreOrderItem = new ImStoreOrderItem();
@@ -116,15 +118,15 @@ public class ImStoreOrderPopup extends BottomPopupView implements View.OnClickLi
 
                         imStoreOrderItem.ordersId = item.getInt("ordersId");
                         imStoreOrderItem.ordersSn = String.valueOf(item.getLong("ordersSn"));
-                        imStoreOrderItem.goodsImage = item.getString("goodsImg");
-                        imStoreOrderItem.goodsName = item.getString("goodsName");
+                        imStoreOrderItem.goodsImage = item.getSafeString("goodsImg");
+                        imStoreOrderItem.goodsName = item.getSafeString("goodsName");
 
                         imStoreOrderItemList.add(imStoreOrderItem);
                     }
 
                     adapter.setNewData(imStoreOrderItemList);
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

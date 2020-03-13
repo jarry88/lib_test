@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class GoodsImage implements Serializable {
     /**
-     * 商品图片编号
+     * 產品图片编号
      */
     private int imageId=0;
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId=0;
 

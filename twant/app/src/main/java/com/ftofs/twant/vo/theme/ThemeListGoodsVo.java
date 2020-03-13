@@ -21,15 +21,15 @@ import java.util.List;
  */
 public class ThemeListGoodsVo {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId=0;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId=0;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName="";
     /**
@@ -42,7 +42,7 @@ public class ThemeListGoodsVo {
      */
     private int isCommend=0;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 0下架，1正常，10违规禁售
      */
     private int goodsState=0;
@@ -60,7 +60,7 @@ public class ThemeListGoodsVo {
      */
     private String verifyRemark="";
     /**
-     * 商品卖点
+     * 產品卖点
      */
     private String jingle="";
     /**
@@ -84,7 +84,7 @@ public class ThemeListGoodsVo {
      */
     private int batchNum2=0;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice=new BigDecimal(0);
     /**
@@ -100,15 +100,15 @@ public class ThemeListGoodsVo {
      */
     private BigDecimal batchPrice2=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin=new BigDecimal(0);
     /**
@@ -133,7 +133,7 @@ public class ThemeListGoodsVo {
      */
     private int goodsStorage=0;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 可以购买1，不可购买0
      */
     private int goodsStatus=0;
@@ -160,11 +160,11 @@ public class ThemeListGoodsVo {
      */
     private int isOwnShop=0;
     /**
-     * 商品图
+     * 產品图
      */
     private String imageSrc="";
     /**
-     * 商品图片列表
+     * 產品图片列表
      */
     private List<GoodsImage> goodsImageList=new ArrayList<>();
     /**
@@ -200,27 +200,27 @@ public class ThemeListGoodsVo {
      */
     private List<SpecJsonVo> specJsonVoList = new ArrayList<SpecJsonVo>();
     /**
-     * 商品编号和规格值编号JSON
+     * 產品编号和规格值编号JSON
      */
     private String goodsSpecValueJson="";
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId=0;
     /**
-     * 商品分类名称
+     * 產品分类名称
      */
     private String categoryName="";
     /**
-     * 商品一级分类
+     * 產品一级分类
      */
     private int categoryId1=0;
     /**
-     * 商品二级分类
+     * 產品二级分类
      */
     private int categoryId2=0;
     /**
-     * 商品三级分类
+     * 產品三级分类
      */
     private int categoryId3=0;
     /**
@@ -232,13 +232,13 @@ public class ThemeListGoodsVo {
      */
     private Integer groupId;
     /**
-     * 是否为积分商品
+     * 是否为积分產品
      */
 
     private Integer isPointsGoods = 0;
 
     /**
-     * 是否为商城活动商品 0不是，1是
+     * 是否为商城活动產品 0不是，1是
      */
     private Integer isThemeGoods = 0;
 

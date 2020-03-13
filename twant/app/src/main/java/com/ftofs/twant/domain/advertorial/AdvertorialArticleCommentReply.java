@@ -14,12 +14,12 @@ public class AdvertorialArticleCommentReply implements Serializable {
     private int commentId;
 
     /**
-     * 文章id
+     * 想要帖id
      */
     private int articleId;
 
     /**
-     * 文章 标题
+     * 想要帖 标题
      */
     private String articleTitle;
 

@@ -1,10 +1,10 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +13,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
 import com.ftofs.twant.fragment.ImageViewerFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SquareGridLayout;
 
 /**
- * 評論回復列表Adapter
+ * 說說回覆列表Adapter
  * @author zwm
  */
-public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> {
+public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> implements SimpleCallback {
     Context context;
     int twBlue;
 
@@ -59,13 +61,14 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
         setText(itemView, R.id.tv_timestamp, new Jarbon(itemData.createTime).format("Y-m-d H:i:s"));
 
         TextView tvReplyContent = itemView.findViewById(R.id.tv_reply_content);
+        tvReplyContent.setMovementMethod(LinkMovementMethod.getInstance());
 
         if (StringUtil.isEmpty(itemData.content)) {
             tvReplyContent.setVisibility(View.GONE);
         } else {
             tvReplyContent.setVisibility(View.VISIBLE);
 
-            Editable content = StringUtil.translateEmoji(context, itemData.content, (int) tvReplyContent.getTextSize());
+            Editable content = StringUtil.translateEmoji(context, itemData.content, (int) tvReplyContent.getTextSize(), this);
             if (itemData.isQuoteReply) {
                 SpannableString spannableString = new SpannableString(" //@" + itemData.quoteNickname + ":");
                 ForegroundColorSpan colorSpan = new ForegroundColorSpan(twBlue);
@@ -77,7 +80,7 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
             tvReplyContent.setText(content);
         }
 
-        // 如果評論有圖片
+        // 如果說說有圖片
         if (itemData.imageList.size() > 0) {
             SquareGridLayout sglImageContainer = itemView.findViewById(R.id.sgl_image_container);
             sglImageContainer.removeAllViews();
@@ -102,8 +105,29 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
                 sglImageContainer.addView(imageView, layoutParams);
             }
         }
+    //添加身份標籤
+        TextView tvRole = itemView.findViewById(R.id.tv_role);
+        tvRole.setVisibility(View.VISIBLE);
+        switch (itemData.commentRole) {
+            case CommentItem.COMMENT_ROLE_MEMBER:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_blue);
+                tvRole.setText(context.getText(R.string.text_member));
+                tvRole.setTextColor(context.getColor(R.color.tw_blue));
+                break;
+            case CommentItem.COMMENT_ROLE_BOSS:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_red);
+                tvRole.setTextColor(context.getColor(R.color.tw_red));
+                tvRole.setText(context.getText(R.string.text_boss));
+                break;
+            case CommentItem.COMMENT_ROLE_CS:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_red);
+                tvRole.setTextColor(context.getColor(R.color.tw_red));
+                tvRole.setText(context.getText(R.string.text_customer));
+                break;
+            default:
+                break;
 
-
+        }
         setText(itemView, R.id.tv_like_count, String.valueOf(itemData.commentLike));
 
         ImageView iconCommentThumb = itemView.findViewById(R.id.icon_comment_thumb);
@@ -112,5 +136,11 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
         } else {
             iconCommentThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
         }
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        String url = (String) data;
+        StringUtil.parseCustomUrl(context, url);
     }
 }

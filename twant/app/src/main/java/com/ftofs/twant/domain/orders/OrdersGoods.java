@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 public class OrdersGoods implements Serializable {
     /**
-     * 订单商品编号
+     * 订单產品编号
      * 主键、自增
      */
     private int ordersGoodsId;
@@ -16,32 +16,32 @@ public class OrdersGoods implements Serializable {
     private int ordersId;
 
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
     /**
-     * 商品原价
+     * 產品原价
      */
     private BigDecimal basePrice = new BigDecimal(0);
 
     /**
-     * 商品单价
+     * 產品单价
      */
     private BigDecimal goodsPrice = new BigDecimal(0);
 
     /**
-     * 商品实际支付总金额(扣除所有促销后)
+     * 產品实际支付总金额(扣除所有促销后)
      */
     private BigDecimal goodsPayAmount = new BigDecimal(0);
 
@@ -51,12 +51,12 @@ public class OrdersGoods implements Serializable {
     private int buyNum;
 
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImage;
 
     /**
-     * 商品促销类型
+     * 產品促销类型
      */
     private int goodsType = 0;
 
@@ -76,7 +76,7 @@ public class OrdersGoods implements Serializable {
     private int commissionRate;
 
     /**
-     * 商品分类ID
+     * 產品分类ID
      */
     private int categoryId;
 
@@ -132,7 +132,7 @@ public class OrdersGoods implements Serializable {
     private BigDecimal refundPrice = new BigDecimal(0);
 
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial;
 
@@ -154,7 +154,7 @@ public class OrdersGoods implements Serializable {
     private String contract;
 
     /**
-     * 秒杀活动商品 主键
+     * 秒杀活动產品 主键
      */
     private int seckillGoodsId;
 
@@ -164,12 +164,12 @@ public class OrdersGoods implements Serializable {
     private int bargainOpenId;
 
     /**
-     * 海外购商品税率
+     * 海外购產品税率
      */
     private BigDecimal taxTate;
 
     /**
-     * 海外购商品税费
+     * 海外购產品税费
      */
     private BigDecimal taxAmount = new BigDecimal(0);
 

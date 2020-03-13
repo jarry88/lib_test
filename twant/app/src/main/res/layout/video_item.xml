@@ -7,7 +7,7 @@
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
     android:orientation="vertical">
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="17.5dp"
@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/icon_play"
             />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.ftofs.twant.widget.StoreDesktop
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:padding="15dp"
         android:background="@drawable/new_arrivals_pane_bg"
         android:orientation="vertical">
-        <!-- 對應的商品列表 -->
+        <!-- 對應的產品列表 -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -68,6 +68,7 @@
                 android:text=""
                 android:textSize="12sp"
                 android:textColor="@color/tw_dark_grey"
+                android:visibility="invisible"
                 />
 
             <TextView

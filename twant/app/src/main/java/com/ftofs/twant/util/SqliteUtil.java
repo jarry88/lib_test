@@ -5,8 +5,10 @@ import android.util.Log;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.DownloadEmojiTask;
+import com.ftofs.twant.widget.SlantedWidget;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
@@ -25,6 +27,7 @@ public class SqliteUtil {
      * 當前正在使用的數據庫表的List
      */
     private static List<String> tableList = new ArrayList<>();
+    private static int count;
 
     /**
      * 切換用戶數據庫，主要是在用戶登錄時調用
@@ -58,7 +61,7 @@ public class SqliteUtil {
         ////////////////////////////
         // 切換用戶相關的操作
         // 檢查是否需要下載表情
-        TwantApplication.getThreadPool().execute(new DownloadEmojiTask());
+        // TwantApplication.getThreadPool().execute(new DownloadEmojiTask());
 
         ///////////////////////////
         // 登錄環信
@@ -73,30 +76,39 @@ public class SqliteUtil {
      * 登錄環信
      */
     public static void imLogin() {
+        SLog.info("调用登录次数 %d,當前進程%s",count++,Thread.currentThread());
+
         EMClient emClient = EMClient.getInstance();
         String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
         String imToken = User.getUserInfo(SPField.FIELD_IM_TOKEN, null);
         SLog.info("memberName[%s], imToken[%s]", memberName, imToken);
-        if (emClient != null && !StringUtil.isEmpty(memberName) && !StringUtil.isEmpty(imToken)) {
-            emClient.loginWithToken(memberName, imToken, new EMCallBack() {//回调
-                @Override
-                public void onSuccess() {
-                    EMClient.getInstance().groupManager().loadAllGroups();
-                    EMClient.getInstance().chatManager().loadAllConversations();
-                    SLog.info("登录聊天服务器成功！");
-                }
+        try {
+            if (emClient != null && !StringUtil.isEmpty(memberName) && !StringUtil.isEmpty(imToken)) {
+                emClient.loginWithToken(memberName, imToken, new EMCallBack() {//回调
+                    @Override
+                    public void onSuccess() {
+                        SLog.info("___threadId[%s]", Thread.currentThread().getId());
+                        EMClient.getInstance().groupManager().loadAllGroups();
+                        EMClient.getInstance().chatManager().loadAllConversations();
+                        SLog.info("登录聊天服务器成功！");
+                    }
 
-                @Override
-                public void onProgress(int progress, String status) {
+                    @Override
+                    public void onProgress(int progress, String status) {
 
-                }
+                    }
 
-                @Override
-                public void onError(int code, String message) {
-                    SLog.info("Error!登录聊天服务器失败,code[%d], message[%s]", code, message);
-                }
-            });
+                    @Override
+                    public void onError(int code, String message) {
+                        SLog.info("Error!登录聊天服务器失败,code[%d], message[%s]", code, message);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            SLog.info("Error,%s",e.getMessage());
+            SLog.bt();
         }
+
     }
 
 

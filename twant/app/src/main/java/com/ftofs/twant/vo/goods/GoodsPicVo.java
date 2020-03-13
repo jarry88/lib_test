@@ -5,7 +5,7 @@ package com.ftofs.twant.vo.goods;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品图片，商品发布时使用
+ * 產品图片，產品发布时使用
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:11

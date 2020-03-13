@@ -10,7 +10,7 @@ public class StatPromotionHours implements Serializable {
     private int statId;
 
     /**
-     * 商品促销类型 GoodsPromotionType 对应
+     * 產品促销类型 GoodsPromotionType 对应
      */
     private int promotionType = 0;
 
@@ -35,7 +35,7 @@ public class StatPromotionHours implements Serializable {
     private BigDecimal ordersAmount = new BigDecimal(0);
 
     /**
-     * 下单商品数
+     * 下单產品数
      */
     private long ordersGoodsNum = 0;
 

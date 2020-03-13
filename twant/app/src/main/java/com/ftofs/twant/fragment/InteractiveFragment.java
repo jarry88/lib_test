@@ -1,14 +1,17 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.lxj.xpopup.XPopup;
@@ -18,9 +21,19 @@ import com.lxj.xpopup.XPopup;
  * @author zwm
  */
 public class InteractiveFragment extends BaseFragment implements View.OnClickListener {
+    String memberName;
+
     public static InteractiveFragment newInstance() {
         Bundle args = new Bundle();
 
+        InteractiveFragment fragment = new InteractiveFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static InteractiveFragment newInstance(String memberName) {
+        Bundle args = new Bundle();
+        args.putString("memberName",memberName);
         InteractiveFragment fragment = new InteractiveFragment();
         fragment.setArguments(args);
 
@@ -38,6 +51,7 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        replaceWord(view);
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_my_like, this);
         Util.setOnClickListener(view, R.id.btn_my_comment, this);
@@ -50,16 +64,16 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
         int id = v.getId();
         switch (id) {
             case R.id.btn_back:
-                pop();
+                hideSoftInputPop();
                 break;
             case R.id.btn_my_like:
-                Util.startFragment(MyLikeFragment.newInstance());
+                Util.startFragment(MyLikeFragment.newInstance(memberName));
                 break;
             case R.id.btn_my_comment:
-                Util.startFragment(MyCommentFragment.newInstance());
+                Util.startFragment(MyCommentFragment.newInstance(memberName));
                 break;
             case R.id.btn_my_follow:
-                Util.startFragment(MyFollowFragment.newInstance());
+                Util.startFragment(MyFollowFragment.newInstance(memberName));
                 break;
             case R.id.btn_menu:
                 new XPopup.Builder(_mActivity)
@@ -80,7 +94,21 @@ public class InteractiveFragment extends BaseFragment implements View.OnClickLis
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
+    }
+    private void replaceWord(View v){
+        memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME,null);
+        if(getArguments().containsKey("memberName")) {
+            if (!memberName.equals(getArguments().getString("memberName"))) {
+                memberName = getArguments().getString("memberName");
+                ((TextView) v.findViewById(R.id.tv_my_like)).setText(getString(R.string.text_him_like));
+                ((TextView) v.findViewById(R.id.tv_like_me)).setText(getString(R.string.text_like_me));
+                ((TextView) v.findViewById(R.id.tv_my_comment)).setText(getString(R.string.text_him_comment));
+                ((TextView) v.findViewById(R.id.tv_comment_me)).setText(getString(R.string.text_comment_me));
+                ((TextView) v.findViewById(R.id.tv_my_follow)).setText(getString(R.string.text_him_follow));
+                ((TextView) v.findViewById(R.id.tv_my_fans)).setText(getString(R.string.text_his_fans));
+            }
+        }
     }
 }

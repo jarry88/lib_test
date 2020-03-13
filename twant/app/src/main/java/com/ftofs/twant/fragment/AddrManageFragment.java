@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,7 +106,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                             @Override
                             public void onResponse(Call call, String responseStr) throws IOException {
                                 SLog.info("responseStr[%s]", responseStr);
-                                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                                     return;
@@ -123,8 +125,8 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
                                 adapter.setNewData(addrItemList);
                             }
                         });
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 } else if (id == R.id.btn_edit) {
                     SLog.info("編輯地址");
@@ -202,28 +204,28 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
                     addrItemList.clear();
-                    EasyJSONArray addressList = responseObj.getArray("datas.addressList");
+                    EasyJSONArray addressList = responseObj.getSafeArray("datas.addressList");
                     for (Object object : addressList) {
                         EasyJSONObject item = (EasyJSONObject) object;
 
                         int addressId = item.getInt("addressId");
-                        String realName = item.getString("realName");
+                        String realName = item.getSafeString("realName");
                         List<Integer> areaIdList = new ArrayList<>();
                         for (int i = 1; i <= 4; ++i) {
                             areaIdList.add(item.getInt("areaId" + i));
                         }
                         int areaId = item.getInt("areaId");
-                        String areaInfo = item.getString("areaInfo");
-                        String address = item.getString("address");
-                        String mobileAreaCode = item.getString("mobileAreaCode");
-                        String mobPhone = item.getString("mobPhone");
+                        String areaInfo = item.getSafeString("areaInfo");
+                        String address = item.getSafeString("address");
+                        String mobileAreaCode = item.getSafeString("mobileAreaCode");
+                        String mobPhone = item.getSafeString("mobPhone");
                         int isDefault = item.getInt("isDefault");
 
                         addrItemList.add(new AddrItem(addressId, realName, areaIdList, areaId, areaInfo, address, mobileAreaCode, mobPhone, isDefault));
@@ -257,7 +259,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
@@ -283,7 +285,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
         bundle.putParcelable("addrItem", addrItem);
 
         setFragmentResult(RESULT_OK, bundle);
-        pop();
+        hideSoftInputPop();
     }
 
     @Override

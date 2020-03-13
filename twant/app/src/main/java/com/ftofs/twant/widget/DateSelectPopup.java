@@ -2,7 +2,7 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -14,7 +14,6 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -39,7 +38,9 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
     Context context;
     PopupType popupType;
     OnSelectedListener onSelectedListener;
-    String dateStr = "1992-01-01";
+    String dateStr = "2019-01-01";
+    boolean showDay=true;
+    String dayLabel = "日";
 
     TimePickerView timePickerView;
 
@@ -84,10 +85,19 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
 
         int year = Integer.parseInt(dateStr.substring(0, 4));
         int month = Integer.parseInt(dateStr.substring(5, 7));
-        int day = Integer.parseInt(dateStr.substring(8, 10));
+        int day=1;
+        if (dateStr.length() > 8) {
+            day= Integer.parseInt(dateStr.substring(8, 10));
+        }
         // 設置初始日期
         calendar.set(year, month - 1, day);
+        SLog.info("calendar[%s]",calendar.getTime());
+        SLog.info("");
 
+        if (popupType == PopupType.SELECT_START_MONTH||popupType == PopupType.SELECT_END_MONTH) {
+            showDay=false;
+            dayLabel="";
+        }
         timePickerView = new TimePickerBuilder(context, new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
@@ -95,11 +105,14 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
                 int year = date.getYear() + 1900;
                 int month = date.getMonth() + 1;
                 int day = date.getDate();
-                String dateStr = String.format("%04d-%02d-%02d", year, month, day);
+                String dateStr = String.format("%04d-%02d-%02d 09:06:03", year, month, day);
                 SLog.info("dateStr[%s]", dateStr);
                 if (popupType == PopupType.BIRTH_DAY) {
                     setBirthday(year, month, day);
-                } else {
+                } else if(popupType == PopupType.SELECT_START_MONTH||popupType == PopupType.SELECT_END_MONTH){
+                    dismiss();
+                    onSelectedListener.onSelected(popupType, 0, dateStr);
+                }else {
                     dismiss();
                     onSelectedListener.onSelected(popupType, 0, String.format("%d-%02d-%02d", year, month, day));
                 }
@@ -120,8 +133,8 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
                         */
                     }
                 })
-                .setType(new boolean[]{true, true, true, false, false, false})
-                .setLabel("年", "月", "日", "", "", "") //设置空字符串以隐藏单位提示   hide label
+                .setType(new boolean[]{true, true,showDay, false, false, false})
+                .setLabel("年", "月", dayLabel, "", "", "") //设置空字符串以隐藏单位提示   hide label
                 .setDividerColor(Color.DKGRAY)
                 .setContentTextSize(20)
                 .setDate(calendar)
@@ -130,15 +143,16 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
                 .setBackgroundId(0x00000000)
                 .setOutSideCancelable(false)
                 .build();
-
         timePickerView.setKeyBackCancelable(false);//系统返回键监听屏蔽掉
         timePickerView.show(false);
     }
+
 
     //完全可见执行
     @Override
     protected void onShow() {
         super.onShow();
+
     }
 
     //完全消失执行
@@ -164,7 +178,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
     }
 
     /**
-     * 設置會員生日
+     * 設置城友生日
      */
     private void setBirthday(int year, int month, int day) {
         String token = User.getToken();
@@ -188,7 +202,7 @@ public class DateSelectPopup extends BottomPopupView implements View.OnClickList
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
                         return;
                     }

@@ -3,7 +3,9 @@ package com.ftofs.twant.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
+import android.util.Log;
+
+import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.AppGuidePagerAdapter;
@@ -13,14 +15,12 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.orhanobut.hawk.Hawk;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,21 +67,21 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
                         return;
                     }
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (responseObj == null) {
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(AppGuideActivity.this, responseObj)) {
                         return;
                     }
 
-                    EasyJSONArray appGuideImageArray = responseObj.getArray("datas.appGuideImage");
+                    EasyJSONArray appGuideImageArray = responseObj.getSafeArray("datas.appGuideImage");
                     for (Object object : appGuideImageArray) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-                        String url = easyJSONObject.getString("guideImage");
+                        String url = easyJSONObject.getSafeString("guideImage");
                         imageList.add(url);
                     }
 
                     showAppGuide();
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -127,12 +127,10 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
                             if (currPage > 0) {
                                 startMainActivity();
                             }
-
                         }
                         mIsScrolled = true;
                         break;
                 }
-
             }
         });
     }

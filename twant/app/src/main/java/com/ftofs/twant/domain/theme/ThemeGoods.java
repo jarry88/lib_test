@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class ThemeGoods implements Serializable{
     /**
-     * 商城活动商品编号
+     * 商城活动產品编号
      */
     private int themeGoodsId;
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 

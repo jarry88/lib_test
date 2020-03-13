@@ -90,7 +90,7 @@ public class Seller {
     private int isReceive = 0;
 
     /**
-     * 會員資料
+     * 城友資料
      */
     private Member member;
 

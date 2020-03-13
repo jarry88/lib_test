@@ -1,12 +1,11 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -17,9 +16,7 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsConformItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -29,8 +26,8 @@ import java.util.List;
 
 
 /**
- * 店鋪贈品彈窗
- * (店鋪促銷也使用這個彈窗)
+ * 商店贈品彈窗
+ * (商店促銷也使用這個彈窗)
  * @author zwm
  */
 public class StoreGiftPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
@@ -60,7 +57,7 @@ public class StoreGiftPopup extends BottomPopupView implements View.OnClickListe
      * @param context
      * @param tabId
      * @param giftItemList 贈品列表（SKU級別）
-     * @param goodsConformItemList 滿優惠列表（SPU或店鋪級別）
+     * @param goodsConformItemList 滿優惠列表（SPU或商店級別）
      */
     public StoreGiftPopup(@NonNull Context context, int tabId, List<GiftItem> giftItemList, List<GoodsConformItem> goodsConformItemList) {
         super(context);

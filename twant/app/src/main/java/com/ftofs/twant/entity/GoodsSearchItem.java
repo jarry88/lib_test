@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
 
 /**
- * 商品搜索结果项
+ * 產品搜索结果项
  * @author zwm
  */
 public class GoodsSearchItem implements MultiItemEntity {
@@ -27,6 +27,7 @@ public class GoodsSearchItem implements MultiItemEntity {
     }
 
     public int itemType;
+    public boolean check;
     public String imageSrc;
     public String storeAvatarUrl;
     public int storeId;
@@ -43,9 +44,6 @@ public class GoodsSearchItem implements MultiItemEntity {
     public float extendPrice0; // 折扣數
     public float batchPrice0;  // 原價
     public boolean showDiscountLabel;  // 是否顯示折扣標簽
-
-    // 最后一項的動畫的顯示狀態
-    public int animShowStatus;
 
 
     @Override

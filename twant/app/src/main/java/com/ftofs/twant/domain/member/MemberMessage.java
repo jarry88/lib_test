@@ -31,7 +31,7 @@ public class MemberMessage implements Serializable {
     /**
      * 消息模板分类
      * 会员    交易-1001 退换货-1002 物流-1003 资产-1004 招聘-1006
-     * 商家    交易-2001 退换货-2002 商品-2003 运营-2004
+     * 商家    交易-2001 退换货-2002 產品-2003 运营-2004
      */
     private Integer tplClass;
 

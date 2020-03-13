@@ -1,23 +1,21 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.CategoryCommodity;
 import com.ftofs.twant.entity.CategoryCommodityRow;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
 /**
- * 商品分類adapter
+ * 產品分類adapter
  * @author zwm
  */
 public class CategoryCommodityAdapter extends BaseQuickAdapter<CategoryCommodityRow, BaseViewHolder> {

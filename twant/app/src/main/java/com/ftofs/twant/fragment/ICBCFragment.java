@@ -2,8 +2,8 @@ package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,9 +135,8 @@ public class ICBCFragment extends BaseFragment {
                         } else {
                             ToastUtil.error(_mActivity, ToastUtil.COMMON_ERROR_MESSAGE);
                         }
-                    } catch (IOException e) {
-                        Log.e(TAG, e.getMessage());
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             };
@@ -160,16 +159,15 @@ public class ICBCFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ICBC_PAY_FINISH) {
-            EasyJSONObject easyJSONObject = (EasyJSONObject) EasyJSONObject.parse((String) message.data);
+            EasyJSONObject easyJSONObject = EasyJSONObject.parse((String) message.data);
             try {
                 if (easyJSONObject.getInt("payResult") == Constant.ONE) {
                     paymentView.setVisibility(View.INVISIBLE);
                     payResult.setVisibility(View.VISIBLE);
                     payResultInfo.setText(getResources().getString(R.string.text_pay_result_success));
                 }
-            } catch (EasyJSONException e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
     }
@@ -177,7 +175,7 @@ public class ICBCFragment extends BaseFragment {
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

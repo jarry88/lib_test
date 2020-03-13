@@ -4,45 +4,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
+    android:layout_marginTop="1dp"
     android:orientation="horizontal">
     <com.ftofs.twant.widget.ScaledButton
         android:id="@+id/btn_check_sku"
         android:layout_width="31dp"
         android:layout_height="31dp"
         android:layout_gravity="center_vertical"
+        android:visibility="gone"
         app:icon_src="@drawable/icon_cart_item_unchecked"
         />
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp"
         android:orientation="vertical">
-
+        <TextView
+            android:id="@+id/tv_goods_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text=""
+            android:textColor="@color/tw_black"
+            />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="#fffafafa">
+            android:layout_marginTop="0dp"
+            >
             <TextView
                 android:id="@+id/tv_goods_full_specs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:text=""
+                android:layout_marginTop="5dp"
+                android:text="123132"
                 android:textColor="#FF929292"
                 android:textSize="13sp"
                 />
 
             <TextView
                 android:id="@+id/tv_price_sum"
+                android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="@dimen/dp_4"
                 android:layout_marginBottom="12dp"
-                android:layout_marginLeft="13dp"
-                android:text=""
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="3dp"
+                android:text="5131321"
                 android:textColor="@color/tw_red"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -53,9 +63,9 @@
                 android:layout_width="92dp"
                 android:layout_height="25dp"
                 android:layout_marginBottom="7dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:textSize="16sp"
                 android:textColor="@color/tw_black"
                 />

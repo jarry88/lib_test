@@ -72,7 +72,7 @@ public enum EBMessageType {
     MESSAGE_TYPE_KEYBOARD_STATE_CHANGED,
 
     /**
-     * 添加新貼文
+     * 添加新想要帖
      */
     MESSAGE_TYPE_ADD_POST,
 
@@ -82,7 +82,7 @@ public enum EBMessageType {
     MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE,
 
     /**
-     * 重新加載商品詳情
+     * 重新加載產品詳情
      */
     MESSAGE_TYPE_RELOAD_GOODS_DETAIL,
 
@@ -92,9 +92,39 @@ public enum EBMessageType {
     MESSAGE_TYPE_WALLET_PAY_SUCCESS,
 
     /**
-     * 修改會員頭像
+     * 修改城友頭像
      */
     MESSAGE_TYPE_CHANGE_MEMBER_AVATAR,
+	
+	/**
+     * 修改了個人專頁背景圖
+     */
+    MESSAGE_TYPE_CHANGE_PERSONAL_BACKGROUND,
+
+    /**
+     * 微信登錄
+     */
+    MESSAGE_TYPE_WEIXIN_LOGIN,
+
+    /**
+     * 微信解綁
+     */
+    MESSAGE_TYPE_WEIXIN_UNBIND,
+
+    /**
+     * 綁定微信
+     */
+    MESSAGE_TYPE_WEIXIN_BIND,
+
+    /**
+     * 選擇想要帖產品
+     */
+    MESSAGE_TYPE_SELECT_POST_GOODS,
+    /**
+     * 通知欄信息跳轉
+     */
+    MESSAGE_NOTIFICATION_INTENT,
+    ;
 }
 
 

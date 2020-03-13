@@ -5,9 +5,16 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.fragment.GifFragment;
+import com.ftofs.twant.fragment.ImageViewerFragment;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
+
+import java.util.ArrayList;
 
 /**
  * 正方形Grid布局
@@ -166,5 +173,42 @@ public class SquareGridLayout extends ViewGroup {
             this.columnCount = columnCount;
             requestLayout();
         }
+    }
+
+    /**
+     * 添加圖片視圖
+     * @param imageView
+     * @param params
+     */
+    public void addImageView(ImageView imageView,LayoutParams params,String imageUrl){
+        Context context=imageView.getContext();
+        if (params == null) {
+            ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.topMargin = Util.dip2px(context, 3);
+            layoutParams.bottomMargin = Util.dip2px(context, 3);
+            layoutParams.leftMargin = Util.dip2px(context, 3);
+            layoutParams.rightMargin = Util.dip2px(context, 3);
+            params=layoutParams;
+        }
+        if (!StringUtil.isEmpty(imageUrl)) {
+            Glide.with(context).load(StringUtil.normalizeImageUrl(imageUrl)).centerCrop().into(imageView);
+            imageView.setOnClickListener(v -> {
+
+
+                if (imageUrl.endsWith(".gif")) { // 如果是Gif，顯示Gif動圖
+                    Util.startFragment(GifFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                } else {
+                    Util.startFragment(ImageViewerFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                }
+
+            });
+        }
+
+        addView(imageView,params);
+    }
+
+    @Override
+    public void addFocusables(ArrayList<View> views, int direction, int focusableMode) {
+        super.addFocusables(views, direction, focusableMode);
     }
 }

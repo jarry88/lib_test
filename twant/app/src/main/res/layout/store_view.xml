@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginBottom="35dp">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/img_store_figure_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +36,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 桌面 -->
     <com.ftofs.twant.widget.StoreDesktop
@@ -47,100 +48,117 @@
         android:layout_marginRight="19dp"
         android:layout_below="@id/img_store_figure_container">
     </com.ftofs.twant.widget.StoreDesktop>
-
-    <LinearLayout
-        android:id="@+id/goods_image_middle_container"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/fl_desktop"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        android:orientation="vertical">
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/goods_image_middle"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/cs_avatar_160"
-            app:riv_border_width="1dp"
-            app:riv_border_color="@android:color/white"
-            app:riv_corner_radius="5dp"
-            />
-
-        <ImageView
+        android:layout_alignBottom="@id/fl_desktop">
+        <LinearLayout
+            android:id="@+id/goods_image_middle_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/shadow_middle"
-            />
-    </LinearLayout>
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintWidth_percent="0.25"
+            android:visibility="gone"
+            android:orientation="vertical"
+            >
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/goods_image_middle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="4dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/cs_avatar_160"
+                app:riv_border_width="1dp"
+                app:riv_border_color="@android:color/white"
+                app:riv_corner_radius="5dp"
+                />
 
-
-    <LinearLayout
-        android:id="@+id/goods_image_left_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/fl_desktop"
-        android:layout_alignLeft="@id/img_store_figure_container"
-        android:layout_marginLeft="18dp"
-        android:visibility="gone"
-        android:orientation="vertical">
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/goods_image_left"
-            android:layout_width="79dp"
-            android:layout_height="79dp"
-            android:layout_marginBottom="3dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/cs_avatar_160"
-            app:riv_corner_radius="5dp"
-            app:riv_border_width="1dp"
-            app:riv_border_color="@android:color/white"
-            />
-
-        <ImageView
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/shadow_middle"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/goods_image_left_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="17dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/shadow_left"
-            />
-    </LinearLayout>
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.14"
+            app:layout_constraintWidth_percent="0.25"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/goods_image_left"
+                android:layout_width="79dp"
+                android:layout_height="79dp"
+                android:layout_marginBottom="3dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/cs_avatar_160"
+                app:riv_corner_radius="5dp"
+                app:riv_border_width="1dp"
+                app:riv_border_color="@android:color/white"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="17dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/shadow_left"
+                />
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/goods_image_right_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/fl_desktop"
-        android:layout_alignRight="@id/img_store_figure_container"
-        android:layout_marginRight="18dp"
-        android:visibility="gone"
-        android:orientation="vertical">
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/goods_image_right"
-            android:layout_width="79dp"
-            android:layout_height="79dp"
-            android:layout_marginBottom="3dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/cs_avatar_160"
-            app:riv_border_width="1dp"
-            app:riv_border_color="@android:color/white"
-            app:riv_corner_radius="5dp"
-            />
-
-        <ImageView
+        <LinearLayout
+            android:id="@+id/goods_image_right_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="17dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/shadow_right"
-            />
-    </LinearLayout>
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.86"
+            app:layout_constraintWidth_percent="0.25"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/goods_image_right"
+                android:layout_width="79dp"
+                android:layout_height="79dp"
+                android:layout_marginBottom="3dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/cs_avatar_160"
+                app:riv_border_width="1dp"
+                app:riv_border_color="@android:color/white"
+                app:riv_corner_radius="5dp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="17dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/shadow_right"
+                />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <RelativeLayout
-        android:id="@+id/ll_store_title_container"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginLeft="@dimen/toolbar_margin_left"

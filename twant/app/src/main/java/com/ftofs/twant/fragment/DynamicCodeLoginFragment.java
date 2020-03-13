@@ -3,8 +3,10 @@ package com.ftofs.twant.fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,9 +18,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.TwantApplication;
-import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.R;
@@ -31,10 +33,9 @@ import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObserver;
-import com.ftofs.twant.util.SharedPreferenceUtil;
-import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
@@ -47,10 +48,9 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
- * 動態碼登入
+ * 基因碼登入
  * @author zwm
  */
 public class DynamicCodeLoginFragment extends BaseFragment implements
@@ -71,6 +71,10 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     String textSecond;
     CountDownTimer countDownTimer;
     boolean canSendSMS = true;
+
+    ImageView btnWechatLogin;
+
+    boolean loginButtonEnable = true; // 防止重覆點擊
 
     CommonCallback commonCallback;
     public void setCommonCallback(CommonCallback commonCallback) {
@@ -114,6 +118,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         };
 
         Util.setOnClickListener(view, R.id.btn_login, this);
+        Util.setOnClickListener(view, R.id.btn_facebook_login, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_forget_password, this);
 
@@ -138,6 +143,10 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         });
         tvAreaName = view.findViewById(R.id.tv_area_name);
 
+        btnWechatLogin = view.findViewById(R.id.btn_wechat_login);
+        btnWechatLogin.setOnClickListener(this);
+
+
         refreshCaptcha();
         getMobileZoneList();
     }
@@ -148,6 +157,14 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         int id = v.getId();
         if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();
+        } else if (id == R.id.btn_wechat_login) {
+            if (!TwantApplication.wxApi.isWXAppInstalled()) { // 未安裝微信
+                ToastUtil.error(_mActivity, getString(R.string.weixin_not_installed_hint));
+                return;
+            }
+            ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_LOGIN);
+        } else if (id == R.id.btn_facebook_login) {
+            ((LoginFragment) commonCallback).facebookLogin();
         } else if (id == R.id.btn_get_sms_code) {
             if (!canSendSMS) {
                 return;
@@ -203,24 +220,27 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
                             return;
                         }
 
-                        ToastUtil.success(_mActivity, "動態碼已發送");
+                        ToastUtil.success(_mActivity, "基因碼已發送");
                         canSendSMS = false;
                         countDownTimer.start();
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } else if (id == R.id.btn_login) {
+            if (!loginButtonEnable) {
+                return;
+            }
             doLogin();
         } else if (id == R.id.btn_mobile_zone) {
             List<ListPopupItem> itemList = new ArrayList<>();
@@ -278,20 +298,24 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 "smsAuthCode", smsCode,
                 "clientType", Constant.CLIENT_TYPE_ANDROID
         );
+
+        loginButtonEnable = false;
         Api.postUI(Api.PATH_MOBILE_LOGIN, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loginButtonEnable = true;
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                // loginButtonEnable = true; 不需要，因为已经登录成功
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 try {
                     int code = responseObj.getInt("code");
                     if (code != ResponseCode.SUCCESS) {
-                        ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
+                        ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
                         // 如果出錯，刷新驗證碼
                         refreshCaptcha();
                         return;
@@ -299,18 +323,16 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
 
                     ToastUtil.success(_mActivity, "登入成功");
                     int userId = responseObj.getInt("datas.memberId");
-                    SharedPreferenceUtil.saveUserInfo(responseObj);
-                    TwantApplication.getInstance().setUmengAlias(Constant.ACTION_ADD);
-                    EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                    User.onLoginSuccess(userId, LoginType.MOBILE, responseObj);
                     hideSoftInput();
-                    SqliteUtil.switchUserDB(userId);
+                    Util.getMemberToken(_mActivity);
 
                     if (commonCallback != null) {
                         SLog.info("Fragment出棧");
                         commonCallback.onSuccess(null);
                     }
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

@@ -81,14 +81,14 @@
             />
     </LinearLayout>
 
-    <!-- 商品 -->
+    <!-- 產品 -->
     <LinearLayout
         android:id="@+id/ll_goods_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
         android:layout_marginBottom="15dp"
         android:orientation="horizontal">
 

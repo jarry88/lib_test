@@ -12,7 +12,7 @@ import java.util.List;
 public class EmojiPage {
     // 每頁20個表情
     public static final int EMOJI_PER_PAGE = 20;
-    public List<Emoji> emojiList;
+    public List<UnicodeEmojiItem> emojiList;
 
     public EmojiPage() {
         this.emojiList = new ArrayList<>();

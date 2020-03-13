@@ -18,7 +18,7 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />
@@ -33,7 +33,10 @@
             />
     </RelativeLayout>
 
-
+    <!-- 真誠提示 -->
+    <include layout="@layout/item_true_notice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <!-- 已發送提示 -->
     <TextView
         android:id="@+id/tv_sms_code_hint"
@@ -45,12 +48,12 @@
         android:textColor="@color/tw_blue"
         />
 
-    <!-- 動態碼 -->
+    <!-- 基因碼 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
         android:background="@drawable/border_type_d">
         <ImageView
             android:layout_width="wrap_content"

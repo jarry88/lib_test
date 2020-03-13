@@ -3,8 +3,8 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:paddingTop="15dp"
-    android:paddingLeft="@dimen/toolbar_margin_left"
-    android:paddingRight="@dimen/toolbar_margin_right"
+    android:paddingStart="@dimen/toolbar_margin_left"
+    android:paddingEnd="@dimen/toolbar_margin_right"
     android:paddingBottom="10dp"
     android:orientation="vertical"
     android:background="@drawable/border_type_d">
@@ -21,18 +21,37 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/img_commenter_avatar"
-            android:layout_marginLeft="15dp"
+            android:layout_toEndOf="@id/img_commenter_avatar"
+            android:layout_marginStart="15dp"
             android:layout_centerVertical="true"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_commenter_nickname"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
+                android:layout_gravity="center_vertical">
+                <TextView
+                    android:id="@+id/tv_commenter_nickname"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp"/>
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_role"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:text="@string/text_member"
+
+                    android:textSize="10sp"
+                    android:textColor="@color/tw_blue"
+                    android:background="@drawable/bg_text_radius_blue"
                 />
+            </LinearLayout>
             <TextView
                 android:id="@+id/tv_comment_time"
                 android:layout_width="wrap_content"
@@ -75,7 +94,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:orientation="horizontal"
             android:layout_gravity="center_vertical">
             <TextView

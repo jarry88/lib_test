@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 /**
- * 店鋪公告
+ * 商店公告
  * @author zwm
  */
 public class ShopAnnoucement {

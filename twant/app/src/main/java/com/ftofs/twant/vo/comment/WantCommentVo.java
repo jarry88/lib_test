@@ -11,21 +11,21 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
- * @Description: 評論視圖類
+ * @Description: 說說視圖類
  * @Auther: yangjian
  * @Date: 2019/2/13 16:22
  */
 public class WantCommentVo {
     /**
-     * 評論id
+     * 說說id
      */
     private BigInteger commentId;
     /**
-     * 評論類型 1全部 2視頻 3文本
+     * 說說類型 1全部 2視頻 3文本
      */
     private int commentType;
     /**
-     * 貼文渠道 1全部 2店鋪 3商品 4貼文 5推文
+     * 想要帖渠道 1全部 2商店 3產品 4想要帖 5推文
      */
     private int commentChannel;
     /**
@@ -37,39 +37,39 @@ public class WantCommentVo {
      */
     private int ordersType;
     /**
-     * 評論類容
+     * 說說類容
      */
     private String content;
     /**
-     * 層級，1-回復主題，2-回復評論
+     * 層級，1-回覆主題，2-回覆說說
      */
     private int deep;
     /**
-     * 關聯店鋪Id
+     * 關聯商店Id
      */
     private int relateStoreId;
     /**
-     * 關聯商品SPU
+     * 關聯產品SPU
      */
     private int relateCommonId;
     /**
-     * 關聯文章Id
+     * 關聯想要帖Id
      */
     private BigInteger relatePostId;
     /**
-     * 回復評論Id
+     * 回覆說說Id
      */
     private BigInteger replyCommentId;
     /**
-     * 評論人
+     * 說說人
      */
     private String createBy;
     /**
-     * 評論時間
+     * 說說時間
      */
     private String createTime;
     /**
-     * 格式化評論時間
+     * 格式化說說時間
      */
     private String formatCreateTime;
     /**
@@ -77,35 +77,35 @@ public class WantCommentVo {
      */
     private int commentState;
     /**
-     * 點讚評論數
+     * 讚想說說數
      */
     private int commentLike = 0;
     /**
-     * 踩該評論數
+     * 踩該說說數
      */
     private int commentUnlike = 0;
     /**
-     * 評論收藏數
+     * 說說收藏數
      */
     private int commentFavor = 0;
     /**
-     * 評論回復數
+     * 說說回覆數
      */
     private int commentReply = 0;
     /**
-     * 評論分享數
+     * 說說分享數
      */
     private int commentShare = 0;
     /**
-     * 是否點讚過
+     * 是否讚想過
      */
     private int isLike = 0;
     /**
-     * 評論時長
+     * 說說時長
      */
     private String commentStartTime;
     /**
-     * 評論图片集合
+     * 說說图片集合
      */
     private List<WantCommentImage> images;
     /**
@@ -113,7 +113,7 @@ public class WantCommentVo {
      */
     private MemberVo memberVo;
     /**
-     * 回復的評論
+     * 回覆的說說
      */
     private WantCommentReplyVo wantCommentReplyVo;
 
@@ -126,29 +126,29 @@ public class WantCommentVo {
      */
     private StoreVo storeVo;
     /**
-     * 评论的商品詳情数据
+     * 评论的產品詳情数据
      */
     private GoodsDetailVo goodsDetailVo;
     /**
-     * 評論者暱稱
+     * 說說者暱稱
      */
     private String nickName;
     /**
-     * 貼文標題
+     * 想要帖標題
      */
     private String wantPostTitle;
     /**
-     * 評論透明度 默认10显示
+     * 說說透明度 默认10显示
      */
     private int opacity = 10;
 
     /**
-     * 最上級評論ID
+     * 最上級說說ID
      */
     private BigInteger parentCommentId;
 
     /**
-     * 主體評論數
+     * 主體說說數
      */
     private long commentCount = 0;
 

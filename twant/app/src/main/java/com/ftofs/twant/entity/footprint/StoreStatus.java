@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 【瀏覽記憶】店鋪狀態模型
+ * 【瀏覽記憶】商店狀態模型
  * @author zwm
  */
 public class StoreStatus extends BaseStatus {

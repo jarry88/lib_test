@@ -9,7 +9,7 @@ public class CategoryCommission implements Serializable {
     private int commissionId;
 
     /**
-     * 商品分类
+     * 產品分类
      */
     private int categoryId;
 

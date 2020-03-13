@@ -1,16 +1,15 @@
 package com.ftofs.twant.adapter;
 
-import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.util.StringUtil;
@@ -19,10 +18,11 @@ import java.util.List;
 
 
 /**
- * 評論列表Adapter
+ * 說說列表Adapter
  * @author zwm
  */
 public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHolder> {
+
 
     public CommentListAdapter(int layoutResId, @Nullable List<CommentItem> data) {
         super(layoutResId, data);
@@ -31,14 +31,18 @@ public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHo
     @Override
     protected void convert(BaseViewHolder helper, CommentItem item) {
         ImageView imgCommenterAvatar = helper.getView(R.id.img_commenter_avatar);
-        Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.commenterAvatar)).centerCrop().into(imgCommenterAvatar);
+        if(StringUtil.isEmpty(item.commenterAvatar)){
+            Glide.with(mContext).load(R.drawable.icon_default_avatar).into(imgCommenterAvatar);
+        }else{
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.commenterAvatar)).into(imgCommenterAvatar);
+        }
 
         TextView tvContent = helper.getView(R.id.tv_content);
         tvContent.setText(StringUtil.translateEmoji(mContext, item.content, (int) tvContent.getTextSize()));
 
         TextView btnReply = helper.getView(R.id.btn_reply);
         String replyText = mContext.getString(R.string.text_reply);
-        if (item.commentReply > 0) { // 評論列表，如果是零回復，則不要顯示那個0
+        if (item.commentReply > 0) { // 說說列表，如果是零回覆，則不要顯示那個0
             replyText += (" " + item.commentReply);
             btnReply.setBackgroundResource(R.drawable.reply_number_bg);
         } else {
@@ -52,6 +56,28 @@ public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHo
             tvThumbCount.setVisibility(View.VISIBLE);
         } else {
             tvThumbCount.setVisibility(View.GONE);
+        }
+        TextView tvRole = helper.getView(R.id.tv_role);
+        tvRole.setVisibility(View.VISIBLE);
+        switch (item.commentRole) {
+            case CommentItem.COMMENT_ROLE_MEMBER:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_blue);
+                tvRole.setText(mContext.getText(R.string.text_member));
+                tvRole.setTextColor(mContext.getColor(R.color.tw_blue));
+                break;
+            case CommentItem.COMMENT_ROLE_BOSS:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_red);
+                tvRole.setTextColor(mContext.getColor(R.color.tw_red));
+                tvRole.setText(mContext.getText(R.string.text_boss));
+                break;
+            case CommentItem.COMMENT_ROLE_CS:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_red);
+                tvRole.setTextColor(mContext.getColor(R.color.tw_red));
+                tvRole.setText(mContext.getText(R.string.text_customer));
+                break;
+            default:
+                break;
+
         }
 
         helper.setText(R.id.tv_commenter_nickname, item.nickname)

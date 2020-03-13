@@ -148,6 +148,76 @@
                 android:src="@drawable/expand_button_big"
                 />
         </RelativeLayout>
+
+        <!--
+        <RelativeLayout
+            android:id="@+id/btn_contact_us"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/border_type_d">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:text="聯絡我們"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_view_post_sale_service"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/border_type_d">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:text="售後服務"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/btn_view_shipping_policy"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                android:text="貨運政策"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+        -->
     </LinearLayout>
 
     <LinearLayout

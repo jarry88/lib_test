@@ -14,11 +14,11 @@ import java.math.BigDecimal;
  */
 public class PresellVo {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal price;
 

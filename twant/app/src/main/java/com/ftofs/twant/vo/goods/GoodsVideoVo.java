@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author liusf
  * @create 2019/1/22 14:15
- * @description 商品视频视图类
+ * @description 產品视频视图类
  */
 public class GoodsVideoVo {
     /**
@@ -21,7 +21,7 @@ public class GoodsVideoVo {
     private StoreVo storeVo;
 
     /**
-     * 商品列表
+     * 產品列表
      */
     private List<GoodsCommonVo> goodsCommonList;
 
@@ -31,7 +31,7 @@ public class GoodsVideoVo {
     private long playTimes = 0;
 
     /**
-     * 點讚數量
+     * 讚想數量
      */
     private long likeCount = 0;
 

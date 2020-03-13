@@ -2,7 +2,7 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +10,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
 
 /**
- * 想要圈貼文截止日期指示
+ * 想要圈想要帖截止日期指示
  * @author zwm
  */
 public class TwProgressBar extends LinearLayout {

@@ -1,10 +1,10 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
+
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.MyFollowGoodsItem;
@@ -12,13 +12,14 @@ import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
-public class MyFollowGoodsAdapter extends BaseQuickAdapter<MyFollowGoodsItem, BaseViewHolder> {
+public class MyFollowGoodsAdapter extends MyFollowAdapter<MyFollowGoodsItem, BaseViewHolder> {
     public MyFollowGoodsAdapter(int layoutResId, @Nullable List<MyFollowGoodsItem> data) {
         super(layoutResId, data);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, MyFollowGoodsItem item) {
+        super.switchMode(helper, item);
         helper.addOnClickListener(R.id.btn_goto_store);
 
         ImageView goodsImage = helper.getView(R.id.goods_image);
@@ -27,7 +28,8 @@ public class MyFollowGoodsAdapter extends BaseQuickAdapter<MyFollowGoodsItem, Ba
         helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_goods_name, item.goodsName)
                 .setText(R.id.tv_jingle, item.jingle)
-                .setText(R.id.tv_price, StringUtil.formatPrice(mContext, item.price, 1))
+                .setText(R.id.tv_price, StringUtil.formatPrice(mContext, item.price, 1,false))
                 .setText(R.id.tv_follow_count, String.valueOf(item.goodsFavorite));
+
     }
 }

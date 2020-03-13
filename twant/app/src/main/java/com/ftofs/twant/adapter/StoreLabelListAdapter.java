@@ -1,7 +1,7 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;

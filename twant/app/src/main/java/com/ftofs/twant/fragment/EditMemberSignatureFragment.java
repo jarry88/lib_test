@@ -1,20 +1,24 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -30,10 +34,20 @@ public class EditMemberSignatureFragment extends BaseFragment implements View.On
 
     EditText etContent;
     TextView tvWordCount;
+    boolean isUser;
 
     public static EditMemberSignatureFragment newInstance(String originalMemberSignature) {
         Bundle args = new Bundle();
 
+        args.putString("originalMemberSignature", originalMemberSignature);
+        EditMemberSignatureFragment fragment = new EditMemberSignatureFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static EditMemberSignatureFragment newInstance(String originalMemberSignature,String memberName) {
+        Bundle args = new Bundle();
+        args.putString("memberName",memberName);
         args.putString("originalMemberSignature", originalMemberSignature);
         EditMemberSignatureFragment fragment = new EditMemberSignatureFragment();
         fragment.setArguments(args);
@@ -53,40 +67,49 @@ public class EditMemberSignatureFragment extends BaseFragment implements View.On
         super.onViewCreated(view, savedInstanceState);
 
         Bundle args = getArguments();
+        isUser = !args.containsKey("memberName");
         memberSignature = args.getString("originalMemberSignature");
 
 
         tvWordCount = view.findViewById(R.id.tv_word_count);
         etContent = view.findViewById(R.id.et_content);
-        etContent.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if(isUser){
+            etContent.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+                }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-            }
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                String wordCount = s.length() + "/200";
-                tvWordCount.setText(wordCount);
-            }
-        });
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String wordCount = s.length() + "/200";
+                    tvWordCount.setText(wordCount);
+                }
+            });
+        } else {
+            etContent.setEnabled(false);
+        }
+
         etContent.setText(memberSignature);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
-        Util.setOnClickListener(view, R.id.btn_ok, this);
+        if(isUser) {
+            Util.setOnClickListener(view, R.id.btn_ok, this);
+        } else {
+            view.findViewById(R.id.btn_ok).setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            hideSoftInput();
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_ok) {
             String content = etContent.getText().toString().trim();
             if (StringUtil.isEmpty(content)) {
@@ -115,7 +138,7 @@ public class EditMemberSignatureFragment extends BaseFragment implements View.On
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
@@ -125,10 +148,11 @@ public class EditMemberSignatureFragment extends BaseFragment implements View.On
                         bundle.putString("memberSignature", content);
                         setFragmentResult(RESULT_OK, bundle);
 
-                        hideSoftInput();
-                        pop();
-                    } catch (Exception e) {
+                        HawkUtil.setUserData(SPField.USER_DATA_KEY_SIGNATURE, content);
 
+                        hideSoftInputPop();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
@@ -138,7 +162,7 @@ public class EditMemberSignatureFragment extends BaseFragment implements View.On
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

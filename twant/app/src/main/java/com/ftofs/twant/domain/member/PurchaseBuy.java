@@ -19,7 +19,7 @@ public class PurchaseBuy {
 	private String title;
 
 	/**
-	 * 商品名称
+	 * 產品名称
 	 */
 	private String proName;
 
@@ -74,7 +74,7 @@ public class PurchaseBuy {
 	private String endTime;
 
 	/**
-	 * 采购类型   现货/标准品、紧急采购、二手商品、库存、求租、代理加盟、合作
+	 * 采购类型   现货/标准品、紧急采购、二手產品、库存、求租、代理加盟、合作
 	 */
 	private String purType;
 

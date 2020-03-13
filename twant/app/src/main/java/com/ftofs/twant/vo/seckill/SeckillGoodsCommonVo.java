@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 秒杀商品
+ * 秒杀產品
  *
  * @author shopnc.feng
  * Created on 2017/9/15 17:52
@@ -22,7 +22,7 @@ public class SeckillGoodsCommonVo {
      */
     private int seckillGoodsId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
@@ -30,19 +30,19 @@ public class SeckillGoodsCommonVo {
      */
     private String imageSrc;
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice = BigDecimal.ZERO;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal seckillGoodsPrice = BigDecimal.ZERO;
     /**

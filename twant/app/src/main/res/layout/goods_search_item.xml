@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -7,11 +7,14 @@
     android:layout_margin="5dp"
     android:paddingBottom="15dp"
     android:orientation="vertical">
-    <android.support.constraint.ConstraintLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="9dp"
-        android:layout_marginRight="9dp">
+        android:layout_marginRight="9dp"
+        >
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/goods_image"
             android:layout_width="0dp"
@@ -32,7 +35,7 @@
             android:layout_height="16dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
             android:layout_marginBottom="5dp"
             android:visibility="gone"
             />
@@ -44,56 +47,41 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
         </com.ftofs.twant.widget.SlantedWidget>
-    </android.support.constraint.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.ftofs.twant.widget.StoreDesktop
         android:id="@+id/sd_desktop"
+        android:layout_below="@id/cl_container"
         android:layout_width="match_parent"
         android:layout_height="9dp"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         />
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_goods_price"
+        android:layout_above="@id/ll_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="25dp"
+        android:gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="$ 129.00"
+        android:textColor="@color/tw_white"
+        android:background="@drawable/price_grey_bg"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        />
+    <LinearLayout
+        android:id="@+id/ll_container"
+        android:layout_below="@id/sd_desktop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
         android:paddingBottom="12dp"
         android:background="@drawable/new_arrivals_pane_bg"
         android:orientation="vertical">
-        <LinearLayout
-            android:id="@+id/btn_goto_store"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/img_store_avatar"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/cs_avatar_160"
-                />
-            <TextView
-                android:id="@+id/tv_store_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="6dp"
-                android:text="質簡"
-                android:textSize="13sp"
-                android:textColor="@color/tw_black"
-                android:singleLine="true"
-                android:ellipsize="end"
-                />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/expand_button"
-                />
-        </LinearLayout>
         <!-- 分隔線 -->
         <View
             android:layout_width="match_parent"
@@ -102,13 +90,14 @@
             />
         <TextView
             android:id="@+id/tv_goods_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="客厅装饰品烛台蜡烛摆件"
             android:textColor="@color/tw_black"
             android:textSize="14sp"
             android:singleLine="true"
+            android:layout_gravity="center"
             android:ellipsize="end"
             />
 
@@ -129,7 +118,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp">
             <TextView
-                android:id="@+id/tv_goods_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -137,13 +125,14 @@
                 android:textColor="@color/tw_red"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal">
                 <TextView
@@ -174,20 +163,71 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_discount"
+                android:id="@+id/tv_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:paddingLeft="2.5dp"
+                android:paddingRight="2.5dp"
+                android:text="折扣"
+                android:textSize="10sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/icon_goods_bargain_bg"
+                android:visibility="gone"
+                />
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:paddingLeft="2.5dp"
                     android:paddingRight="2.5dp"
-                    android:text="折扣"
+                    android:text="-"
                     android:textSize="10sp"
                     android:textColor="@android:color/white"
-                    android:background="@drawable/icon_goods_bargain_bg"
-                    android:visibility="gone"
                     />
             </LinearLayout>
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tw_light_grey"
+            android:layout_marginStart="@dimen/length_15dp"
+            android:layout_marginEnd="@dimen/length_15dp"/>
+        <LinearLayout
+            android:id="@+id/btn_goto_store"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_store_avatar"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/cs_avatar_160"
+                />
+            <TextView
+                android:id="@+id/tv_store_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="質簡"
+                android:textSize="13sp"
+                android:textColor="@color/tw_black"
+                android:singleLine="true"
+                android:ellipsize="end"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/expand_button"
+                android:visibility="gone"
+                />
+        </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

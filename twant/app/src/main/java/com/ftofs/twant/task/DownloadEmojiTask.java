@@ -36,7 +36,7 @@ public class DownloadEmojiTask implements Runnable {
             String responseStr = Api.syncGet(Api.PATH_GET_EMOJI_LIST, params);
             SLog.info("responseStr[%s]", responseStr);
 
-            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
             if (ToastUtil.isError(responseObj)) {
                 return;
             }
@@ -46,12 +46,12 @@ public class DownloadEmojiTask implements Runnable {
                 return;
             }
 
-            String versions = responseObj.getString("datas.versions");
+            String versions = responseObj.getSafeString("datas.versions");
 
             // 先刪除所有舊的表情信息
             LitePal.deleteAll(Emoji.class);
 
-            EasyJSONArray emojiList = responseObj.getArray("datas.emojiList");
+            EasyJSONArray emojiList = responseObj.getSafeArray("datas.emojiList");
             boolean allSuceess = true; // 所有表情是否保存成功
             for (Object object : emojiList) {
                 EasyJSONObject emojiItem = (EasyJSONObject) object;
@@ -59,23 +59,23 @@ public class DownloadEmojiTask implements Runnable {
 
                 // 下載表情圖片
                 int emojiId = emojiItem.getInt("emojiId");
-                String url = StringUtil.normalizeImageUrl(emojiItem.getString("emojiImage"));
+                String url = StringUtil.normalizeImageUrl(emojiItem.getSafeString("emojiImage"));
                 String ext = PathUtil.getExtension(url, true);
 
                 String absolutePath = String.format("emojiList/%s/%d.%s", versions, emojiId, ext);
                 File emojiFile = FileUtil.getCacheFile(TwantApplication.getInstance(), absolutePath);
                 boolean success = Api.syncDownloadFile(url, emojiFile);
                 if (success) {
-                    SLog.info("emoji absolutePath[%s]", emojiFile.getAbsolutePath());
+                    // SLog.info("emoji absolutePath[%s]", emojiFile.getAbsolutePath());
 
                     Emoji emoji = new Emoji();
                     emoji.emojiId = emojiId;
-                    emoji.emojiCode = emojiItem.getString("emojiCode");
-                    emoji.emojiDesc = emojiItem.getString("emojiDesc");
-                    emoji.emojiImage = emojiItem.getString("emojiImage");
+                    emoji.emojiCode = emojiItem.getSafeString("emojiCode");
+                    emoji.emojiDesc = emojiItem.getSafeString("emojiDesc");
+                    emoji.emojiImage = emojiItem.getSafeString("emojiImage");
                     emoji.sort = emojiItem.getInt("sort");
                     emoji.absolutePath = emojiFile.getAbsolutePath();
-                    SLog.info("emoji.absolutePath[%s]", emoji.absolutePath);
+                    // SLog.info("emoji.absolutePath[%s]", emoji.absolutePath);
 
                     emoji.save();
                 } else {

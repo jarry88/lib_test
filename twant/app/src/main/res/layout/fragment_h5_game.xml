@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@drawable/border_type_d">
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+        <View
+            android:id="@+id/vw_right_padding"
+            android:layout_width="15dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            />
+
+        <TextView
+            android:id="@+id/tv_fragment_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/btn_back"
+            android:layout_toLeftOf="@id/vw_right_padding"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="@string/app_name"
+            android:textColor="@color/tw_black"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            />
+    </RelativeLayout>
     <WebView
+        android:visibility="gone"
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </WebView>
-    <com.ftofs.twant.widget.ScaledButton
-        android:id="@+id/btn_back"
-        android:layout_width="31dp"
-        android:layout_height="31dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="7dp"
-        app:icon_src="@drawable/icon_back"
-        android:visibility="gone">
-    </com.ftofs.twant.widget.ScaledButton>
-</RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.ycbjie.webviewlib.X5WebView
+            android:id="@+id/x5_web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!--仿微信横向进度条-->
+        <com.ycbjie.webviewlib.WebProgress
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"/>
+    </FrameLayout>
+</LinearLayout>

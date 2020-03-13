@@ -1,11 +1,11 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -13,9 +13,8 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreAnnouncementListAdapter;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.StoreAnnouncement;
-import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.fragment.ExplorerFragment;
-import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.fragment.StoreAnnouncementDetailFragment;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
@@ -54,8 +53,9 @@ public class StoreAnnouncementPopup extends BottomPopupView implements View.OnCl
                 StoreAnnouncement storeAnnouncement = storeAnnouncementList.get(position);
                 String url = Config.WEB_BASE_URL + "/store/announcement/" + storeAnnouncement.id;
 
-                // 使用瀏覽器顯示店鋪公告
-                Util.startFragment(ExplorerFragment.newInstance(url, true));
+                // 使用瀏覽器顯示商店公告
+                // Util.startFragment(ExplorerFragment.newInstance(url, true));
+                Util.startFragment(StoreAnnouncementDetailFragment.newInstance(storeAnnouncement.title, storeAnnouncement.content));
 
                 dismiss();
             }

@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.store;
 import java.util.List;
 
 /**
- * @Description: 首頁店鋪推薦
+ * @Description: 首頁商店推薦
  * @Auther: yangjian
  * @Date: 2018/9/27 10:34
  */

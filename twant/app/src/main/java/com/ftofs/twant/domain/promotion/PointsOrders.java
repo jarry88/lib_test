@@ -140,17 +140,17 @@ public class PointsOrders implements Serializable {
     private int totalPoints = 0;
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
@@ -166,7 +166,7 @@ public class PointsOrders implements Serializable {
     private int buyNum = 0;
 
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImage;
 

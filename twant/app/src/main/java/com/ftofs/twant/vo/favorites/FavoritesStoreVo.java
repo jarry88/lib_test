@@ -28,15 +28,15 @@ public class FavoritesStoreVo {
     private int memberId = 0;
 
     /**
-     * 會員名稱
+     * 城友名稱
      */
     private String memberName;
     /**
-     * 會員暱稱
+     * 城友暱稱
      */
     private String nickName;
     /**
-     * 會員頭像
+     * 城友頭像
      */
     private String avatar;
     /**
@@ -53,7 +53,7 @@ public class FavoritesStoreVo {
      */
     private Store store = null;
     /**
-     * 店铺商品总数
+     * 店铺產品总数
      */
     private long goodsCommonCount = 0L;
     /**
@@ -62,7 +62,7 @@ public class FavoritesStoreVo {
     private List<GoodsCommon> newGoodsList  = new ArrayList<>() ;
 
     /**
-     * bycj -- 商品上新数量
+     * bycj -- 產品上新数量
      * 根数關注时间判断
      */
     private long newGoodsCount = 0 ;
@@ -87,17 +87,17 @@ public class FavoritesStoreVo {
     private int isOwnShop =  0 ;
 
     /**
-     * 店鋪門店位置 高德經度
+     * 商店門店位置 高德經度
      */
     private double lng = 0;
 
     /**
-     * 店鋪門店位置 高德緯度
+     * 商店門店位置 高德緯度
      */
     private double lat = 0;
 
     /**
-     * 當前位置與店鋪閒的距離(格式化為字符串顯示，單位m)
+     * 當前位置與商店閒的距離(格式化為字符串顯示，單位m)
      */
     private String distance = "0";
 

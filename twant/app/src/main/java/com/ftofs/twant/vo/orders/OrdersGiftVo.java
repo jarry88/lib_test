@@ -28,7 +28,7 @@ public class OrdersGiftVo {
      */
     private int giftNum;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**

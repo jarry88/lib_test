@@ -16,12 +16,12 @@ public class DistributionOrders implements Serializable {
     private int distributorId;
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 
     /**
-     * 商品店铺编号
+     * 產品店铺编号
      */
     private int storeId;
 
@@ -36,7 +36,7 @@ public class DistributionOrders implements Serializable {
     private int commissionRate;
 
     /**
-     * 订单商品编号
+     * 订单產品编号
      */
     private int ordersGoodsId;
 

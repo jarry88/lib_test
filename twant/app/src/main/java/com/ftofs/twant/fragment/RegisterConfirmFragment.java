@@ -1,37 +1,34 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.ResponseCode;
-import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.SharedPreferenceUtil;
-import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 確認注冊界面
@@ -102,7 +99,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_register) {
             String fullMobile = areaCode + "," + mobile;
             String smsCode =etSmsCode.getText().toString().trim();
@@ -148,38 +145,47 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                 public void onResponse(Call call, String responseStr) throws IOException {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     try {
                         int code = responseObj.getInt("code");
                         if (code != ResponseCode.SUCCESS) {
-                            ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
+                            ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
                             return;
                         }
 
                         // 保存服務器端返回的數據
                         int userId = responseObj.getInt("datas.memberId");
-                        SharedPreferenceUtil.saveUserInfo(responseObj);
-                        TwantApplication.getInstance().setUmengAlias(Constant.ACTION_ADD);
-                        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+                        User.onLoginSuccess(userId, LoginType.MOBILE, responseObj);
                         hideSoftInput();
-                        SqliteUtil.switchUserDB(userId);
+                        Util.getMemberToken(_mActivity);
 
                         ToastUtil.success(_mActivity, "注冊成功");
 
                         // 注冊成功，跳到主頁面
                         popTo(MainFragment.class, false);
-                    } catch (EasyJSONException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         }
     }
-
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        SLog.info("__onSupportVisible");
+        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        SLog.info("__onSupportInvisible");
+        _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

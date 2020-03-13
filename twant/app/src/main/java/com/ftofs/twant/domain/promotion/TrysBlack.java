@@ -12,12 +12,12 @@ public class TrysBlack {
     private int trysId;
 
     /**
-     * 商品ID
+     * 產品ID
      */
     private int commonId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 

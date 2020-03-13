@@ -70,7 +70,7 @@ public class StatHours implements Serializable {
     private BigDecimal refundAmount = new BigDecimal(0);
 
     /**
-     * 新增商品数
+     * 新增產品数
      */
     private long newGoodsCommonNum = 0;
 

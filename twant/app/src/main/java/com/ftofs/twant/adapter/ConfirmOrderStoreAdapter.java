@@ -1,7 +1,7 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -32,13 +32,18 @@ import com.ftofs.twant.util.Util;
 import java.util.List;
 
 /**
- * 確認訂單店鋪列表Adapter
+ * 確認訂單商店列表Adapter
  * @author zwm
  */
 public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
     Context context;
     String timesSign;
     List<ListPopupItem> shippingTimeDescList;  // 配送時間描述列表
+    int payWayIndex = 0;
+
+    public void setPayWayIndex(int payWayIndex) {
+        this.payWayIndex = payWayIndex;
+    }
 
     public ConfirmOrderStoreAdapter(Context context, List<ListPopupItem> shippingTimeDescList, @Nullable List<MultiItemEntity> data) {
         super(data);
@@ -58,8 +63,8 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             final ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) multiItemEntity;
             helper.addOnClickListener(R.id.btn_receipt)  // 變更單據信息
                     .addOnClickListener(R.id.btn_change_shipping_time)  // 修改配送時間
-                    .addOnClickListener(R.id.ll_store_info_container)  // 點擊店鋪信息
-                    .addOnClickListener(R.id.btn_use_voucher);  // 使用店鋪券
+                    .addOnClickListener(R.id.ll_store_info_container)  // 點擊商店信息
+                    .addOnClickListener(R.id.btn_use_voucher);  // 使用商店券
 
 
             String voucherStatus = "";
@@ -80,12 +85,19 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             if (item.discountAmount > 0) { // 如果有優惠，在前面加上負號
                 discountAmountText = "-" + discountAmountText;
             }
+
+            //每家商店小計金額
+            float realFreightAmount = item.freightAmount;
+            if (payWayIndex == 2) {  // 如果是門店自提，則不算運費
+                realFreightAmount = 0;
+            }
+            float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
             helper.setText(R.id.tv_store_name, item.storeName)
-                .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0))
+                .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, realFreightAmount, 0))
                 .setText(R.id.tv_store_discount, discountAmountText)
                 .setText(R.id.tv_store_voucher_count, voucherStatus)
                 .setText(R.id.tv_store_item_count, String.format("共%d件，小計：", item.itemCount))
-                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, item.buyItemAmount, 0));
+                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, finalPayAmount, 0));
 
             EditText etLeaveMessage = helper.getView(R.id.et_leave_message);
             etLeaveMessage.setText(item.leaveMessage);
@@ -147,6 +159,14 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
 
                 llSkuItemContainer.addView(skuItemView, layoutParams);
             }
+
+            if (item.conformTemplatePrice > 0) {
+                String conformTitle = "送 " + StringUtil.formatPrice(context, item.conformTemplatePrice, 0) + " 店舖券一張";
+                helper.setText(R.id.tv_conform_title, conformTitle);
+                helper.setGone(R.id.ll_conform_container, true);
+            } else {
+                helper.setGone(R.id.ll_conform_container, false);
+            }
         } else {
             // 匯總數據
             ConfirmOrderSummaryItem item = (ConfirmOrderSummaryItem) multiItemEntity;
@@ -171,9 +191,9 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             helper.setText(R.id.tv_pay_way, paymentTypeCodeToPayWayDesc(item.paymentTypeCode));
             if (item.platformCouponCount > 0) {
                 helper.setText(R.id.tv_platform_coupon, item.platformCouponStatus);
-                helper.setGone(R.id.rl_select_platform_coupon_container, true);
+                helper.setGone(R.id.btn_select_platform_coupon, true);
             } else {
-                helper.setGone(R.id.rl_select_platform_coupon_container, false);
+                helper.setGone(R.id.btn_select_platform_coupon, false);
             }
         }
     }

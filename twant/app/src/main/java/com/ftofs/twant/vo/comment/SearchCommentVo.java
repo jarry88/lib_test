@@ -13,51 +13,51 @@ import java.util.List;
 /**
  * @author liusf
  * @create 2019/3/27 11:55
- * @description 評論實體，用於建立搜索引擎索引
+ * @description 說說實體，用於建立搜索引擎索引
  */
 public class SearchCommentVo {
     /**
-     * 評論id
+     * 說說id
      */
     private BigInteger commentId;
     /**
-     * 評論類型 1全部 2視頻 3文本
+     * 說說類型 1全部 2視頻 3文本
      */
     private int commentType;
     /**
-     * 貼文渠道 1全部 2店鋪 3商品 4貼文 5推文
+     * 想要帖渠道 1全部 2商店 3產品 4想要帖 5推文
      */
     private int commentChannel;
     /**
-     * 評論類容
+     * 說說類容
      */
     private String content;
     /**
-     * 層級，1-回復主題，2-回復評論
+     * 層級，1-回覆主題，2-回覆說說
      */
     private int deep;
     /**
-     * 關聯店鋪Id
+     * 關聯商店Id
      */
     private int relateStoreId;
     /**
-     * 關聯商品SPU
+     * 關聯產品SPU
      */
     private int relateCommonId;
     /**
-     * 關聯文章Id
+     * 關聯想要帖Id
      */
     private BigInteger relatePostId;
     /**
-     * 回復評論Id
+     * 回覆說說Id
      */
     private BigInteger replyCommentId;
     /**
-     * 評論人
+     * 說說人
      */
     private String createBy;
     /**
-     * 評論時間
+     * 說說時間
      */
     private String createTime;
     /**
@@ -65,77 +65,77 @@ public class SearchCommentVo {
      */
     private int commentState;
     /**
-     * 點讚評論數
+     * 讚想說說數
      */
     private int commentLike;
     /**
-     * 踩該評論數
+     * 踩該說說數
      */
     private int commentUnlike;
     /**
-     * 評論收藏數
+     * 說說收藏數
      */
     private int commentFavor;
     /**
-     * 評論回復數
+     * 說說回覆數
      */
     private int commentReply;
     /**
-     * 評論分享數
+     * 說說分享數
      */
     private int commentShare;
     /**
-     * 貼文標題
+     * 想要帖標題
      */
     private String wantPostTitle;
     /**
-     * 評論圖片
+     * 說說圖片
      */
     private List<WantCommentImage> images;
 
     //以下字段不存在于搜索引擎
     /**
-     * 點讚狀態
+     * 讚想狀態
      */
     private int isLike = 0;
 
     /**
-     * 評論者信息
+     * 說說者信息
      */
     private MemberVo memberVo;
 
     /**
-     * 評論時間描述
+     * 說說時間描述
      */
     private String commentStartTime;
 
     /**
-     * 回復的評論
+     * 回覆的說說
      */
     private WantCommentReplyVo wantCommentReplyVo;
 
     /**
-     * 評論透明度 默认10显示
+     * 說說透明度 默认10显示
      */
     private int opacity = 10;
 
     /**
-     * 評論的商品信息
+     * 說說的產品信息
      */
     private GoodsCommonVo goodsCommonVo;
 
     /**
-     * 評論的店鋪信息
+     * 說說的商店信息
      */
     private StoreVo storeVo;
 
     /**
-     * 評論的貼文信息
+     * 說說的想要帖信息
      */
     private WantPostVo wantPostVo;
 
     /**
-     * 評論月份
+     * 說說月份
      */
     private int month;
 

@@ -71,27 +71,27 @@ public class RefundItemVo {
     private String memberName;
 
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
 
     private int goodsId;
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
 
     private int commonId;
 
 
     /**
-     * 订单商品编号</br>
+     * 订单產品编号</br>
      * 主键、自增
      */
 
     private int ordersGoodsId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
 
     private String goodsName;
@@ -109,14 +109,14 @@ public class RefundItemVo {
     private BigDecimal refundAmount;
 
     /**
-     * 商品图片
+     * 產品图片
      */
 
     private String goodsImage;
 
     /**
      * 订单类型类型</br>
-     * 类型:1默认2团购商品3限时折扣商品4组合套装
+     * 类型:1默认2团购產品3限时折扣產品4组合套装
      */
 
     private int orderGoodsType = 1;
@@ -249,13 +249,13 @@ public class RefundItemVo {
     private int maxDayRefundConfirm = 1;
 
     /**
-     * 退货的商品 买家发货多少天后卖家不确认收货，卖家自动确认收货
+     * 退货的產品 买家发货多少天后卖家不确认收货，卖家自动确认收货
      * bycj#20190316
      */
     private int maxDayReturnAutoReceive = 1;
 
     /**
-     * 退货的商品多少天不发货自动取消退货申请
+     * 退货的產品多少天不发货自动取消退货申请
      * bycj#20190316
      */
     private int maxDayReturnAutoCancel = 1;
@@ -305,7 +305,7 @@ public class RefundItemVo {
      */
     private int ordersType;
     /**
-     * 商品图片带URL
+     * 產品图片带URL
      */
     private String imageSrc;
 

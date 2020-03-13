@@ -9,7 +9,7 @@ public class WantCommentLike {
     private BigInteger commentId;
 
     /**
-     * 會員名稱
+     * 城友名稱
      */
     private String memberName;
 

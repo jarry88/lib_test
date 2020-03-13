@@ -12,22 +12,22 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商城活动商品
+ * 商城活动產品
  * 
  * @author shopnc.szq
  * Created 2017/8/31 14:02
  */
 public class ThemeGoodsVo {
     /**
-     * 商城活动商品
+     * 商城活动產品
      */
     private int themeGoodsId;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId=0;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName="";
     /**
@@ -40,7 +40,7 @@ public class ThemeGoodsVo {
      */
     private int isCommend=0;
     /**
-     * 商品卖点
+     * 產品卖点
      */
     private String jingle="";
     /**
@@ -64,7 +64,7 @@ public class ThemeGoodsVo {
      */
     private int batchNum2=0;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice=new BigDecimal(0);
     /**
@@ -80,15 +80,15 @@ public class ThemeGoodsVo {
      */
     private BigDecimal batchPrice2=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin=new BigDecimal(0);
     /**
@@ -125,16 +125,16 @@ public class ThemeGoodsVo {
      */
     private int goodsStorage=0;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 可以购买1，不可购买0
      */
     private int goodsStatus=0;
     /**
-     * 商品图
+     * 產品图
      */
     private String imageSrc="";
     /**
-     * 商品图名称
+     * 產品图名称
      */
     private String imageName = "" ;
 

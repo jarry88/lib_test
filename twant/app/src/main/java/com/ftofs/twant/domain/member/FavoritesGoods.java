@@ -15,7 +15,7 @@ public class FavoritesGoods implements Serializable {
     private int memberId = 0;
 
     /**
-     * 商品SPU编码
+     * 產品SPU编码
      */
     private int commonId = 0;
 
@@ -25,7 +25,7 @@ public class FavoritesGoods implements Serializable {
     private int storeId = 0;
 
     /**
-     * 商品分类ID
+     * 產品分类ID
      */
     private int categoryId = 0;
 
@@ -35,7 +35,7 @@ public class FavoritesGoods implements Serializable {
     private String addTime;
 
     /**
-     * 商品關注时价格
+     * 產品關注时价格
      */
     private BigDecimal favGoodsPrice = new BigDecimal(0);
 

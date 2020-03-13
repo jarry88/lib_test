@@ -11,22 +11,22 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品
+ * 產品
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:12
  */
 public class GoodsVo {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId=0;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId=0;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName="";
     /**
@@ -39,7 +39,7 @@ public class GoodsVo {
      */
     private int isCommend=0;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 0下架，1正常，10违规禁售
      */
     private int goodsState=0;
@@ -57,7 +57,7 @@ public class GoodsVo {
      */
     private String verifyRemark="";
     /**
-     * 商品卖点
+     * 產品卖点
      */
     private String jingle="";
     /**
@@ -81,7 +81,7 @@ public class GoodsVo {
      */
     private int batchNum2=0;
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice=new BigDecimal(0);
     /**
@@ -97,15 +97,15 @@ public class GoodsVo {
      */
     private BigDecimal batchPrice2=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin=new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin=new BigDecimal(0);
     /**
@@ -130,7 +130,7 @@ public class GoodsVo {
      */
     private int goodsStorage=0;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 可以购买1，不可购买0
      */
     private int goodsStatus=0;
@@ -157,11 +157,11 @@ public class GoodsVo {
      */
     private int isOwnShop=0;
     /**
-     * 商品图
+     * 產品图
      */
     private String imageSrc="";
     /**
-     * 商品图片列表
+     * 產品图片列表
      */
     private List<GoodsImage> goodsImageList=new ArrayList<>();
     /**
@@ -197,27 +197,27 @@ public class GoodsVo {
      */
     private List<SpecJsonVo> specJsonVoList = new ArrayList<SpecJsonVo>();
     /**
-     * 商品编号和规格值编号JSON
+     * 產品编号和规格值编号JSON
      */
     private String goodsSpecValueJson="";
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId=0;
     /**
-     * 商品分类名称
+     * 產品分类名称
      */
     private String categoryName="";
     /**
-     * 商品一级分类
+     * 產品一级分类
      */
     private int categoryId1=0;
     /**
-     * 商品二级分类
+     * 產品二级分类
      */
     private int categoryId2=0;
     /**
-     * 商品三级分类
+     * 產品三级分类
      */
     private int categoryId3=0;
     /**
@@ -229,16 +229,16 @@ public class GoodsVo {
      */
     private Integer groupId;
     /**
-     * 是否为积分商品
+     * 是否为积分產品
      */
     private Integer isPointsGoods = 0;
     /**
-     * 是否为秒杀商品
+     * 是否为秒杀產品
      */
     private int isSeckill = 0;
 
     /**
-     * 是否為虛擬商品
+     * 是否為虛擬產品
      */
     private int isVirtual = 0;
 

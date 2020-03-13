@@ -5,18 +5,18 @@ package com.ftofs.twant.vo.goods;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品分类佣金
+ * 產品分类佣金
  *
  * @author hbj
  * Created 2017/4/13 14:45
  */
 public class CategoryCommissionVo {
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId;
     /**
-     * 商品分类名称
+     * 產品分类名称
      */
     private String categoryName;
     /**

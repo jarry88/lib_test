@@ -35,14 +35,14 @@
     </RelativeLayout>
     <!-- END OF 工具欄 -->
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_evaluation_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
         android:layout_width="match_parent"

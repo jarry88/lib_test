@@ -1,42 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/toolbar_margin_left"
-    android:layout_marginRight="@dimen/toolbar_margin_right"
+    android:layout_marginStart="@dimen/toolbar_margin_left"
+    android:layout_marginEnd="@dimen/toolbar_margin_right"
     android:layout_marginBottom="15dp"
-    android:background="@drawable/store_discount_item_bg"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_discount_title"
+    android:background="@drawable/yellow_outline_bg">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="17dp"
-        android:gravity="center"
-        android:text="優品八折,共25件商品"
-        android:textColor="#fff"
-        android:textSize="22sp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_discount_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:textColor="@color/tw_black"
+            android:textSize="19sp"
+            android:text="雙11狂歡"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9.5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_goods_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:text="68"
+                android:textSize="16sp"
+                android:textColor="@color/tw_yellow"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 件產品，促銷進行中"
+                android:textSize="16sp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9.5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4.5dp"
+                android:src="@drawable/icon_clock"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:text="剩餘時間"
+                android:textSize="14sp"
+                android:textColor="#666"
+                />
+
+            <LinearLayout
+                android:id="@+id/ll_day_count_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_day_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="14sp"
+                    android:textColor="@color/tw_red"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="天"
+                    android:textSize="14sp"
+                    android:textColor="#666"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_remain_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22:57:12"
+                android:textSize="14sp"
+                android:textColor="@color/tw_red"
+                />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/btn_participate_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12.5dp"
+            android:layout_marginBottom="21dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="114dp"
+            android:paddingRight="114dp"
+            android:text="@string/text_participate_activity"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/yellow_button"
+            />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/activity_discount_label_bg"
         />
 
     <TextView
-        android:id="@+id/btn_participate_activity"
+        android:id="@+id/tv_discount_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:layout_marginBottom="15dp"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="114dp"
-        android:paddingRight="114dp"
-        android:text="@string/text_participate_activity"
-        android:textColor="#FFFECD52"
-        android:textSize="16sp"
-        android:background="@drawable/white_button"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        android:text="6.56折"
+        android:rotation="-45"
         />
-</LinearLayout>
+</RelativeLayout>
+

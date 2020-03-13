@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 /**
- * 店鋪商品對
+ * 商店產品對
  * @author zwm
  */
 public class StoreGoodsPair {

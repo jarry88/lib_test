@@ -29,6 +29,7 @@ public class SimpleTabButton extends RelativeLayout {
 	
 	int strokeWidthPx;
     boolean useCap;
+    boolean drawUnderline;  // 是否繪製下劃線
     String text;
 
     int textWidth;
@@ -53,13 +54,14 @@ public class SimpleTabButton extends RelativeLayout {
         text = array.getString(R.styleable.SimpleTabButton_stb_text);
         paddingBottomPx = (int) array.getDimension(R.styleable.SimpleTabButton_stb_padding_bottom, 0);
         selectedColor = array.getColor(R.styleable.SimpleTabButton_stb_selected_color, getResources().getColor(R.color.tw_blue, null));
+        unselectedColor = array.getColor(R.styleable.SimpleTabButton_stb_unselected_color, getResources().getColor(R.color.tw_black, null));
+        drawUnderline = array.getBoolean(R.styleable.SimpleTabButton_stb_draw_underline, true);
         array.recycle();
 
         // SLog.info("strokeWidthPx[%d],useCap[%s],horizontalPaddingPx[%d],text[%s], paddingBottom[%d]",
         //         strokeWidthPx, useCap, horizontalPaddingPx, text, paddingBottomPx);
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        unselectedColor = getResources().getColor(R.color.tw_black, null);
 
         tvTitle = new TextView(context);
         tvTitle.setTextColor(unselectedColor);
@@ -79,7 +81,7 @@ public class SimpleTabButton extends RelativeLayout {
         tvTitle.post(new Runnable() {
             @Override
             public void run() {
-                textWidth = tvTitle.getWidth();
+                textWidth = tvTitle.getMeasuredWidth();
                 invalidate();
             }
         });
@@ -89,11 +91,12 @@ public class SimpleTabButton extends RelativeLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // SLog.info("status[%d], strokeWidthPx[%d], textWidth[%d]", status, strokeWidthPx, textWidth);
-        if (status == Constant.STATUS_SELECTED && strokeWidthPx > 0 && textWidth > 0) {
+        textWidth = tvTitle.getMeasuredWidth();
+        SLog.info("status[%d], strokeWidthPx[%d], textWidth[%d]", status, strokeWidthPx, textWidth);
+        if (status == Constant.STATUS_SELECTED && strokeWidthPx > 0 && textWidth > 0 && drawUnderline) {
             int width = getWidth();
             int height = getHeight();
-            // SLog.info("height[%d]", height);
+            SLog.info("__==height[%d]", height);
 
             int halfWidth = width / 2;
 

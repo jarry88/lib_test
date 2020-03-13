@@ -1,25 +1,21 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.InStorePersonListAdapter;
-import com.ftofs.twant.adapter.ShopGoodsAdapter;
-import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.InStorePersonItem;
-import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

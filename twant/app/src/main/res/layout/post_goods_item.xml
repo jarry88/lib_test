@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="1dp"
+    android:layout_marginRight="1dp"
+    android:padding="6dp"
+    android:orientation="vertical"
+    android:background="@drawable/post_list_item_bg">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/goods_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="3dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_goods_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:textSize="12sp"
+        android:textColor="@color/tw_black"
+        android:text=""
+        android:singleLine="true"
+        android:ellipsize="end"
+        />
+
+    <TextView
+        android:id="@+id/tv_goods_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:textSize="13sp"
+        android:textColor="@color/tw_red"
+        />
+
+</LinearLayout>

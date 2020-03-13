@@ -34,7 +34,7 @@ public class PromotionQuota implements Serializable {
     private String conformEndTime;
 
     /**
-     * 预售商品结束时间
+     * 预售產品结束时间
      */
     private String bookEndTime;
 
@@ -44,7 +44,7 @@ public class PromotionQuota implements Serializable {
     private String bundlingEndTime;
 
     /**
-     * 商品赠品结束时间
+     * 產品赠品结束时间
      */
     private String giftEndTime;
 
@@ -59,7 +59,7 @@ public class PromotionQuota implements Serializable {
     private String trysEndTime;
 
     /**
-     * 积分商品结束时间
+     * 积分產品结束时间
      */
     private String pointsGoodsEndTime;
 
@@ -99,7 +99,7 @@ public class PromotionQuota implements Serializable {
     private Integer conformAllowRenewal;
 
     /**
-     * 预售商品是否允许续期
+     * 预售產品是否允许续期
      */
     private Integer bookAllowRenewal;
 
@@ -109,7 +109,7 @@ public class PromotionQuota implements Serializable {
     private Integer bundlingAllowRenewal;
 
     /**
-     * 商品赠品是否允许续期
+     * 產品赠品是否允许续期
      */
     private Integer giftAllowRenewal;
 
@@ -124,7 +124,7 @@ public class PromotionQuota implements Serializable {
     private Integer trysAllowRenewal;
 
     /**
-     * 积分商品是否允许续期
+     * 积分產品是否允许续期
      */
     private Integer pointsGoodsAllowRenewal;
 
@@ -164,7 +164,7 @@ public class PromotionQuota implements Serializable {
     private Integer conformUsable;
 
     /**
-     * 预售商品是否可用
+     * 预售產品是否可用
      */
     private Integer bookUsable;
 
@@ -174,7 +174,7 @@ public class PromotionQuota implements Serializable {
     private Integer bundlingUsable;
 
     /**
-     * 商品赠品是否可用
+     * 產品赠品是否可用
      */
     private Integer giftUsable;
 
@@ -189,7 +189,7 @@ public class PromotionQuota implements Serializable {
     private Integer trysUsable;
 
     /**
-     * 积分商品是否可用
+     * 积分產品是否可用
      */
     private Integer pointsGoodsUsable;
 

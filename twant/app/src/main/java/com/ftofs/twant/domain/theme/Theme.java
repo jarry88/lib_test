@@ -97,7 +97,7 @@ public class Theme {
     private String showEndTimeString = "";
 
     /**
-     * 商家是否可以参加活动提交商品
+     * 商家是否可以参加活动提交產品
      * 0不可以，1可以
      */
     private int isInTheme = 0;

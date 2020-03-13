@@ -20,7 +20,7 @@ public class Complain {
     private String ordersSn;
 
     /**
-     * 订单商品表主键
+     * 订单產品表主键
      */
     private int ordersGoodsId;
 
@@ -35,12 +35,12 @@ public class Complain {
     private int commonId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImage;
 

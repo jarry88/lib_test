@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class DistributorGoods implements Serializable {
     /**
-     * 分销商商品编号
+     * 分销商產品编号
      */
     private int distributorGoodsId;
 
     /**
-     * 分销商商品 spu id
+     * 分销商產品 spu id
      */
     private int commonId;
 
@@ -44,7 +44,7 @@ public class DistributorGoods implements Serializable {
     private String addTime;
 
     /**
-     * 该会员的商品推广数量
+     * 该会员的產品推广数量
      */
     private int distributionCount ;
 
@@ -54,17 +54,17 @@ public class DistributorGoods implements Serializable {
     private int distributorFavoritesId = 0 ;
 
     /**
-     * 商品图片地址
+     * 產品图片地址
      */
     private String goodsImageSrc = "";
 
     /**
-     * 商品图片名称
+     * 產品图片名称
      */
     private String goodsImageName = "";
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName = "";
 

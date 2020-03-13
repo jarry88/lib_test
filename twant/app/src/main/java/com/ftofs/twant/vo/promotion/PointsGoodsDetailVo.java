@@ -17,30 +17,30 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 积分商品详情
+ * 积分產品详情
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:20
  */
 public class PointsGoodsDetailVo {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId=0;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId=0;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName="";
     /**
-     * 商品买点
+     * 產品买点
      */
     private String jingle="";
     /**
-     * 商品分类编号
+     * 產品分类编号
     */
     private int categoryId=0;
     /**
@@ -56,7 +56,7 @@ public class PointsGoodsDetailVo {
      */
     private int brandId;
     /**
-     * 商品描述
+     * 產品描述
      */
     private String goodsBody;
     /**
@@ -68,11 +68,11 @@ public class PointsGoodsDetailVo {
      */
     private List<GoodsMobileBodyVo> mobileBodyVoList = new ArrayList<>();
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 可以购买1，不可购买0
      */
     private int goodsStatus;
@@ -110,7 +110,7 @@ public class PointsGoodsDetailVo {
      */
     private int goodsSaleNum;
     /**
-     * 商品图片
+     * 產品图片
      */
     private String imageSrc;
     /**
@@ -118,23 +118,23 @@ public class PointsGoodsDetailVo {
      */
     private List<SpecJsonVo> specJson = new ArrayList<>();
     /**
-     * 商品规格名称JSON
+     * 產品规格名称JSON
      */
     private List<String> goodsSpecNameList = new ArrayList<>();
     /**
-     * 商品编号和规格值编号JSON
+     * 產品编号和规格值编号JSON
      */
     private String goodsSpecValues;
     /**
-     * 商品编号和规格值编号JSON
+     * 產品编号和规格值编号JSON
      */
     private List<GoodsSpecValueJsonVo> goodsSpecValueJson;
     /**
-     * 商品图片列表
+     * 產品图片列表
      */
     private List<GoodsImage> goodsImageList;
     /**
-     * 商品参数
+     * 產品参数
      */
     private List<GoodsAttrVo> goodsAttrList;
     /**
@@ -146,11 +146,11 @@ public class PointsGoodsDetailVo {
      */
     private int formatBottom;
     /**
-     * 商品列表
+     * 產品列表
      */
     private List<Goods> goodsList;
     /**
-     * 商品销售与形式
+     * 產品销售与形式
      */
     private int goodsModal;
     /**
@@ -198,7 +198,7 @@ public class PointsGoodsDetailVo {
      */
     private BigDecimal webPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin=new BigDecimal(0);
     /**
@@ -218,7 +218,7 @@ public class PointsGoodsDetailVo {
      */
     private BigDecimal appPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin=new BigDecimal(0);
     /**
@@ -238,7 +238,7 @@ public class PointsGoodsDetailVo {
      */
     private BigDecimal wechatPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin=new BigDecimal(0);
     /**
@@ -254,7 +254,7 @@ public class PointsGoodsDetailVo {
      */
     private String unitName;
     /**
-     * 积分商品编号
+     * 积分產品编号
      */
     private int pointsGoodsId;
     /**
@@ -270,7 +270,7 @@ public class PointsGoodsDetailVo {
      */
     private String limitMemberGradeName = "";
     /**
-     * 积分商品创建时间
+     * 积分產品创建时间
      */
 
     private String createTime;

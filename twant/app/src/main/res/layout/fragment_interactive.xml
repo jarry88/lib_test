@@ -18,7 +18,7 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />
@@ -37,65 +37,100 @@
             android:id="@+id/btn_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="12dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentEnd="true"
             android:src="@drawable/icon_contact_menu"
             />
     </RelativeLayout>
-
     <RelativeLayout
-        android:id="@+id/btn_my_like"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
+        android:background="@drawable/border_type_d"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:background="@drawable/border_type_d">
+        android:paddingBottom="15dp">
+
         <ImageView
             android:id="@+id/icon_my_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/icon_my_like"
-            />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/icon_my_like" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginEnd="20dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_my_like"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@id/icon_my_like"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_my_like"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_my_like_desc"
-                android:textColor="@color/tw_dark_grey"
-                android:textSize="14sp"
-                />
-        </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/expand_button"
-            />
+            <RelativeLayout
+                android:id="@+id/btn_my_like"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_my_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_my_like"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/expand_button_medium" />
+
+            </RelativeLayout>
+
+            <View
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/tw_light_grey" />
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/btn_like_me"
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_like_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_like_me"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_button_medium" />
+            </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
+
     <RelativeLayout
-        android:id="@+id/btn_my_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:background="@drawable/border_type_d">
@@ -103,46 +138,82 @@
             android:id="@+id/icon_my_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_my_comment"
             />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginEnd="20dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_my_comment"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@id/icon_my_comment"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_my_comment"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_my_comment_desc"
-                android:textColor="@color/tw_dark_grey"
-                android:textSize="14sp"
-                />
+
+            <RelativeLayout
+                android:id="@+id/btn_my_comment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_my_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_my_comment"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/expand_button_medium" />
+
+            </RelativeLayout>
+
+            <View
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/tw_light_grey" />
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/btn_comment_me"
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_comment_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_comment_me"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_button_medium" />
+            </RelativeLayout>
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/expand_button"
-            />
     </RelativeLayout>
     <RelativeLayout
-        android:id="@+id/btn_my_follow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:background="@drawable/border_type_d">
@@ -150,38 +221,75 @@
             android:id="@+id/icon_my_follow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_my_follow"
             />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginEnd="20dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/icon_my_follow"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@id/icon_my_follow"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_my_follow"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_my_follow_desc"
-                android:textColor="@color/tw_dark_grey"
-                android:textSize="14sp"
-                />
-        </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/expand_button"
-            />
+            <RelativeLayout
+                android:id="@+id/btn_my_follow"
+                android:layout_width="match_parent"
+
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_my_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_my_follow"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/expand_button_medium" />
+
+            </RelativeLayout>
+
+            <View
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/tw_light_grey" />
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/btn_my_fans"
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_my_fans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_my_fans"
+                    android:textColor="@color/tw_black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/expand_button_medium" />
+            </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

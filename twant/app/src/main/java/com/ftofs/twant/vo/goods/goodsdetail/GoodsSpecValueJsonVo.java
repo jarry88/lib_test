@@ -7,7 +7,7 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品编号与规格组合
+ * 產品编号与规格组合
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:05

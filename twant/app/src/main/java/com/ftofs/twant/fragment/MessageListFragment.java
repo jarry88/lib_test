@@ -1,11 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +14,11 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.activity.AppGuideActivity;
 import com.ftofs.twant.adapter.NoticeListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.EBMessageType;
-import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.NoticeItem;
-import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.UnreadCount;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
@@ -35,12 +32,10 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
-import java.io.PipedOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -144,7 +139,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                                 @Override
                                 public void onResponse(Call call, String responseStr) throws IOException {
                                     SLog.info("responseStr[%s]", responseStr);
-                                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                                         return;
                                     }
@@ -153,14 +148,13 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                                     adapter.notifyItemRemoved(position);
 
                                     try {
-                                        UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getArray("datas.unreadList"));
+                                        UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getSafeArray("datas.unreadList"));
                                         if (unreadCount != null) {
                                             UnreadCount.save(unreadCount);
                                         }
                                     } catch (Exception e) {
-
+                                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                                     }
-
                                 }
                             });
                         }
@@ -190,7 +184,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                             try {
                                 SLog.info("responseStr[%s]", responseStr);
 
-                                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                                     return;
                                 }
@@ -199,7 +193,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                                 adapter.notifyItemChanged(position);
 
                                 try {
-                                    UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getArray("datas.unreadList"));
+                                    UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getSafeArray("datas.unreadList"));
                                     if (unreadCount != null) {
                                         UnreadCount.save(unreadCount);
                                     }
@@ -261,6 +255,10 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                                     }
                                 }).asCustom(new ReadMessagePopup(_mActivity, noticeItem.title, noticeItem.createTime, iconRes, noticeItem.content))
                                 .show();
+                    } else if (StringUtil.equalsOne(noticeItem.tplCode, new String[] {
+                            "adminReply"
+                    })) {
+                        Util.startFragment(MyFeedbackFragment.newInstance());
                     }
                 }
             }
@@ -270,12 +268,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         noticeListAdapter.setEnableLoadMore(true);
         noticeListAdapter.setOnLoadMoreListener(this, rvList);
 
-        // 設置空頁面
-        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.no_result_empty_view, null, false);
-        // 設置空頁面的提示語
-        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
-        tvEmptyHint.setText(R.string.no_data_hint);
-        noticeListAdapter.setEmptyView(emptyView);
+        noticeListAdapter.setEmptyView(R.layout.layout_placeholder_no_app_message, rvList);
         rvList.setAdapter(noticeListAdapter);
 
         loadData(currPage + 1);
@@ -285,7 +278,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_clear_all) {
             new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
@@ -316,7 +309,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -343,7 +336,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -354,14 +347,14 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
 
                     ToastUtil.error(_mActivity, "清除未讀成功");
 
-                    UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getArray("datas.unreadList"));
+                    UnreadCount unreadCount = UnreadCount.processUnreadList(responseObj.getSafeArray("datas.unreadList"));
                     if (unreadCount != null) {
                         UnreadCount.save(unreadCount);
                     }
 
                     noticeListAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -391,7 +384,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         noticeListAdapter.loadMoreFail();
                         return;
@@ -404,24 +397,24 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                         noticeListAdapter.setEnableLoadMore(false);
                     }
 
-                    EasyJSONArray memberMessageList = responseObj.getArray("datas.memberMessageList");
+                    EasyJSONArray memberMessageList = responseObj.getSafeArray("datas.memberMessageList");
                     for (Object object : memberMessageList) {
                         EasyJSONObject message = (EasyJSONObject) object;
 
                         int messageId = message.getInt("messageId");
 
 
-                        String tplCode = message.getString("tplCode");
-                        String addTime = message.getString("addTime");
-                        String imageUrl = message.getString("imageUrl");
-                        String content = message.getString("messageContent");
+                        String tplCode = message.getSafeString("tplCode");
+                        String addTime = message.getSafeString("addTime");
+                        String imageUrl = message.getSafeString("imageUrl");
+                        String content = message.getSafeString("messageContent");
                         int isRead = message.getInt("isRead");
 
                         String title = getMessageTitle(tplCode);
 
                         NoticeItem noticeItem = new NoticeItem(Constant.ITEM_TYPE_NORMAL, messageId, title, tplCode, addTime, imageUrl, content, isRead == 1);
                         if (message.exists("sn")) {
-                            noticeItem.sn = message.getString("sn");
+                            noticeItem.sn = message.getSafeString("sn");
                         }
 
                         noticeItemList.add(noticeItem);
@@ -436,7 +429,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                     noticeListAdapter.setNewData(noticeItemList);
                     currPage++;
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -472,27 +465,27 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         } else if (tplCode.equals("memberOrdersReceive")) {
             return "訂單收貨提醒";
         } else if (tplCode.equals("storeHr") || tplCode.equals("storeInfoUpdate")) {
-            return "店鋪提醒";
+            return "商店提醒";
         } else if (tplCode.equals("storeGoodsCommonUpdate")) {
-            return "商品更新提醒";
+            return "產品更新提醒";
         } else if (tplCode.equals("storeOpen")) {
-            return "店鋪開店提醒";
+            return "商店開店提醒";
         } else if (tplCode.equals("storeClose")) {
-            return "店鋪關店提醒";
+            return "商店關店提醒";
         } else if (tplCode.equals("storeGoodsCommonNew")) {
-            return "店鋪消息";
+            return "商店消息";
         } else if (tplCode.equals("storeSalesPromotion")) {
-            return "店鋪促銷提醒";
+            return "商店促銷提醒";
         }  else if (tplCode.equals("memberDiscountCoupon")) {
-            return "店鋪優惠消息";
+            return "商店優惠消息";
         } else if (tplCode.equals("memberWantCommentLike") || tplCode.equals("memberWantPostLike")) {
-            return "點讚提醒";
+            return "讚想提醒";
         } else if (tplCode.equals("memberFriendsApply") || tplCode.equals("memberAgreeFriendsApply")) {
             return "好友邀請提醒";
         } else if (tplCode.equals("storeAnnouncement")) {
-            return "店鋪公告提醒";
+            return "商店公告提醒";
         } else if (tplCode.equals("memberStoreWantCommentReply") || tplCode.equals("memberGoodsWantCommentReply")) {
-            return "評論提醒";
+            return "說說提醒";
         } else if (tplCode.equals("memberFollowWantPost")) {
             return "關注提醒 ";
         }

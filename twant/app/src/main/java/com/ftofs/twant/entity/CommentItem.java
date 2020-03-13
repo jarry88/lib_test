@@ -2,32 +2,46 @@ package com.ftofs.twant.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class CommentItem implements Parcelable {
     public int commentId;
     /**
-     * 評論類型 1全部 2視頻 3文本
+     * 說說類型 1全部 2視頻 3文本
      */
+    public static final int COMMENT_ROLE_MEMBER=0;//會員
+    public static final int COMMENT_ROLE_CS=3;//客服
+    public static final int COMMENT_ROLE_BOSS=4;//老闆
     public int commentType;
-    public int commentChannel; // 貼文渠道 1全部 2店鋪 3商品 4貼文 5推文
+    public int commentChannel; // 想要帖渠道 1全部 2商店 3產品 4想要帖 5推文
 
     public String content;
-    public int isLike; // 是否點讚
-    public int commentLike; // 點讚數
-    public int commentReply; // 回復數
+    public int isLike; // 是否讚想
+    public int commentLike; // 讚想數
+    public int commentReply; // 回覆數
 
     public String commenterAvatar;
     public String memberName;
-    public String nickname; // 評論人的昵稱
+    public String nickname; // 說說人的昵稱
     public String commentTime;
-    public String imageUrl; // 評論的圖片
+    public String imageUrl; // 說說的圖片
+    public String [] images;
 
-    public int relateCommonId;  // 相關的商品Id
-    public int relateStoreId;   // 相關的店鋪Id
-    public int replyCommentId;  // 回復評論Id
-    public int relatePostId;    // 相關的貼文Id
-    public int parentCommentId; // 一級評論ID
+    public int relateCommonId;  // 相關的產品Id
+    public int relateStoreId;   // 相關的商店Id
+    public int replyCommentId;  // 回覆說說Id
+    public int relatePostId;    // 相關的想要帖Id
+    public String configurePostUrl;//想要帖封面圖
+    public String postContent; //想要帖內容
+    public String postTitle;
+    public String postAuthorAvatar;
+    public String postAuthorName;
+    public int parentCommentId; // 一級說說ID
+    public long date;         //說說發表時間
+    public final  static int TYPE_POST = 3;
+    public final static int TYPE_STORE = 2;
+    public final static int TYPE_GOOD = 1;
+    public int commentRole;
 
     public CommentItem() {
 

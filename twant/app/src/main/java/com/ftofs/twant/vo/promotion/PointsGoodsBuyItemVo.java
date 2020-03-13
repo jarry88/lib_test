@@ -7,34 +7,34 @@ import java.math.BigDecimal;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 积分商品购买
+ * 积分產品购买
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:19
  */
 public class PointsGoodsBuyItemVo implements Cloneable {
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品规格
+     * 產品规格
      */
     private String goodsFullSpecs;
     /**
-     * 商品单价
+     * 產品单价
      */
     private BigDecimal goodsPrice;
     /**
-     * 商品图
+     * 產品图
      */
     private String imageName;
     /**
@@ -42,11 +42,11 @@ public class PointsGoodsBuyItemVo implements Cloneable {
      */
     private int buyNum;
     /**
-     * 商品库存
+     * 產品库存
      */
     private int goodsStorage;
     /**
-     * 商品状态
+     * 產品状态
      */
     private int goodsStatus;
     /**
@@ -66,7 +66,7 @@ public class PointsGoodsBuyItemVo implements Cloneable {
      */
     private String unitName;
     /**
-     * 积分商品编号
+     * 积分產品编号
      */
     private int pointsGoodsId;
     /**

@@ -9,7 +9,7 @@ public class MemberAccessStat implements Serializable{
     private int id;
 
     /**
-     * 會員名稱（唯一）
+     * 城友名稱（唯一）
      */
     private String memberName;
 
@@ -19,7 +19,7 @@ public class MemberAccessStat implements Serializable{
     private String ip;
 
     /**
-     * 店鋪Id
+     * 商店Id
      */
     private int storeId;
 

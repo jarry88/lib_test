@@ -5,7 +5,7 @@ package com.ftofs.twant.vo.orders;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 订单商品消保实体
+ * 订单產品消保实体
  *
  * @author hbj
  * Created 2017/4/13 14:45

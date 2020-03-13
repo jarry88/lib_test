@@ -1,30 +1,23 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.config.Config;
-import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.entity.CategoryShop;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
 /**
- * 店鋪分類adapter
+ * 商店分類adapter
  * @author zwm
  */
 
@@ -42,11 +35,11 @@ public class CategoryShopAdapter extends BaseQuickAdapter<CategoryShop, BaseView
         ImageView coverImage = helper.getView(R.id.img_cover);
         Glide.with(context).load(coverUrl).centerCrop().into(coverImage);
 
-        String shopText = context.getString(R.string.text_store);
+        String shopText = "間";
         String commodityText = context.getString(R.string.text_goods);
         helper.setText(R.id.tv_shop_parent_name, categoryShop.shopParentName);
 
-        String shopCountStr = String.format("%s %d", shopText, categoryShop.shopCount);
+        String shopCountStr = String.format("%d%s", categoryShop.shopCount, shopText);
         helper.setText(R.id.tv_shop_count, shopCountStr);
 
         String commodityCountStr = String.format("%s %d", commodityText, categoryShop.commodityCount);
@@ -54,10 +47,12 @@ public class CategoryShopAdapter extends BaseQuickAdapter<CategoryShop, BaseView
 
         int itemCount = getItemCount();
         int position = helper.getAdapterPosition();
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
         if (position == itemCount - 1) {
             // 最后一項，設置大一點的bottomMargin
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
             layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
+        } else {
+            layoutParams.bottomMargin = 0;
         }
     }
 }

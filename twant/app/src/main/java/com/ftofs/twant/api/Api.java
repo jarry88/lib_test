@@ -3,9 +3,9 @@ package com.ftofs.twant.api;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.util.Pair;
 
 import com.ftofs.twant.R;
@@ -133,19 +133,19 @@ public class Api {
 
 
     /**
-     * 最新入駐
+     * 首頁最新想要店
      */
     public static final String PATH_NEW_ARRIVALS = "/app/home/recommend";
 
 
     /**
-     * 店鋪分類
+     * 商店分類
      */
     public static final String PATH_SHOP_CATEGORY = "/app/home/store_class_nav";
 
 
     /**
-     * 商品分類
+     * 產品分類
      */
     public static final String PATH_COMMODITY_CATEGORY = "/app/home/goods_class_nav";
 
@@ -157,28 +157,43 @@ public class Api {
 
 
     /**
-     * 店鋪首頁
+     * 商店首頁
      */
-    public static final String PATH_SHOP_HOME = "/app/store";
-
+    public static final String PATH_SHOP_HOME = "/store/home";
     /**
-     * 商品搜索
+     * 商店首頁評論總數
+     */
+    public static final String PATH_COMMENT_STORE_COUNT = "/app/comment/store/count";
+    /**
+     * 商店首頁評論
+     */
+    public static final String PATH_STORE_COMMENT = "/store/comment";
+    /**
+     * 商店招聘列表
+     */
+    public static final String PATH_STORE_HRPOST = "/store/hrpost";
+    /**
+     * 商店招聘職位詳情
+     */
+    public static final String PATH_STORE_HR_INFO = "/app/store/hr/info";
+    /**
+     * 產品搜索
      */
     public static final String PATH_SEARCH_GOODS = "/search";
 
     /**
-     * 店鋪搜索
+     * 商店搜索
      */
     public static final String PATH_SEARCH_STORE = "/app/search/store";
 
     /**
-     * 店铺内商品搜索
+     * 店铺内產品搜索
      */
     public static final String PATH_SEARCH_GOODS_IN_STORE = "/app/store/search/goods";
 
 
     /**
-     * 商品詳情
+     * 產品詳情
      */
     public static final String PATH_GOODS_DETAIL = "/app/goods";
 
@@ -199,7 +214,7 @@ public class Api {
     public static final String PATH_CART_LIST = "/cart/list";
 
     /**
-     * 购买第一步：显示商品信息
+     * 购买第一步：显示產品信息
      */
     public static final String PATH_DISPLAY_BILL_DATA = "/member/buy/step1";
 
@@ -259,13 +274,13 @@ public class Api {
     public static final String PATH_ORDER_DETAIL = "/member/orders/info";
 
     /**
-     * 商品關注/取消關注
+     * 產品關注/取消關注
      */
     public static final String PATH_GOODS_FAVORITE = "/app/goods/favorite";
 
 
     /**
-     * 商品點讚/取消點讚
+     * 產品讚想/取消讚想
      */
     public static final String PATH_GOODS_LIKE = "/app/goods/like";
 
@@ -282,12 +297,12 @@ public class Api {
 
 
     /**
-     * 店鋪：會員點讚/取消點讚
+     * 商店：城友讚想/取消讚想
      */
     public static final String PATH_STORE_LIKE = "/app/store/like";
 
     /**
-     * 店鋪-商品分類搜索
+     * 商店-產品分類搜索
      */
     public static final String PATH_STORE_CATEGORY = "/app/store/category";
 
@@ -323,6 +338,30 @@ public class Api {
      * 個人中心：批量刪除瀏覽足跡
      */
     public static final String PATH_DELETE_FOOTPRINT = "/member/app/browse/delete";
+    /**
+     * 個人中心：批量刪除城友關注
+     */
+    public static final String PATH_MEMBER_FOLLOW_MULTI_DELETE = "member/follow/multi_delete";
+    /**
+     * 個人中心：批量刪除商店關注
+     */
+    public static final String PATH_STORE_FOLLOW_MULTI_DELETE = "/member/store/favorite/multi_delete";
+    /**
+     * 批量刪除產品關注
+     */
+    public static final String PATH_GOODS_FOLLOW_MULTI_DELETE = "/member/goods/favorite/multi_delete";
+    /**
+     * 批量取消想要帖收藏
+     */
+    public static final String PATH_ARTICAL_FOLLOW_MULTI_DELETE = "/member/want_post/favor/multi_delete";
+    /**
+     * 批量取消想要帖收藏
+     */
+    public static final String PATH_WANT_POST_DELETE = "/want_post/delete";
+    /**
+     * 批量取消招聘收藏
+     */
+    public static final String PATH_HRPOST_FOLLOW_MULTI_DELETE = "/member/hr_post/favor/multi_delete";
 
     /**
      * 订单取消（未付款）
@@ -349,7 +388,7 @@ public class Api {
 
 
     /**
-     * 會員詳情
+     * 城友詳情
      */
     public static final String PATH_MEMBER_DETAIL = "/member/detail";
 
@@ -397,39 +436,44 @@ public class Api {
     /**
      * 個人專頁數據
      */
-    public static final String PATH_USER_DATA = "/memberpage/index";
+    //此處修改路徑
+    public static final String PATH_MEMBER_PAGE = "/member/page/index";
 
     /**
-     * 個人專頁-互動-我的點讚-店鋪
+     * 個人專頁-互動-我的讚想-商店
      */
     public static final String PATH_MY_LIKE_STORE = "/memberpage/like/store";
 
     /**
-     * 個人專頁-互動-我的點讚-商品
+     * 個人專頁-互動-我的讚想-產品
      */
     public static final String PATH_MY_LIKE_GOODS = "/memberpage/like/goods";
 
     /**
-     * 個人專頁-互動-我的點讚-文章
+     * 個人專頁-互動-我的讚想-想要帖
      */
     public static final String PATH_MY_LIKE_POST = "/memberpage/like/want_post";
 
 
     /**
-     * 個人專頁-我的關注-店鋪
+     * 個人專頁-我的關注-商店
      */
     public static final String PATH_MY_FOLLOW_STORE = "/memberpage/favor/store";
 
     /**
-     * 個人專頁-我的關注-商品
+     * 個人專頁-我的關注-產品
      */
     public static final String PATH_MY_FOLLOW_GOODS = "/memberpage/favor/goods";
 
     /**
-     * 商品详情 ：计算运费
+     * 產品详情 ：计算运费
      * 用戶切換送貨地區時，重新計算運費
      */
     public static final String PATH_REFRESH_FREIGHT = "/app/goods/freight";
+    /**
+     * 刪除個人評論
+     */
+    public static final String PATH_COMMENT_REMOVE = "/comment/remove.json";
 
 
     /**
@@ -462,18 +506,18 @@ public class Api {
 
 
     /**
-     * 貼文分類
+     * 想要帖分類
      */
     public static final String PATH_POST_CATEGORY_LIST = "/want_post/category/list";
 
 
     /**
-     * 貼文發佈
+     * 想要帖發佈
      */
     public static final String PATH_COMMIT_POST = "/want_post/issue";
 
     /**
-     * 貼文搜索
+     * 想要帖搜索
      */
     public static final String PATH_SEARCH_POST = "/want_post/list";
 
@@ -494,18 +538,18 @@ public class Api {
 
 
     /**
-     * 發表回復評論
+     * 發表回覆評論
      */
     public static final String PATH_PUBLISH_COMMENT = "/member/comment/send";
 
     /**
-     * 单个商品退款申请页面
+     * 单个產品退款申请页面
      */
     public static final String PATH_SINGLE_GOODS_REFUND = "/member/refund/goods";
 
 
     /**
-     * 单个商品退款申请保存
+     * 单个產品退款申请保存
      */
     public static final String PATH_SINGLE_GOODS_REFUND_SAVE = "/member/refund/goods/save";
 
@@ -526,12 +570,12 @@ public class Api {
     public static final String PATH_REFUND_INFO = "/member/refund/info";
 
     /**
-     * 单个商品退货申请页面
+     * 单个產品退货申请页面
      */
     public static final String PATH_SINGLE_GOODS_RETURN = "/member/return/add";
 
     /**
-     * 单个商品申请退货保存
+     * 单个產品申请退货保存
      */
     public static final String PATH_SINGLE_GOODS_RETURN_SAVE = "/member/return/save";
 
@@ -615,6 +659,7 @@ public class Api {
      * IM發送消息
      */
     public static final String PATH_IM_SEND_MESSAGE = "/member/im/message/send";
+    public static final String PATH_IM_INFO = "/member/im/info";
 
     /**
      * 購買：門店自提
@@ -637,12 +682,12 @@ public class Api {
     public static final String PATH_REFUND_ALL_SAVE = "/member/refund/all/save";
 
     /**
-     * 获取作者详情和作者其他文章
+     * 获取作者详情和作者其他想要帖
      */
     public static final String PATH_MEMBER_INFO = "/want_post/member/info";
 
     /**
-     * 關注/取消關注會員
+     * 關注/取消關注城友
      */
     public static final String PATH_MEMBER_FOLLOW = "/member/follow";
 
@@ -665,13 +710,13 @@ public class Api {
 
 
     /**
-     * IM店鋪商品列表【新】
+     * IM商店產品列表【新】
      */
     public static final String PATH_IM_STORE_GOODS_LIST = "/member/im/goods/list";
 
 
     /**
-     * 我在店鋪的訂單記錄【新】
+     * 我在商店的訂單記錄【新】
      */
     public static final String PATH_IM_STORE_ORDER_LIST = "/member/im/orders/list";
 
@@ -712,37 +757,37 @@ public class Api {
 
 
     /**
-     * 貼文詳情
+     * 想要帖詳情
      */
     public static final String PATH_POST_DETAIL = "/want_post/info";
 
     /**
-     * 貼文點讚/取消點讚
+     * 想要帖讚想/取消讚想
      */
     public static final String PATH_POST_THUMB = "/want_post/like";
 
     /**
-     * 貼文關注/取消關注
+     * 想要帖關注/取消關注
      */
     public static final String PATH_POST_LIKE = "/want_post/favorite";
 
     /**
-     * 猜你喜欢的商品
+     * 猜你喜欢的產品
      */
     public static final String PATH_GUESS_YOUR_LIKE = "/goods/guess/like";
 
     /**
-     * 個人專頁-文章(貼文列表)
+     * 個人專頁-想要帖(想要帖列表)
      */
     public static final String PATH_POST_LIST = "/memberpage/want_post/list";
 
     /**
-     * 個人專頁-我的關注-會員
+     * 個人專頁-我的關注-城友
      */
     public static final String PATH_MY_FOLLOW_MEMBER = "/memberpage/favor/member";
 
     /**
-     * 個人專頁-我的關注-文章
+     * 個人專頁-我的關注-想要帖
      */
     public static final String PATH_MY_FOLLOW_POST = "/memberpage/favor/want_post";
 
@@ -775,9 +820,12 @@ public class Api {
      * 關注職位
      */
     public static final String PATH_FOLLOW_JOB = "/app/store/hr/follow";
+    /**
+     *
+     */
 
     /**
-     * 取消關注店鋪職位
+     * 取消關注商店職位
      */
     public static final String PATH_UNFOLLOW_JOB = "/app/store/hr/unfollow";
 
@@ -785,9 +833,13 @@ public class Api {
      * 個人專頁-我的評論
      */
     public static final String PATH_MEMBER_PAGE_ALL_COMMENT = "/memberpage/all/comment";
+    /**
+     * 個人專頁-互動-我的評論
+     */
+    public static final String PATH_MEMBER_PAGE_COMMENT = "/memberpage/comment";
 
     /**
-     * 店鋪客服列表
+     * 商店客服列表
      */
     public static final String PATH_STORE_CUSTOMER_SERVICE = "/app/store/service";
 
@@ -797,7 +849,7 @@ public class Api {
     public static final String PATH_CONTACT_SEARCH = "/member/friend/contact_search";
 
     /**
-     * 商品詳情：到貨通知
+     * 產品詳情：到貨通知
      */
     public static final String PATH_ARRIVAL_NOTICE = "/app/goods/arrival/notice";
 
@@ -823,7 +875,7 @@ public class Api {
     public static final String PATH_ORDER_COUNT = "/member/orders/count";
 
     /**
-     * 訂單商品評論
+     * 訂單產品評論
      */
     public static final String PATH_GOODS_COMMENT = "/member/orders/comment/send";
 
@@ -868,12 +920,12 @@ public class Api {
     public static final String PATH_RECEIVE_PLATFORM_COUPON_BY_PWD = "/member/coupon/receive/pwd";
 
     /**
-     * 商品詳情頁-查詢優惠券列表(包含店鋪券、平台券)
+     * 產品詳情頁-查詢優惠券列表(包含商店券、平台券)
      */
     public static final String PATH_GOODS_DETAIL_COUPON_LIST = "/search/coupon/activity/list";
 
     /**
-     * 優惠券(包含店鋪券、平台券)領取
+     * 優惠券(包含商店券、平台券)領取
      */
     public static final String PATH_RECEIVE_COUPON = "/member/coupon/receive/search";
 
@@ -883,22 +935,22 @@ public class Api {
     public static final String PATH_BUY_COUPON_LIST = "/member/buy/coupon/list";
 
     /**
-     * 店鋪想看列表
+     * 商店想看列表
      */
     public static final String PATH_STORE_VIDEO_LIST = "/store/video";
 
     /**
-     * 刪除會員消息
+     * 刪除城友消息
      */
     public static final String PATH_DELETE_MESSAGE = "/member/message/delete.json";
 
     /**
-     * 獲取會員所有類型的未讀消息
+     * 獲取城友所有類型的未讀消息
      */
     public static final String PATH_GET_UNREAD_MESSAGE_COUNT = "/member/message/unread.json";
 
     /**
-     * 修改會員站内信消息為已讀狀態
+     * 修改城友站内信消息為已讀狀態
      */
     public static final String PATH_MARK_ALL_MESSAGE_READ = "/member/message/markRead.json";
 
@@ -909,14 +961,242 @@ public class Api {
 
 
     /**
-     * 雙11促銷商品搜索
+     * 活動專場促銷產品搜索
      */
     public static final String PATH_SEARCH_PROMOTION = "/search/promotion";
 
     /**
-     * 首頁最新想要店
+     * 個人專頁背景圖修改
      */
-    public static final String PATH_HOME_NEW_LIST = "/app/home/new/list";
+    public static final String PATH_CHANGE_PERSONAL_BACKGROUND = "/member/background/modify.json";
+
+	/**
+     * 獲取支付寶(香港)支付參數
+     */
+    public static final String PATH_ALIPAY_HK = "/member/buy/pay/alipayhk";
+
+    /**
+     * 支付寶(香港)支付完成
+     */
+    public static final String PATH_ALIPAY_HK_FINISH = "/member/alipayhk/finish";
+
+    /**
+     * 微信登录（第一步）
+     */
+    public static final String PATH_WX_LOGIN_STEP1 = "/loginconnect/new/weixin/login";
+
+
+    /**
+     * 微信登录（第二步）
+     */
+    public static final String PATH_WX_LOGIN_STEP2 = "/loginconnect/new/weixin/login/bind";
+
+    /**
+     * 微信绑定
+     */
+    public static final String PATH_BIND_WEIXIN = "/loginconnect/new/weixin/bind";
+
+    /**
+     * 微信登錄绑定身份碼發送
+     */
+    public static final String PATH_WX_BIND_SEND_SMS_CODE = "/loginconnect/weixin/smscode/send";
+
+
+    /**
+     * 微信解綁
+     */
+    public static final String PATH_UNBIND_WEIXIN = "/loginconnect/new/weixin/unbind";
+    /**
+     * 邮箱保存
+     */
+    public static final String PATH_MEMBEREMAIL_EDIT ="/member/memberemail/edit" ;
+
+    /**
+     * 發表想要帖-購物車產品
+     */
+    public static final String PATH_POST_GOODS_CART = "/member/wantpost/cart/goods";
+
+    /**
+     * 發表想要帖-最近購買
+     */
+    public static final String PATH_POST_GOODS_BUY = "/member/wnatpost/buyer/goods";
+
+    /**
+     * 發表想要帖-最近瀏覽產品
+     */
+    public static final String PATH_POST_GOODS_VISIT = "/member/wantpost/goods/browse";
+
+
+    /**
+     * 發表想要帖-產品搜索
+     */
+    public static final String PATH_POST_GOODS_SEARCH = "/member/wantpost/goods/search";
+
+
+    /**
+     * 聖誕活動參與狀態
+     */
+    public static final String PATH_GET_JOIN_CHRISTMAS_STATUS = "/member/christmas/join";
+
+
+    /**
+     * 设置婚姻
+     */
+    public static final String PATH_SET_MARRIAGE ="/member/membermarriage/edit" ;
+    /**
+     * 保存尺碼數據
+     */
+    public static final String PATH_MEASUREMENT_EDIT ="/member/measurement/edit" ;
+    /**
+     * 個人簡歷頁
+     */
+    public static final String PATH_MEMBER_RESUME = "/member/resume/info";
+    /**
+     * 與我溝通
+     */
+    public static final String PATH_RESUME_COMMUNICATION = "/member/resume/communication";
+    /**
+     * 我的投遞
+     */
+    public static final String PATH_RESUME_DELIVER = "/member/resume/deliver";
+    /**
+     * 、關注
+     */
+    public static final String PATH_RESUME_FOLLOW = "/member/resume/follow";
+    public static final String PATH_POSITION_EDIT ="/member/resume/position/edit" ;
+    public static final String PATH_RESUME_STATE_EDIT ="/member/resume/state/edit" ;
+    /**
+     * 保存或修改 資格證書-獲獎經歷-擅長技能
+     */
+    public static final String PATH_CAREER_EDIT = "/member/career/edit";
+    /**
+     * 修改簡歷開放狀態
+     */
+    public static final String PATH_RESUME_OPEN = "/member/resume/open/edit";
+    /**
+     *投遞簡歷
+     */
+    public static final String PATH_STORE_HR_APPLY = "/app/store/hr/apply";
+    /**
+     * 獲取教育與工作頁
+     */
+    public static final String PATH_CAREER_DETAIL = "/member/career/detail";
+    /**E
+     * 保存或修改工作經歷
+     */
+    public static final String PATH_EXPERIENCE_EDIT ="/member/experience/edit" ;
+    /**
+     * 保存或修改教育經歷
+     */
+    public static final String PATH_EDUCATION_EDIT = "/member/education/edit";
+    /**
+     * 刪除工作經歷
+     */
+    public static final String PATH_EDUCATION_DELETE="/member/education/delete";
+    /**
+     * 刪除教育經歷
+     */
+    public static final String PATH_EXPERIENCE_DELETE ="/member/experience/delete" ;
+    /**
+     * 開放聯繫方式給商家
+     */
+    public static final String PATH_COMMUNICATION_AUTHOR="/member/resume/communication/author";
+    /**
+     * 作者相關想要帖
+     */
+    public static final String PATH_WANT_POST_MEMBER_INFO_LIST = "/want_post/member/info/list";
+
+    /**
+     * 商品SKU列表
+     */
+    public static final String PATH_SKU_LIST = "/goods/sku";
+
+    /**
+     * 店鋪導航菜單
+     */
+    public static final String PATH_STORE_NAVIGATION = "/store/navigation";
+
+
+    /**
+     * 貼文成真
+     */
+    public static final String PATH_POST_COME_TRUE = "/member/wantpost/cometrue";
+
+
+    /**
+     * 評論成真
+     */
+    public static final String PATH_COMMENT_COME_TRUE = "/member/comment/cometrue";
+
+
+    /**
+     * facebook登錄（第一步）
+     */
+    public static final String PATH_FACEBOOK_LOGIN = "/loginconnect/facebook/login";
+
+
+    /**
+     * facebook登錄（第二步）
+     */
+    public static final String PATH_FACEBOOK_LOGIN_BIND = "/loginconnect/facebook/login/bind";
+
+    /**
+     * facebook賬號綁定
+     */
+    public static final String PATH_FACEBOOK_BIND = "/loginconnect/facebook/bind";
+
+    /**
+     * facebook賬號解綁
+     */
+    public static final String PATH_FACEBOOK_UNBIND = "/loginconnect/facebook/unbind";
+
+    /**
+     * 訂單不同支付方式所需付款金額
+     */
+    public static final String PATH_PAYMENT_PRICE = "/member/buy/payment/price";
+
+    /**
+     * 移動端門店自提支付成功訂單列表頁
+     * /member/buy/orders接口不再使用
+     */
+    public static final String PATH_BUY_ORDERS = "/member/buy/orders/info";
+
+
+    /**
+     * 獲取用戶token(活動身份令牌)
+     */
+    public static final String PATH_GET_MEMBER_TOKEN = "/member/getToken";
+    /**
+     * 獲取用戶token(活動身份令牌)
+     */
+    public static final String PATH_GET_IM_TOKEN = "/member/getUserTokenBySession";
+    /**
+     * 商城url地址解析(目前只解析店鋪，商品，貼文)
+     */
+    public static final String PATH_PARSE_URL = "/url/skip";
+
+
+    /**
+     * im平台客服列表
+     */
+    public static final String ADMIN_STAFF="/member/admin/staff";
+
+    /**
+     * 微信賬號編輯
+     */
+    public static final String PATH_EDIT_WECHAT_ID = "/member/memberwechat/edit";
+
+    /**
+     * Facebook賬號編輯
+     */
+    public static final String PATH_EDIT_FACEBOOK_ID = "/member/memberfacebook/edit";
+
+
+    public static final String MEMBER_CARD_DETAIL = "/member/card/detail";
+    /**
+     * 新活動專場頁
+     */
+    public static final String PATH_SHOP_SESSION="/shop/goods/list";
 
 
     /**
@@ -932,7 +1212,13 @@ public class Api {
     private static String httpRequest(int method, String path, EasyJSONObject params,
                                       Callback ioCallback, final UICallback uiCallback) {
         OkHttpClient client = getOkHttpClient();
-        String url = API_BASE_URL + path;
+        String url;
+        if (StringUtil.isUrlString(path)) {
+            url = path;
+        } else {
+            url = API_BASE_URL + path;
+        }
+        SLog.info("url[%s]", url);
         Request request = null;
 
         if (method == METHOD_GET) {
@@ -991,8 +1277,8 @@ public class Api {
                 Response response = client.newCall(request).execute();
                 String responseStr = response.body().string();
                 return responseStr;
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
         return null;
@@ -1097,9 +1383,8 @@ public class Api {
                 }
                 fos.write(buffer, 0, n);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            SLog.info("Error!下載失敗");
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             result = false;
         } finally {
             try {
@@ -1109,8 +1394,8 @@ public class Api {
                 if (is != null) {
                     is.close();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
 
@@ -1129,13 +1414,13 @@ public class Api {
             // 1. 首先獲取captcha key
             String responseStr = syncGet(PATH_MAKE_CAPTCHA_KEY, null);
             SLog.info("responseStr[%s]", responseStr);
-            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
             int code = responseObj.getInt("code");
             if (code != ResponseCode.SUCCESS) {
                 return null;
             }
 
-            captchaKey = responseObj.getString("datas.captchaKey");
+            captchaKey = responseObj.getSafeString("datas.captchaKey");
 
 
             // 2. 獲取到captcha key后，再下載驗證碼圖片
@@ -1152,17 +1437,15 @@ public class Api {
 
             is = response.body().byteStream();
             bitmap = BitmapFactory.decodeStream(is);
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         } finally {
             try {
                 if (is != null) {
                     is.close();
                 }
             }
-            catch (IOException e) {
+            catch (Exception e) {
             }
 
             if (bitmap == null || captchaKey == null) {
@@ -1192,12 +1475,12 @@ public class Api {
                         return null;
                     }
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (responseObj == null) {
                         return null;
                     }
 
-                    EasyJSONArray adminMobileAreaList = responseObj.getArray("datas.adminMobileAreaList");
+                    EasyJSONArray adminMobileAreaList = responseObj.getSafeArray("datas.adminMobileAreaList");
 
                     for (Object object : adminMobileAreaList) {
                         final MobileZone mobileZone = (MobileZone) EasyJSONBase.jsonDecode(MobileZone.class, object.toString());
@@ -1208,7 +1491,7 @@ public class Api {
                     SLog.info("获取MobileZone数据成功");
                     return mobileZoneList;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
 
                 return null;
@@ -1230,12 +1513,12 @@ public class Api {
                         return;
                     }
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (responseObj == null) {
                         return;
                     }
 
-                    EasyJSONArray adminMobileAreaList = responseObj.getArray("datas.adminMobileAreaList");
+                    EasyJSONArray adminMobileAreaList = responseObj.getSafeArray("datas.adminMobileAreaList");
                     for (Object object : adminMobileAreaList) {
                         MobileZone mobileZone = (MobileZone) EasyJSONBase.jsonDecode(MobileZone.class, object.toString());
                         SLog.info("mobileZone: %s", mobileZone);
@@ -1244,7 +1527,7 @@ public class Api {
 
                     SLog.info("获取MobileZone数据成功");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -1271,7 +1554,7 @@ public class Api {
     }
 
     /**
-     * 會員異步上傳文件
+     * 城友異步上傳文件
      * @param file
      */
     public static void asyncUploadFile(File file) {
@@ -1293,7 +1576,7 @@ public class Api {
     }
 
     /**
-     * 會員同步上傳文件
+     * 城友同步上傳文件
      * 成功上傳返回文件相對URL  失敗返回null
      * @param file
      */
@@ -1348,12 +1631,12 @@ public class Api {
             String responseStr = response.body().string();
             SLog.info("threadId[%d], responseStr[%s]", threadId, responseStr);
 
-            EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
             if (ToastUtil.isError(responseObj)) {
                 return null;
             }
 
-            return responseObj.getString("datas.name");
+            return responseObj.getSafeString("datas.name");
         } catch (Exception e) {
 
         }
@@ -1438,8 +1721,8 @@ public class Api {
                 Response response = client.newCall(request).execute();
                 String responseStr = response.body().string();
                 return responseStr;
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
 
@@ -1509,7 +1792,7 @@ public class Api {
         Api.postJsonIo(path, params.toString(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                SLog.info("Error!%s", e.getMessage());
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
 
             @Override
@@ -1548,10 +1831,8 @@ public class Api {
         try {
             sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, new TrustManager[]{xtm}, new SecureRandom());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
             @Override

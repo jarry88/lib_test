@@ -1,5 +1,9 @@
 package com.ftofs.twant.util;
 
+import android.util.Log;
+
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.log.SLog;
 import com.orhanobut.hawk.Hawk;
@@ -14,26 +18,62 @@ import cn.snailpad.easyjson.EasyJSONObject;
 public class SharedPreferenceUtil {
     /**
      * 保存注冊/登錄返回的用戶數據
+     * @param loginType
      * @param responseObj
      */
-    public static void saveUserInfo(EasyJSONObject responseObj) {
+    public static void saveUserInfo(LoginType loginType, EasyJSONObject responseObj) {
         try {
-            Hawk.put(SPField.FIELD_USER_ID, responseObj.getInt("datas.memberId"));
-            Hawk.put(SPField.FIELD_TOKEN, responseObj.getString("datas.token"));
-            Hawk.put(SPField.FIELD_NICKNAME, responseObj.getString("datas.nickName"));
-            Hawk.put(SPField.FIELD_LAST_LOGIN_TIME, Time.timestamp());  // 最近一次登錄時間
+            EasyJSONObject memberVo = responseObj.getSafeObject("datas.memberVo");
 
-            String fullMobile = responseObj.getString("datas.memberVo.mobileAreaCode") + "," + responseObj.getString("datas.memberVo.mobile");
+            Hawk.put(SPField.FIELD_LOGIN_TYPE, loginType.name());
+            if (loginType == LoginType.WEIXIN) {
+                Hawk.put(SPField.FIELD_WX_BINDING_STATUS, responseObj.getInt("datas.isBind"));
+            } else if (loginType == LoginType.FACEBOOK) {
+                Hawk.put(SPField.FIELD_FB_BINDING_STATUS, Constant.TRUE_INT);
+            }
+            Hawk.put(SPField.FIELD_MEMBER_TOKEN, responseObj.getSafeString("datas.memberToken"));
+            SLog.info("FIELD_USER_ID[%s]", responseObj.getSafeString("datas.memberToken"));
+            Hawk.put(SPField.FIELD_USER_ID, responseObj.getInt("datas.memberId"));
+            SLog.info("FIELD_USER_ID[%d]", responseObj.getInt("datas.memberId"));
+            Hawk.put(SPField.FIELD_TOKEN, responseObj.getSafeString("datas.token"));
+            SLog.info("FIELD_TOKEN[%s]", responseObj.getSafeString("datas.token"));
+            if (loginType == LoginType.MOBILE) {
+                Hawk.put(SPField.FIELD_NICKNAME, responseObj.getSafeString("datas.nickName"));
+                Hawk.put(SPField.FIELD_AVATAR, memberVo.getSafeString("avatar"));
+            } else if (loginType == LoginType.WEIXIN) {
+                Hawk.put(SPField.FIELD_NICKNAME, responseObj.getSafeString("datas.weixinNickName"));
+                Hawk.put(SPField.FIELD_AVATAR, responseObj.getSafeString("datas.weixinAvatarUrl"));
+            } else if (loginType == LoginType.FACEBOOK) {
+                Hawk.put(SPField.FIELD_NICKNAME, responseObj.getSafeString("datas.facebookNickName"));
+                String facebookAvatarUrl = responseObj.getSafeString("datas.facebookAvatarUrl");
+                // 去除facebookAvatarUrl前後的引號
+                if (facebookAvatarUrl.startsWith("\"")) {
+                    facebookAvatarUrl = facebookAvatarUrl.substring(1);
+                }
+                if (facebookAvatarUrl.endsWith("\"")) {
+                    facebookAvatarUrl = facebookAvatarUrl.substring(0, facebookAvatarUrl.length() - 1);
+                }
+
+                SLog.info("facebookAvatarUrl[%s]", facebookAvatarUrl);
+                Hawk.put(SPField.FIELD_AVATAR, facebookAvatarUrl);
+            }
+
+            Hawk.put(SPField.FIELD_MEMBER_NAME, responseObj.getSafeString("datas.memberName"));
+            SLog.info("FIELD_MEMBER_NAME[%s]", responseObj.getSafeString("datas.memberName"));
+            if (responseObj.exists("datas.imToken")) {
+                Hawk.put(SPField.FIELD_IM_TOKEN, responseObj.getSafeString("datas.imToken"));
+            }
+            Hawk.put(SPField.FIELD_LAST_LOGIN_TIME, Time.timestamp());  // 最近一次登錄時間
+            SLog.info("FIELD_LAST_LOGIN_TIME[%d]", Time.timestamp());
+
+            String fullMobile = memberVo.getSafeString("mobileAreaCode") + "," + memberVo.getSafeString("mobile");
             Hawk.put(SPField.FIELD_MOBILE, fullMobile);  // 區號+手機號
-            Hawk.put(SPField.FIELD_MOBILE_ENCRYPT, responseObj.getString("datas.memberVo.mobileEncrypt"));
-            Hawk.put(SPField.FIELD_MEMBER_NAME, responseObj.getString("datas.memberName"));
-            Hawk.put(SPField.FIELD_IM_TOKEN, responseObj.getString("datas.imToken"));
-            Hawk.put(SPField.FIELD_AVATAR, responseObj.getString("datas.memberVo.avatar"));
-            Hawk.put(SPField.FIELD_GENDER, responseObj.getInt("datas.memberVo.memberSex"));
-            Hawk.put(SPField.FIELD_MEMBER_SIGNATURE, responseObj.getString("datas.memberVo.memberSignature"));
-            Hawk.put(SPField.FIELD_MEMBER_BIO, responseObj.getString("datas.memberVo.memberBio"));
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
+            Hawk.put(SPField.FIELD_MOBILE_ENCRYPT, memberVo.getSafeString("mobileEncrypt"));
+            Hawk.put(SPField.FIELD_GENDER, memberVo.getInt("memberSex"));
+            Hawk.put(SPField.FIELD_MEMBER_SIGNATURE, memberVo.getSafeString("memberSignature"));
+            Hawk.put(SPField.FIELD_MEMBER_BIO, memberVo.getSafeString("memberBio"));
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 }

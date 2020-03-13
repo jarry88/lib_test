@@ -2,11 +2,11 @@ package com.ftofs.twant.widget;
 
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.NestedScrollingParent2;
-import android.support.v4.view.NestedScrollingParentHelper;
-import android.support.v4.view.ViewCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.NestedScrollingParent2;
+import androidx.core.view.NestedScrollingParentHelper;
+import androidx.core.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
-import com.ftofs.twant.log.SLog;
 
 /**
  * Author:  andy.xwt
@@ -30,7 +29,6 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
     NestedScrollingCallback callback;
 
 
-
     private NestedScrollingParentHelper mNestedScrollingParentHelper = new NestedScrollingParentHelper(this);
 
     public NestedScrollingParent2Layout(Context context) {
@@ -44,10 +42,6 @@ public class NestedScrollingParent2Layout extends LinearLayout implements Nested
     public NestedScrollingParent2Layout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOrientation(VERTICAL);
-    }
-
-    public void setCallback(NestedScrollingCallback callback) {
-        this.callback = callback;
     }
 
 

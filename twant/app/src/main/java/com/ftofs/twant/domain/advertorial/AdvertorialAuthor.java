@@ -39,7 +39,7 @@ public class AdvertorialAuthor implements Serializable {
     private int subCount;
 
     /**
-     * 文章数
+     * 想要帖数
      */
     private int articleCount;
 

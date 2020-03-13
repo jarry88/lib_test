@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 /**
- * 商品的各種SKU的信息
+ * 產品的各種SKU的信息
  * @author zwm
  */
 public class GoodsInfo {
@@ -12,13 +12,15 @@ public class GoodsInfo {
     public float goodsPrice0; // 原價
     public float price;  // 最終價，如果沒有打折，最終價與原價相同
     public String imageSrc;
-    public int goodsStorage;  // 商品庫存
+    public int goodsStorage;  // 產品庫存
     public int reserveStorage;  // 預留庫存
     public int limitAmount;   // 每人限購多少
     public String unitName;
+    public String goodsName;
+    public Boolean showSendBtn;
 
     /**
-     * 獲取最終庫存(商品的庫存減去預留庫存)
+     * 獲取最終庫存(產品的庫存減去預留庫存)
      * @return
      */
     public int getFinalStorage() {

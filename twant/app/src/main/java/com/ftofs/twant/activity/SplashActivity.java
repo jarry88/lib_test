@@ -1,10 +1,15 @@
 package com.ftofs.twant.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
@@ -12,6 +17,7 @@ import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.twant.entity.SoftInputInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
@@ -45,10 +51,112 @@ public class SplashActivity extends BaseActivity {
 
     ImageView splashBackground;
 
+    RelativeLayout rlContainer;
+    EditText etStub; // 用於顯示軟鍵盤以獲取軟鍵盤的高度
+
+    SoftInputInfo softInputInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        // 檢測是否從瀏覽器網頁拉起APP
+        Intent intent =getIntent();
+        if (intent != null) {
+            /*
+            参考
+            Android 使用Scheme实现从网页启动APP
+            https://blog.csdn.net/dpl12/article/details/82703780
+             */
+            String appUriScheme = getString(R.string.app_uri_scheme);
+            String scheme = intent.getScheme();
+            SLog.info("scheme[%s]", scheme);
+            if (appUriScheme.equals(scheme)) {
+                Uri uri =intent.getData();
+                if (uri != null) {
+                    SLog.info("scheme[%s]", uri.getScheme());
+                    String host = uri.getHost();
+                    SLog.info("host[%s]", host);
+                    SLog.info("port[%s]", uri.getPort());
+                    SLog.info("path[%s]", uri.getPath());
+                    SLog.info("queryString[%s]", uri.getQuery());
+                    // SLog.info("queryParameter: "+uri.getQueryParameter("key"));
+
+                    EasyJSONObject launchAppParams = null;
+
+                    if ("weburl".equals(host)) { // 1 跳轉網頁
+                        // url=xx&isNeedLogin=yy&title=zz
+                        String url = uri.getQueryParameter("url");
+                        int isNeedLogin = 0;
+                        String isNeedLoginStr = uri.getQueryParameter("isNeedLogin");
+                        if (isNeedLoginStr != null) {
+                            isNeedLogin = Integer.valueOf(isNeedLoginStr);
+                        }
+                        String title = "";
+                        String htmlTitle = uri.getQueryParameter("title");
+                        if (htmlTitle != null) {
+                            title = htmlTitle;
+                        }
+
+                        launchAppParams = EasyJSONObject.generate(
+                                "host", host,
+                                "url", url,
+                                "isNeedLogin", isNeedLogin,
+                                "title", title);
+                    } else if ("store".equals(host)) { // 2 跳轉店鋪首頁
+                        String storeId = uri.getQueryParameter("storeId");
+                        if (storeId != null) {
+                            launchAppParams = EasyJSONObject.generate(
+                                    "host", host,
+                                    "storeId", Integer.valueOf(storeId));
+                        }
+                    } else if ("goods".equals(host)) { // 3 跳轉商品詳情
+                        String commonId = uri.getQueryParameter("commonId");
+                        if (commonId != null) {
+                            launchAppParams = EasyJSONObject.generate(
+                                    "host", host,
+                                    "commonId", Integer.valueOf(commonId));
+                        }
+                    } else if ("memberinfo".equals(host)) { // 4 个人名片页
+                        String memberName = uri.getQueryParameter("memberName");
+                        if (memberName == null) {
+                            memberName = "";
+                        }
+
+                        launchAppParams = EasyJSONObject.generate(
+                                "host", host,
+                                "memberName", memberName);
+                    } else if ("postinfo".equals(host)) { // 5 贴文詳情页
+                        String postId = uri.getQueryParameter("postId");
+                        if (postId != null) {
+                            launchAppParams = EasyJSONObject.generate(
+                                    "host", host,
+                                    "postId", Integer.valueOf(postId));
+                        }
+                    } else if ("recruitinfo".equals(host)) { // 6 招聘詳情页
+                        String postId = uri.getQueryParameter("postId");
+                        if (postId != null) {
+                            launchAppParams = EasyJSONObject.generate(
+                                    "host", host,
+                                    "postId", Integer.valueOf(postId));
+                        }
+                    } else if ("activityindex".equals(host) || "home".equals(host)) { // 7 購物專場 8 商城首页
+                        launchAppParams = EasyJSONObject.generate(
+                                "host", host);
+                    }
+
+                    if (launchAppParams != null) {
+                        SLog.info("launchAppParams[%s]", launchAppParams.toString());
+                        Hawk.put(SPField.FIELD_LAUNCH_APP_PARAMS, launchAppParams.toString());
+                    }
+
+                }
+            }
+        } else {
+            SLog.info("intent_is_null");
+        }
+
 
         TextView tvCopyRight = findViewById(R.id.copyright);
         String copyright = getResources().getString(R.string.copyright);
@@ -74,36 +182,75 @@ public class SplashActivity extends BaseActivity {
 
         splashBackground = findViewById(R.id.splash_bg);
 
-        // 下載App引導頁圖片任務
-        TwantApplication.getThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String responseStr = Api.syncGet(Api.PATH_APP_GUIDE, null);
-                    SLog.info("responseStr[%s]", responseStr);
-                    if (StringUtil.isEmpty(responseStr)) {
-                        return;
-                    }
+        // 獲取軟鍵盤的高度
+        etStub = findViewById(R.id.et_stub);
+        int softInputHeight = Hawk.get(SPField.FIELD_SOFT_INPUT_HEIGHT, SoftInputInfo.INVALID_HEIGHT);
+        SLog.info("_softInputHeight[%d]", softInputHeight);
+        if (softInputHeight == SoftInputInfo.INVALID_HEIGHT) { // 如果未用軟鍵盤的高度，則獲取
+            softInputInfo = new SoftInputInfo();
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
-                    if (responseObj == null) {
-                        return;
-                    }
 
-                    EasyJSONArray appGuideImageArray = responseObj.getArray("datas.appGuideImage");
-                    for (Object object : appGuideImageArray) {
-                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-                        String url = easyJSONObject.getString("guideImage");
-                        File appGuideImageFile = FileUtil.getCacheFile(SplashActivity.this, url);
-                        if (!appGuideImageFile.exists()) { // 如果引導圖片不存在，則下載
-                            Api.syncDownloadFile(StringUtil.normalizeImageUrl(url), appGuideImageFile);
-                        }
-                    }
-                } catch (Exception e) {
+            rlContainer = findViewById(R.id.rl_container);
+            rlContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    int height = rlContainer.getHeight();
+                    SLog.info("rlContainer.height[%d]", height);
+                    softInputInfo.setHeight(height);
 
+                    int softInputHeight = softInputInfo.getSoftInputHeight();
+                    if (softInputHeight != SoftInputInfo.INVALID_HEIGHT) {
+                        Hawk.put(SPField.FIELD_SOFT_INPUT_HEIGHT, softInputHeight);
+                    }
                 }
-            }
-        });
+            });
+            rlContainer.post(new Runnable() {
+                @Override
+                public void run() {
+                    Util.showSoftInput(SplashActivity.this, etStub);
+                    rlContainer.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Util.hideSoftInput(SplashActivity.this, etStub);
+                        }
+                    }, 500);
+                }
+            });
+        } else { // 如果已经有保存软键盘高度，则隐藏etStub，否则软键盘还会自动弹出
+            etStub.setVisibility(View.GONE);
+        }
+
+
+        // 下載App引導頁圖片任務
+//        TwantApplication.getThreadPool().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    String responseStr = Api.syncGet(Api.PATH_APP_GUIDE, null);
+//                    SLog.info("responseStr[%s]", responseStr);
+//                    if (StringUtil.isEmpty(responseStr)) {
+//                        return;
+//                    }
+//
+//                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+//                    if (responseObj == null) {
+//                        return;
+//                    }
+//
+//                    EasyJSONArray appGuideImageArray = responseObj.getSafeArray("datas.appGuideImage");
+//                    for (Object object : appGuideImageArray) {
+//                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+//                        String url = easyJSONObject.getSafeString("guideImage");
+//                        File appGuideImageFile = FileUtil.getCacheFile(SplashActivity.this, url);
+//                        if (!appGuideImageFile.exists()) { // 如果引導圖片不存在，則下載
+//                            Api.syncDownloadFile(StringUtil.normalizeImageUrl(url), appGuideImageFile);
+//                        }
+//                    }
+//                } catch (Exception e) {
+//
+//                }
+//            }
+//        });
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +89,7 @@ public class OrderLogisticsInfoFragment extends BaseFragment implements View.OnC
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 
@@ -95,7 +97,7 @@ public class OrderLogisticsInfoFragment extends BaseFragment implements View.OnC
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -125,25 +127,25 @@ public class OrderLogisticsInfoFragment extends BaseFragment implements View.OnC
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    String goodsImageUrl = responseObj.getString("datas.ordersVo.ordersGoodsVoList[0].goodsImage");
+                    String goodsImageUrl = responseObj.getSafeString("datas.ordersVo.ordersGoodsVoList[0].goodsImage");
                     Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
 
-                    tvGoodsName.setText(responseObj.getString("datas.ordersVo.ordersGoodsVoList[0].goodsName"));
+                    tvGoodsName.setText(responseObj.getSafeString("datas.ordersVo.ordersGoodsVoList[0].goodsName"));
 
-                    tvShipName.setText(responseObj.getString("datas.shipCompany.shipName"));
+                    tvShipName.setText(responseObj.getSafeString("datas.shipCompany.shipName"));
 
-                    tvOrdersStateName.setText(responseObj.getString("datas.ordersVo.ordersStateName"));
-                    tvLogisticsNumber.setText(responseObj.getString("datas.logisticsNumber"));
-                    tvCustomerOrderNumber.setText(responseObj.getString("datas.customerOrderNumber"));
-                    tvSendTime.setText(responseObj.getString("datas.ordersVo.sendTime"));
+                    tvOrdersStateName.setText(responseObj.getSafeString("datas.ordersVo.ordersStateName"));
+                    tvLogisticsNumber.setText(responseObj.getSafeString("datas.logisticsNumber"));
+                    tvCustomerOrderNumber.setText(responseObj.getSafeString("datas.customerOrderNumber"));
+                    tvSendTime.setText(responseObj.getSafeString("datas.ordersVo.sendTime"));
 
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

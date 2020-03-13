@@ -6,32 +6,41 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.util.Log;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.EntityReplace;
 import com.ftofs.twant.entity.Mobile;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
+import com.ftofs.twant.fragment.H5GameFragment;
+import com.ftofs.twant.fragment.PostDetailFragment;
+import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Emoji;
-import com.ftofs.twant.orm.UserStatus;
 import com.ftofs.twant.widget.QMUIAlignMiddleImageSpan;
+import com.ftofs.twant.widget.TwClickableSpan;
 
 import org.litepal.LitePal;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import cn.snailpad.easyjson.EasyJSONException;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 字符串工具類
@@ -88,7 +97,7 @@ public class StringUtil {
      * @param spaceCount 美元符$与价格的空格个数
      * @return
      */
-    public static String formatPrice(Context context, float price, int spaceCount) {
+    public static String formatPrice(Context context, double price, int spaceCount) {
         if (isEmpty(currencyTypeSign)) {
             currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
         }
@@ -99,6 +108,33 @@ public class StringUtil {
         }
         sb.append(StringUtil.formatFloat(price));
         return sb.toString();
+    }
+    /**
+     * @param context
+     * @param price
+     * @param spaceCount 美元符$与价格的空格个数
+     * @param byWord 尾部0用漢字代替
+     * @return
+     */
+    public static String formatPrice(Context context, double price, int spaceCount,boolean byWord) {
+        String result;
+        String sb = formatPrice(context, price, spaceCount);
+        result=sb;
+        if (sb.length() > 8) {
+            String lastEight =sb.substring(sb.length()-8);
+            if (lastEight.equals("00000000")) {
+                result = sb.substring(0, sb.length() - 8) + "億";
+                return result;
+            }
+        }
+        if(sb.length() > 4){
+            String lastFour =sb.substring(sb.length()-4);
+            if (lastFour.equals("0000")) {
+                result= sb.substring(0, sb.length() - 4)+"萬";
+
+            }
+        }
+        return result;
     }
 
     /**
@@ -159,14 +195,53 @@ public class StringUtil {
     }
 
     /**
+     * 格式化貼文瀏覽量的顯示
+     * 顯示規則：
+     *                         （1）小於9999時，直接顯示對應數字；
+     *                         （2）大於9999時，從百位向上取整保留小數點後1位：顯示X.X萬；
+     *
+     *                         例：
+     *                         10001 --> 1萬；
+     *                         10100  --> 1.1萬；
+     * @param postView 貼文瀏覽量
+     * @return
+     */
+    public static String formatPostView(int postView) {
+        SLog.info("formatPostView[%d]", postView);
+        if (postView <= 9999) {
+            return String.valueOf(postView);
+        }
+
+        int k10 = postView / 10000;  // 萬
+        int k = (postView % 10000) / 1000;  // 千
+        int h = (postView % 1000) / 100; // 百
+
+        if (h > 0) { // 百位向上取整
+            ++k;
+            if (k >= 10) {
+                ++k10;
+                k = 0;
+            }
+        }
+
+        String result = "";
+        result += k10;
+        if (k > 0) {
+            result += "." + k;
+        }
+
+        return result + "萬";
+    }
+
+    /**
      * 將float轉換為字符串，如果val是整數，則去除后面的小數部分
      * 比如，如果val是 9.03， 則顯示9.03
      *      如果val是 9, 則顯示9，而不是9.0
      * @param val
      * @return
      */
-    public static String formatFloat(float val) {
-        String strVal = String.valueOf(val);
+    public static String formatFloat(double val) {
+        String strVal = String.format("%.2f", val);
         int len = strVal.length();
         int index = len - 1;
 
@@ -208,6 +283,19 @@ public class StringUtil {
 
 
     /**
+     * 判斷字符串是否為網址格式
+     * @param str
+     * @return
+     */
+    public static boolean isUrlString(String str) {
+        if (isEmpty(str)) {
+            return false;
+        }
+        return str.startsWith("http://") || str.startsWith("https://");
+    }
+
+
+    /**
      * 規范圖片的Url，如果沒有前綴，添加前綴
      * @param imageUrl
      */
@@ -215,7 +303,7 @@ public class StringUtil {
         if (isEmpty(imageUrl)) {
             return imageUrl;
         }
-        if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+        if (isUrlString(imageUrl)) {
             return imageUrl;
         }
 
@@ -276,18 +364,112 @@ public class StringUtil {
         return sb.toString();
     }
 
+
+    /**
+     * 處理文本中的Url鏈接
+     * @param text
+     */
+
+    /**
+     * 處理文本中的Url鏈接
+     * @param context
+     * @param text
+     * @param simpleCallback 點擊文本中URL鏈接時的回調
+     * @return
+     */
+    public static SpannableString processTextUrl(Context context, String text, SimpleCallback simpleCallback) {
+        /*
+        匹配鏈接的正則表達式
+        參考
+        https://cyhour.com/1009/
+        https://regexr.com/
+         */
+        Pattern pattern = Pattern.compile("https?:\\/\\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]");
+
+
+        SpannableString spannableString = new SpannableString(text);
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            String data = matcher.group();
+            SLog.info("data[%d][%d][%s]\n", matcher.start(), matcher.end(), data);
+
+            TwClickableSpan clickableSpan = new TwClickableSpan(context, data, simpleCallback);
+            spannableString.setSpan(clickableSpan, matcher.start(), matcher.end(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+
+
+
+        return spannableString;
+    }
+
+    public static Editable translateEmoji(Context context, String text, int textSize) {
+        return translateEmoji(context, text, textSize, null);
+    }
+
+
+    public static void parseCustomUrl(Context context, String origUrl) {
+        EasyJSONObject params = EasyJSONObject.generate("url", origUrl);
+        Api.postUI(Api.PATH_PARSE_URL, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(context, responseObj)) {
+                    return;
+                }
+
+                try {
+                    String action = responseObj.getSafeString("datas.action");
+                    if ("store".equals(action)) {
+                        int storeId = responseObj.getInt("datas.storeId");
+                        Util.startFragment(ShopMainFragment.newInstance(storeId));
+                    } else if ("goods".equals(action)) {
+                        String commonIdStr = responseObj.getSafeString("datas.commonId");
+                        int commonId = Integer.valueOf(commonIdStr);
+                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                    } else if ("postinfo".equals(action)) {
+                        String postIdStr = responseObj.getSafeString("datas.postId");
+                        int postId = Integer.valueOf(postIdStr);
+                        Util.startFragment(PostDetailFragment.newInstance(postId));
+                    } else if ("weburl".equals(action) || "default".equals(action)) {
+                        String url = responseObj.getSafeString("datas.url");
+                        Util.startFragment(H5GameFragment.newInstance(url, ""));
+                    }
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+    }
+
+
     /**
      * 替換text文本中的表情占位符為圖片
      * @param context
      * @param text
      * @param textSize  文本控件中的文字大小
+     * @param urlClickedCallback 點擊Url鏈接的回調
      * @return
      */
-    public static Editable translateEmoji(Context context, String text, int textSize) {
-        SLog.info("text[%s]", text);
+    public static Editable translateEmoji(Context context, String text, int textSize, SimpleCallback urlClickedCallback) {
+        //SLog.info("text[%s]", text);
         text = escapeEntity(text);
-        SLog.info("text[%s]", text);
-        SpannableStringBuilder spannableString = new SpannableStringBuilder(text);
+        //SLog.info("text[%s]", text);
+
+        SpannableStringBuilder spannableString;
+        if (urlClickedCallback != null) { // 有添加Url點擊回調才解析url鏈接
+            SpannableString urlProcessedText = processTextUrl(context, text, urlClickedCallback);
+            spannableString = new SpannableStringBuilder(urlProcessedText);
+        } else {
+            spannableString = new SpannableStringBuilder(text);
+        }
 
         List<Emoji> emojiList = LitePal.findAll(Emoji.class);
         HashMap<String, String> emojiMap = new HashMap<>();
@@ -341,6 +523,31 @@ public class StringUtil {
         SLog.info("message[%s]", message);
         return message.substring(5, message.length() - 1);
     }
+    /**
+     * 提取環信的body中的屬性
+     * @param message
+     * @return
+     */
+    public static String getEMMessageStringAttribute(String message,String attribute) {
+        // txt:"abc" 返回 abc
+        String string="";
+        if (isEMMessageText(message)) {
+            message = message.substring(5,message.length()-1);
+        } else {
+            return "";
+        }
+        SLog.info("message[%s]", message);
+        if (message.equals("[電子名片]")) {
+            return "";
+        }
+        EasyJSONObject responseObj = EasyJSONObject.parse(message);
+        try {
+            string = responseObj.getSafeString(attribute);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+        return string;
+    }
 
     /**
      * 判斷是否為環信格式的消息文本   比如， txt:"abc"
@@ -357,7 +564,7 @@ public class StringUtil {
     }
 
     public static Editable getSpannableMessageText(Context context, String text, int textSize) {
-        return translateEmoji(context, getEMMessageText(text), textSize);
+        return translateEmoji(context, getEMMessageText(text), textSize, null);
     }
 
     /**
@@ -384,7 +591,7 @@ public class StringUtil {
     }
 
     /**
-     * 發表評論替換空格和換行符
+     * 發表說說替換空格和換行符
      * @param content
      * @return
      */
@@ -450,5 +657,24 @@ public class StringUtil {
         }
 
         return false;
+    }
+
+
+    /**
+     * 有些客服的memberName，比如 u_452915810409s533，倒數第4為s，這個方法用於返回s之前的memberName
+     * @param memberName
+     * @return
+     */
+    public static String getPureMemberName(String memberName) {
+        if (memberName == null) {
+            return null;
+        }
+
+        int idx = memberName.indexOf('s');
+        if (idx != -1) {
+            memberName = memberName.substring(0, idx);
+        }
+
+        return memberName;
     }
 }

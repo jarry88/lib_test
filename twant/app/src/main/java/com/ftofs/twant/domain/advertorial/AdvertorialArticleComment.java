@@ -9,17 +9,17 @@ public class AdvertorialArticleComment implements Serializable {
     private int commentId;
 
     /**
-     * 文章id
+     * 想要帖id
      */
     private int articleId;
 
     /**
-     * 文章标题
+     * 想要帖标题
      */
     private String  articleTitle;
 
     /**
-     * 文章作者会员id
+     * 想要帖作者会员id
     */
     private int authorMemberId;
 

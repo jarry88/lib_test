@@ -33,7 +33,8 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_type_d">
+        android:background="@drawable/border_type_d"
+        android:visibility="gone">
         <com.ftofs.twant.widget.SimpleTabButton
             android:layout_width="75dp"
             android:layout_height="37dp">
@@ -42,9 +43,10 @@
     </HorizontalScrollView>
     <!-- END OF 月歷 -->
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_comment_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F1F1F1">
-    </android.support.v7.widget.RecyclerView>
+        android:background="@color/tw_grey_F1F1">
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

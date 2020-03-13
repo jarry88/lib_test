@@ -10,7 +10,7 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 文章评论vo
+ * 想要帖评论vo
  *
  * @author cj
  * Created 2017-10-10 下午 3:13
@@ -21,11 +21,11 @@ public class AdvertorialArticleCommentVo implements Serializable {
      */
     private Integer commentId;
     /**
-     * 文章id
+     * 想要帖id
      */
     private int articleId;
     /**
-     * 文章标题
+     * 想要帖标题
      */
     private String articleTitle;
 

@@ -1,6 +1,6 @@
 package com.ftofs.twant.orm;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ftofs.twant.log.SLog;
 
@@ -8,14 +8,14 @@ import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
 /**
- * imName與memberName的映射關系表(只有店鋪客服才用到這個表)
+ * imName與memberName的映射關系表(只有商店客服才用到這個表)
  * 在點擊客服頭像時，如果沒有記錄關系，就保存記錄關系
  * @author zwm
  */
 public class ImNameMap extends LitePalSupport {
     public String imName;
     public String memberName;
-    public int storeId; // 對應的店鋪Id
+    public int storeId; // 對應的商店Id
 
     public static ImNameMap getByImName(String imName) {
         return LitePal.where("imName = ?", imName).findFirst(ImNameMap.class);

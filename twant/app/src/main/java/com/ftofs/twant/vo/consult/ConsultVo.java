@@ -7,7 +7,7 @@ import com.ftofs.twant.domain.goods.GoodsCommon;
  * @license    http://www.shopnc.net
  * @link       http://www.shopnc.net
  *
- * 商品咨询
+ * 產品咨询
  *
  * @author zxy
  * Created 2017/4/13 11:00
@@ -18,7 +18,7 @@ public class ConsultVo {
      */
     private int consultId = 0;
     /**
-     * 商品编号
+     * 產品编号
      */
     private int commonId = 0;
     /**
@@ -78,7 +78,7 @@ public class ConsultVo {
      */
     private int readState = 0;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private GoodsCommon goodsCommon = null;
 

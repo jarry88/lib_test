@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@drawable/border_type_d">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:textColor="@color/tw_black"
+            android:text="@string/text_bind_mobile"
+            />
+    </RelativeLayout>
+    <!-- END OF 工具欄 -->
+
+    <!-- 地區區號 -->
+    <LinearLayout
+        android:id="@+id/ll_mobile_zone_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+        <include layout="@layout/mobile_zone_select" />
+    </LinearLayout>
+
+    <!-- 手機號 -->
+    <RelativeLayout
+        android:id="@+id/rl_mobile_container"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:background="@drawable/border_type_d">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/mobile"
+            />
+
+        <EditText
+            android:id="@+id/et_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_mobile_hint"
+            android:inputType="number"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+    <!-- 驗證碼 -->
+    <RelativeLayout
+        android:id="@+id/rl_captcha_container"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:background="@drawable/border_type_d"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/captcha"
+            />
+
+        <ImageView
+            android:id="@+id/btn_refresh_captcha"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+
+        <EditText
+            android:id="@+id/et_captcha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/btn_refresh_captcha"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_captcha_hint"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+    <!-- 基因碼 -->
+    <RelativeLayout
+        android:id="@+id/rl_dynamic_code_container"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:background="@drawable/border_type_d">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/dynamic_code"
+            />
+
+
+        <TextView
+            android:id="@+id/btn_get_sms_code"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:background="#F6F6F6"
+            android:textColor="@color/tw_black"
+            android:text="@string/get_sms_code"
+            android:textSize="14sp"
+            />
+
+
+        <EditText
+            android:id="@+id/et_sms_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="41dp"
+            android:layout_toLeftOf="@id/btn_get_sms_code"
+            android:background="@null"
+            android:textColor="@color/tw_black"
+            android:textColorHint="@color/tw_grey"
+            android:hint="@string/input_sms_code_hint"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:textSize="17sp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="265dp"
+            android:layout_height="44dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/blue_button"
+            android:text="確認"
+            android:textSize="16sp"
+            android:textColor="#fff"
+            android:gravity="center"
+            />
+    </RelativeLayout>
+</LinearLayout>

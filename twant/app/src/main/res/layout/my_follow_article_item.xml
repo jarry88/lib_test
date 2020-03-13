@@ -1,97 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:padding="10dp"
-    android:orientation="horizontal"
-    android:background="@android:color/white">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="@dimen/dp_10"
+    android:layout_marginEnd="@dimen/dp_10"
+    android:padding="@dimen/dp_4"
+    android:background="@drawable/border_type_d">
+    <com.ftofs.twant.widget.ScaledButton
+        android:id="@+id/btn_select"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        app:icon_src="@drawable/icon_cart_item_unchecked"
+        />
+    <LinearLayout
+        android:layout_toEndOf="@id/btn_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/img_post_cover"
+            android:layout_width="120dp"
+            android:layout_height="74dp"
+            android:src="@drawable/del"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="15sp"
+                android:textColor="@color/tw_black"
+                android:lines="2"
+                android:ellipsize="end"
+                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+
+                <!--瀏覽點讚收藏-->
+                <LinearLayout
+                    android:id="@+id/ll_thumb_data_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/icon_view"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_look_post_small"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_look_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="@dimen/dp_10"
+                        android:text=""
+                        android:textColor="@color/tw_medium_grey"
+                        android:textSize="14sp"
+                        />
+                    <ImageView
+                        android:id="@+id/icon_follow"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_follow_post_small"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_follow_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text=""
+                        android:textColor="#666"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        />
+                    <ImageView
+                        android:id="@+id/icon_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_like_post_small"
+                    />
+
+                    <TextView
+                        android:id="@+id/tv_like_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text=""
+                        android:textColor="@color/tw_medium_grey"
+                        android:textSize="14sp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_unuseful"
+                        android:background="@drawable/job_type_bg"
+                        android:id="@+id/tv_unuseful"
+                        android:visibility="gone"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/ll_thumb_data_container"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/img_author_avatar"
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:src="@drawable/avatar_female"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_author_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textSize="14sp"
+                        android:textColor="@color/tw_medium_grey"
+                        android:text=""
+                        />
+
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
 
     <ImageView
-        android:id="@+id/img_post_cover"
-        android:layout_width="120dp"
-        android:layout_height="74dp"
-        android:src="@drawable/del"
-        />
-
-    <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="市場 | 想要帶你去浪漫的土耳其去看日暮寧靜後的... "
-            android:textSize="15sp"
-            android:textColor="@color/tw_black"
-            android:lines="2"
-            android:ellipsize="end"
-            />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
-
-
-            <LinearLayout
-                android:id="@+id/ll_thumb_data_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_follow_mini"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_follow_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="23"
-                    android:textColor="#666"
-                    android:textSize="14sp"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@id/ll_thumb_data_container"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/img_author_avatar"
-                    android:layout_width="27dp"
-                    android:layout_height="27dp"
-                    android:src="@drawable/avatar_female"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_author_nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textSize="13sp"
-                    android:textColor="@color/tw_black"
-                    android:text="說走就走"
-                    />
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-</LinearLayout>
+        android:src="@drawable/icon_post_true_small"
+        android:layout_marginEnd="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_10"
+        android:id="@+id/img_true_state"
+        android:visibility="gone"/>
+</RelativeLayout>

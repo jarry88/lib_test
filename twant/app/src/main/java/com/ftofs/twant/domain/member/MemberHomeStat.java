@@ -17,7 +17,7 @@ public class MemberHomeStat {
     private int follow;
 
     /**
-     * 文章数量
+     * 想要帖数量
      */
     private int post;
 

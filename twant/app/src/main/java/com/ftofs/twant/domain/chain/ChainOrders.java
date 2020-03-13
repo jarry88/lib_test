@@ -187,12 +187,12 @@ public class ChainOrders implements Serializable, Cloneable {
     private String sendTime;
 
     /**
-     * 订单下的商品使用的平台券总金额
+     * 订单下的產品使用的平台券总金额
      */
     private BigDecimal couponAmount = new BigDecimal(0);
 
     /**
-     * 订单的商品使用的平台券总金额中平台应承担的总金额
+     * 订单的產品使用的平台券总金额中平台应承担的总金额
      */
     private BigDecimal shopCommitmentAmount = BigDecimal.ZERO;
 

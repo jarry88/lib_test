@@ -4,12 +4,12 @@ import java.math.BigInteger;
 
 public class WantPostUnlike {
     /**
-     * 貼文id
+     * 想要帖id
      */
     private BigInteger postId;
 
     /**
-     * 會員名稱
+     * 城友名稱
      */
     private String memberName;
 

@@ -1,6 +1,6 @@
 package com.ftofs.twant.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +34,42 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
         textList.add("bb");
         textList.add("cc");
         textList.add("dd");
+        textList.add("aa");
+        textList.add("bb");
+        textList.add("cc");
+        textList.add("dd");
+        textList.add("aa");
+        textList.add("bb");
+        textList.add("cc");
+        textList.add("dd");
+        textList.add("aa");
+        textList.add("bb");
+        textList.add("cc");
+        textList.add("dd");
+        textList.add("aa");
+        textList.add("bb");
+        textList.add("cc");
+        textList.add("dd");
+        textList.add("aa");
+        textList.add("bb");
+        textList.add("cc");
+        textList.add("dd");
+        textList.add("aa");
+        textList.add("bb");
+        textList.add("cc");
+        textList.add("dd");
+        textList.add("111");
+        textList.add("222");
+        textList.add("333");
+        textList.add("444");
+        textList.add("111");
+        textList.add("222");
+        textList.add("333");
+        textList.add("444");
+        textList.add("222");
+        textList.add("333");
+        textList.add("444");
+
 
     }
 

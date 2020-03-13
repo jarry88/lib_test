@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +38,7 @@ import okhttp3.Call;
 
 
 /**
- * 店鋪內商品搜索頁面
+ * 商店內產品搜索頁面
  * @author zwm
  */
 public class ShopSearchFragment extends BaseFragment implements View.OnClickListener {
@@ -114,14 +116,14 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SearchItem item = searchItemList.get(position);
                 // Label忽略點擊
-                if (item.getItemType() == SearchItem.ITEM_TYPE_CATEGORY) { // 商品分類搜索
+                if (item.getItemType() == SearchItem.ITEM_TYPE_CATEGORY) { // 產品分類搜索
                     if (item.id == SearchItem.CATEGORY_ID_NEW) {
-                        SLog.info("最新商品");
+                        SLog.info("最新產品");
                         start(ShopCommodityFragment.newInstance(true, EasyJSONObject.generate(
                                 "storeId", storeId,
                                 "sort", "new_desc").toString()));
                     } else if (item.id == SearchItem.CATEGORY_ID_HOT) {
-                        SLog.info("店鋪熱賣");
+                        SLog.info("商店熱賣");
                         start(ShopCommodityFragment.newInstance(true, EasyJSONObject.generate(
                                 "storeId", storeId,
                                 "sort", "sale_desc").toString()));
@@ -131,7 +133,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
                                 "storeId", storeId,
                                 "labelId", item.id).toString()));
                     }
-                } else { // 具體的商品，跳到商品詳情
+                } else { // 具體的產品，跳到產品詳情
                     redirectToGoodsDetailFragment(item.id);
                 }
             }
@@ -150,7 +152,7 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
         int id = v.getId();
         switch (id) {
             case R.id.btn_back:
-                pop();
+                hideSoftInputPop();
                 break;
             case R.id.btn_clear_all:
                 etKeyword.setText("");
@@ -176,65 +178,65 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
      * @param data JSON字符串格式
      */
     private void populateData(String data) {
-        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(data);
+        EasyJSONObject responseObj = EasyJSONObject.parse(data);
         if (ToastUtil.checkError(_mActivity, responseObj)) {
             return;
         }
 
         try {
-            // 最新商品
+            // 最新產品
             searchItemList.add(new SearchItem(SearchItem.ITEM_TYPE_CATEGORY, SearchItem.CATEGORY_ID_NEW, getString(R.string.text_new_in_chinese)));
-            EasyJSONArray newGoodsVoList = responseObj.getArray("datas.newGoodsVoList");
+            EasyJSONArray newGoodsVoList = responseObj.getSafeArray("datas.newGoodsVoList");
             for (Object object : newGoodsVoList) {
                 EasyJSONObject newGoodsVo = (EasyJSONObject) object;
 
                 int commonId = newGoodsVo.getInt("commonId");
-                String goodsName = newGoodsVo.getString("goodsName");
+                String goodsName = newGoodsVo.getSafeString("goodsName");
 
                 SearchItem searchItem = new SearchItem(SearchItem.ITEM_TYPE_GOODS, commonId, goodsName);
                 searchItem.action = SearchItem.ACTION_GOTO_CATEGORY;
                 searchItemList.add(searchItem);
             }
 
-            // 店鋪熱賣
+            // 商店熱賣
             searchItemList.add(new SearchItem(SearchItem.ITEM_TYPE_CATEGORY, SearchItem.CATEGORY_ID_HOT, getString(R.string.text_store_hot_item_chinese)));
-            EasyJSONArray commendGoodsVoList = responseObj.getArray("datas.commendGoodsVoList");
+            EasyJSONArray commendGoodsVoList = responseObj.getSafeArray("datas.commendGoodsVoList");
             for (Object object : commendGoodsVoList) {
                 EasyJSONObject commendGoodsVo = (EasyJSONObject) object;
 
                 int commonId = commendGoodsVo.getInt("commonId");
-                String goodsName = commendGoodsVo.getString("goodsName");
+                String goodsName = commendGoodsVo.getSafeString("goodsName");
 
                 SearchItem searchItem = new SearchItem(SearchItem.ITEM_TYPE_GOODS, commonId, goodsName);
-                searchItem.action = SearchItem.ACTION_GOTO_GOODS;  // 跳轉到具體商品
+                searchItem.action = SearchItem.ACTION_GOTO_GOODS;  // 跳轉到具體產品
                 searchItemList.add(searchItem);
             }
 
 
             // 其它分類
-            EasyJSONArray storeCategoryList = responseObj.getArray("datas.storeCategoryList");
+            EasyJSONArray storeCategoryList = responseObj.getSafeArray("datas.storeCategoryList");
             for (Object object : storeCategoryList) {
                 EasyJSONObject easyJSONObject = (EasyJSONObject) object;
 
                 SearchItem searchItem = new SearchItem(SearchItem.ITEM_TYPE_CATEGORY,
-                        easyJSONObject.getInt("storeLabelId"), easyJSONObject.getString("storeLabelName"));
+                        easyJSONObject.getInt("storeLabelId"), easyJSONObject.getSafeString("storeLabelName"));
                 searchItem.storeId = easyJSONObject.getInt("storeId");
                 searchItem.action = SearchItem.ACTION_GOTO_CATEGORY;
                 searchItemList.add(searchItem);
 
-                EasyJSONArray storeLabelList = easyJSONObject.getArray("storeLabelList");
+                EasyJSONArray storeLabelList = easyJSONObject.getSafeArray("storeLabelList");
                 if (storeLabelList != null && storeLabelList.length() > 0) {
                     for (Object object2 : storeLabelList) {
                         EasyJSONObject easyJSONObject2 = (EasyJSONObject) object2;
                         StoreLabel storeLabel2 = new StoreLabel();
                         storeLabel2.setStoreLabelId(easyJSONObject2.getInt("storeLabelId"));
-                        storeLabel2.setStoreLabelName(easyJSONObject2.getString("storeLabelName"));
+                        storeLabel2.setStoreLabelName(easyJSONObject2.getSafeString("storeLabelName"));
                         storeLabel2.setParentId(easyJSONObject2.getInt("parentId"));
                         storeLabel2.setStoreId(easyJSONObject2.getInt("storeId"));
 
                         // 2級Item
                         SearchItem searchItem2 = new SearchItem(SearchItem.ITEM_TYPE_GOODS,
-                                easyJSONObject2.getInt("storeLabelId"), easyJSONObject2.getString("storeLabelName"));
+                                easyJSONObject2.getInt("storeLabelId"), easyJSONObject2.getSafeString("storeLabelName"));
                         searchItem2.storeId = easyJSONObject2.getInt("storeId");
                         searchItem.action = SearchItem.ACTION_GOTO_CATEGORY;
                         searchItemList.add(searchItem2);
@@ -243,8 +245,8 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
             }
 
             adapter.setNewData(searchItemList);
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -252,12 +254,12 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
     /**
-     * 中轉到商品詳情頁面
+     * 中轉到產品詳情頁面
      * @param commonId
      */
     private void redirectToGoodsDetailFragment(int commonId) {

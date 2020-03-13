@@ -5,17 +5,17 @@ import java.math.BigDecimal;
 
 public class Book implements Serializable {
     /**
-     * 商品SKU
+     * 產品SKU
      */
     private int goodsId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 

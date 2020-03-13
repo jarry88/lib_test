@@ -21,7 +21,6 @@
             />
 
         <LinearLayout
-            android:id="@+id/ll_left_brand_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/sd_left_desktop"
@@ -89,7 +88,6 @@
             />
 
         <LinearLayout
-            android:id="@+id/ll_right_brand_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/sd_right_desktop"

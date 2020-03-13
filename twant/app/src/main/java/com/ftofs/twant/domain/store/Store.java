@@ -95,7 +95,7 @@ public class Store {
     private String storePhone = "";
 
     /**
-     * 店铺主营商品
+     * 店铺主营產品
      */
     private String storeZy = "";
 
@@ -257,17 +257,17 @@ public class Store {
     private int hasFoodCirculationPermit;
 
     /**
-     * 发布海外购商品
+     * 发布海外购產品
      */
     private int allowForeignGoods = 0;
 
     /**
-     * 店鋪形象圖(店內局部圖)
+     * 商店形象圖(店內局部圖)
      */
     private String storeFigureImage;
 
     /**
-     * 店鋪視頻鏈接
+     * 商店視頻鏈接
      */
     private String videoUrl;
 
@@ -277,22 +277,22 @@ public class Store {
     private Chain chain;
 
     /**
-     * 店鋪簽名
+     * 商店簽名
      */
     private String storeSignature = "";
 
     /**
-     * 店鋪介紹
+     * 商店介紹
      */
     private String storeIntroduce = "";
 
     /**
-     * 店鋪形象圖(店內全景圖)
+     * 商店形象圖(店內全景圖)
      */
     private String storeFigureImageInner;
 
     /**
-     * 店鋪形象圖(店外全景圖)
+     * 商店形象圖(店外全景圖)
      */
     private String storeFigureImageOuter;
 

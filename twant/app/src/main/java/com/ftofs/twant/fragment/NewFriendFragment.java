@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +111,7 @@ public class NewFriendFragment extends BaseFragment implements View.OnClickListe
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
@@ -139,33 +141,32 @@ public class NewFriendFragment extends BaseFragment implements View.OnClickListe
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
 
                 try {
-                    EasyJSONArray memberList = responseObj.getArray("datas.requestMemberList");
+                    EasyJSONArray memberList = responseObj.getSafeArray("datas.requestMemberList");
 
                     newFriendItemList.clear();
                     for (Object object : memberList) {
                         EasyJSONObject member = (EasyJSONObject) object;
 
                         NewFriendItem newFriendItem = new NewFriendItem();
-                        newFriendItem.memberName = member.getString("fromMember");
-                        newFriendItem.nickname = member.getString("memberInfo.nickName");
-                        newFriendItem.remark = member.getString("notes");
-                        newFriendItem.avatarUrl = member.getString("memberInfo.avatar");
+                        newFriendItem.memberName = member.getSafeString("fromMember");
+                        newFriendItem.nickname = member.getSafeString("memberInfo.nickName");
+                        newFriendItem.remark = member.getSafeString("notes");
+                        newFriendItem.avatarUrl = member.getSafeString("memberInfo.avatar");
                         newFriendItem.status = member.getInt("state");
 
                         newFriendItemList.add(newFriendItem);
                     }
 
                     adapter.setNewData(newFriendItemList);
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -176,7 +177,7 @@ public class NewFriendFragment extends BaseFragment implements View.OnClickListe
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_add_friend) {
             start(AddFriendFragment.newInstance());
         }
@@ -185,7 +186,7 @@ public class NewFriendFragment extends BaseFragment implements View.OnClickListe
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

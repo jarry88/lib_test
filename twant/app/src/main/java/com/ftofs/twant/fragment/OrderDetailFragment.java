@@ -2,16 +2,21 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
@@ -24,14 +29,17 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
+import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SquareGridLayout;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
@@ -48,12 +56,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
  * 訂單詳情
+ *
  * @author zwm
  */
 public class OrderDetailFragment extends BaseFragment implements View.OnClickListener {
@@ -67,33 +80,35 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
 
-    TextView tvReceiverName;
-    TextView tvMobile;
-    TextView tvAddress;
-    TextView tvStoreName;
-    TextView tvOrdersStateName;
-    TextView tvFreightAmount;
-    TextView tvOrdersAmount;
-    TextView tvShipTime;
-    RelativeLayout rlTakeCodeContainer;
-    TextView tvTakeCode;
-    TextView tvOrdersSn;
-
-    LinearLayout llOrderCreateTimeContainer;
-    TextView tvCreateTime;
-    LinearLayout llOrderPaymentTimeContainer;
-    TextView tvPaymentTime;
-    LinearLayout llOrderPaySnContainer;
-    TextView tvPaySn;
-    LinearLayout llOrderSendTimeContainer;
-    TextView tvSendTime;
-
-    LinearLayout llOrderButtonContainer;
-
+    @BindView(R.id.hsv_bottom_toolbar)
     HorizontalScrollView hsvBottomToolbar;
+    @BindView(R.id.tv_receiver_name)
+    TextView tvReceiverName;
+    @BindView(R.id.tv_mobile)
+    TextView tvMobile;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+    @BindView(R.id.tv_store_name)
+    TextView tvStoreName;
+    @BindView(R.id.tv_freight_amount)
+    TextView tvFreightAmount;
+    @BindView(R.id.tv_orders_amount)
+    TextView tvOrdersAmount;
+    @BindView(R.id.tv_orders_state_name)
+    TextView tvOrdersStateName;
+    @BindView(R.id.tv_ship_time)
+    TextView tvShipTime;
+
+    @BindView(R.id.tv_send_time)
+    TextView tvSendTime;
+    @BindView(R.id.tv_leave_message)
+    TextView tvLeaveMessage;
+    @BindView(R.id.ll_leave_message_container)
+    LinearLayout llLeaveMessageContainer;
 
     String storePhone;
     boolean needReloadData;
+
 
     public static final String TEXT_MEMBER_BUY_AGAIN = "showMemberBuyAgain";
     public static final String TEXT_MEMBER_RECEIVE = "showMemberReceive";
@@ -105,11 +120,96 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     public static final String TEXT_MEMBER_DELETE = "showMemberDelete";
     public static final String TEXT_MEMBER_PAY = "showMemberPay";
 
-    String[] buttonNameList = new String[] {
+    String[] buttonNameList = new String[]{
             TEXT_MEMBER_BUY_AGAIN, TEXT_MEMBER_RECEIVE, TEXT_REFUND_WAITING, TEXT_MEMBER_REFUND_ALL,
             TEXT_EVALUATION, TEXT_SHIP_SEARCH, TEXT_MEMBER_CANCEL, TEXT_MEMBER_DELETE, TEXT_MEMBER_PAY};
 
     Map<String, String> orderButtonNameMap = new HashMap<>();
+    @BindView(R.id.swipe_refresh_container)
+    SwipeRefreshLayout swipeRefreshContainer;
+    @BindView(R.id.tv_order_status)
+    TextView tvOrderStatus;
+    @BindView(R.id.tv_order_status_desc)
+    TextView tvOrderStatusDesc;
+    @BindView(R.id.icon_order_status)
+    ImageView iconOrderStatus;
+    @BindView(R.id.tv_goods_amount)
+    TextView tvGoodsAmount;
+    @BindView(R.id.ll_ship_type)
+    LinearLayout llShipType;
+
+    @OnClick(R.id.btn_back)
+    public void back() {
+        hideSoftInputPop();
+    }
+
+    @BindView(R.id.tv_fragment_title)
+    TextView tvFragmentTitle;
+    @BindView(R.id.tool_bar)
+    RelativeLayout toolBar;
+
+    @OnClick(R.id.btn_buy_again)
+    public void buyAgain(View v) {
+        SLog.info("添加到購物袋%d",ordersId);
+        for (OrderDetailGoodsItem goodsItem:orderDetailGoodsItemList){
+            Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> ToastUtil.success(_mActivity, "添加購物袋成功"));
+        }
+    }
+
+    @BindView(R.id.btn_goto_store)
+    LinearLayout btnGotoStore;
+    @BindView(R.id.ll_order_detail_goods_list)
+    LinearLayout llOrderDetailGoodsList;
+    @BindView(R.id.btn_advisory_service)
+    LinearLayout btnAdvisoryService;
+    @BindView(R.id.btn_dial_store_phone)
+    LinearLayout btnDialStorePhone;
+    @BindView(R.id.tv_take_code)
+    TextView tvTakeCode;
+    @BindView(R.id.rl_take_code_container)
+    RelativeLayout rlTakeCodeContainer;
+    @BindView(R.id.tv_orders_sn)
+    TextView tvOrdersSn;
+    @BindView(R.id.tv_create_time)
+    TextView tvCreateTime;
+    @BindView(R.id.ll_order_create_time_container)
+    LinearLayout llOrderCreateTimeContainer;
+    @BindView(R.id.ll_order_send_time_container)
+    LinearLayout llOrderSendTimeContainer;
+    @BindView(R.id.tv_pay_type)
+    TextView tvPayType;
+    @BindView(R.id.ll_order_pay_type)
+    LinearLayout llOrderPayType;
+    @BindView(R.id.tv_pay_sn)
+    TextView tvPaySn;
+    @BindView(R.id.ll_order_pay_sn_container)
+    LinearLayout llOrderPaySnContainer;
+    @BindView(R.id.tv_payment_time)
+    TextView tvPaymentTime;
+    @BindView(R.id.ll_order_payment_time_container)
+    LinearLayout llOrderPaymentTimeContainer;
+    @BindView(R.id.tv_ship_type)
+    TextView tvShipType;
+    @BindView(R.id.tv_ship_date)
+    TextView tvShipDate;
+    @BindView(R.id.ll_ship_info)
+    LinearLayout llShipInfo;
+    @BindView(R.id.tv_store_send_info)
+    TextView tvStoreSendInfo;
+    @BindView(R.id.sgl_image_container)
+    SquareGridLayout sglImageContainer;
+    @BindView(R.id.ll_store_send_info_container)
+    LinearLayout llStoreSendInfoContainer;
+    @BindView(R.id.tv_store_welfare)
+    TextView tvStoreWelfare;
+    @BindView(R.id.tv_platform_welfare)
+    TextView tvPlatformWelfare;
+    @BindView(R.id.ll_order_button_container)
+    LinearLayout llOrderButtonContainer;
+    @BindView(R.id.rl_send_container)
+    RelativeLayout rlSendContainer;
+
+    private Unbinder unbinder;
 
     public static OrderDetailFragment newInstance(int ordersId) {
         Bundle args = new Bundle();
@@ -127,11 +227,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_detail, container, false);
+        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
 
         EventBus.getDefault().register(this);
@@ -140,6 +242,16 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         ordersId = args.getInt("ordersId");
         SLog.info("ordersId[%d]", ordersId);
 
+        //下拉刷新監聽設置處理
+        //设置为不能刷新
+        swipeRefreshContainer.setEnabled(false);
+        swipeRefreshContainer.setOnRefreshListener(() -> {
+            new Handler().postDelayed(() -> {//模拟耗时操作
+                //取消刷新
+                hsvBottomToolbar.postDelayed(() -> loadOrderDetail(), 1500);
+                swipeRefreshContainer.setRefreshing(false);
+            }, 200);
+        });
         orderButtonNameMap.put(buttonNameList[0], getString(R.string.text_buy_again));
         orderButtonNameMap.put(buttonNameList[1], getString(R.string.text_have_received));
         orderButtonNameMap.put(buttonNameList[2], getString(R.string.text_refund_in_progress));
@@ -149,33 +261,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
         orderButtonNameMap.put(buttonNameList[6], getString(R.string.text_cancel_order));
         orderButtonNameMap.put(buttonNameList[7], getString(R.string.text_delete_order));
         orderButtonNameMap.put(buttonNameList[8], getString(R.string.text_pay_order));
-
-        Util.arrayReverse(buttonNameList); // 倒序排序，與iOS保持一致
-
-        tvReceiverName = view.findViewById(R.id.tv_receiver_name);
-        tvMobile = view.findViewById(R.id.tv_mobile);
-        tvAddress = view.findViewById(R.id.tv_address);
-        tvStoreName = view.findViewById(R.id.tv_store_name);
-        tvOrdersStateName = view.findViewById(R.id.tv_orders_state_name);
-        tvFreightAmount = view.findViewById(R.id.tv_freight_amount);
-        tvOrdersAmount = view.findViewById(R.id.tv_orders_amount);
-        tvShipTime = view.findViewById(R.id.tv_ship_time);
-        rlTakeCodeContainer = view.findViewById(R.id.rl_take_code_container);
-        tvTakeCode = view.findViewById(R.id.tv_take_code);
-        tvOrdersSn = view.findViewById(R.id.tv_orders_sn);
-
-        llOrderCreateTimeContainer = view.findViewById(R.id.ll_order_create_time_container);
-        tvCreateTime = view.findViewById(R.id.tv_create_time);
-        llOrderPaymentTimeContainer = view.findViewById(R.id.ll_order_payment_time_container);
-        tvPaymentTime = view.findViewById(R.id.tv_payment_time);
-        llOrderPaySnContainer = view.findViewById(R.id.ll_order_pay_sn_container);
-        tvPaySn = view.findViewById(R.id.tv_pay_sn);
-        llOrderSendTimeContainer = view.findViewById(R.id.ll_order_send_time_container);
-        tvSendTime = view.findViewById(R.id.tv_send_time);
-
-        hsvBottomToolbar = view.findViewById(R.id.hsv_bottom_toolbar);
-
-        llOrderButtonContainer = view.findViewById(R.id.ll_order_button_container);
+// 倒序排序，與iOS保持一致
+        Util.arrayReverse(buttonNameList);
 
         Util.setOnClickListener(view, R.id.btn_goto_store, this);
         Util.setOnClickListener(view, R.id.btn_dial_store_phone, this);
@@ -211,7 +298,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             }
         });
 
-        Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.tv_fragment_title, this);
 
         loadOrderDetail();
@@ -220,7 +306,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        unbinder.unbind();
         EventBus.getDefault().unregister(this);
     }
 
@@ -270,21 +356,22 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             @Override
                             public void onShow() {
                             }
+
                             @Override
                             public void onDismiss() {
                             }
                         }).asCustom(new TwConfirmPopup(_mActivity, confirmText, null, new OnConfirmCallback() {
-                                @Override
-                                public void onYes() {
-                                    SLog.info("onYes");
-                                    orderOperation(finalOperationType);
-                                }
+                    @Override
+                    public void onYes() {
+                        SLog.info("onYes");
+                        orderOperation(finalOperationType);
+                    }
 
-                                @Override
-                                public void onNo() {
-                                    SLog.info("onNo");
-                                }
-                            }))
+                    @Override
+                    public void onNo() {
+                        SLog.info("onNo");
+                    }
+                }))
                         .show();
             } else if (tag.equals(TEXT_MEMBER_RECEIVE)) { // 確認收貨
                 new XPopup.Builder(_mActivity)
@@ -295,21 +382,22 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             @Override
                             public void onShow() {
                             }
+
                             @Override
                             public void onDismiss() {
                             }
                         }).asCustom(new TwConfirmPopup(_mActivity, "確認收貨嗎?", null, new OnConfirmCallback() {
-                                @Override
-                                public void onYes() {
-                                    SLog.info("onYes");
-                                    confirmReceive();
-                                }
+                    @Override
+                    public void onYes() {
+                        SLog.info("onYes");
+                        confirmReceive();
+                    }
 
-                                @Override
-                                public void onNo() {
-                                    SLog.info("onNo");
-                                }
-                            }))
+                    @Override
+                    public void onNo() {
+                        SLog.info("onNo");
+                    }
+                }))
                         .show();
             } else if (tag.equals(TEXT_MEMBER_BUY_AGAIN)) {
                 orderOperation(OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN);
@@ -351,9 +439,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
         int id = v.getId();
         switch (id) {
-            case R.id.btn_back:
-                pop();
-                break;
             case R.id.btn_dial_store_phone:
                 SLog.info("storePhone[%s]", storePhone);
                 if (StringUtil.isEmpty(storePhone)) {
@@ -363,11 +448,16 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 Util.dialPhone(_mActivity, storePhone);
                 break;
             case R.id.btn_advisory_service:
+                GoodsInfo goodsInfo = new GoodsInfo();
+                goodsInfo.commonId = orderDetailGoodsItemList.get(0).commonId;
+                goodsInfo.goodsName = orderDetailGoodsItemList.get(0).goodsName;
+                goodsInfo.imageSrc = orderDetailGoodsItemList.get(0).imageSrc;
+                goodsInfo.imageSrc = orderDetailGoodsItemList.get(0).imageSrc;
+                goodsInfo.showSendBtn = true;
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new StoreCustomerServicePopup(_mActivity, storeId))
-                        .show();
+                        .asCustom(new StoreCustomerServicePopup(_mActivity, storeId,goodsInfo)).show();
                 break;
             case R.id.btn_goto_store:
                 Util.startFragment(ShopMainFragment.newInstance(storeId));
@@ -416,21 +506,21 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
                         if (operationType == OrderOperation.ORDER_OPERATION_TYPE_CANCEL) {
                             ToastUtil.success(_mActivity, "取消訂單成功");
-                        } else if(operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
+                        } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_DELETE) {
                             ToastUtil.success(_mActivity, "刪除訂單成功");
                         } else if (operationType == OrderOperation.ORDER_OPERATION_TYPE_BUY_AGAIN) {
                             ToastUtil.success(_mActivity, "訂單已添加到購物袋");
                             start(CartFragment.newInstance(true));
                         }
 
-                        pop();
+                        hideSoftInputPop();
                     } catch (Exception e) {
 
                     }
@@ -467,13 +557,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
                     ToastUtil.success(_mActivity, "確認收貨成功");
-                    pop();
+                    hideSoftInputPop();
                 } catch (Exception e) {
 
                 }
@@ -491,9 +581,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 "token", token,
                 "ordersId", ordersId);
 
-        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                .asLoading(getString(R.string.text_loading))
-                .show();
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         SLog.info("params[%s]", params);
         Api.postUI(Api.PATH_ORDER_DETAIL, params, new UICallback() {
             @Override
@@ -508,27 +596,88 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    EasyJSONObject ordersVo = responseObj.getObject("datas.ordersVo");
-                    String receiverName = ordersVo.getString("receiverName");
-                    String mobile = ordersVo.getString("receiverPhone");
-                    String address = ordersVo.getString("receiverAreaInfo") + ordersVo.getString("receiverAddress");
+                    EasyJSONObject ordersVo = responseObj.getSafeObject("datas.ordersVo");
+                    String receiverName = ordersVo.getSafeString("receiverName");
+                    String mobile = ordersVo.getSafeString("receiverPhone");
+                    String address = ordersVo.getSafeString("receiverAreaInfo") + ordersVo.getSafeString("receiverAddress");
 
                     storeId = ordersVo.getInt("storeId");
-                    storeName = ordersVo.getString("storeName");
-                    String ordersStateName = ordersVo.getString("ordersStateName");
-                    float freightAmount = (float) ordersVo.getDouble("freightAmount");
-                    ordersAmount = (float) ordersVo.getDouble("ordersAmount");
-                    String shipTime = ordersVo.getString("shipTime");
+                    storeName = ordersVo.getSafeString("storeName");
+                    String ordersStateName = ordersVo.getSafeString("ordersStateName");
+                    int ordersState = ordersVo.getInt("ordersState");
+                    switch (ordersState) {
+                        case 10:
+                            iconOrderStatus.setImageResource(R.drawable.icon_wait_pay);
+                            Jarbon createTime = Jarbon.parse(ordersVo.getSafeString("createTime"));
+                            int diff =createTime.diffInMinutes(new Jarbon());
 
+                            tvOrderStatusDesc.setText(String.format("您的訂單還未付款，%d小時%d分鐘後將取消訂單請及時完成支付~", 23-diff / 60, 60-diff % 60));
+                            llShipInfo.setVisibility(View.GONE);
+                            llShipType.setVisibility(View.GONE);
+                            break;
+                        case 20:
+                            iconOrderStatus.setImageResource(R.drawable.icon_wait_send);
+                            tvOrderStatusDesc.setText("商家正在處理您的商品，請耐心等待商家發貨。");
+                            llShipInfo.setVisibility(View.GONE);
+                            llShipType.setVisibility(View.GONE);
+                            break;
+                        case 30:
+                            tvOrderStatusDesc.setText("您購買的商品已經發貨，請耐心等待快遞人員的派送。");
+                            iconOrderStatus.setImageResource(R.drawable.icon_wait_receive);
+                            break;
+                        case 40:
+                            tvOrderStatusDesc.setText("您購買的商品已經完成派送，祝您使用愉快。");
+                            iconOrderStatus.setImageResource(R.drawable.icon_order_ok);
+                            break;
+                        default:
+                            break;
+                    }
+                    float freightAmount = (float) ordersVo.getDouble("freightAmount");
+                    float itemAmount=(float) ordersVo.getDouble("itemAmount");
+                    float storeDiscountAmount=(float)ordersVo.getDouble("storeDiscountAmount");
+                    float counponAmount=(float)ordersVo.getDouble("couponAmount");
+                    ordersAmount = (float) ordersVo.getDouble("ordersAmount");
+                    String shipTime = ordersVo.getSafeString("shipTime");
+                    String finishTime=ordersVo.getSafeString("finishTime");
+                    if (StringUtil.isEmpty(finishTime)) {
+                        llOrderSendTimeContainer.setVisibility(View.GONE);
+                    } else {
+                        tvSendTime.setText(finishTime);
+                    }
+                    String paymentName=ordersVo.getSafeString("paymentName");
+                    tvPayType.setText(paymentName);
+                    String shipName=ordersVo.getSafeString("shipName");
+                    tvShipType.setText(shipName);
+                    String ordersExplain=ordersVo.getSafeString("ordersExplain");
+
+                    EasyJSONArray explainImages=ordersVo.getSafeArray("explainImages");
+                    if (!StringUtil.isEmpty(ordersExplain)) {
+                        llStoreSendInfoContainer.setVisibility(View.VISIBLE);
+                        tvStoreSendInfo.setText(ordersExplain);
+                    }
+
+                    if (explainImages != null && explainImages.length() > 0) {
+                        sglImageContainer.setVisibility(View.VISIBLE);
+                        for (int i = 0; i < sglImageContainer.getColumnCount() && i < explainImages.length(); i++) {
+                            EasyJSONObject object=explainImages.getObject(i);
+                            ImageView imageView = new ImageView(_mActivity);
+                            sglImageContainer.addImageView(imageView,null,object.getSafeString("imageUrl"));
+                        }
+                    }
+                    String receiverMessage=ordersVo.getSafeString("receiverMessage");
+                    if (!StringUtil.isEmpty(receiverMessage)) {
+                        llLeaveMessageContainer.setVisibility(View.VISIBLE);
+                        tvLeaveMessage.setText(receiverMessage);
+                    }
                     // 單據信息
-                    String invoiceTitle = ordersVo.getString("invoiceTitle");
-                    String invoiceContent = ordersVo.getString("invoiceContent");
-                    String invoiceCode = ordersVo.getString("invoiceCode");
+                    String invoiceTitle = ordersVo.getSafeString("invoiceTitle");
+                    String invoiceContent = ordersVo.getSafeString("invoiceContent");
+                    String invoiceCode = ordersVo.getSafeString("invoiceCode");
                     if (!StringUtil.isEmpty(invoiceTitle) && !StringUtil.isEmpty(invoiceContent) && !StringUtil.isEmpty(invoiceCode)) {
                         Receipt receipt = new Receipt();
                         receipt.header = invoiceTitle;
@@ -544,26 +693,28 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             tvTakeCode.setText(String.valueOf(takeCode));
                         }
                     }
-
                     long ordersSn = ordersVo.getLong("ordersSn");
-                    paySnStr = ordersVo.getString("paySnStr");
+                    paySnStr = ordersVo.getSafeString("paySnStr");
                     payId = ordersVo.getInt("payId");
-                    String createTime = ordersVo.getString("createTime");
-                    String paymentTime = ordersVo.getString("paymentTime");
-                    String sendTime = ordersVo.getString("sendTime");
-
+                    String createTime = ordersVo.getSafeString("createTime");
+                    String paymentTime = ordersVo.getSafeString("paymentTime");
+                    String sendTime = ordersVo.getSafeString("sendTime");
                     if (responseObj.exists("datas.sellerMobile")) {
-                        storePhone = responseObj.getString("datas.sellerMobile");
+                        storePhone = responseObj.getSafeString("datas.sellerMobile");
                     }
-
                     tvReceiverName.setText(getString(R.string.text_receiver) + ":  " + receiverName);
                     tvMobile.setText(mobile);
                     tvAddress.setText(address);
                     tvStoreName.setText(storeName);
+                    tvOrderStatus.setText(ordersStateName);
                     tvOrdersStateName.setText(ordersStateName);
                     tvFreightAmount.setText(StringUtil.formatPrice(_mActivity, freightAmount, 1));
+
+                    tvGoodsAmount.setText(StringUtil.formatPrice(_mActivity, itemAmount, 1));
+                    tvStoreWelfare.setText("-"+StringUtil.formatPrice(_mActivity, storeDiscountAmount, 1));
+                    tvPlatformWelfare.setText("-"+StringUtil.formatPrice(_mActivity, counponAmount, 1));
                     tvOrdersAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1));
-                    tvShipTime.setText(shipTime);
+                    tvShipDate.setText(shipTime);
                     tvOrdersSn.setText(String.valueOf(ordersSn));
                     if (StringUtil.isEmpty(createTime)) {
                         llOrderCreateTimeContainer.setVisibility(View.GONE);
@@ -584,9 +735,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     if (StringUtil.isEmpty(sendTime)) {
-                        llOrderSendTimeContainer.setVisibility(View.GONE);
+                        rlSendContainer.setVisibility(View.GONE);
                     } else {
-                        tvSendTime.setText(sendTime);
+                        tvShipTime.setText(sendTime);
                     }
 
                     List<String> showButtonNameList = new ArrayList<>();
@@ -628,17 +779,17 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 Util.dip2px(_mActivity, 39));
                         llOrderButtonContainer.addView(button, layoutParams);
                     }
-                    hsvBottomToolbar.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                    hsvBottomToolbar.postDelayed(() -> {
+                        if (hsvBottomToolbar != null) {
                             hsvBottomToolbar.fullScroll(View.FOCUS_RIGHT);
                         }
+
                     }, 50);
 
 
-
                     int showMemberComplain = ordersVo.getInt("showMemberComplain");
-                    EasyJSONArray ordersGoodsVoList = ordersVo.getArray("ordersGoodsVoList");
+                    EasyJSONArray ordersGoodsVoList = ordersVo.getSafeArray("ordersGoodsVoList");
+                    orderDetailGoodsItemList.clear();
                     for (Object object : ordersGoodsVoList) {
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
 
@@ -647,21 +798,22 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("goodsId"),
                                 goodsVo.getInt("ordersId"),
                                 goodsVo.getInt("ordersGoodsId"),
-                                goodsVo.getString("imageSrc"),
-                                goodsVo.getString("goodsName"),
+                                goodsVo.getSafeString("imageSrc"),
+                                goodsVo.getSafeString("goodsName"),
                                 (float) goodsVo.getDouble("goodsPrice"),
                                 goodsVo.getInt("buyNum"),
-                                goodsVo.getString("goodsFullSpecs"),
+                                goodsVo.getSafeString("goodsFullSpecs"),
                                 goodsVo.getInt("refundType"),
                                 goodsVo.getInt("showRefund"),
                                 showMemberComplain,
-                                goodsVo.getInt("complainId")));
+                                goodsVo.getInt("complainId")
+                                )
+                        );
                     }
                     adapter.setData(orderDetailGoodsItemList);
                     needReloadData = false;
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
-                    e.printStackTrace();
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -670,7 +822,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -678,12 +830,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     public void onSupportVisible() {
         super.onSupportVisible();
         if (needReloadData) {
-            hsvBottomToolbar.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    loadOrderDetail();
-                }
-            }, 1500);
+            hsvBottomToolbar.postDelayed(() -> loadOrderDetail(), 1500);
         }
     }
 

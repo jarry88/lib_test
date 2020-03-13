@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.hr;
 
 public class HrPostType {
     /**
-     * 文章id
+     * 想要帖id
      */
     private int typeId;
 

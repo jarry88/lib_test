@@ -17,29 +17,42 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:orientation="vertical">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_receiver_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:maxLines="2"
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
-                android:text=""
                 />
-            <TextView
-                android:id="@+id/tv_mobile"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                android:text=""
-                />
-        </RelativeLayout>
+                android:layout_marginTop="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mobile_phone_number"
+                    android:textSize="@dimen/sp_14"
+                   />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/tv_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/tw_black"
+                    android:text=""
+                    />
+            </LinearLayout>
+        </LinearLayout>
         <TextView
             android:id="@+id/tv_addr"
             android:layout_width="match_parent"

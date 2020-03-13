@@ -10,7 +10,7 @@ import com.ftofs.twant.domain.goods.GoodsCommon;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 组合商品
+ * 组合產品
  *
  * @author sjz
  * Created 2017/4/17 11:55

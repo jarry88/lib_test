@@ -1,30 +1,69 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.orhanobut.hawk.Hawk;
 
-import me.yokeyword.fragmentation.SupportFragment;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 設置Fragment
  * @author zwm
  */
 public class SecuritySettingFragment extends BaseFragment implements View.OnClickListener {
+    SwitchButton sbBindWeixin;
+    SwitchButton sbBindFacebook;
+    int wxBindingStatus;
+    int fbBindingStatus;
+
+
+    private static final int FB_ACTION_BIND = 1;
+    private static final int FB_ACTION_UNBIND = 2;
+    int fbAction;    // 用於區別Facebook綁定還是解綁
+
+    CallbackManager callbackManager;
+    List<String> permissions;  // Facebook 權限
+
     public static SecuritySettingFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -46,6 +85,11 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
+        permissions = new ArrayList<>();
+        permissions.add("email");
+
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_login_password, this);
         Util.setOnClickListener(view, R.id.btn_change_mobile, this);
@@ -56,14 +100,309 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
         String mobileEncrypt = Hawk.get(SPField.FIELD_MOBILE_ENCRYPT, "");
         TextView tvMobile = view.findViewById(R.id.tv_mobile);
         tvMobile.setText(mobileEncrypt);
+        sbBindWeixin = view.findViewById(R.id.sb_bind_weixin);
+        sbBindFacebook = view.findViewById(R.id.sb_bind_facebook);
+        wxBindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, 0);
+        fbBindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, 0);
+        loadBindStatus();//請求接口更新綁定狀態
+
+        if (TwantApplication.wxApi.isWXAppInstalled()) {  // 如果微信已經安裝，則顯示綁定設置
+            view.findViewById(R.id.btn_wx_login_setting).setVisibility(View.VISIBLE);
+        } else {
+            view.findViewById(R.id.btn_wx_login_setting).setVisibility(View.GONE);
+        }
+
+        sbBindWeixin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SLog.info("onCheckedChanged, isChecked[%s]", isChecked);
+                if (isChecked) {
+                    // 綁定微信
+                    String token = User.getToken();
+                    if (StringUtil.isEmpty(token)) {
+                        return;
+                    }
+
+                    ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_BIND);
+                } else {
+                    // 解綁微信
+                    ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_UNBIND);
+                }
+            }
+        });
+
+        sbBindFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SLog.info("onCheckedChanged, isChecked[%s]", isChecked);
+                if (isChecked) {
+                    // 綁定Facebook
+                    fbAction = FB_ACTION_BIND;
+                } else {
+                    // 解綁Facebook
+                    fbAction = FB_ACTION_UNBIND;
+                }
+                LoginManager.getInstance().logInWithReadPermissions(SecuritySettingFragment.this, permissions);
+            }
+        });
+
+        callbackManager = ((MainActivity) _mActivity).getCallbackManager();
+        // 回调
+        LoginManager.getInstance().registerCallback(((MainActivity) _mActivity).getCallbackManager(), new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                SLog.info("onSuccess");
+                AccessToken accessToken = loginResult.getAccessToken();
+                String token = accessToken.getToken();
+                String userId = accessToken.getUserId();
+                SLog.info("token[%s], userId[%s]", token, userId);
+
+                if (fbAction == FB_ACTION_BIND) {
+                    bindFacebook(token, userId);
+                } else {
+                    unbindFacebook(token, userId);
+                }
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+                SLog.info("onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+                ToastUtil.error(_mActivity, "登錄失敗");
+                SLog.info("onError, exception[%s]", exception.toString());
+            }
+        });
     }
 
+    private void bindFacebook(String accessToken, String userId) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "accessToken", accessToken,
+                "userId", userId,
+                "token", token,
+                "clientType", Constant.CLIENT_TYPE_ANDROID
+        );
+        SLog.info("params[%s]", params);
+        Api.postUI(Api.PATH_FACEBOOK_BIND, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+                sbBindFacebook.setCheckedNoEvent(false);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                sbBindFacebook.setCheckedNoEvent(false);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                sbBindFacebook.setCheckedNoEvent(true);
+                Hawk.put(SPField.FIELD_FB_BINDING_STATUS, Constant.TRUE_INT);
+                ToastUtil.success(_mActivity, "綁定Facebook成功");
+            }
+        });
+    }
+
+    private void unbindFacebook(String accessToken, String userId) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "accessToken", accessToken,
+                "userId", userId,
+                "token", token,
+                "clientType", Constant.CLIENT_TYPE_ANDROID
+        );
+        SLog.info("params[%s]", params);
+        Api.postUI(Api.PATH_FACEBOOK_UNBIND, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+                sbBindFacebook.setCheckedNoEvent(true);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                sbBindFacebook.setCheckedNoEvent(true);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                sbBindFacebook.setCheckedNoEvent(false);
+                Hawk.put(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
+                ToastUtil.success(_mActivity, "解綁Facebook成功");
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void loadBindStatus() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token);
+
+        SLog.info("params[%s]", params);
+        Api.postUI(Api.PATH_MEMBER_DETAIL, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    String weixinUserInfo = responseObj.getSafeString("datas.memberInfo.weixinUserInfo");
+                    if(weixinUserInfo.length() > 0){
+                        wxBindingStatus = Constant.TRUE_INT;
+                        sbBindWeixin.setCheckedNoEvent(true);
+                    }else {
+                        wxBindingStatus = Constant.FALSE_INT;
+                        sbBindWeixin.setCheckedNoEvent(false);
+                    }
+                    SLog.info("wxBindingStatus[%d]", wxBindingStatus);
+
+                    fbBindingStatus = Hawk.get(SPField.FIELD_FB_BINDING_STATUS, Constant.FALSE_INT);
+                    SLog.info("fbBindingStatus[%d]", fbBindingStatus);
+                    if(fbBindingStatus == Constant.TRUE_INT){
+                        sbBindFacebook.setCheckedNoEvent(true);
+                    }else {
+                        sbBindFacebook.setCheckedNoEvent(false);
+                    }
+                    SLog.info("fbBindingStatus[%d]", fbBindingStatus);
+
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        if (message.messageType == EBMessageType.MESSAGE_TYPE_WEIXIN_UNBIND || message.messageType == EBMessageType.MESSAGE_TYPE_WEIXIN_BIND) {
+            String url;
+            if (message.messageType == EBMessageType.MESSAGE_TYPE_WEIXIN_UNBIND) {
+                url = Api.PATH_UNBIND_WEIXIN;
+            } else {
+                url = Api.PATH_BIND_WEIXIN;
+            }
+
+            // 根據返回的數據，請求服務器端解綁微信
+            String token = User.getToken();
+            String code = (String) message.data;
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "code", code,
+                    "clientType", Constant.CLIENT_TYPE_ANDROID
+            );
+
+            SLog.info("url[%s], params[%s]", url, params);
+            Api.postUI(url, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                    SLog.info("message.messageType[%s]", message.messageType);
+                    // 失敗，則恢復回原狀態
+                    if (message.messageType == EBMessageType.MESSAGE_TYPE_WEIXIN_UNBIND) {
+                        sbBindWeixin.setCheckedNoEvent(true);
+                    } else {
+                        sbBindWeixin.setCheckedNoEvent(false);
+                    }
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            // 失敗，則恢復回原狀態
+                            if (message.messageType == EBMessageType.MESSAGE_TYPE_WEIXIN_UNBIND) {
+                                sbBindWeixin.setCheckedNoEvent(true);
+                            } else {
+                                sbBindWeixin.setCheckedNoEvent(false);
+                            }
+                            return;
+                        }
+
+                        if (responseObj.exists("datas.bind")) {
+                            boolean bind = responseObj.getBoolean("datas.bind");
+                            if (!bind) {
+                                sbBindWeixin.setCheckedNoEvent(false);
+                                ToastUtil.success(_mActivity,responseObj.getSafeString("datas.message"));
+                                return;
+                            }
+                        }
+
+
+                        // 成功
+                        if (message.messageType == EBMessageType.MESSAGE_TYPE_WEIXIN_UNBIND) {
+                            //ToastUtil.success(_mActivity,responseObj.getString());
+                            sbBindWeixin.setCheckedNoEvent(false);
+                            ToastUtil.success(_mActivity,"解綁成功");
+                            wxBindingStatus = Constant.FALSE_INT;
+                        } else {
+                            sbBindWeixin.setCheckedNoEvent(true);
+                            ToastUtil.success(_mActivity,"綁定成功");
+                            wxBindingStatus = Constant.TRUE_INT;
+                        }
+
+                        Hawk.put(SPField.FIELD_WX_BINDING_STATUS, wxBindingStatus);
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+        }
+
+    }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_logout) {
             User.logout();
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS, null);
@@ -78,7 +417,24 @@ public class SecuritySettingFragment extends BaseFragment implements View.OnClic
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        /*
+        bindingStatus = Hawk.get(SPField.FIELD_WX_BINDING_STATUS, 0);
+        SLog.info("bindingStatus[%d]", bindingStatus);
+        sbBindWeixin.setCheckedNoEvent(bindingStatus == 1);
+
+         */
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }

@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.wantpost;
 import java.math.BigInteger;
 
 /**
- * @Description: 貼文圖片視圖對象
+ * @Description: 想要帖圖片視圖對象
  * @Auther: yangjian
  * @Date: 2019/3/21 16:00
  */

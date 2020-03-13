@@ -3,10 +3,12 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,22 +129,22 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
                     addFriendSearchResultItemList.clear();
-                    EasyJSONArray memberList = responseObj.getArray("datas.memberList");
+                    EasyJSONArray memberList = responseObj.getSafeArray("datas.memberList");
                     for (Object object : memberList) {
                         EasyJSONObject member = (EasyJSONObject) object;
 
                         AddFriendSearchResultItem item = new AddFriendSearchResultItem();
-                        item.memberName = member.getString("memberName");
-                        item.avatar = member.getString("avatar");
-                        item.nickname = member.getString("nickName");
-                        item.memberSignature = member.getString("memberSignature");
+                        item.memberName = member.getSafeString("memberName");
+                        item.avatar = member.getSafeString("avatar");
+                        item.nickname = member.getSafeString("nickName");
+                        item.memberSignature = member.getSafeString("memberSignature");
 
                         addFriendSearchResultItemList.add(item);
                     }
@@ -153,7 +155,7 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
                         ToastUtil.error(_mActivity, "沒有符合條件的用戶");
                     }
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -166,7 +168,7 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_my_qr_code) {
             Util.startFragment(QrCodeCardFragment.newInstance());
         } else if (id == R.id.btn_scan_qr_code) {
@@ -177,7 +179,7 @@ public class AddFriendFragment extends BaseFragment implements View.OnClickListe
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 

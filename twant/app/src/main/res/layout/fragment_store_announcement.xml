@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ftofs.twant.widget.LockableNestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/sv_container"
+    android:background="@color/tw_white">
+    <LinearLayout
+        android:id="@+id/ll_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+    </LinearLayout>
+</com.ftofs.twant.widget.LockableNestedScrollView>

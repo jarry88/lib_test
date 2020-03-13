@@ -7,14 +7,14 @@ import java.math.BigDecimal;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 积分商品
+ * 积分產品
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:20
  */
 public class PointsGoodsVo {
     /**
-     * 积分商品编号
+     * 积分產品编号
      */
     private int pointsGoodsId;
     /**
@@ -22,19 +22,19 @@ public class PointsGoodsVo {
      */
     private int expendPoints = 0;
     /**
-     * 领取积分商品限制的会员等级
+     * 领取积分產品限制的会员等级
      */
     private int limitMemberGradeLevel = 0;
     /**
-     * 领取积分商品限制的会员等级名称
+     * 领取积分產品限制的会员等级名称
      */
     private String limitMemberGradeName = "";
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
@@ -42,15 +42,15 @@ public class PointsGoodsVo {
      */
     private String imageSrc="";
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin;
 

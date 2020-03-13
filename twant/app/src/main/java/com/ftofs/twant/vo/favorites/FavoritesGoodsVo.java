@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * @license    http://www.shopnc.net
  * @link       http://www.shopnc.net
  *
- * 商品關注
+ * 產品關注
  * 
  * @author zxy
  * Created 2017/4/13 11:00
@@ -25,7 +25,7 @@ public class FavoritesGoodsVo {
      */
     private int memberId = 0;
     /**
-     * 商品SPU编码
+     * 產品SPU编码
      */
     private int commonId = 0;
     /**
@@ -38,15 +38,15 @@ public class FavoritesGoodsVo {
 
     private String addTime = "";
     /**
-     * 商品關注时价格
+     * 產品關注时价格
      */
     private BigDecimal favGoodsPrice = BigDecimal.ZERO;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName = "";
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private GoodsCommon goodsCommon = null;
     /**
@@ -65,7 +65,7 @@ public class FavoritesGoodsVo {
     private StoreVo storeVo = null;
 
     /**
-     * 1是0否點讚
+     * 1是0否讚想
      */
     private int isLike;
 

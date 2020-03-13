@@ -1,15 +1,14 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.Receipt;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -133,8 +132,7 @@ public class ReceiptInfoFragment extends BaseFragment implements View.OnClickLis
             bundle.putParcelable("receipt", receipt);
         }
         setFragmentResult(RESULT_OK, bundle);
-        hideSoftInput();
-        pop();
+        hideSoftInputPop();
     }
 
     @Override

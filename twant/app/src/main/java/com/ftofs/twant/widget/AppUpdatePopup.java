@@ -1,44 +1,29 @@
 package com.ftofs.twant.widget;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.os.health.SystemHealthManager;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
-import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
-import com.ftofs.twant.api.Api;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.task.TaskObservable;
-import com.ftofs.twant.task.TaskObserver;
-import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
-import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 import com.orhanobut.hawk.Hawk;
 import com.yanzhenjie.permission.runtime.Permission;
-
-import java.io.File;
 
 /**
  * App升級彈窗
@@ -70,10 +55,6 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
         this.version = version;
         this.versionDesc = versionDesc;
         this.isForceUpdate = isForceUpdate;
-
-        if (Config.DEVELOPER_MODE) {
-            appUrl = "https://gfile.oss-cn-hangzhou.aliyuncs.com/takewant/twant_12250_app_update_test.apk";
-        }
         this.appUrl = appUrl;
     }
 
@@ -159,6 +140,14 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
             // 跳轉到Google Play
             Util.gotoGooglePlay(activity);
         } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_OFFICIAL)) {
+            Uri uri = Uri.parse("https://www.twant.com/web/app-download.html");
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            MainActivity mainActivity = MainActivity.getInstance();
+            if (mainActivity != null) {
+                mainActivity.startActivity(intent);
+            }
+            /*
+
             TaskObserver taskObserver = new TaskObserver() {
                 @Override
                 public void onMessage() {
@@ -180,7 +169,7 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
                     File apkFile = new File(dir + "/" + apkFilename);
 
                     long now = System.currentTimeMillis();
-                    long downloadApp = Hawk.get(SPField.FIELD_DOWNLOAD_APP, 0);
+                    long downloadApp = Hawk.get(SPField.FIELD_DOWNLOAD_APP, 0L);
                     if (now - downloadApp < 10 * 60 * 1000) { // 如果10分鐘內下載過，不再重復下載
                         SLog.info("如果10分鐘內下載過，不再重復下載");
                         return null;
@@ -195,6 +184,7 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
                 }
             };
             TwantApplication.getThreadPool().execute(taskObservable);
+             */
         }
     }
 }

@@ -22,35 +22,35 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品详情
+ * 產品详情
  *
  * @author shopnc.feng
  * Created 2017/4/13 14:06
  */
 public class GoodsDetailVo {
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId=0;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId=0;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName="";
     /**
-     * 商品產地
+     * 產品產地
      *  Modify By yangjian 2019/1/8 9:42
      */
     private Integer goodsCountry=0;
     /**
-     * 商品买点
+     * 產品买点
      */
     private String jingle="";
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId=0;
     /**
@@ -66,7 +66,7 @@ public class GoodsDetailVo {
      */
     private int brandId;
     /**
-     * 商品描述
+     * 產品描述
      */
 
     private String goodsBody;
@@ -76,11 +76,11 @@ public class GoodsDetailVo {
 
     private String mobileBody;
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial;
     /**
-     * 商品状态<br>
+     * 產品状态<br>
      * 可以购买1，不可购买0
      */
     private int goodsStatus;
@@ -118,7 +118,7 @@ public class GoodsDetailVo {
      */
     private int goodsSaleNum;
     /**
-     * 商品图片
+     * 產品图片
      */
     private String imageSrc;
     /**
@@ -131,32 +131,32 @@ public class GoodsDetailVo {
      */
     private List<SpecJsonVo> specJson = new ArrayList<>();
     /**
-     * 商品规格名称JSON
+     * 產品规格名称JSON
      */
     private List<String> goodsSpecNameList = new ArrayList<>();
     /**
-     * 商品编号和规格值编号JSON
+     * 產品编号和规格值编号JSON
      */
     private String goodsSpecValues;
     /**
-     * 商品编号和规格值编号JSON
+     * 產品编号和规格值编号JSON
      */
     private List<GoodsSpecValueJsonVo> goodsSpecValueJson;
     /**
-     * 商品图片列表
+     * 產品图片列表
      */
     private List<GoodsImage> goodsImageList;
     /**
-     * 商品参数
+     * 產品参数
      */
 
     private List<GoodsAttrVo> goodsAttrList;
     /**
-     * 商品列表
+     * 產品列表
      */
     private List<Goods> goodsList;
     /**
-     * 商品销售与形式
+     * 產品销售与形式
      */
     private int goodsModal;
     /**
@@ -204,7 +204,7 @@ public class GoodsDetailVo {
      */
     private BigDecimal webPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin = BigDecimal.ZERO;
     /**
@@ -224,7 +224,7 @@ public class GoodsDetailVo {
      */
     private BigDecimal appPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin = BigDecimal.ZERO;
     /**
@@ -244,7 +244,7 @@ public class GoodsDetailVo {
      */
     private BigDecimal wechatPrice2;
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin = BigDecimal.ZERO;
     /**
@@ -341,7 +341,7 @@ public class GoodsDetailVo {
      */
     private Integer virtualOverdueRefund = 0;
     /**
-     * 海外商品税率
+     * 海外產品税率
      */
     private BigDecimal foreignTaxRate = BigDecimal.ZERO;
     /**
@@ -354,12 +354,12 @@ public class GoodsDetailVo {
     private List<GoodsDetailCouponVo> goodsDetailCouponVoList = new ArrayList<>();
 
     /**
-     * 是否是虛擬商品
+     * 是否是虛擬產品
      */
     private int isVirtual = 0;
 
     /**
-     * 商品視頻鏈接
+     * 產品視頻鏈接
      */
     private String goodsVideo;
 
@@ -384,33 +384,33 @@ public class GoodsDetailVo {
     private String waterMarkPosition;
 
     /**
-     * 商品產地地址
+     * 產品產地地址
      */
     private AdminCountry adminCountry;
 
     /**
-     * 商品关注状态
+     * 產品关注状态
      */
     private int isFavorite;
 
 
     /**
-     * 商品点赞状态
+     * 產品点赞状态
      */
     private int isLike;
 
     /**
-     * 商品点赞数量
+     * 產品点赞数量
      */
     private int goodsLike;
 
     /**
-     * 商品評論
+     * 產品評論
      */
     private int commentCount;
 
     /**
-     * 商品sku列表
+     * 產品sku列表
      */
     private List<GoodsInfoVo> goodsInfoVoList;
 

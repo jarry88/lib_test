@@ -21,7 +21,7 @@ public class Channel implements Serializable {
     private int categoryId;
 
     /**
-     * 商品分类名称
+     * 產品分类名称
      */
     private String categoryName;
 

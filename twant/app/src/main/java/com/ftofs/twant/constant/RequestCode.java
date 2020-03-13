@@ -95,17 +95,39 @@ public enum RequestCode {
     ALI_PAY,
 
     /**
-     * 添加評論
+     * 添加說說
      */
     ADD_COMMENT,
 
-    /**
-     * 修改個性簽名
-     */
-    EDIT_MEMBER_SIGNATURE,
 
     /**
      * 請求安裝APP的權限
      */
     REQUEST_INSTALL_APP_PERMISSION,
+
+    /**
+     * 選擇想要帖產品
+     */
+    SELECT_POST_GOODS,
+    /**
+     * 返回簡歷我的狀態值
+     */
+    MY_STATUS ,
+    /**
+     * 返回簡歷期望職位值
+     */
+    EXPECT_POSITION,
+    /**
+     * 添加邮箱
+     */
+    ADD_EMAIL,
+    /**
+     * 添加編輯工作
+     */
+    WORK_EXP,
+    EDUCATE_EXP ,
+    EDIT_SKILL,
+    CERTIFICATION,
+    WINNINGEXPERIENCE;
+
 }

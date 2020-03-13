@@ -9,13 +9,12 @@ import android.view.View;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.log.SLog;
 
 /**
  * 高亮狀態下，帶有下劃線的TabButton
  * @author zwm
  */
-public class TwTabButton extends android.support.v7.widget.AppCompatTextView {
+public class TwTabButton extends androidx.appcompat.widget.AppCompatTextView {
     int status = Constant.STATUS_UNSELECTED;
 
     Paint paint;

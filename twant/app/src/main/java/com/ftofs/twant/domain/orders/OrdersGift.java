@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class OrdersGift implements Serializable {
     /**
-     * 订单商品编号
+     * 订单產品编号
      * 主键、自增
      */
     private int ordersGiftId;
 
     /**
-     * 订单商品表主键，只有商品级赠品时，该值才>0
+     * 订单產品表主键，只有產品级赠品时，该值才>0
      */
     private int ordersGoodsId = 0;
 
@@ -25,12 +25,12 @@ public class OrdersGift implements Serializable {
     private int ordersId;
 
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
@@ -40,22 +40,22 @@ public class OrdersGift implements Serializable {
     private int giftNum;
 
     /**
-     * 赠品类型，1满优惠赠品、2商品赠品
+     * 赠品类型，1满优惠赠品、2產品赠品
      */
     private int giftType;
 
     /**
-     * 项目编号，如满优惠编号、主商品编号
+     * 项目编号，如满优惠编号、主產品编号
      */
     private int itemId;
 
     /**
-     * 项目编号，记录商品赠品的主商品SPU
+     * 项目编号，记录產品赠品的主產品SPU
      */
     private int itemCommonId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
@@ -76,7 +76,7 @@ public class OrdersGift implements Serializable {
     private String imageSrc = "";
 
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial;
 

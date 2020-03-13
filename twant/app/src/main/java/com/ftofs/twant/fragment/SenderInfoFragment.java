@@ -2,8 +2,8 @@ package com.ftofs.twant.fragment;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.entity.ListPopupItem;
@@ -29,8 +28,6 @@ import com.lxj.xpopup.XPopup;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.snailpad.easyjson.EasyJSONObject;
 
 
 /**
@@ -126,7 +123,7 @@ public class SenderInfoFragment extends BaseFragment implements View.OnClickList
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_mobile_zone) {
             List<ListPopupItem> itemList = new ArrayList<>();
             for (MobileZone mobileZone : mobileZoneList) {
@@ -192,7 +189,7 @@ public class SenderInfoFragment extends BaseFragment implements View.OnClickList
 
             SLog.info("bundle[%s]", bundle);
             setFragmentResult(RESULT_OK, bundle);
-            pop();
+            hideSoftInputPop();
         }
     }
 
@@ -272,7 +269,7 @@ public class SenderInfoFragment extends BaseFragment implements View.OnClickList
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

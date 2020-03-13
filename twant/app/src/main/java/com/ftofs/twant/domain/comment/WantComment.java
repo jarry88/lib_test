@@ -5,47 +5,47 @@ import java.math.BigInteger;
 
 public class WantComment {
     /**
-     * 評論id
+     * 說說id
      */
     private BigInteger commentId;
 
     /**
-     * 評論類型 1全部 2視頻 3文本
+     * 說說類型 1全部 2視頻 3文本
      */
     private int commentType;
 
     /**
-     * 貼文渠道 1全部 2店鋪 3商品 4貼文 5推文
+     * 想要帖渠道 1全部 2商店 3產品 4想要帖 5推文
      */
     private int commentChannel;
 
     /**
-     * 評論類容
+     * 說說類容
      */
     private String content;
 
     /**
-     * 層級，1-回復主題，2-回復評論
+     * 層級，1-回覆主題，2-回覆說說
      */
     private int deep;
 
     /**
-     * 關聯店鋪Id
+     * 關聯商店Id
      */
     private int relateStoreId;
 
     /**
-     * 關聯商品SPU
+     * 關聯產品SPU
      */
     private int relateCommonId;
 
     /**
-     * 關聯文章Id
+     * 關聯想要帖Id
      */
     private BigInteger relatePostId;
 
     /**
-     * 回復評論Id
+     * 回覆評論Id
      */
     private BigInteger replyCommentId;
 
@@ -65,7 +65,7 @@ public class WantComment {
     private int commentState;
 
     /**
-     * 點讚評論數
+     * 讚想評論數
      */
     private int commentLike;
 
@@ -80,7 +80,7 @@ public class WantComment {
     private int commentFavor;
 
     /**
-     * 評論回復數
+     * 評論回覆數
      */
     private int commentReply;
 
@@ -95,7 +95,7 @@ public class WantComment {
     private String nickName;
 
     /**
-     * 貼文標題
+     * 想要帖標題
      */
     private String wantPostTitle;
 

@@ -1,17 +1,22 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.MyFollowArticleAdapter;
 import com.ftofs.twant.adapter.MyFollowGoodsAdapter;
 import com.ftofs.twant.adapter.MyFollowMemberAdapter;
@@ -19,7 +24,10 @@ import com.ftofs.twant.adapter.MyFollowRecruitmentAdapter;
 import com.ftofs.twant.adapter.MyFollowStoreAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.entity.GoodsSearchItem;
+import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.entity.MyFollowGoodsItem;
 import com.ftofs.twant.entity.MyFollowMemberItem;
 import com.ftofs.twant.entity.MyFollowStoreItem;
@@ -30,15 +38,17 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SimpleTabManager;
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -61,6 +71,12 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     List<MyFollowMemberItem> myFollowMemberItemList = new ArrayList<>();
 
     int currTabIndex = TAB_INDEX_STORE;
+    int mode = Constant.MODE_VIEW;
+    boolean isCheckVisible;
+    RelativeLayout rl_total_operation_container;
+    TextView btnEdit;
+    TextView btnDelete;
+    ScaledButton btnSelectAll;
 
     boolean storeDataLoaded = false;
     MyFollowStoreAdapter myFollowStoreAdapter;
@@ -73,11 +89,24 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     boolean memberDataLoaded = false;
     MyFollowMemberAdapter myFollowMemberAdapter;
 
+
     RecyclerView rvMyFollowList;
+    String memberName;
+    private GoodsSearchResultAdapter mGoodsAdapter;
+    private List<GoodsSearchItemPair> goodsItemPairList;
 
     public static MyFollowFragment newInstance() {
         Bundle args = new Bundle();
 
+        MyFollowFragment fragment = new MyFollowFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static MyFollowFragment newInstance(String memberName) {
+        Bundle args = new Bundle();
+        args.putString("memberName", memberName);
         MyFollowFragment fragment = new MyFollowFragment();
         fragment.setArguments(args);
 
@@ -94,72 +123,155 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        replaceWord(view);
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_edit, this);
+        Util.setOnClickListener(view, R.id.btn_select_all, this);
+        Util.setOnClickListener(view, R.id.btn_delete, this);
+        Util.setOnClickListener(view, R.id.btn_select_all, this);
+        rl_total_operation_container = view.findViewById(R.id.rl_total_operation_container);
+        btnEdit = view.findViewById(R.id.btn_edit);
+        btnDelete = view.findViewById(R.id.btn_delete);
+        btnSelectAll =view.findViewById(R.id.btn_select_all);
         rvMyFollowList = view.findViewById(R.id.rv_my_follow_list);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
-        rvMyFollowList.setLayoutManager(layoutManager);
+        rvMyFollowList.setLayoutManager(new LinearLayoutManager(_mActivity));
 
         myFollowStoreAdapter = new MyFollowStoreAdapter(R.layout.my_follow_store_item, myFollowStoreItemList);
-        myFollowStoreAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                MyFollowStoreItem myFollowStoreItem = myFollowStoreItemList.get(position);
+        myFollowStoreAdapter.setEmptyView(R.layout.layout_placeholder_no_favorite, rvMyFollowList);
+        myFollowStoreAdapter.setOnItemClickListener((adapter, view1, position) -> {
+            MyFollowStoreItem myFollowStoreItem = myFollowStoreItemList.get(position);
+            if (mode == Constant.MODE_VIEW) {
                 start(ShopMainFragment.newInstance(myFollowStoreItem.storeId));
+            } else {
+                myFollowStoreItem.switchCheck();
+                myFollowStoreAdapter.notifyDataSetChanged();
             }
         });
 
-        myFollowGoodsAdapter = new MyFollowGoodsAdapter(R.layout.my_follow_goods_item, myFollowGoodsItemList);
-        myFollowGoodsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                SLog.info("HERE");
-                MyFollowGoodsItem myFollowGoodsItem = myFollowGoodsItemList.get(position);
-                start(GoodsDetailFragment.newInstance(myFollowGoodsItem.commonId, 0));
-            }
-        });
-        myFollowGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        mGoodsAdapter = new GoodsSearchResultAdapter(_mActivity, goodsItemPairList);
+        mGoodsAdapter.setEmptyView(R.layout.layout_placeholder_no_favorite, rvMyFollowList);
+        goodsItemPairList = new ArrayList<>();
+        mGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                SLog.info("HERE");
+
                 int id = view.getId();
-                if (id == R.id.btn_goto_store) {
-                    MyFollowGoodsItem myFollowGoodsItem = myFollowGoodsItemList.get(position);
-                    start(ShopMainFragment.newInstance(myFollowGoodsItem.storeId));
+                if (mode != Constant.MODE_VIEW) {
+                    if (id == R.id.btn_left_select || id == R.id.btn_right_select||id == R.id.cl_container_left || id == R.id.cl_container_right) {
+                        GoodsSearchItemPair goodsSearchItemPair=goodsItemPairList.get(position);
+                        if (id == R.id.btn_left_select||id == R.id.cl_container_left) {
+                            goodsSearchItemPair.left.check = !goodsSearchItemPair.left.check;
+                        } else {
+                            goodsSearchItemPair.right.check = !goodsSearchItemPair.right.check;
+                        }
+                        mGoodsAdapter.notifyDataSetChanged();
+                    }
+                }else {
+                    if (id == R.id.btn_goto_store_left || id == R.id.btn_goto_store_right) {
+                        GoodsSearchItemPair pair = goodsItemPairList.get(position);
+                        int storeId;
+                        if (id == R.id.btn_goto_store_left) {
+                            storeId = pair.left.storeId;
+                        } else {
+                            storeId = pair.right.storeId;
+                        }
+
+
+                        Util.startFragment(ShopMainFragment.newInstance(storeId));
+
+                    } else if (id == R.id.cl_container_left || id == R.id.cl_container_right) {
+                        GoodsSearchItemPair pair = goodsItemPairList.get(position);
+                        int commonId;
+                        if (id == R.id.cl_container_left) {
+                            commonId = pair.left.commonId;
+                        } else {
+                            commonId = pair.right.commonId;
+                        }
+
+                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                    } else if (id == R.id.btn_play_game) {
+//                    String url = Util.makeChristmasH5Url();
+                        String url = Util.makeSpringH5Url();
+                        SLog.info("sprint_url[%s]", url);
+                        if (url == null) {
+                            Util.showLoginFragment();
+                            return;
+                        }
+                        start(H5GameFragment.newInstance(url, true));
+                    } else if (id == R.id.btn_back) {
+                        pop();
+                    }
                 }
             }
         });
+        mGoodsAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
+                GoodsSearchItemPair pair = goodsItemPairList.get(position);
+                int itemType = pair.getItemType();
+                if (itemType == Constant.ITEM_TYPE_NORMAL) {
+                    return 1;
+                } else if (itemType == Constant.ITEM_TYPE_LOAD_END_HINT || itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
+                    return 2;
+                }
+                return 1;
+            }
+        });
+
 
         myFollowArticleAdapter = new MyFollowArticleAdapter(R.layout.my_follow_article_item, myFollowArticleItemList);
+        myFollowArticleAdapter.setEmptyView(R.layout.layout_placeholder_no_favorite, rvMyFollowList);
         myFollowArticleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 PostItem item = myFollowArticleItemList.get(position);
-                start(PostDetailFragment.newInstance(item.postId));
-            }
-        });
-
-        myFollowRecruitmentAdapter = new MyFollowRecruitmentAdapter(R.layout.my_follow_recruitment_item, myFollowRecruitmentItemList);
-        myFollowRecruitmentAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                int id = view.getId();
-                if (id == R.id.btn_expand) {
-                    WantedPostItem wantedPostItem = myFollowRecruitmentItemList.get(position);
-                    wantedPostItem.isJobDescExpanded = !wantedPostItem.isJobDescExpanded;
-
-                    adapter.notifyItemChanged(position);
+                if(mode == Constant.MODE_VIEW){
+                    start(PostDetailFragment.newInstance(item.postId));
+                }
+                else {
+                    item.switchCheck();
+                    adapter.notifyDataSetChanged();
                 }
             }
         });
 
+        myFollowRecruitmentAdapter = new MyFollowRecruitmentAdapter(R.layout.my_follow_recruitment_item, myFollowRecruitmentItemList);
+        myFollowRecruitmentAdapter.setEmptyView(R.layout.layout_placeholder_no_favorite, rvMyFollowList);
+        myFollowRecruitmentAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (mode == Constant.MODE_VIEW){
+                    int id = view.getId();
+                    if (id == R.id.btn_expand) {
+                        WantedPostItem wantedPostItem = myFollowRecruitmentItemList.get(position);
+                        wantedPostItem.isJobDescExpanded = !wantedPostItem.isJobDescExpanded;
+
+                        adapter.notifyItemChanged(position);
+                    }
+                }
+                else{
+                    WantedPostItem wantedPostItem = myFollowRecruitmentItemList.get(position);
+                    wantedPostItem.switchCheck();
+                    myFollowRecruitmentAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+
         myFollowMemberAdapter = new MyFollowMemberAdapter(R.layout.my_follow_member_item, myFollowMemberItemList);
+        myFollowMemberAdapter.setEmptyView(R.layout.layout_placeholder_no_favorite, rvMyFollowList);
         myFollowMemberAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 MyFollowMemberItem item = myFollowMemberItemList.get(position);
-                start(MemberInfoFragment.newInstance(item.memberName));
+                if (mode == Constant.MODE_VIEW){
+                    start(MemberInfoFragment.newInstance(item.memberName));
+                } else {
+                    item.switchCheck();
+                    myFollowMemberAdapter.notifyDataSetChanged();
+                }
+
             }
         });
 
@@ -170,7 +282,9 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                 if (isRepeat) {
                     return;
                 }
-
+                btnSelectAll.setChecked(false);
+                mode = Constant.MODE_EDIT;
+                switchMode();
                 int id = v.getId();
                 if (id == R.id.btn_store) {
                     currTabIndex = TAB_INDEX_STORE;
@@ -179,10 +293,11 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                     } else {
                         loadMyFollowStore();
                     }
+
                 } else if (id == R.id.btn_goods) {
                     currTabIndex = TAB_INDEX_GOODS;
                     if (goodsDataLoaded) {
-                        rvMyFollowList.setAdapter(myFollowGoodsAdapter);
+                        rvMyFollowList.setAdapter(mGoodsAdapter);
                     } else {
                         loadMyFollowGoods();
                     }
@@ -225,20 +340,335 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
+        }
+        if (id == R.id.btn_edit) {
+            switchMode();
+        }
+        if (id == R.id.btn_select_all){
+            boolean allCheck =!btnSelectAll.isChecked();
+            btnSelectAll.setChecked(allCheck);
+            for (MyFollowStoreItem item:myFollowStoreItemList) {
+                item.check = allCheck;
+            }
+            myFollowStoreAdapter.notifyDataSetChanged();
+            for (GoodsSearchItemPair item:goodsItemPairList){
+                item.left.check =allCheck;
+                item.right.check =allCheck;
+            }
+            mGoodsAdapter.notifyDataSetChanged();
+            for (PostItem item: myFollowArticleItemList){
+                item.check = allCheck;
+            }
+            myFollowArticleAdapter.notifyDataSetChanged();
+            for (WantedPostItem item : myFollowRecruitmentItemList){
+                item.check = allCheck;
+            }
+            myFollowRecruitmentAdapter.notifyDataSetChanged();
+            for (MyFollowMemberItem item : myFollowMemberItemList){
+                item.check = allCheck;
+            }
+            myFollowMemberAdapter.notifyDataSetChanged();
+
+        }
+        if (id == R.id.btn_delete){
+            switch (currTabIndex){
+                case TAB_INDEX_STORE:
+                    multiStoreDelete();break;
+                case TAB_INDEX_GOODS:
+                    multiGoodsDelete();break;
+                case  TAB_INDEX_ARTICLE:
+                    multiArticleDelete();
+                    break;
+                case TAB_INDEX_RECRUITMENT:
+                    multiRecruitmentDelete();
+                    break;
+                case TAB_INDEX_MEMBER:
+                    multiMemberDelete();
+                    break;
+            }
         }
     }
+    private void multiStoreDelete(){
+        if (currTabIndex == TAB_INDEX_STORE) {
+            try{
+                EasyJSONObject params = EasyJSONObject.generate("token",User.getToken());
+                StringBuilder storeIds = new StringBuilder();
+                for (MyFollowStoreItem item:myFollowStoreItemList) {
+                    if (item.check) {
+                        if (storeIds.length()!=0){
+                            storeIds.append(",");
+                        }
+                        storeIds.append(item.storeId);
+                    }
+                }
+                if (storeIds.length()==0){
+                    SLog.info("無需發送刪除請求");
+                    return;
+                }
+                params.set("storeIds", storeIds.toString());
+                Api.postUI(Api.PATH_STORE_FOLLOW_MULTI_DELETE, params, new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        ToastUtil.showNetworkError(_mActivity,e);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        SLog.info("responseStr[%s]",responseStr);
+                        try {
+
+                            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                            Iterator<MyFollowStoreItem> storeItr = myFollowStoreItemList.iterator();
+                            while (storeItr.hasNext()) {
+                                if (storeItr.next().check) {
+                                    storeItr.remove();
+                                }
+                            }
+                            myFollowStoreAdapter.notifyDataSetChanged();
+                        }catch (Exception e){
+                            SLog.info("EastJSON[%s]",e);
+                        }
+                    }
+                });
+            }catch (Exception e){
+                SLog.info("Error![%s]",e);
+            }
+        }
+    }
+
+    private void multiGoodsDelete(){
+        if(currTabIndex ==TAB_INDEX_GOODS){
+            try {
+                StringBuilder commonIds = new StringBuilder();
+                for (GoodsSearchItemPair item:goodsItemPairList){
+                    if (item.left.check){
+                        if (commonIds.length()>0){
+                            commonIds.append(",");
+                        }
+                        commonIds.append(item.left.commonId);
+                    }
+                    if (item.right.check){
+                        if (commonIds.length()>0){
+                            commonIds.append(",");
+                        }
+                        commonIds.append(item.right.commonId);
+                    }
+                }
+                if (commonIds.length()>0){
+                    EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+                    params.set("commonIds", commonIds);
+
+                    Api.postUI(Api.PATH_GOODS_FOLLOW_MULTI_DELETE, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(_mActivity,e);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            SLog.info("responseStr[%s]",responseStr);
+                            try {
+
+                                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                                int i = 0;
+                                boolean j = true;
+                                List<GoodsSearchItem> itemList = new ArrayList<>();
+                                for (GoodsSearchItemPair pair : goodsItemPairList) {
+                                    if (!pair.left.check) {
+                                        itemList.add(pair.left);
+                                    }
+                                    if (!pair.right.check) {
+                                        itemList.add(pair.right);
+                                    }
+                                }
+                                goodsItemPairList.clear();
+                                GoodsSearchItemPair pair=null;
+                                for (GoodsSearchItem item : itemList) {
+                                    if (pair == null) {
+                                        pair = new GoodsSearchItemPair(Constant.ITEM_TYPE_NORMAL);
+                                        pair.left = item;
+                                    } else {
+                                        pair.right = item;
+                                        goodsItemPairList.add(pair);
+                                        pair = null;
+                                    }
+                                }
+                                mGoodsAdapter.notifyDataSetChanged();
+                            }catch (Exception e){
+                                SLog.info("EastJSON[%s]",e);
+                            }
+                        }
+                    });
+                }
+
+
+            }catch (Exception e){
+                SLog.info("Error![%s]",e);
+            }
+        }
+    }
+
+    private void multiArticleDelete() {
+        if (currTabIndex == TAB_INDEX_ARTICLE) {
+            try {
+                StringBuilder postIds = new StringBuilder();
+                for (PostItem item:myFollowArticleItemList){
+                    if (item.check){
+                        if (postIds.length()>0){
+                            postIds.append(",");
+                        }
+                        postIds.append(item.postId);
+                    }
+                }
+                if (postIds.length()>0){
+                    EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+                    params.set("postIds", postIds);
+
+                    Api.postUI(Api.PATH_ARTICAL_FOLLOW_MULTI_DELETE, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(_mActivity,e);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            SLog.info("responseStr[%s]",responseStr);
+                            try {
+
+                                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                                Iterator<PostItem> postItr = myFollowArticleItemList.iterator();
+                                while (postItr.hasNext()) {
+                                    if (postItr.next().check) {
+                                        postItr.remove();
+                                    }
+                                }
+                                myFollowArticleAdapter.notifyDataSetChanged();
+                            }catch (Exception e){
+                                SLog.info("EastJSON[%s]",e);
+                            }
+                        }
+                    });
+                }
+
+
+            }catch (Exception e){
+                SLog.info("Error![%s]",e);
+            }
+        }
+    }
+
+    private void multiRecruitmentDelete() {
+        if (currTabIndex == TAB_INDEX_RECRUITMENT) {
+            try {
+                StringBuilder postIds = new StringBuilder();
+                for (WantedPostItem item:myFollowRecruitmentItemList){
+                    if (item.check){
+                        if (postIds.length()>0){
+                            postIds.append(",");
+                        }
+                        postIds.append(item.postId);
+                    }
+                }
+                if (postIds.length()>0){
+                    EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+                    params.set("postIds", postIds);
+
+                    Api.postUI(Api.PATH_HRPOST_FOLLOW_MULTI_DELETE, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(_mActivity,e);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            SLog.info("responseStr[%s]",responseStr);
+                            try {
+
+                                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                                Iterator<WantedPostItem> postItr = myFollowRecruitmentItemList.iterator();
+                                while (postItr.hasNext()) {
+                                    if (postItr.next().check) {
+                                        postItr.remove();
+                                    }
+                                }
+                                SLog.info("EastJSON[招聘取消關注]");
+                                myFollowRecruitmentAdapter.notifyDataSetChanged();
+                            }catch (Exception e){
+                                SLog.info("EastJSON[%s]",e);
+                            }
+                        }
+                    });
+                }
+
+
+            }catch (Exception e){
+                SLog.info("Error![%s]",e);
+            }
+        }
+    }
+
+    private void multiMemberDelete() {
+        if (currTabIndex == TAB_INDEX_MEMBER) {
+            try {
+                StringBuilder followMembers = new StringBuilder();
+                for (MyFollowMemberItem item:myFollowMemberItemList){
+                    if (item.check){
+                        if (followMembers.length()>0){
+                            followMembers.append(",");
+                        }
+                        followMembers.append(item.memberName);
+                    }
+                }
+                if (followMembers.length()>0){
+                    EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+                    params.set("followMembers", followMembers);
+
+                    Api.postUI(Api.PATH_MEMBER_FOLLOW_MULTI_DELETE, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(_mActivity,e);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            SLog.info("responseStr[%s]",responseStr);
+                            try {
+
+                                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                                Iterator<MyFollowMemberItem> memberItr = myFollowMemberItemList.iterator();
+                                while (memberItr.hasNext()) {
+                                    if (memberItr.next().check) {
+                                        memberItr.remove();
+                                    }
+                                }
+                                myFollowMemberAdapter.notifyDataSetChanged();
+                            }catch (Exception e){
+                                SLog.info("EastJSON[%s]",e);
+                            }
+                        }
+                    });
+                }
+
+
+            }catch (Exception e){
+                SLog.info("Error![%s]",e);
+            }
+        }
+    }
+
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
     private void loadMyFollowStore() {
         try {
-            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+            //String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }
@@ -249,9 +679,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                 params.set("token", token);
             }
 
-            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                    .asLoading(getString(R.string.text_loading))
-                    .show();
+            final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             Api.postUI(Api.PATH_MY_FOLLOW_STORE, params, new UICallback() {
                 @Override
@@ -266,22 +694,26 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        EasyJSONArray storeList = responseObj.getArray("datas.sotreList");  // sotreList拼寫錯誤
+                        EasyJSONArray storeList = responseObj.getSafeArray("datas.sotreList");  // sotreList拼寫錯誤
+
                         for (Object object : storeList) {
                             EasyJSONObject store = (EasyJSONObject) object;
 
                             MyFollowStoreItem myFollowStoreItem = new MyFollowStoreItem();
                             myFollowStoreItem.storeId = store.getInt("storeVo.storeId");
-                            myFollowStoreItem.storeAvatarUrl = store.getString("storeVo.storeAvatarUrl");
-                            myFollowStoreItem.storeName = store.getString("storeVo.storeName");
-                            myFollowStoreItem.chainAreaInfo = store.getString("storeVo.chainAreaInfo");
-                            myFollowStoreItem.distance = store.getString("storeVo.distance");
+                            myFollowStoreItem.storeAvatarUrl = store.getSafeString("storeVo.storeAvatarUrl");
+                            myFollowStoreItem.storeName = store.getSafeString("storeVo.storeName");
+                            myFollowStoreItem.chainAreaInfo = store.getSafeString("storeVo.chainAreaInfo");
+                            myFollowStoreItem.distance = store.getSafeString("storeVo.distance");
                             myFollowStoreItem.collectCount = store.getInt("storeVo.likeCount");
+                            myFollowStoreItem.storeFigureImageUrl = store.getSafeString("storeVo.storeFigureImageUrl");
+                            myFollowStoreItem.className = store.getSafeString("storeVo.className").split(",")[0];
+
 
                             myFollowStoreItemList.add(myFollowStoreItem);
                         }
@@ -292,18 +724,18 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                         }
                         myFollowStoreAdapter.setNewData(myFollowStoreItemList);
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
     private void loadMyFollowGoods() {
         try {
-            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+            //String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }
@@ -315,9 +747,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
             }
 
 
-            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                    .asLoading(getString(R.string.text_loading))
-                    .show();
+            final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             Api.postUI(Api.PATH_MY_FOLLOW_GOODS, params, new UICallback() {
                 @Override
@@ -332,36 +762,48 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
+                        EasyJSONArray goodsList = responseObj.getSafeArray("datas.goodsList");
+                        GoodsSearchItemPair pair = null;
                         for (Object object : goodsList) {
                             EasyJSONObject goods = (EasyJSONObject) object;
-                            EasyJSONObject goodsCommon = goods.getObject("goodsCommon");
+                            EasyJSONObject goodsCommon = goods.getSafeObject("goodsCommon");
 
-                            MyFollowGoodsItem myFollowGoodsItem = new MyFollowGoodsItem();
-                            myFollowGoodsItem.commonId = goods.getInt("commonId");
-                            myFollowGoodsItem.goodsName = goods.getString("goodsName");
-                            myFollowGoodsItem.storeId = goods.getInt("storeVo.storeId");
-                            myFollowGoodsItem.storeName = goods.getString("storeVo.storeName");
-                            myFollowGoodsItem.imageSrc = goodsCommon.getString("imageSrc");
-                            myFollowGoodsItem.jingle = goodsCommon.getString("jingle");
-                            myFollowGoodsItem.goodsFavorite = goodsCommon.getInt("goodsFavorite");
-                            myFollowGoodsItem.price = Util.getSpuPrice(goodsCommon);
+                            MyFollowGoodsItem good = new MyFollowGoodsItem();
+                            good.storeAvatarUrl = goods.getSafeString("storeVo.storeAvatarUrl");
+                            good.commonId = goods.getInt("commonId");
+                            good.goodsName = goods.getSafeString("goodsName");
+                            good.storeId = goods.getInt("storeVo.storeId");
+                            good.storeName = goods.getSafeString("storeVo.storeName");
+                            good.imageSrc = goodsCommon.getSafeString("imageSrc");
+                            good.jingle = goodsCommon.getSafeString("jingle");
+                            good.goodsFavorite = goodsCommon.getInt("goodsFavorite");
+                            good.price = Util.getSpuPrice(goodsCommon);
+                            SLog.info("goodsCommon[%s]",goodsCommon.toString());
+                            //String nationalFlag = StringUtil.normalizeImageUrl(goodsCommon.getString("adminCountry.nationalFlag"));
 
-                            myFollowGoodsItemList.add(myFollowGoodsItem);
+                            GoodsSearchItem goodsSearchItem = new GoodsSearchItem(good.imageSrc,good.storeAvatarUrl,good.storeId,good.storeName,good.commonId,good.goodsName,good.jingle,good.price,null);
+                            if (pair == null) {
+                                pair = new GoodsSearchItemPair(Constant.ITEM_TYPE_NORMAL);
+                                pair.left = goodsSearchItem;
+                            } else {
+                                pair.right = goodsSearchItem;
+                                goodsItemPairList.add(pair);
+                                pair = null;
+                            }
                         }
                         SLog.info("ITEM_COUNT[%d]", myFollowGoodsItemList.size());
                         goodsDataLoaded = true;
                         if (currTabIndex == TAB_INDEX_GOODS) {
-                            rvMyFollowList.setAdapter(myFollowGoodsAdapter);
+                            rvMyFollowList.setAdapter(mGoodsAdapter);
                         }
-                        myFollowGoodsAdapter.setNewData(myFollowGoodsItemList);
+                        mGoodsAdapter.setNewData(goodsItemPairList);
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
@@ -372,7 +814,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
     private void loadMyFollowArticle() {
         try {
-            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+            //String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }
@@ -384,9 +826,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
             }
 
 
-            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                    .asLoading(getString(R.string.text_loading))
-                    .show();
+            final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             SLog.info("params[%s]", params);
 
@@ -403,23 +843,26 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        EasyJSONArray wantPostList = responseObj.getArray("datas.wantPostList");
+                        EasyJSONArray wantPostList = responseObj.getSafeArray("datas.wantPostList");
                         for (Object object : wantPostList) {
                             EasyJSONObject wantPost = (EasyJSONObject) object;
 
                             PostItem postItem = new PostItem();
+                            postItem.itemType = PostItem.POST_TYPE_MY_FOLLOW;
                             postItem.postId = wantPost.getInt("postId");
-                            postItem.coverImage = wantPost.getString("coverImage");
-                            postItem.postCategory = wantPost.getString("postCategory");
-                            postItem.title = wantPost.getString("title");
-                            postItem.authorAvatar = wantPost.getString("memberVo.avatar");
-                            postItem.authorNickname = wantPost.getString("memberVo.nickName");
+                            postItem.coverImage = wantPost.getSafeString("coverImage");
+                            postItem.postCategory = wantPost.getSafeString("postCategory");
+                            postItem.title = wantPost.getSafeString("title");
+                            postItem.authorAvatar = wantPost.getSafeString("memberVo.avatar");
+                            postItem.authorNickname = wantPost.getSafeString("memberVo.nickName");
                             postItem.postFollow = wantPost.getInt("postFavor");
+                            postItem.comeTrueState = wantPost.getInt("comeTrueState");
+                            postItem.isDelete = wantPost.getInt("isDelete");
 
                             myFollowArticleItemList.add(postItem);
                         }
@@ -430,7 +873,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                         }
                         myFollowArticleAdapter.setNewData(myFollowArticleItemList);
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
@@ -441,7 +884,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
     private void loadMyFollowRecruitment() {
         try {
-            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+            //String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }
@@ -453,9 +896,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
             }
 
 
-            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                    .asLoading(getString(R.string.text_loading))
-                    .show();
+            final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             SLog.info("params[%s]", params);
 
@@ -472,25 +913,25 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        EasyJSONArray hrPostVoList = responseObj.getArray("datas.hrPostVoList");
+                        EasyJSONArray hrPostVoList = responseObj.getSafeArray("datas.hrPostVoList");
                         for (Object object : hrPostVoList) {
                             EasyJSONObject hrPostVo = (EasyJSONObject) object;
 
                             WantedPostItem wantedPostItem = new WantedPostItem();
                             wantedPostItem.postId = hrPostVo.getInt("postId");
-                            wantedPostItem.postTitle = hrPostVo.getString("postTitle");
-                            wantedPostItem.postType = hrPostVo.getString("postType");
-                            wantedPostItem.postArea = hrPostVo.getString("postArea");
-                            wantedPostItem.salaryType = hrPostVo.getString("salaryType");
-                            wantedPostItem.salaryRange = hrPostVo.getString("salaryRange");
-                            wantedPostItem.currency = hrPostVo.getString("currency");
-                            wantedPostItem.mailbox = hrPostVo.getString("mailbox");
-                            wantedPostItem.postDescription = hrPostVo.getString("postDescription");
+                            wantedPostItem.postTitle = hrPostVo.getSafeString("postTitle");
+                            wantedPostItem.postType = hrPostVo.getSafeString("postType");
+                            wantedPostItem.postArea = hrPostVo.getSafeString("postArea");
+                            wantedPostItem.salaryType = hrPostVo.getSafeString("salaryType");
+                            wantedPostItem.salaryRange = hrPostVo.getSafeString("salaryRange");
+                            wantedPostItem.currency = hrPostVo.getSafeString("currency");
+                            wantedPostItem.mailbox = hrPostVo.getSafeString("mailbox");
+                            wantedPostItem.postDescription = hrPostVo.getSafeString("postDescription");
 
                             myFollowRecruitmentItemList.add(wantedPostItem);
                         }
@@ -501,7 +942,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                         }
                         myFollowRecruitmentAdapter.setNewData(myFollowRecruitmentItemList);
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
@@ -509,10 +950,9 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
         }
     }
-
     private void loadMyFollowMember() {
         try {
-            String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+            //String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
             if (StringUtil.isEmpty(memberName)) {
                 return;
             }
@@ -524,9 +964,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
             }
 
 
-            final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                    .asLoading(getString(R.string.text_loading))
-                    .show();
+            final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
             SLog.info("params[%s]", params);
 
@@ -543,21 +981,21 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        EasyJSONArray memberVoList = responseObj.getArray("datas.memberVoList");
+                        EasyJSONArray memberVoList = responseObj.getSafeArray("datas.memberVoList");
                         for (Object object : memberVoList) {
                             EasyJSONObject memberVo = (EasyJSONObject) object;
 
                             MyFollowMemberItem myFollowMemberItem = new MyFollowMemberItem();
-                            myFollowMemberItem.memberName = memberVo.getString("memberName");
-                            myFollowMemberItem.nickname = memberVo.getString("nickName");
-                            myFollowMemberItem.avatarUrl = memberVo.getString("avatar");
-                            myFollowMemberItem.memberSignature = memberVo.getString("memberSignature");
-                            myFollowMemberItem.level = memberVo.getString("currGrade.gradeName");
+                            myFollowMemberItem.memberName = memberVo.getSafeString("memberName");
+                            myFollowMemberItem.nickname = memberVo.getSafeString("nickName");
+                            myFollowMemberItem.avatarUrl = memberVo.getSafeString("avatar");
+                            myFollowMemberItem.memberSignature = memberVo.getSafeString("memberSignature");
+                            myFollowMemberItem.level = memberVo.getSafeString("currGrade.gradeName");
 
                             myFollowMemberItemList.add(myFollowMemberItem);
                         }
@@ -568,7 +1006,7 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
                         }
                         myFollowMemberAdapter.setNewData(myFollowMemberItemList);
                     } catch (Exception e) {
-                        SLog.info("Error!%s", e.getMessage());
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
@@ -576,4 +1014,90 @@ public class MyFollowFragment extends BaseFragment implements View.OnClickListen
 
         }
     }
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        isCheckVisible = false;
+        rl_total_operation_container.setVisibility(View.GONE);
+    }
+
+
+
+    private void replaceWord(View v) {
+        memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+        if (getArguments().containsKey("memberName")) {
+            if (!memberName.equals(getArguments().getString("memberName"))) {
+                memberName = getArguments().getString("memberName");
+                ((TextView) v.findViewById(R.id.tv_fragment_title)).setText(getString(R.string.text_him_follow));
+            }
+        }
+    }
+
+    private void switchMode() {
+        if (mode == Constant.MODE_VIEW) {
+            rl_total_operation_container.setVisibility(View.VISIBLE);
+            isCheckVisible = true;
+            btnEdit.setText(getResources().getString(R.string.text_finish));
+            btnEdit.setTextColor(getResources().getColor(R.color.tw_red, null));
+            mode = Constant.MODE_EDIT;
+
+
+
+        } else {
+            rl_total_operation_container.setVisibility(View.GONE);
+            isCheckVisible = false;
+            btnEdit.setText(getResources().getString(R.string.text_edit));
+            btnEdit.setTextColor(getResources().getColor(R.color.tw_black, null));
+            mode = Constant.MODE_VIEW;
+        }
+
+        switch (currTabIndex){
+            case TAB_INDEX_STORE:
+                myFollowStoreAdapter.setMode(mode);
+                break;
+            case TAB_INDEX_GOODS:
+                mGoodsAdapter.setMode(mode);
+                break;
+            case TAB_INDEX_ARTICLE:
+                myFollowArticleAdapter.setMode(mode);
+            case TAB_INDEX_RECRUITMENT:
+                myFollowRecruitmentAdapter.setMode(mode);
+                break;
+            case TAB_INDEX_MEMBER:
+                myFollowMemberAdapter.setMode(mode);
+                break;
+            default:break;
+        }
+
+    }
+
 }
+//    private void setCheckButtonOnClickListener(View checkButton) {
+//        checkButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ScaledButton btnCheck = (ScaledButton) v;
+//                BaseStatus status = (BaseStatus) btnCheck.getTag();
+//                status.changeCheckStatus(!status.isChecked(), BaseStatus.PHRASE_TARGET);
+//                updateTotalData();
+//            }
+//        });
+//    }
+//
+//    /**
+//     * 更新合計數據
+//     */
+//    private void updateTotalData() {
+//        Pair<Float, Integer> totalData = totalStatus.getTotalData();
+//
+//        float totalPrice = totalData.first;  // 總價錢
+//        int totalCount = totalData.second;  // 總件數
+//        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
+//        String btnSettlementText = textSettlement;
+//
+//        if (totalCount > 0) {
+//            btnSettlementText += "(" + totalCount + ")";
+//        }
+//        btnSettlement.setText(btnSettlementText);
+//    }
+//}

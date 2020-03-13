@@ -1,9 +1,9 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
@@ -22,12 +21,10 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.SharedPreferenceUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
-import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -40,7 +37,6 @@ import java.util.regex.Pattern;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * 確認重置密碼、確認支付密碼Fragment
@@ -166,7 +162,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_ok) {
             if (usage == Constant.USAGE_RESET_PASSWORD) {
                 doResetPassword();
@@ -204,11 +200,11 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 try {
                     int code = responseObj.getInt("code");
                     if (code != ResponseCode.SUCCESS) {
-                        ToastUtil.error(_mActivity, responseObj.getString("datas.error"));
+                        ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
                         return;
                     }
 
@@ -230,9 +226,8 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
 
 
                     ToastUtil.success(_mActivity, "重置密碼成功");
-
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -288,7 +283,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
@@ -307,7 +302,7 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

@@ -12,7 +12,7 @@ public class ChainBook {
     private int memberId;
 
     /**
-     * 商品(sku)ID
+     * 產品(sku)ID
      */
     private int goodsId = 0;
 
@@ -22,12 +22,12 @@ public class ChainBook {
     private int buyNum;
 
     /**
-     * 商品(spu)ID
+     * 產品(spu)ID
      */
     private int commonId;
 
     /**
-     * 门店商品ID
+     * 门店產品ID
      */
     private int chainGoodsId;
 
@@ -42,7 +42,7 @@ public class ChainBook {
     private int chainId;
 
     /**
-     * 商品服务
+     * 產品服务
      */
     private String goodsServices;
 

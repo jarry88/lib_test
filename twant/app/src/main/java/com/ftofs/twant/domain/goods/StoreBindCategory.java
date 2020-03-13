@@ -12,32 +12,32 @@ public class StoreBindCategory {
     private int storeId;
 
     /**
-     * 一级商品分类编号
+     * 一级產品分类编号
      */
     private int categoryId1 = 0;
 
     /**
-     * 一级商品分类名称
+     * 一级產品分类名称
      */
     private String categoryName1 = "";
 
     /**
-     * 二级商品分类
+     * 二级產品分类
      */
     private int categoryId2 = 0;
 
     /**
-     * 二级商品分类名称
+     * 二级產品分类名称
      */
     private String categoryName2 = "";
 
     /**
-     * 三级商品分类
+     * 三级產品分类
      */
     private int categoryId3 = 0;
 
     /**
-     * 三级商品分类名称
+     * 三级產品分类名称
      */
     private String categoryName3 = "";
 

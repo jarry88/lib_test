@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="20dp"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <!-- 聊天時間 上一條消息與本條消息超過5分鐘才顯示 -->
     <TextView
@@ -17,7 +18,6 @@
         />
 
     <RelativeLayout
-        android:id="@+id/rl_message_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp">
@@ -25,42 +25,53 @@
             android:id="@+id/img_your_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="0dp"
             android:src="@drawable/icon_default_avatar"
+            app:civ_border_width="0dp"
+            app:civ_border_color="@color/tw_blue"
             />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_my_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentEnd="true"
+            android:padding="2.5dp"
+            app:civ_border_width="0dp"
+            app:civ_border_color="@color/tw_red"
             android:src="@drawable/icon_default_avatar"
             />
 
-        <!-- 消息內容容器 -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginEnd="55dp"
             android:orientation="vertical">
             <!-- 文本消息 -->
-            <TextView
-                android:id="@+id/tv_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:background="@drawable/my_message_bg"
-                android:text=""
-                android:textSize="16sp"
-                android:textColor="@color/tw_black"
-                />
+            <LinearLayout
+                android:id="@+id/ll_txt_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+
+                    android:text=""
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_black"
+                    />
+            </LinearLayout>
+            <!-- 消息內容容器 -->
             <!-- 圖片消息 -->
             <LinearLayout
                 android:id="@+id/ll_image_message_container"
@@ -75,7 +86,7 @@
                     android:src="@drawable/icon_default_avatar"
                     />
             </LinearLayout>
-            <!-- 商品消息 -->
+            <!-- 產品消息 -->
             <LinearLayout
                 android:id="@+id/ll_goods_message_container"
                 android:layout_width="match_parent"
@@ -83,22 +94,56 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:background="@android:color/white"
-                android:padding="15dp">
+                android:padding="15dp"
+                >
                 <ImageView
                     android:id="@+id/goods_image"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:src="@drawable/icon_default_avatar"
                     />
-                <TextView
-                    android:id="@+id/tv_goods_name"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:textSize="13sp"
-                    android:textColor="@color/tw_black"
-                    android:text=""
-                    />
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_goods_name"
+                        android:layout_alignParentTop="true"
+                        android:maxLines="2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/tw_black"
+                        android:text=""
+                        />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_goods_name"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_goods_price"
+                            android:textColor="@color/tw_red"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="@dimen/dp_4"/>
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/btn_send"
+                            android:layout_width="67dp"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="@dimen/dp_4"
+                            android:textSize="11sp"
+                            android:textColor="@color/tw_white"
+                            android:layout_alignParentEnd="true"
+                            android:gravity="center"
+                            android:background="@drawable/blue_button"
+                            android:text="發給商家"
+                            />
+                    </RelativeLayout>
+                </RelativeLayout>
             </LinearLayout>
             <!-- 訂單信息 -->
             <LinearLayout
@@ -130,7 +175,6 @@
                         android:src="@drawable/icon_default_avatar"
                         />
                     <TextView
-                        android:id="@+id/tv_order_goods_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -139,6 +183,59 @@
                         android:textColor="@color/tw_black"
                         />
                 </LinearLayout>
+
+            </LinearLayout>
+            <!-- 電子名片信息 -->
+            <LinearLayout
+                android:id="@+id/ll_enc_message_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/img_enc_avatar"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:riv_corner_radius="4dp"
+                        android:src="@drawable/icon_default_avatar"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_enc_nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text=""
+                        android:textColor="@color/tw_black"
+                        android:textSize="16sp"
+                        />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/tw_light_grey"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="電子名片"
+                    android:textSize="12sp"
+                    android:textColor="@color/tw_medium_grey"
+                    />
 
             </LinearLayout>
         </LinearLayout>

@@ -5,7 +5,7 @@ package com.ftofs.twant.vo.goods;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 商品与自定义属性关系Vo
+ * 產品与自定义属性关系Vo
  * 
  * @author shopnc.feng
  * Created 2017/4/13 14:06

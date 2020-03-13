@@ -1,9 +1,11 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -36,7 +38,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * IM聊天發送商品選擇(暫時不做分類)
+ * IM聊天發送產品選擇(暫時不做分類)
  * @author zwm
  */
 public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickListener {
@@ -138,8 +140,8 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
         if (!StringUtil.isEmpty(keyword)) {
             try {
                 params.set("keyword", keyword);
-            } catch (EasyJSONException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
 
@@ -153,7 +155,7 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                 if (ToastUtil.checkError(context, responseObj)) {
                     return;
@@ -162,25 +164,25 @@ public class ImStoreGoodsPopup extends BottomPopupView implements View.OnClickLi
                 try {
                     imStoreGoodsItemList.clear();
 
-                    EasyJSONArray goodsList = responseObj.getArray("datas.goodsList");
+                    EasyJSONArray goodsList = responseObj.getSafeArray("datas.goodsList");
 
                     for (Object object : goodsList) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
 
-                        // 分兩類 1.分類名  2.商品列表
+                        // 分兩類 1.分類名  2.產品列表
                         ImStoreGoodsItem item = new ImStoreGoodsItem(ImStoreGoodsItem.ITEM_TYPE_HEADER);
-                        item.goodsName = easyJSONObject.getString("categoryName");
+                        item.goodsName = easyJSONObject.getSafeString("categoryName");
                         imStoreGoodsItemList.add(item);
 
-                        EasyJSONArray goods = easyJSONObject.getArray("goods");
+                        EasyJSONArray goods = easyJSONObject.getSafeArray("goods");
                         for (Object object2 : goods) {
                             EasyJSONObject easyJSONObject2 = (EasyJSONObject) object2;
 
                             item = new ImStoreGoodsItem(ImStoreGoodsItem.ITEM_TYPE_ITEM);
 
                             item.commonId = easyJSONObject2.getInt("commonId");
-                            item.goodsImg = easyJSONObject2.getString("goodsImg");
-                            item.goodsName = easyJSONObject2.getString("goodsName");
+                            item.goodsImg = easyJSONObject2.getSafeString("goodsImg");
+                            item.goodsName = easyJSONObject2.getSafeString("goodsName");
                             imStoreGoodsItemList.add(item);
                         }
                     }

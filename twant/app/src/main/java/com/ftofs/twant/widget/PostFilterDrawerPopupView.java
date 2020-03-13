@@ -1,7 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,7 +12,7 @@ import com.lxj.xpopup.core.DrawerPopupView;
 
 
 /**
- * 貼文列表的篩選彈窗
+ * 想要帖列表的篩選彈窗
  * @author zwm
  */
 public class PostFilterDrawerPopupView extends DrawerPopupView implements View.OnClickListener {
@@ -31,8 +31,8 @@ public class PostFilterDrawerPopupView extends DrawerPopupView implements View.O
 
 
     /**
-     * 貼文篩選描述
-     * postView 查看最多 postFavor 最受關注 postLike 點讚最多 postReply 評論最多 expiresDate 截止日期
+     * 想要帖篩選描述
+     * postView 查看數量 postFavor 最受關注 postLike 讚想數量 postReply 說說數量 expiresDate 截止日期
      */
     String filterDescArr[] = new String[] {
            "postView",  "postFavor", "postLike", "postReply", "expiresDate"

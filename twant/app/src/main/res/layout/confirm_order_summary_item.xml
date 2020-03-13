@@ -10,6 +10,7 @@
 
     <!-- 支付方式 -->
     <RelativeLayout
+        android:id="@+id/btn_change_pay_way"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
@@ -21,13 +22,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="@string/text_pay_way"
+            android:text="送貨方式"
             android:textSize="14sp"
             android:textColor="@color/tw_black"
             />
 
         <LinearLayout
-            android:id="@+id/btn_change_pay_way"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -44,7 +44,6 @@
                 />
 
             <ImageView
-                android:id="@+id/img_expand_pay_way"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -54,7 +53,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_select_platform_coupon_container"
+        android:id="@+id/btn_select_platform_coupon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -73,7 +72,6 @@
             />
 
         <LinearLayout
-            android:id="@+id/btn_select_platform_coupon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -90,7 +88,6 @@
                 />
 
             <ImageView
-                android:id="@+id/img_expand_platform_coupon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

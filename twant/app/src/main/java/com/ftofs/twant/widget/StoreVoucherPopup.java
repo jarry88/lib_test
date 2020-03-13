@@ -1,9 +1,9 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -19,22 +19,17 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 店鋪優惠券彈窗
+ * 商店優惠券彈窗
  * @author zwm
  */
 public class StoreVoucherPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
@@ -67,16 +62,13 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         rvStoreVoucherList.setLayoutManager(layoutManager);
         adapter = new GoodsVoucherListAdapter(R.layout.store_voucher_item, storeVoucherList);
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                int id = view.getId();
-                if (id == R.id.btn_receive_voucher_now) {
-                    StoreVoucher storeVoucher = storeVoucherList.get(position);
-                    // 檢查未領取才調用領取接口
-                    if (storeVoucher.usable) {
-                        receiveVoucher(position, storeVoucher.searchSn);
-                    }
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                StoreVoucher storeVoucher = storeVoucherList.get(position);
+                // 檢查未領取才調用領取接口
+                if (storeVoucher.state == Constant.COUPON_STATE_UNRECEIVED) {
+                    receiveVoucher(position, storeVoucher.searchSn);
                 }
             }
         });
@@ -92,7 +84,6 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
     //完全消失执行
     @Override
     protected void onDismiss() {
-
     }
 
     @Override
@@ -136,15 +127,15 @@ public class StoreVoucherPopup extends BottomPopupView implements View.OnClickLi
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
 
-                EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(context, responseObj)) {
                     return;
                 }
 
                 ToastUtil.success(context, "領取成功");
                 StoreVoucher storeVoucher = storeVoucherList.get(position);
-                storeVoucher.usable = false;
-                adapter.setNewData(storeVoucherList);
+                storeVoucher.state = Constant.COUPON_STATE_RECEIVED;
+                adapter.notifyDataSetChanged();
             }
         });
     }

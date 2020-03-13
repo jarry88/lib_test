@@ -1,6 +1,6 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,7 +23,7 @@ public class OrderVoucherListAdapter extends BaseQuickAdapter<StoreVoucherVo, Ba
      * @param layoutResId
      * @param storeName
      * @param couponType data參數是哪種類型的列表
-     * @param data 店鋪券列表 或 平台券列表
+     * @param data 商店券列表 或 平台券列表
      * @param platformCouponIndex 當前正在使用的平台券列表Index(-1表示沒有使用），當couponType為平台券時才有意義
      */
     public OrderVoucherListAdapter(int layoutResId, String storeName, int couponType, @Nullable List<StoreVoucherVo> data, int platformCouponIndex) {
@@ -51,22 +51,23 @@ public class OrderVoucherListAdapter extends BaseQuickAdapter<StoreVoucherVo, Ba
 
         RelativeLayout rlLeftContainer = helper.getView(R.id.rl_left_container);
         if (couponType == Constant.COUPON_TYPE_STORE) {
-            rlLeftContainer.setBackgroundResource(R.drawable.red_voucher);
+            // rlLeftContainer.setBackgroundResource(R.drawable.red_voucher);
             if (itemData.isInUse) {
-                helper.setGone(R.id.img_voucher_in_use_indicator, true);
+                helper.setGone(R.id.vw_voucher_in_use_indicator, true);
             } else {
-                helper.setGone(R.id.img_voucher_in_use_indicator, false);
+                helper.setGone(R.id.vw_voucher_in_use_indicator, false);
             }
         } else {
-            rlLeftContainer.setBackgroundResource(R.drawable.blue_voucher);
+            // rlLeftContainer.setBackgroundResource(R.drawable.blue_voucher);
             int position = helper.getAdapterPosition();
             SLog.info("position[%d]", position);
             if (position == platformCouponIndex) {
-                helper.setGone(R.id.img_voucher_in_use_indicator, true);
+                helper.setGone(R.id.vw_voucher_in_use_indicator, true);
             } else {
-                helper.setGone(R.id.img_voucher_in_use_indicator, false);
+                helper.setGone(R.id.vw_voucher_in_use_indicator, false);
             }
         }
+
     }
     /*
     public void setPlatformCouponIndex(int platformCouponIndex) {

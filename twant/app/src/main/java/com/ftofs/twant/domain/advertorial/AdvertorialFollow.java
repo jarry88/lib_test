@@ -14,7 +14,7 @@ public class AdvertorialFollow implements Serializable {
     private int memberId;
 
     /**
-     * 文章id
+     * 想要帖id
      */
     private int articleId;
 

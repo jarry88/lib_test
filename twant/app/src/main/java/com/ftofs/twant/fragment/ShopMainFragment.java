@@ -1,84 +1,124 @@
 package com.ftofs.twant.fragment;
 
-import android.animation.ObjectAnimator;
+
+import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Pair;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.entity.StoreNavigationItem;
+import com.ftofs.twant.interfaces.NestedScrollingCallback;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.orm.ImNameMap;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.ScaledButton;
-import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
+import com.ftofs.twant.widget.StoreCustomerServicePopup;
+import com.ftofs.twant.widget.WhiteDropdownMenu;
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.yokeyword.fragmentation.SupportFragment;
+import okhttp3.Call;
+
 
 /**
- * 店鋪主Fragment容器
+ * 商店主Fragment容器
  * @author zwm
  */
-public class ShopMainFragment extends BaseFragment implements View.OnClickListener {
-    // 店鋪Id
+public class ShopMainFragment extends BaseFragment implements View.OnClickListener, SimpleCallback, NestedScrollingCallback {
+    // 商店Id
     int storeId;
-    RelativeLayout toolbar;
+    String storeFigure;
+    LinearLayout toolbar;
 
     TextView tvShopTitle;
 
-    // 店鋪頭像圓形按鈕
+    // 商店頭像圓形按鈕
     ImageView imgBottomBarShopAvatar;
 
-    // 店鋪名稱
+    List<StoreNavigationItem> storeNavigationItemList = new ArrayList<>();
+
+    // 商店名稱
     String storeName = "";
 
-    ImageView btnMenu;
+    FloatingActionMenu btnCustomerMenu;
     ScaledButton btnSearch;
     LinearLayout llTabButtonContainer;
 
-
-
-    public static final int FRAGMENT_COUNT = 5;
+    SimpleTabManager simpleTabManager;
 
     /** 首頁 */
     public static final int HOME_FRAGMENT = 0;
-    /** 商品 */
+    /** 產品 */
     public static final int COMMODITY_FRAGMENT = 1;
-    /** 分類 */
-    public static final int CATEGORY_FRAGMENT = 2;
     /** 活動 */
-    public static final int ACTIVITY_FRAGMENT = 3;
-    /** 客服  */
-    public static final int CUSTOMER_SERVICE_FRAGMENT = 4;
+    public static final int ACTIVITY_FRAGMENT = 2;
+    /** 招聘 */
+    public static final int RECRUITMENT_FRAGMENT = 3;
+    /** 更多 */
+    public static final int MORE_FRAGMENT = 4;
 
-    private SupportFragment[] mFragments = new SupportFragment[5];
-    private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_commodity, R.id.btn_category,
-            R.id.btn_activity, R.id.btn_customer_service};
-    private int[] bottomBarIconIds = new int[] {0, R.id.icon_shop_bottom_bar_commodity, R.id.icon_shop_bottom_bar_category,
-            R.id.icon_shop_bottom_bar_activity, R.id.icon_shop_bottom_bar_customer_service};
+    private SupportFragment[] mFragments = new SupportFragment[4];
+    private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_commodity,
+            R.id.btn_activity, R.id.btn_recruitment, R.id.btn_more};
+    private int[] bottomBarIconIds = new int[] {0, R.id.icon_shop_bottom_bar_commodity, R.id.icon_shop_bottom_bar_activity,
+            R.id.icon_shop_bottom_bar_recruitment, R.id.icon_shop_bottom_bar_more};
     private ImageView[] bottomBarIcons = new ImageView[5];
-    private int[] bottomBarIconResources = new int[] {0, R.drawable.icon_shop_bottom_bar_commodity, R.drawable.icon_shop_bottom_bar_category,
-            R.drawable.icon_shop_bottom_bar_activity, R.drawable.icon_shop_bottom_bar_customer_service};
-    private int[] bottomBarSelIconResources = new int[] {0, R.drawable.icon_shop_bottom_bar_commodity_sel, R.drawable.icon_shop_bottom_bar_category_sel,
-            R.drawable.icon_shop_bottom_bar_activity_sel, R.drawable.icon_shop_bottom_bar_customer_service_sel};
-
+    private int[] bottomBarIconResources = new int[] {0, R.drawable.icon_shop_bottom_bar_commodity, R.drawable.icon_shop_bottom_bar_activity,
+             R.drawable.icon_shop_bottom_bar_recruitment, R.drawable.icon_shop_bottom_bar_more};
+    private int[] bottomBarSelIconResources = new int[] {0, R.drawable.icon_shop_bottom_bar_commodity_sel, R.drawable.icon_shop_bottom_bar_activity_sel,
+            R.drawable.icon_shop_bottom_bar_recruitment_sel, R.drawable.icon_shop_bottom_bar_more_sel};
+    /*
+    用于記錄滑動狀態，以處理浮動按鈕的顯示與隱藏
+     */
+    private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800; // 浮動按鈕滑動顯示與隱藏效果的延遲時間(毫秒)
+    boolean isScrolling = false; // 是否在滑動狀態
+    long lastScrollingTimestamp = 0;  // 最近一次滑動的時間戳（毫秒）
+    boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
+    LinearLayout llFloatButtonContainer;
     /**
      * 當前正在顯示的Fragment的下標
      */
     private int selectedFragmentIndex = HOME_FRAGMENT;
+    private int commentChannel= Constant.COMMENT_CHANNEL_STORE;
+    private List<FloatingActionButton> customerList =new ArrayList<>();
+    private boolean customerListLoaded =false;
 
     public static ShopMainFragment newInstance(int shopId) {
         Bundle args = new Bundle();
@@ -103,31 +143,64 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         Bundle args = getArguments();
         storeId = args.getInt("shopId");
-
+        llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
+        Util.setOnClickListener(view,R.id.btn_comment,this);
         toolbar = view.findViewById(R.id.tool_bar);
         tvShopTitle = view.findViewById(R.id.tv_shop_title);
         imgBottomBarShopAvatar = view.findViewById(R.id.img_bottom_bar_shop_avatar);
 
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
-
+        Util.setOnClickListener(view,R.id.btn_menu,this);
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
         }
 
-        for (int i = 0; i < FRAGMENT_COUNT; i++) {
+        for (int i = 0; i < 5; i++) {
             if (i == HOME_FRAGMENT) {
                 continue;
             }
             bottomBarIcons[i] = view.findViewById(bottomBarIconIds[i]);
         }
 
-        btnMenu = view.findViewById(R.id.btn_menu);
-        btnMenu.setOnClickListener(this);
+        btnCustomerMenu = view.findViewById(R.id.menu_blue);
+        FloatingActionButton customerOne =new FloatingActionButton(getContext());
+        customerOne.setButtonSize(FloatingActionButton.SIZE_MINI);
+        loadCustomerData(getContext());
+        btnCustomerMenu.setIconAnimated(false);
+
+        btnCustomerMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        btnCustomerMenu.open(false);
+        btnCustomerMenu.setBackgroundResource(R.drawable.bg_expandable_selector);
+        btnCustomerMenu.getBackground().setAlpha(0);
+
+        btnCustomerMenu.setOnMenuButtonClickListener(v -> {
+            Boolean expanded = btnCustomerMenu.isOpened();
+            SLog.info("measureHeight%d,expanded %s childCount %d", btnCustomerMenu.getMeasuredHeight(),expanded, btnCustomerMenu.getChildCount());
+            if (expanded) {
+                btnCustomerMenu.removeAllMenuButtons();
+                btnCustomerMenu.close(true);
+                btnCustomerMenu.getBackground().setAlpha(0);
+                btnCustomerMenu.getMenuIconView().setImageResource(R.drawable.btn_customer_service);
+            } else {
+                for (FloatingActionButton floatingActionButton : customerList) {
+                    btnCustomerMenu.addMenuButton(floatingActionButton);
+                }
+                btnCustomerMenu.open(true);
+                btnCustomerMenu.getMenuIconView().setImageResource(R.drawable.icon_customer_expand);
+                btnCustomerMenu.getBackground().setAlpha(255);
+            }
+        });
+
         btnSearch = view.findViewById(R.id.btn_search);
         btnSearch.setOnClickListener(this);
         Util.setOnClickListener(view, R.id.btn_back, this);
 
-        SimpleTabManager simpleTabManager = new SimpleTabManager(0) {
+        simpleTabManager = new SimpleTabManager(0) {
             @Override
             public void onClick(View v) {
                 boolean isRepeat = onSelect(v);
@@ -148,21 +221,68 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         simpleTabManager.add(view.findViewById(R.id.stb_want_see));
 
         showGoodsFragment(false);
+
+        String url = Api.PATH_STORE_NAVIGATION + "/" + storeId;
+        SLog.info("url[%s]", url);
+        Api.getUI(url, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    return;
+                }
+
+                try {
+                    EasyJSONArray navigationList = responseObj.getSafeArray("datas.navigationList");
+                    for (Object object : navigationList) {
+                        StoreNavigationItem item = (StoreNavigationItem) EasyJSONBase.jsonDecode(StoreNavigationItem.class, object.toString());
+                        storeNavigationItemList.add(item);
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        });
+        setStoreNavigationItem();
     }
 
     /**
-     * 是否切換到顯示商品Fragment
+     * 初始化【更多】菜單按鈕
+     *
+     */
+    private void setStoreNavigationItem() {
+        // 添加兩個固定在頂部的菜單
+        StoreNavigationItem storeNavigationItem = new StoreNavigationItem();
+        storeNavigationItem.id = -1;
+        storeNavigationItem.title = "產品想看";
+        storeNavigationItemList.add(storeNavigationItem);
+
+        storeNavigationItem = new StoreNavigationItem();
+        storeNavigationItem.id = -2;
+        storeNavigationItem.title = "聯繫我們";
+        storeNavigationItemList.add(storeNavigationItem);
+    }
+
+    /**
+     * 是否切換到顯示產品Fragment
      * @param show
      */
     private void showGoodsFragment(boolean show) {
         if (show) {
             tvShopTitle.setVisibility(View.GONE);
-            btnMenu.setVisibility(View.GONE);
+            btnCustomerMenu.setVisibility(View.GONE);
             btnSearch.setVisibility(View.GONE);
             llTabButtonContainer.setVisibility(View.VISIBLE);
         } else {
             tvShopTitle.setVisibility(View.VISIBLE);
-            btnMenu.setVisibility(View.VISIBLE);
+            btnCustomerMenu.setVisibility(View.VISIBLE);
             btnSearch.setVisibility(View.VISIBLE);
             llTabButtonContainer.setVisibility(View.GONE);
         }
@@ -177,23 +297,20 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         if (homeFragment == null) {
             mFragments[HOME_FRAGMENT] = ShopHomeFragment.newInstance();
             mFragments[COMMODITY_FRAGMENT] = ShopCommodityFragment.newInstance(false, EasyJSONObject.generate("storeId", storeId).toString());
-            mFragments[CATEGORY_FRAGMENT] = ShopCategoryFragment.newInstance();
             mFragments[ACTIVITY_FRAGMENT] = ShopActivityFragment.newInstance();
-            mFragments[CUSTOMER_SERVICE_FRAGMENT] = ShopCustomerServiceFragment.newInstance();
+            mFragments[RECRUITMENT_FRAGMENT] = ShopRecruitmentFragment.newInstance();
 
 
             loadMultipleRootFragment(R.id.fl_tab_container, selectedFragmentIndex,
                     mFragments[HOME_FRAGMENT],
                     mFragments[COMMODITY_FRAGMENT],
-                    mFragments[CATEGORY_FRAGMENT],
                     mFragments[ACTIVITY_FRAGMENT],
-                    mFragments[CUSTOMER_SERVICE_FRAGMENT]);
+                    mFragments[RECRUITMENT_FRAGMENT]);
         } else {
             mFragments[HOME_FRAGMENT] = homeFragment;
             mFragments[COMMODITY_FRAGMENT] = findChildFragment(ShopCommodityFragment.class);
-            mFragments[CATEGORY_FRAGMENT] = findChildFragment(ShopCategoryFragment.class);
             mFragments[ACTIVITY_FRAGMENT] = findChildFragment(ShopActivityFragment.class);
-            mFragments[CUSTOMER_SERVICE_FRAGMENT] = findChildFragment(ShopCustomerServiceFragment.class);
+            mFragments[RECRUITMENT_FRAGMENT] = findChildFragment(ShopRecruitmentFragment.class);
         }
     }
 
@@ -201,7 +318,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_menu) {
             SLog.info("here");
             new XPopup.Builder(_mActivity)
@@ -214,6 +331,15 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     .show();
         } else if (id == R.id.btn_search) {
             start(ShopSearchFragment.newInstance(storeId, null));
+        } else if(id==R.id.btn_comment){
+            int userId = User.getUserId();
+            if (userId == 0) {
+                Util.showLoginFragment();
+                return;
+            }
+            Util.startFragmentForResult(AddCommentFragment.newInstance(storeId, commentChannel), RequestCode.ADD_COMMENT.ordinal());
+        }else if(id==R.id.menu_blue){
+            Util.startFragment(ShopCustomerServiceFragment.newInstance(storeId, storeFigure));
         } else { // 點擊底部導航欄
             int len = bottomBarButtonIds.length;
             // 想要选中的Fragment的下标
@@ -243,19 +369,34 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         }
 
         if (index == ACTIVITY_FRAGMENT) {
-            // 如果是點擊【店鋪活動】的按鈕，檢查用戶是否已經登錄
+            // 如果是點擊【商店活動】的按鈕，檢查用戶是否已經登錄
             if (!User.isLogin()) {
                 Util.showLoginFragment();
                 return;
             }
         }
 
-        if (index == COMMODITY_FRAGMENT) { // 如果切換到商品Tab，頂部工具欄隱藏分隔線
+        if (index == COMMODITY_FRAGMENT) { // 如果切換到產品Tab，頂部工具欄隱藏分隔線
             toolbar.setBackgroundColor(getResources().getColor(android.R.color.white, null));
             showGoodsFragment(true);
         } else { // 如果切換到其它Tab，恢復背景
             toolbar.setBackgroundResource(R.drawable.border_type_d);
             showGoodsFragment(false);
+        }
+
+        if (index == MORE_FRAGMENT) {
+            ImageView imgIcon = bottomBarIcons[MORE_FRAGMENT];
+            new XPopup.Builder(_mActivity)
+                    .offsetX(-Util.dip2px(_mActivity, 45))
+                    .offsetY(-Util.dip2px(_mActivity, 6))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                    .hasShadowBg(false) // 去掉半透明背景
+                    .atView(imgIcon)
+                    .asCustom(new WhiteDropdownMenu(_mActivity, storeId, storeFigure, storeNavigationItemList, this))
+                    .show();
+
+            tmpSwitchSelectedIcon(false);
+            return;
         }
 
         // 切換底部工具欄圖標的選中狀態
@@ -269,14 +410,15 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             imgIcon.setImageResource(bottomBarSelIconResources[index]);
         }
 
-        if (index != CUSTOMER_SERVICE_FRAGMENT) {
-            SLog.info("storeName[%s]", storeName);
-            tvShopTitle.setText(storeName);
-        }
 
+
+        tvShopTitle.setText(storeName);
+
+        SLog.info("index[%d], selectedFragmentIndex[%d]", index, selectedFragmentIndex);
         showHideFragment(mFragments[index], mFragments[selectedFragmentIndex]);
         selectedFragmentIndex = index;
     }
+
 
     public void setImgBottomBarShopAvatar(String url) {
         if (StringUtil.isEmpty(url)) {
@@ -297,5 +439,202 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
     public int getStoreId() {
         return storeId;
+    }
+    public void setStoreFigure(String storeFigure){this.storeFigure = storeFigure;}
+    public String getStoreFigure(){ return storeFigure; }
+
+    /**
+     * 彈出【更多】菜單時，臨時高亮【更多】icon，不高亮原先的icon
+     * 当【更多】菜单关闭时，恢复原先状态
+     * @param isRestore 是否為恢復狀態
+     */
+    public void tmpSwitchSelectedIcon(boolean isRestore) {
+        if (isRestore) {
+            bottomBarIcons[MORE_FRAGMENT].setImageResource(R.drawable.icon_shop_bottom_bar_more);
+
+            if (selectedFragmentIndex != HOME_FRAGMENT) {
+                bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarSelIconResources[selectedFragmentIndex]);
+            }
+        } else {
+            bottomBarIcons[MORE_FRAGMENT].setImageResource(R.drawable.icon_shop_bottom_bar_more_sel);
+
+            if (selectedFragmentIndex != HOME_FRAGMENT) {
+                bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarIconResources[selectedFragmentIndex]);
+            }
+        }
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        int btnId = (int) data;
+        if (btnId == -1) { // 切換到商店想看視頻
+            onBottomBarClick(COMMODITY_FRAGMENT);
+            simpleTabManager.performClick(1);
+        }
+        // 彈出菜單關閉，恢復原先icon的高亮狀態
+        tmpSwitchSelectedIcon(true);
+    }
+
+
+    @Override
+    public void onCbStartNestedScroll() {
+        isScrolling = true;
+        lastScrollingTimestamp = System.currentTimeMillis();
+        hideFloatButton();
+    }
+
+    private void showFloatButton() {
+        if (floatButtonShown ){
+            return;
+        }
+        llFloatButtonContainer.setTranslationX(0);
+        floatButtonShown = true;
+    }
+
+    private void hideFloatButton() {
+        if (floatButtonShown) {
+            llFloatButtonContainer.setTranslationX(Util.dip2px(_mActivity, 25));
+            floatButtonShown = false;
+        }
+
+    }
+
+    @Override
+    public void onCbStopNestedScroll() {
+        if(!isScrolling){
+            return;
+        }
+
+        isScrolling = false;
+        llFloatButtonContainer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isScrolling) {
+                    return;
+                }
+
+                showFloatButton();
+            }
+        }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY);
+
+    }
+
+    /**
+     * 加載商店客服頭像數據
+     */
+    private void loadCustomerData(Context context) {
+        String path = Api.PATH_STORE_CUSTOMER_SERVICE + "/" + storeId;
+        SLog.info("path[%s]", path);
+
+        Api.getUI(path, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(context, responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONArray serviceStaffList = responseObj.getSafeArray("datas.serviceStaffList");
+                    customerList.clear();
+                    if (serviceStaffList == null || serviceStaffList.length() == 0) {
+                        btnCustomerMenu.getMenuIconView().setOnClickListener(v ->
+                                ToastUtil.error(context,"當前店鋪未設置客服"));
+                        return;
+                    }
+                    if (serviceStaffList.length() >= 3) {
+                        FloatingActionButton moreActionButton = new FloatingActionButton(context);
+                        moreActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
+                        Glide.with(context).load(R.drawable.btn_customer_more).centerCrop().into(moreActionButton);
+                        moreActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
+                        moreActionButton.setOnClickListener(v -> {
+                            new XPopup.Builder(_mActivity)
+                                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                                    .moveUpToKeyboard(false)
+                                    .asCustom(new StoreCustomerServicePopup(_mActivity, storeId,null))
+                                    .show();
+                        });
+                        customerList.add(moreActionButton);
+                    }
+
+                    for (int i=0;i<serviceStaffList.length()&&i<3;i++) {
+                        Object object = serviceStaffList.getObject(i);
+                        EasyJSONObject serviceStaff = (EasyJSONObject) object;
+
+                        CustomerServiceStaff staff = new CustomerServiceStaff();
+                        Util.packStaffInfo(staff, serviceStaff);
+                        FloatingActionButton floatingActionButton = new FloatingActionButton(context);
+                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
+                        CircleImageView view =new CircleImageView(context);
+                        view.setMaxWidth(25);
+                        view.setMaxHeight(25);
+
+//                        floatingActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
+                        SLog.info("staff.avatar %s",staff.avatar);
+                        if (staff.avatar.equals("img/default_avatar.png")) {
+                            Glide.with(context).load(R.drawable.grey_default_avatar)
+                                    .diskCacheStrategy(
+//                                        DiskCacheStrategy.NONE： 表示不缓存任何内容。
+//                                        DiskCacheStrategy.SOURCE： 表示只缓存原始图片。
+//                                        DiskCacheStrategy.RESULT： 表示只缓存转换过后的图片（默认选项）。
+//                                        DiskCacheStrategy.ALL ： 表示既缓存原始图片，也缓存转换过后的图片
+
+                                            DiskCacheStrategy.NONE).apply(
+                                    RequestOptions.bitmapTransform(
+                                            new CircleCrop())).override(120,120).into(
+                                    floatingActionButton);
+                        } else {
+                            Glide.with(context).load(StringUtil.normalizeImageUrl(staff.avatar)).placeholder(R.drawable.grey_default_avatar)
+                                    .diskCacheStrategy(
+                                            DiskCacheStrategy.NONE).apply(
+                                    RequestOptions.bitmapTransform(
+                                            new CircleCrop())).override(120,120).into(
+                                    floatingActionButton);
+                        }
+
+
+
+                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
+
+                        floatingActionButton.setOnClickListener(v ->{
+                                    String memberName = staff.memberName;
+                                    String imName = staff.imName;
+                                    ImNameMap.saveMap(imName, memberName, storeId);
+
+                                    FriendInfo friendInfo = new FriendInfo();
+                                    friendInfo.memberName = memberName;
+                                    friendInfo.nickname = staff.staffName;
+                                    friendInfo.avatarUrl = staff.avatar;
+                                    friendInfo.role = ChatUtil.ROLE_CS_AVAILABLE;
+                                    if (StringUtil.isEmpty(imName)) {
+                                        //存在客服im为空的情况
+                                        imName = memberName;
+                                    }
+                                    imName = StringUtil.getPureMemberName(imName);
+                                    FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE,ChatUtil.ROLE_CS_AVAILABLE,storeName,storeId);
+                                    EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
+                            if (conversation == null) {
+                                SLog.info("创建会话失败，memberName %s", memberName);
+                                ToastUtil.success(_mActivity, "暂时无法于此客服创建会话");
+                            } else {
+                                Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
+                            }
+                                });
+                        customerList.add(floatingActionButton);
+                    }
+                    customerListLoaded=true;
+
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 }

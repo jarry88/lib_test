@@ -1,10 +1,12 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,7 +132,7 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 
@@ -140,9 +142,7 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
-        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                .asLoading(getString(R.string.text_loading))
-                .show();
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
 
         String type;
@@ -158,8 +158,8 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
         if (!StringUtil.isEmpty(queryOrderNumber)) {
             try {
                 params.set("number", queryOrderNumber);
-            } catch (EasyJSONException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
 
@@ -176,7 +176,7 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
                 loadingPopup.dismiss();
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -193,25 +193,25 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
                     }
                     packageItemList.add(packageItem);
 
-                    EasyJSONArray resultList = responseObj.getArray("datas.resultList");
+                    EasyJSONArray resultList = responseObj.getSafeArray("datas.resultList");
                     for (Object object : resultList) {
                         EasyJSONObject result = (EasyJSONObject) object;
 
                         packageItem = new PackageItem();
                         packageItem.itemType = PackageItem.ITEM_TYPE_INFO;
                         packageItem.state = result.getInt("state");
-                        packageItem.updateTime = result.getString("updateTime");
-                        packageItem.customerOrderNumber = result.getString("customerOrderNumber");
-                        packageItem.originalOrderNumber = result.getString("originalOrderNumber");
-                        packageItem.createTime = result.getString("createTime");
+                        packageItem.updateTime = result.getSafeString("updateTime");
+                        packageItem.customerOrderNumber = result.getSafeString("customerOrderNumber");
+                        packageItem.originalOrderNumber = result.getSafeString("originalOrderNumber");
+                        packageItem.createTime = result.getSafeString("createTime");
 
-                        packageItem.consignerName = result.getString("consignerName");
-                        packageItem.consignerPhone = result.getString("consignerPhone");
-                        packageItem.consignerAddress = result.getString("consignerAddress");
+                        packageItem.consignerName = result.getSafeString("consignerName");
+                        packageItem.consignerPhone = result.getSafeString("consignerPhone");
+                        packageItem.consignerAddress = result.getSafeString("consignerAddress");
 
-                        packageItem.consigneeName = result.getString("consigneeName");
-                        packageItem.consigneePhone = result.getString("consigneePhone");
-                        packageItem.consigneeAddress = result.getString("consigneeAddress");
+                        packageItem.consigneeName = result.getSafeString("consigneeName");
+                        packageItem.consigneePhone = result.getSafeString("consigneePhone");
+                        packageItem.consigneeAddress = result.getSafeString("consigneeAddress");
 
                         packageItemList.add(packageItem);
                     }
@@ -219,7 +219,7 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
 
                     adapter.setNewData(packageItemList);
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -228,7 +228,7 @@ public class QueryPackageFragment extends BaseFragment implements View.OnClickLi
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 

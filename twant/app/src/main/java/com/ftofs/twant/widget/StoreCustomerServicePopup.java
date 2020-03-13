@@ -1,11 +1,13 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -13,14 +15,17 @@ import com.ftofs.twant.adapter.StoreServiceStaffListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.fragment.ChatFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.hyphenate.chat.EMConversation;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -33,19 +38,23 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 public class StoreCustomerServicePopup extends BottomPopupView implements View.OnClickListener {
+    private final GoodsInfo goodsInfo;
     Context context;
 
     TextView tvPopupTitle;
 
     List<CustomerServiceStaff> staffList = new ArrayList<>();
+    String storeAvatar;
+    String storeName;
 
     int storeId;
     StoreServiceStaffListAdapter adapter;
-    public StoreCustomerServicePopup(@NonNull Context context, int storeId) {
+    public  StoreCustomerServicePopup(@NonNull Context context, int storeId, GoodsInfo goodsInfo) {
         super(context);
 
         this.context = context;
         this.storeId = storeId;
+        this.goodsInfo = goodsInfo;
     }
 
 
@@ -69,29 +78,45 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 CustomerServiceStaff staff = staffList.get(position);
-                String memberName = staff.memberName;
-                String imName = staff.imName;
-                ImNameMap.saveMap(imName, memberName, storeId);
-
-                dismiss();
-
-                FriendInfo friendInfo = new FriendInfo();
-                friendInfo.memberName = memberName;
-                friendInfo.nickname = staff.staffName;
-                friendInfo.avatarUrl = staff.avatar;
-                friendInfo.role = ChatUtil.ROLE_CS_AVAILABLE;
-                FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
+                pullChat(staff);
             }
         });
         rvStaffList.setAdapter(adapter);
-
+        dismiss();
         loadData();
+    }
+
+    private void pullChat(CustomerServiceStaff staff) {
+        String memberName = staff.memberName;
+        String imName = staff.imName;
+        ImNameMap.saveMap(imName, memberName, storeId);
+
+        dismiss();
+
+        FriendInfo friendInfo = new FriendInfo();
+        friendInfo.memberName = memberName;
+        friendInfo.nickname = staff.staffName;
+        friendInfo.avatarUrl = staff.avatar;
+        friendInfo.role = ChatUtil.ROLE_CS_AVAILABLE;
+        friendInfo.storeId = storeId;
+        friendInfo.goodsInfo = goodsInfo;
+        friendInfo.goodsInfo.showSendBtn = true;
+        FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE,1,"",staff.storeId);
+        if (StringUtil.isEmpty(imName)) {
+            imName = memberName;
+        }
+        if (StringUtil.isEmpty(imName)) {
+            ToastUtil.success(getContext(),"當前客服狀態異常，無法會話");
+            return;
+        }
+        EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
+        Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
     }
 
 
     private void loadData() {
+        final BasePopupView loadingPopup = Util.createLoadingPopup(getContext()).show();
+
         String path = Api.PATH_STORE_CUSTOMER_SERVICE + "/" + storeId;
         SLog.info("path[%s]", path);
 
@@ -103,15 +128,17 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
+
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(context, responseObj)) {
                         return;
                     }
 
-                    EasyJSONArray serviceStaffList = responseObj.getArray("datas.serviceStaffList");
+                    EasyJSONArray serviceStaffList = responseObj.getSafeArray("datas.serviceStaffList");
                     for (Object object : serviceStaffList) {
                         EasyJSONObject serviceStaff = (EasyJSONObject) object;
 
@@ -120,11 +147,17 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
 
                         staffList.add(staff);
                     }
+                    if (staffList.size() == 1) {
+                        pullChat(staffList.get(0));
+                        return;
+                    } else {
+                        show();
+                    }
 
                     adapter.setNewData(staffList);
                     tvPopupTitle.setText(context.getString(R.string.text_store_customer_service) + "(" + staffList.size() + "人)");
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

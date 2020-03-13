@@ -7,7 +7,7 @@ public class CashierOrder implements Serializable{
 	
 	//支付方式
 	private String paymentCode;
-	//商品列表
+	//產品列表
 	private  List<CashierOrderGoodsItem> goodsItems;
 	
 	public String getPaymentCode() {

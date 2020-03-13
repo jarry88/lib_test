@@ -2,7 +2,7 @@ package com.ftofs.twant.entity.order;
 
 
 /**
- * 訂單詳情的商品列表Item
+ * 訂單詳情的產品列表Item
  * @author zwm
  */
 public class OrderDetailGoodsItem {
@@ -24,6 +24,7 @@ public class OrderDetailGoodsItem {
         this.showRefund = showRefund;
         this.showMemberComplain = showMemberComplain;
         this.complainId = complainId;
+
     }
 
     public int commonId;

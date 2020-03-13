@@ -1,22 +1,17 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.util.StringUtil;
 
-import java.util.List;
-
 /**
- * 訂單詳情頁面的商品列表Adapter
+ * 訂單詳情頁面的產品列表Adapter
  * @author zwm
  */
 public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsItem> {
@@ -48,7 +43,7 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
         setText(itemView, R.id.tv_goods_full_specs, itemData.goodsFullSpecs);
         setText(itemView, R.id.tv_goods_price, StringUtil.formatPrice(context, itemData.goodsPrice, 0));
         setText(itemView, R.id.tv_buy_item_amount, timesSign + " " + itemData.buyNum);
-
+        setText(itemView,R.id.tv_goods_amount,StringUtil.formatPrice(context,itemData.goodsPrice,0));
         if (itemData.refundType == 0) {
             View btnRefund = itemView.findViewById(R.id.btn_refund);
             View btnReturn = itemView.findViewById(R.id.btn_return);

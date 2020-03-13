@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class WantPostVo {
     /**
-     * 貼文id
+     * 想要帖id
      */
     private BigInteger postId;
     /**
@@ -56,7 +56,7 @@ public class WantPostVo {
      */
     private String createBy;
     /**
-     * 貼文狀態 0審核中 1審核通過 2審核不通過
+     * 想要帖狀態 0審核中 1審核通過 2審核不通過
      */
     private int isPublish;
     /**
@@ -76,7 +76,7 @@ public class WantPostVo {
      */
     private int postView;
     /**
-     * 點讚
+     * 讚想
      */
     private int postLike;
     /**
@@ -88,7 +88,7 @@ public class WantPostVo {
      */
     private int postFavor;
     /**
-     * 回復個數
+     * 回覆個數
      */
     private int postReply;
     /**
@@ -104,7 +104,7 @@ public class WantPostVo {
      */
     private int isFavor;
     /**
-     * 是否點讚過
+     * 是否讚想過
      */
     private int isLike;
     /**
@@ -124,7 +124,7 @@ public class WantPostVo {
      */
     private List<WantPostImageVo> wantPostImages;
     /**
-     * 貼文評論集合
+     * 想要帖評論集合
      */
     private List<WantCommentVo> wantCommentVoList;
 

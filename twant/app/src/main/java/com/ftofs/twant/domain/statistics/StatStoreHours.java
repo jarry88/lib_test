@@ -50,7 +50,7 @@ public class StatStoreHours implements Serializable {
     private BigDecimal ordersAmount = new BigDecimal(0);
 
     /**
-     * 下单商品数
+     * 下单產品数
      */
     private long ordersGoodsNum = 0;
 

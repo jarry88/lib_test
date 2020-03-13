@@ -9,7 +9,7 @@ public class GoodsBrowse implements Serializable {
     private int browseId;
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId = 0;
 
@@ -24,22 +24,22 @@ public class GoodsBrowse implements Serializable {
     private String addTime;
 
     /**
-     * 商品分类ID
+     * 產品分类ID
      */
     private int goodsCategoryId = 0;
 
     /**
-     * 商品一级分类
+     * 產品一级分类
      */
     private int goodsCategoryId1 = 0;
 
     /**
-     * 商品二级分类
+     * 產品二级分类
      */
     private int goodsCategoryId2 = 0;
 
     /**
-     * 商品三级分类
+     * 產品三级分类
      */
     private int goodsCategoryId3 = 0;
 

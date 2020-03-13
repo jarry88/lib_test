@@ -1,21 +1,21 @@
 package com.ftofs.twant.vo.goods;
 
 /**
- * @Description: IM商品視圖對象
+ * @Description: IM產品視圖對象
  * @Auther: yangjian
  * @Date: 2019/4/9 14:35
  */
 public class GoodsImVo {
     /**
-     * 商品名稱
+     * 產品名稱
      */
     private String goodsName;
     /**
-     * 商品圖片
+     * 產品圖片
      */
     private String goodsImage;
     /**
-     * 商品id
+     * 產品id
      */
     private int commonId = 0;
 

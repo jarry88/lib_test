@@ -1,15 +1,17 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -24,10 +26,8 @@ import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
-import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.hyphenate.chat.EMConversation;
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
@@ -37,16 +37,16 @@ import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
-import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 
 
 /**
- * 店鋪客服Fragment
+ * 商店客服Fragment
  * @author zwm
  */
 public class ShopCustomerServiceFragment extends BaseFragment implements View.OnClickListener {
-    ShopMainFragment parentFragment;
+    int storeId;
+    String storeFigureUrl;
 
     ImageView imgBackground;
     List<CustomerServiceStaff> customerServiceStaffList = new ArrayList<>();
@@ -55,6 +55,8 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
     CustomerServiceStaffListAdapter adapter;
 
     boolean isShown;
+
+    boolean storeFigureShown = false;
 
     /**
      * 展示客服歡迎語動畫的順序, 從0開始(以隨機的順序顯示歡迎語動畫)
@@ -65,11 +67,15 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
      */
     int animDoneCount;
 
-    public static ShopCustomerServiceFragment newInstance() {
+    TextView tvFragmentTitle;
+
+    public static ShopCustomerServiceFragment newInstance(int storeId, String storeFigureUrl) {
         Bundle args = new Bundle();
 
         ShopCustomerServiceFragment fragment = new ShopCustomerServiceFragment();
         fragment.setArguments(args);
+        fragment.setStoreId(storeId);
+        fragment.setStoreFigureUrl(storeFigureUrl);
 
         return fragment;
     }
@@ -84,7 +90,10 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        parentFragment = (ShopMainFragment) getParentFragment();
+
+        Util.setOnClickListener(view, R.id.btn_back, this);
+
+        tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
 
         imgBackground = view.findViewById(R.id.img_background);
         rvStaffList = view.findViewById(R.id.rv_staff_list);
@@ -98,10 +107,17 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
                 String memberName = staff.memberName;
                 String imName = staff.imName;
-                ImNameMap.saveMap(imName, memberName, parentFragment.getStoreId());
+                ImNameMap.saveMap(imName, memberName, storeId);
                 SLog.info("memberName[%s], imName[%s]", memberName, imName);
 
                 FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
+                if (StringUtil.isEmpty(imName)) {
+                    imName = memberName;
+                }
+                if (StringUtil.isEmpty(imName)) {
+                    ToastUtil.success(getContext(),"當前客服狀態異常，無法會話");
+                    return;
+                }
                 EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
 
                 FriendInfo friendInfo = new FriendInfo();
@@ -120,32 +136,31 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
     @Override
     public void onClick(View v) {
+        int id = v.getId();
 
+        if (id == R.id.btn_back) {
+            hideSoftInputPop();
+        }
     }
 
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        ((SupportFragment) getParentFragment()).pop();
+        hideSoftInputPop();
+
         return true;
     }
 
     private void loadStaffData() {
-        final BasePopupView loadingPopup = new XPopup.Builder(_mActivity)
-                .asLoading(getString(R.string.text_loading))
-                .show();
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
         try {
-            // 獲取店鋪首頁信息
-            String path = Api.PATH_SHOP_HOME + "/" + parentFragment.getStoreId();
-            String token = User.getToken();
+            // 獲取商店首頁信息
+            String path = Api.PATH_STORE_CUSTOMER_SERVICE + "/" + storeId;
             EasyJSONObject params = EasyJSONObject.generate();
-            if (!StringUtil.isEmpty(token)) {
-                params.set("token", token);
-            }
 
             SLog.info("path[%s], params[%s]", path, params.toString());
-            Api.postUI(path, params, new UICallback() {
+            Api.getUI(path, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
@@ -159,16 +174,18 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
-                        EasyJSONObject storeInfo = responseObj.getObject("datas.storeInfo");
-                        String storeFigureImage = StringUtil.normalizeImageUrl(storeInfo.getString("storeFigureImage"));
-                        Glide.with(_mActivity).load(storeFigureImage).centerCrop().into(imgBackground);
+                        //EasyJSONObject storeInfo = responseObj.getSafeObject("datas.storeInfo");
+                        //String storeFigureImage = StringUtil.normalizeImageUrl(storeInfo.getString("storeFigureImage"));
+                        //Glide.with(_mActivity).load(storeFigureImage).centerCrop().into(imgBackground);
 
-                        EasyJSONArray storeServiceStaffVoList = storeInfo.getArray("storeServiceStaffVoList");
+                        showStoreFigure();
+
+                        EasyJSONArray storeServiceStaffVoList = responseObj.getSafeArray("datas.serviceStaffList");
 
                         for (int i = 0; i < storeServiceStaffVoList.length(); i++) {
                             welcomeMessageAnimOrder.add(i);
@@ -184,10 +201,7 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                         }
                         adapter.setNewData(customerServiceStaffList);
 
-                        if (isShown) {
-                            parentFragment.setFragmentTitle(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
-                        }
-
+                        tvFragmentTitle.setText(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
                     } catch (Exception e) {
 
                     }
@@ -202,8 +216,10 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
     public void onSupportVisible() {
         super.onSupportVisible();
 
+
+        showStoreFigure();
+
         isShown = true;
-        parentFragment.setFragmentTitle(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
 
         rvStaffList.postDelayed(new Runnable() {
             @Override
@@ -243,6 +259,36 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
             customerServiceStaffList.get(position).showWelcomeMessageAnimation = true;
             adapter.notifyItemChanged(position);
         }
+    }
+    public void loadStoreFigure(String url){
+        if(StringUtil.isEmpty(url)){
+            Glide.with(_mActivity).load(R.drawable.store_figure_default).centerCrop().into(imgBackground);
+        }else{
+            Glide.with(_mActivity).load(url).centerCrop().into(imgBackground);
+        }
+    }
+
+    private void showStoreFigure() {
+        if (storeFigureShown) {
+            return;
+        }
+
+        if(!StringUtil.isEmpty(storeFigureUrl)){
+            storeFigureShown = true;
+            if(storeFigureUrl.equals("no")){
+                storeFigureUrl ="";
+            }
+            loadStoreFigure(storeFigureUrl);
+        }
+
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
+    }
+
+    public void setStoreFigureUrl(String storeFigureUrl) {
+        this.storeFigureUrl = storeFigureUrl;
     }
 }
 

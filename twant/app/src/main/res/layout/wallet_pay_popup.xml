@@ -99,7 +99,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_password_indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -182,7 +181,6 @@
         </RelativeLayout>
     </RelativeLayout>
     <LinearLayout
-        android:id="@+id/ll_keyboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"

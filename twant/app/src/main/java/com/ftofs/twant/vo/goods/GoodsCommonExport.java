@@ -11,24 +11,24 @@ import java.util.List;
 /**
  * @author liusf
  * @create 2019/2/27 15:21
- * @description  商品導出Excel
+ * @description  產品導出Excel
  */
 public class GoodsCommonExport {
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
     /**
-     * 商品產地(國家)
+     * 產品產地(國家)
      */
     private String goodsCountry;
     /**
-     * 商品卖点
+     * 產品卖点
      */
 
     private String jingle;
@@ -49,7 +49,7 @@ public class GoodsCommonExport {
      */
     private String specJson;
     /**
-     * 商品编号和规格值编号JSON
+     * 產品编号和规格值编号JSON
      */
     private String goodsSpecValueJson;
     /**
@@ -61,23 +61,23 @@ public class GoodsCommonExport {
      */
     private String brandName;
     /**
-     * 商品创建时间
+     * 產品创建时间
      */
     private String createTime;
     /**
-     * 商品更新时间
+     * 產品更新时间
      */
     private String updateTime;
     /**
-     * 商品运费
+     * 產品运费
      */
     private BigDecimal goodsFreight =  new BigDecimal("0");
     /**
-     * 商品重量
+     * 產品重量
      */
     private BigDecimal freightWeight = BigDecimal.ZERO;
     /**
-     * 商品体积
+     * 產品体积
      */
     private BigDecimal freightVolume = BigDecimal.ZERO;
     /**
@@ -129,7 +129,7 @@ public class GoodsCommonExport {
      */
     private BigDecimal webPrice2 = new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin;
     /**
@@ -149,7 +149,7 @@ public class GoodsCommonExport {
      */
     private BigDecimal appPrice2 = new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin;
     /**
@@ -169,7 +169,7 @@ public class GoodsCommonExport {
      */
     private BigDecimal wechatPrice2 = new BigDecimal(0);
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin;
     /**
@@ -242,11 +242,11 @@ public class GoodsCommonExport {
      */
     private int joinBigSale = 1;
     /**
-     * 商品图片
+     * 產品图片
      */
     private List<GoodsImage> goodsImageList = new ArrayList<>();
     /**
-     * 商品列表
+     * 產品列表
      */
     private List<Goods> goodsList = new ArrayList<>();
     /**
@@ -258,11 +258,11 @@ public class GoodsCommonExport {
      */
     private Integer searchBoost = 0;
     /**
-     * 是否虛擬商品 0否 1是
+     * 是否虛擬產品 0否 1是
      */
     private Integer isVirtual = 0;
     /**
-     * 商品視頻鏈接
+     * 產品視頻鏈接
      */
     private String goodsVideo;
     /**
@@ -284,7 +284,7 @@ public class GoodsCommonExport {
     private String waterMarkPosition;
 
     /**
-     * 點讚數量
+     * 讚想數量
      */
     private int goodsLike = 0;
 

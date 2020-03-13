@@ -3,7 +3,7 @@ package com.ftofs.twant.wxapi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.SPField;
@@ -78,7 +78,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
         SLog.info("key[%s]", key);
         String payData = Hawk.get(key, "");
         SLog.info("payData[%s]", payData);
-        EasyJSONObject payDataObj = (EasyJSONObject) EasyJSONObject.parse(payData);
+        EasyJSONObject payDataObj = EasyJSONObject.parse(payData);
         if (payDataObj == null) {
             return;
         }

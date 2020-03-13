@@ -2,7 +2,8 @@ package com.ftofs.twant.activity;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.umeng.message.PushAgent;
 

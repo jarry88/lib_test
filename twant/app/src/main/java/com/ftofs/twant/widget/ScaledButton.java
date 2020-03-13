@@ -15,6 +15,7 @@ import com.ftofs.twant.R;
  * @author zwm
  */
 public class ScaledButton extends RelativeLayout {
+    boolean isChecked;
     ImageView buttonIcon;
     public ScaledButton(Context context) {
         this(context, null);
@@ -54,5 +55,20 @@ public class ScaledButton extends RelativeLayout {
     public void setColorFilter(int color) {
         buttonIcon.setColorFilter(color);
     }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+        if (isChecked) {
+            this.setIconResource(R.drawable.icon_cart_item_checked);
+        } else {
+            this.setIconResource(R.drawable.icon_cart_item_unchecked);
+        }
+    }
+
+
 }
 

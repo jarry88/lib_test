@@ -1,8 +1,8 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
-import com.ftofs.twant.log.SLog;
 
 import java.util.List;
 
@@ -48,6 +47,7 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
 
     // 選中高亮文本的顏色
     int highlightedTextColor;
+    int twBlack;
 
     boolean hasSeparator;
     boolean showUncheckedIndicator;  // 是否顯示未選中的提示圖標
@@ -71,6 +71,7 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
         this.showUncheckedIndicator = showUncheckedIndicator;
 
         highlightedTextColor = context.getColor(R.color.tw_blue);
+        twBlack = context.getColor(R.color.tw_black);
     }
 
     @NonNull
@@ -86,16 +87,18 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         ListPopupItem item = itemList.get(i);
         viewHolder.tvText.setText(item.title);
-        // 選中的高亮顯示
-        if (i == index) {
+
+        if (i == index) {  // 選中的高亮顯示
             viewHolder.tvText.setTextColor(highlightedTextColor);
             viewHolder.checkedImage.setVisibility(View.VISIBLE);
+            viewHolder.checkedImage.setImageResource(R.drawable.icon_checked);
 
             if (item.selectedIconResId != 0) {
                 viewHolder.imgIcon.setImageResource(item.selectedIconResId);
             }
             viewHolder.imgIcon.setVisibility(item.selectedIconResId != 0 ? View.VISIBLE : View.GONE);
         } else {
+            viewHolder.tvText.setTextColor(twBlack);
             if (showUncheckedIndicator) {
                 viewHolder.checkedImage.setVisibility(View.VISIBLE);
                 viewHolder.checkedImage.setImageResource(R.drawable.icon_cart_item_unchecked);
@@ -117,6 +120,7 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                index = i;
                 onSelectedListener.onSelected(type, i, null);
             }
         });

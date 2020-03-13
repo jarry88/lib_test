@@ -18,6 +18,8 @@ import java.util.List;
  * Created 2017/4/13 11:01
  */
 public class MemberVo {
+
+    public boolean getFromInterface;
     /**
      * 会员自增编码
      */
@@ -31,7 +33,7 @@ public class MemberVo {
      */
     private String trueName = "";
     /**
-     * 會員暱稱 Modify By yangjian 2018/9/19 18:02 description 新增會員暱稱
+     * 城友暱稱 Modify By yangjian 2018/9/19 18:02 description 新增城友暱稱
      */
     private String nickName = "";
     /**
@@ -208,8 +210,8 @@ public class MemberVo {
     private HashMap<String, Object> currGrade = new HashMap<String, Object>();
 
     /**
-     * Modify By yangjian 2018/9/7 19:46 description 0店鋪入駐 1進入店鋪
-     * 顯示店鋪入駐，進入店鋪
+     * Modify By yangjian 2018/9/7 19:46 description 0商店入駐 1進入商店
+     * 顯示商店入駐，進入商店
      */
     private int isStoreSuccess = 0;
 
@@ -259,11 +261,11 @@ public class MemberVo {
     private int follow = 0;
 
     /**
-     * 會員個性簽名
+     * 城友個性簽名
      */
     private String memberSignature;
     /**
-     * 會員簡介
+     * 城友簡介
      */
     private String memberBio;
 
@@ -271,6 +273,17 @@ public class MemberVo {
      * 地區名稱
      */
     private String mobileAreaName;
+    //  按照會員信息查詢接口新增memberVo類字段20/3/6
+    public int role;//角色 0會員 1客服 2店主
+    public String staffName;//客服名稱
+    public String storeAvatar;
+    public String storeName;
+
+    public int getStoreId() {
+        return storeId;
+    }
+
+    private int storeId;
 
     public int getMemberId() {
         return memberId;
@@ -741,6 +754,8 @@ public class MemberVo {
         return "MemberVo{" +
                 "memberId=" + memberId +
                 ", memberName='" + memberName + '\'' +
+                ", storeName='" + storeName + '\'' +
+                ", staffName" + staffName +'\'' +
                 ", trueName='" + trueName + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", memberPwd='" + memberPwd + '\'' +
@@ -797,5 +812,9 @@ public class MemberVo {
                 ", memberSignature='" + memberSignature + '\'' +
                 ", memberBio='" + memberBio + '\'' +
                 '}';
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
     }
 }

@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
 
 /**
- * 商品總計
+ * 產品總計
  * @author zwm
  */
 public class ConfirmOrderSummaryItem implements MultiItemEntity {
@@ -23,8 +23,23 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
     public int platformCouponCount;  // 平台券數量
     public String platformCouponStatus;  // 當前平台券的狀態描述，比如【可用XX張】、【$10元無門檻券】
 
+    public int payWayIndex = 0;
+
     @Override
     public int getItemType() {
         return Constant.ITEM_VIEW_TYPE_SUMMARY;
+    }
+
+    /**
+     * 計算最終的總價
+     * @return
+     */
+    public float calcTotalPrice() {
+        // 總金額 + 總運費 - 商店折扣 - 平臺折扣
+        float result = totalAmount - storeDiscount - platformDiscount;
+        if (payWayIndex != 2) { // 不是門店自提才加上運費
+            result += totalFreight;
+        }
+        return result;
     }
 }

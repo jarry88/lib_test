@@ -3,7 +3,7 @@ package com.ftofs.twant.vo.comment;
 import java.util.List;
 
 /**
- * @Description: 訂單評論
+ * @Description: 訂單說說
  * @Auther: yangjian
  * @Date: 2019/4/19 16:36
  */
@@ -17,7 +17,7 @@ public class OrderCommentVo {
      */
     private int ordersType;
     /**
-     * 商品評論列表
+     * 產品說說列表
      */
     private List<WantCommentVo> wantCommentVoList;
 

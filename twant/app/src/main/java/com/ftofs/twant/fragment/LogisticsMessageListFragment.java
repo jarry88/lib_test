@@ -1,10 +1,10 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,13 +111,13 @@ public class LogisticsMessageListFragment  extends BaseFragment implements View.
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    EasyJSONArray messageClassVoList = responseObj.getArray("datas.memberMessageList");
+                    EasyJSONArray messageClassVoList = responseObj.getSafeArray("datas.memberMessageList");
                     if (messageClassVoList.length() < 1) {
                         ToastUtil.info(_mActivity, "暫無消息");
                         return;
@@ -127,8 +127,8 @@ public class LogisticsMessageListFragment  extends BaseFragment implements View.
 
                         LogisticsMessage logisticsMessage = new LogisticsMessage();
                         logisticsMessage.id = memberMessage.getInt("messageId");
-                        logisticsMessage.content = memberMessage.getString("messageContent");
-                        logisticsMessage.time = memberMessage.getString("addTime");
+                        logisticsMessage.content = memberMessage.getSafeString("messageContent");
+                        logisticsMessage.time = memberMessage.getSafeString("addTime");
 
                         logisticsMessageList.add(logisticsMessage);
                     }
@@ -144,7 +144,7 @@ public class LogisticsMessageListFragment  extends BaseFragment implements View.
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -152,7 +152,7 @@ public class LogisticsMessageListFragment  extends BaseFragment implements View.
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.ftofs.twant.entity;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * 規格項

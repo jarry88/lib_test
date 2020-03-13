@@ -16,7 +16,7 @@ import java.util.List;
  * Copyright: www.bizpower.com
  * Copyright: 天津网城商动科技有限责任公司
  *
- * 存放下单时单个商品信息
+ * 存放下单时单个產品信息
  *
  * @author hbj
  * Created 2017/4/13 14:40
@@ -27,27 +27,27 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private int cartId;
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品规格
+     * 產品规格
      */
     private String goodsFullSpecs;
     /**
-     * 商品单价[不同端的最后单价]
+     * 產品单价[不同端的最后单价]
      */
     private BigDecimal goodsPrice;
     /**
-     * 商品图
+     * 產品图
      */
     private String imageName;
     /**
@@ -55,27 +55,27 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private int buyNum;
     /**
-     * 商品小计[单价 * 数量]
+     * 產品小计[单价 * 数量]
      */
     private BigDecimal itemAmount;
     /**
-     * 可变金额[备用]，会在商品小计的基础上减去这个值
+     * 可变金额[备用]，会在產品小计的基础上减去这个值
      */
     private BigDecimal variableItemAmount = new BigDecimal(0);
     /**
-     * 商品运费
+     * 產品运费
      */
     private BigDecimal goodsFreight;
     /**
-     * 商品库存
+     * 產品库存
      */
     private int goodsStorage;
     /**
-     * 商品分类
+     * 產品分类
      */
     private int categoryId;
     /**
-     * 商品状态
+     * 產品状态
      */
     private int goodsStatus;
     /**
@@ -87,7 +87,7 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private String storeName;
     /**
-     * 商品库存是否足够
+     * 產品库存是否足够
      */
     private int storageStatus;
     /**
@@ -103,11 +103,11 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private int allowSend = 1;
     /**
-     * 商品重量
+     * 產品重量
      */
     private BigDecimal freightWeight;
     /**
-     * 商品体积
+     * 產品体积
      */
     private BigDecimal freightVolume;
 
@@ -242,27 +242,27 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private String promotionTitle;
     /**
-     * 商品价格0
+     * 產品价格0
      */
     private BigDecimal goodsPrice0;
     /**
-     * 商品价格1
+     * 產品价格1
      */
     private BigDecimal goodsPrice1;
     /**
-     * 商品价格2
+     * 產品价格2
      */
     private BigDecimal goodsPrice2;
     /**
-     * 商品原价
+     * 產品原价
      */
     private BigDecimal basePrice;
     /**
-     * 促销价比原价节省金额(商品级)
+     * 促销价比原价节省金额(產品级)
      */
     private BigDecimal savePrice;
     /**
-     * 商品实际支付金额
+     * 產品实际支付金额
      */
     private BigDecimal payAmount = new BigDecimal(0);
     /**
@@ -278,7 +278,7 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private List<GiftVo> giftVoList = new ArrayList<>();
     /**
-     * 优惠套装商品
+     * 优惠套装產品
      */
     private List<BuyBundlingItemVo> buyBundlingItemVoList;
     /**
@@ -294,15 +294,15 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private DistributionOrders distributionOrders = new DistributionOrders();
     /**
-     * 该商品是否有付邮试用资格
+     * 该產品是否有付邮试用资格
      */
     private int trysPostUseState = 0;
     /**
-     * 该商品是否有返券试用资格
+     * 该產品是否有返券试用资格
      */
     private int trysSendUseState = 0;
     /**
-     * 商品货号
+     * 產品货号
      */
     private String goodsSerial;
     /**
@@ -374,7 +374,7 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private int isSecKill;
     /**
-     * 移杀商品Id
+     * 移杀產品Id
      */
     private int seckillGoodsId;
     /**
@@ -382,7 +382,7 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private int bargainOpenId;
     /**
-     * 该商品分摊使用的平台券总金额
+     * 该產品分摊使用的平台券总金额
      */
     private BigDecimal couponAmount = BigDecimal.ZERO;
     /**
@@ -402,15 +402,15 @@ public class BuyGoodsItemVo implements Cloneable {
      */
     private BigDecimal finalAmount = BigDecimal.ZERO;
     /**
-     * 海外购商品税率
+     * 海外购產品税率
      */
     private BigDecimal foreignTaxRate = BigDecimal.ZERO;
     /**
-     * 是否是海外购商品
+     * 是否是海外购產品
      */
     private int isForeign = 0;
     /**
-     * 海外购商品税费
+     * 海外购產品税费
      */
     private BigDecimal foreignTaxAmount = BigDecimal.ZERO;
 

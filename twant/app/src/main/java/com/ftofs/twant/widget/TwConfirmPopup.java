@@ -1,9 +1,10 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -41,6 +42,8 @@ public class TwConfirmPopup extends CenterPopupView implements View.OnClickListe
         }
         if (!StringUtil.isEmpty(textBtnNo)) {
             this.textBtnNo = textBtnNo;
+        } else {
+            findViewById(R.id.btn_no).setVisibility(GONE);
         }
     }
 

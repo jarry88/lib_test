@@ -1,26 +1,21 @@
 package com.ftofs.twant.widget;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.amap.api.maps2d.AMap;
-import com.amap.api.maps2d.CameraUpdateFactory;
-import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.model.BitmapDescriptorFactory;
-import com.amap.api.maps2d.model.LatLng;
-import com.amap.api.maps2d.model.MarkerOptions;
+import androidx.annotation.NonNull;
+
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.BitmapUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -28,6 +23,12 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.util.XPopupUtils;
+import com.tencent.mapsdk.raster.model.BitmapDescriptorFactory;
+import com.tencent.mapsdk.raster.model.LatLng;
+import com.tencent.mapsdk.raster.model.Marker;
+import com.tencent.mapsdk.raster.model.MarkerOptions;
+import com.tencent.tencentmap.mapsdk.map.MapView;
+import com.tencent.tencentmap.mapsdk.map.TencentMap;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -66,20 +67,18 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
 
     Activity activity;
     MapView mapView;
-    AMap aMap;
+//    AMap aMap;
 
     StoreMapInfo storeMapInfo;
-    Bundle savedInstanceState;
 
     public List<MapAppInfo> mapAppInfoList;
     int availableMapCount;
 
-    public AmapPopup(@NonNull Activity activity, StoreMapInfo storeMapInfo, @Nullable Bundle savedInstanceState) {
+    public AmapPopup(@NonNull Activity activity, StoreMapInfo storeMapInfo) {
         super(activity);
 
         this.activity = activity;
         this.storeMapInfo = storeMapInfo;
-        this.savedInstanceState = savedInstanceState;
 
         mapAppInfoList = new ArrayList<>();
         mapAppInfoList.add(new MapAppInfo(false, MAP_ID_AMAP, "高德地圖", null, "com.autonavi.minimap"));
@@ -100,33 +99,46 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
         findViewById(R.id.btn_map_navigation).setOnClickListener(this);
 
         TextView tvStoreAddress = findViewById(R.id.tv_store_address);
+        TextView tvBusInfo = findViewById(R.id.tv_bus_info);
         tvStoreAddress.setText(storeMapInfo.storeAddress);
+        if (StringUtil.isEmpty(storeMapInfo.busInfo)) {
+            tvBusInfo.setVisibility(GONE);
+        } else {
+            tvBusInfo.setText(storeMapInfo.busInfo);
+        }
 
         TextView tvStoreDistance = findViewById(R.id.tv_store_distance);
         if (storeMapInfo.storeDistance < Constant.STORE_DISTANCE_THRESHOLD) {
             // 如果沒有距離，則隱藏距離信息
             tvStoreDistance.setVisibility(GONE);
+            findViewById(R.id.vw_line).setVisibility(GONE);
         } else {
             String distanceText = activity.getString(R.string.text_distance) + String.format("%.1f", storeMapInfo.storeDistance / 1000) + "km";
             tvStoreDistance.setText(distanceText);
         }
 
         mapView = findViewById(R.id.map_view);
-        mapView.onCreate(savedInstanceState);// 此方法必须重写
-        aMap = mapView.getMap();
-
-        // 參考資料 https://blog.csdn.net/lhp15575865420/article/details/78150854
+        SLog.info("storeLatitude[%s], storeLongitude[%s]", storeMapInfo.storeLatitude,storeMapInfo.storeLongitude);
         LatLng latLng = new LatLng(storeMapInfo.storeLatitude,storeMapInfo.storeLongitude);
-        // 设置显示比例
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+        // latLng = new LatLng(20, 115);
+        TencentMap map = mapView.getMap();
+        //设置卫星底图
+        // map.setSatelliteEnabled(true);
+        //设置地图中心点
+        map.setCenter(latLng);
+        //设置缩放级别
+        map.setZoom(19);
 
-        aMap.addMarker(new MarkerOptions().position(latLng)
-                .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon_map_marker)))
-                .title(storeMapInfo.storeName));  // 设置 Marker覆盖物的 標題
-                // .snippet("店鋪文字描述")); // 设置 Marker覆盖物的 文字描述
+        Bitmap bmMarker = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.icon_map_marker);
+        bmMarker = BitmapUtil.scaleBitmap(bmMarker, 0.7f);
 
-        // 使高德地圖顯示指定的地點，如果不设置的话中心点是北京
-        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+        Marker marker = map.addMarker(new MarkerOptions()
+                .position(latLng)
+                // .title("上海")
+                .anchor(0.5f, 0.5f)
+                .icon(BitmapDescriptorFactory.fromBitmap(bmMarker))
+                .draggable(false));
+
 
         // 初始化地圖應用狀態
         MapAppInfo mapAppInfo = mapAppInfoList.get(MAP_ID_AMAP);
@@ -233,8 +245,8 @@ public class AmapPopup extends BottomPopupView implements View.OnClickListener {
         Intent intent = null;
         try {
             intent = Intent.parseUri(mapAppInfo.uri, 0);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         activity.startActivity(intent);
     }

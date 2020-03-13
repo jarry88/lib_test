@@ -18,11 +18,11 @@ public class EvaluateGoodsVo {
      */
     private int evaluateId;
     /**
-     * 商品SPU ID
+     * 產品SPU ID
      */
     private Integer commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
@@ -31,7 +31,7 @@ public class EvaluateGoodsVo {
      */
     private String goodsFullSpecs;
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImageUrl;
     /**

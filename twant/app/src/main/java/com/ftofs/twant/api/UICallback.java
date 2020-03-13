@@ -1,5 +1,9 @@
 package com.ftofs.twant.api;
 
+import android.util.Log;
+
+import com.ftofs.twant.log.SLog;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -74,8 +78,8 @@ public abstract class UICallback implements Runnable {
             try {
                 // 成功時回調onResponse
                 onResponse(call, responseStr);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
         }
     }

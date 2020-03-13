@@ -15,14 +15,14 @@
             android:layout_height="wrap_content"
             android:text="9.5"
             android:textColor="@android:color/white"
-            android:textSize="15sp"
+            android:textSize="13sp"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="折"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="9sp"
             />
     </LinearLayout>
 
@@ -32,6 +32,6 @@
         android:layout_height="wrap_content"
         android:text="11.2"
         android:textColor="@android:color/white"
-        android:textSize="10sp"
+        android:textSize="9sp"
         />
 </LinearLayout>

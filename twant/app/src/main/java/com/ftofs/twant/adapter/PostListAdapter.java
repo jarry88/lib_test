@@ -1,38 +1,43 @@
 package com.ftofs.twant.adapter;
 
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
-import com.ftofs.twant.widget.TwProgressBar;
 
 import java.util.List;
 
 public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseViewHolder> implements Animation.AnimationListener {
     Animation animation;
-    ImageView animatingImageView;
+    TextView animatingTextView;
 
-    public PostListAdapter(@Nullable List<PostItem> data) {
+    int twBlue;
+    int twYellow;
+
+    public PostListAdapter(Context context, @Nullable List<PostItem> data) {
         super(data);
 
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.post_list_item);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint_new);
+
+        twBlue = context.getColor(R.color.tw_blue);
+        twYellow = context.getColor(R.color.tw_yellow);
     }
 
     @Override
@@ -40,7 +45,23 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
         int itemType = item.getItemType();
         if (itemType == Constant.ITEM_TYPE_NORMAL) {
             ImageView coverImage = helper.getView(R.id.post_cover_image);
-            Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.coverImage)).centerCrop().into(coverImage);
+            TextView tvPostSummary = helper.getView(R.id.tv_post_summary);
+            SLog.info("coverImage[%s]", item.coverImage);
+            if (StringUtil.isEmpty(item.coverImage)) {
+                tvPostSummary.setText(StringUtil.translateEmoji(mContext, item.content, (int) tvPostSummary.getTextSize()));
+                coverImage.setVisibility(View.GONE);
+                tvPostSummary.setVisibility(View.VISIBLE);
+                if (item.comeTrueState == Constant.TRUE_INT) {
+                    tvPostSummary.setBackgroundColor(twYellow);
+                } else {
+                    tvPostSummary.setBackgroundColor(twBlue);
+                }
+            } else {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.coverImage)).centerCrop().into(coverImage);
+                coverImage.setVisibility(View.VISIBLE);
+                tvPostSummary.setVisibility(View.GONE);
+            }
+
 
             ImageView authorAvatar = helper.getView(R.id.img_author_avatar);
             if (StringUtil.isEmpty(item.authorAvatar)) {
@@ -49,13 +70,24 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
                 Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.authorAvatar)).centerCrop().into(authorAvatar);
             }
 
-
+            String createTime= Jarbon.parse(item.createTime).format("y年n月j日 H:i");
+            String postViewText = StringUtil.formatPostView(item.postView);
             helper.setText(R.id.tv_title, String.format("%s | %s", item.postCategory, item.title))
                     .setText(R.id.tv_author_nickname, item.authorNickname)
                     .setText(R.id.tv_like_count, String.valueOf(item.postFollow))
                     .setText(R.id.tv_comment_count, String.valueOf(item.postReply))
-                    .setText(R.id.tv_view_count, String.valueOf(item.postView))
-                    .setText(R.id.tv_create_time, item.createTime);
+                    .setText(R.id.tv_view_count, postViewText)
+                    .setText(R.id.tv_create_time,createTime);
+
+            if (item.comeTrueState == Constant.TRUE_INT) {
+                helper.setGone(R.id.icon_come_true, true)
+                        .setBackgroundRes(R.id.ll_header_container, R.drawable.post_item_header_bg_achieved)
+                        .setBackgroundRes(R.id.fl_author_avatar_container, R.drawable.post_item_avatar_bg_achieved);
+            } else {
+                helper.setGone(R.id.icon_come_true, false)
+                        .setBackgroundRes(R.id.ll_header_container, R.drawable.post_item_header_bg_normal)
+                        .setBackgroundRes(R.id.fl_author_avatar_container, R.drawable.post_item_avatar_bg_normal);
+            }
 
             int itemCount = getItemCount();
             int position = helper.getAdapterPosition();
@@ -72,11 +104,14 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
                 animation = AnimationUtils.loadAnimation(mContext, R.anim.takewant_message);
                 animation.setAnimationListener(this);
             }
-            animatingImageView = helper.getView(R.id.img_load_end_hint_bubble);
+            animatingTextView = helper.getView(R.id.tv_load_end_hint_bubble);
             if (item.animShowStatus == Constant.ANIM_SHOWING) {
                 item.animShowStatus = Constant.ANIM_SHOWN;
-                animatingImageView.startAnimation(animation);
+                animatingTextView.startAnimation(animation);
             }
+
+            ImageView iconPublishWantPost = helper.getView(R.id.icon_publish_want_post);
+            Glide.with(mContext).load("file:///android_asset/christmas/publish_want_post_dynamic.gif").centerCrop().into(iconPublishWantPost);
         }
     }
 
@@ -88,12 +123,12 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
     @Override
     public void onAnimationEnd(Animation animation) {
         SLog.info("onAnimationEnd");
-        if (animatingImageView != null) {
-            animatingImageView.setVisibility(View.VISIBLE);
-            animatingImageView.postDelayed(new Runnable() {
+        if (animatingTextView != null) {
+            animatingTextView.setVisibility(View.VISIBLE);
+            animatingTextView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    animatingImageView.setVisibility(View.INVISIBLE);
+                    animatingTextView.setVisibility(View.INVISIBLE);
                 }
             }, 1500);
         }

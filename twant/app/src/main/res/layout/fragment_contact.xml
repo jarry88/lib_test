@@ -19,7 +19,7 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />
@@ -38,8 +38,8 @@
             android:id="@+id/btn_contact_menu"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="12dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginEnd="12dp"
+            android:layout_alignParentEnd="true"
             android:scaleType="fitXY"
             android:src="@drawable/icon_contact_menu"
             />
@@ -49,8 +49,8 @@
             android:id="@+id/btn_contact_find"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/btn_contact_menu"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/btn_contact_menu"
             android:scaleType="fitXY"
             android:src="@drawable/icon_contact_find"
             />
@@ -73,11 +73,10 @@
             android:src="@drawable/icon_new_friend"
             />
         <TextView
-            android:id="@+id/tv_new_friend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@id/icon_new_friend"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@id/icon_new_friend"
             android:layout_centerVertical="true"
             android:text="@string/text_new_friend"
             android:textSize="16sp"
@@ -101,10 +100,10 @@
         android:background="@color/tw_light_grey"
         />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_contact_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

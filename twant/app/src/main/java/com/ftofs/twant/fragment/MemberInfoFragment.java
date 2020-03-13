@@ -1,13 +1,15 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -29,8 +31,12 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 會員信息Fragment
+ * 城友信息Fragment
  * @author zwm
+ */
+/**
+ *更改處loadMemberInfo().onResponse(),267行，
+ * 增加isFriend判斷
  */
 public class MemberInfoFragment extends BaseFragment implements View.OnClickListener {
     /**
@@ -104,7 +110,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_chat_with_him) {
             FriendInfo.upsertFriendInfo(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER);
             FriendInfo friendInfo = new FriendInfo();
@@ -136,7 +142,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
@@ -162,7 +168,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
                         .asCustom(new InviteAddFriendPopup(_mActivity, memberName))
                         .show();
             } else { // 訪問專頁
-
+                start(TestFriendFragment.newInstance(memberName));
             }
         }
     }
@@ -191,7 +197,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -202,9 +208,12 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
                     }
 
                     isFriend = responseObj.getInt("datas.isFriend");
-                    EasyJSONObject member = responseObj.getObject("datas.member");
+                    if(isFriend == 1){
+                        btnAddFriend.setText("訪問專頁");
+                    }
+                    EasyJSONObject member = responseObj.getSafeObject("datas.member");
 
-                    avatarUrl = StringUtil.normalizeImageUrl(member.getString("avatarUrl"));
+                    avatarUrl = StringUtil.normalizeImageUrl(member.getSafeString("avatarUrl"));
 
                     if (StringUtil.useDefaultAvatar(avatarUrl)) {
                         Glide.with(_mActivity).load(R.drawable.grey_default_avatar).centerCrop().into(imageAvatar);
@@ -212,18 +221,18 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imageAvatar);
                     }
 
-                    nickname = member.getString("nickName");
+                    nickname = member.getSafeString("nickName");
                     tvNickname.setText(nickname);
-                    tvLocation.setText(member.getString("addressAreaInfo"));
-                    tvMemberSignature.setText(member.getString("memberSignature"));
+                    tvLocation.setText(member.getSafeString("addressAreaInfo"));
+                    tvMemberSignature.setText(member.getSafeString("memberSignature"));
 
 
-                    EasyJSONObject memberHomeState = responseObj.getObject("datas.memberHomeState");
+                    EasyJSONObject memberHomeState = responseObj.getSafeObject("datas.memberHomeState");
                     tvPopularity.setText(String.valueOf(memberHomeState.getInt("popularity")));
                     tvFollowCount.setText(String.valueOf(memberHomeState.getInt("follow")));
                     tvArticleCount.setText(String.valueOf(memberHomeState.getInt("post")));
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -232,7 +241,7 @@ public class MemberInfoFragment extends BaseFragment implements View.OnClickList
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 }

@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.hr;
 
 public class HrPost {
     /**
-     * 招聘文章id
+     * 招聘想要帖id
      */
     private int postId;
 
@@ -12,7 +12,7 @@ public class HrPost {
     private String postTitle;
 
     /**
-     * 文章類型
+     * 想要帖類型
      */
     private int postType;
 
@@ -87,7 +87,7 @@ public class HrPost {
     private String createTime;
 
     /**
-     * 店鋪id
+     * 商店id
      */
     private int storeId;
 

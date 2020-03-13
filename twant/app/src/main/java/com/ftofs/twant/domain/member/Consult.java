@@ -9,7 +9,7 @@ public class Consult implements Serializable {
     private int consultId;
 
     /**
-     * 商品编号
+     * 產品编号
      */
     private int commonId = 0;
 

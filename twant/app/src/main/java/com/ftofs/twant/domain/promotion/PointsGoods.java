@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class PointsGoods implements Serializable {
     /**
-     * 积分商品编号
+     * 积分產品编号
      */
     private int pointsGoodsId;
 
@@ -24,7 +24,7 @@ public class PointsGoods implements Serializable {
     private String limitMemberGradeName = "";
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 
@@ -34,7 +34,7 @@ public class PointsGoods implements Serializable {
     private int storeId;
 
     /**
-     * 积分商品创建时间
+     * 积分產品创建时间
      */
     private String createTime;
 

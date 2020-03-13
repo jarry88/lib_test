@@ -37,21 +37,21 @@
             android:id="@+id/btn_ok"
             android:layout_width="51dp"
             android:layout_height="25dp"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:text="@string/ok"
-            android:background="@drawable/micro_red_button"
+            android:background="@drawable/micro_blue_button"
             />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="167dp"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:layout_marginStart="@dimen/toolbar_margin_left"
+        android:layout_marginEnd="@dimen/toolbar_margin_right"
         android:layout_marginTop="15dp"
         android:background="@drawable/border_type_a">
         <EditText
@@ -71,9 +71,9 @@
             android:id="@+id/tv_word_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="10dp"
             android:text="0/200"
             android:textSize="10sp"

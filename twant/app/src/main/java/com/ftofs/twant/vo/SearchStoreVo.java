@@ -39,7 +39,7 @@ public class SearchStoreVo {
      */
     private String sellerName;
     /**
-     * 店铺主营商品
+     * 店铺主营產品
      */
     private String storeZy = "";
     /**
@@ -88,7 +88,7 @@ public class SearchStoreVo {
      */
     private Integer companyAreaId = 0;
     /**
-     * 查询店铺商品数量
+     * 查询店铺產品数量
      */
     private long goodsCommonCount = 0;
     /**
@@ -96,7 +96,7 @@ public class SearchStoreVo {
      */
     private EvaluateStoreVo evaluateStoreVo = new EvaluateStoreVo();
     /**
-     * 商品SPU列表(5个)
+     * 產品SPU列表(5个)
      */
     private List<GoodsCommon> goodsCommonList = new ArrayList<>();
     /**
@@ -118,7 +118,7 @@ public class SearchStoreVo {
     private int isOnline = 0;
 
     /**
-     * 店鋪形象圖
+     * 商店形象圖
      */
     private String storeFigureImage;
 
@@ -142,7 +142,7 @@ public class SearchStoreVo {
     private Integer likeCount;
 
     /**
-     * 當前位置與店鋪閒的距離(格式化為字符串顯示，單位m)
+     * 當前位置與商店閒的距離(格式化為字符串顯示，單位m)
      */
     private String distance = "0";
 

@@ -8,7 +8,7 @@
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:background="@drawable/border_type_d">
-    <!-- 通用的會員列表 -->
+    <!-- 通用的城友列表 -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_avatar"
         android:layout_width="50dp"

@@ -8,28 +8,28 @@ import java.util.List;
 
 public class GoodsCommon implements Serializable,Cloneable {
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
 
     /**
-     * 商品產地(國家)
+     * 產品產地(國家)
      * Modify By yangjian 2019/1/4 14:42
      */
     private Integer goodsCountry=0;
 
     /**
-     * 商品卖点
+     * 產品卖点
      */
     private String jingle;
 
     /**
-     * 商品分类编号
+     * 產品分类编号
      */
     private int categoryId;
 
@@ -54,7 +54,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private String specJson;
 
     /**
-     * 商品编号和规格值编号JSON
+     * 產品编号和规格值编号JSON
      */
     private String goodsSpecValueJson;
 
@@ -69,7 +69,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private int brandId;
 
     /**
-     * 商品状态
+     * 產品状态
      * 0下架，1正常，10违规禁售
      */
     private int goodsState;
@@ -91,12 +91,12 @@ public class GoodsCommon implements Serializable,Cloneable {
     private String verifyRemark;
 
     /**
-     * 商品创建时间
+     * 產品创建时间
      */
     private String createTime;
 
     /**
-     * 商品更新时间
+     * 產品更新时间
      */
     private String updateTime;
 
@@ -116,7 +116,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private String areaInfo;
 
     /**
-     * 商品运费
+     * 產品运费
      */
     private BigDecimal goodsFreight =  new BigDecimal("0");
 
@@ -126,12 +126,12 @@ public class GoodsCommon implements Serializable,Cloneable {
     private int freightTemplateId = 0;
 
     /**
-     * 商品重量
+     * 產品重量
      */
     private BigDecimal freightWeight = BigDecimal.ZERO;
 
     /**
-     * 商品体积
+     * 產品体积
      */
     private BigDecimal freightVolume = BigDecimal.ZERO;
 
@@ -196,7 +196,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private BigDecimal webPrice2 = new BigDecimal(0);
 
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal webPriceMin;
 
@@ -221,7 +221,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private BigDecimal appPrice2 = new BigDecimal(0);
 
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal appPriceMin;
 
@@ -246,7 +246,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private BigDecimal wechatPrice2 = new BigDecimal(0);
 
     /**
-     * 商品最低价
+     * 產品最低价
      */
     private BigDecimal wechatPriceMin;
 
@@ -297,7 +297,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private int goodsModal;
 
     /**
-     * 商品规格名称JSON
+     * 產品规格名称JSON
      */
     private String goodsSpecNames;
 
@@ -348,12 +348,12 @@ public class GoodsCommon implements Serializable,Cloneable {
     private int joinBigSale = 1;
 
     /**
-     * 商品图片
+     * 產品图片
      */
     private List<GoodsImage> goodsImageList = new ArrayList<>();
 
     /**
-     * 商品列表
+     * 產品列表
      */
     private List<Goods> goodsList = new ArrayList<>();
 
@@ -368,17 +368,17 @@ public class GoodsCommon implements Serializable,Cloneable {
     private Integer groupId;
 
     /**
-     * 是否为编辑团购商品
+     * 是否为编辑团购產品
      */
     private int isGroupEdit = 0;
 
     /**
-     * 是否为分销商品
+     * 是否为分销產品
      */
     private Integer isDistribution = 0;
 
     /**
-     * 是否为积分商品
+     * 是否为积分產品
      */
     private Integer isPointsGoods = 0;
 
@@ -443,17 +443,17 @@ public class GoodsCommon implements Serializable,Cloneable {
     private Integer virtualOverdueRefund = 0;
 
     /**
-     * 海外商品税率
+     * 海外產品税率
      */
     private BigDecimal foreignTaxRate = BigDecimal.ZERO;
 
     /**
-     * 是否虛擬商品 0否 1是
+     * 是否虛擬產品 0否 1是
      */
     private Integer isVirtual = 0;
 
     /**
-     * 商品視頻鏈接
+     * 產品視頻鏈接
      */
     private String goodsVideo;
 
@@ -478,7 +478,7 @@ public class GoodsCommon implements Serializable,Cloneable {
     private String waterMarkPosition;
 
     /**
-     * Modify By liusf 2019/1/9 11:01 被點讚数量
+     * Modify By liusf 2019/1/9 11:01 被讚想数量
      */
     private int goodsLike = 0;
 

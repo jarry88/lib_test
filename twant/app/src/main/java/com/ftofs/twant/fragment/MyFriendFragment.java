@@ -1,16 +1,20 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.MyFriendListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -43,10 +47,34 @@ import okhttp3.Call;
 public class MyFriendFragment extends BaseFragment implements View.OnClickListener {
     List<MyFriendListItem> myFriendListItems = new ArrayList<>();
     MyFriendListAdapter adapter;
+    String memberName;
+    TextView tv_fragment_title;
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        ((MainActivity) getActivity()).setMessageFragmentsActivity(false);
+
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        ((MainActivity) getActivity()).setMessageFragmentsActivity(true);
+
+    }
 
     public static MyFriendFragment newInstance() {
         Bundle args = new Bundle();
 
+        MyFriendFragment fragment = new MyFriendFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static MyFriendFragment newInstance(String memberName) {
+        Bundle args = new Bundle();
+        args.putString("memberName",memberName);
         MyFriendFragment fragment = new MyFriendFragment();
         fragment.setArguments(args);
 
@@ -65,19 +93,21 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+
+        Util.setOnClickListener(view, R.id.btn_my_like, this);
+        Util.setOnClickListener(view, R.id.btn_my_comment, this);
+        Util.setOnClickListener(view, R.id.btn_my_follow, this);
+        Util.setOnClickListener(view, R.id.btn_message_search, this);
+
         Util.setOnClickListener(view, R.id.btn_menu, this);
+
+        tv_fragment_title = view.findViewById(R.id.tv_fragment_title);
+        replaceWord(view);
 
         RecyclerView rvList = view.findViewById(R.id.rv_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvList.setLayoutManager(layoutManager);
         adapter = new MyFriendListAdapter(R.layout.my_friend_list_item, myFriendListItems);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                String memberName = myFriendListItems.get(position).memberName;
-                start(MemberInfoFragment.newInstance(memberName));
-            }
-        });
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -108,8 +138,12 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
                             SLog.info("onNo");
                         }
                     })).show();
-                } else if (id == R.id.img_avatar) {
-                    start(MemberInfoFragment.newInstance(memberName));
+                } else if (id == R.id.ll_swipe_content) {
+                    if(memberName.equals(User.getUserInfo(SPField.FIELD_MEMBER_NAME,null))){
+                        start(PersonalInfoFragment.newInstance());
+                    }else{
+                        start(MemberInfoFragment.newInstance(memberName));
+                    }
                 }
             }
         });
@@ -119,7 +153,6 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadData() {
-        String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
         String token = User.getToken();
 
         if (StringUtil.isEmpty(token) || StringUtil.isEmpty(memberName)) {
@@ -141,30 +174,30 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    EasyJSONArray friendsList = responseObj.getArray("datas.friendsList");
+                    EasyJSONArray friendsList = responseObj.getSafeArray("datas.friendsList");
 
                     for (Object object : friendsList) {
                         EasyJSONObject friend = (EasyJSONObject) object;
 
                         MyFriendListItem item = new MyFriendListItem(
-                                friend.getString("memberName"),
-                                friend.getString("avatar"),
-                                friend.getString("nickName"),
+                                friend.getSafeString("memberName"),
+                                friend.getSafeString("avatar"),
+                                friend.getSafeString("nickName"),
                                 friend.getInt("currGrade.gradeLevel"),
-                                friend.getString("memberSignature"));
+                                friend.getSafeString("memberSignature"));
 
                         myFriendListItems.add(item);
                     }
 
                     adapter.setNewData(myFriendListItems);
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -176,7 +209,7 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -185,7 +218,13 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
+        } else if(id == R.id.btn_my_like) {
+            Util.startFragment(MyLikeFragment.newInstance(memberName));
+        } else if(id == R.id.btn_my_comment) {
+            Util.startFragment(MyCommentFragment.newInstance(memberName));
+        } else if(id == R.id.btn_my_follow) {
+            Util.startFragment(MyFollowFragment.newInstance(memberName));
         } else if (id == R.id.btn_menu) {
             new XPopup.Builder(_mActivity)
                     .offsetX(-Util.dip2px(_mActivity, 11))
@@ -195,6 +234,8 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
                     .atView(v)
                     .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_HOME_AND_MY))
                     .show();
+        } else if (id == R.id.btn_message_search) {
+            Util.startFragment(SearchFriendFragment.newInstance());
         }
     }
 
@@ -220,7 +261,7 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
@@ -233,5 +274,15 @@ public class MyFriendFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+    }
+    private void replaceWord(View v){
+        memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME,null);
+        if(getArguments().containsKey("memberName")){
+            if(!memberName.equals(getArguments().getString("memberName"))){
+                ((TextView) v.findViewById(R.id.tv_fragment_title)).setText(getString(R.string.text_him_friend));
+                memberName = getArguments().getString("memberName");
+            }
+        }
+
     }
 }

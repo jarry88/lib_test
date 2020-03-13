@@ -1,8 +1,8 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +89,7 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_mobile_zone) {
             List<ListPopupItem> itemList = new ArrayList<>();
             for (MobileZone mobileZone : mobileZoneList) {
@@ -146,14 +146,13 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
                     try {
                         SLog.info("responseStr[%s]", responseStr);
 
-                        EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
 
                         ToastUtil.success(_mActivity, "設置成功");
-                        hideSoftInput();
-                        pop();
+                        hideSoftInputPop();
                     } catch (Exception e) {
 
                     }
@@ -166,7 +165,7 @@ public class ArrivalNoticeFragment extends BaseFragment implements View.OnClickL
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 

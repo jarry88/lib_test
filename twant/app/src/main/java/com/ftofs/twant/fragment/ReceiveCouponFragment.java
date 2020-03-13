@@ -2,8 +2,8 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +30,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
- * 領取【平台券】、【店鋪券】Fragment
+ * 領取【平台券】、【商店券】Fragment
  * @author zwm
  */
 public class ReceiveCouponFragment extends BaseFragment implements View.OnClickListener {
@@ -96,10 +96,12 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
                     SLog.info("平台券");
                     tvCardPassTitle.setText(R.string.text_platform_coupon_card_pass);
                     etCouponCardPass.setHint(R.string.input_platform_coupon_card_pass_hint);
+                    couponType = Constant.COUPON_TYPE_PLATFORM;
                 } else if (id == R.id.tab_store_coupon) {
-                    SLog.info("店鋪券");
+                    SLog.info("商店券");
                     tvCardPassTitle.setText(R.string.text_store_coupon_card_pass);
                     etCouponCardPass.setHint(R.string.input_store_coupon_card_pass_hint);
+                    couponType = Constant.COUPON_TYPE_STORE;
                 }
             }
         };
@@ -123,7 +125,7 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_back) {
-            pop();
+            hideSoftInputPop();
         } else if (id == R.id.btn_ok) {
             receiveCoupon();
         } else if (id == R.id.btn_refresh_captcha) {
@@ -134,7 +136,7 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        hideSoftInputPop();
         return true;
     }
 
@@ -157,6 +159,7 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
         } else {
             url = Api.PATH_RECEIVE_PLATFORM_COUPON_BY_PWD;
         }
+        SLog.info("url[%s]", url);
 
         Api.postUI(url, params, new UICallback() {
             @Override
@@ -168,7 +171,7 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         etCaptcha.setText("");

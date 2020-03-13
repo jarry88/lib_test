@@ -9,14 +9,14 @@ import java.util.List;
  * @license http://www.shopnc.net
  * @link http://www.shopnc.net
  *
- * 买家订单商品列表
+ * 买家订单產品列表
  *
  * @author hbj
  * Created 2017/4/13 14:46
  */
 public class SearchOrdersGoodsVo {
     /**
-     * 订单商品编号
+     * 订单產品编号
      */
     private int ordersGoodsId;
     /**
@@ -24,23 +24,23 @@ public class SearchOrdersGoodsVo {
      */
     private int ordersId;
     /**
-     * 商品Id
+     * 產品Id
      */
     private int goodsId;
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
     /**
-     * 商品名称
+     * 產品名称
      */
     private String goodsName;
     /**
-     * 商品(购买时的)单价
+     * 產品(购买时的)单价
      */
     private BigDecimal goodsPrice;
     /**
-     * (该商品)实付支付总金额
+     * (该產品)实付支付总金额
      */
     private BigDecimal goodsPayAmount;
     /**
@@ -48,11 +48,11 @@ public class SearchOrdersGoodsVo {
      */
     private int buyNum;
     /**
-     * 商品图片
+     * 產品图片
      */
     private String goodsImage;
     /**
-     * 商品图片带URL
+     * 產品图片带URL
      */
     private String imageSrc;
     /**
@@ -84,7 +84,7 @@ public class SearchOrdersGoodsVo {
      */
     private List<String> goodsServicesList = new ArrayList<>();
     /**
-     * cj[ 商品是否显示退款](该字段不存到搜索引擎里)
+     * cj[ 產品是否显示退款](该字段不存到搜索引擎里)
      * 1.显示 ， 2 不显示
      */
     private int showRefund = 0;
@@ -117,11 +117,11 @@ public class SearchOrdersGoodsVo {
      */
     private int showViewReturn = 0;
     /**
-     * 虚拟商品是否申请过退款
+     * 虚拟產品是否申请过退款
      */
     private int virtualRefundApplyed = 0;
     /**
-     * 虚拟商品是否允许退款(当旗下至少有一个虚拟码可退时，就可以申请退款)(该字段不存到搜索引擎里)
+     * 虚拟產品是否允许退款(当旗下至少有一个虚拟码可退时，就可以申请退款)(该字段不存到搜索引擎里)
      */
     private int allowVirtualRefund = 0;
     /**
@@ -129,7 +129,7 @@ public class SearchOrdersGoodsVo {
      */
     private int isExistLock = 0;
     /**
-     * 商品促销标签标题(只有订单列表、详情显示商品促销类型使用)(该字段不存到搜索引擎里)
+     * 產品促销标签标题(只有订单列表、详情显示產品促销类型使用)(该字段不存到搜索引擎里)
      */
     private String tagTitle = "";
 

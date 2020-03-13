@@ -1,7 +1,7 @@
 package com.ftofs.twant.entity;
 
 /**
- * 店鋪券的使用狀態的數據結構
+ * 商店券的使用狀態的數據結構
  * @author zwm
  */
 public class VoucherUseStatus {

@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.NoticeItem;
+import com.ftofs.twant.log.SLog;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class NoticeListAdapter extends BaseMultiItemQuickAdapter<NoticeItem, Bas
             helper.addOnClickListener(R.id.btn_delete_message_item, R.id.ll_swipe_content);
 
             ImageView imageView = helper.getView(R.id.img_msg_cover);
+            SLog.info("item.tplCode[%s]", item.tplCode);
             if (item.tplCode.equals("memberReturnUpdate")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_return).centerCrop().into(imageView);
             } else if (item.tplCode.equals("storeOpen") || item.tplCode.equals("storeClose") ||
@@ -47,7 +49,8 @@ public class NoticeListAdapter extends BaseMultiItemQuickAdapter<NoticeItem, Bas
                 Glide.with(mContext).load(R.drawable.icon_notice_store).centerCrop().into(imageView);
             } else if (item.tplCode.equals("storeSalesPromotion") || item.tplCode.equals("memberDiscountCoupon")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_bargain).centerCrop().into(imageView);
-            } else if (item.tplCode.equals("memberWantCommentLike") || item.tplCode.equals("memberStoreWantCommentReply") || item.tplCode.equals("memberGoodsWantCommentReply")) {
+            } else if (item.tplCode.equals("memberWantCommentLike") || item.tplCode.equals("memberStoreWantCommentReply") || item.tplCode.equals("memberGoodsWantCommentReply") ||
+                    item.tplCode.equals("adminReply")) {
                 Glide.with(mContext).load(R.drawable.icon_notice_interactive).centerCrop().into(imageView);
             } else if (item.tplCode.equals("memberWantPostLike") || item.tplCode.equals("memberFriendsApply") ||
                     item.tplCode.equals("memberFollowWantPost") || item.tplCode.equals("memberAgreeFriendsApply")) {

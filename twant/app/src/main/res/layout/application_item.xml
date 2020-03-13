@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/goods_image_bg"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginTop="15dp"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="15dp">
+        <TextView
+            android:id="@+id/tv_position_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            android:text="營業員"/>
+        <TextView
+            android:id="@+id/tv_position_category"
+            android:layout_toEndOf="@id/tv_position_name"
+            android:padding="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tw_text_dark"
+            android:background="@drawable/grey_circle_bg"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:text="兼職"/>
+
+        <TextView
+            android:id="@+id/tv_salary_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:text="100-300日薪"
+            android:textColor="@color/tw_red"
+            android:textSize="16sp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp">
+        <ImageView
+            android:id="@+id/img_shop_avatar"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/default_store_avatar"/>
+        <TextView
+            android:id="@+id/tv_store_name"
+            android:layout_toEndOf="@id/img_shop_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/tw_dark_grey"
+            android:text="Trevi Fashion（服裝店）"
+            android:layout_marginStart="5dp"/>
+        <TextView
+            android:id="@+id/tv_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tw_dark_grey"
+            android:textSize="13sp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:text="澳門.氹仔"/>
+    </RelativeLayout>
+
+</LinearLayout>

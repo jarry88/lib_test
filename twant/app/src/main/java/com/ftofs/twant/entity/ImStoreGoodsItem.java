@@ -3,7 +3,7 @@ package com.ftofs.twant.entity;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 /**
- * IM聊天商品Item
+ * IM聊天產品Item
  * @author
  */
 public class ImStoreGoodsItem implements MultiItemEntity {
@@ -12,7 +12,7 @@ public class ImStoreGoodsItem implements MultiItemEntity {
      */
     public static final int ITEM_TYPE_HEADER = 1;
     /**
-     * 商品Item
+     * 產品Item
      */
     public static final int ITEM_TYPE_ITEM = 2;
 

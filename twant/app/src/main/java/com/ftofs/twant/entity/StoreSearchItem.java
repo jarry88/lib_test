@@ -10,14 +10,21 @@ import java.util.List;
  * @author zwm
  */
 public class StoreSearchItem implements MultiItemEntity {
+    public int listCount;
+    public CustomerServiceStaff staff =null;
+    public int viewCount;
+    public int followCount;
+    public boolean showJobInfo;
+
     public StoreSearchItem() {
         this.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
     }
 
-    public StoreSearchItem(int storeId, String storeAvatarUrl, String storeName, String className, String mainBusiness, String storeFigureImage,
-                           float distance, String shopDay, int likeCount, int goodsCommonCount, List<String> goodsImageList) {
+    public StoreSearchItem(int storeId, int storeView, String storeAvatarUrl, String storeName, String className, String mainBusiness, String storeFigureImage,
+                           float distance, String shopDay, int likeCount,int followCount,int viewCount, int goodsCommonCount, List<String> goodsImageList, List<JobInfoItem> jobList,CustomerServiceStaff staff) {
         this.itemType = Constant.ITEM_TYPE_NORMAL;
         this.storeId = storeId;
+        this.storeView = storeView;
         this.storeAvatarUrl = storeAvatarUrl;
         this.storeName = storeName;
         this.className = className;
@@ -28,24 +35,34 @@ public class StoreSearchItem implements MultiItemEntity {
         this.likeCount = likeCount;
         this.goodsCommonCount = goodsCommonCount;
         this.goodsImageList = goodsImageList;
+        this.jobList = jobList;
+        this.followCount = followCount;
+        this.viewCount = viewCount;
+        this.staff = staff;
+        if (jobList != null && jobList.size() > 0) {
+            this.listCount = jobList.size();
+        }else
+            this.likeCount = 0;
     }
 
     public int itemType;
     public int storeId;
+    public int storeView;  // 店鋪瀏覽量
     public String storeAvatarUrl;
     public String storeName;
-    public String className; // 店鋪分類名稱，比如：超級市場、文具店等
+    public String className; // 商店分類名稱，比如：超級市場、文具店等
     public String mainBusiness;
     public String storeFigureImage;
     public float distance;
     public String shopDay;
+    public List<JobInfoItem> jobList;
     /**
-     * 點讚數量
+     * 讚想數量
      */
     public int likeCount;
     public int goodsCommonCount;
     /**
-     * 店鋪的前3個商品的照片
+     * 商店的前3個產品的照片
      */
     public List<String> goodsImageList;
 

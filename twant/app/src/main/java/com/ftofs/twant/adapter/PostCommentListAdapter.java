@@ -1,11 +1,7 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,17 +11,18 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.CommentItem;
-import com.ftofs.twant.entity.CommentReplyItem;
-import com.ftofs.twant.util.Jarbon;
+import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 /**
- * 貼文評論列表Adapter
+ * 想要帖評論列表Adapter
  * @author zwm
  */
-public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> {
+public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> implements SimpleCallback {
     Context context;
     int twBlue;
+    boolean isComeTrue;
 
     /**
      * 構造方法
@@ -39,7 +36,7 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> {
 
         this.context = context;
         twBlue = context.getResources().getColor(R.color.tw_blue, null);
-        addClickableChildrenId(R.id.btn_reply, R.id.btn_thumb, R.id.img_commenter_avatar);
+        addClickableChildrenId(R.id.btn_reply, R.id.btn_thumb, R.id.img_commenter_avatar, R.id.btn_make_true);
     }
 
     @Override
@@ -56,7 +53,8 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> {
         if (StringUtil.isEmpty(itemData.content)) {
             tvContent.setVisibility(View.GONE);
         } else {
-            tvContent.setText(StringUtil.translateEmoji(context, itemData.content, (int) tvContent.getTextSize()));
+            tvContent.setMovementMethod(LinkMovementMethod.getInstance());
+            tvContent.setText(StringUtil.translateEmoji(context, itemData.content, (int) tvContent.getTextSize(), this));
             tvContent.setVisibility(View.VISIBLE);
         }
 
@@ -93,5 +91,47 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> {
         } else {
             iconThumb.setImageResource(R.drawable.icon_comment_thumb_grey);
         }
+
+        TextView btnMakeTrue = itemView.findViewById(R.id.btn_make_true);
+        if (isComeTrue) {
+            btnMakeTrue.setVisibility(View.GONE);
+        } else {
+            btnMakeTrue.setVisibility(View.GONE);
+        }
+        //添加身份標籤
+        TextView tvRole = itemView.findViewById(R.id.tv_role);
+        tvRole.setVisibility(View.VISIBLE);
+        switch (itemData.commentRole) {
+            case CommentItem.COMMENT_ROLE_MEMBER:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_blue);
+                tvRole.setText(context.getText(R.string.text_member));
+                tvRole.setTextColor(context.getColor(R.color.tw_blue));
+                break;
+            case CommentItem.COMMENT_ROLE_BOSS:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_red);
+                tvRole.setTextColor(context.getColor(R.color.tw_red));
+                tvRole.setText(context.getText(R.string.text_boss));
+                break;
+            case CommentItem.COMMENT_ROLE_CS:
+                tvRole.setBackgroundResource(R.drawable.bg_text_radius_red);
+                tvRole.setTextColor(context.getColor(R.color.tw_red));
+                tvRole.setText(context.getText(R.string.text_customer));
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    public void setComeTrue(boolean isComeTrue) {
+        this.isComeTrue = isComeTrue;
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        SLog.info("data[%s]", data);
+
+        String url = (String) data;
+        StringUtil.parseCustomUrl(context, url);
     }
 }

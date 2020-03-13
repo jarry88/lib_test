@@ -1,30 +1,272 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/white">
-    <Button
-        android:id="@+id/btn_facebook_share"
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/com_facebook_share_button_text"
-        />
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/btn_facebook_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        />
-    <Button
-        android:id="@+id/btn_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="test"
-        />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+        <!-- 仅用于清除缓存 -->
+        <com.ycbjie.webviewlib.X5WebView
+            android:id="@+id/x5_web_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/tv_28"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textSize="16sp"
+                android:layout_height="wrap_content"
+                android:text="切換至28"
+                android:layout_margin="@dimen/length_15dp"
+                />
+            <TextView
+                android:id="@+id/tv_29"
+                android:gravity="center_horizontal"
+                android:textSize="16sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="切換至29"
+                android:layout_margin="@dimen/length_15dp"
+                />
+            <TextView
+                android:id="@+id/tv_prod"
+                android:gravity="center_horizontal"
+                android:textSize="16sp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/length_15dp"
+                android:text="切換至prod"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="test"
+            />
+
+        <Button
+            android:id="@+id/btn_test2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="test2"
+            />
+        <Button
+            android:id="@+id/btn_shoppingSession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="購物專場"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/test_im"
+                android:text="Imcount"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="用户Token:"
+                    android:textSize="16sp"
+                    android:textColor="@color/tw_black"
+                    />
+
+                <TextView
+                    android:id="@+id/btn_copy_token"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="5dp"
+                    android:text="复制Token"
+                    android:textColor="@android:color/white"
+                    android:background="@color/tw_blue"
+                    />
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/et_token"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:gravity="top"
+                android:lines="3"
+                android:background="@drawable/border_type_a"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="URL:"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                />
+            <EditText
+                android:id="@+id/et_url"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:padding="5dp"
+                android:background="@drawable/border_type_a"
+                android:gravity="top"
+                android:hint="请输入URL"
+                android:text="http://192.168.240.20:8080/activities/spring/#/20191226/index"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="带Token的URL:"
+                android:textSize="16sp"
+                android:textColor="@color/tw_black"
+                />
+            <EditText
+                android:id="@+id/et_url_with_token"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:padding="5dp"
+                android:background="@drawable/border_type_a"
+                android:gravity="top"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_open_url"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="打开URL"
+                    />
+                <Button
+                    android:id="@+id/btn_open_url_with_token"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="打开URL(带Token)"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btn_clear_cache"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:text="清除缓存"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:background="@color/tw_blue"
+                />
+        </LinearLayout>
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_your_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/icon_default_avatar"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_my_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/icon_default_avatar"
+                />
+
+            <!-- 消息內容容器 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="55dp"
+                android:layout_marginEnd="55dp"
+                android:orientation="vertical">
+                <!-- 文本消息 -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rl_message"
+                    android:layout_gravity="right">
+
+                    <TextView
+                        android:id="@+id/tv_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="111"
+                        android:textSize="16sp"
+                        android:textColor="@color/tw_black"
+                        android:background="@drawable/my_message_bg"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/icon_activity_entrance"
+            android:layout_width="63.5dp"
+            android:layout_height="52.5dp"
+            android:scaleType="fitXY"
+            android:background="#000"
+            />
+    </LinearLayout>
+</ScrollView>
 

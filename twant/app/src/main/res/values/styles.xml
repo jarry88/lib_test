@@ -19,4 +19,11 @@
         <item name="stGravity">center</item>
         <item name="stRadius">4dp</item>
     </style>
+
+    <style name="MenuButtonsSmall">
+        <item name="fab_size">mini</item>
+        <item name="fab_colorNormal">#1565C0</item>
+        <item name="fab_colorPressed">#2272CD</item>
+        <item name="fab_colorRipple">#62B2FF</item>
+    </style>
 </resources>

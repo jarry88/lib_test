@@ -24,6 +24,7 @@
             />
 
         <TextView
+            android:id="@+id/tv_fragment_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -36,29 +37,41 @@
             android:id="@+id/btn_ok"
             android:layout_width="52dp"
             android:layout_height="26dp"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:gravity="center"
-            android:background="@drawable/micro_red_button"
+            android:background="@drawable/micro_blue_button"
             android:textSize="14sp"
             android:textColor="#fff"
             android:text="@string/ok"
             />
     </RelativeLayout>
-    <EditText
-        android:id="@+id/et_nickname"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
-        android:background="@null"
-        android:hint="@string/input_nickname_hint_simple"
-        android:textSize="16sp"
-        android:textColor="@color/tw_black"
-        android:inputType="text"
-        android:imeOptions="actionDone"
-        android:singleLine="true"
-        />
+        android:layout_height="50dp"
+        android:layout_gravity="center">
+        <EditText
+            android:id="@+id/et_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
+            android:background="@null"
+            android:hint="@string/input_nickname_hint_simple"
+            android:text="dsfsadfsdfasfdsfsdafasdfsdafasdfdaffsadffasdfasdfasdf"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/tw_grey_F3F3"/>
 </LinearLayout>

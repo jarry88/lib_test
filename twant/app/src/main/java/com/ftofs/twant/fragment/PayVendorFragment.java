@@ -2,12 +2,16 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
@@ -20,23 +24,23 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.CommonCallback;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.WalletPayPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.enums.PopupAnimation;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.macau.pay.sdk.MPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.vivebest.taifung.api.PaymentHandler;
 import com.vivebest.taifung.api.TaifungSDK;
-
-import org.greenrobot.eventbus.EventBus;
-import org.litepal.util.Const;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -64,7 +68,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     /**
      * 想要錢包余額
      */
-    float walletBalance;
+    double walletBalance;
 
     /**
      * 支付單金額
@@ -74,12 +78,22 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     TextView tvWalletBalance;
     TextView tvPayAmount;
 
+    TextView tvMPay;
+    LinearLayout llMPayActivityContainer;
+    ImageView iconMPayActivityLabel;
 
-    int[] payButtonIdArr = {R.id.btn_wallet, R.id.btn_mpay, R.id.btn_taifung_pay, /* R.id.btn_union_pay, */ R.id.btn_weixin_pay, R.id.btn_ali_pay};
+
+    int[] payButtonIdArr = {R.id.btn_wallet, R.id.btn_mpay, R.id.btn_taifung_pay, /* R.id.btn_union_pay, */ R.id.btn_alihk_pay, R.id.btn_weixin_pay, R.id.btn_ali_pay};
+    int[] payMaskIdArr = {R.id.mask_wallet, R.id.mask_mpay, R.id.mask_taifung_pay, /* R.id.mask_union_pay, */ R.id.mask_alihk_pay, R.id.mask_weixin_pay, R.id.mask_ali_pay};
     /**
      * 支付商按鈕Id與View的Map
      */
     Map<Integer, View> payVendorButtonMap = new HashMap<>();
+
+    /**
+     * 支付商按鈕Id與蒙板View的Map
+     */
+    Map<Integer, View> payMaskMap = new HashMap<>();
 
     /**
      * 選中的支付按鈕的Id(-1表示任何都未選中)
@@ -121,8 +135,13 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
         tvPayAmount = view.findViewById(R.id.tv_pay_amount);
         tvPayAmount.setText(StringUtil.formatFloat(payAmount));
+        Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, payAmount);
         tvWalletBalance = view.findViewById(R.id.tv_wallet_balance);
         tvWalletBalance.setText("(未激活)");
+
+        llMPayActivityContainer = view.findViewById(R.id.ll_mpay_activity_container);
+        tvMPay = view.findViewById(R.id.tv_mpay);
+        iconMPayActivityLabel = view.findViewById(R.id.icon_mpay_activity_label);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_pay, this);
@@ -131,9 +150,59 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             View btnPayVendor = view.findViewById(payButtonIdArr[i]);
             btnPayVendor.setOnClickListener(this);
             payVendorButtonMap.put(payButtonIdArr[i], btnPayVendor);
+
+            View payMask = view.findViewById(payMaskIdArr[i]);
+            payMaskMap.put(payButtonIdArr[i], payMask);
         }
 
         getWalletBalance();
+        loadMPayActivityStatus();
+    }
+
+
+    /**
+     * 加載MPay活動的狀態
+     */
+    private void loadMPayActivityStatus() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "payId", payId);
+
+        SLog.info("params[%s]", params);
+        Api.postUI(Api.PATH_PAYMENT_PRICE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    // responseStr = "{\"code\":200,\"datas\":{\"isMpayActivity\":0}}";
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    int isMpayActivity = responseObj.getInt("datas.isMpayActivity");
+                    SLog.info("isMpayActivity[%d]", isMpayActivity);
+                    if (isMpayActivity == Constant.TRUE_INT) {
+                        tvMPay.setVisibility(View.GONE);
+                        llMPayActivityContainer.setVisibility(View.VISIBLE);
+                        iconMPayActivityLabel.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
 
@@ -156,7 +225,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
@@ -170,12 +239,11 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                         walletStatus = Constant.WANT_PAY_WALLET_STATUS_ACTIVATED;
 
                         // 獲取余額
-                        walletBalance = (float) responseObj.getDouble("datas.memberInfo.predepositAvailable");
-                        tvWalletBalance.setText(String.format("(餘額：%s)", StringUtil.formatPrice(_mActivity, walletBalance, 0)));
+                        walletBalance = responseObj.getDouble("datas.memberInfo.predepositAvailable");
+                        tvWalletBalance.setText(String.format("(餘額：$%.2f)",walletBalance));
                     }
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
-                    e.printStackTrace();
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -191,7 +259,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         }
 
         if (id == R.id.btn_back) {
-            pop();
+            showCancelConfirm();
         } else if (id == R.id.btn_pay) {
             if (selectedPayButtonId == -1) {
                 ToastUtil.error(_mActivity, "請選擇支付方式");
@@ -224,6 +292,8 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 doWeixinPay();
             } else if (selectedPayButtonId == R.id.btn_ali_pay) {
                 doAliPay();
+            } else if (selectedPayButtonId == R.id.btn_alihk_pay) {
+                doAliHKPay();
             }
         }
     }
@@ -255,8 +325,20 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 if (id == selectedPayButtonId) { // 再次點擊，表示取消選擇
                     selectedPayButtonId = -1;
                     setStatus(view, Constant.STATUS_UNSELECTED);
+
+                    // 隱藏所有蒙板
+                    for(Map.Entry<Integer, View> entry : payMaskMap.entrySet()) {
+                        entry.getValue().setVisibility(View.GONE);
+                    }
+
+                    iconMPayActivityLabel.setImageResource(R.drawable.icon_mpay_activity_label);
                 } else {
                     setStatus(view, Constant.STATUS_SELECTED);
+                    if (id == R.id.btn_mpay) {
+                        iconMPayActivityLabel.setImageResource(R.drawable.icon_mpay_activity_label);
+                    } else {
+                        iconMPayActivityLabel.setImageResource(R.drawable.icon_mpay_activity_label_dark);
+                    }
 
                     // 將之前選中的View取消選擇
                     if (selectedPayButtonId != -1) {
@@ -264,6 +346,15 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                         setStatus(prevSelView, Constant.STATUS_UNSELECTED);
                     }
                     selectedPayButtonId = id;
+
+                    // 顯示所有的蒙板，除了自己
+                    for(Map.Entry<Integer, View> entry : payMaskMap.entrySet()) {
+                        if (entry.getKey() == id) {
+                            entry.getValue().setVisibility(View.GONE);
+                        } else {
+                            entry.getValue().setVisibility(View.VISIBLE);
+                        }
+                    }
                 }
                 return true;
             }
@@ -275,7 +366,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        pop();
+        showCancelConfirm();
         return true;
     }
 
@@ -324,14 +415,14 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
                     ToastUtil.success(_mActivity, getString(R.string.text_open_pay_ui));
-                    pop();
+                    hideSoftInputPop();
 
                     EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
                     MPaySdk.mPay(_mActivity, datas.toString(), (MainActivity) _mActivity);
@@ -368,28 +459,28 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    // 有些商品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
+                    // 有些產品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
                     if (responseObj.exists("datas.isPay")) {
                         int isPay = responseObj.getInt("datas.isPay");
                         if (isPay == 1) {
                             // isPay為1 表示已經支付，無需請求大豐SDK
                             PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_TAIFUNG);
-                            pop();
+                            hideSoftInputPop();
                             return;
                         }
                     }
 
-                    String uuid = responseObj.getString("datas.tx_uuid");
-                    String notifyUrl = responseObj.getString("datas.notify_url");
+                    String uuid = responseObj.getSafeString("datas.tx_uuid");
+                    String notifyUrl = responseObj.getSafeString("datas.notify_url");
 
                     ToastUtil.success(_mActivity, getString(R.string.text_open_pay_ui));
-                    pop();
+                    hideSoftInputPop();
 
                     SLog.info("uuid[%s], notifyUrl[%s]", uuid, notifyUrl);
                     TaifungSDK.startPay(MainActivity.getInstance(), uuid, Config.TAIFUNG_PAY_MER_CUST_NO, Config.TAIFUNG_PAY_SECRET_KEY,
@@ -417,8 +508,8 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                                     }
                                 }
                             });
-                } catch (EasyJSONException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -446,35 +537,35 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    // 有些商品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
+                    // 有些產品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
                     if (responseObj.exists("datas.isPayed")) {
                         int isPay = responseObj.getInt("datas.isPayed");
                         if (isPay == 1) {
                             // isPay為1 表示已經支付，無需請求微信SDK
                             PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_WEIXIN);
-                            pop();
+                            hideSoftInputPop();
                             return;
                         }
                     }
 
                     ToastUtil.success(_mActivity, getString(R.string.text_open_pay_ui));
 
-                    EasyJSONObject payData = responseObj.getObject("datas.payData");
+                    EasyJSONObject payData = responseObj.getSafeObject("datas.payData");
 
                     PayReq req = new PayReq();
                     req.appId           = getString(R.string.weixin_app_id);//你的微信appid
                     req.partnerId       = getString(R.string.weixin_partner_id);//商户号
-                    req.prepayId        = payData.getString("prepayid");//预支付交易会话ID
-                    req.nonceStr        = payData.getString("noncestr");//随机字符串
-                    req.timeStamp       = payData.getString("timestamp");//时间戳
+                    req.prepayId        = payData.getSafeString("prepayid");//预支付交易会话ID
+                    req.nonceStr        = payData.getSafeString("noncestr");//随机字符串
+                    req.timeStamp       = payData.getSafeString("timestamp");//时间戳
                     req.packageValue    = "Sign=WXPay"; // 扩展字段,这里固定填写Sign=WXPay
-                    req.sign            = payData.getString("sign"); //签名
+                    req.sign            = payData.getSafeString("sign"); //签名
                     // req.extData         = "app data"; // optional
 
                     SLog.info("req.prepayId[%s], req.sign[%s], nonceStr[%s], timeStamp[%s]",
@@ -485,9 +576,9 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     markPayId(SPField.FIELD_WX_PAY_ID);
 
-                    pop();
+                    hideSoftInputPop();
                 } catch (Exception e) {
-                    SLog.info("Error!%s", e.getMessage());
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -515,29 +606,81 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
-                    EasyJSONObject responseObj = (EasyJSONObject) EasyJSONObject.parse(responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
 
-                    // 有些商品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
+                    // 有些產品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
                     if (responseObj.exists("datas.isPayed")) {
                         int isPay = responseObj.getInt("datas.isPayed");
                         if (isPay == 1) {
                             // isPay為1 表示已經支付，無需請求支付寶SDK
                             PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_ALI);
-                            pop();
+                            hideSoftInputPop();
                             return;
                         }
                     }
 
                     ToastUtil.success(_mActivity, getString(R.string.text_open_pay_ui));
 
-                    String orderInfo = responseObj.getString("datas.payData");
+                    String orderInfo = responseObj.getSafeString("datas.payData");
                     ((MainActivity) _mActivity).startAliPay(orderInfo);
                     markPayId(SPField.FIELD_ALI_PAY_ID);
-                    pop();
+                    hideSoftInputPop();
+                } catch (Exception e) {
+
+                }
+            }
+        });
+    }
+
+    private void doAliHKPay() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "payId", payId);
+
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_ALIPAY_HK, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    // 有些產品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
+                    if (responseObj.exists("datas.isPayed")) {
+                        int isPay = responseObj.getInt("datas.isPayed");
+                        if (isPay == 1) {
+                            // isPay為1 表示已經支付，無需請求支付寶SDK
+                            PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_ALI);
+                            hideSoftInputPop();
+                            return;
+                        }
+                    }
+
+                    ToastUtil.success(_mActivity, getString(R.string.text_open_pay_ui));
+
+                    String orderInfo = responseObj.getSafeString("datas.payData");
+                    ((MainActivity) _mActivity).startAliPay(orderInfo);
+                    markPayId(SPField.FIELD_ALI_PAY_HK_ID);
+                    hideSoftInputPop();
                 } catch (Exception e) {
 
                 }
@@ -562,9 +705,10 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     public String onSuccess(@Nullable String data) {
         SLog.info("想要錢包支付成功");
 
-        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WALLET_PAY_SUCCESS, null);
-        // PayUtil.onPaySuccess(false, 0, 0);
-        pop();
+        EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_WALLET_PAY_SUCCESS, payId);
+
+        PayUtil.onPaySuccess(false, false, 0, 0);
+        hideSoftInputPop();
         return null;
     }
 
@@ -582,5 +726,35 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+    /**
+     * 顯示確認取消支付的提示框
+     */
+    private void showCancelConfirm() {
+        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(_mActivity, "是否取消當前訂單的支付", null, "確認取消", "繼續購買", new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+                hideSoftInputPop();
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        }))
+                .show();
     }
 }

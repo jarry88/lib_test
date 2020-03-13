@@ -59,7 +59,7 @@ public class ChannelModuleItemVo implements Serializable {
     private int moduleId;
 
     /**
-     * 携带的商品信息
+     * 携带的產品信息
      */
     private List<GoodsCommon> goodsCommons = new ArrayList<GoodsCommon>();
 

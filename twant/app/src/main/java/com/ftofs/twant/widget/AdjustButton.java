@@ -4,10 +4,10 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.widget.TextView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.cart.SkuStatus;
+import com.ftofs.twant.entity.cart.SpuStatus;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
@@ -15,10 +15,11 @@ import com.ftofs.twant.util.Util;
  * 購物袋數量調節按鈕
  * @author zwm
  */
-public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
+public class AdjustButton extends androidx.appcompat.widget.AppCompatTextView {
     public static final float DEFAULT_THRESHOLD = 0.28f;
 
     protected SkuStatus skuStatus;
+    protected SpuStatus spuStatus;
 
     // 有效的取值范圍為 [minValue, maxValue]，開區間
     int minValue = 0;
@@ -34,6 +35,7 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
     int value;
     // 調節按鈕的閾值，范圍  0 ~ 0.5
     float threshold = DEFAULT_THRESHOLD;
+
     public AdjustButton(Context context) {
         this(context, null);
     }
@@ -113,8 +115,11 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
         }
 
         this.value = value;
-        if (skuStatus != null) {
-            skuStatus.setCount(value);
+//        if (skuStatus != null) {
+//            skuStatus.setCount(value);
+//        }
+        if (spuStatus != null) {
+            spuStatus.setCount(value);
         }
         updateView();
 
@@ -141,6 +146,11 @@ public class AdjustButton extends android.support.v7.widget.AppCompatTextView {
 
     public void setSkuStatus(SkuStatus skuStatus) {
         this.skuStatus = skuStatus;
+
+    }
+
+    public void setSpuStatus(SpuStatus spuStatus) {
+        this.spuStatus = spuStatus;
     }
 
     public interface OutOfValueCallback {

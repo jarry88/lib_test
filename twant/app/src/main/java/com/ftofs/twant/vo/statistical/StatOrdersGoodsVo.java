@@ -10,22 +10,22 @@ import java.math.BigDecimal;
  * @license    http://www.shopnc.net
  * @link       http://www.shopnc.net
  *
- * 统计中订单商品数据缓存
+ * 统计中订单產品数据缓存
  * 
  * @author zxy
  * Created 2017/4/13 11:02
  */
 public class StatOrdersGoodsVo {
     /**
-     * 订单商品
+     * 订单產品
      */
     private StatOrdersGoods statOrdersGoods = null;
     /**
-     * 订单商品总金额
+     * 订单產品总金额
      */
     private BigDecimal goodsPayAmountSum = new BigDecimal(0);
     /**
-     * 订单商品购买量
+     * 订单產品购买量
      */
     private long goodsBuyNumSum = 0L;
     /**
@@ -33,11 +33,11 @@ public class StatOrdersGoodsVo {
      */
     private long ordersCount = 0L;
     /**
-     * 订单商品一级分类ID
+     * 订单產品一级分类ID
      */
     private int categoryId1 = 0;
     /**
-     * 商品SPU实体
+     * 產品SPU实体
      */
     private GoodsCommon goodsCommon = null;
 

@@ -6,12 +6,12 @@ public class StoreLike implements Serializable {
     private int id;
 
     /**
-     * 會員id
+     * 城友id
      */
     private int memberId;
 
     /**
-     * 店鋪id
+     * 商店id
      */
     private int storeId;
 

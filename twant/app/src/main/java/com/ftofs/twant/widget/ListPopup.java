@@ -1,9 +1,9 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,7 +20,7 @@ import java.util.List;
 
 
 /**
- * 配送時間選擇
+ * 通用列表彈窗
  * @author zwm
  */
 public class ListPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {

@@ -10,17 +10,17 @@ public class BundlingGoods implements Serializable {
     private int bundlingId;
 
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
 
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice;
 

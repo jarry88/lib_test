@@ -8,7 +8,8 @@
     <ScrollView
         android:id="@+id/sv_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+     >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
-        <include layout="@layout/no_result_empty_view" />
+        <include layout="@layout/layout_placeholder_no_coupon" />
     </LinearLayout>
 </LinearLayout>
 

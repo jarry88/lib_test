@@ -2,7 +2,7 @@ package com.ftofs.twant.domain.im;
 
 public class ImMemberStatus {
     /**
-     * 會員狀態
+     * 城友狀態
      */
     private String memberNameStatus;
     /**

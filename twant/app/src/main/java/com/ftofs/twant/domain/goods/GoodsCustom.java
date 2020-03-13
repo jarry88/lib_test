@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class GoodsCustom implements Serializable {
     /**
-     * 商品SPU编号
+     * 產品SPU编号
      */
     private int commonId;
 

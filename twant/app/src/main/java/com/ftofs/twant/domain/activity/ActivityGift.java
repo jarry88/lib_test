@@ -11,7 +11,7 @@ public class ActivityGift implements Serializable {
     private Integer giftId;
 
     /**
-     * 商品名称
+     * 產品名称
      */
     private String giftGoodsName;
 

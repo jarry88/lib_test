@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 
 public class ChainGoods {
     /**
-     * 门店商品Id
+     * 门店產品Id
      */
     private int chainGoodsId;
 
     /**
-     * 商品SKU编号
+     * 產品SKU编号
      */
     private int goodsId;
 
     /**
-     * 商品SPU
+     * 產品SPU
      */
     private int commonId;
 
@@ -29,7 +29,7 @@ public class ChainGoods {
     private String chainName;
 
     /**
-     * 商品价格
+     * 產品价格
      */
     private BigDecimal goodsPrice = BigDecimal.ZERO;
 
@@ -44,7 +44,7 @@ public class ChainGoods {
     private int goodsSaleNum = 0;
 
     /**
-     * 商品更新时间（只有在门店店员更新门店商品时需要更新时间。）
+     * 產品更新时间（只有在门店店员更新门店產品时需要更新时间。）
      */
     private String updateTime;
 

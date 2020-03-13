@@ -17,8 +17,8 @@ import java.util.Date;
  */
 public class SLog {
     public static void info(String format, Object... args) {
-        if (!Config.DEVELOPER_MODE) {
-            return;
+        if (!Config.SLOGENABLE) {
+             return;
         }
 
         StackTraceElement[] traceArray = Thread.currentThread().getStackTrace();
@@ -51,7 +51,7 @@ public class SLog {
             if (!first) {
                 msg = "------>[" + msg + "]";
             }
-            Log.e("SLog", msg);
+            Log.println(Log.ASSERT, "SLog", msg);
 
             if (logContent.length() <= limit) {
                 break;
@@ -59,6 +59,34 @@ public class SLog {
             logContent = logContent.substring(limit);
             first = false;
         }
+    }
+    /**
+     * 打印当前调用栈
+     */
+    public static void bt() {
+        // 生成时间戳
+        // 设置日期格式： 2019-04-26 16:28:39.772
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        // new Date()为获取当前系统时间
+        String timestamp = sdf.format(new Date());
+
+        StringBuilder sb = new StringBuilder("\n****************TRACE****************");
+
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        for (int i = 3; i < elements.length; ++i) {
+            StackTraceElement element = elements[i];
+            sb.append("\n\tat ");
+            sb.append(element);
+        }
+
+        sb.append("\n################TRACE################");
+
+        StackTraceElement[] traceArray = Thread.currentThread().getStackTrace();
+        StackTraceElement trace = traceArray[3];
+        String content = String.format("[%s][%s][%s]%s\n",
+                timestamp, trace.getFileName(), String.format("%05d", trace.getLineNumber()), sb.toString());
+
+        Log.println(Log.ASSERT, "SLog", content);
     }
 }
 

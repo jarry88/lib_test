@@ -63,12 +63,12 @@ public class StoreJoinin {
     private String joininSubmitTime;
 
     /**
-     * 发布海外购商品
+     * 发布海外购產品
      */
     private int allowForeignGoods;
 
     /**
-     * 店鋪形象圖
+     * 商店形象圖
      */
     private String storeFigureImage;
 

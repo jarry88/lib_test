@@ -11,15 +11,19 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.JobInfoItem;
 import com.ftofs.twant.entity.StoreSearchItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSearchItem, BaseViewHolder> implements Animation.AnimationListener  {
     Animation animation;
-    ImageView animatingImageView;
+    TextView animatingTextView;
+
+    private boolean showJobInfo;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -37,13 +41,22 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
     @Override
     protected void convert(BaseViewHolder helper, StoreSearchItem item) {
         if (item.getItemType() == Constant.ITEM_TYPE_NORMAL) {
-            ImageView imgStoreAvatar = helper.getView(R.id.img_store_avatar);
+            helper.addOnClickListener( R.id.btn_shop_hr);
             SLog.info("item.storeAvatarUrl[%s]", item.storeAvatarUrl);
             String storeAvatarUrl = StringUtil.normalizeImageUrl(item.storeAvatarUrl);
+            ImageView imgStoreAvatar = helper.getView(R.id.img_store_avatar);
             if ("https://192.168.5.29/public/img/default_store_avatar.png".equals(storeAvatarUrl)) {
                 Glide.with(mContext).load(R.drawable.default_store_avatar).into(imgStoreAvatar);
             } else {
                 Glide.with(mContext).load(item.storeAvatarUrl).into(imgStoreAvatar);
+            }
+
+            ImageView imgCustomerAvatar = helper.getView(R.id.btn_customer);
+            if(item.staff != null){
+                helper.addOnClickListener(R.id.btn_customer);
+                imgCustomerAvatar.setVisibility(View.VISIBLE);
+            } else {
+                imgCustomerAvatar.setVisibility(View.GONE);
             }
 
 
@@ -64,19 +77,30 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
 
             ImageView imgStoreFigure = helper.getView(R.id.img_store_figure);
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.storeFigureImage)).centerCrop().into(imgStoreFigure);
+            if(StringUtil.isEmpty(item.storeFigureImage)){
+                Glide.with(mContext).load(R.drawable.store_figure_default).centerCrop().into(imgStoreFigure);
+            }
+            else{
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.storeFigureImage)).centerCrop().into(imgStoreFigure);
+            }
 
             TextView tvDistance = helper.getView(R.id.tv_distance);
             if (item.distance < Constant.STORE_DISTANCE_THRESHOLD) {
                 // 如果distance為0，則隱藏距離信息
                 tvDistance.setVisibility(View.GONE);
             } else {
-                String distanceText = item.distance + "km";
+                DecimalFormat df = new DecimalFormat("#.#");
+                String distanceText = df.format(item.distance/1000) + "km";
                 tvDistance.setText(distanceText);
+                // tvDistance.setVisibility(View.VISIBLE);  距離不要
             }
 
             helper.setText(R.id.tv_shop_open_day, String.valueOf(item.shopDay));
             helper.setText(R.id.tv_goods_common_count, String.valueOf(item.goodsCommonCount));
             helper.setText(R.id.tv_like_count, String.valueOf(item.likeCount));
+            helper.setText(R.id.tv_shop_follow_count, String.valueOf(item.followCount));
+            String storeViewCountText = StringUtil.formatPostView(item.storeView);
+            helper.setText(R.id.tv_shop_view_count, storeViewCountText);
 
             for (int i = 0; i < item.goodsImageList.size(); i++) {
                 String url = item.goodsImageList.get(i);
@@ -94,17 +118,47 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
                     helper.setGone(R.id.goods_image_right_container, true);
                 }
             }
+            if (item.listCount==0) {
+                helper.setGone(R.id.btn_shop_hr, false);
+            } else{
+                helper.setVisible(R.id.btn_shop_hr, true);
+            }
+                if (item.showJobInfo && item.listCount>0) {
+
+                helper.setGone(R.id.ll_recruitment_list, true)
+                        .setGone(R.id.img_store_job_list_mask, true);
+
+                JobInfoItem jobInfoItem = item.jobList.get(0);
+
+                helper.setText(R.id.tv_job_title1, jobInfoItem.postName)
+                        .setText(R.id.tv_salary1, jobInfoItem.salaryRange + "/" + jobInfoItem.salaryType);
+
+                if (item.jobList.size() >= 2) {
+                    jobInfoItem = item.jobList.get(1);
+                    helper.setGone(R.id.rl_recruitment2, true)
+                            .setText(R.id.tv_job_title2, jobInfoItem.postName)
+                            .setText(R.id.tv_salary2, jobInfoItem.salaryRange + "/" + jobInfoItem.salaryType);
+                } else {
+                    helper.setGone(R.id.rl_recruitment2, false);
+                }
+            } else {
+                helper.setGone(R.id.ll_recruitment_list, false)
+                        .setGone(R.id.img_store_job_list_mask, false);
+            }
         } else {
             //  加載發表想要的入口，不需要做特別處理
             if (animation == null) {
                 animation = AnimationUtils.loadAnimation(mContext, R.anim.takewant_message);
                 animation.setAnimationListener(this);
             }
-            animatingImageView = helper.getView(R.id.img_load_end_hint_bubble);
+            animatingTextView = helper.getView(R.id.tv_load_end_hint_bubble);
             if (item.animShowStatus == Constant.ANIM_SHOWING) {
                 item.animShowStatus = Constant.ANIM_SHOWN;
-                animatingImageView.startAnimation(animation);
+                animatingTextView.startAnimation(animation);
             }
+
+            ImageView iconPublishWantPost = helper.getView(R.id.icon_publish_want_post);
+            Glide.with(mContext).load("file:///android_asset/christmas/publish_want_post_dynamic.gif").centerCrop().into(iconPublishWantPost);
         }
     }
 
@@ -116,12 +170,12 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
     @Override
     public void onAnimationEnd(Animation animation) {
         SLog.info("onAnimationEnd");
-        if (animatingImageView != null) {
-            animatingImageView.setVisibility(View.VISIBLE);
-            animatingImageView.postDelayed(new Runnable() {
+        if (animatingTextView != null) {
+            animatingTextView.setVisibility(View.VISIBLE);
+            animatingTextView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    animatingImageView.setVisibility(View.INVISIBLE);
+                    animatingTextView.setVisibility(View.INVISIBLE);
                 }
             }, 1500);
         }

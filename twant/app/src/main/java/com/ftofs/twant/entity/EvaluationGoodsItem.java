@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 訂單的每一件商品
+ * 訂單的每一件產品
  * @author zwm
  */
 public class EvaluationGoodsItem {
@@ -23,7 +23,7 @@ public class EvaluationGoodsItem {
     public String goodsName;
     public String goodsFullSpecs;
 
-    public String content;  // 評論內容
+    public String content;  // 說說內容
     public List<String> imageList; // 評價圖片
 }
 
