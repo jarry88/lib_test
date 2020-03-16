@@ -2,6 +2,9 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,6 +109,25 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
                 ((TextView) view.findViewById(R.id.tv_receiver_name)).setTextColor(Color.BLACK);
             }
         });
+        etReceiverName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() >= REAL_NAME_MAXLENTH) {
+                    ToastUtil.success(_mActivity,String.format("姓名長度不能超過%d字",REAL_NAME_MAXLENTH));
+                }
+
+            }
+        });
+        etReceiverName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(REAL_NAME_MAXLENTH)});
         etMobile = view.findViewById(R.id.et_mobile);
         etMobile.setOnClickListener((v)-> {
             ((TextView) view.findViewById(R.id.tv_phone_number)).setTextColor(Color.GRAY);
@@ -117,6 +139,25 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         });
         tvArea = view.findViewById(R.id.tv_area);
         etDetailAddress = view.findViewById(R.id.et_detail_address);
+        etDetailAddress.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DETAIL_ADDRESS_MAXLENTH)});
+        etDetailAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() >= DETAIL_ADDRESS_MAXLENTH) {
+                    ToastUtil.success(_mActivity,String.format("地址長度不能超過%d字",DETAIL_ADDRESS_MAXLENTH));
+                }
+            }
+        });
         mSbDefaultAddr = view.findViewById(R.id.sb_default_addr);
         mSbDefaultAddr.setOnClickListener(this);
 
@@ -148,6 +189,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         Util.setOnClickListener(view, R.id.btn_select_area, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
         Util.setOnClickListener(view, R.id.btn_clear_detail_address, this);
+        Util.setOnClickListener(view, R.id.btn_clear_name, this);
 
         getMobileZoneList();
     }
@@ -190,6 +232,8 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             SLog.info("mIsDefaultAddr[%d]", mIsDefaultAddr);
         } else if (id == R.id.btn_clear_detail_address) {
             etDetailAddress.setText("");
+        } else if (id == R.id.btn_clear_name) {
+                etReceiverName.setText("");
         } else if (id == R.id.btn_ok) {
             saveAddress();
         }

@@ -73,21 +73,35 @@
                 android:text="@string/text_receiver_name"
                 android:id="@+id/tv_receiver_name"
                 />
-            <EditText
-                android:id="@+id/et_receiver_name"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:inputType="text"
-                android:imeOptions="actionNext"
-                android:singleLine="true"
-                android:textSize="17sp"
-                android:textColor="@color/tw_black"
-                android:textColorHint="#BBB"
-                android:text=""
-                android:hint="@string/hint_input_receiver_name"
-                android:background="@null"
-                />
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/et_receiver_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@id/btn_clear_name"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true"
+                    android:textSize="17sp"
+                    android:textColor="@color/tw_black"
+                    android:textColorHint="#BBB"
+                    android:text=""
+                    android:hint="@string/hint_input_receiver_name"
+                    android:background="@null"
+                    />
+                <com.ftofs.twant.widget.ScaledButton
+                    android:id="@+id/btn_clear_name"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    app:icon_src="@drawable/icon_grey_dismiss_mini"
+                    />
+            </RelativeLayout>
         </LinearLayout>
 
         <!-- 手機號碼 -->
@@ -136,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true">
+                    android:layout_alignParentEnd="true">
                     <TextView
                         android:id="@+id/tv_mobile_zone"
                         android:layout_width="wrap_content"
@@ -250,9 +264,10 @@
                     android:id="@+id/btn_clear_detail_address"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_marginStart="@dimen/dp_4"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    app:icon_src="@drawable/icon_clear_all"
+                    app:icon_src="@drawable/icon_grey_dismiss_mini"
                     />
             </RelativeLayout>
         </LinearLayout>
@@ -273,7 +288,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/text_default_address"
                 android:textSize="16sp"
