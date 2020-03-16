@@ -30,8 +30,16 @@
             android:background="@drawable/list_popup_bg">
             <RelativeLayout
                 android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:background="@drawable/circle_gradient_drawable">
+                android:layout_height="42dp">
+                <com.mikhaellopez.circleview.CircleView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cv_color="#fff"
+                    app:cv_shadow="true"
+                    app:cv_shadow_color="#aaa"
+                    app:cv_shadow_radius="6"
+                    app:cv_shadow_gravity="center">
+                </com.mikhaellopez.circleview.CircleView>
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/img_store_avatar"
                     android:layout_width="30dp"
