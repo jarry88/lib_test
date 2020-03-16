@@ -95,12 +95,13 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
                         if (fragment != null) {
                             boolean needStartFragment = !OrderFragment.class.equals(fragment.getClass());
                             SLog.info("needStartFragment[%s]", needStartFragment);
-                            hideSoftInputPop();
+                            popTo(OrderFragment.class,false);
                             // 轉去訂單列表，已跟進能確認過
                             if (needStartFragment) {
                                 Util.startFragment(OrderFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED, OrderFragment.USAGE_LIST));
                             }
                         } else {
+                            hideSoftInputPop();
                             Util.startFragment(OrderFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED, OrderFragment.USAGE_LIST));
 
                         }
