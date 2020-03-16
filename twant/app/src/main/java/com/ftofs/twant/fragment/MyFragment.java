@@ -282,6 +282,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
             loadUserData();
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_LOGOUT_SUCCESS) { // 如果用戶退出登錄，重新加載數據
             userDataLoaded = false;
+            //主動清空占位圖
+            Glide.with(_mActivity).load(R.drawable.my_fragment_header_bg).centerCrop().into(imgPersonalBackground);
+            Glide.with(_mActivity).load(R.drawable.icon_default_avatar).centerCrop().into(imgAvatar);
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_CHANGE_PERSONAL_BACKGROUND) {
             personalBackgroundChanged = true;
         }
