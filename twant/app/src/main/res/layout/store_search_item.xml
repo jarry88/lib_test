@@ -349,7 +349,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="25dp"
 
-                android:src="@drawable/icon_follow_post_small"
+                android:src="@drawable/icon_fav_count"
                 />
             <TextView
                 android:id="@+id/tv_shop_follow_count"

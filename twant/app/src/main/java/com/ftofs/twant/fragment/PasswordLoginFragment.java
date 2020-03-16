@@ -99,6 +99,7 @@ public class PasswordLoginFragment extends BaseFragment implements
         Util.setOnClickListener(view, R.id.btn_login, this);
         Util.setOnClickListener(view, R.id.btn_facebook_login, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
+        Util.setOnClickListener(view, R.id.btn_view_tos, this);
         Util.setOnClickListener(view, R.id.btn_forget_password, this);
 
         btnMobilezone = view.findViewById(R.id.btn_mobile_zone);
@@ -162,6 +163,8 @@ public class PasswordLoginFragment extends BaseFragment implements
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
                             PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
+        } else if (id == R.id.btn_view_tos) {
+            Util.startFragment(H5GameFragment.newInstance(Constant.TOS_URL, getString(R.string.text_service_contract)));
         } else if (id == R.id.btn_forget_password) {
             Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_RESET_PASSWORD, false));
         }
