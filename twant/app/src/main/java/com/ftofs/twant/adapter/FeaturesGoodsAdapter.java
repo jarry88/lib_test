@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.util.StringUtil;
@@ -76,6 +77,6 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
     @Override
     public int getItemCount() {
         // 用于無限循環
-        return Integer.MAX_VALUE;
+        return Constant.INFINITE_LOOP_VALUE;
     }
 }

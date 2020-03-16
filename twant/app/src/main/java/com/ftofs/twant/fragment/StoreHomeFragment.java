@@ -18,6 +18,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FeaturesGoodsAdapter;
 import com.ftofs.twant.adapter.StoreGoodsListAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.log.SLog;
@@ -46,6 +47,8 @@ public class StoreHomeFragment extends ScrollableBaseFragment {
     List<StoreGoodsPair> storeHotItemList = new ArrayList<>();
     List<StoreGoodsPair> storeNewInItemList = new ArrayList<>();
     private LockableNestedScrollView llContainer;
+
+
 
     public static StoreHomeFragment newInstance() {
         StoreHomeFragment fragment = new StoreHomeFragment();
@@ -105,7 +108,7 @@ public class StoreHomeFragment extends ScrollableBaseFragment {
         rvFeaturesGoodsList.postDelayed(new Runnable() {
             @Override
             public void run() {
-                int targetPosition = Integer.MAX_VALUE / 2;
+                int targetPosition = Constant.INFINITE_LOOP_VALUE / 2;
                 rvFeaturesGoodsList.scrollToPosition(targetPosition);
                                     /*
                                     解決PagerSnapHelper的scrollToPosition不能居中的問題

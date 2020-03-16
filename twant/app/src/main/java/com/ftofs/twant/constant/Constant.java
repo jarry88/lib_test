@@ -8,6 +8,11 @@ public class Constant {
     public static final String CLIENT_TYPE_ANDROID = "android";
 
     /**
+     * 【镇店之宝】无限循环的最大值
+     */
+    public static final int INFINITE_LOOP_VALUE = 2999999;
+
+    /**
      * 分類相關的常量定義
      */
     // 商店分類
