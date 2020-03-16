@@ -11,6 +11,7 @@ public class Constant {
      * 【镇店之宝】无限循环的最大值
      */
     public static final int INFINITE_LOOP_VALUE = 2999999;
+    public static final String TOS_URL = "https://www.twant.com/web/register/agreement";
 
     /**
      * 分類相關的常量定義
