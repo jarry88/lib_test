@@ -23,6 +23,7 @@ import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.ConfirmOrderSummaryItem;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.EditTextUtil;
@@ -88,7 +89,8 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
 
             //每家商店小計金額
             float realFreightAmount = item.freightAmount;
-            if (payWayIndex == 2) {  // 如果是門店自提，則不算運費
+            //
+            if (payWayIndex == 1) {  // 如果是門店自提，則不算運費
                 realFreightAmount = 0;
             }
             float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
