@@ -4,92 +4,71 @@ package com.ftofs.twant.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.AppGuidePagerAdapter;
-import com.ftofs.twant.api.Api;
-import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.Jarbon;
-import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
-import com.orhanobut.hawk.Hawk;
+import com.ftofs.twant.widget.HwLoadingView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
-import okhttp3.Call;
 
 /**
  * App啟動引導頁
  * 每天最多顯示一次
  * @author zwm
  */
-public class AppGuideActivity extends BaseActivity implements OnSelectedListener {
+public class AppGuideActivity extends BaseActivity implements SimpleCallback {
+    public static final int EVENT_TYPE_START_MAIN_ACTIVITY = 1; // 啟動MainActivity
+
+    boolean lastPage = false; // 標記當前是否處於最後一頁
+
     private boolean mIsScrolled;
     ViewPager vpAppGuide;
-    List<String> imageList = new ArrayList<>();
     int currPage = 0;
+
+    HwLoadingView vwLoading;
+
+    boolean showFramework;  // 是否显示引导页框架
+    List<String> imageList = new ArrayList<>(); // 引导页背景图
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_guide);
 
-        // 記錄最近一次顯示APP引導頁的日期
-        Hawk.put(SPField.FIELD_SHOW_APP_GUIDE_DATE, new Jarbon().toDateString());
-
+        vwLoading = findViewById(R.id.vw_loading);
+        vwLoading.setVisibility(View.VISIBLE);
         vpAppGuide = findViewById(R.id.vp_app_guide);
 
-        loadData();
-    }
+        Intent intent = getIntent();
 
-    private void loadData() {
-        Api.getUI(Api.PATH_APP_GUIDE, null, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(AppGuideActivity.this, e);
+        String dataStr = intent.getStringExtra("dataStr");
+        SLog.info("dataStr[%s]", dataStr);
+        try {
+            EasyJSONObject dataObj = EasyJSONObject.parse(dataStr);
+            showFramework = dataObj.getBoolean("showFramework");
+
+            for (Object object : dataObj.getArray("imageList")) {
+                String imageUrl = (String) object;
+                imageList.add(imageUrl);
             }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
-                    if (StringUtil.isEmpty(responseStr)) {
-                        return;
-                    }
-
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(AppGuideActivity.this, responseObj)) {
-                        return;
-                    }
-
-                    EasyJSONArray appGuideImageArray = responseObj.getSafeArray("datas.appGuideImage");
-                    for (Object object : appGuideImageArray) {
-                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-                        String url = easyJSONObject.getSafeString("guideImage");
-                        imageList.add(url);
-                    }
-
-                    showAppGuide();
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
-            }
-        });
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+        showAppGuide(dataStr);
     }
 
 
-    private void showAppGuide() {
-        AppGuidePagerAdapter adapter = new AppGuidePagerAdapter(this, imageList, this);
+    private void showAppGuide(String dataStr) {
+        AppGuidePagerAdapter adapter = new AppGuidePagerAdapter(this, showFramework, imageList, this);
         vpAppGuide.setAdapter(adapter);
         vpAppGuide.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -101,6 +80,20 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
             public void onPageSelected(int i) {
                 currPage = i;
                 SLog.info("currPage[%d]", currPage);
+                if (currPage == imageList.size() - 1) {
+                    lastPage = true;
+
+                    vpAppGuide.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (lastPage) {
+                                startMainActivity();
+                            }
+                        }
+                    }, 5000);
+                } else {
+                    lastPage = false;
+                }
             }
 
             @Override
@@ -143,16 +136,24 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
         Util.enterFullScreen(this);
     }
 
-    @Override
-    public void onSelected(PopupType type, int id, Object extra) {
-        // 開始體驗
-        SLog.info("開始體驗");
-        startMainActivity();
-    }
-
     private void startMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        EasyJSONObject dataObj = (EasyJSONObject) data;
+
+        try {
+            int eventType = dataObj.getInt("event_type");
+            if (eventType == EVENT_TYPE_START_MAIN_ACTIVITY) {
+                startMainActivity();
+            }
+
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 }

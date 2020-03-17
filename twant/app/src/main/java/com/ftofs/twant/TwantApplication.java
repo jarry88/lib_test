@@ -133,6 +133,8 @@ public class TwantApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        SLog.info("Launch performance...");
+
         int pid = android.os.Process.myPid();
 
         String processAppName = getAppName(pid);

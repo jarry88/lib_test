@@ -44,6 +44,12 @@ public class SPField {
      */
     public static final String FIELD_SHOW_APP_GUIDE_DATE = "show_app_guide_date";
 
+    /**
+     * 最近一次顯示App引導頁的版本號
+     * App引導頁每次更新顯示一次
+     */
+    public static final String FIELD_SHOW_APP_GUIDE_VERSION = "show_app_guide_version";
+
 
     /**
      * 升級對話框是否在顯示，即最近一次顯示的時間戳
