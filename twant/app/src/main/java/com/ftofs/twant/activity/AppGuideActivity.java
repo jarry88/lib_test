@@ -4,6 +4,7 @@ package com.ftofs.twant.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.viewpager.widget.ViewPager;
 
@@ -19,6 +20,7 @@ import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.HwLoadingView;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
@@ -39,6 +41,9 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
     ViewPager vpAppGuide;
     List<String> imageList = new ArrayList<>();
     int currPage = 0;
+
+    HwLoadingView vwLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,8 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
         // 記錄最近一次顯示APP引導頁的日期
         Hawk.put(SPField.FIELD_SHOW_APP_GUIDE_DATE, new Jarbon().toDateString());
 
+        vwLoading = findViewById(R.id.vw_loading);
+        vwLoading.setVisibility(View.VISIBLE);
         vpAppGuide = findViewById(R.id.vp_app_guide);
 
         loadData();
@@ -56,6 +63,7 @@ public class AppGuideActivity extends BaseActivity implements OnSelectedListener
         Api.getUI(Api.PATH_APP_GUIDE, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                vwLoading.setVisibility(View.GONE);
                 ToastUtil.showNetworkError(AppGuideActivity.this, e);
             }
 
