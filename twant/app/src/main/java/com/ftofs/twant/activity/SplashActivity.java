@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -12,9 +13,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.entity.SoftInputInfo;
@@ -26,16 +30,19 @@ import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 啟動頁面
@@ -60,6 +67,8 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        SLog.info("Launch performance...");
 
         // 檢測是否從瀏覽器網頁拉起APP
         Intent intent =getIntent();
@@ -165,21 +174,6 @@ public class SplashActivity extends BaseActivity {
 
         tvCopyRight.setText(copyright);
 
-        // 判斷是否需要啟動App引導頁(每天需要顯示一次引導頁)
-        String lastShowAppGuideDate = Hawk.get(SPField.FIELD_SHOW_APP_GUIDE_DATE);
-        String today = new Jarbon().toDateString();
-
-        // lastShowAppGuideDate = null;
-        SLog.info("lastShowAppGuideDate[%s], today[%s]", lastShowAppGuideDate, today);
-
-        if (!today.equals(lastShowAppGuideDate)) { // 需要顯示App引導頁
-            SLog.info("需要顯示App引導頁");
-            startTargetActivity(AppGuideActivity.class);
-        } else {
-            SLog.info("【不】需要顯示App引導頁");
-            startTargetActivity(MainActivity.class);
-        }
-
         splashBackground = findViewById(R.id.splash_bg);
 
         // 獲取軟鍵盤的高度
@@ -188,7 +182,6 @@ public class SplashActivity extends BaseActivity {
         SLog.info("_softInputHeight[%d]", softInputHeight);
         if (softInputHeight == SoftInputInfo.INVALID_HEIGHT) { // 如果未用軟鍵盤的高度，則獲取
             softInputInfo = new SoftInputInfo();
-
 
             rlContainer = findViewById(R.id.rl_container);
             rlContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -220,37 +213,7 @@ public class SplashActivity extends BaseActivity {
             etStub.setVisibility(View.GONE);
         }
 
-
-        // 下載App引導頁圖片任務
-//        TwantApplication.getThreadPool().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    String responseStr = Api.syncGet(Api.PATH_APP_GUIDE, null);
-//                    SLog.info("responseStr[%s]", responseStr);
-//                    if (StringUtil.isEmpty(responseStr)) {
-//                        return;
-//                    }
-//
-//                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-//                    if (responseObj == null) {
-//                        return;
-//                    }
-//
-//                    EasyJSONArray appGuideImageArray = responseObj.getSafeArray("datas.appGuideImage");
-//                    for (Object object : appGuideImageArray) {
-//                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-//                        String url = easyJSONObject.getSafeString("guideImage");
-//                        File appGuideImageFile = FileUtil.getCacheFile(SplashActivity.this, url);
-//                        if (!appGuideImageFile.exists()) { // 如果引導圖片不存在，則下載
-//                            Api.syncDownloadFile(StringUtil.normalizeImageUrl(url), appGuideImageFile);
-//                        }
-//                    }
-//                } catch (Exception e) {
-//
-//                }
-//            }
-//        });
+        loadAppGuideData();
     }
 
     @Override
@@ -259,6 +222,88 @@ public class SplashActivity extends BaseActivity {
 
         Util.enterFullScreen(this);
     }
+
+    /**
+     * 加载是否显示引导页的数据
+     */
+    private void loadAppGuideData() {
+        Api.getUI(Api.PATH_APP_GUIDE, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(SplashActivity.this, e);
+                startTargetActivity(MainActivity.class, null); // 出错的话，直接显示MainActivity
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(SplashActivity.this, responseObj)) {
+                        startTargetActivity(MainActivity.class, null); // 出错的话，直接显示MainActivity
+                        return;
+                    }
+
+                    int isOpenGuide = Integer.parseInt(responseObj.getSafeString("datas.isOpenGuide"));
+                    if (isOpenGuide != Constant.TRUE_INT) { // 如果不开启引导页，直接显示MainActivity
+                        startTargetActivity(MainActivity.class, null);
+                        return;
+                    }
+
+                    // 引導頁顯示頻率 1-每天首次啟動顯示 2-每次啟動顯示 3-每次更新後顯示
+                    int guideFrequency = Integer.parseInt(responseObj.getSafeString("datas.guideFrequency"));
+                    if (guideFrequency == 1) { // 1-每天首次啟動顯示
+                        // 判斷是否需要啟動App引導頁(每天需要顯示一次引導頁)
+                        String lastShowAppGuideDate = Hawk.get(SPField.FIELD_SHOW_APP_GUIDE_DATE);
+                        String today = new Jarbon().toDateString();
+
+                        // lastShowAppGuideDate = null;
+                        SLog.info("lastShowAppGuideDate[%s], today[%s]", lastShowAppGuideDate, today);
+
+                        if (today.equals(lastShowAppGuideDate)) { // 不需要顯示App引導頁，直接顯示MainActivity
+                            SLog.info("今天【不】需要顯示App引導頁");
+                            startTargetActivity(MainActivity.class, null);
+                            return;
+                        }
+                    } else if (guideFrequency == 3) { // 3-每次更新後顯示
+                        int lastShowAppGuideVersion = Hawk.get(SPField.FIELD_SHOW_APP_GUIDE_VERSION, 0);
+                        SLog.info("lastShowAppGuideVersion[%d], version[%s]", lastShowAppGuideVersion, BuildConfig.VERSION_CODE);
+
+                        if (lastShowAppGuideVersion == BuildConfig.VERSION_CODE) {
+                            SLog.info("當前版本【不】需要顯示App引導頁");
+                            startTargetActivity(MainActivity.class, null);
+                            return;
+                        }
+                    }
+
+                    // 記錄最近一次顯示APP引導頁的日期和版本号
+                    Hawk.put(SPField.FIELD_SHOW_APP_GUIDE_DATE, new Jarbon().toDateString());
+                    Hawk.put(SPField.FIELD_SHOW_APP_GUIDE_VERSION, BuildConfig.VERSION_CODE);
+
+                    int isOpenGuideFrame = Integer.parseInt(responseObj.getSafeString("datas.isOpenGuideFrame"));
+
+                    EasyJSONArray appGuideImageArray = responseObj.getSafeArray("datas.appGuideImage");
+                    EasyJSONArray imageList = EasyJSONArray.generate();
+                    for (Object object : appGuideImageArray) {
+                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                        String url = easyJSONObject.getSafeString("guideImage");
+                        imageList.append(url);
+                    }
+
+                    EasyJSONObject appGuideDataObj = EasyJSONObject.generate(
+                            "showFramework", isOpenGuideFrame == Constant.TRUE_INT,
+                            "imageList", imageList
+                    );
+
+                    startTargetActivity(AppGuideActivity.class, appGuideDataObj.toString());
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    startTargetActivity(MainActivity.class, null); // 出错的话，直接显示MainActivity
+                }
+            }
+        });
+    }
+
 
     /**
      * 禁用返回键
@@ -277,8 +322,9 @@ public class SplashActivity extends BaseActivity {
     /**
      * 啟動指定的Activity
      * @param cls
+     * @param dataStr 传递给目标Activity的参数
      */
-    private void startTargetActivity(Class<?> cls) {
+    private void startTargetActivity(Class<?> cls, String dataStr) {
         // delayMillis為啟動頁需要顯示的時間減去App啟動所耗的時間
         long delayMillis = SPLASH_DURATION - (System.currentTimeMillis() - appStartTime);
         if (delayMillis < 0) {
@@ -290,6 +336,9 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashActivity.this, cls);
+                if (dataStr != null) {
+                    intent.putExtra("dataStr", dataStr);
+                }
                 startActivity(intent);
                 finish();
             }

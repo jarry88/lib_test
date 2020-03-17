@@ -3,6 +3,8 @@ package com.ftofs.twant.adapter;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +12,17 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.activity.AppGuideActivity;
+import com.ftofs.twant.activity.SplashActivity;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.StringUtil;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * App引導頁PagerAdapter
@@ -24,13 +30,15 @@ import java.util.List;
  */
 public class AppGuidePagerAdapter extends PagerAdapter {
     Context context;
-    List<String> imageList;
-    OnSelectedListener onSelectedListener;
+    boolean showFramework;  // 是否显示引导页框架
+    List<String> imageList = new ArrayList<>(); // 引导页背景图
+    SimpleCallback simpleCallback;
 
-    public AppGuidePagerAdapter(Context context, List<String> imageList, OnSelectedListener onSelectedListener) {
+    public AppGuidePagerAdapter(Context context, boolean showFramework, List<String> imageList, SimpleCallback simpleCallback) {
         this.context = context;
+        this.showFramework = showFramework;
         this.imageList = imageList;
-        this.onSelectedListener = onSelectedListener;
+        this.simpleCallback = simpleCallback;
     }
 
     @Override
@@ -46,31 +54,30 @@ public class AppGuidePagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        String imagePath = imageList.get(position);
-        File imageFile = FileUtil.getCacheFile(context, imagePath);
-        if (position == imageList.size() - 1) {
-            View lastAppGuide = LayoutInflater.from(context).inflate(R.layout.last_app_guide, container, false);
-            ImageView iv = lastAppGuide.findViewById(R.id.img_background);
+        View appGuide = LayoutInflater.from(context).inflate(R.layout.app_guide, container, false);
 
-            Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
+        if (showFramework) {
+            appGuide.findViewById(R.id.app_guide_framework).setVisibility(View.VISIBLE);
+        } else {
+            appGuide.findViewById(R.id.app_guide_framework).setVisibility(View.GONE);
+        }
 
-            lastAppGuide.findViewById(R.id.btn_start_main_activity).setOnClickListener(new View.OnClickListener() {
+        if (position == imageList.size() - 1) { // 如果是最後一頁，點擊就跳轉到MainActivity
+            appGuide.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onSelectedListener != null) {
-                        onSelectedListener.onSelected(null, 0, null);
-                    }
+                    SLog.info("如果是最後一頁，點擊就跳轉到MainActivity");
+                    simpleCallback.onSimpleCall(EasyJSONObject.generate("event_type", AppGuideActivity.EVENT_TYPE_START_MAIN_ACTIVITY));
                 }
             });
-            container.addView(lastAppGuide);
-
-            return lastAppGuide;
-        } else {
-            ImageView iv = new ImageView(context);
-            Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
-            container.addView(iv);
-            return iv;
         }
+
+        ImageView iv = appGuide.findViewById(R.id.img_background);
+        // 採用fitCenter() 齊高寬度適應是指背景圖高度保持與屏幕高度一致，隨著設備分辨率不同，背景圖片跟隨變化，寬度按照等比方式適應；
+        Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).fitCenter().into(iv);
+        container.addView(appGuide);
+
+        return appGuide;
     }
 
     @Override
