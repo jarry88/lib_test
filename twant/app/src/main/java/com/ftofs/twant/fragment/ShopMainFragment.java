@@ -119,6 +119,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private int commentChannel= Constant.COMMENT_CHANNEL_STORE;
     private List<FloatingActionButton> customerList =new ArrayList<>();
     private boolean customerListLoaded =false;
+    private float serversAvatarSize =48;
 
     public static ShopMainFragment newInstance(int shopId) {
         Bundle args = new Bundle();
@@ -187,11 +188,19 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 btnCustomerMenu.getBackground().setAlpha(0);
                 btnCustomerMenu.getMenuIconView().setImageResource(R.drawable.btn_customer_service);
             } else {
+                if (customerList.size() == 1) {
+                    customerList.get(0).performClick();
+                    return;
+                } else if (customerList.size() == 0) {
+                    ToastUtil.error(_mActivity,"當前店鋪未設置客服");
+                    return;
+                }
                 for (FloatingActionButton floatingActionButton : customerList) {
+                    floatingActionButton.setShadowColor(R.color.tw_white);
                     btnCustomerMenu.addMenuButton(floatingActionButton);
                 }
                 btnCustomerMenu.open(true);
-                btnCustomerMenu.getMenuIconView().setImageResource(R.drawable.icon_customer_expand);
+                btnCustomerMenu.getMenuIconView().setImageResource(R.drawable.icon_red_customer);
                 btnCustomerMenu.getBackground().setAlpha(255);
             }
         });
@@ -571,10 +580,11 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                         CustomerServiceStaff staff = new CustomerServiceStaff();
                         Util.packStaffInfo(staff, serviceStaff);
                         FloatingActionButton floatingActionButton = new FloatingActionButton(context);
-                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
-                        CircleImageView view =new CircleImageView(context);
-                        view.setMaxWidth(25);
-                        view.setMaxHeight(25);
+//                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
+//                        CircleImageView view =new CircleImageView(context);
+//                        view.setMaxWidth(25);
+//                        view.setMaxHeight(25);
+
 
 //                        floatingActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
                         SLog.info("staff.avatar %s",staff.avatar);
@@ -588,14 +598,14 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
                                             DiskCacheStrategy.NONE).apply(
                                     RequestOptions.bitmapTransform(
-                                            new CircleCrop())).override(120,120).into(
+                                            new CircleCrop())).override(Util.dip2px(_mActivity,serversAvatarSize),Util.dip2px(_mActivity,serversAvatarSize)).into(
                                     floatingActionButton);
                         } else {
                             Glide.with(context).load(StringUtil.normalizeImageUrl(staff.avatar)).placeholder(R.drawable.grey_default_avatar)
                                     .diskCacheStrategy(
                                             DiskCacheStrategy.NONE).apply(
                                     RequestOptions.bitmapTransform(
-                                            new CircleCrop())).override(120,120).into(
+                                            new CircleCrop())).override(Util.dip2px(_mActivity,serversAvatarSize),Util.dip2px(_mActivity,serversAvatarSize)).into(
                                     floatingActionButton);
                         }
 
