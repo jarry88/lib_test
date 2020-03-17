@@ -287,6 +287,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
             Glide.with(_mActivity).load(R.drawable.icon_default_avatar).centerCrop().into(imgAvatar);
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_CHANGE_PERSONAL_BACKGROUND) {
             personalBackgroundChanged = true;
+        } else if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_POST) {
+
         }
     }
 

@@ -22,9 +22,11 @@ import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.CommentItem;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
@@ -403,7 +405,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
                 }
-
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_ADD_POST, null);
                 ToastUtil.success(_mActivity, "刪除成功");
 
                 pop();

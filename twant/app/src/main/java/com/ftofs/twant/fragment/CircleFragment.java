@@ -97,6 +97,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
      * -1表示未選中，從0開始
      */
     int filterSelectedIndex = -1;
+    //來自於bus信息需要主動更新的標記
+    private boolean fromBus=false;
 
     public static CircleFragment newInstance(boolean isStandalone, SearchPostParams searchPostParams) {
         Bundle args = new Bundle();
@@ -278,6 +280,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         // SLog.info("onEBMessage, messageType[%s]", message.messageType);
         if (message.messageType == EBMessageType.MESSAGE_TYPE_ADD_POST) {
             SLog.info("收到添加想要帖消息");
+            fromBus = true;
             isPostDataLoaded = false;
         }
     }
@@ -492,6 +495,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                         PostItem item = new PostItem();
                         item.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
                         postItemList.add(item);
+                        loadingPopup.dismiss();
                     }
 
                     swipeRefreshLayout.setRefreshing(false);
@@ -540,7 +544,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                     currPage = 0;
                     loadPostData(currPage + 1);
                 }
-            }, 1500);
+            }, fromBus?200:1500);
         }
     }
 
