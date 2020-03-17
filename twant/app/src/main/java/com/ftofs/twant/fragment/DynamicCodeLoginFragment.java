@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.constant.LoginType;
@@ -77,6 +78,9 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     boolean loginButtonEnable = true; // 防止重覆點擊
 
     CommonCallback commonCallback;
+    private ImageView imgClick;
+    private boolean checkButtonState=true;
+
     public void setCommonCallback(CommonCallback commonCallback) {
         this.commonCallback = commonCallback;
     }
@@ -122,7 +126,8 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_view_tos, this);
         Util.setOnClickListener(view, R.id.btn_forget_password, this);
-
+        Util.setOnClickListener(view, R.id.img_check, this);
+        imgClick = view.findViewById(R.id.img_check);
         btnGetSMSCode = view.findViewById(R.id.btn_get_sms_code);
         btnGetSMSCode.setOnClickListener(this);
 
@@ -164,6 +169,10 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 return;
             }
             ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_LOGIN);
+        } else if (id == R.id.img_check) {
+            checkButtonState =!checkButtonState;
+            Glide.with(_mActivity).load(checkButtonState?R.drawable.icon_checked:R.drawable.icon_unchecked).centerCrop().into(imgClick);
+
         } else if (id == R.id.btn_facebook_login) {
             ((LoginFragment) commonCallback).facebookLogin();
         } else if (id == R.id.btn_get_sms_code) {
@@ -183,7 +192,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
             }
 
             if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
-                String[] areaArray = new String[] {
+                String[] areaArray = new String[]{
                         "",
                         getString(R.string.text_hongkong),
                         getString(R.string.text_mainland),

@@ -1,12 +1,15 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +46,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
     EditText etPassword;
     EditText etConfirmPassword;
     EditText etNickname;
+    private TextView btnRegister;
 
     /**
      *
@@ -86,13 +90,100 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
 
         TextView tvSmsCodeHint = view.findViewById(R.id.tv_sms_code_hint);
         tvSmsCodeHint.setText(String.format(getString(R.string.text_sms_code_validate_hint), mobile, smsCodeValidTime));
-
+        btnRegister = view.findViewById(R.id.btn_register);
         etSmsCode = view.findViewById(R.id.et_sms_code);
+        etSmsCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateBtnRegister();
+            }
+        });
         etPassword = view.findViewById(R.id.et_password);
         etPassword.setHint(String.format(getString(R.string.input_password_hint), "-"));
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateBtnRegister();
+            }
+        });
         etConfirmPassword = view.findViewById(R.id.et_confirm_password);
+        etConfirmPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateBtnRegister();
+            }
+        });
         etNickname = view.findViewById(R.id.et_nickname);
+        etNickname.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateBtnRegister();
+            }
+        });
+    }
+
+    private void updateBtnRegister() {
+        String smsCode =etSmsCode.getText().toString().trim();
+        String password = etPassword.getText().toString();
+        String confirmPassword = etConfirmPassword.getText().toString();
+        String nickname = etNickname.getText().toString().trim();
+
+        if (StringUtil.isEmpty(smsCode)) {
+            return;
+        }
+
+        if (StringUtil.isEmpty(password)) {
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            return;
+        }
+
+        if (StringUtil.isEmpty(nickname)) {
+            return;
+        }
+        btnRegister.setBackgroundResource(R.drawable.blue_button);
     }
 
     @Override
@@ -109,21 +200,28 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
 
             if (StringUtil.isEmpty(smsCode)) {
                 ToastUtil.error(_mActivity, getString(R.string.input_sms_code_hint));
+                btnRegister.setBackgroundResource(R.drawable.grey_button);
+
                 return;
             }
 
             if (StringUtil.isEmpty(password)) {
                 ToastUtil.error(_mActivity, "請輸入密碼");
+                btnRegister.setBackgroundResource(R.drawable.grey_button);
+
                 return;
             }
 
             if (!password.equals(confirmPassword)) {
                 ToastUtil.error(_mActivity, "密碼不一致");
+                btnRegister.setBackgroundResource(R.drawable.grey_button);
+
                 return;
             }
 
             if (StringUtil.isEmpty(nickname)) {
                 ToastUtil.error(_mActivity, getString(R.string.input_nickname_hint));
+                btnRegister.setBackgroundResource(R.drawable.grey_button);
                 return;
             }
 
@@ -139,6 +237,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
+                    btnRegister.setBackgroundResource(R.drawable.grey_button);
                 }
 
                 @Override
@@ -175,6 +274,7 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
         super.onSupportVisible();
         SLog.info("__onSupportVisible");
         _mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        btnRegister.setBackgroundResource(R.drawable.grey_button);
     }
     @Override
     public void onSupportInvisible() {

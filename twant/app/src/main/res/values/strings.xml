@@ -750,4 +750,7 @@
     <string name="text_goto_member_info">查看資料</string>
     <string name="text_report">舉報</string>
     <string name="text_short_want">想要</string>
+    <string name="agree_server">請先同意服務協議</string>
+    <string name="agree_and_login">登入并同意</string>
+    <string name="tip_number_is_null">手機號不能爲空</string>
 </resources>

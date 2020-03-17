@@ -2,7 +2,9 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Layout;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -13,10 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -70,6 +74,9 @@ public class ResetPasswordFragment extends BaseFragment implements
     TextView tvAreaName;
     boolean isModifyPaymentPassword;
     private LinearLayout trueNoticeLoge;
+    private TextView btnNext;
+    private boolean checkAgreeState;
+    private ImageView imgCheckAgree;
 
 
     public static ResetPasswordFragment newInstance(int usage, boolean isModifyPaymentPassword) {
@@ -101,6 +108,10 @@ public class ResetPasswordFragment extends BaseFragment implements
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_next, this);
+        Util.setOnClickListener(view, R.id.img_check, this);
+        Util.setOnClickListener(view, R.id.btn_view_tos, this);
+        btnNext = view.findViewById(R.id.btn_next);
+        imgCheckAgree = view.findViewById(R.id.img_check);
         trueNoticeLoge = view.findViewById(R.id.item_logo);
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         if (usage == Constant.USAGE_USER_REGISTER) {
@@ -119,7 +130,39 @@ public class ResetPasswordFragment extends BaseFragment implements
         btnRefreshCaptcha.setOnClickListener(this);
 
         etMobile = view.findViewById(R.id.et_mobile);
+        etMobile.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updataBtnNext();
+            }
+        });
         etCaptcha = view.findViewById(R.id.et_captcha);
+        etCaptcha.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updataBtnNext();
+            }
+        });
         tvAreaName = view.findViewById(R.id.tv_area_name);
 
         refreshCaptcha();
@@ -151,12 +194,18 @@ public class ResetPasswordFragment extends BaseFragment implements
             refreshCaptcha();
         } else if (id == R.id.btn_next) {
             getSmsCode();
+        } else if (id == R.id.img_check) {
+            checkAgreeState = !checkAgreeState;
+            Glide.with(_mActivity).load(checkAgreeState ? R.drawable.icon_checked : R.drawable.icon_unchecked).centerCrop().into(imgCheckAgree);
+            updataBtnNext();
+        } else if (id == R.id.btn_view_tos) {
+            Util.startFragment(H5GameFragment.newInstance(Constant.TOS_URL, getString(R.string.text_service_contract)));
         }
     }
 
     private void getSmsCode() {
         try {
-            if (mobileZoneList.size() <= selectedMobileZoneIndex) {
+            if (!checkInfo(true)) {
                 return;
             }
             // 獲取區號
@@ -164,33 +213,9 @@ public class ResetPasswordFragment extends BaseFragment implements
 
             // 注账号为 区号,手机号
             final String mobile = etMobile.getText().toString().trim();
-            if (StringUtil.isEmpty(mobile)) {
-                ToastUtil.error(_mActivity, "手機號不能為空");
-                return;
-            }
-
-
-            if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
-                String[] areaArray = new String[] {
-                        "",
-                        getString(R.string.text_hongkong),
-                        getString(R.string.text_mainland),
-                        getString(R.string.text_macao)
-                };
-
-                String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
-                ToastUtil.error(_mActivity, msg);
-                return;
-            }
-
-            final String fullMobile = String.format("%s,%s", mobileZone.areaCode, mobile);
+            String fullMobile = String.format("%s,%s", mobileZone.areaCode, mobile);
 
             String captchaText = etCaptcha.getText().toString().trim();
-            if (StringUtil.isEmpty(captchaText)) {
-                ToastUtil.error(_mActivity, "驗證碼不能為空");
-                return;
-            }
-
             EasyJSONObject params = EasyJSONObject.generate(
                     "mobile", fullMobile,
                     "captchaKey", captchaKey,
@@ -210,6 +235,7 @@ public class ResetPasswordFragment extends BaseFragment implements
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
+                    btnNext.setBackgroundResource(R.drawable.grey_button);
                 }
 
                 @Override
@@ -222,6 +248,7 @@ public class ResetPasswordFragment extends BaseFragment implements
                             // 如果出錯，刷新驗證碼
                             refreshCaptcha();
                             ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
+                            btnNext.setBackgroundResource(R.drawable.grey_button);
                             return;
                         }
 
@@ -240,6 +267,55 @@ public class ResetPasswordFragment extends BaseFragment implements
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+    private boolean checkInfo(boolean toastEnable) {
+        if (mobileZoneList.size() <= selectedMobileZoneIndex) {
+            return false;
+        }
+        // 獲取區號
+        final MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+
+        // 注账号为 区号,手机号
+        final String mobile = etMobile.getText().toString().trim();
+        if (StringUtil.isEmpty(mobile)) {
+            if (toastEnable) {
+                ToastUtil.error(_mActivity, getString(R.string.tip_number_is_null));
+            }
+            return false;
+        }
+
+
+        if (!StringUtil.isMobileValid(mobile, mobileZone.areaId)) {
+            String[] areaArray = new String[] {
+                    "",
+                    getString(R.string.text_hongkong),
+                    getString(R.string.text_mainland),
+                    getString(R.string.text_macao)
+            };
+
+            String msg = String.format(getString(R.string.text_invalid_mobile), areaArray[mobileZone.areaId]);
+            if (toastEnable) {
+                ToastUtil.error(_mActivity, msg);
+            }
+            return false;
+        }
+
+
+        String captchaText = etCaptcha.getText().toString().trim();
+        if (StringUtil.isEmpty(captchaText)) {
+            if (toastEnable) {
+                ToastUtil.error(_mActivity, "驗證碼不能為空");
+            }
+            return false;
+        }
+        if (!checkAgreeState) {
+            if (toastEnable) {
+                ToastUtil.error(_mActivity, getString(R.string.agree_server));
+            }
+            return false;
+        }
+        return true;
     }
 
 
@@ -289,6 +365,16 @@ public class ResetPasswordFragment extends BaseFragment implements
         this.selectedMobileZoneIndex = id;
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
+        updataBtnNext();
+    }
+
+    private void updataBtnNext() {
+        if (checkInfo(false)) {
+            btnNext.setBackgroundResource(R.drawable.blue_button);
+        } else {
+            btnNext.setBackgroundResource(R.drawable.grey_button);
+
+        }
     }
 
     @Override

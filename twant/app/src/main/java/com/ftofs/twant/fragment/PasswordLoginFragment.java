@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -70,6 +71,8 @@ public class PasswordLoginFragment extends BaseFragment implements
     private RelativeLayout btnMobilezone;
 
     boolean loginButtonEnable = true; // 防止重覆點擊
+    boolean checkButtonState = true; // 防止重覆點擊
+    private ImageView imgClick;
 
     public void setCommonCallback(CommonCallback commonCallback) {
         this.commonCallback = commonCallback;
@@ -101,7 +104,9 @@ public class PasswordLoginFragment extends BaseFragment implements
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_view_tos, this);
         Util.setOnClickListener(view, R.id.btn_forget_password, this);
+        Util.setOnClickListener(view, R.id.img_check,this);
 
+        imgClick = view.findViewById(R.id.img_check);
         btnMobilezone = view.findViewById(R.id.btn_mobile_zone);
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
@@ -167,6 +172,9 @@ public class PasswordLoginFragment extends BaseFragment implements
             Util.startFragment(H5GameFragment.newInstance(Constant.TOS_URL, getString(R.string.text_service_contract)));
         } else if (id == R.id.btn_forget_password) {
             Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_RESET_PASSWORD, false));
+        } else if (id == R.id.img_check) {
+            checkButtonState = !checkButtonState;
+            Glide.with(_mActivity).load(checkButtonState?R.drawable.icon_checked:R.drawable.icon_unchecked).centerCrop().into(imgClick);
         }
     }
 
@@ -179,7 +187,10 @@ public class PasswordLoginFragment extends BaseFragment implements
         String mobile = etMobile.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
         String captcha = etCaptcha.getText().toString().trim();
-
+        if (!checkButtonState) {
+            ToastUtil.error(_mActivity, getString(R.string.agree_server));
+            return;
+        }
         if (StringUtil.isEmpty(mobile)) {
             ToastUtil.error(_mActivity, getString(R.string.input_mobile_hint));
             return;

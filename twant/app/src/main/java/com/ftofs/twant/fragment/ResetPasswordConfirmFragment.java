@@ -112,6 +112,8 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
+        Util.setOnClickListener(view, R.id.btn_view_tos,this);
+
 
         SLog.info("areaCode[%s], mobile[%s], smsCodeValidTime[%d]", areaCode, mobile, smsCodeValidTime);
 
@@ -169,6 +171,8 @@ public class ResetPasswordConfirmFragment extends BaseFragment implements View.O
             } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
                 doSetPaymentPassword();
             }
+        } else if (id == R.id.btn_view_tos) {
+            Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_RESET_PASSWORD, false));
         }
     }
 
