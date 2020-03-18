@@ -310,8 +310,10 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
 
         if (requestCode == RequestCode.SELECT_SENDER_ADDR.ordinal()) {
             AddrItem addrItem = data.getParcelable("addrItem");
+            if (addrItem == null) {
+                return;
+            }
             SLog.info("addrItem[%s]", addrItem.toString());
-
             senderName = addrItem.realName;
             senderAreaId1 = addrItem.areaIdList.get(0);
             senderAreaId2 = addrItem.areaIdList.get(1);

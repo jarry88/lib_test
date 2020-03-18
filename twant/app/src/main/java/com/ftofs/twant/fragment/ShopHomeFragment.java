@@ -190,6 +190,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private boolean bannerStart;
     private CountDownHandler countDownHandler;
     private String storeBusInfo;
+    private int storeReply;
 
     static class CountDownHandler extends Handler {
 
@@ -423,6 +424,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         updateBanner(hasSlider);
 
                          //好友
+
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, TwantApplication.getStringRes(R.string.text_friend)));
                         EasyJSONArray friends = null;
                         if (responseObj.exists("datas.friendList")) {
@@ -672,6 +674,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             storeMapInfo = new StoreMapInfo(storeLongitude, storeLatitude, storeDistance, 0, 0,
                     storeName, storeAddress, storePhone,storeBusInfo);
             showStoreMapButton();
+            storeReply = storeInfo.getInt("storeReply");
+//4220            tabs.get(COMMENT_FRAGMENT).concat("()");
+
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }

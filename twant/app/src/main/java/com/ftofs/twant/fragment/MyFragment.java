@@ -406,7 +406,10 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                         if (!StringUtil.isEmpty(avatarUrl)) {
                             Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAvatar);
                             Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAuthorAvatar);
-                        }
+                        } else {
+                            Glide.with(_mActivity).load(R.drawable.grey_default_avatar).centerCrop().into(imgAvatar);
+                            Glide.with(_mActivity).load(R.drawable.grey_default_avatar).centerCrop().into(imgAuthorAvatar);
+                        } 
 
                         String nickname = Hawk.get(SPField.FIELD_NICKNAME, "");
                         tvNickname.setText(nickname);
