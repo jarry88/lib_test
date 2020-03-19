@@ -446,6 +446,8 @@
                         android:textColor="@color/tw_black"
                         android:textSize="17sp"
                         android:text="-"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         />
                 </RelativeLayout>
 

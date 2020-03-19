@@ -68,6 +68,8 @@
                 android:layout_marginStart="10dp"
                 android:textSize="14sp"
                 android:textColor="#FF2A292A"
+                android:singleLine="true"
+                android:ellipsize="end"
                 />
 
         </LinearLayout>
