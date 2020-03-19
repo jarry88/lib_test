@@ -141,7 +141,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     .setGone(R.id.tv_goods_name_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_jingle_right, rightHandSideVisible)
                     .setGone(R.id.vw_right_bottom_separator, rightHandSideVisible)
-                    .setGone(R.id.btn_goto_store_right, rightHandSideVisible);
+                    .setGone(R.id.btn_goto_store_right, rightHandSideVisible)
+                    .setGone(R.id.tv_goods_price_right, rightHandSideVisible);
 
         } else if (itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
             helper.addOnClickListener(R.id.btn_play_game)
