@@ -118,7 +118,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     // 贈品數
     int giftCount;
 
-    String goodsVideoId;
+    String goodsVideoId;  // 產品視頻Id
+    String detailVideoId; // 介紹視頻Id
 
     float promotionDiscountRate;
     TextView tvPromotionDiscountRate;
@@ -1175,6 +1176,30 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         SLog.info("SPEC_DUMP[%s]", spec);
                     }
 
+                    if (goodsDetail.exists("detailVideo")) {
+                        String detailVideoUrl = goodsDetail.getSafeString("detailVideo");
+                        SLog.info("detailVideoUrl[%s]", detailVideoUrl);
+                        if (!StringUtil.isEmpty(detailVideoUrl)) {
+                            detailVideoId = Util.getYoutubeVideoId(detailVideoUrl);
+                            if (!StringUtil.isEmpty(detailVideoId)) { // 如果有介紹視頻
+                                String coverUrl = String.format("https://img.youtube.com/vi/%s/sddefault.jpg", detailVideoId);
+                                View detailVideoView = LayoutInflater.from(_mActivity).inflate(R.layout.goods_detail_video, llGoodsDetailImageContainer, false);
+                                ImageView imgDetailVideoCover = detailVideoView.findViewById(R.id.img_detail_video_cover);
+                                Glide.with(_mActivity).load(coverUrl).centerCrop().into(imgDetailVideoCover);
+
+                                detailVideoView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, detailVideoId);
+                                        startActivity(intent);
+                                    }
+                                });
+
+                                llGoodsDetailImageContainer.addView(detailVideoView);
+                            }
+                        }
+                    }
+
                     // 產品詳情圖片
                     EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.goodsMobileBodyVoList");
                     for (Object object : easyJSONArray) {
@@ -1222,8 +1247,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     // 視頻
                     boolean hasGoodsVideo = false;
-                    if (goodsDetail.exists("detailVideo")) {
-                        String goodsVideoUrl = goodsDetail.getSafeString("detailVideo");
+                    if (goodsDetail.exists("goodsVideo")) {
+                        String goodsVideoUrl = goodsDetail.getSafeString("goodsVideo");
                         if (!StringUtil.isEmpty(goodsVideoUrl)) {
                             goodsVideoId = Util.getYoutubeVideoId(goodsVideoUrl);
                             if (!StringUtil.isEmpty(goodsVideoId)) {

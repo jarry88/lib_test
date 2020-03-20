@@ -548,7 +548,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                         ToastUtil.showNetworkError(_mActivity, e);
                         loadingPopup.dismiss();
-                        if (!isActivityShopping) {
+                        if (!isActivityShopping && mGoodsAdapter != null) {
                             mGoodsAdapter.loadMoreFail();
                         }
                     }

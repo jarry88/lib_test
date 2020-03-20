@@ -4,8 +4,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,6 +130,13 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
             }
         });
         etReceiverName.setFilters(new InputFilter[]{new InputFilter.LengthFilter(REAL_NAME_MAXLENTH)});
+        etReceiverName.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        etReceiverName.setGravity(Gravity.TOP);
+        //改变默认的单行模式
+        etReceiverName.setSingleLine(false);
+        //水平滚动设置为False
+        etReceiverName.setHorizontallyScrolling(false);
+
         etMobile = view.findViewById(R.id.et_mobile);
         etMobile.setOnClickListener((v)-> {
             ((TextView) view.findViewById(R.id.tv_phone_number)).setTextColor(Color.GRAY);
@@ -140,6 +149,12 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         tvArea = view.findViewById(R.id.tv_area);
         etDetailAddress = view.findViewById(R.id.et_detail_address);
         etDetailAddress.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DETAIL_ADDRESS_MAXLENTH)});
+        etDetailAddress.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        etDetailAddress.setGravity(Gravity.TOP);
+        //改变默认的单行模式
+        etDetailAddress.setSingleLine(false);
+        //水平滚动设置为False
+        etDetailAddress.setHorizontallyScrolling(false);
         etDetailAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

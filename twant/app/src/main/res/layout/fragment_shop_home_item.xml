@@ -13,44 +13,68 @@
         <View
             android:id="@+id/vw_separator_store_wanted"
             android:layout_width="0dp"
-            android:layout_height="5dp"
+            android:layout_height="0dp"
             android:background="@color/tw_light_grey"
             />
 
         <!-- 鎮店之寶 -->
-        <LinearLayout
-            android:id="@+id/ll_features_goods_container"
+        <RelativeLayout
+            android:id="@+id/rl_features_goods_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:orientation="vertical"
-            android:visibility="gone"
-            >
-
-            <TextView
+            android:visibility="gone">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center"
-                android:text="鎮 店 之 寶"
-                android:textColor="@color/tw_black"
-                android:textSize="21sp" />
+                android:orientation="vertical"
+                android:background="@drawable/goods_bg">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:text="鎮 店 之 寶"
+                    android:textColor="@color/tw_black"
+                    android:textSize="21sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="U n i q u e   P r o d u c t"
-                android:textColor="@color/tw_black"
-                android:textSize="10sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="U n i q u e   P r o d u c t"
+                    android:textColor="@color/tw_black"
+                    android:textSize="10sp" />
 
-            <com.ftofs.twant.view.CustomRecyclerView
-                android:id="@+id/rv_features_goods_list"
-                android:layout_width="match_parent"
+                <com.ftofs.twant.view.CustomRecyclerView
+                    android:id="@+id/rv_features_goods_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="25dp"
+                    />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/btn_view_prev_feature_goods"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"/>
-        </LinearLayout>
+                android:layout_marginTop="210dp"
+                android:padding="15dp"
+                android:src="@drawable/icon_prev_feature_goods">
+            </ImageView>
+            <ImageView
+                android:id="@+id/btn_view_next_feature_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="210dp"
+                android:padding="15dp"
+                android:src="@drawable/icon_next_feature_goods">
+            </ImageView>
+        </RelativeLayout>
+
 
         <!-- 商店熱賣 -->
         <LinearLayout
