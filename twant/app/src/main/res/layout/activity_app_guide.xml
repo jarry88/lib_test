@@ -21,4 +21,17 @@
 
     </androidx.viewpager.widget.ViewPager>
 
+    <!-- 【跳過】按鈕 -->
+    <TextView
+        android:id="@+id/btn_skip_app_guide"
+        android:layout_width="46dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:text="跳過"
+        android:background="@drawable/skip_app_guide_bg">
+    </TextView>
 </RelativeLayout>
