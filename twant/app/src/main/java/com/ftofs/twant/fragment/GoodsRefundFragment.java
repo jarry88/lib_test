@@ -348,14 +348,16 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                                 "buyerMessage", buyerMessage,
                                 "ordersGoodsId", ordersGoodsId,
                                 "reasonId", reasonItemList.get(reasonIndex).id,
-                                "refundAmount", refundAmount);
+                                "refundAmount", refundAmount,
+                                "refundWay", refundWay);
                     } else {
                         path = Api.PATH_REFUND_ALL_SAVE;
                         params = EasyJSONObject.generate(
                                 "token", token,
                                 "ordersId", ordersId,
                                 "picJson", picJson.toString(),
-                                "buyerMessage", buyerMessage);
+                                "buyerMessage", buyerMessage,
+                                "refundWay", refundWay);
                     }
 
                     SLog.info("params[%s]", params.toString());
@@ -447,7 +449,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                             "buyerMessage", buyerMessage,
                             "ordersGoodsId", ordersGoodsId,
                             "reasonId", reasonItemList.get(reasonIndex).id,
-                            "refundAmount", refundAmount);
+                            "refundAmount", refundAmount,
+                            "refundWay", refundWay);
 
                     SLog.info("params[%s]", params.toString());
                     String responseStr = Api.syncPost(Api.PATH_SINGLE_GOODS_RETURN_SAVE, params);
