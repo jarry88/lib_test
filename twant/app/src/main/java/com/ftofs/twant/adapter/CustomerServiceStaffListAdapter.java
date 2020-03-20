@@ -13,13 +13,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.entity.CustomerServiceStaffPair;
 import com.ftofs.twant.fragment.ShopCustomerServiceFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
-public class CustomerServiceStaffListAdapter extends BaseQuickAdapter<CustomerServiceStaff, BaseViewHolder>
+public class CustomerServiceStaffListAdapter extends BaseQuickAdapter<CustomerServiceStaffPair, BaseViewHolder>
                                         implements Animation.AnimationListener {
     /**
      * Adapter所在的Fragment
@@ -27,40 +28,92 @@ public class CustomerServiceStaffListAdapter extends BaseQuickAdapter<CustomerSe
     ShopCustomerServiceFragment shopCustomerServiceFragment;
     Animation animation;
     TextView animatingTextView;
-    public CustomerServiceStaffListAdapter(ShopCustomerServiceFragment shopCustomerServiceFragment, int layoutResId, @Nullable List<CustomerServiceStaff> data) {
+    public CustomerServiceStaffListAdapter(ShopCustomerServiceFragment shopCustomerServiceFragment, int layoutResId, @Nullable List<CustomerServiceStaffPair> data) {
         super(layoutResId, data);
 
         this.shopCustomerServiceFragment = shopCustomerServiceFragment;
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, CustomerServiceStaff item) {
+    protected void convert(BaseViewHolder helper, CustomerServiceStaffPair item) {
+        helper.addOnClickListener(R.id.btn_init_cs_left, R.id.btn_init_cs_right);
+
         if (animation == null) {
             animation = AnimationUtils.loadAnimation(mContext, R.anim.welcome_message);
             animation.setAnimationListener(this);
         }
 
-        ImageView imgStaffAvatar = helper.getView(R.id.img_staff_avatar);
+        if (item.left != null) {
+            CustomerServiceStaff leftItem = item.left;
 
-        if (StringUtil.useDefaultAvatar(item.avatar)) {
-            Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgStaffAvatar);
-        } else {
-            Glide.with(mContext).load(item.avatar).centerCrop().into(imgStaffAvatar);
+            ImageView imgStaffAvatar = helper.getView(R.id.img_staff_avatar_left);
+
+            if (StringUtil.useDefaultAvatar(leftItem.avatar)) {
+                Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgStaffAvatar);
+            } else {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(leftItem.avatar)).centerCrop().into(imgStaffAvatar);
+            }
+
+
+            helper.setText(R.id.tv_staff_name_left, leftItem.staffName);
+
+            if (leftItem.staffType == 1) {
+                helper.setBackgroundRes(R.id.tv_staff_type_left, R.drawable.customer_service_type_indicator_bg_red)
+                    .setText(R.id.tv_staff_type_left, "售前");
+            } else {
+                helper.setBackgroundRes(R.id.tv_staff_type_left, R.drawable.customer_service_type_indicator_bg_blue)
+                        .setText(R.id.tv_staff_type_left, "售後");
+            }
+
+            TextView tvWelcomeMessage = helper.getView(R.id.tv_welcome_message_left);
+            tvWelcomeMessage.setText(leftItem.welcomeMessage);
+
+            if (leftItem.showWelcomeMessageAnimation) {
+                tvWelcomeMessage.setVisibility(View.INVISIBLE);
+                animatingTextView = tvWelcomeMessage;
+                tvWelcomeMessage.startAnimation(animation);
+            } else {
+                tvWelcomeMessage.setVisibility(View.INVISIBLE);
+            }
         }
 
+        if (item.right != null) {
+            CustomerServiceStaff rightItem = item.right;
 
-        helper.setText(R.id.tv_staff_name, item.staffName);
+            ImageView imgStaffAvatar = helper.getView(R.id.img_staff_avatar_right);
 
-        TextView tvWelcomeMessage = helper.getView(R.id.tv_welcome_message);
-        tvWelcomeMessage.setText(item.welcomeMessage);
+            if (StringUtil.useDefaultAvatar(rightItem.avatar)) {
+                Glide.with(mContext).load(R.drawable.grey_default_avatar).centerCrop().into(imgStaffAvatar);
+            } else {
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(rightItem.avatar)).centerCrop().into(imgStaffAvatar);
+            }
 
-        if (item.showWelcomeMessageAnimation) {
-            tvWelcomeMessage.setVisibility(View.INVISIBLE);
-            animatingTextView = tvWelcomeMessage;
-            tvWelcomeMessage.startAnimation(animation);
+
+            helper.setText(R.id.tv_staff_name_right, rightItem.staffName);
+
+            if (rightItem.staffType == 1) {
+                helper.setBackgroundRes(R.id.tv_staff_type_right, R.drawable.customer_service_type_indicator_bg_red)
+                        .setText(R.id.tv_staff_type_right, "售前");
+            } else {
+                helper.setBackgroundRes(R.id.tv_staff_type_right, R.drawable.customer_service_type_indicator_bg_blue)
+                        .setText(R.id.tv_staff_type_right, "售後");
+            }
+
+            TextView tvWelcomeMessage = helper.getView(R.id.tv_welcome_message_right);
+            tvWelcomeMessage.setText(rightItem.welcomeMessage);
+
+            if (rightItem.showWelcomeMessageAnimation) {
+                tvWelcomeMessage.setVisibility(View.INVISIBLE);
+                animatingTextView = tvWelcomeMessage;
+                tvWelcomeMessage.startAnimation(animation);
+            } else {
+                tvWelcomeMessage.setVisibility(View.INVISIBLE);
+            }
+            helper.setVisible(R.id.ll_right_container, true);
         } else {
-            tvWelcomeMessage.setVisibility(View.INVISIBLE);
+            helper.setVisible(R.id.ll_right_container, false);
         }
+
 
 
         int itemCount = getItemCount();
