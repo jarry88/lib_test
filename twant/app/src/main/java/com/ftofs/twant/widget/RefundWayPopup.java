@@ -2,6 +2,7 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -43,6 +44,15 @@ public class RefundWayPopup  extends BottomPopupView implements View.OnClickList
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
         findViewById(R.id.btn_refund_to_wallet).setOnClickListener(this);
         findViewById(R.id.btn_refund_to_original).setOnClickListener(this);
+
+        if (refundWay == REFUND_WAY_WALLET) {
+            ((ImageView) findViewById(R.id.indicator_refund_to_wallet)).setImageResource(R.drawable.icon_checked);
+            ((ImageView) findViewById(R.id.indicator_refund_to_original)).setImageResource(R.drawable.icon_unchecked);
+        } else {
+            ((ImageView) findViewById(R.id.indicator_refund_to_wallet)).setImageResource(R.drawable.icon_unchecked);
+            ((ImageView) findViewById(R.id.indicator_refund_to_original)).setImageResource(R.drawable.icon_checked);
+        }
+
     }
 
     //完全可见执行

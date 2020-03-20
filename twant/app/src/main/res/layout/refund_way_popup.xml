@@ -64,6 +64,7 @@
                         android:textColor="@color/tw_black">
                     </TextView>
                     <ImageView
+                        android:id="@+id/indicator_refund_to_wallet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -105,6 +106,7 @@
                         android:textColor="@color/tw_black">
                     </TextView>
                     <ImageView
+                        android:id="@+id/indicator_refund_to_original"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
