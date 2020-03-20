@@ -747,15 +747,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         .show();
                 break;
             case R.id.btn_goods_share:
-                SLog.info("goodsPrice[%s]", goodsPrice);
-                new XPopup.Builder(_mActivity)
-                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                        .moveUpToKeyboard(false)
-                        .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
-                                jingle, currGalleryImageList.get(0), EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
-                                                                        "commonId", commonId, "goodsName", goodsName,
-                                                                        "goodsImage", currGalleryImageList.get(0), "goodsPrice", goodsPrice)))
-                        .show();
+                pullShare();
                 break;
             case R.id.ll_comment_container:
             case R.id.btn_goods_comment:
@@ -779,6 +771,18 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             default:
                 break;
         }
+    }
+
+    public void pullShare() {
+        SLog.info("goodsPrice[%s]", goodsPrice);
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
+                        jingle, currGalleryImageList.get(0), EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
+                        "commonId", commonId, "goodsName", goodsName,
+                        "goodsImage", currGalleryImageList.get(0), "goodsPrice", goodsPrice)))
+                .show();
     }
 
     public void showStoreCustomerService() {

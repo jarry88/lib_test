@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,6 +96,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     public static final int MORE_FRAGMENT = 4;
 
     private SupportFragment[] mFragments = new SupportFragment[4];
+    private ImageView[] mCustomers = new ImageView[4];
     private int[] bottomBarButtonIds = new int[] {R.id.btn_home, R.id.btn_commodity,
             R.id.btn_activity, R.id.btn_recruitment, R.id.btn_more};
     private int[] bottomBarIconIds = new int[] {0, R.id.icon_shop_bottom_bar_commodity, R.id.icon_shop_bottom_bar_activity,
@@ -117,9 +119,17 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
      */
     private int selectedFragmentIndex = HOME_FRAGMENT;
     private int commentChannel= Constant.COMMENT_CHANNEL_STORE;
-    private List<FloatingActionButton> customerList =new ArrayList<>();
+    private List<ImageView> customerList =new ArrayList<>();
     private boolean customerListLoaded =false;
-    private float serversAvatarSize =48;
+    private float serversAvatarSize =36;
+    private LinearLayout llFloatButtonList;
+    private ImageView customer1;
+    private ImageView customer2;
+    private ImageView customer3;
+    private ImageView customerMore;
+    private ImageView btnCustomer;
+    private boolean customerExpanded =false;
+    private int customerCount;
 
     public static ShopMainFragment newInstance(int shopId) {
         Bundle args = new Bundle();
@@ -145,6 +155,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         Bundle args = getArguments();
         storeId = args.getInt("shopId");
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
+        llFloatButtonList = view.findViewById(R.id.btn_customer_list);
         Util.setOnClickListener(view,R.id.btn_comment,this);
         toolbar = view.findViewById(R.id.tool_bar);
         tvShopTitle = view.findViewById(R.id.tv_shop_title);
@@ -152,6 +163,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
         Util.setOnClickListener(view,R.id.btn_menu,this);
+        initCustomerList(view);
+        loadCustomerData(getContext());
+
         for (int id : bottomBarButtonIds) {
             Util.setOnClickListener(view, id, this);
         }
@@ -163,47 +177,6 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             bottomBarIcons[i] = view.findViewById(bottomBarIconIds[i]);
         }
 
-        btnCustomerMenu = view.findViewById(R.id.menu_blue);
-        FloatingActionButton customerOne =new FloatingActionButton(getContext());
-        customerOne.setButtonSize(FloatingActionButton.SIZE_MINI);
-        loadCustomerData(getContext());
-        btnCustomerMenu.setIconAnimated(false);
-
-        btnCustomerMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        btnCustomerMenu.open(false);
-        btnCustomerMenu.setBackgroundResource(R.drawable.bg_expandable_selector);
-        btnCustomerMenu.getBackground().setAlpha(0);
-
-        btnCustomerMenu.setOnMenuButtonClickListener(v -> {
-            Boolean expanded = btnCustomerMenu.isOpened();
-            SLog.info("measureHeight%d,expanded %s childCount %d", btnCustomerMenu.getMeasuredHeight(),expanded, btnCustomerMenu.getChildCount());
-            if (expanded) {
-                btnCustomerMenu.removeAllMenuButtons();
-                btnCustomerMenu.close(true);
-                btnCustomerMenu.getBackground().setAlpha(0);
-                btnCustomerMenu.getMenuIconView().setImageResource(R.drawable.btn_customer_service);
-            } else {
-                if (customerList.size() == 1) {
-                    customerList.get(0).performClick();
-                    return;
-                } else if (customerList.size() == 0) {
-                    ToastUtil.error(_mActivity,"當前店鋪未設置客服");
-                    return;
-                }
-                for (FloatingActionButton floatingActionButton : customerList) {
-                    floatingActionButton.setShadowColor(R.color.tw_white);
-                    btnCustomerMenu.addMenuButton(floatingActionButton);
-                }
-                btnCustomerMenu.open(true);
-                btnCustomerMenu.getMenuIconView().setImageResource(R.drawable.icon_red_customer);
-                btnCustomerMenu.getBackground().setAlpha(255);
-            }
-        });
 
         btnSearch = view.findViewById(R.id.btn_search);
         btnSearch.setOnClickListener(this);
@@ -262,6 +235,23 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         setStoreNavigationItem();
     }
 
+    private void initCustomerList(View view) {
+        Util.setOnClickListener(view,R.id.btn_customer,this);
+        Util.setOnClickListener(view,R.id.btn_customer1,this);
+        Util.setOnClickListener(view,R.id.btn_customer2,this);
+        Util.setOnClickListener(view,R.id.btn_customer3,this);
+        Util.setOnClickListener(view,R.id.btn_customer_more,this);
+        btnCustomer = view.findViewById(R.id.btn_customer);
+        customer1 = view.findViewById(R.id.btn_customer1);
+        customer2 = view.findViewById(R.id.btn_customer2);
+        customer3 = view.findViewById(R.id.btn_customer3);
+        customerMore = view.findViewById(R.id.btn_customer_more);
+        mCustomers[0] = customer1;
+        mCustomers[1] = customer2;
+        mCustomers[2] = customer3;
+        mCustomers[3] = customerMore;
+    }
+
     /**
      * 初始化【更多】菜單按鈕
      *
@@ -286,12 +276,12 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private void showGoodsFragment(boolean show) {
         if (show) {
             tvShopTitle.setVisibility(View.GONE);
-            btnCustomerMenu.setVisibility(View.GONE);
+//            btnCustomerMenu.setVisibility(View.GONE);
             btnSearch.setVisibility(View.GONE);
             llTabButtonContainer.setVisibility(View.VISIBLE);
         } else {
             tvShopTitle.setVisibility(View.VISIBLE);
-            btnCustomerMenu.setVisibility(View.VISIBLE);
+//            btnCustomerMenu.setVisibility(View.VISIBLE);
             btnSearch.setVisibility(View.VISIBLE);
             llTabButtonContainer.setVisibility(View.GONE);
         }
@@ -340,6 +330,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     .show();
         } else if (id == R.id.btn_search) {
             start(ShopSearchFragment.newInstance(storeId, null));
+        } else if(id==R.id.btn_customer){
+            customerListShow();
         } else if(id==R.id.btn_comment){
             int userId = User.getUserId();
             if (userId == 0) {
@@ -365,6 +357,39 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 onBottomBarClick(index);
             }
         }
+    }
+
+    private void customerListShow() {
+
+        if (customerExpanded) {
+            //收起
+//            llFloatButtonList.getBackground().setAlpha(0);
+            Glide.with(_mActivity).load(R.drawable.icon_customer_without_shadow).centerCrop().into(btnCustomer);
+            for (int i=0;i<3;i++) {
+                mCustomers[i].setVisibility(View.GONE);
+            }
+            customerMore.setVisibility(View.GONE);
+        }else {
+            //展開
+//            btnCustomer.(R.drawable.icon_red_customer);
+
+            if (customerCount== 1) {
+                customer1.performClick();
+                return;
+            } else if (customerCount == 0) {
+                ToastUtil.error(_mActivity,"當前店鋪未設置客服");
+                return;
+            }
+            for (int i=0;i<3&&i<customerCount;i++) {
+                mCustomers[i].setVisibility(View.VISIBLE);
+            }
+//            llFloatButtonList.getBackground().setAlpha(1);
+            Glide.with(_mActivity).load(R.drawable.icon_red_customer).centerCrop().into(btnCustomer);
+            if (customerCount > 3) {
+                customerMore.setVisibility(View.VISIBLE);
+            }
+        }
+        customerExpanded = !customerExpanded;
     }
 
     /**
@@ -554,23 +579,34 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     EasyJSONArray serviceStaffList = responseObj.getSafeArray("datas.serviceStaffList");
                     customerList.clear();
                     if (serviceStaffList == null || serviceStaffList.length() == 0) {
+                        btnCustomer.setOnClickListener(v ->
+                                ToastUtil.error(context,"當前店鋪未設置客服"));
                         btnCustomerMenu.getMenuIconView().setOnClickListener(v ->
                                 ToastUtil.error(context,"當前店鋪未設置客服"));
                         return;
                     }
-                    if (serviceStaffList.length() >= 3) {
-                        FloatingActionButton moreActionButton = new FloatingActionButton(context);
-                        moreActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
-                        Glide.with(context).load(R.drawable.btn_customer_more).centerCrop().into(moreActionButton);
-                        moreActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
-                        moreActionButton.setOnClickListener(v -> {
+                    customerCount = serviceStaffList.length();
+                    if (serviceStaffList.length() > 3) {
+//                        FloatingActionButton moreActionButton = new FloatingActionButton(context);
+//                        moreActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
+//                        Glide.with(context).load(R.drawable.btn_customer_more).centerCrop().into(moreActionButton);
+//                        moreActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
+//                        moreActionButton.setOnClickListener(v -> {
+//                            new XPopup.Builder(_mActivity)
+//                                    // 如果不加这个，评论弹窗会移动到软键盘上面
+//                                    .moveUpToKeyboard(false)
+//                                    .asCustom(new StoreCustomerServicePopup(_mActivity, storeId,null))
+//                                    .show();
+//                        });
+//                        customerList.add(moreActionButton);
+                        customerMore.setOnClickListener(v -> {
                             new XPopup.Builder(_mActivity)
                                     // 如果不加这个，评论弹窗会移动到软键盘上面
                                     .moveUpToKeyboard(false)
                                     .asCustom(new StoreCustomerServicePopup(_mActivity, storeId,null))
                                     .show();
                         });
-                        customerList.add(moreActionButton);
+                        customerMore.setVisibility(View.VISIBLE);
                     }
 
                     for (int i=0;i<serviceStaffList.length()&&i<3;i++) {
@@ -599,21 +635,21 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                                             DiskCacheStrategy.NONE).apply(
                                     RequestOptions.bitmapTransform(
                                             new CircleCrop())).override(Util.dip2px(_mActivity,serversAvatarSize),Util.dip2px(_mActivity,serversAvatarSize)).into(
-                                    floatingActionButton);
+                                    mCustomers[i]);
                         } else {
                             Glide.with(context).load(StringUtil.normalizeImageUrl(staff.avatar)).placeholder(R.drawable.grey_default_avatar)
                                     .diskCacheStrategy(
                                             DiskCacheStrategy.NONE).apply(
                                     RequestOptions.bitmapTransform(
                                             new CircleCrop())).override(Util.dip2px(_mActivity,serversAvatarSize),Util.dip2px(_mActivity,serversAvatarSize)).into(
-                                    floatingActionButton);
+                                    mCustomers[i]);
                         }
 
 
 
-                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
+//                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
 
-                        floatingActionButton.setOnClickListener(v ->{
+                        mCustomers[i].setOnClickListener(v ->{
                                     String memberName = staff.memberName;
                                     String imName = staff.imName;
                                     ImNameMap.saveMap(imName, memberName, storeId);
@@ -646,5 +682,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+    }
+
+    public ShopHomeFragment getHomeFragment() {
+        return (ShopHomeFragment)mFragments[HOME_FRAGMENT];
     }
 }

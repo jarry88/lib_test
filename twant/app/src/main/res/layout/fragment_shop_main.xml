@@ -127,6 +127,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
         <com.github.clans.fab.FloatingActionMenu
+            android:visibility="gone"
             android:id="@+id/menu_blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -138,20 +139,26 @@
 
         </com.github.clans.fab.FloatingActionMenu>
         <LinearLayout
-            android:padding="1.5dp"
             android:id="@+id/btn_customer_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/customer_service_bar_bg"
+            android:background="@drawable/customer_list_bg_"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:paddingBottom="@dimen/length_15dp"
+            android:paddingTop="@dimen/length_15dp"
+            >
             <ImageView
+                android:visibility="gone"
+                android:layout_margin="@dimen/dp_4"
                 android:id="@+id/btn_customer_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_customer_more"
                 />
             <ImageView
+                android:visibility="gone"
+                android:layout_margin="@dimen/dp_4"
                 android:id="@+id/btn_customer3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -160,23 +167,30 @@
                 android:outlineSpotShadowColor="@color/tw_white"
                 />
             <ImageView
+                android:visibility="gone"
+                android:layout_margin="@dimen/dp_4"
                 android:id="@+id/btn_customer2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_customer_service"
                 />
             <ImageView
+                android:visibility="gone"
+                android:layout_margin="@dimen/dp_4"
+
                 android:id="@+id/btn_customer1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_customer_service"
+                android:src="@drawable/icon_customer_expand"
                 />
+
             <ImageView
                 android:id="@+id/btn_customer"
+                android:layout_margin="@dimen/dp_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/btn_customer_service"
-                />
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_customer_without_shadow" />
         </LinearLayout>
 
         <ImageView

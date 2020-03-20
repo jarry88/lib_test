@@ -858,17 +858,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         .show();
                 break;
             case R.id.ll_uo_share_container:
-                new XPopup.Builder(_mActivity)
-                        // 如果不加这个，评论弹窗会移动到软键盘上面
-                        .moveUpToKeyboard(false)
-                        .asCustom(new SharePopup(_mActivity, SharePopup.generateStoreShareLink(storeId), storeName, storeSignature, storeAvatarUrl, EasyJSONObject.generate(
-                                "shareType", SharePopup.SHARE_TYPE_STORE,
-                                "storeId", storeId,
-                                "storeAvatar", storeAvatarUrl,
-                                "storeName", storeName,
-                                "storeSignature", storeSignature
-                        )))
-                        .show();
+                pullShare();
                 break;
             case R.id.rl_shop_comment_container:
                 Util.startFragment(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
@@ -905,6 +895,21 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 break;
         }
     }
+
+    public void pullShare() {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SharePopup(_mActivity, SharePopup.generateStoreShareLink(storeId), storeName, storeSignature, storeAvatarUrl, EasyJSONObject.generate(
+                        "shareType", SharePopup.SHARE_TYPE_STORE,
+                        "storeId", storeId,
+                        "storeAvatar", storeAvatarUrl,
+                        "storeName", storeName,
+                        "storeSignature", storeSignature
+                )))
+                .show();
+    }
+
     private void switchThumbState() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
