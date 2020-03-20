@@ -120,7 +120,7 @@ public class JobDetailFragment extends BaseFragment implements View.OnClickListe
         tvFollow=view.findViewById(R.id.tv_job_follow);
         tvDeliver = view.findViewById(R.id.tv_deliver);
         imgFollow = view.findViewById(R.id.img_follow);
-        if(data.isCompanyInfoExpand){
+        if(data!=null&&data.isCompanyInfoExpand){
             llCompanyInfo = view.findViewById(R.id.ll_company_info);
             llCompanyInfo.setVisibility(View.VISIBLE);
         }

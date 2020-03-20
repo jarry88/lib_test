@@ -114,6 +114,8 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.menu_item_shop_home_customer_service);
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_black_menu_message);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.menu_item_shop_home_message);
+            ((ImageView) findViewById(R.id.icon_item_5)).setImageResource(R.drawable.icon_black_menu_message);
+            ((TextView) findViewById(R.id.tv_item_5)).setText(R.string.text_share);
         } else if (type == TYPE_ORDER) {
             ((ImageView) findViewById(R.id.icon_item_1)).setImageResource(R.drawable.icon_black_menu_home);
             ((TextView) findViewById(R.id.tv_item_1)).setText(R.string.menu_item_shop_home_home);

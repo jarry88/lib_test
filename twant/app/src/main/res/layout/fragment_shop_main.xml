@@ -137,6 +137,47 @@
             fab:menu_icon="@drawable/btn_customer_service">
 
         </com.github.clans.fab.FloatingActionMenu>
+        <LinearLayout
+            android:padding="1.5dp"
+            android:id="@+id/btn_customer_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/customer_service_bar_bg"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/btn_customer_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_customer_more"
+                />
+            <ImageView
+                android:id="@+id/btn_customer3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_customer_service"
+                android:outlineAmbientShadowColor="@color/tw_white"
+                android:outlineSpotShadowColor="@color/tw_white"
+                />
+            <ImageView
+                android:id="@+id/btn_customer2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_customer_service"
+                />
+            <ImageView
+                android:id="@+id/btn_customer1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_customer_service"
+                />
+            <ImageView
+                android:id="@+id/btn_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_customer_service"
+                />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/btn_comment"
