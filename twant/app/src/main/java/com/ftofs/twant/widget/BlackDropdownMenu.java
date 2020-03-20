@@ -27,6 +27,7 @@ import com.ftofs.twant.fragment.MemberInfoFragment;
 import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.fragment.PersonalInfoFragment;
 import com.ftofs.twant.fragment.ShopCustomerServiceFragment;
+import com.ftofs.twant.fragment.ShopHomeFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -110,10 +111,12 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((TextView) findViewById(R.id.tv_item_1)).setText(R.string.menu_item_shop_home_home);
             ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_black_menu_search);
             ((TextView) findViewById(R.id.tv_item_2)).setText(R.string.menu_item_shop_home_search);
-            ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon__menu_customer);
+            ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_black_menu_message_custom);
             ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.menu_item_shop_home_customer_service);
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_black_menu_message);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.menu_item_shop_home_message);
+            ((ImageView) findViewById(R.id.icon_item_5)).setImageResource(R.drawable.icon_black_menu_message_share);
+            ((TextView) findViewById(R.id.tv_item_5)).setText(R.string.text_share);
         } else if (type == TYPE_ORDER) {
             ((ImageView) findViewById(R.id.icon_item_1)).setImageResource(R.drawable.icon_black_menu_home);
             ((TextView) findViewById(R.id.tv_item_1)).setText(R.string.menu_item_shop_home_home);
@@ -158,13 +161,23 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 ViewGroup.MarginLayoutParams layoutParams = (MarginLayoutParams) btnItem3.getLayoutParams();
                 layoutParams.topMargin = Util.dip2px(context, 15);
             }
-        } else {
+            //暫時只做店鋪
+        }else if(type==TYPE_STORE){
+            View btnItem5 = findViewById(R.id.btn_item_5);
+            View btnItem4 = findViewById(R.id.btn_item_4);
+            btnItem4.setBackgroundResource(R.drawable.black_dropdown_menu_separator);
+            btnItem5.setVisibility(VISIBLE);
+
+//            ViewGroup.MarginLayoutParams layoutParams = (MarginLayoutParams) btnItem5.getLayoutParams();
+//            layoutParams.topMargin = Util.dip2px(context, 15);
+        }else {
             findViewById(R.id.btn_item_1).setOnClickListener(this);
             findViewById(R.id.btn_item_2).setOnClickListener(this);
         }
 
         findViewById(R.id.btn_item_3).setOnClickListener(this);
         findViewById(R.id.btn_item_4).setOnClickListener(this);
+        findViewById(R.id.btn_item_5).setOnClickListener(this);
     }
 
     // 如果要自定义弹窗的背景，不要给布局设置背景图片，重写这个方法返回一个Drawable即可
@@ -190,9 +203,24 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             handleItem3Clicked();
         } else if (id == R.id.btn_item_4) {
             handleItem4Clicked();
+        } else if (id == R.id.btn_item_5) {
+            handleItem5Clicked();
         }
 
         dismiss();
+    }
+
+    private void handleItem5Clicked() {
+        switch (type) {
+            case TYPE_STORE:
+                ((ShopMainFragment) baseFragment).getHomeFragment().pullShare();
+                break;
+            case TYPE_GOODS:
+                // 商品分享
+                ((GoodsDetailFragment)baseFragment).pullShare();
+                break;
+            default:break;
+    }
     }
 
     private void handleItem1Clicked() {
