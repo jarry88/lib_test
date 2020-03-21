@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 
+import android.app.Notification;
 import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -130,6 +131,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private ImageView btnCustomer;
     private boolean customerExpanded =false;
     private int customerCount;
+    private ImageView btnCart;
 
     public static ShopMainFragment newInstance(int shopId) {
         Bundle args = new Bundle();
@@ -163,6 +165,15 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
         Util.setOnClickListener(view,R.id.btn_menu,this);
+        Util.setOnClickListener(view,R.id.btn_cart,this);
+        btnCart = view.findViewById(R.id.btn_cart);
+        btnCart.setOnClickListener((v -> {
+            if (User.getUserId() > 0) {
+                Util.startFragment(CartFragment.newInstance(true));
+            } else {
+                Util.showLoginFragment();
+            }
+        }));
         initCustomerList(view);
         loadCustomerData(getContext());
 
@@ -276,13 +287,14 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private void showGoodsFragment(boolean show) {
         if (show) {
             tvShopTitle.setVisibility(View.GONE);
-//            btnCustomerMenu.setVisibility(View.GONE);
+            btnCustomer.setVisibility(View.GONE);
+            btnCart.setVisibility(View.VISIBLE);
             btnSearch.setVisibility(View.GONE);
             llTabButtonContainer.setVisibility(View.VISIBLE);
         } else {
             tvShopTitle.setVisibility(View.VISIBLE);
 //            btnCustomerMenu.setVisibility(View.VISIBLE);
-            btnSearch.setVisibility(View.VISIBLE);
+            btnCart.setVisibility(View.GONE);
             llTabButtonContainer.setVisibility(View.GONE);
         }
     }
@@ -606,7 +618,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                                     .asCustom(new StoreCustomerServicePopup(_mActivity, storeId,null))
                                     .show();
                         });
-                        customerMore.setVisibility(View.VISIBLE);
+//                        customerMore.setVisibility(View.VISIBLE);
                     }
 
                     for (int i=0;i<serviceStaffList.length()&&i<3;i++) {
@@ -624,30 +636,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
 //                        floatingActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
                         SLog.info("staff.avatar %s",staff.avatar);
-                        if (staff.avatar.equals("img/default_avatar.png")) {
-                            Glide.with(context).load(R.drawable.grey_default_avatar)
-                                    .diskCacheStrategy(
-//                                        DiskCacheStrategy.NONE： 表示不缓存任何内容。
-//                                        DiskCacheStrategy.SOURCE： 表示只缓存原始图片。
-//                                        DiskCacheStrategy.RESULT： 表示只缓存转换过后的图片（默认选项）。
-//                                        DiskCacheStrategy.ALL ： 表示既缓存原始图片，也缓存转换过后的图片
 
-                                            DiskCacheStrategy.NONE).apply(
-                                    RequestOptions.bitmapTransform(
-                                            new CircleCrop())).override(Util.dip2px(_mActivity,serversAvatarSize),Util.dip2px(_mActivity,serversAvatarSize)).into(
-                                    mCustomers[i]);
-                        } else {
-                            Glide.with(context).load(StringUtil.normalizeImageUrl(staff.avatar)).placeholder(R.drawable.grey_default_avatar)
-                                    .diskCacheStrategy(
-                                            DiskCacheStrategy.NONE).apply(
-                                    RequestOptions.bitmapTransform(
-                                            new CircleCrop())).override(Util.dip2px(_mActivity,serversAvatarSize),Util.dip2px(_mActivity,serversAvatarSize)).into(
-                                    mCustomers[i]);
-                        }
-
-
-
-//                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
 
                         mCustomers[i].setOnClickListener(v ->{
                                     String memberName = staff.memberName;

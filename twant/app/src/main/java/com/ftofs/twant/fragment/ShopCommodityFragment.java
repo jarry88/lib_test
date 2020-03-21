@@ -646,9 +646,10 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             storeLabel.setStoreLabelList(new ArrayList<>());
                         }
 
-                        goodsCountTotal += goodsCount;
+//                        goodsCountTotal += goodsCount;
                         shopStoreLabelList.add(storeLabel);
                     }
+                    goodsCountTotal = responseObj.getInt("datas.storeGoodsCount");
                     shopStoreLabelList.get(0).setGoodsCount(goodsCountTotal);  // 添加【全部產品】的項數
                     storeCategoryListAdapter.setNewData(shopStoreLabelList);
                 } catch (Exception e) {

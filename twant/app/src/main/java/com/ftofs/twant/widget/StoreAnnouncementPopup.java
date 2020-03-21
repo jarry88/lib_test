@@ -55,7 +55,7 @@ public class StoreAnnouncementPopup extends BottomPopupView implements View.OnCl
 
                 // 使用瀏覽器顯示商店公告
                 // Util.startFragment(ExplorerFragment.newInstance(url, true));
-                Util.startFragment(StoreAnnouncementDetailFragment.newInstance(storeAnnouncement.title, storeAnnouncement.content));
+                Util.startFragment(StoreAnnouncementDetailFragment.newInstance(storeAnnouncement));
 
                 dismiss();
             }

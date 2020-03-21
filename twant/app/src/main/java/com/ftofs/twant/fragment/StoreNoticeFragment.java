@@ -54,9 +54,12 @@ public class StoreNoticeFragment extends ScrollableBaseFragment {
             View announcementItemView = LayoutInflater.from(_mActivity).inflate(R.layout.store_announcement_item, llContainer, false);
             TextView tvAnnouncementTitle = announcementItemView.findViewById(R.id.tv_announcement_title);
             tvAnnouncementTitle.setText(announcement.title);
+            TextView tvAnnouncementTime = announcementItemView.findViewById(R.id.tv_announcement_time);
+            tvAnnouncementTime.setText(Time.fromMillisUnixtime(announcement.createTime,"Y-m-d H:i:s"));
+
             tvAnnouncementTitle.setOnClickListener(v -> {
                 SLog.info("onClick, announcement.title[%s], announcement.content[%s]", announcement.title, announcement.content);
-                Util.startFragment(StoreAnnouncementDetailFragment.newInstance(announcement.title, announcement.content));
+                Util.startFragment(StoreAnnouncementDetailFragment.newInstance(announcement));
             });
 
             llContainer.addView(announcementItemView);
