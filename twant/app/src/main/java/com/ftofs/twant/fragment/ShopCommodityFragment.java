@@ -549,6 +549,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         // 如果剛好奇數個，可能沒添加到列表中
                         if (currGoodsPair != null) {
                             goodsPairList.add(currGoodsPair);
+                            currGoodsPair = null;
                         }
 
                         if (!hasMore && goodsList.size() > 0) {

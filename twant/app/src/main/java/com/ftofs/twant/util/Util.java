@@ -452,7 +452,7 @@ public class Util {
             staff.welcomeMessage = storeServiceStaffVo.getSafeString("welcome");
             staff.staffType = storeServiceStaffVo.getInt("staffType");
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 

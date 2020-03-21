@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +20,7 @@ import com.ftofs.twant.adapter.CustomerServiceStaffListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.entity.CustomerServiceStaffPair;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
@@ -50,11 +51,12 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
     ImageView imgBackground;
     List<CustomerServiceStaff> customerServiceStaffList = new ArrayList<>();
+    List<CustomerServiceStaffPair> customerServiceStaffPairList = new ArrayList<>();
 
     RecyclerView rvStaffList;
     CustomerServiceStaffListAdapter adapter;
 
-    boolean isShown;
+    boolean isShown;  // 是否要顯示歡迎動畫
 
     boolean storeFigureShown = false;
 
@@ -97,35 +99,50 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
 
         imgBackground = view.findViewById(R.id.img_background);
         rvStaffList = view.findViewById(R.id.rv_staff_list);
-        GridLayoutManager layoutManager = new GridLayoutManager(_mActivity, 2, LinearLayoutManager.VERTICAL, false);
-        rvStaffList.setLayoutManager(layoutManager);
-        adapter = new CustomerServiceStaffListAdapter(this, R.layout.store_customer_service_staff, customerServiceStaffList);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+
+        rvStaffList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        adapter = new CustomerServiceStaffListAdapter(this, R.layout.store_customer_service_staff, customerServiceStaffPairList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                CustomerServiceStaff staff = customerServiceStaffList.get(position);
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                CustomerServiceStaffPair customerServiceStaffPair = customerServiceStaffPairList.get(position);
 
-                String memberName = staff.memberName;
-                String imName = staff.imName;
-                ImNameMap.saveMap(imName, memberName, storeId);
-                SLog.info("memberName[%s], imName[%s]", memberName, imName);
+                if (id == R.id.btn_init_cs_left || id == R.id.btn_init_cs_right) {
+                    CustomerServiceStaff staff;
 
-                FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-                if (StringUtil.isEmpty(imName)) {
-                    imName = memberName;
+                    if (id == R.id.btn_init_cs_left) {
+                        staff = customerServiceStaffPair.left;
+                    } else {
+                        staff = customerServiceStaffPair.right;
+                    }
+
+                    if (staff == null) {
+                        return;
+                    }
+
+                    String memberName = staff.memberName;
+                    String imName = staff.imName;
+                    ImNameMap.saveMap(imName, memberName, storeId);
+                    SLog.info("memberName[%s], imName[%s]", memberName, imName);
+
+                    FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
+                    if (StringUtil.isEmpty(imName)) {
+                        imName = memberName;
+                    }
+                    if (StringUtil.isEmpty(imName)) {
+                        ToastUtil.success(getContext(),"當前客服狀態異常，無法會話");
+                        return;
+                    }
+                    EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
+
+                    FriendInfo friendInfo = new FriendInfo();
+                    friendInfo.memberName = staff.memberName;
+                    friendInfo.nickname = staff.staffName;
+                    friendInfo.avatarUrl = staff.avatar;
+                    friendInfo.role = ChatUtil.ROLE_CS_AVAILABLE;
+                    Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
                 }
-                if (StringUtil.isEmpty(imName)) {
-                    ToastUtil.success(getContext(),"當前客服狀態異常，無法會話");
-                    return;
-                }
-                EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
-
-                FriendInfo friendInfo = new FriendInfo();
-                friendInfo.memberName = staff.memberName;
-                friendInfo.nickname = staff.staffName;
-                friendInfo.avatarUrl = staff.avatar;
-                friendInfo.role = ChatUtil.ROLE_CS_AVAILABLE;
-                Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
             }
         });
         rvStaffList.setAdapter(adapter);
@@ -179,36 +196,73 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
                             return;
                         }
 
-                        //EasyJSONObject storeInfo = responseObj.getSafeObject("datas.storeInfo");
-                        //String storeFigureImage = StringUtil.normalizeImageUrl(storeInfo.getString("storeFigureImage"));
-                        //Glide.with(_mActivity).load(storeFigureImage).centerCrop().into(imgBackground);
+                        String storeFigureImage = responseObj.getSafeString("datas.storeVo.storeFigureImage");
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(storeFigureImage)).centerCrop().into(imgBackground);
 
                         showStoreFigure();
 
-                        EasyJSONArray storeServiceStaffVoList = responseObj.getSafeArray("datas.serviceStaffList");
 
-                        for (int i = 0; i < storeServiceStaffVoList.length(); i++) {
+                        // 處理售前
+                        if (responseObj.exists("datas.preServiceList")) {
+                            EasyJSONArray preServiceList = responseObj.getSafeArray("datas.preServiceList");
+
+                            for (Object object : preServiceList) {
+                                EasyJSONObject storeServiceStaffVo = (EasyJSONObject) object;
+                                CustomerServiceStaff staff = new CustomerServiceStaff();
+                                Util.packStaffInfo(staff, storeServiceStaffVo);
+
+                                customerServiceStaffList.add(staff);
+                            }
+                        }
+
+                        // 處理售後
+                        if (responseObj.exists("datas.afterServiceList")) {
+                            EasyJSONArray afterServiceList = responseObj.getSafeArray("datas.afterServiceList");
+
+                            for (Object object : afterServiceList) {
+                                EasyJSONObject storeServiceStaffVo = (EasyJSONObject) object;
+                                CustomerServiceStaff staff = new CustomerServiceStaff();
+                                Util.packStaffInfo(staff, storeServiceStaffVo);
+
+                                customerServiceStaffList.add(staff);
+                            }
+                        }
+
+                        // 處理一對對的數據
+                        CustomerServiceStaffPair pair = null;
+                        for (CustomerServiceStaff customerServiceStaff : customerServiceStaffList) {
+                            if (pair == null) {
+                                pair = new CustomerServiceStaffPair();
+                                pair.left = customerServiceStaff;
+                            } else {
+                                pair.right = customerServiceStaff;
+                                customerServiceStaffPairList.add(pair);
+
+                                pair = null;
+                            }
+                        }
+
+                        if (pair != null) {  // 處理個數為奇數的情況
+                            customerServiceStaffPairList.add(pair);
+                            pair = null;
+                        }
+
+                        SLog.info("customerServiceStaffPairList.size[%d]", customerServiceStaffPairList.size());
+                        adapter.setNewData(customerServiceStaffPairList);
+
+                        for (int i = 0; i < customerServiceStaffList.size(); i++) {
                             welcomeMessageAnimOrder.add(i);
                         }
                         Collections.shuffle(welcomeMessageAnimOrder); // 以隨機的順序顯示歡迎語動畫
 
-                        for (Object object : storeServiceStaffVoList) {
-                            EasyJSONObject storeServiceStaffVo = (EasyJSONObject) object;
-                            CustomerServiceStaff staff = new CustomerServiceStaff();
-                            Util.packStaffInfo(staff, storeServiceStaffVo);
-
-                            customerServiceStaffList.add(staff);
-                        }
-                        adapter.setNewData(customerServiceStaffList);
-
                         tvFragmentTitle.setText(getString(R.string.text_customer_service) + "(" + customerServiceStaffList.size() + ")");
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -244,7 +298,15 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
             return;
         }
         int position = welcomeMessageAnimOrder.get(animDoneCount);
-        customerServiceStaffList.get(position).showWelcomeMessageAnimation = false;
+        int pairPosition = position / 2;
+        CustomerServiceStaffPair pair = customerServiceStaffPairList.get(pairPosition);
+
+        if (position % 2 == 0) {
+            pair.left.showWelcomeMessageAnimation = false;
+        } else {
+            pair.right.showWelcomeMessageAnimation = false;
+        }
+
         animDoneCount++;
         // 開始下一個歡迎語動畫
         startWelcomeMessageAnim();
@@ -256,8 +318,16 @@ public class ShopCustomerServiceFragment extends BaseFragment implements View.On
     private void startWelcomeMessageAnim() {
         if (animDoneCount < welcomeMessageAnimOrder.size()) {
             int position = welcomeMessageAnimOrder.get(animDoneCount);
-            customerServiceStaffList.get(position).showWelcomeMessageAnimation = true;
-            adapter.notifyItemChanged(position);
+            int pairPosition = position / 2;
+            CustomerServiceStaffPair pair = customerServiceStaffPairList.get(pairPosition);
+
+            if (position % 2 == 0) {
+                pair.left.showWelcomeMessageAnimation = true;
+            } else {
+                pair.right.showWelcomeMessageAnimation = true;
+            }
+
+            adapter.notifyItemChanged(pairPosition);
         }
     }
     public void loadStoreFigure(String url){
