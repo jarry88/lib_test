@@ -27,7 +27,7 @@
             android:paddingBottom="2dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:background="@drawable/list_popup_bg">
+            android:background="@drawable/store_item_header_bg">
             <RelativeLayout
                 android:layout_width="42dp"
                 android:layout_height="42dp">
