@@ -424,6 +424,9 @@
     <string name="input_return_amount_hint">请输入退貨金额</string>
     <string name="input_complain_content_hint">請輸入您的投訴內容</string>
 
+    <string name="text_refund_way_wallet">退至預存款</string>
+    <string name="text_refund_way_original">原路退回</string>
+
     <string name="text_not_allow_send">該地區無貨</string>
     <string name="not_allow_send_hint">所選地區不支持配送</string>
     <string name="text_feedback">建議表達</string>
@@ -448,7 +451,8 @@
     <string name="text_refund_amount">退款金額</string>
     <string name="text_most_refund_amount">最多可退金額</string>
     <string name="text_refund_desc">退款說明</string>
-    <string name="input_refund_desc_hint">請輸入您要退貨的說明文字</string>
+    <string name="input_refund_desc_hint">請輸入您要退款的說明文字</string>
+    <string name="input_return_desc_hint">請輸入您要退貨的說明文字</string>
     <string name="text_upload_evidence">上傳憑證</string>
     <string name="text_complain_evidence">投訴憑證</string>
     <string name="text_return_count">退貨數量</string>

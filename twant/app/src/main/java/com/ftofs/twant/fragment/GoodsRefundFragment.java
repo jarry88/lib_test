@@ -39,6 +39,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
 import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.RefundWayPopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
 
@@ -96,6 +97,13 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
 
     LinearLayout btnSelectRefundReason;
     int reasonIndex = -1;
+
+    TextView tvRefundWay;
+
+    /**
+     * 當前選中的退款方式
+     */
+    int refundWay = RefundWayPopup.REFUND_WAY_WALLET;
 
     RefundGoodsListAdapter adapter;
 
@@ -168,9 +176,18 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         btnSelectRefundReason.setOnClickListener(this);
         tvRefundReason = view.findViewById(R.id.tv_refund_reason);
 
+        tvRefundWay = view.findViewById(R.id.tv_refund_way);
+        updateRefundWayDesc();
+        Util.setOnClickListener(view, R.id.btn_select_refund_way, this);
+
         tvMaxRefundAmount = view.findViewById(R.id.tv_max_refund_amount);
         etRefundAmount = view.findViewById(R.id.et_refund_amount);
         etRefundDesc = view.findViewById(R.id.et_refund_desc);
+        if (action == Constant.ACTION_REFUND || action == Constant.ACTION_REFUND_ALL) {
+            etRefundDesc.setHint(getString(R.string.input_refund_desc_hint));
+        } else if (action == Constant.ACTION_RETURN) {
+            etRefundDesc.setHint(getString(R.string.input_return_desc_hint));
+        }
 
         sglImageContainer = view.findViewById(R.id.sgl_image_container);
         btnAddImage = view.findViewById(R.id.btn_add_image);
@@ -226,6 +243,12 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     .moveUpToKeyboard(false)
                     .asCustom(new ListPopup(_mActivity, title,
                             PopupType.DEFAULT, reasonItemList, reasonIndex != -1 ? reasonIndex : 0, this))
+                    .show();
+        } else if (id == R.id.btn_select_refund_way) {
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new RefundWayPopup(_mActivity, this, refundWay))
                     .show();
         } else if (id == R.id.btn_add_image) {
             openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
@@ -325,14 +348,16 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                                 "buyerMessage", buyerMessage,
                                 "ordersGoodsId", ordersGoodsId,
                                 "reasonId", reasonItemList.get(reasonIndex).id,
-                                "refundAmount", refundAmount);
+                                "refundAmount", refundAmount,
+                                "refundWay", refundWay);
                     } else {
                         path = Api.PATH_REFUND_ALL_SAVE;
                         params = EasyJSONObject.generate(
                                 "token", token,
                                 "ordersId", ordersId,
                                 "picJson", picJson.toString(),
-                                "buyerMessage", buyerMessage);
+                                "buyerMessage", buyerMessage,
+                                "refundWay", refundWay);
                     }
 
                     SLog.info("params[%s]", params.toString());
@@ -424,7 +449,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                             "buyerMessage", buyerMessage,
                             "ordersGoodsId", ordersGoodsId,
                             "reasonId", reasonItemList.get(reasonIndex).id,
-                            "refundAmount", refundAmount);
+                            "refundAmount", refundAmount,
+                            "refundWay", refundWay);
 
                     SLog.info("params[%s]", params.toString());
                     String responseStr = Api.syncPost(Api.PATH_SINGLE_GOODS_RETURN_SAVE, params);
@@ -716,7 +742,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -798,6 +824,17 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         if (type == PopupType.DEFAULT) {
             reasonIndex = id;
             tvRefundReason.setText(reasonItemList.get(reasonIndex).title);
+        } else if (type == PopupType.SELECT_REFUND_WAY) {
+            refundWay = id;
+            updateRefundWayDesc();
+        }
+    }
+
+    private void updateRefundWayDesc() {
+        if (refundWay == RefundWayPopup.REFUND_WAY_WALLET) {
+            tvRefundWay.setText("退至預存款");
+        } else {
+            tvRefundWay.setText("原路退回");
         }
     }
 

@@ -129,5 +129,10 @@ public enum PopupType {
 切換環境
  */
     Env_TYPE,
-    SELECT_START_MONTH,;
+    SELECT_START_MONTH,
+
+    /**
+     * 選擇退款方式
+     */
+    SELECT_REFUND_WAY,
 }
