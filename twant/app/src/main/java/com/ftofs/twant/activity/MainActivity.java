@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.vlayout.Range;
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
@@ -35,7 +36,9 @@ import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.AliPayResult;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.Location;
+import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -53,6 +56,7 @@ import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
 import com.ftofs.twant.tangram.LogoView;
 import com.ftofs.twant.tangram.SloganView;
+import com.ftofs.twant.tangram.StoreItemView;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
@@ -72,18 +76,29 @@ import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tmall.wireless.tangram.TangramBuilder;
 import com.tmall.wireless.tangram.TangramEngine;
+import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
+import com.tmall.wireless.tangram.dataparser.concrete.Card;
+import com.tmall.wireless.tangram.structure.BaseCell;
+import com.tmall.wireless.tangram.support.async.AsyncLoader;
+import com.tmall.wireless.tangram.support.async.AsyncPageLoader;
+import com.tmall.wireless.tangram.support.async.CardLoadSupport;
 import com.tmall.wireless.tangram.util.IInnerImageSetter;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -308,6 +323,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         builder.registerCell("StickyCell", HomeStickyView.class);
         builder.registerCell("CarouselCell", CarouselView.class);
         builder.registerCell("SloganCell", SloganView.class);
+        builder.registerCell("StoreItemCell", StoreItemView.class);
 
 
         // 生成 TangramEngine 实例
@@ -320,6 +336,155 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         // mEngine.addExposureSupport(new CustomExposureSupport());
         // 异步加载数据
         // mEngine.addCardLoadSupport(cardLoadSupport);
+
+        CardLoadSupport cardLoadSupport = new CardLoadSupport(new AsyncLoader() {
+            @Override
+            public void loadData(Card card, @NonNull LoadedCallback callback) {
+                SLog.info("loadData: cardType[%s], load[%s]", card.stringType, card.load);
+
+                // do loading
+                JSONArray cells = new JSONArray();
+
+                for (int i = 0; i < 10; i++) {
+                    try {
+                        JSONObject obj = new JSONObject();
+                        obj.put("type", "TestCell");
+                        obj.put("msg", "async loaded");
+                        JSONObject style = new JSONObject();
+                        style.put("bgColor", "#FF1111");
+                        obj.put("style", style.toString());
+                        cells.put(obj);
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+
+                // callback.fail(false);
+                callback.finish(engine.parseComponent(cells));
+            }
+        }, new AsyncPageLoader() {
+            @Override
+            public void loadData(int page, @NonNull Card card, @NonNull LoadedCallback callback) {
+                SLog.info("loadData: page=" + page + ", cardType=" + card.stringType);
+
+                try {
+                    String token = User.getToken();
+                    EasyJSONObject params = EasyJSONObject.generate("page", page);
+                    if (!StringUtil.isEmpty(token)) {
+                        params.set("token", token);
+                    }
+
+                    SLog.info("params[%s]", params);
+                    Api.getUI(Api.PATH_NEW_ARRIVALS, params, new UICallback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            ToastUtil.showNetworkError(MainActivity.this, e);
+                        }
+
+                        @Override
+                        public void onResponse(Call call, String responseStr) throws IOException {
+                            SLog.info("PATH_NEW_ARRIVALS, responseStr[%s]", responseStr);
+                            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                            if (ToastUtil.checkError(MainActivity.this, responseObj)) {
+                                SLog.info("Error!responseObj is invalid");
+                                return;
+                            }
+
+                            try {
+                                boolean hasMore = responseObj.getBoolean("datas.pageEntity.hasMore");
+                                SLog.info("hasMore[%s]", hasMore);
+
+                                List<StoreItem> storeItemList = new ArrayList<>();
+
+                                EasyJSONArray storeList = responseObj.getSafeArray("datas.storeList");
+                                SLog.info("storeList size[%d]", storeList.length());
+
+                                for (Object object : storeList) {
+                                    EasyJSONObject store = (EasyJSONObject) object;
+
+                                    StoreItem storeItem = new StoreItem();
+
+                                    // 獲取店鋪Id
+                                    storeItem.storeId = store.getInt("storeId");
+
+                                    // 設置店鋪名稱
+                                    storeItem.storeName = store.getSafeString("storeName");
+
+                                    // 設置商店類別
+                                    storeItem.storeClass = store.getSafeString("className");
+
+                                    // 店鋪形象圖
+                                    storeItem.storeFigureImage = StringUtil.normalizeImageUrl(store.getSafeString("storeFigureImage"));
+                                    EasyJSONArray goodsList= store.getSafeArray("goodsList");
+                                    if (goodsList.length() > 0) {
+                                        // 商店的3個產品展示
+                                        for (Object object2 : goodsList) {
+                                            EasyJSONObject goodsObject = (EasyJSONObject) object2;
+                                            Goods goods = new Goods();
+
+                                            goods.imageUrl = goodsObject.getSafeString("goodsImage");
+                                            goods.id = goodsObject.getInt("commonId");
+
+                                            storeItem.goodsList.add(goods);
+                                        }
+                                    }
+                                    storeItemList.add(storeItem);
+                                }
+
+                                SLog.info("storeItemList.size[%d]", storeItemList.size());
+
+
+
+                                JSONArray cells = new JSONArray();
+                                for (int i = 0; i < storeItemList.size(); i++) {
+                                    StoreItem storeItem = storeItemList.get(i);
+
+                                    JSONObject obj = new JSONObject();
+
+                                    obj.put("type", "StoreItemCell");
+                                    obj.put("data", storeItem);
+                                    cells.put(obj);
+                                }
+
+                                if (!hasMore && storeItemList.size() > 1) {
+                                    // 如果全部加載完畢，添加加載完畢的提示
+
+                                }
+
+                                List<BaseCell> cs = engine.parseComponent(cells);
+
+                                if (card.page == 1) {
+                                    GroupBasicAdapter<Card, ?> adapter = engine.getGroupBasicAdapter();
+
+                                    card.setCells(cs);
+                                    adapter.refreshWithoutNotify();
+                                    Range<Integer> range = adapter.getCardRange(card);
+
+                                    adapter.notifyItemRemoved(range.getLower());
+                                    adapter.notifyItemRangeInserted(range.getLower(), cs.size());
+                                } else {
+                                    card.addCells(cs);
+                                }
+
+                                callback.finish(hasMore);
+                                card.notifyDataChange();
+                            } catch (Exception e) {
+                                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+
+        CardLoadSupport.setInitialPage(1);
+        engine.addCardLoadSupport(cardLoadSupport);
+
+        // 启用加载更加
+        engine.enableAutoLoadMore(true);
     }
 
     public TangramEngine getTangramEngine() {
