@@ -1,0 +1,21 @@
+[
+  {
+    "type": "container-oneColumn",
+    "items": [
+      {
+        "type": "LogoCell"
+      }
+    ],
+    "style": {
+      "padding": [23, 0, 0, 0]
+    }
+  },
+  {
+    "type": "container-sticky",
+    "items": [
+      {
+        "type": "StickyCell"
+      }
+    ]
+  }
+]

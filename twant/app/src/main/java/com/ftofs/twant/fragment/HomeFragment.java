@@ -479,11 +479,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         } else if (id == R.id.btn_test) {
             SLog.info("Config.PROD[%s]", Config.PROD);
             if (!Config.PROD) {
-                Util.startFragment(TestFragment.newInstance());
+                // Util.startFragment(TestFragment.newInstance());
 //                    getFragmentManager().getFragments().size()
                 // Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
                 // Util.startFragment(SoftToolPaneLayoutFragment.newInstance());
 //                Util.startFragment(TestFragment.newInstance());
+                Util.startFragment(NewHomeFragment.newInstance());
             }
         } else if (id == R.id.btn_add_feedback) {
             Util.startFragment(CommitFeedbackFragment.newInstance());

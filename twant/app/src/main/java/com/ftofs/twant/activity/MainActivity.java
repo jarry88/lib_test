@@ -15,10 +15,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.alipay.sdk.app.PayTask;
+import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -46,6 +49,8 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.HomeStickyView;
+import com.ftofs.twant.tangram.LogoView;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
@@ -63,6 +68,9 @@ import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tmall.wireless.tangram.TangramBuilder;
+import com.tmall.wireless.tangram.TangramEngine;
+import com.tmall.wireless.tangram.util.IInnerImageSetter;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
@@ -87,6 +95,8 @@ import okhttp3.Response;
  */
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     long lastBackPressedTime;
+
+    TangramEngine engine;
 
     public MainFragment getMainFragment() {
         return mainFragment;
@@ -203,6 +213,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         EventBus.getDefault().register(this);
 
+        initTangram();
+
         int color = getResources().getColor(R.color.tw_blue, null);
         /*
         改變狀態欄顏色，在錘子手機中，狀態欄有一種灰色蒙板的感覺，在紅米手機中沒有
@@ -273,6 +285,42 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         replyIntent();
     }
 
+
+
+    private void initTangram() {
+        // 初始化 Tangram 环境
+        TangramBuilder.init(this, new IInnerImageSetter() {
+            @Override
+            public <IMAGE extends ImageView> void doLoadImageUrl(@NonNull IMAGE view,
+                                                                 @Nullable String url) {
+                //假设你使用 Picasso 加载图片
+                Glide.with(MainActivity.this).load(url).into(view);
+            }
+        }, ImageView.class);
+
+        // 初始化 TangramBuilder
+        TangramBuilder.InnerBuilder builder = TangramBuilder.newInnerBuilder(MainActivity.this);
+
+        // 注册自定义的卡片和组件
+        builder.registerCell("LogoCell", LogoView.class);
+        builder.registerCell("StickyCell", HomeStickyView.class);
+
+
+        // 生成 TangramEngine 实例
+        engine = builder.build();
+
+        // 绑定业务 support 类到 engine
+        // 处理点击
+        // mEngine.addSimpleClickSupport(new CustomClickSupport());
+        // 处理曝光
+        // mEngine.addExposureSupport(new CustomExposureSupport());
+        // 异步加载数据
+        // mEngine.addCardLoadSupport(cardLoadSupport);
+    }
+
+    public TangramEngine getTangramEngine() {
+        return engine;
+    }
 
     private void setFloatActionMenuOnClick() {
         int env= Hawk.get(SPField.FIELD_CURRENT_ENV,Config.ENV_PROD);
@@ -526,6 +574,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         instance = null;
 
         EventBus.getDefault().unregister(this);
+
+        // 退出的时候销毁 engine
+        engine.destroy();
     }
 
     public static MainActivity getInstance() {
