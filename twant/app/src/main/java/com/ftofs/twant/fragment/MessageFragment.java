@@ -30,6 +30,7 @@ import com.ftofs.twant.entity.UnreadCount;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.util.BadgeUtil;
 import com.ftofs.twant.util.ChatUtil;
@@ -42,6 +43,7 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.MaxHeightRecyclerView;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.SlantedWidget;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -205,6 +207,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
                 if (chatConversation.unreadCount > 0) {
                     // 從未讀總數中減去這條會話的未讀數
+
+//                    chatConversation.unreadCount = 0;
                     totalIMUnreadCount -= chatConversation.unreadCount;
                     displayUnreadCount();
                 }
@@ -315,35 +319,35 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             chatConversationList.clear();
 
             Map<String, EMConversation> conversationMap = EMClient.getInstance().chatManager().getAllConversations();
-            SLog.info("會話數[%d]", conversationMap.size());
+            saveEMConversation(conversationMap);
 
-            for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
+
+            List<Conversation> allConversations = Conversation.getAllConversations(); //查询Conversation表的所有数据
+            SLog.info("来自网络會話數[%d]，本地保存的会话数[%d]", conversationMap.size(),allConversations.size());
+            for (Conversation conversation : allConversations) {
                 //此處要增加帶s標識member Name和平臺客服的過濾
-                String memberName = entry.getKey();
-                EMConversation conversation = entry.getValue();
-                if (memberName.indexOf("s") != -1) {//存在s的舊對話
+                String memberName = conversation.memberName;
+                if (memberName.contains("s")) {//存在s的舊對話
                     EMClient.getInstance().chatManager().deleteConversation(memberName, true);
+                    SLog.info("memberName：%s",memberName);
                     continue;
                 };
-                SLog.info("%s,%s",entry.getValue(),User.getUserInfo(SPField.FIELD_MEMBER_NAME,""));
+                long timestamp = conversation.lastMessageTime;
+                SLog.info("本地保存记录：%s,时间%d",conversation.nickname,timestamp);
 
-                EMMessage lastMessage = conversation.getLastMessage();
-                if (lastMessage == null) {
+                if (timestamp < 1) {
                     continue;
                 }
-                long timestamp = lastMessage.getMsgTime();
                 //不是每條都在數據庫保存過，直接取數據庫不可以了 gzp
                 FriendInfo friendInfo = new FriendInfo();
 //                FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
                 friendInfo.memberName = memberName;
-                String extField = conversation.getExtField();
-                SLog.info("extField[%s]", extField);
-                if (EasyJSONBase.isJSONString(extField)) {
-                    EasyJSONObject extFieldObj = EasyJSONObject.parse(extField);
-
-                    friendInfo.nickname = extFieldObj.getSafeString("nickName");
-                    friendInfo.avatarUrl = extFieldObj.getSafeString("avatarUrl");
-                    friendInfo.role = extFieldObj.getInt("role");
+                String extField = conversation.extField;
+                SLog.info("extField[%s],Conversation[%s]", extField,conversation.toString());
+                if (!StringUtil.isEmpty(extField)) {
+                    friendInfo.nickname = conversation.nickname;
+                    friendInfo.avatarUrl = conversation.avatarUrl;
+                    friendInfo.role = conversation.role;
                     SLog.info("會話框數據從extFied得到");
 //                    friendInfo.storeName = extFieldObj.getSafeString("storeName");
                 } else {
@@ -356,8 +360,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 }
 
 
-                SLog.info("memberName[%s], lastMessage[%s], timestamp[%s], nickname[%s], avatar[%s]",
-                        memberName, lastMessage.getBody().toString(), Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"),
+                SLog.info("unreadCount[%d],memberName[%s], lastMessage[%s], timestamp[%s], nickname[%s], avatar[%s]",
+                       conversation.unreadMsgCount, memberName, conversation.lastMessageText, Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"),
                         friendInfo.nickname, friendInfo.avatarUrl);
 
                 SLog.info("friendInfo[%s]", friendInfo);
@@ -365,11 +369,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 ChatConversation chatConversation = new ChatConversation();
 
                 chatConversation.friendInfo = friendInfo;
-
-                chatConversation.unreadCount = conversation.getUnreadMsgCount();
-                chatConversation.lastMessageType = ChatUtil.getIntMessageType(lastMessage);
-                chatConversation.lastMessage = lastMessage.getBody().toString();
-                chatConversation.timestamp = lastMessage.getMsgTime();
+                chatConversation.chatConversationId = conversation.conversationId;
+                chatConversation.unreadCount = conversation.unreadMsgCount;
+                chatConversation.lastMessageType = conversation.lastMessageType;
+                chatConversation.lastMessage = conversation.lastMessageText;
+                chatConversation.timestamp = timestamp;
                 totalIMUnreadCount += chatConversation.unreadCount;
                 SLog.info("here!!storeid%d, platId%d",friendInfo.storeId,PLATFORM_CUSTOM_STORE_ID);
                if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID) {
@@ -402,6 +406,18 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
+
+    private void saveEMConversation(Map<String, EMConversation> conversationMap) {
+        int count = 0;
+        for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
+            EMConversation conversation = entry.getValue();
+            String memberName = entry.getKey();
+            Conversation.upsertConversationInfo(conversation.conversationId(),memberName,conversation.getAllMessages(),conversation.getLastMessage(),conversation.getExtField(),conversation.getUnreadMsgCount());
+            Conversation loacal = Conversation.getByConversationId(conversation.conversationId());
+            SLog.info("第%d个，memberName[%s],nickName %s,lastMessage %s,unread[%d]",count++ ,memberName, loacal.nickname,loacal.lastMessageText,conversation.getUnreadMsgCount());
+        }
+    }
+
     private void loadPlatformCustomerData() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
@@ -682,6 +698,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             loadPlatformCustomerData();
         } else {
             loadData();
+        }
+        for (ChatConversation chatConversation : chatConversationList) {
+            SLog.info("unread[%d]", chatConversation.unreadCount);
         }
         displayUnreadCount();
     }

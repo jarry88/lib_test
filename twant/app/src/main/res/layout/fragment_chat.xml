@@ -58,7 +58,12 @@
         android:focusableInTouchMode="true"
         app:silInputView="@+id/et_message"
         app:silInputPane="@+id/fl_pane_container">
-
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#F1F1F1">
         <!-- 消息列表 -->
         <com.ftofs.twant.widget.SizeChangedRecyclerView
             android:id="@+id/rv_message_list"
@@ -67,6 +72,7 @@
             android:layout_weight="1"
             android:background="#F3F3F3"
             />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <!-- 底部工具条 -->
         <LinearLayout
