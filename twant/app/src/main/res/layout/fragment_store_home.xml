@@ -19,6 +19,57 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/ll_shop_signature_container"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                >
+                <!-- 店铺名稱 -->
+                <TextView
+                    android:id="@+id/tv_store_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginBottom="@dimen/length_15dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="-"
+                    android:textColor="@color/tw_black"
+                    android:textSize="18sp" />
+                <!-- 店铺签名 -->
+                <TextView
+                    android:id="@+id/tv_shop_signature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginRight="60dp"
+                    android:background="@drawable/shop_signature_bg"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:paddingLeft="19dp"
+                    android:paddingRight="19dp"
+                    android:singleLine="true"
+                    android:text="-"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+                <!-- 开店天数 -->
+                <!--                    android:id="@+id/tv_shop_open_day"-->
+                <TextView
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/tw_black"
+                android:textSize="12sp"
+                android:text="-"
+                />
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,56 +141,6 @@
                 </RelativeLayout>
             </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_shop_signature_container"
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                >
-                <!-- 店铺名稱 -->
-                <TextView
-                    android:id="@+id/tv_store_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="22dp"
-                    android:layout_marginLeft="60dp"
-                    android:layout_marginRight="60dp"
-                    android:layout_marginBottom="@dimen/length_15dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="-"
-                    android:textColor="@color/tw_black"
-                    android:textSize="18sp" />
-                <!-- 店铺签名 -->
-                <TextView
-                    android:id="@+id/tv_shop_signature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="22dp"
-                    android:layout_marginLeft="60dp"
-                    android:layout_marginRight="60dp"
-                    android:background="@drawable/shop_signature_bg"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:paddingLeft="19dp"
-                    android:paddingRight="19dp"
-                    android:singleLine="true"
-                    android:text="-"
-                    android:textColor="#fff"
-                    android:textSize="12sp" />
-                <!-- 开店天数 -->
-                <TextView
-                    android:id="@+id/tv_shop_open_day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/tw_black"
-                    android:textSize="12sp"
-                    android:text="-"
-                    />
-            </LinearLayout>
-
             <!-- 城友 -->
             <RelativeLayout
                 android:id="@+id/rl_shop_friend_container"
@@ -166,7 +167,9 @@
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="15dp">
+                    android:paddingStart="15dp"
+                    android:paddingEnd="1dp"
+                    >
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -210,16 +213,66 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_visitor_count">
-
                 <LinearLayout
+                    android:id="@+id/ll_open_days_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/ll_view_container"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/icon_store_open_days" />
+
+                    <TextView
+                        android:id="@+id/tv_store_open_days"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/tw_black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ll_view_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="@+id/ll_uo_like_container"
+                    app:layout_constraintRight_toRightOf="@+id/ll_open_days_container"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/icon_store_view" />
+
+                    <TextView
+                        android:id="@+id/tv_store_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/tw_black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/ll_uo_thumb_up_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/ll_uo_like_container"
+                    app:layout_constraintLeft_toRightOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/ll_view_container"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
@@ -246,8 +299,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/ll_uo_thumb_up_container"
-                    app:layout_constraintRight_toLeftOf="@+id/ll_uo_share_container"
+                    app:layout_constraintLeft_toRightOf="@id/ll_view_container"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
@@ -268,7 +321,9 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
+                <!--324新需求隐藏-->
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/ll_uo_share_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -325,6 +380,7 @@
                     />
 
                 <ImageView
+                    android:id="@+id/img_notice_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

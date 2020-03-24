@@ -392,7 +392,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     platformCustomer = new ChatConversation();
                     platformCustomer.friendInfo = FriendInfo.newInstance("", "平台想想", "", ChatUtil.ROLE_CS_PLATFORM);
                     platformCustomer.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
-                    platformCustomer.lastMessage = "     歡迎來到想要城～有什麼想要了解...";
+                    platformCustomer.lastMessage = "     歡迎來到想要城～有什麼想要了解... ";
                     platformCustomer.isPlatformCustomer = true;
                 }
 
@@ -413,8 +413,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             EMConversation conversation = entry.getValue();
             String memberName = entry.getKey();
             Conversation.upsertConversationInfo(conversation.conversationId(),memberName,conversation.getAllMessages(),conversation.getLastMessage(),conversation.getExtField(),conversation.getUnreadMsgCount());
-            Conversation loacal = Conversation.getByConversationId(conversation.conversationId());
-            SLog.info("第%d个，memberName[%s],nickName %s,lastMessage %s,unread[%d]",count++ ,memberName, loacal.nickname,loacal.lastMessageText,conversation.getUnreadMsgCount());
+            Conversation loacal = Conversation.getByMemberName(memberName);
+            if (loacal == null) {
+                SLog.info("Error,存取對話失敗");
+            } else {
+                SLog.info("第%d个，memberName[%s],nickName %s,lastMessage %s,unread[%d]",count++ ,memberName, loacal.nickname,loacal.lastMessageText,conversation.getUnreadMsgCount());
+            }
         }
     }
 
@@ -697,12 +701,82 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             SLog.info("onSupportVisible");
             loadPlatformCustomerData();
         } else {
+            loadConversation();
             loadData();
         }
         for (ChatConversation chatConversation : chatConversationList) {
             SLog.info("unread[%d]", chatConversation.unreadCount);
         }
         displayUnreadCount();
+    }
+
+    private void loadConversation() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+        EasyJSONObject params = EasyJSONObject.generate("token", token);
+
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_GET_IM_CONVERSATION, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr [%s]", responseStr);
+                try {
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    EasyJSONArray conversationList = responseObj.getArray("datas.conversationList");
+                    int oldCount = chatConversationList.size();
+                    if (conversationList != null && conversationList.length() > 0) {
+                        for (Object object : conversationList) {
+                            EasyJSONObject conversation = (EasyJSONObject) object;
+                            String memberName = conversation.getSafeString("memberName");
+                            String nickName = conversation.getSafeString("nickName");
+                            String avatar = conversation.getSafeString("avatar");
+                            String storeAvatar = conversation.getSafeString("storeAvatar");
+                            String messageContent=conversation.getSafeString("messageContent");
+                            String storeName = conversation.getSafeString("storeName");
+                            String sendTime =conversation.getSafeString("sendTime");
+                            int role = conversation.getInt("role");
+                            int storeId = conversation.getInt("storeId");
+                            boolean has = false;
+                            for (ChatConversation chatConversation : chatConversationList) {
+                                if (chatConversation.friendInfo != null) {
+                                    if (chatConversation.friendInfo.memberName.equals(memberName)) {
+                                        has = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (!has) {
+                                ChatConversation newChat = new ChatConversation();
+                                if (role > 0) {
+                                    newChat.friendInfo = FriendInfo.newInstance(memberName, storeName+nickName, storeAvatar, role);
+                                } else {
+                                    newChat.friendInfo = FriendInfo.newInstance(memberName, nickName, avatar, role);
+                                }
+                                newChat.friendInfo.storeId = storeId;
+                                newChat.friendInfo.storeName = storeName;
+                                newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                                newChat.lastMessage = "txt::"+messageContent+":";
+//                                newChat.timestamp = sendTime;
+                                chatConversationList.add(newChat);
+                            }
+                        }
+                    }
+                    if (chatConversationList.size() > oldCount) {
+                        adapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     @Override

@@ -184,6 +184,6 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
     }
 
     private void updateWordCount(int wordCount) {
-        tvWordCount.setText(String.format("%d/500", wordCount));
+        tvWordCount.setText(String.format("%d/500", 500-wordCount));
     }
 }

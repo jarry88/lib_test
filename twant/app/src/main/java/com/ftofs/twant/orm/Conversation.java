@@ -55,7 +55,7 @@ public class Conversation extends LitePalSupport {
      * @param lastMessage     最新信息
      */
     public static void upsertConversationInfo(String conversationId,String memberName, List<EMMessage> newEMMessageList,EMMessage lastMessage,String extField,int unreadMsgCount) {
-        Conversation conversation = getByConversationId(conversationId);
+        Conversation conversation = getByMemberName(memberName);
         if (conversation == null) {
             conversation = new Conversation();
             conversation.conversationId = conversationId;
@@ -79,7 +79,7 @@ public class Conversation extends LitePalSupport {
         }
     }
 
-    private void explainLastMessage() {
+    public void explainLastMessage() {
         if (lastMessage == null) {
             return;
         }
@@ -111,12 +111,21 @@ public class Conversation extends LitePalSupport {
     }
 
     public String getLastMessageText() {
-        return lastMessage.toString();
+        if (lastMessage == null) {
+            SLog.info("空指针异常");
+            return "";
+
+        } else {
+            return lastMessage.getBody().toString();
+        }
     }
 
 
     public static Conversation getByConversationId(String conversationId) {
         return LitePal.where("conversationId = ?", conversationId).findFirst(Conversation.class);
+    }
+    public static Conversation getByMemberName(String memberName) {
+        return LitePal.where("memberName = ?", memberName).findFirst(Conversation.class);
     }
 
     public static List<Conversation> getAllConversations() {

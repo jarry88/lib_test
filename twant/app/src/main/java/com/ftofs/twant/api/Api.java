@@ -1171,6 +1171,11 @@ public class Api {
      */
     public static final String PATH_GET_IM_TOKEN = "/member/getUserTokenBySession";
     /**
+     * 獲取用戶对话框列表
+     */
+    public static final String PATH_GET_IM_CONVERSATION = "/member/im/conversation";
+
+    /**
      * 商城url地址解析(目前只解析店鋪，商品，貼文)
      */
     public static final String PATH_PARSE_URL = "/url/skip";

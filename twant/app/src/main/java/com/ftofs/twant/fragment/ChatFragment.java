@@ -214,10 +214,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             new Handler().postDelayed(() -> {
                 loadHistoryMessage(pagesize);
                 SLog.info("执行下拉刷新");
-                chatMessageAdapter.notifyDataSetChanged();
+//                chatMessageAdapter.notifyDataSetChanged();
 
-                swipeRefreshLayout.setRefreshing(false);//取消刷新
-            },1000);
+            },100);
 
         });
 
@@ -338,29 +337,47 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             if (chatMessageList != null && chatMessageList.size() > 0) {
                 messageId = chatMessageList.get(0).messageId;
             }
+            int dbCount = (loadFromDB(messageId, pagesize));
+            if (dbCount == pagesize) {
+                SLog.info("本地获取成功,获取条数");
+                uiHandler.sendMessage(new Message());
+                return;
+            }
 //            EMClient.getInstance().chatManager().f
-            EMClient.getInstance().chatManager().asyncFetchHistoryMessage(conversation.conversationId(), conversation.getType(), pagesize,messageId, new EMValueCallBack<EMCursorResult<EMMessage>>() {
+            EMClient.getInstance().chatManager().asyncFetchHistoryMessage(conversation.conversationId(), conversation.getType(), pagesize-dbCount,messageId, new EMValueCallBack<EMCursorResult<EMMessage>>() {
                 @Override
                 public void onSuccess(EMCursorResult<EMMessage> emMessageEMCursorResult) {
+
                     SLog.info("异步获取成功,获取条数 %d",conversation.getAllMessages().size());
                     List<EMMessage> messages = emMessageEMCursorResult.getData();
-                    if (messages != null) {
+                    if (messages != null&&messages.size()>0) {
                         int i=0;
+                        Conversation dbItem=Conversation.getByMemberName(yourMemberName);
+                        if (dbItem == null) {
+                            dbItem = new Conversation();
+                            dbItem.memberName = yourMemberName;
+                            dbItem.lastMessage = messages.get(messages.size()-1);
+
+                            SLog.info("Lastmessage[%s]", dbItem.lastMessage.toString());
+                            dbItem.explainLastMessage();
+                        }
                         for (EMMessage emMessage : messages) {
-                            SLog.info("message[%s]", emMessage.toString());
                             if (ChatUtil.getIntMessageType(emMessage)==0) {
                                 continue;
                             }
-                            chatMessageList.add(i++,emMessageToChatMessage(emMessage));
+                            chatMessageList.add(i,emMessageToChatMessage(emMessage));
+                            dbItem.allEMMessage.add(i++, emMessage);
                         }
-                        uiHandler.sendMessage(new Message());
+                        dbItem.save();
                     } else {
                         SLog.info("没有更多记录了");
                     }
+                    uiHandler.sendMessage(new Message());
                 }
 
                 @Override
                 public void onError(int i, String s) {
+                    swipeRefreshLayout.setRefreshing(false);//取消刷新
                     SLog.info("获取失败");
                 }
             });
@@ -401,6 +418,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             if (yourInfo.role > ChatUtil.ROLE_MEMBER) {
                 yourNickname = yourInfo.storeName+" "+yourInfo.staffName;
                 yourAvatarUrl = yourInfo.storeAvatar;
+                Conversation conversation=Conversation.getByMemberName(yourMemberName);
+                conversation.nickname = yourNickname;
+                conversation.save();
             }
             showGoodsAndOrder();
             tvNickname.setText(yourNickname);
@@ -605,20 +625,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         for (EMMessage emMessage : messages) {
             SLog.info("message[%s]", emMessage.toString());
             lastMessage = emMessage;
+            if (ChatUtil.getIntMessageType(emMessage) == 0) {
+                continue;
+            }
 
             chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
-        startMsgId = messages.get(0).getMsgId();
+        if (messages != null) {
+            startMsgId = messages.get(0).getMsgId();
+        }
         //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
         //获取startMsgId之前的pagesize条消息，此方法获取的messages SDK会自动存入到此会话中，APP中无需再次把获取到的messages添加到会话中
-        int i=0;
         int pagesize = 20;
-        messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
-        for (EMMessage emMessage : messages) {
-            SLog.info("message[%s]", emMessage.toString());
-            chatMessageList.add(i++,emMessageToChatMessage(emMessage));
-        }
 
+        int dbCount=loadFromDB(startMsgId,pagesize);
         /*
         if (lastMessage != null) {
             SLog.info("lastMessage[%s]", lastMessage.toString());
@@ -630,6 +650,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         setShowTimestamp(chatMessageList);
         SLog.info("_chatMessageList.size = %d", chatMessageList.size());
         chatMessageAdapter.setNewData(chatMessageList);
+    }
+
+    private int loadFromDB(String startMsgId, int pagesize) {
+        int i = 0;
+        List<EMMessage> messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
+        for (EMMessage emMessage : messages) {
+            SLog.info("message[%s]", emMessage.toString());
+            if (ChatUtil.getIntMessageType(emMessage) == 0) {
+                continue;
+            }
+            chatMessageList.add(i++,emMessageToChatMessage(emMessage));
+        }
+        if (messages == null) {
+            return 0;
+        } else {
+            return messages.size();
+        }
     }
 
     private ChatMessage emMessageToChatMessage(EMMessage emMessage) {
@@ -1587,6 +1624,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             ChatFragment chatFragment = weakReference.get();
             chatFragment.chatMessageAdapter.notifyDataSetChanged();
+            chatFragment.swipeRefreshLayout.setRefreshing(false);
         }
     }
 }

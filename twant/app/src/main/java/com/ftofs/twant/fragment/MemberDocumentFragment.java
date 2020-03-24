@@ -50,7 +50,7 @@ public class MemberDocumentFragment extends BaseFragment implements View.OnClick
         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(User.getUserInfo(SPField.FIELD_AVATAR,null))).into(avatar);
         TextView memberName=v.findViewById(R.id.tv_member_name);
         TextView memberNumber=v.findViewById(R.id.tv_member_number);
-        memberName.setText(User.getUserInfo(SPField.FIELD_NICKNAME,null));
+//        memberName.setText(User.getUserInfo(SPField.FIELD_NICKNAME,null));
         memberNumber.setText(User.getUserInfo(SPField.FIELD_MOBILE,null));
     }
 

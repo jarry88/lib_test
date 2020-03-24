@@ -115,6 +115,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             //3797平台客服置頂新增淺灰底色
             helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_light_grey));
         }else {
+            helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_white));
             llMessageItemContainer.setBackgroundResource(R.drawable.border_type_d);
         }
         if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
