@@ -412,8 +412,10 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     if (!StringUtil.isEmpty(value)) {
                         if (value.length() > 10) {  // 最多顯示10個字符
                             tvMemberBio.setText(value.substring(0, 10) + "⋯");
+                        } else {
+                            tvMemberBio.setText(value);
                         }
-
+                        SLog.info("memberBio %s",value);
                     }
                     userDataObj.set(SPField.USER_DATA_KEY_BIO, value);
 

@@ -87,7 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
-                        android:text="@string/mobile_phone_number"
+                        android:text="@string/mobile_phone_number_"
                         android:textColor="@color/tw_dark_grey"
                         android:textSize="14sp" />
 
