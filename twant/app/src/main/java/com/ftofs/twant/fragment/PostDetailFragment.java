@@ -323,7 +323,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
             if (!StringUtil.isEmpty(authorMemberName)) {
                 if (User.isLogin()) {
                     if (isMe) {
-                        start(MyFragment.newInstance());
+                        start(MyFragment.newInstance(true));
                     } else {
                         start(AuthorInfoFragment.newInstance(authorMemberName));
                     }

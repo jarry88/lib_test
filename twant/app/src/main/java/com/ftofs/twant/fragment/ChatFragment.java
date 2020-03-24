@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -54,6 +57,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.interfaces.ViewSizeChangedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
@@ -75,10 +79,13 @@ import com.ftofs.twant.widget.SizeChangedRecyclerView;
 import com.ftofs.twant.widget.SmoothInputLayout;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.exceptions.HyphenateException;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -91,6 +98,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -154,6 +162,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     int yourRole;
 
     TextView tvNickname;
+    UiHandler uiHandler ;
 
     /**
      * 拍照的圖片文件
@@ -168,6 +177,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private int myRole;
     private LinearLayout btnSendGoods;
     private LinearLayout btnSendOrder;
+    private int pagesize=20;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static ChatFragment newInstance(EMConversation conversation, FriendInfo friendInfo) {
         Bundle args = new Bundle();
@@ -197,8 +208,19 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         long imTokenExpire = Hawk.get(SPField.FIELD_IM_TOKEN_EXPIRE, 0L);
         long now = System.currentTimeMillis();
         SLog.info("imTokenExpire[%s], now[%s]", imTokenExpire, now);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            //模拟耗时操作
+            new Handler().postDelayed(() -> {
+                loadHistoryMessage(pagesize);
+                SLog.info("执行下拉刷新");
+//                chatMessageAdapter.notifyDataSetChanged();
+
+            },100);
+
+        });
+
         if (now >= imTokenExpire) {  // 如果已經過期，則獲取最新的imToken並更新
-            SLog.info("here______");
             String token = User.getToken();
             EasyJSONObject params = EasyJSONObject.generate("token", token);
             Api.postUI(Api.PATH_GET_IM_TOKEN, params, new UICallback() {
@@ -232,6 +254,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         // 指定会话消息未读数清零(進入會話處)
         conversation.markAllMessagesAsRead();
+        Conversation.clearUnreadMsgCount(conversation.conversationId());
+
 
         String ext = conversation.getExtField();
         EasyJSONObject extObj = EasyJSONObject.parse(ext);
@@ -288,6 +312,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 //            btnSendOrder.setVisibility(View.GONE);
 //        }
 
+        uiHandler= new UiHandler(this);
         initEmojiPage(view);
         loadEmojiData();
 
@@ -299,6 +324,74 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         bindFriendInfo();
         showGoodsAndOrder();
+    }
+
+    private void loadHistoryMessage(int pagesize) {
+        try {
+            EMClient.getInstance().chatManager().fetchHistoryMessages(
+                    yourMemberName,EMConversation.EMConversationType.Chat, pagesize, "");
+            final List<EMMessage> msgs = conversation.getAllMessages();
+            int msgCount = msgs != null ? msgs.size() : 0;
+            SLog.info("COUNT%s",conversation.getAllMsgCount());
+            String messageId = null;
+            if (chatMessageList != null && chatMessageList.size() > 0) {
+                messageId = chatMessageList.get(0).messageId;
+            }
+            int dbCount = (loadFromDB(messageId, pagesize));
+            if (dbCount == pagesize) {
+                SLog.info("本地获取成功,获取条数");
+                uiHandler.sendMessage(new Message());
+                return;
+            }
+//            EMClient.getInstance().chatManager().f
+            EMClient.getInstance().chatManager().asyncFetchHistoryMessage(conversation.conversationId(), conversation.getType(), pagesize-dbCount,messageId, new EMValueCallBack<EMCursorResult<EMMessage>>() {
+                @Override
+                public void onSuccess(EMCursorResult<EMMessage> emMessageEMCursorResult) {
+
+                    SLog.info("异步获取成功,获取条数 %d",conversation.getAllMessages().size());
+                    List<EMMessage> messages = emMessageEMCursorResult.getData();
+                    if (messages != null&&messages.size()>0) {
+                        int i=0;
+                        Conversation dbItem=Conversation.getByMemberName(yourMemberName);
+                        if (dbItem == null) {
+                            dbItem = new Conversation();
+                            dbItem.memberName = yourMemberName;
+                            dbItem.lastMessage = messages.get(messages.size()-1);
+
+                            SLog.info("Lastmessage[%s]", dbItem.lastMessage.toString());
+                            dbItem.explainLastMessage();
+                        }
+                        for (EMMessage emMessage : messages) {
+                            if (ChatUtil.getIntMessageType(emMessage)==0) {
+                                continue;
+                            }
+                            chatMessageList.add(i,emMessageToChatMessage(emMessage));
+                            dbItem.allEMMessage.add(i++, emMessage);
+                        }
+                        dbItem.save();
+                    } else {
+                        SLog.info("没有更多记录了");
+                    }
+                    uiHandler.sendMessage(new Message());
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    swipeRefreshLayout.setRefreshing(false);//取消刷新
+                    SLog.info("获取失败");
+                }
+            });
+//            if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
+//                String msgId = null;
+//                if (msgs != null && msgs.size() > 0) {
+//                    msgId = msgs.get(0).getMsgId();
+//                }
+////                conversation.loadMoreMsgFromDB(msgId, pagesize - msgCount);
+//
+//            }
+        } catch (HyphenateException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showGoodsAndOrder() {
@@ -325,6 +418,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             if (yourInfo.role > ChatUtil.ROLE_MEMBER) {
                 yourNickname = yourInfo.storeName+" "+yourInfo.staffName;
                 yourAvatarUrl = yourInfo.storeAvatar;
+                Conversation conversation=Conversation.getByMemberName(yourMemberName);
+                conversation.nickname = yourNickname;
+                conversation.save();
             }
             showGoodsAndOrder();
             tvNickname.setText(yourNickname);
@@ -529,20 +625,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         for (EMMessage emMessage : messages) {
             SLog.info("message[%s]", emMessage.toString());
             lastMessage = emMessage;
+            if (ChatUtil.getIntMessageType(emMessage) == 0) {
+                continue;
+            }
 
             chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
-        startMsgId = messages.get(0).getMsgId();
+        if (messages != null) {
+            startMsgId = messages.get(0).getMsgId();
+        }
         //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
         //获取startMsgId之前的pagesize条消息，此方法获取的messages SDK会自动存入到此会话中，APP中无需再次把获取到的messages添加到会话中
-        int i=0;
         int pagesize = 20;
-        messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
-        for (EMMessage emMessage : messages) {
-            SLog.info("message[%s]", emMessage.toString());
-            chatMessageList.add(i++,emMessageToChatMessage(emMessage));
-        }
 
+        int dbCount=loadFromDB(startMsgId,pagesize);
         /*
         if (lastMessage != null) {
             SLog.info("lastMessage[%s]", lastMessage.toString());
@@ -554,6 +650,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         setShowTimestamp(chatMessageList);
         SLog.info("_chatMessageList.size = %d", chatMessageList.size());
         chatMessageAdapter.setNewData(chatMessageList);
+    }
+
+    private int loadFromDB(String startMsgId, int pagesize) {
+        int i = 0;
+        List<EMMessage> messages = conversation.loadMoreMsgFromDB(startMsgId, pagesize);
+        for (EMMessage emMessage : messages) {
+            SLog.info("message[%s]", emMessage.toString());
+            if (ChatUtil.getIntMessageType(emMessage) == 0) {
+                continue;
+            }
+            chatMessageList.add(i++,emMessageToChatMessage(emMessage));
+        }
+        if (messages == null) {
+            return 0;
+        } else {
+            return messages.size();
+        }
     }
 
     private ChatMessage emMessageToChatMessage(EMMessage emMessage) {
@@ -583,7 +696,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             chatMessage.content = EasyJSONObject.generate("goodsImage", goodsImage, "commonId", commonId, "goodsName", goodsName).toString();
         } else if (chatMessage.messageType == Constant.CHAT_MESSAGE_TYPE_ORDER) {
-            int ordersId = Integer.valueOf(emMessage.getStringAttribute("ordersId", ""));
+            SLog.info("orders %s",emMessage.getStringAttribute("ordersId", ""));
+
+//            SLog.info("orders %d",Integer.parseInt(emMessage.getStringAttribute("ordersId", "")));
+//            int ordersId = Integer.parseInt(emMessage.getStringAttribute("ordersId", ""));
+            int ordersId = 0;
+            try {
+               ordersId = Integer.parseInt(emMessage.getStringAttribute("ordersId", ""));
+            } catch (Exception e) {
+                try {
+                    ordersId = emMessage.getIntAttribute("ordersId");
+                } catch (HyphenateException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+
             String ordersSn = emMessage.getStringAttribute("ordersSn", "");
             String goodsImage = emMessage.getStringAttribute("goodsImage", "");
             String goodsName = emMessage.getStringAttribute("goodsName", "");
@@ -751,6 +879,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             case R.id.tv_nickname:
                 if (Config.DEVELOPER_MODE) {
                     // rvMessageList.smoothScrollBy(0, 825);
+
                 }
                 break;
             default:
@@ -1480,6 +1609,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+    static class UiHandler extends Handler {
+        WeakReference<ChatFragment> weakReference;
+
+        public UiHandler(ChatFragment chatFragment) {
+            weakReference = new WeakReference<>(chatFragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            ChatFragment chatFragment = weakReference.get();
+            chatFragment.chatMessageAdapter.notifyDataSetChanged();
+            chatFragment.swipeRefreshLayout.setRefreshing(false);
         }
     }
 }

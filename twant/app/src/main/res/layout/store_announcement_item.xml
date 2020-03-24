@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/toolbar_margin_left"
     android:layout_marginEnd="@dimen/toolbar_margin_right"
+    android:paddingBottom="@dimen/dp_4"
+    android:paddingTop="@dimen/dp_4"
     android:background="@drawable/border_type_d">
     <ImageView
         android:id="@+id/icon_expand"

@@ -1,5 +1,6 @@
 package com.ftofs.twant.adapter;
 
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
@@ -82,7 +84,21 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             helper.setGone(R.id.icon_do_not_disturb, false);
             if (chatConversation.unreadCount > 0) {
                 helper.setGone(R.id.tv_unread_count, true);
-                helper.setText(R.id.tv_unread_count, String.valueOf(chatConversation.unreadCount));
+                TextView count = helper.getView(R.id.tv_unread_count);
+                ViewGroup.LayoutParams layoutParams = count.getLayoutParams();
+                if (chatConversation.unreadCount == 1) {
+                    count.setHeight(Util.dip2px(mContext,8));
+                    count.setText("");
+                } else if (chatConversation.unreadCount <= 999) {
+
+                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    count.setLayoutParams(layoutParams);
+                    helper.setText(R.id.tv_unread_count, String.valueOf(chatConversation.unreadCount));
+                } else {
+                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    count.setLayoutParams(layoutParams);
+                    helper.setText(R.id.tv_unread_count, "⋯");
+                }
             } else {
                 helper.setGone(R.id.tv_unread_count, false);
             }
@@ -99,6 +115,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             //3797平台客服置頂新增淺灰底色
             helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_light_grey));
         }else {
+            helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_white));
             llMessageItemContainer.setBackgroundResource(R.drawable.border_type_d);
         }
         if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {

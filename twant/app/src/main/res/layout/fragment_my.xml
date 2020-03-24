@@ -28,14 +28,27 @@
                     android:scaleType="centerCrop"
                     />
             </com.ftofs.twant.widget.SquareGridLayout>
-
+            <FrameLayout
+                android:id="@+id/btn_back_round"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_alignParentStart="true"
+                android:visibility="gone"
+                android:padding="15dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_back_round"
+                    />
+            </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/btn_setting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:padding="15dp">
                 <ImageView
                     android:layout_width="wrap_content"

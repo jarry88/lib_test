@@ -32,6 +32,7 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.GoodsGalleryAdapter;
 import com.ftofs.twant.adapter.NestedScrollingFragmentAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -96,7 +97,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     TextView tvStoreName;
     @BindView(R.id.tv_shop_signature)
     TextView tvShopSignature;
-    @BindView(R.id.tv_shop_open_day)
+    @BindView(R.id.tv_store_open_days)
     TextView tvShopOpenDay;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
@@ -114,6 +115,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     @BindView(R.id.tv_like_count)
     TextView tvLikeCount;
+    @BindView(R.id.tv_store_view)
+    TextView tvStoreView;
     int likeCount;
     TextView tvFavoriteCount;
     int favoriteCount;
@@ -421,6 +424,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                 currGalleryImageList.add(object2.toString());
                             }
                         }
+                        String shopDay = storeInfo.getString("shopDay");
+//                        int storeView=  responseObj.getInt("datas.storeView");
+                        int storeView=  storeInfo.getInt("storeView");
+                        tvStoreView.setText(String.valueOf(storeView));
+//                        tvShopOpenDay.setText(shopDay);
                         updateBanner(hasSlider);
 
                          //好友
@@ -629,8 +637,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 tvShopSignature.setText(storeSignature);
             }
 
-            // 開店天數
-            tvShopOpenDay.setText(getString(R.string.text_store_open_day_prefix) + storeInfo.getSafeString("shopDay"));
+            // 開店天數getString(R.string.text_store_open_day_prefix) +
+            tvShopOpenDay.setText( storeInfo.getSafeString("shopDay"));
 
             // 商店形象圖
             String shopFigureUrl = StringUtil.normalizeImageUrl(storeInfo.getSafeString("storeFigureImage"));
@@ -741,6 +749,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         if (storeAnnouncementList.size() < 1) {
             llShopAnnouncementContainer.setVisibility(View.GONE);
             return;
+        } else if(storeAnnouncementList.size()==1){
+            llShopAnnouncementContainer.findViewById(R.id.img_notice_more).setVisibility(View.GONE);
         }
         ((StoreNoticeFragment) fragments.get(NOTICE_FRAGMENT)).setAnnouncementData(storeAnnouncementList);
     }
@@ -1043,11 +1053,12 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     private void updateFavoriteView() {
         if (isFavorite == Constant.ONE) {
-            btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_red);
+            btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_yellow);
+            tvFavoriteCount.setText("已關注");
         } else {
             btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_grey);
+            tvFavoriteCount.setText(String.valueOf(favoriteCount));
         }
-        tvFavoriteCount.setText(String.valueOf(favoriteCount));
     }
 
 

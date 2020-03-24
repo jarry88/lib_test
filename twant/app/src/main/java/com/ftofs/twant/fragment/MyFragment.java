@@ -115,11 +115,21 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     boolean personalBackgroundChanged = false;
     private TextView tvShoppingMessageCount;
     private int PostCountMax=10;
+    private boolean showBack;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
 
         MyFragment fragment = new MyFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+    public static MyFragment newInstance(boolean showBack) {
+        Bundle args = new Bundle();
+
+        MyFragment fragment = new MyFragment();
+        fragment.showBack = showBack;
         fragment.setArguments(args);
 
         return fragment;
@@ -148,6 +158,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
 
 
         Util.setOnClickListener(view, R.id.btn_setting, this);
+        Util.setOnClickListener(view, R.id.btn_back_round, this);
+        view.findViewById(R.id.btn_back_round).setVisibility(showBack ? View.VISIBLE : View.GONE);
 
         Util.setOnClickListener(view, R.id.btn_mall, this);
         Util.setOnClickListener(view, R.id.btn_article, this);
@@ -318,6 +330,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                 break;
             case R.id.btn_setting:
                 Util.startFragment(UniversalFragment.newInstance());
+                break;
+            case R.id.btn_back_round:
+                hideSoftInputPop();
                 break;
             case R.id.tv_member_signature:
                 String signature = memberSignature;

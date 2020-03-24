@@ -28,6 +28,7 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.Emoji;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
@@ -199,7 +200,7 @@ public class TwantApplication extends Application {
         /* 添加各個表，如果新增表，需要在這里添加表，然后增加數據庫版本號
            例如： SqliteUtil.addTables(Table1.class.getName(), Table2.class.getName()); */
         SqliteUtil.addTables(Test.class.getName(), UserStatus.class.getName(), Emoji.class.getName(),
-                FriendInfo.class.getName(), ImNameMap.class.getName());
+                FriendInfo.class.getName(), ImNameMap.class.getName(), Conversation.class.getName());
 
         int fragmentationMode;
         if (Config.DEVELOPER_MODE) {
@@ -594,7 +595,7 @@ public class TwantApplication extends Application {
                     Map<String, Object> ext = message.ext();
                     String from = message.getFrom();
                     String to = message.getTo();
-                    SLog.info("msgId[%s], type[%s], from[%s], to[%s], body[%s],ext[%s]", msgId, type, from, to, body.toString(),ext);
+                    SLog.info("msgId[%s], type[%s], from[%s], to[%s], body[%s],ext[%s]，", msgId, type, from, to, body.toString(),ext);
 
                     // 獲取拓展字段
                     String extNickname = message.getStringAttribute("nickName", "");
@@ -634,6 +635,7 @@ public class TwantApplication extends Application {
                     if (extRole>ChatUtil.ROLE_MEMBER) {
                         imNickName = storeName + " " + extNickname;
                     }
+                    //这里有什么用
                     ChatUtil.getConversation(message.getFrom(), imNickName, extAvatar, extRole);
 
                     if (type == EMMessage.Type.TXT) {
