@@ -47,5 +47,13 @@
       "indicatorMargin": 8,
       "indicatorHeight": 2
     }
+  },
+  {
+    "type": "container-oneColumn",
+    "items": [
+      {
+        "type": "SloganCell"
+      }
+    ]
   }
 ]

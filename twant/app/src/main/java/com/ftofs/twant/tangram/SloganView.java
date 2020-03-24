@@ -1,34 +1,31 @@
 package com.ftofs.twant.tangram;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
 
-public class CarouselView extends LinearLayout implements ITangramViewLifeCycle {
+public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
     Context context;
-    TextView tvTest;
 
-    public CarouselView(Context context) {
+    public SloganView(Context context) {
         this(context, null);
     }
 
-    public CarouselView(Context context, @Nullable AttributeSet attrs) {
+    public SloganView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CarouselView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SloganView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         this.context = context;
@@ -39,8 +36,8 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
 
-        View contentView = LayoutInflater.from(context).inflate(R.layout.tangram_layout_home_carousel_view, this, false);
-        tvTest = contentView.findViewById(R.id.tv_test);
+
+        View contentView = LayoutInflater.from(context).inflate(R.layout.tangram_layout_home_slogan_view, this, false);
 
         addView(contentView);
     }
@@ -52,15 +49,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
 
     @Override
     public void postBindView(BaseCell cell) {
-        int pos = cell.pos;
 
-        if (pos == 0) {
-            tvTest.setBackgroundColor(Color.RED);
-        } else if (pos == 1) {
-            tvTest.setBackgroundColor(Color.GREEN);
-        } else if (pos == 2) {
-            tvTest.setBackgroundColor(Color.BLUE);
-        }
     }
 
     @Override
@@ -68,3 +57,4 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
 
     }
 }
+

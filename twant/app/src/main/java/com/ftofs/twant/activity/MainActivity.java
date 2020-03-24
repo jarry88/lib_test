@@ -52,6 +52,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
 import com.ftofs.twant.tangram.LogoView;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
@@ -306,6 +307,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         builder.registerCell("LogoCell", LogoView.class);
         builder.registerCell("StickyCell", HomeStickyView.class);
         builder.registerCell("CarouselCell", CarouselView.class);
+        builder.registerCell("SloganCell", SloganView.class);
 
 
         // 生成 TangramEngine 实例

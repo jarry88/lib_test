@@ -2,6 +2,7 @@ package com.ftofs.twant.tangram;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,6 +33,9 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     }
 
     private void init() {
+        setOrientation(VERTICAL);
+        setGravity(Gravity.CENTER_HORIZONTAL);
+
         View contentView = LayoutInflater.from(context).inflate(R.layout.tangram_layout_home_sticky_view, this, false);
 
         addView(contentView);
