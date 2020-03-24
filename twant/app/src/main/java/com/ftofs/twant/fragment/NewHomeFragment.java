@@ -14,6 +14,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
+import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.TangramEngine;
 
 import org.json.JSONArray;
@@ -40,6 +41,9 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Util.setOnClickListener(view, R.id.btn_goto_top, this);
+        Util.setOnClickListener(view, R.id.btn_publish_want_post, this);
 
         tangramEngine = ((MainActivity) _mActivity).getTangramEngine();
         rvList = view.findViewById(R.id.rv_list);
@@ -82,7 +86,11 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         int id = v.getId();
+
+        if (id == R.id.btn_goto_top) {
+            rvList.scrollToPosition(0);
+        } else if (id == R.id.btn_publish_want_post) {
+            Util.startFragment(AddPostFragment.newInstance(false));
+        }
     }
-
-
 }
