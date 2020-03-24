@@ -66,7 +66,7 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
     int mIsDefaultAddr;
 
     int action;  // 標記是編輯還是添加
-    private int DETAIL_ADDRESS_MAXLENTH=100;
+    private int DETAIL_ADDRESS_MAXLENTH=80;
     private int REAL_NAME_MAXLENTH=50;
 
     public static AddAddressFragment newInstance(int action, AddrItem addrItem) {
@@ -158,7 +158,9 @@ public class AddAddressFragment extends BaseFragment implements View.OnClickList
         etDetailAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (s.length() >= DETAIL_ADDRESS_MAXLENTH) {
+                    ToastUtil.success(_mActivity,String.format("地址長度不能超過%d字",DETAIL_ADDRESS_MAXLENTH));
+                }
             }
 
             @Override

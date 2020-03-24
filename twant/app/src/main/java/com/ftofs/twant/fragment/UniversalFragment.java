@@ -69,7 +69,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         tvMemberName = view.findViewById(R.id.tv_member_name);
         tvMemberNumber = view.findViewById(R.id.tv_member_number);
         avatar =view.findViewById((R.id.img_avatar));
-        tvMemberName.setText(User.getUserInfo(SPField.FIELD_NICKNAME,null));
+//        tvMemberName.setText(User.getUserInfo(SPField.FIELD_NICKNAME,null));
         tvMemberNumber.setText(User.getUserInfo(SPField.FIELD_MOBILE_ENCRYPT,null));
         String avatarUrl = User.getUserInfo(SPField.FIELD_AVATAR,null);
         if(StringUtil.isEmpty(avatarUrl)){

@@ -117,6 +117,8 @@ public class ResetPasswordFragment extends BaseFragment implements
         if (usage == Constant.USAGE_USER_REGISTER) {
             tvFragmentTitle.setText(R.string.register_fragment_title);
             trueNoticeLoge.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.rl_tos_container).setVisibility(View.VISIBLE);
+
         } else if (usage == Constant.USAGE_RESET_PASSWORD) {
             tvFragmentTitle.setText(R.string.reset_password_fragment_title);
         } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
