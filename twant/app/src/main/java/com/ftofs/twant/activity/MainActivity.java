@@ -311,7 +311,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             public <IMAGE extends ImageView> void doLoadImageUrl(@NonNull IMAGE view,
                                                                  @Nullable String url) {
                 //假设你使用 Picasso 加载图片
-                Glide.with(MainActivity.this).load(url).into(view);
+                Glide.with(TwantApplication.getInstance()).load(url).into(view);
             }
         }, ImageView.class);
 
