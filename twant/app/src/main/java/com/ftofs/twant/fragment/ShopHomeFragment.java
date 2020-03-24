@@ -425,9 +425,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                             }
                         }
                         String shopDay = storeInfo.getString("shopDay");
-                        int storeView=  responseObj.getInt("datas.storeView");
+//                        int storeView=  responseObj.getInt("datas.storeView");
+                        int storeView=  storeInfo.getInt("storeView");
                         tvStoreView.setText(String.valueOf(storeView));
-                        tvShopOpenDay.setText(shopDay);
+//                        tvShopOpenDay.setText(shopDay);
                         updateBanner(hasSlider);
 
                          //好友
@@ -636,8 +637,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 tvShopSignature.setText(storeSignature);
             }
 
-            // 開店天數
-            tvShopOpenDay.setText(getString(R.string.text_store_open_day_prefix) + storeInfo.getSafeString("shopDay"));
+            // 開店天數getString(R.string.text_store_open_day_prefix) +
+            tvShopOpenDay.setText( storeInfo.getSafeString("shopDay"));
 
             // 商店形象圖
             String shopFigureUrl = StringUtil.normalizeImageUrl(storeInfo.getSafeString("storeFigureImage"));
