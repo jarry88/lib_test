@@ -478,7 +478,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
         } else if (id == R.id.btn_test) {
             SLog.info("Config.PROD[%s]", Config.PROD);
-            if (!Config.PROD) {
+            if (true || !Config.PROD) {
                 // Util.startFragment(TestFragment.newInstance());
 //                    getFragmentManager().getFragments().size()
                 // Util.startFragment(RegisterConfirmFragment.newInstance("0086", "13417785707", 10));
