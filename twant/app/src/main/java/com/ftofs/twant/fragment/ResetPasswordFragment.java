@@ -311,11 +311,13 @@ public class ResetPasswordFragment extends BaseFragment implements
             }
             return false;
         }
-        if (!checkAgreeState) {
-            if (toastEnable) {
-                ToastUtil.error(_mActivity, getString(R.string.agree_server));
+        if (usage == Constant.USAGE_USER_REGISTER) {
+            if (!checkAgreeState) {
+                if (toastEnable) {
+                    ToastUtil.error(_mActivity, getString(R.string.agree_server));
+                }
+                return false;
             }
-            return false;
         }
         return true;
     }

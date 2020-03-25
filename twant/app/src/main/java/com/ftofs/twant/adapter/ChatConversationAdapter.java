@@ -85,18 +85,14 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             if (chatConversation.unreadCount > 0) {
                 helper.setGone(R.id.tv_unread_count, true);
                 TextView count = helper.getView(R.id.tv_unread_count);
-                ViewGroup.LayoutParams layoutParams = count.getLayoutParams();
                 if (chatConversation.unreadCount == 1) {
-                    count.setHeight(Util.dip2px(mContext,8));
+                    count.setTextSize(6);
                     count.setText("");
                 } else if (chatConversation.unreadCount <= 999) {
-
-                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    count.setLayoutParams(layoutParams);
+                    count.setTextSize(10);
                     helper.setText(R.id.tv_unread_count, String.valueOf(chatConversation.unreadCount));
                 } else {
-                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    count.setLayoutParams(layoutParams);
+                    count.setTextSize(8);
                     helper.setText(R.id.tv_unread_count, "⋯");
                 }
             } else {

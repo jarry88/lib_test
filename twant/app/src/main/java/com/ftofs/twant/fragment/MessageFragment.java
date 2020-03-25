@@ -338,7 +338,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 if (timestamp < 1) {
                     continue;
                 }
-                //不是每條都在數據庫保存過，直接取數據庫不可以了 gzp
+                //不是每條都在數據庫保存過，直接取數據庫不可以 gzp
                 FriendInfo friendInfo = new FriendInfo();
 //                FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
                 friendInfo.memberName = memberName;

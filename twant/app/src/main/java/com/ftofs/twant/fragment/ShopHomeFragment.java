@@ -99,6 +99,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     TextView tvShopSignature;
     @BindView(R.id.tv_store_open_days)
     TextView tvShopOpenDay;
+    @BindView(R.id.tv_shop_open_day)
+    TextView tvOpenDay;
     @BindView(R.id.viewpager)
     ViewPager viewpager;
 
@@ -638,6 +640,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             }
 
             // 開店天數getString(R.string.text_store_open_day_prefix) +
+            tvOpenDay.setText(getString(R.string.text_store_open_day_prefix) +storeInfo.getSafeString("shopDay"));
             tvShopOpenDay.setText( storeInfo.getSafeString("shopDay"));
 
             // 商店形象圖

@@ -19,56 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/ll_shop_signature_container"
-                android:layout_marginTop="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                >
-                <!-- 店铺名稱 -->
-                <TextView
-                    android:id="@+id/tv_store_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="22dp"
-                    android:layout_marginLeft="60dp"
-                    android:layout_marginRight="60dp"
-                    android:layout_marginBottom="@dimen/length_15dp"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="-"
-                    android:textColor="@color/tw_black"
-                    android:textSize="18sp" />
-                <!-- 店铺签名 -->
-                <TextView
-                    android:id="@+id/tv_shop_signature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="22dp"
-                    android:layout_marginLeft="60dp"
-                    android:layout_marginRight="60dp"
-                    android:background="@drawable/shop_signature_bg"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:paddingLeft="19dp"
-                    android:paddingRight="19dp"
-                    android:singleLine="true"
-                    android:text="-"
-                    android:textColor="#fff"
-                    android:textSize="12sp" />
-                <!-- 开店天数 -->
-                <!--                    android:id="@+id/tv_shop_open_day"-->
-                <TextView
-                android:layout_width="wrap_content"
 
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/tw_black"
-                android:textSize="12sp"
-                android:text="-"
-                />
-            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -140,7 +91,56 @@
 
                 </RelativeLayout>
             </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/ll_shop_signature_container"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                >
+                <!-- 店铺名稱 -->
+                <TextView
+                    android:id="@+id/tv_store_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginBottom="@dimen/length_15dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="-"
+                    android:textColor="@color/tw_black"
+                    android:textSize="18sp" />
+                <!-- 店铺签名 -->
+                <TextView
+                    android:id="@+id/tv_shop_signature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginRight="60dp"
+                    android:background="@drawable/shop_signature_bg"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:paddingLeft="19dp"
+                    android:paddingRight="19dp"
+                    android:singleLine="true"
+                    android:text="-"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
+                <!-- 开店天数 -->
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_shop_open_day"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/tw_black"
+                    android:textSize="12sp"
+                    android:text="-"
+                    />
+            </LinearLayout>
             <!-- 城友 -->
             <RelativeLayout
                 android:id="@+id/rl_shop_friend_container"
@@ -186,6 +186,8 @@
                     android:layout_toEndOf="@id/tv_shop_friend" />
 
             </RelativeLayout>
+
+
             <!-- 游客數量 -->
             <TextView
                 android:id="@+id/tv_visitor_count"

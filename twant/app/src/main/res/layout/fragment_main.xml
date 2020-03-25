@@ -89,16 +89,16 @@
                     android:id="@+id/tv_message_item_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/icon_message"
-                    android:layout_marginLeft="-7dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
+                    android:layout_toEndOf="@id/icon_message"
+                    android:layout_marginStart="-7dp"
+                    android:paddingStart="3dp"
+                    android:paddingEnd="4dp"
                     android:background="@drawable/circle_red_bubble_bg"
                     android:gravity="center"
-                    android:text="18"
+                    android:text="1812"
                     android:textColor="@android:color/white"
                     android:textSize="10sp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     />
             </RelativeLayout>
             <TextView

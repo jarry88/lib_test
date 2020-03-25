@@ -66,7 +66,7 @@ public class Conversation extends LitePalSupport {
             }
             conversation.allEMMessage.addAll(newEMMessageList);
         }
-        conversation.unreadMsgCount += unreadMsgCount;
+        conversation.unreadMsgCount = unreadMsgCount;
         conversation.memberName = memberName;
         conversation.lastMessage = lastMessage;
         conversation.extField = extField;
