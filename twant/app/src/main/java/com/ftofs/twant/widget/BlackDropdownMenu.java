@@ -167,6 +167,9 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             View btnItem4 = findViewById(R.id.btn_item_4);
             btnItem4.setBackgroundResource(R.drawable.black_dropdown_menu_separator);
             btnItem5.setVisibility(VISIBLE);
+            findViewById(R.id.btn_item_1).setOnClickListener(this);
+            findViewById(R.id.btn_item_2).setOnClickListener(this);
+
 
 //            ViewGroup.MarginLayoutParams layoutParams = (MarginLayoutParams) btnItem5.getLayoutParams();
 //            layoutParams.topMargin = Util.dip2px(context, 15);
