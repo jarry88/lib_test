@@ -629,8 +629,10 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
 //                        floatingActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
                         SLog.info("staff.avatar %s",staff.avatar);
-
-                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(staff.avatar)).centerCrop().into(mCustomers[i]);
+                        boolean defaultAvatar = "img/default_avatar.png".equals(staff.avatar);
+                        if (!defaultAvatar) {
+                            Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(staff.avatar)).centerCrop().into(mCustomers[i]);
+                        }
                         mCustomers[i].setOnClickListener(v ->{
                                     String memberName = staff.memberName;
                                     String imName = staff.imName;

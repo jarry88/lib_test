@@ -99,8 +99,10 @@ public class StoreCustomerServicePopup extends BottomPopupView implements View.O
         friendInfo.avatarUrl = staff.avatar;
         friendInfo.role = ChatUtil.ROLE_CS_AVAILABLE;
         friendInfo.storeId = storeId;
-        friendInfo.goodsInfo = goodsInfo;
-        friendInfo.goodsInfo.showSendBtn = true;
+        if (goodsInfo != null) {
+            friendInfo.goodsInfo = goodsInfo;
+            friendInfo.goodsInfo.showSendBtn = true;
+        }
         FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE,1,"",staff.storeId);
         if (StringUtil.isEmpty(imName)) {
             imName = memberName;

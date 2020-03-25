@@ -634,6 +634,8 @@ public class StringUtil {
     public static boolean useDefaultAvatar(String url) {
         if (isEmpty(url)) {
             return true;
+        } else if ("img/default_avatar.png".equals(url)) {
+            return true;
         }
 
         return isIntranetAddr(url);

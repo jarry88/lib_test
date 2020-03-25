@@ -78,8 +78,8 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
         } else {
             helper.itemView.setBackgroundColor(Color.WHITE);
             helper.setGone(R.id.vw_selected_indicator, true);
-            tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_medium_grey, null));
-            tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_blue, null));
+//            tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
             if (subItemCount > 0) {
                 llSubCategoryList.removeAllViews();
