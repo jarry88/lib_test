@@ -15,17 +15,19 @@ public class StoreSearchItem implements MultiItemEntity {
     public int viewCount;
     public int followCount;
     public boolean showJobInfo;
+    public String storeVideoUrl; // 店鋪形象視頻
 
     public StoreSearchItem() {
         this.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
     }
 
-    public StoreSearchItem(int storeId, int storeView, String storeAvatarUrl, String storeName, String className, String mainBusiness, String storeFigureImage,
+    public StoreSearchItem(int storeId, int storeView, String storeAvatarUrl, String storeVideoUrl, String storeName, String className, String mainBusiness, String storeFigureImage,
                            float distance, String shopDay, int likeCount,int followCount,int viewCount, int goodsCommonCount, List<String> goodsImageList, List<JobInfoItem> jobList,CustomerServiceStaff staff) {
         this.itemType = Constant.ITEM_TYPE_NORMAL;
         this.storeId = storeId;
         this.storeView = storeView;
         this.storeAvatarUrl = storeAvatarUrl;
+        this.storeVideoUrl = storeVideoUrl;
         this.storeName = storeName;
         this.className = className;
         this.mainBusiness = mainBusiness;

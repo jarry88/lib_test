@@ -57,6 +57,7 @@ import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.ftofs.twant.widget.TwQRCodePopup;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -150,6 +151,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     double storeLongitude;
     double storeLatitude;
 
+    // 店鋪形象視頻相關
+    ImageView btnPlay;
+    String storeVideoUrl;
+
     private TextView tvPhoneNumber;
     private TextView tvShopAddress;
 
@@ -242,6 +247,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         viewpager.setOffscreenPageLimit(tabCount-1);
 
         imgShopLogo.setOnClickListener(this);
+
+        btnPlay = view.findViewById(R.id.btn_play);
+        btnPlay.setOnClickListener(this);
 
         tvLikeCount = view.findViewById(R.id.tv_like_count);
         btnStoreThumb = view.findViewById(R.id.btn_store_thumb);
@@ -519,6 +527,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         EasyJSONArray announcements = responseObj.getSafeArray("datas.announcements");
                         setAnnouncements(announcements);
 
+                        // 店鋪形象視頻
+                        if (storeInfo.exists("videoUrl")) {
+                            storeVideoUrl = storeInfo.getSafeString("videoUrl");
+                            btnPlay.setVisibility(StringUtil.isEmpty(storeVideoUrl) ? View.GONE : VISIBLE);
+                        }
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
@@ -903,6 +916,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 new XPopup.Builder(_mActivity)
                         .asCustom(new TwQRCodePopup(_mActivity, storeUrl))
                         .show();
+                break;
+            case R.id.btn_play:
+                String videoId = Util.getYoutubeVideoId(storeVideoUrl);
+                if (!StringUtil.isEmpty(videoId)) {
+                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, videoId);
+                    startActivity(intent);
+                }
                 break;
             default:
                 break;
