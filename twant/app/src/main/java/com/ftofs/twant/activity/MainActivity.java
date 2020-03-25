@@ -515,7 +515,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     ToastUtil.success(getApplicationContext(),String.format("重啓homefragment,當前為%d環境",Config.currEnv));
                     HomeFragment homeFragment = mainFragment.getHomeFragment();
                     if (homeFragment != null) {
-                        homeFragment.resetLoaded();
+                        // homeFragment.resetLoaded();
                     }
                 }
             } else {
