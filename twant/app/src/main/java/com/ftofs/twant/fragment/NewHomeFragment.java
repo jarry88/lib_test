@@ -62,8 +62,8 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
     String appPopupAdLinkValue;
     long showAppPopupAdTimestamp;
 
-    boolean carouselLoaded;
-    boolean newArrivalsLoaded;
+    boolean carouselLoaded = false;
+    boolean newArrivalsLoaded = false;
 
     BasePopupView popupViewAd;
 
@@ -123,8 +123,6 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
             }
         });
 
-        loadCarousel();
-
         loadNewArrivals();
     }
 
@@ -133,41 +131,6 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
         super.onDestroyView();
 
         tangramEngine.unbindView();
-    }
-
-
-    private void test() {
-
-        if (true) {
-            pop();
-            return;
-        }
-        try {
-            GroupBasicAdapter<Card, ?> adapter = tangramEngine.getGroupBasicAdapter();
-            List<Card> cardList = adapter.getGroups();
-            SLog.info("cardList.size[%d]", cardList.size());
-
-            // 获取StickyView
-            Card card = cardList.get(1); // 索引为1的是StickyView
-
-            JSONArray cells = new JSONArray();
-
-            JSONObject obj = new JSONObject();
-            obj.put("type", TangramCellType.STICKY_CELL);
-            StickyCellData stickyCellData = new StickyCellData();
-            stickyCellData.goodsCommonCount = 100; stickyCellData.storeCount = 200; stickyCellData.wantPostCount = 300;
-            obj.put("data", stickyCellData);
-
-            cells.put(obj);
-
-            List<BaseCell> cs = tangramEngine.parseComponent(cells);
-
-
-            card.setCells(cs);
-            card.notifyDataChange();
-        } catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
     }
 
 
@@ -361,7 +324,7 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
         } else if (id == R.id.btn_publish_want_post) {
             Util.startFragment(AddPostFragment.newInstance(false));
         } else if (id == R.id.btn_test) {
-            test();
+
         }
     }
 
@@ -385,5 +348,22 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
         layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
         llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = false;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        // 加載輪播圖片
+        if (!carouselLoaded) {
+            loadCarousel();
+        }
+
+        showPopupAd();
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }
