@@ -152,7 +152,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     public void buyAgain(View v) {
         SLog.info("添加到購物袋%d",ordersId);
         for (OrderDetailGoodsItem goodsItem:orderDetailGoodsItemList){
-            Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> ToastUtil.success(_mActivity, "添加購物袋成功"));
+            Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> {ToastUtil.success(_mActivity, "添加購物袋成功");
+                Util.startFragment(CartFragment.newInstance(true));});
         }
     }
 

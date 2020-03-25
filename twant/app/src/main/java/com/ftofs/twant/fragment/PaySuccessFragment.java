@@ -108,6 +108,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
 
 
                     } else if (id == R.id.btn_goto_home) {
+                        MainFragment.getInstance().showHideFragment(MainFragment.HOME_FRAGMENT);
                         popTo(MainFragment.class, false);
                     }
                 } else if (itemViewType == Constant.ITEM_VIEW_TYPE_COMMON) {

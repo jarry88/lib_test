@@ -125,7 +125,12 @@ public class Conversation extends LitePalSupport {
         return LitePal.where("conversationId = ?", conversationId).findFirst(Conversation.class);
     }
     public static Conversation getByMemberName(String memberName) {
-        return LitePal.where("memberName = ?", memberName).findFirst(Conversation.class);
+        Conversation conversation = LitePal.where("memberName = ?", memberName).findFirst(Conversation.class);
+        if (conversation == null) {
+            conversation = new Conversation();
+            conversation.memberName = memberName;
+        }
+        return conversation;
     }
 
     public static List<Conversation> getAllConversations() {
