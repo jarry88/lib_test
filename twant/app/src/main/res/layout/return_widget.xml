@@ -7,160 +7,210 @@
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:layout_marginLeft="@dimen/toolbar_margin_left"
         android:layout_marginRight="@dimen/toolbar_margin_right"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@drawable/border_type_d">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_return_reason"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
+
         <LinearLayout
+            android:id="@+id/btn_select_refund_reason"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="@drawable/border_type_d">
+            android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text_return_reason"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <LinearLayout
-                android:id="@+id/btn_select_refund_reason"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_refund_reason"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/select_return_reason_hint"
-                    />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/expand_button_medium"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@drawable/border_type_d">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_return_count"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <com.ftofs.twant.widget.AdjustButton
-                android:id="@+id/ab_return_amount"
-                android:layout_width="92dp"
-                android:layout_height="25dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:textSize="16sp"
-                android:textColor="@color/tw_black"
-                />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@drawable/border_type_d">
-            <TextView
-                android:id="@+id/tv_refund_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_return_amount"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <EditText
-                android:id="@+id/et_refund_amount"
+                android:id="@+id/tv_refund_reason"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@id/tv_refund_amount"
-                android:layout_toLeftOf="@+id/ll_max_refund_amount_container"
-                android:layout_centerVertical="true"
-                android:textColor="@color/tw_black"
-                android:textSize="14sp"
-                android:text=""
-                android:singleLine="true"
-                android:inputType="numberDecimal"
-                android:imeOptions="actionNext"
-                android:hint="@string/input_return_amount_hint"
-                android:background="@null"
+                android:layout_weight="1"
+                android:hint="@string/select_return_reason_hint"
                 />
-
-            <LinearLayout
-                android:id="@+id/ll_max_refund_amount_container"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tv_max_refund_amount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="9sp"
-                    android:textColor="@color/tw_red"
-                    android:text=""
-                    android:gravity="right"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/text_most_refund_amount"
-                    android:textSize="12sp"
-                    android:textColor="@color/tw_medium_grey"
-                    />
-            </LinearLayout>
-        </RelativeLayout>
+                android:src="@drawable/expand_button_medium"
+                />
+        </LinearLayout>
+    </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="@drawable/border_type_d">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:background="@drawable/border_type_d">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_return_count"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
+
+        <com.ftofs.twant.widget.AdjustButton
+            android:id="@+id/ab_return_amount"
+            android:layout_width="92dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:background="@drawable/border_type_d">
+        <TextView
+            android:id="@+id/tv_refund_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_return_amount"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
+
+        <EditText
+            android:id="@+id/et_refund_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/tv_refund_amount"
+            android:layout_toLeftOf="@+id/ll_max_refund_amount_container"
+            android:layout_centerVertical="true"
+            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            android:text=""
+            android:singleLine="true"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionNext"
+            android:hint="@string/input_return_amount_hint"
+            android:background="@null"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_max_refund_amount_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
             <TextView
-                android:id="@+id/tv_refund_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_return_desc"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                />
-
-            <EditText
-                android:id="@+id/et_refund_desc"
+                android:id="@+id/tv_max_refund_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@id/tv_refund_desc"
-                android:layout_centerVertical="true"
-                android:hint="@string/input_refund_desc_hint"
-                android:textSize="14sp"
-                android:textColor="@color/tw_black"
-                android:singleLine="true"
-                android:inputType="text"
-                android:imeOptions="actionDone"
-                android:background="@null"
+                android:textSize="9sp"
+                android:textColor="@color/tw_red"
+                android:text=""
+                android:gravity="right"
                 />
-        </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/text_most_refund_amount"
+                android:textSize="12sp"
+                android:textColor="@color/tw_medium_grey"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_refund_way_container"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_refund_way"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
+
+        <LinearLayout
+            android:id="@+id/btn_select_refund_way"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_refund_way"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="9dp"
+                android:gravity="right"
+                android:text="@string/text_refund_way_wallet"
+                android:textColor="@color/tw_black"
+                android:textSize="14sp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/expand_button_medium"
+                />
+        </LinearLayout>
     </LinearLayout>
+
+    <!-- 分隔條 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#F3F3F3">
+    </View>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="@dimen/toolbar_margin_left"
+        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:background="@drawable/border_type_d">
+        <TextView
+            android:id="@+id/tv_refund_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/text_return_desc"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            />
+
+        <EditText
+            android:id="@+id/et_refund_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/tv_refund_desc"
+            android:layout_centerVertical="true"
+            android:hint="@string/input_return_desc_hint"
+            android:textSize="14sp"
+            android:textColor="@color/tw_black"
+            android:singleLine="true"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:background="@null"
+            />
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

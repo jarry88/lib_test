@@ -831,6 +831,9 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void updateRefundWayDesc() {
+        if (tvRefundWay == null) {
+            return;
+        }
         if (refundWay == RefundWayPopup.REFUND_WAY_WALLET) {
             tvRefundWay.setText("退至預存款");
         } else {
