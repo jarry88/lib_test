@@ -57,6 +57,7 @@ import com.ftofs.twant.tangram.HomeStickyView;
 import com.ftofs.twant.tangram.LogoView;
 import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.tangram.StoreItemView;
+import com.ftofs.twant.tangram.TangramClickSupport;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
@@ -331,7 +332,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         // 绑定业务 support 类到 engine
         // 处理点击
-        // mEngine.addSimpleClickSupport(new CustomClickSupport());
+        engine.addSimpleClickSupport(new TangramClickSupport());
         // 处理曝光
         // mEngine.addExposureSupport(new CustomExposureSupport());
         // 异步加载数据

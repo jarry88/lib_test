@@ -92,7 +92,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
 
     @Override
     public void cellInited(BaseCell cell) {
-
+        setOnClickListener(cell);
     }
 
     @Override

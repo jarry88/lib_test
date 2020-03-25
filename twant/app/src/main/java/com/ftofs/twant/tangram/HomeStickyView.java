@@ -13,14 +13,21 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.StickyCellData;
+import com.ftofs.twant.fragment.CategoryFragment;
+import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
+import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycle, View.OnClickListener {
     Context context;
@@ -55,6 +62,11 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         setGravity(Gravity.CENTER_HORIZONTAL);
 
         View contentView = LayoutInflater.from(context).inflate(R.layout.tangram_layout_home_sticky_view, this, false);
+        contentView.findViewById(R.id.ll_search_box).setOnClickListener(this);
+        contentView.findViewById(R.id.btn_category_store).setOnClickListener(this);
+        contentView.findViewById(R.id.btn_category_goods).setOnClickListener(this);
+        contentView.findViewById(R.id.btn_category_brand).setOnClickListener(this);
+
         tvStoreCount = contentView.findViewById(R.id.tv_store_count);
         tvGoodsCount = contentView.findViewById(R.id.tv_goods_count);
         tvPostCount = contentView.findViewById(R.id.tv_post_count);
@@ -116,6 +128,18 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         int id = v.getId();
         if (id == R.id.btn_goto_activity) {
             gotoActivity();
+        } else if (id == R.id.ll_search_box) {
+            Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
+        } else if (id == R.id.btn_category_store) {
+            Util.startFragment(SearchResultFragment.newInstance(SearchType.STORE.name(),
+                    EasyJSONObject.generate("keyword", "").toString()));
+        } else if (id == R.id.btn_category_goods) {
+            Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                    EasyJSONObject.generate("keyword", "").toString()));
+        } else if (id == R.id.btn_category_brand) {
+            SearchPostParams searchPostParams = new SearchPostParams();
+            searchPostParams.keyword = "";
+            Util.startFragment(CircleFragment.newInstance(true, searchPostParams));
         }
     }
 

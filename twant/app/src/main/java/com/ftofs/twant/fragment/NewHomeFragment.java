@@ -33,6 +33,7 @@ import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
+import com.tmall.wireless.tangram.support.SimpleClickSupport;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -98,6 +99,8 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
             }
         });
 
+        loadCarousel();
+
         loadNewArrivals();
     }
 
@@ -110,12 +113,11 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
 
 
     private void test() {
-        loadCarousel();
 
         if (true) {
+            pop();
             return;
         }
-
         try {
             GroupBasicAdapter<Card, ?> adapter = tangramEngine.getGroupBasicAdapter();
             List<Card> cardList = adapter.getGroups();
