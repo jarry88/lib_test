@@ -1,0 +1,57 @@
+[
+  {
+    "type": "container-oneColumn",
+    "items": [
+      {
+        "type": "LogoCell"
+      }
+    ],
+    "style": {
+      "padding": [23, 0, 0, 0],
+      "bgColor": "#FFFFFF"
+    }
+  },
+  {
+    "type": "container-sticky",
+    "items": [
+      {
+        "type": "StickyCell"
+      }
+    ]
+  },
+  {
+    "type": "container-banner",
+    "items": [
+      {
+        "type": "CarouselCell",
+        "text": "這是用於支撐佈局的佔位Item，如果items為空，加載數據填充後輪播圖佈局會有問題"
+      }
+    ],
+    "style": {
+      "itemRatio": 1.78,
+      "pageRatio": 1,
+      "autoScroll": 3000,
+      "infinite": true,
+      "indicatorGravity": "center",
+      "indicatorPosition": "inside",
+      "indicatorGap": 5,
+      "indicatorMargin": 8,
+      "indicatorHeight": 6
+    }
+  },
+  {
+    "type": "container-oneColumn",
+    "items": [
+      {
+        "type": "SloganCell"
+      }
+    ]
+  },
+  {
+    "type": "container-oneColumn",
+    "load": "loadMore",
+    "loadType": 1,
+    "items": [
+    ]
+  }
+]

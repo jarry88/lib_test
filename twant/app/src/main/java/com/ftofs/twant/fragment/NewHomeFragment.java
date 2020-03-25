@@ -48,7 +48,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class NewHomeFragment extends BaseFragment implements View.OnClickListener {
     RecyclerView rvList;
     TangramEngine tangramEngine;
 
@@ -78,7 +78,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_home, container, false);
         return view;
     }
 

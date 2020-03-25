@@ -12,6 +12,29 @@ import java.io.InputStream;
 
 public class AssetsUtil {
     /**
+     * 加载assets目录下的文本
+     * @param context
+     * @param filename  文件名，比如test.txt
+     * @return
+     */
+    public static String loadText(Context context, String filename) {
+        StringBuilder result = new StringBuilder();
+        try{
+            InputStream is = context.getResources().getAssets().open(filename);
+            int ch;
+            byte[] buffer = new byte[1024];
+            while (-1 != (ch = is.read(buffer))){
+                result.append(new String(buffer, 0, ch));
+            }
+            is.close();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            return null;
+        }
+        return result.toString();
+    }
+
+    /**
      * 将asset文件写入缓存
      */
     public static boolean copyAssetAndWrite(Context context, String fileName){
