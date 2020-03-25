@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -88,6 +89,8 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
                     TextView tvSubCategory = new TextView(context);
 
                     SLog.info("storeLabel.getIsFold, i[%d], isFold[%d]", i, storeLabel.getIsFold());
+                    tvSubCategory.setMaxLines(2);
+                    tvSubCategory.setEllipsize(TextUtils.TruncateAt.END);
                     if (storeLabel.getIsFold() == 0) {
                         tvSubCategory.setTextColor(twBlue);
                     } else {
