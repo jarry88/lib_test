@@ -34,6 +34,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.AliPayResult;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Goods;
@@ -320,11 +321,11 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         TangramBuilder.InnerBuilder builder = TangramBuilder.newInnerBuilder(MainActivity.this);
 
         // 注册自定义的卡片和组件
-        builder.registerCell("LogoCell", LogoView.class);
-        builder.registerCell("StickyCell", HomeStickyView.class);
-        builder.registerCell("CarouselCell", CarouselView.class);
-        builder.registerCell("SloganCell", SloganView.class);
-        builder.registerCell("StoreItemCell", StoreItemView.class);
+        builder.registerCell(TangramCellType.LOGO_CELL, LogoView.class);
+        builder.registerCell(TangramCellType.STICKY_CELL, HomeStickyView.class);
+        builder.registerCell(TangramCellType.CAROUSEL_CELL, CarouselView.class);
+        builder.registerCell(TangramCellType.SLOGAN_CELL, SloganView.class);
+        builder.registerCell(TangramCellType.STORE_ITEM_CELL, StoreItemView.class);
 
 
         // 生成 TangramEngine 实例
@@ -443,7 +444,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
                                     JSONObject obj = new JSONObject();
 
-                                    obj.put("type", "StoreItemCell");
+                                    obj.put("type", TangramCellType.STORE_ITEM_CELL);
                                     obj.put("data", storeItem);
                                     cells.put(obj);
                                 }

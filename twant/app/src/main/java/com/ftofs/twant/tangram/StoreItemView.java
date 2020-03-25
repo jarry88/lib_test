@@ -80,6 +80,7 @@ public class StoreItemView extends LinearLayout implements ITangramViewLifeCycle
     @Override
     public void cellInited(BaseCell cell) {
         this.cell = cell;
+        setOnClickListener(cell);
     }
 
     @Override
@@ -122,19 +123,22 @@ public class StoreItemView extends LinearLayout implements ITangramViewLifeCycle
     public void onClick(View v) {
         int id = v.getId();
 
-        StoreItem storeItem = (StoreItem) cell.optParam("data");
+        Object data = cell.optParam("data");
+        if (data != null) {
+            StoreItem storeItem = (StoreItem) data;
 
-        if (id == R.id.goods_image_left_container || id == R.id.goods_image_middle_container || id == R.id.goods_image_right_container) {
-            int commonId;
-            if (id == R.id.goods_image_left_container) {
-                commonId = storeItem.goodsList.get(0).id;
-            } else if (id == R.id.goods_image_middle_container) {
-                commonId = storeItem.goodsList.get(1).id;
-            } else {
-                commonId = storeItem.goodsList.get(2).id;
+            if (id == R.id.goods_image_left_container || id == R.id.goods_image_middle_container || id == R.id.goods_image_right_container) {
+                int commonId;
+                if (id == R.id.goods_image_left_container) {
+                    commonId = storeItem.goodsList.get(0).id;
+                } else if (id == R.id.goods_image_middle_container) {
+                    commonId = storeItem.goodsList.get(1).id;
+                } else {
+                    commonId = storeItem.goodsList.get(2).id;
+                }
+
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
             }
-
-            Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
         }
     }
 }

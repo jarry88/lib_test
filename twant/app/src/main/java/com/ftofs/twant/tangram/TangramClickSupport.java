@@ -4,6 +4,8 @@ import android.view.View;
 
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.constant.TangramCellType;
+import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -30,7 +32,7 @@ public class TangramClickSupport extends SimpleClickSupport {
     public void defaultClick(View targetView, BaseCell cell, int eventType) {
         SLog.info("stringType[%s], pos[%d], position[%d]",
                 cell.stringType, cell.pos, cell.position);
-        if ("CarouselCell".equals(cell.stringType)) {
+        if (TangramCellType.CAROUSEL_CELL.equals(cell.stringType)) {
             Object data = cell.optParam("data");
             if (data != null) {
                 WebSliderItem webSliderItem = (WebSliderItem) data;
@@ -95,6 +97,12 @@ public class TangramClickSupport extends SimpleClickSupport {
                     default:
                         break;
                 }
+            }
+        } else if (TangramCellType.STORE_ITEM_CELL.equals(cell.stringType)) {
+            Object data = cell.optParam("data");
+            if (data != null) {
+                StoreItem storeItem = (StoreItem) data;
+                Util.startFragment(ShopMainFragment.newInstance(storeItem.storeId));
             }
         }
     }

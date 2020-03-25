@@ -18,6 +18,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.log.SLog;
@@ -129,7 +130,7 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
             JSONArray cells = new JSONArray();
 
             JSONObject obj = new JSONObject();
-            obj.put("type", "StickyCell");
+            obj.put("type", TangramCellType.STICKY_CELL);
             StickyCellData stickyCellData = new StickyCellData();
             stickyCellData.goodsCommonCount = 100; stickyCellData.storeCount = 200; stickyCellData.wantPostCount = 300;
             obj.put("data", stickyCellData);
@@ -177,7 +178,7 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
                     JSONArray cells = new JSONArray();
 
                     JSONObject obj = new JSONObject();
-                    obj.put("type", "StickyCell");
+                    obj.put("type", TangramCellType.STICKY_CELL);
                     StickyCellData stickyCellData = new StickyCellData();
                     // 店鋪、商品、想要帖三類數據
                     stickyCellData.goodsCommonCount = responseObj.getInt("datas.goodsCommonCount");;
@@ -232,7 +233,7 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
                                 goodsCommonsStr);
 
                         obj = new JSONObject();
-                        obj.put("type", "CarouselCell");
+                        obj.put("type", TangramCellType.CAROUSEL_CELL);
                         obj.put("data", webSliderItem);
                         cells.put(obj);
                     }
