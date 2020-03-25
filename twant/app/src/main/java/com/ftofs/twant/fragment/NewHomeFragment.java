@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,6 +52,10 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
     RecyclerView rvList;
     TangramEngine tangramEngine;
 
+    boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
+    LinearLayout llFloatButtonContainer;
+    private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800; // 浮動按鈕滑動顯示與隱藏效果的延遲時間(毫秒)
+
     boolean popAd = false;
     String appPopupAdImage;
     String appPopupAdLinkType;
@@ -80,6 +86,7 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_goto_top, this);
         Util.setOnClickListener(view, R.id.btn_publish_want_post, this);
@@ -97,6 +104,22 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
                 super.onScrolled(recyclerView, dx, dy);
                 //在 scroll 事件中触发 engine 的 onScroll，内部会触发需要异步加载的卡片去提前加载数据
                 tangramEngine.onScrolled();
+            }
+
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                SLog.info("newState[%d]", newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    hideFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    llFloatButtonContainer.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showFloatButton();
+                        }
+                    }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY);
+                }
             }
         });
 
@@ -340,5 +363,27 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
         } else if (id == R.id.btn_test) {
             test();
         }
+    }
+
+    private void showFloatButton() {
+        if (floatButtonShown){
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = true;
+    }
+
+    private void hideFloatButton() {
+        if (!floatButtonShown) {
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = false;
     }
 }
