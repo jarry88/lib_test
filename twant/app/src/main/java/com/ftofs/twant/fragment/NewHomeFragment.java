@@ -18,9 +18,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
-import com.ftofs.twant.entity.CarouselCellData;
 import com.ftofs.twant.entity.StickyCellData;
-import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
@@ -35,7 +33,6 @@ import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
-import com.zhouwei.mzbanner.holder.MZHolderCreator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -208,8 +205,10 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
 
 
                     // 获取CarouselView
+                    card = cardList.get(2); // 索引为2的是CarouselView
+                    cells = new JSONArray();
+
                     EasyJSONArray itemList = responseObj.getSafeArray("datas.webSliderItem");
-                    CarouselCellData carouselCellData = new CarouselCellData();
                     for (Object object : itemList) {
                         EasyJSONObject itemObj = (EasyJSONObject) object;
 
@@ -229,8 +228,16 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
                                 itemObj.getSafeString("linkValue"),
                                 itemObj.getSafeString("goodsIds"),
                                 goodsCommonsStr);
-                        carouselCellData.webSliderItemList.add(webSliderItem);
+
+                        obj = new JSONObject();
+                        obj.put("type", "CarouselCell");
+                        obj.put("data", webSliderItem);
+                        cells.put(obj);
                     }
+                    cs = tangramEngine.parseComponent(cells);
+                    card.setCells(cs);
+                    card.notifyDataChange();
+                    // END OF 获取CarouselView
 
                     // 彈出廣告
                     String enableAppPopupAdStr = responseObj.getSafeString("datas.enableAppPopupAd");
