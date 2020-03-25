@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
@@ -45,6 +46,7 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
     TextView tvCardPassTitle;
     EditText etCouponCardPass;
     EditText etCaptcha;
+    private TextView tvCardHint;
 
     public static ReceiveCouponFragment newInstance(int couponType) {
         Bundle args = new Bundle();
@@ -77,6 +79,7 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
         tvCardPassTitle = view.findViewById(R.id.tv_card_pass_title);
         etCouponCardPass = view.findViewById(R.id.et_coupon_card_pass);
         etCaptcha = view.findViewById(R.id.et_captcha);
+        tvCardHint = view.findViewById(R.id.tv_coupon_hint);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
@@ -96,9 +99,11 @@ public class ReceiveCouponFragment extends BaseFragment implements View.OnClickL
                     SLog.info("平台券");
                     tvCardPassTitle.setText(R.string.text_platform_coupon_card_pass);
                     etCouponCardPass.setHint(R.string.input_platform_coupon_card_pass_hint);
+                    tvCardHint.setText(R.string.text_receive_platform_coupon_hint);
                     couponType = Constant.COUPON_TYPE_PLATFORM;
                 } else if (id == R.id.tab_store_coupon) {
                     SLog.info("商店券");
+                    tvCardHint.setText(R.string.text_receive_store_coupon_hint);
                     tvCardPassTitle.setText(R.string.text_store_coupon_card_pass);
                     etCouponCardPass.setHint(R.string.input_store_coupon_card_pass_hint);
                     couponType = Constant.COUPON_TYPE_STORE;

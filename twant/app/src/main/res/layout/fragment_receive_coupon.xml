@@ -77,10 +77,11 @@
         android:paddingRight="15dp"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/tv_coupon_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="@string/text_receive_store_coupon_hint"
+            android:text="@string/text_receive_platform_coupon_hint"
             android:textSize="13sp"
             android:textColor="@color/tw_blue"
             />
@@ -96,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:textColor="@color/tw_black"
                 android:textSize="14sp"
                 android:text="@string/text_platform_coupon_card_pass"

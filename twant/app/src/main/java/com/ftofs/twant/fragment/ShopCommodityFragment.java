@@ -178,7 +178,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     SLog.info("btn_order_general");
                     goodsList.clear();
                     goodsPairList.clear();
-                    mExtra = null;
+                    //默認字段
+                    mExtra =EasyJSONObject.generate("sort", "default_desc");;
                     currPage = 0;
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_sale) { // 銷量
@@ -355,7 +356,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 simpleTabManager.performClick(1);
             }
         } else {
-            loadStoreGoods(paramsOriginal, null, 1);
+            loadStoreGoods(paramsOriginal, EasyJSONObject.generate("sort", "default_desc"), 1);
         }
 
         RecyclerView rvVideoList = view.findViewById(R.id.rv_video_list);

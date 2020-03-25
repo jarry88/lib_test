@@ -128,6 +128,7 @@
     <string name="text_captcha">驗證碼</string>
 
     <string name="text_receive_store_coupon_hint">請輸入已獲得的商店券卡密領取商店券\n領取成功后可在購買產品時抵扣訂單金額使用</string>
+    <string name="text_receive_platform_coupon_hint">請輸入已獲得的平臺券卡密領取平臺券\n領取成功后可在購買產品時抵扣訂單金額使用</string>
 
     <string name="text_confidentiality">保密</string>
     <string name="text_male">男</string>
