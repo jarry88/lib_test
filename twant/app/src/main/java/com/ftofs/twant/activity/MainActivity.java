@@ -448,7 +448,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                 }
 
                                 if (!hasMore && storeItemList.size() > 1) {
-                                    // 如果全部加載完畢，添加加載完畢的提示
+                                    // todo 如果全部加載完畢，添加加載完畢的提示
 
                                 }
 

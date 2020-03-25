@@ -61,7 +61,7 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
 
     @Override
     public void postBindView(BaseCell cell) {
-        SLog.info("ANII_postBindView, animInitialized[%s]", animInitialized);
+        // SLog.info("ANII_postBindView, animInitialized[%s]", animInitialized);
         if (animInitialized) {
             return;
         }
@@ -120,7 +120,7 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
 
     @Override
     public void postUnBindView(BaseCell cell) {
-        SLog.info("ANII_postUnBindView");
+        // SLog.info("ANII_postUnBindView");
     }
 }
 
