@@ -291,15 +291,18 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         } else {
             String HxId = bundle.getString(Constant.MSG_NOTIFY_HXID);
             if (StringUtil.isEmpty(HxId)) {
+                //切換環境后singletask模式會進入這裏，設置初始化homefragment
                 boolean exit = bundle.getBoolean("exit");
                 if (exit) {
-                    ToastUtil.success(getApplicationContext(),String.format("重啓homefragment,當前為%d環境",Config.currEnv));
+                    ToastUtil.success(getApplicationContext(),String.format("重啓homefragment,當前為%d環境",28+Config.currEnv));
                     HomeFragment homeFragment = mainFragment.getHomeFragment();
+                    //切換環境
                     if (homeFragment != null) {
                         homeFragment.resetLoaded();
                     }
                 }
             } else {
+                //HxId為從通知消息中取得的intent數據
                 mainFragment.showHideFragment(MainFragment.MESSAGE_FRAGMENT);
             }
         }
