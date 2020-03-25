@@ -3,6 +3,7 @@ package com.ftofs.twant.fragment;
 
 import android.app.Notification;
 import android.content.Context;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -132,6 +133,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private boolean customerExpanded =false;
     private int customerCount;
     private ImageView btnCart;
+    private ImageView btnComment;
 
     public static ShopMainFragment newInstance(int shopId) {
         Bundle args = new Bundle();
@@ -166,6 +168,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
         Util.setOnClickListener(view,R.id.btn_menu,this);
         Util.setOnClickListener(view,R.id.btn_cart,this);
+        btnComment = view.findViewById(R.id.btn_comment);
         btnCart = view.findViewById(R.id.btn_cart);
         btnCart.setOnClickListener((v -> {
             if (User.getUserId() > 0) {
@@ -287,13 +290,13 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private void showGoodsFragment(boolean show) {
         if (show) {
             tvShopTitle.setVisibility(View.GONE);
-            btnCustomer.setVisibility(View.GONE);
+            btnCustomer.setVisibility(View.VISIBLE);
             btnCart.setVisibility(View.VISIBLE);
+            btnComment.setVisibility(View.GONE);
             btnSearch.setVisibility(View.GONE);
             llTabButtonContainer.setVisibility(View.VISIBLE);
         } else {
             tvShopTitle.setVisibility(View.VISIBLE);
-//            btnCustomerMenu.setVisibility(View.VISIBLE);
             btnCart.setVisibility(View.GONE);
             llTabButtonContainer.setVisibility(View.GONE);
         }
@@ -351,9 +354,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                 return;
             }
             Util.startFragmentForResult(AddCommentFragment.newInstance(storeId, commentChannel), RequestCode.ADD_COMMENT.ordinal());
-        }else if(id==R.id.menu_blue){
-            Util.startFragment(ShopCustomerServiceFragment.newInstance(storeId, storeFigure));
-        } else { // 點擊底部導航欄
+        }else { // 點擊底部導航欄
             int len = bottomBarButtonIds.length;
             // 想要选中的Fragment的下标
             int index = -1;
@@ -395,10 +396,13 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             for (int i=0;i<3&&i<customerCount;i++) {
                 mCustomers[i].setVisibility(View.VISIBLE);
             }
+            SLog.info("展開顯示了%d個圖標",customerCount);
 //            llFloatButtonList.getBackground().setAlpha(1);
             Glide.with(_mActivity).load(R.drawable.icon_red_customer).centerCrop().into(btnCustomer);
             if (customerCount > 3) {
                 customerMore.setVisibility(View.VISIBLE);
+            } else {
+                customerMore.setVisibility(View.GONE);
             }
         }
         customerExpanded = !customerExpanded;
@@ -599,18 +603,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     }
                     customerCount = serviceStaffList.length();
                     if (serviceStaffList.length() > 3) {
-//                        FloatingActionButton moreActionButton = new FloatingActionButton(context);
-//                        moreActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
-//                        Glide.with(context).load(R.drawable.btn_customer_more).centerCrop().into(moreActionButton);
-//                        moreActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
-//                        moreActionButton.setOnClickListener(v -> {
-//                            new XPopup.Builder(_mActivity)
-//                                    // 如果不加这个，评论弹窗会移动到软键盘上面
-//                                    .moveUpToKeyboard(false)
-//                                    .asCustom(new StoreCustomerServicePopup(_mActivity, storeId,null))
-//                                    .show();
-//                        });
-//                        customerList.add(moreActionButton);
+
                         customerMore.setOnClickListener(v -> {
                             new XPopup.Builder(_mActivity)
                                     // 如果不加这个，评论弹窗会移动到软键盘上面
@@ -627,7 +620,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
                         CustomerServiceStaff staff = new CustomerServiceStaff();
                         Util.packStaffInfo(staff, serviceStaff);
-                        FloatingActionButton floatingActionButton = new FloatingActionButton(context);
+//                        FloatingActionButton floatingActionButton = new FloatingActionButton(context);
 //                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
 //                        CircleImageView view =new CircleImageView(context);
 //                        view.setMaxWidth(25);
@@ -637,7 +630,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 //                        floatingActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
                         SLog.info("staff.avatar %s",staff.avatar);
 
-
+                        Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(staff.avatar)).centerCrop().into(mCustomers[i]);
                         mCustomers[i].setOnClickListener(v ->{
                                     String memberName = staff.memberName;
                                     String imName = staff.imName;
@@ -662,7 +655,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                                 Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
                             }
                                 });
-                        customerList.add(floatingActionButton);
+//                        customerList.add(floatingActionButton);
                     }
                     customerListLoaded=true;
 

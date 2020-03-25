@@ -126,18 +126,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center_horizontal"
         android:orientation="vertical">
-        <com.github.clans.fab.FloatingActionMenu
-            android:visibility="gone"
-            android:id="@+id/menu_blue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:menu_fab_size="mini"
-            fab:menu_colorNormal="@color/tw_white"
-            fab:menu_colorPressed="#2272CD"
-            fab:menu_colorRipple="#62B2FF"
-            fab:menu_icon="@drawable/btn_customer_service">
 
-        </com.github.clans.fab.FloatingActionMenu>
         <LinearLayout
             android:id="@+id/btn_customer_list"
             android:layout_width="match_parent"
@@ -160,19 +149,21 @@
                 android:visibility="gone"
                 android:layout_margin="@dimen/dp_4"
                 android:id="@+id/btn_customer3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/btn_customer_service"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_default_avatar"
                 android:outlineAmbientShadowColor="@color/tw_white"
                 android:outlineSpotShadowColor="@color/tw_white"
                 />
             <ImageView
                 android:visibility="gone"
                 android:layout_margin="@dimen/dp_4"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="fitXY"
                 android:id="@+id/btn_customer2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/btn_customer_service"
+                android:src="@drawable/icon_default_avatar"
                 />
 
             <ImageView
@@ -180,9 +171,10 @@
                 android:layout_margin="@dimen/dp_4"
 
                 android:id="@+id/btn_customer1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_customer_expand"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_default_avatar"
                 />
 
             <ImageView
