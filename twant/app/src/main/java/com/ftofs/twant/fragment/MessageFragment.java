@@ -32,14 +32,18 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Conversation;
 import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.tangram.SloganView;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.BadgeUtil;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.SqliteUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.vo.member.MemberVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.MaxHeightRecyclerView;
 import com.ftofs.twant.widget.ScaledButton;
@@ -89,6 +93,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     ChatConversation platformCustomer;
 
     LinearLayout llMessageListContainer;
+    List<String> updateConversationList =new ArrayList<>();
 
     int totalIMUnreadCount;  // 未讀IM消息總數
     UnreadCount unreadCount;
@@ -324,6 +329,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
             List<Conversation> allConversations = Conversation.getAllConversations(); //查询Conversation表的所有数据
             SLog.info("来自网络會話數[%d]，本地保存的会话数[%d]", conversationMap.size(),allConversations.size());
+            updateConversationList.clear();
             for (Conversation conversation : allConversations) {
                 //此處要增加帶s標識member Name和平臺客服的過濾
                 String memberName = conversation.memberName;
@@ -334,17 +340,16 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 };
                 long timestamp = conversation.lastMessageTime;
                 SLog.info("本地保存记录：%s,时间%d",conversation.nickname,timestamp);
-
-                if (timestamp < 1) {
-                    continue;
+                if (conversation.needUpdate()) {
+                    SLog.info("%s需要更新",memberName);
+                    updateConversationList.add(memberName);
                 }
+
                 //不是每條都在數據庫保存過，直接取數據庫不可以 gzp
-                FriendInfo friendInfo = new FriendInfo();
-//                FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
-                friendInfo.memberName = memberName;
+                FriendInfo friendInfo = FriendInfo.getFriendInfoByMemberName(memberName);
                 String extField = conversation.extField;
                 SLog.info("extField[%s],Conversation[%s]", extField,conversation.toString());
-                if (!StringUtil.isEmpty(extField)) {
+                if (!StringUtil.isEmpty(conversation.nickname)) {
                     friendInfo.nickname = conversation.nickname;
                     friendInfo.avatarUrl = conversation.avatarUrl;
                     friendInfo.role = conversation.role;
@@ -369,11 +374,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 ChatConversation chatConversation = new ChatConversation();
 
                 chatConversation.friendInfo = friendInfo;
-                chatConversation.chatConversationId = conversation.conversationId;
                 chatConversation.unreadCount = conversation.unreadMsgCount;
                 chatConversation.lastMessageType = conversation.lastMessageType;
                 chatConversation.lastMessage = conversation.lastMessageText;
-                chatConversation.timestamp = timestamp;
+                if (timestamp > 1) {
+                    chatConversation.timestamp = timestamp;
+                }
                 totalIMUnreadCount += chatConversation.unreadCount;
                 SLog.info("here!!storeid%d, platId%d",friendInfo.storeId,PLATFORM_CUSTOM_STORE_ID);
                if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID) {
@@ -398,6 +404,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
                 chatConversationList.add(0,platformCustomer);
             }
+            updateConversationInfo();
             displayUnreadCount();
 
             adapter.setNewData(chatConversationList);
@@ -407,12 +414,32 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
+    private void updateConversationInfo() {
+        if (updateConversationList.size() > 0) {
+            SLog.info("更新了一波本地會話數據庫%d",updateConversationList.size());
+            for (String memberName : updateConversationList) {
+                ApiUtil.getImInfo(_mActivity, memberName,memberVo->{
+                    MemberVo member = (MemberVo) memberVo;
+                    Conversation.upsertConversationByMemberVo(member);
+                    for (ChatConversation chatConversation : chatConversationList) {
+                        if (chatConversation.friendInfo.memberName.equals(memberName)) {
+                            chatConversation.friendInfo.role = member.role;
+                            chatConversation.friendInfo.nickname = member.role > 0 ? member.storeName + " " + member.getNickName(): member.getNickName();
+                            chatConversation.friendInfo.avatarUrl = member.role > 0 ? member.storeAvatar : member.getAvatar();
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                });
+            }
+        }
+    }
+
     private void saveEMConversation(Map<String, EMConversation> conversationMap) {
         int count = 0;
         for (Map.Entry<String, EMConversation> entry : conversationMap.entrySet()) {
             EMConversation conversation = entry.getValue();
             String memberName = entry.getKey();
-            Conversation.upsertConversationInfo(conversation.conversationId(),memberName,conversation.getAllMessages(),conversation.getLastMessage(),conversation.getExtField(),conversation.getUnreadMsgCount());
+            Conversation.upsertConversationInfo(memberName,conversation.getAllMessages(),conversation.getLastMessage(),conversation.getExtField(),conversation.getUnreadMsgCount());
             Conversation loacal = Conversation.getByMemberName(memberName);
             if (loacal == null) {
                 SLog.info("Error,存取對話失敗");
@@ -737,6 +764,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             EasyJSONObject conversation = (EasyJSONObject) object;
                             String memberName = conversation.getSafeString("memberName");
                             String nickName = conversation.getSafeString("nickName");
+                            if (StringUtil.isEmpty(nickName)) {
+                                continue;
+                            }
                             String avatar = conversation.getSafeString("avatar");
                             String storeAvatar = conversation.getSafeString("storeAvatar");
                             String messageContent=conversation.getSafeString("messageContent");
@@ -755,15 +785,23 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             }
                             if (!has) {
                                 ChatConversation newChat = new ChatConversation();
-                                if (role > 0) {
-                                    newChat.friendInfo = FriendInfo.newInstance(memberName, storeName+nickName, storeAvatar, role);
-                                } else {
-                                    newChat.friendInfo = FriendInfo.newInstance(memberName, nickName, avatar, role);
-                                }
+                                String name = role > 0 ? storeName + nickName : nickName;
+                                String avatarUrl = role > 0 ? storeAvatar : avatar;
+                                int time =Jarbon.parse(sendTime).getTimestamp();
+                                newChat.friendInfo = FriendInfo.newInstance(memberName, name, avatarUrl, role);
                                 newChat.friendInfo.storeId = storeId;
                                 newChat.friendInfo.storeName = storeName;
                                 newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 newChat.lastMessage = "txt::"+messageContent+":";
+//                                newChat.timestamp = time;
+                                Conversation conversation1 = Conversation.getByMemberName(memberName);
+                                conversation1.nickname = name;
+                                conversation1.avatarUrl = avatarUrl;
+                                conversation1.lastMessageText = messageContent;
+                                conversation1.storeId = storeId;
+                                conversation1.role = role;
+                                conversation1.timestamp = time;
+                                conversation1.save();
 //                                newChat.timestamp = sendTime;
                                 chatConversationList.add(newChat);
                             }
