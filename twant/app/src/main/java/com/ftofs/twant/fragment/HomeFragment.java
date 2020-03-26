@@ -67,10 +67,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     BasePopupView popupViewAd;
 
-    public static NewHomeFragment newInstance() {
+    public static HomeFragment newInstance() {
         Bundle args = new Bundle();
 
-        NewHomeFragment fragment = new NewHomeFragment();
+        HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
