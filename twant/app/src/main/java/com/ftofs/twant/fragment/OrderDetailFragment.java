@@ -27,6 +27,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.OrderOperation;
+import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
 import com.ftofs.twant.entity.GoodsInfo;
@@ -108,6 +109,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     String storePhone;
     boolean needReloadData;
+
+    int ordersState;
+    int showRefundWaiting;
 
 
     public static final String TEXT_MEMBER_BUY_AGAIN = "showMemberBuyAgain";
@@ -285,6 +289,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             "action", Constant.ACTION_REFUND,
                             "ordersId", item.ordersId,
                             "ordersGoodsId", item.ordersGoodsId).toString()));
+                } else if (id == R.id.btn_refund_all) {
+                    Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
+                            "action", Constant.ACTION_REFUND_ALL,
+                            "ordersId", item.ordersId).toString()));
+                } else if (id == R.id.btn_refund_waiting) {
+                    Util.startFragment(RefundFragment.newInstance());
                 } else if (id == R.id.btn_return) {
                     Util.startFragment(GoodsRefundFragment.newInstance(EasyJSONObject.generate(
                             "action", Constant.ACTION_RETURN,
@@ -610,9 +620,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     storeId = ordersVo.getInt("storeId");
                     storeName = ordersVo.getSafeString("storeName");
                     String ordersStateName = ordersVo.getSafeString("ordersStateName");
-                    int ordersState = ordersVo.getInt("ordersState");
+                    ordersState = ordersVo.getInt("ordersState");
+                    showRefundWaiting = ordersVo.getInt("showRefundWaiting");
                     switch (ordersState) {
-                        case 10:
+                        case OrderState.TO_BE_PAY:
                             iconOrderStatus.setImageResource(R.drawable.icon_wait_pay);
                             Jarbon createTime = Jarbon.parse(ordersVo.getSafeString("createTime"));
                             int diff =createTime.diffInMinutes(new Jarbon());
@@ -621,17 +632,17 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             llShipInfo.setVisibility(View.GONE);
                             llShipType.setVisibility(View.GONE);
                             break;
-                        case 20:
+                        case OrderState.TO_BE_SEND:
                             iconOrderStatus.setImageResource(R.drawable.icon_wait_send);
                             tvOrderStatusDesc.setText("商家正在處理您的商品，請耐心等待商家發貨。");
                             llShipInfo.setVisibility(View.GONE);
                             llShipType.setVisibility(View.GONE);
                             break;
-                        case 30:
+                        case OrderState.TO_BE_RECEIVE:
                             tvOrderStatusDesc.setText("您購買的商品已經發貨，請耐心等待快遞人員的派送。");
                             iconOrderStatus.setImageResource(R.drawable.icon_wait_receive);
                             break;
-                        case 40:
+                        case OrderState.TO_BE_COMMENT:
                             tvOrderStatusDesc.setText("您購買的商品已經完成派送，祝您使用愉快。");
                             iconOrderStatus.setImageResource(R.drawable.icon_order_ok);
                             break;
@@ -798,6 +809,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("commonId"),
                                 goodsVo.getInt("goodsId"),
                                 goodsVo.getInt("ordersId"),
+                                ordersState,
+                                showRefundWaiting,
                                 goodsVo.getInt("ordersGoodsId"),
                                 goodsVo.getSafeString("imageSrc"),
                                 goodsVo.getSafeString("goodsName"),

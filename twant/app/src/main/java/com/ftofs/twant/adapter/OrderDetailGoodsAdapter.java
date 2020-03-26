@@ -7,6 +7,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.util.StringUtil;
 
@@ -31,7 +33,7 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
         this.context = context;
 
         timesSign = context.getString(R.string.times_sign);
-        addClickableChildrenId(R.id.btn_goto_goods, R.id.btn_refund, R.id.btn_return, R.id.btn_view_complaint, R.id.btn_complain);
+        addClickableChildrenId(R.id.btn_goto_goods, R.id.btn_refund, R.id.btn_refund_all, R.id.btn_refund_waiting, R.id.btn_return, R.id.btn_view_complaint, R.id.btn_complain);
     }
 
 
@@ -46,14 +48,31 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
         setText(itemView,R.id.tv_goods_amount,StringUtil.formatPrice(context,itemData.goodsPrice,0));
         if (itemData.refundType == 0) {
             View btnRefund = itemView.findViewById(R.id.btn_refund);
+            View btnRefundAll = itemView.findViewById(R.id.btn_refund_all);
+            View btnRefundWaiting = itemView.findViewById(R.id.btn_refund_waiting);
             View btnReturn = itemView.findViewById(R.id.btn_return);
-            if (itemData.showRefund == 1) {
-                btnRefund.setVisibility(View.VISIBLE);
-                btnReturn.setVisibility(View.VISIBLE);
+            if (itemData.showRefundWaiting == Constant.TRUE_INT) {
+                btnRefundWaiting.setVisibility(View.VISIBLE);
             } else {
-                btnRefund.setVisibility(View.GONE);
-                btnReturn.setVisibility(View.GONE);
+                if (itemData.showRefund == 1) {
+                    btnRefund.setVisibility(View.VISIBLE);
+                    btnReturn.setVisibility(View.VISIBLE);
+                } else {
+                    btnRefund.setVisibility(View.GONE);
+                    btnReturn.setVisibility(View.GONE);
+                }
+
+                if (itemData.orderState == OrderState.TO_BE_SEND) {
+                    btnRefund.setVisibility(View.GONE);
+                    btnRefundAll.setVisibility(View.VISIBLE);
+                    btnReturn.setVisibility(View.GONE);
+                } else if (itemData.orderState == OrderState.TO_BE_RECEIVE) {
+                    btnRefund.setVisibility(View.VISIBLE);
+                    btnRefundAll.setVisibility(View.GONE);
+                    btnReturn.setVisibility(View.VISIBLE);
+                }
             }
+
         } else if (itemData.refundType == 1) { // 查看退款
 
         } else if (itemData.refundType == 2) { // 查看退貨

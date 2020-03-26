@@ -94,6 +94,28 @@
                 android:visibility="gone"
                 />
             <TextView
+                android:id="@+id/btn_refund_all"
+                android:layout_width="76dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:text="全部退款"
+                android:textColor="@color/tw_black"
+                android:textSize="13sp"
+                android:background="@drawable/smaller_outline_button_revert"
+                android:visibility="gone"
+                />
+            <TextView
+                android:id="@+id/btn_refund_waiting"
+                android:layout_width="76dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:text="退款中"
+                android:textColor="@color/tw_black"
+                android:textSize="13sp"
+                android:background="@drawable/smaller_outline_button_revert"
+                android:visibility="gone"
+                />
+            <TextView
                 android:layout_width="76dp"
                 android:layout_height="26dp"
                 android:gravity="center"
