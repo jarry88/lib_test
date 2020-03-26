@@ -3,6 +3,8 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,125 +173,144 @@ public class SendPackageFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void doCommit() {
-        // 校驗收發貨地址信息
-
-        if (StringUtil.isEmpty(senderName) || senderAreaId1 == 0 || senderAreaId == 0 || StringUtil.isEmpty(senderAreaInfo) ||
-                StringUtil.isEmpty(senderAddress) || StringUtil.isEmpty(senderMobile) || StringUtil.isEmpty(senderMobileAreaCode)) {
-            ToastUtil.error(_mActivity, "請填寫有效的發貨信息");
-            return;
-        }
-
-        if (StringUtil.isEmpty(receiverName) || receiverAreaId1 == 0 || receiverAreaId == 0 || StringUtil.isEmpty(receiverAreaInfo) ||
-                StringUtil.isEmpty(receiverAddress) || StringUtil.isEmpty(receiverMobile) || StringUtil.isEmpty(receiverMobileAreaCode)) {
-            SLog.info("receiverName[%s], receiverAreaId1[%d], receiverAreaId[%d], receiverAreaInfo[%s], receiverAddress[%s], receiverMobile[%s], receiverMobileAreaCode[%s]",
-                    receiverName, receiverAreaId1, receiverAreaId, receiverAreaInfo, receiverAddress, receiverMobile, receiverMobileAreaCode);
-            ToastUtil.error(_mActivity, "請填寫有效的收貨信息");
-            return;
-        }
-
-        StringBuilder packageType = new StringBuilder();
-        boolean first = true;
-        for (String item: packageTypeSet) {
-            if (!first) {
-                packageType.append(",");
-            }
-            packageType.append(item);
-            first = false;
-        }
-
-        String customPackageType = etCustomPackageType.getText().toString().trim();
-        if (!StringUtil.isEmpty(customPackageType)) {
-            if (!first) {
-                packageType.append(",");
-            }
-            packageType.append(customPackageType);
-            first = false;
-        }
-
-        SLog.info("packageType[%s]", packageType);
-
-        String packageWeight = etPackageWeight.getText().toString().trim();
-        String packageLength = etPackageLength.getText().toString().trim();
-        String packageWidth = etPackageWidth.getText().toString().trim();
-        String packageHeight = etPackageHeight.getText().toString().trim();
-        String remark = etRemark.getText().toString().trim();
-
-        if (StringUtil.isEmpty(packageWeight)) {
-            ToastUtil.error(_mActivity, getString(R.string.input_package_weight_hint));
-            return;
-        }
-
-        Double weight = Double.valueOf(packageWeight);
-        Double length = Double.valueOf(packageLength);
-        Double width = Double.valueOf(packageWidth);
-        Double height = Double.valueOf(packageHeight);
-
-        String token = User.getToken();
-        // token要附在url中
-        String path = Api.PATH_PACKAGE_DELIVERY + Api.makeQueryString(EasyJSONObject.generate("token", token));
-        SLog.info("url[%s]", path);
-
-        EasyJSONObject receiverAddressInfo = EasyJSONObject.generate(
-                "realName", receiverName,
-                "areaId1", receiverAreaId1,
-                "areaId2", receiverAreaId2,
-                "areaId3", receiverAreaId3,
-                "areaId4", receiverAreaId4,
-                "areaId", receiverAreaId,
-                "areaInfo", receiverAreaInfo,
-                "address", receiverAddress,
-                "mobPhone", receiverMobile,
-                "mobileAreaCode", receiverMobileAreaCode);
-
-        EasyJSONObject cargo = EasyJSONObject.generate(
-                "name", packageType,
-                "quantity", "1",
-                "weight", weight,
-                "height", height,
-                "width", width,
-                "cargoLong", length);
-
-        EasyJSONObject entityVo = EasyJSONObject.generate(
-                "consigneeAddress", mergeAddress(receiverAreaInfo, receiverAddress),
-                "consigneeName", receiverName,
-                "consigneePhone", receiverMobileAreaCode + receiverMobile,
-                "consignerAddress", mergeAddress(senderAreaInfo, senderAddress),
-                "consignerName", senderName,
-                "consignerPhone", senderMobileAreaCode + senderMobile,
-                "remarks", remark,
-                "cargoList", EasyJSONArray.generate(cargo));
-
-        EasyJSONObject params = EasyJSONObject.generate(
-                "addressList", EasyJSONArray.generate(receiverAddressInfo),
-                "entityVo", entityVo
-        );
-
-        SLog.info("params[%s]", params.toString());
-
-        Api.postJsonUi(path, params.toString(), new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(_mActivity, e);
+        try {
+            // 校驗收發貨地址信息
+            if (StringUtil.isEmpty(senderName) || senderAreaId1 == 0 || senderAreaId == 0 || StringUtil.isEmpty(senderAreaInfo) ||
+                    StringUtil.isEmpty(senderAddress) || StringUtil.isEmpty(senderMobile) || StringUtil.isEmpty(senderMobileAreaCode)) {
+                ToastUtil.error(_mActivity, "請填寫有效的發貨信息");
+                return;
             }
 
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
+            if (StringUtil.isEmpty(receiverName) || receiverAreaId1 == 0 || receiverAreaId == 0 || StringUtil.isEmpty(receiverAreaInfo) ||
+                    StringUtil.isEmpty(receiverAddress) || StringUtil.isEmpty(receiverMobile) || StringUtil.isEmpty(receiverMobileAreaCode)) {
+                SLog.info("receiverName[%s], receiverAreaId1[%d], receiverAreaId[%d], receiverAreaInfo[%s], receiverAddress[%s], receiverMobile[%s], receiverMobileAreaCode[%s]",
+                        receiverName, receiverAreaId1, receiverAreaId, receiverAreaInfo, receiverAddress, receiverMobile, receiverMobileAreaCode);
+                ToastUtil.error(_mActivity, "請填寫有效的收貨信息");
+                return;
+            }
 
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        return;
-                    }
-
-                    ToastUtil.success(_mActivity, "提交成功");
-
-                    hideSoftInputPop();
-                } catch (Exception e) {
-
+            StringBuilder packageType = new StringBuilder();
+            boolean first = true;
+            for (String item: packageTypeSet) {
+                if (!first) {
+                    packageType.append(",");
                 }
+                packageType.append(item);
+                first = false;
             }
-        });
+
+            String customPackageType = etCustomPackageType.getText().toString().trim();
+            if (!StringUtil.isEmpty(customPackageType)) {
+                if (!first) {
+                    packageType.append(",");
+                }
+                packageType.append(customPackageType);
+                first = false;
+            }
+
+            SLog.info("packageType[%s]", packageType);
+
+            String packageWeight = etPackageWeight.getText().toString().trim();
+            String packageLength = etPackageLength.getText().toString().trim();
+            String packageWidth = etPackageWidth.getText().toString().trim();
+            String packageHeight = etPackageHeight.getText().toString().trim();
+            String remark = etRemark.getText().toString().trim();
+
+            if (StringUtil.isEmpty(packageWeight)) {
+                ToastUtil.error(_mActivity, getString(R.string.input_package_weight_hint));
+                return;
+            }
+
+
+            if (StringUtil.isEmpty(packageWeight)) {
+                packageWeight = "0";
+            }
+            Double weight = Double.parseDouble(packageWeight);
+
+            if (StringUtil.isEmpty(packageLength)) {
+                packageLength = "0";
+            }
+            Double length = Double.parseDouble(packageLength);
+
+            if (StringUtil.isEmpty(packageWidth)) {
+                packageWidth = "0";
+            }
+            Double width = Double.parseDouble(packageWidth);
+
+            if (StringUtil.isEmpty(packageHeight)) {
+                packageHeight = "0";
+            }
+            Double height = Double.parseDouble(packageHeight);
+
+            String token = User.getToken();
+            // token要附在url中
+            String path = Api.PATH_PACKAGE_DELIVERY + Api.makeQueryString(EasyJSONObject.generate("token", token));
+            SLog.info("url[%s]", path);
+
+            EasyJSONObject receiverAddressInfo = EasyJSONObject.generate(
+                    "realName", receiverName,
+                    "areaId1", receiverAreaId1,
+                    "areaId2", receiverAreaId2,
+                    "areaId3", receiverAreaId3,
+                    "areaId4", receiverAreaId4,
+                    "areaId", receiverAreaId,
+                    "areaInfo", receiverAreaInfo,
+                    "address", receiverAddress,
+                    "mobPhone", receiverMobile,
+                    "mobileAreaCode", receiverMobileAreaCode);
+
+            EasyJSONObject cargo = EasyJSONObject.generate(
+                    "name", packageType,
+                    "quantity", "1",
+                    "weight", weight,
+                    "height", height,
+                    "width", width,
+                    "cargoLong", length);
+
+            EasyJSONObject entityVo = EasyJSONObject.generate(
+                    "consigneeAddress", mergeAddress(receiverAreaInfo, receiverAddress),
+                    "consigneeName", receiverName,
+                    "consigneePhone", receiverMobileAreaCode + receiverMobile,
+                    "consignerAddress", mergeAddress(senderAreaInfo, senderAddress),
+                    "consignerName", senderName,
+                    "consignerPhone", senderMobileAreaCode + senderMobile,
+                    "remarks", remark,
+                    "cargoList", EasyJSONArray.generate(cargo));
+
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "addressList", EasyJSONArray.generate(receiverAddressInfo),
+                    "entityVo", entityVo
+            );
+
+            SLog.info("params[%s]", params.toString());
+
+            Api.postJsonUi(path, params.toString(), new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        ToastUtil.success(_mActivity, "提交成功");
+
+                        hideSoftInputPop();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 
     @Override
