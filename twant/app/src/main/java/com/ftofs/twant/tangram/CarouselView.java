@@ -97,7 +97,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
 
     @Override
     public void postBindView(BaseCell cell) {
-        SLog.info("CarouselView::postBindView");
+        // SLog.info("CarouselView::postBindView");
         Object data = cell.optParam("data");
         if (data != null) {
             WebSliderItem webSliderItem = (WebSliderItem) data;

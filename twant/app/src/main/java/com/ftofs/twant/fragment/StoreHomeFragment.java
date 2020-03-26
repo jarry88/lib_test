@@ -59,6 +59,9 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
     Timer timer;
     TimerHandler timerHandler;
 
+    long featureGoodsNavClickTimestamp = 0; // 【鎮店之寶】最近一次點擊的時間戳
+    public static final long FEATURE_GOODS_NAV_CLICK_INTERVAL = 500; // 【鎮店之寶】兩次點擊之間的最短時間間隔（毫秒）
+
     public static StoreHomeFragment newInstance() {
         StoreHomeFragment fragment = new StoreHomeFragment();
         return fragment;
@@ -180,6 +183,9 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
 
         int position = featuresGoodsLayoutManager.findFirstCompletelyVisibleItemPosition();
         SLog.info("position[%d]", position);
+        if (position == -1) {
+            return;
+        }
         rvFeaturesGoodsList.smoothScrollToPosition(position + direction);
     }
 
@@ -342,10 +348,18 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_view_prev_feature_goods) {
-            scrollFeatureGoods(-1);
-        } else if (id == R.id.btn_view_next_feature_goods) {
-            scrollFeatureGoods(1);
+        if (id == R.id.btn_view_prev_feature_goods || id == R.id.btn_view_next_feature_goods) {
+            long now = System.currentTimeMillis();
+
+            if (now - featureGoodsNavClickTimestamp < FEATURE_GOODS_NAV_CLICK_INTERVAL) {
+                return;
+            }
+            featureGoodsNavClickTimestamp = now;
+            if (id == R.id.btn_view_prev_feature_goods) {
+                scrollFeatureGoods(-1);
+            } else {
+                scrollFeatureGoods(1);
+            }
         }
     }
 }
