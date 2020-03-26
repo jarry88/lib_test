@@ -780,7 +780,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         EasyJSONArray voucherVoList = buyStoreVo.getSafeArray("voucherVoList");
                         for (Object object2 : voucherVoList) {
                             StoreVoucherVo storeVoucherVo = (StoreVoucherVo) EasyJSONBase.jsonDecode(StoreVoucherVo.class, object2.toString());
-                            storeVoucherVoList.add(storeVoucherVo);
+                            if (storeVoucherVo.useEnable == Constant.TRUE_INT) {
+                                storeVoucherVoList.add(storeVoucherVo);
+                            }
                             SLog.info("storeVoucherVo[%s]", storeVoucherVo);
                         }
 

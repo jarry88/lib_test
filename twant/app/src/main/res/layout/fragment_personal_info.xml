@@ -27,7 +27,7 @@
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
-            android:text="@string/base_info_fragment_title"
+            android:text="個人信息"
             />
     </RelativeLayout>
     <ScrollView
