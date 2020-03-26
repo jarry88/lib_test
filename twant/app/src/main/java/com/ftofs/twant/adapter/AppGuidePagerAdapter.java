@@ -77,7 +77,7 @@ public class AppGuidePagerAdapter extends PagerAdapter {
 
         ImageView iv = appGuide.findViewById(R.id.img_background);
         // 採用fitCenter() 齊高寬度適應是指背景圖高度保持與屏幕高度一致，隨著設備分辨率不同，背景圖片跟隨變化，寬度按照等比方式適應；
-        Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).fitCenter().into(iv);
+        Glide.with(context).load(StringUtil.normalizeImageUrl(imageList.get(position))).centerCrop().into(iv);
         container.addView(appGuide);
 
         return appGuide;
