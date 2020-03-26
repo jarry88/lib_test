@@ -661,7 +661,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             likeCount = storeInfo.getInt("likeCount");
             tvLikeCount.setText(String.valueOf(likeCount));
             favoriteCount = storeInfo.getInt("collectCount");
-            tvFavoriteCount.setText(String.valueOf(favoriteCount));
+            tvFavoriteCount.setText(R.string.text_follow);
 
             isLike = storeInfo.getInt("isLike");
             isFavorite = storeInfo.getInt("isFavorite");
@@ -1077,10 +1077,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private void updateFavoriteView() {
         if (isFavorite == Constant.ONE) {
             btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_yellow);
-            tvFavoriteCount.setText("已關注");
+            tvFavoriteCount.setText(R.string.text_followed);
         } else {
             btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_grey);
-            tvFavoriteCount.setText(String.valueOf(favoriteCount));
+            tvFavoriteCount.setText(R.string.text_follow);
         }
     }
 

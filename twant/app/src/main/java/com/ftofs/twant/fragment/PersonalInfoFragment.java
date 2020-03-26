@@ -525,6 +525,10 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                 SLog.info("absolutePath[%s]", absolutePath);
 
                 File file = new File(absolutePath);
+                if(Util.bigImageError(_mActivity,file)){
+                    return;
+                }
+
                 Api.asyncUploadFile(file);
             }
         } else if (action == ACTION_SET_PERSONAL_BACKGROUND) { // 設置個人專頁背景圖
@@ -560,6 +564,9 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     @Override
                     public Object doWork() {
                         File file = new File(absolutePath);
+                        if(Util.bigImageError(_mActivity,file)){
+                            return null;
+                        }
                         String imageUrl = Api.syncUploadFile(file);
                         String token = User.getToken();
 

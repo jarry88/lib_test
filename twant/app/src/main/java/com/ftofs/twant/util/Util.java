@@ -88,6 +88,7 @@ import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import cn.snailpad.easyjson.json.JSONObject;
 import me.yokeyword.fragmentation.ISupportFragment;
+import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 
@@ -1154,6 +1155,19 @@ public class Util {
             }
         }
         return params;
+    }
+
+    public static boolean bigImageError(SupportActivity activity, File file) {
+        if (file.exists() && file.isFile()) {
+            if (file.length() / 1024 > 495) {
+                ToastUtil.error(activity, "圖片超過上限");
+                return true;
+            }
+            return false;
+        } else {
+            ToastUtil.error(activity, "圖片打開失敗");
+            return true;
+        }
     }
 }
 
