@@ -178,7 +178,7 @@ dependencies {
     // 仿微信軟鍵盤、表情切換
     // implementation 'am.widget:smoothinputlayout:1.1.2'
     implementation 'cn.yipianfengye.android:zxing-library:2.2'
-    implementation 'com.yanzhenjie.permission:support:2.0.1'
+    implementation 'com.yanzhenjie:permission:2.0.3'
 
     implementation 'top.zibin:Luban:1.1.8'
 

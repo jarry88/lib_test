@@ -197,6 +197,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
                     break;
                 case R.id.btn_set_personal_background:
+                    action = ACTION_SET_PERSONAL_BACKGROUND;
                     selectPersonalBackground();
                     break;
                 case R.id.btn_modify_mobile:
@@ -564,9 +565,6 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     @Override
                     public Object doWork() {
                         File file = new File(absolutePath);
-                        if(Util.bigImageError(_mActivity,file)){
-                            return null;
-                        }
                         String imageUrl = Api.syncUploadFile(file);
                         String token = User.getToken();
 
