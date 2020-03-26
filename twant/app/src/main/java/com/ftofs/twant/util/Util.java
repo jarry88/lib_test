@@ -708,6 +708,9 @@ public class Util {
      * @return
      */
     public static String getYoutubeVideoId(String youtubeUrl) {
+        if (StringUtil.isEmpty(youtubeUrl)) {
+            return null;
+        }
         // 先處理第3種形式
         if (youtubeUrl.startsWith("https://youtu.be/")) {
             return Urls.parse(youtubeUrl).path().filename();

@@ -84,6 +84,13 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
                 Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.storeFigureImage)).centerCrop().into(imgStoreFigure);
             }
 
+            if (StringUtil.isEmpty(item.storeVideoUrl)) {
+                helper.setGone(R.id.btn_play, false);
+            } else {
+                helper.setGone(R.id.btn_play, true);
+                helper.addOnClickListener(R.id.btn_play);
+            }
+
             TextView tvDistance = helper.getView(R.id.tv_distance);
             if (item.distance < Constant.STORE_DISTANCE_THRESHOLD) {
                 // 如果distance為0，則隱藏距離信息

@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,12 +21,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsSearchResultAdapter;
 import com.ftofs.twant.adapter.StoreSearchResultAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SearchType;
@@ -51,6 +54,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
 import com.ftofs.twant.widget.StoreFilterPopup;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -415,6 +419,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     FriendInfo.upsertFriendInfo(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
                     EMConversation conversation = ChatUtil.getConversation(imName, staff.staffName, staff.avatar, ChatUtil.ROLE_CS_AVAILABLE);
                     Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
+                } else if (id == R.id.btn_play) {
+                    StoreSearchItem storeSearchItem = storeItemList.get(position);
+                    String storeVideoUrl = storeSearchItem.storeVideoUrl;
+                    String videoId = Util.getYoutubeVideoId(storeVideoUrl);
+                    if (!StringUtil.isEmpty(videoId)) {
+                        Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, videoId);
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -871,8 +883,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                     }
                                 }
 
+                                // 店鋪形象視頻
+                                String storeVideoUrl = null;
+                                if (store.exists("videoUrl")) {
+                                    storeVideoUrl = store.getSafeString("videoUrl");
+                                }
 
-                                storeItemList.add(new StoreSearchItem(storeId, storeView, storeAvatarUrl, storeName, className, mainBusiness,
+
+                                storeItemList.add(new StoreSearchItem(storeId, storeView, storeAvatarUrl, storeVideoUrl, storeName, className, mainBusiness,
                                         storeFigureImage, distance, shopDay, likeCount,followCount,viewCount, goodsCommonCount, goodsImageList, jobList,staff));
                             }
 
