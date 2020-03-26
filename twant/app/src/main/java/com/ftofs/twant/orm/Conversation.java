@@ -8,7 +8,9 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.vo.member.MemberVo;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.umeng.commonsdk.debug.E;
@@ -50,33 +52,49 @@ public class Conversation extends LitePalSupport {
     /**
      * 更新会话信息
      *
-     * @param conversationId
      * @param newEMMessageList       新得到的数据列表
      * @param lastMessage     最新信息
      */
-    public static void upsertConversationInfo(String conversationId,String memberName, List<EMMessage> newEMMessageList,EMMessage lastMessage,String extField,int unreadMsgCount) {
+    public static void upsertConversationInfo(String memberName, List<EMMessage> newEMMessageList,EMMessage lastMessage,String extField,int unreadMsgCount) {
         Conversation conversation = getByMemberName(memberName);
-        if (conversation == null) {
-            conversation = new Conversation();
-            conversation.conversationId = conversationId;
-            conversation.allEMMessage = newEMMessageList;
-        } else {
-            for (int i = 0; i < conversation.allEMMessage.size(); i++) {
-                SLog.info("第%d条的时间为%s",i,conversation.allEMMessage.get(i).getMsgTime());
-            }
-            conversation.allEMMessage.addAll(newEMMessageList);
-        }
+
+//        for (int i = 0; i < conversation.allEMMessage.size(); i++) {
+//                SLog.info("第%d条的时间为%s",i,conversation.allEMMessage.get(i).getMsgTime());
+//            }
+        conversation.allEMMessage.addAll(newEMMessageList);
         conversation.unreadMsgCount = unreadMsgCount;
         conversation.memberName = memberName;
-        conversation.lastMessage = lastMessage;
-        conversation.extField = extField;
-        conversation.explainExtField();
-        conversation.explainLastMessage();
+        if (!StringUtil.isEmpty(extField)) {
+            conversation.extField = extField;
+            conversation.explainExtField();
+        }
+        if (lastMessage != null) {
+            conversation.lastMessage = lastMessage;
+            conversation.explainLastMessage();
+        }
         if (conversation.save()) {
             SLog.info("保存会话消息成功:%s,last [%s],lastTime[%s]", conversation.nickname,conversation.getLastMessageText(),conversation.lastMessageTime);
         } else {
             SLog.info("保存会话消息失败:%s", conversation.nickname);
         }
+    }
+
+    public static void upsertConversationByMemberVo(MemberVo member) {
+        if (member == null) {
+            return;
+        }
+        Conversation conversation = Conversation.getByMemberName(member.getMemberName());
+        conversation.role = member.role;
+
+        if (member.role > 0) {
+            conversation.nickname = member.storeName + " " + member.getNickName();
+            conversation.storeId = member.getStoreId();
+            conversation.avatarUrl = member.storeAvatar;
+        } else {
+            conversation.nickname = member.getNickName();
+            conversation.avatarUrl = member.getAvatar();
+        }
+        conversation.save();
     }
 
     public void explainLastMessage() {
@@ -99,8 +117,10 @@ public class Conversation extends LitePalSupport {
 
     }
     private void explainExtField() {
+        if (StringUtil.isEmpty(extField)) {
+            return;
+        }
         EasyJSONObject extFieldObj = EasyJSONObject.parse(extField);
-
         try {
             nickname = extFieldObj.getSafeString("nickName");
             avatarUrl = extFieldObj.getSafeString("avatarUrl");
@@ -154,5 +174,12 @@ public class Conversation extends LitePalSupport {
     public String toString() {
         return String.format("memberName[%s], nickname[%s], avatarUrl[%s], role[%s],lastMessage[%s],lastMessageTime[%s]",
                 memberName, nickname, avatarUrl, role,lastMessageText,lastMessageTime);
+    }
+
+    public boolean needUpdate() {
+        if (StringUtil.isEmpty(nickname)) {
+            return true;
+        }
+        return false;
     }
 }
