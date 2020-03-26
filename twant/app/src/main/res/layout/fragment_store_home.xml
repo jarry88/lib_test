@@ -151,6 +151,7 @@
                     android:textColor="@color/tw_black"
                     android:textSize="12sp"
                     android:text="-"
+                    android:visibility="gone"
                     />
             </LinearLayout>
             <!-- 城友 -->
@@ -234,7 +235,6 @@
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/ll_view_container"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
@@ -258,8 +258,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="@+id/ll_uo_like_container"
-                    app:layout_constraintRight_toRightOf="@+id/ll_open_days_container"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
@@ -313,7 +313,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/ll_view_container"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -332,7 +331,8 @@
                         android:layout_gravity="center_vertical"
                         android:text="-"
                         android:textColor="@color/tw_black"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        />
                 </LinearLayout>
 
                 <!--324新需求隐藏-->
