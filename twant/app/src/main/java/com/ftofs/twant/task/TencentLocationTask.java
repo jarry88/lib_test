@@ -2,18 +2,36 @@ package com.ftofs.twant.task;
 
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.PermissionUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.tencent.map.geolocation.TencentLocationManager;
 import com.tencent.map.geolocation.TencentLocationRequest;
+import com.yanzhenjie.permission.runtime.Permission;
 
 public class TencentLocationTask {
     public static void doLocation(Context context) {
         SLog.info("doLocation");
-        TencentLocationRequest request = TencentLocationRequest.create();
-        TencentLocationManager locationManager = TencentLocationManager.getInstance(context);
-        TwTencentLocationListener locationListener = new TwTencentLocationListener(locationManager);
-        int error = locationManager.requestLocationUpdates(request, locationListener);
-        SLog.info("error[%d]", error);
+        PermissionUtil.actionWithPermission(context, new String[] {Permission.ACCESS_COARSE_LOCATION, Permission.ACCESS_FINE_LOCATION}, "", new CommonCallback() {
+            @Override
+            public String onSuccess(@Nullable String data) {
+                TencentLocationRequest request = TencentLocationRequest.create();
+                TencentLocationManager locationManager = TencentLocationManager.getInstance(context);
+                TwTencentLocationListener locationListener = new TwTencentLocationListener(locationManager);
+                int error = locationManager.requestLocationUpdates(request, locationListener);
+                SLog.info("error[%d]", error);
+                return null;
+            }
+
+            @Override
+            public String onFailure(@Nullable String data) {
+                ToastUtil.error(context, "您拒絕了授權，無法使用定位功能>_<");
+                return null;
+            }
+        });
     }
 }

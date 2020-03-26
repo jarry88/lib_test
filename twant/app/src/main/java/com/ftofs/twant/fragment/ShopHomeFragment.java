@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -1078,9 +1079,12 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         if (isFavorite == Constant.ONE) {
             btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_yellow);
             tvFavoriteCount.setText(R.string.text_followed);
+            tvFavoriteCount.setTextColor(getResources().getColor(R.color.tw_yellow, null));
         } else {
             btnStoreFavorite.setImageResource(R.drawable.icon_store_favorite_grey);
             tvFavoriteCount.setText(R.string.text_follow);
+            tvFavoriteCount.setTextColor(getResources().getColor(R.color.tw_black, null));
+
         }
     }
 

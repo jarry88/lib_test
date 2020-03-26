@@ -42,7 +42,7 @@ public class RvMemberPostListAdapter extends BaseMultiItemQuickAdapter<PostItem,
                 coverImage.setVisibility(View.GONE);
                 tvPostSummary.setVisibility(View.VISIBLE);
                 if (item.comeTrueState == Constant.TRUE_INT) {
-                    tvPostSummary.setBackgroundColor(Color.parseColor("#FFFEB809"));
+                    tvPostSummary.setBackgroundColor(mContext.getColor(R.color.tw_yellow));
                 } else {
                     tvPostSummary.setBackgroundColor(Color.parseColor("#00B0FF"));
                 }
