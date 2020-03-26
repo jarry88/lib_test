@@ -150,6 +150,7 @@ public class ToastUtil {
     }
 
     public static void showNetworkError(Context context, IOException e) {
-        error(context, e.getMessage());
+        //e.getMessage()
+        error(context,"當前網絡信號弱");
     }
 }

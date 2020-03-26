@@ -79,7 +79,6 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     List<PostItem> postItemList = new ArrayList<>();
 
     FollowMeAvatarAdapter followMeAvatarAdapter;
-
     NestedScrollView containerView;
     int containerViewHeight = 0;
 
