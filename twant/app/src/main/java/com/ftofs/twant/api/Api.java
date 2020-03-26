@@ -1203,6 +1203,15 @@ public class Api {
      */
     public static final String PATH_SHOP_SESSION="/shop/goods/list";
 
+    /**
+     * 退货发货信息
+     */
+    public static final String PATH_RETURN_SHIP = "/member/return/ship";
+
+    /**
+     * 退货发货信息保存
+     */
+    public static final String PATH_RETURN_SHIP_SAVE = "/member/return/ship/save";
 
     /**
      * 發送Http請求
