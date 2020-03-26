@@ -197,6 +197,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
                     break;
                 case R.id.btn_set_personal_background:
+                    action = ACTION_SET_PERSONAL_BACKGROUND;
                     selectPersonalBackground();
                     break;
                 case R.id.btn_modify_mobile:
@@ -525,6 +526,10 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                 SLog.info("absolutePath[%s]", absolutePath);
 
                 File file = new File(absolutePath);
+                if(Util.bigImageError(_mActivity,file)){
+                    return;
+                }
+
                 Api.asyncUploadFile(file);
             }
         } else if (action == ACTION_SET_PERSONAL_BACKGROUND) { // 設置個人專頁背景圖
