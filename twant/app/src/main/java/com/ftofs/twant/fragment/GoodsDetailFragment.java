@@ -552,6 +552,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     currGalleryPosition = getCurrPosition();
                     SLog.info("currPosition[%d]", currGalleryPosition);
+                    if (currGalleryImageList.size() == 0) {
+                        return;
+                    }
                     int position = currGalleryPosition % currGalleryImageList.size();
                     pageIndicatorView.setSelection(position);
                 }
