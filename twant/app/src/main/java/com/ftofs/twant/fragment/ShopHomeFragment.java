@@ -43,8 +43,10 @@ import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.entity.WantedPostItem;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TencentLocationTask;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -57,10 +59,12 @@ import com.ftofs.twant.widget.InStorePersonPopup;
 import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.TwQRCodePopup;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.rd.PageIndicatorView;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -550,7 +554,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             DataImageView snsImage = new DataImageView(_mActivity);
             snsImage.setOnClickListener(this);
             snsImage.setId(R.id.btn_show_store_qr_code);
-            snsImage.setCustomData(EasyJSONObject.generate("socialName", "takewant"));
+            snsImage.setCustomData(EasyJSONObject.generate("socialName", "takewant", "socialForm", 0));
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 31), Util.dip2px(_mActivity, 31));
             layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
             Glide.with(this).load(R.drawable.app_logo).into(snsImage);
@@ -840,7 +844,56 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                 try {
                     String socialName = dataObject.getSafeString("socialName");
-                    SLog.info("socialName[%s]", socialName);
+                    int socialForm = dataObject.getInt("socialForm");
+                    SLog.info("socialName[%s], socialForm[%d]", socialName, socialForm);
+
+                    // socialForm   1 链接，2 二维码 3 賬號類型
+                    if (socialForm == 1) {
+                        Intent intent =new Intent(Intent.ACTION_VIEW);
+                        String accountAddress = dataObject.getSafeString("accountAddress");
+                        if (StringUtil.isEmpty(accountAddress)) {
+                            return;
+                        }
+                        Uri uri = Uri.parse(accountAddress);
+                        intent.setData(uri);
+
+                        _mActivity.startActivity(intent);
+                    } else if (socialForm == 2) {
+                        String accountImageAddress = StringUtil.normalizeImageUrl(dataObject.getSafeString("accountImageAddress"));
+                        new XPopup.Builder(_mActivity)
+                                .asCustom(new TwQRCodePopup(_mActivity, accountImageAddress))
+                                .show();
+                    } else if (socialForm == 3) {
+                        String account = dataObject.getSafeString("account");
+
+                        String content = String.format("%s: %s", socialName, account);
+                        ClipboardUtils.copyText(_mActivity, account);
+                        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                                .setPopupCallback(new XPopupCallback() {
+                                    @Override
+                                    public void onShow() {
+                                    }
+                                    @Override
+                                    public void onDismiss() {
+                                    }
+                                }).asCustom(new TwConfirmPopup(_mActivity, "社交帳號已複製", content, new OnConfirmCallback() {
+                            @Override
+                            public void onYes() {
+                                SLog.info("onYes");
+                            }
+
+                            @Override
+                            public void onNo() {
+                                SLog.info("onNo");
+                            }
+                        }))
+                                .show();
+                    }
+
+                    /*
                     if (socialName.equals("WeChat")) {  // 如果是微信，显示微信二维码
                         String accountImageAddress = dataObject.getSafeString("accountImageAddress");
                         new XPopup.Builder(_mActivity)
@@ -849,11 +902,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     } else if (socialName.equals("Facebook") || socialName.equals("Instagram") || socialName.equals("WhatsApp")) { // 打开社交网址用户主页
                         Intent intent =new Intent(Intent.ACTION_VIEW);
                         String accountAddress = dataObject.getSafeString("accountAddress");
+                        if (StringUtil.isEmpty(accountAddress)) {
+                            return;
+                        }
                         Uri uri = Uri.parse(accountAddress);
                         intent.setData(uri);
 
                         _mActivity.startActivity(intent);
                     }
+                     */
                 } catch (EasyJSONException e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
