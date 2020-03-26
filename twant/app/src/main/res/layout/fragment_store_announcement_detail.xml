@@ -12,24 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         android:background="@drawable/border_type_d">
-        <com.ftofs.twant.widget.ScaledButton
-            android:id="@+id/btn_back"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="7dp"
-            android:layout_centerVertical="true"
-            app:icon_src="@drawable/icon_back"
-            />
-
         <TextView
             android:id="@+id/tv_fragment_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginStart="@dimen/length_15dp"
-            android:layout_marginEnd="@dimen/length_15dp"
+            android:layout_marginStart="38dp"
+            android:layout_marginEnd="38dp"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:singleLine="true"
             android:ellipsize="marquee"
             />
@@ -45,6 +38,14 @@
             android:textColor="@color/tw_black"
             android:singleLine="true"
             android:ellipsize="marquee"
+            />
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
             />
     </RelativeLayout>
     <!-- END OF 工具欄 -->
