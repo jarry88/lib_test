@@ -82,9 +82,9 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     LinearLayout llMPayActivityContainer;
     ImageView iconMPayActivityLabel;
 
-
     int[] payButtonIdArr = {R.id.btn_wallet, R.id.btn_mpay, R.id.btn_taifung_pay, /* R.id.btn_union_pay, */ R.id.btn_alihk_pay, R.id.btn_weixin_pay, R.id.btn_ali_pay};
     int[] payMaskIdArr = {R.id.mask_wallet, R.id.mask_mpay, R.id.mask_taifung_pay, /* R.id.mask_union_pay, */ R.id.mask_alihk_pay, R.id.mask_weixin_pay, R.id.mask_ali_pay};
+    int[] payTopMarginIdArr = {0, 85, 170, 255, 340, 425};
     /**
      * 支付商按鈕Id與View的Map
      */
