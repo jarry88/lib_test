@@ -8,7 +8,7 @@
     <string name="register_fragment_title">注冊賬號</string>
     <string name="login_fragment_title">登入</string>
     <string name="security_setting_fragment_title">安全設置</string>
-    <string name="new_notification_setting">新消息提醒</string>
+    <string name="new_notification_setting">新消息設置</string>
     <string name="_setting_fragment_title">安全設置</string>
     <string name="payment_password_fragment_title">設置支付密碼</string>
     <string name="modify_payment_password">修改支付密碼</string>

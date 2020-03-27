@@ -45,8 +45,9 @@
 
     <com.ftofs.twant.widget.StoreDesktop
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="7dp"
         android:layout_marginLeft="3dp"
+        android:layout_marginTop="-1.5dp"
         android:layout_marginRight="3dp"
         />
     <LinearLayout
@@ -80,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:paddingEnd="@dimen/dp_4">
+                >
                 <TextView
                     android:id="@+id/tv_left_goods_price"
                     android:layout_width="match_parent"
@@ -97,6 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:paddingEnd="@dimen/dp_4"
                     android:src="@drawable/icon_add_to_cart_blue"
                     />
             </RelativeLayout>
@@ -142,9 +144,10 @@
                     android:id="@+id/btn_add_to_cart_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_add_to_cart_blue"
+                    android:paddingEnd="@dimen/dp_4"
                     />
             </RelativeLayout>
         </LinearLayout>

@@ -288,7 +288,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             int index = 0;
             int currSpecValueId = selSpecValueIdList.get(position);  // 當前選中的specValueId
             FlowLayout flSpecButtonContainer = llSpec.findViewById(R.id.fl_spec_button_container);
-            int count = 0;
             for (SpecValue specValue : spec.specValueList) {
 
                 TextView button = new TextView(context);
@@ -316,6 +315,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 }
 
                 SpecButtonData specButtonData = new SpecButtonData(position, spec.specId, specValue.specValueId, specValue.imageSrc, isSelected);
+                specButtonData.index = index;
                 button.setTag(specButtonData);
                 button.setOnClickListener(new OnClickListener() {
                     @Override
@@ -326,7 +326,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                             SLog.info("如果已經選中，重復點擊，不處理");
                             return;
                         } else {
-                            SLog.info("選中第%d",currData.position);
+                            SLog.info("選中第%d",specButtonData.index);
                         }
 
                         // 前一個選中的按鈕
