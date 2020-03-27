@@ -287,7 +287,11 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             } else if (selectedPayButtonId == R.id.btn_mpay) {
                 doMPay();
             } else if (selectedPayButtonId == R.id.btn_taifung_pay/* || selectedPayButtonId == R.id.btn_union_pay */) {
-                 doTaiFungPay();
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    ToastUtil.error(_mActivity, "大豐銀行電子支付暫未支持Android 10");
+                    return;
+                }
+                doTaiFungPay();
             } else if (selectedPayButtonId == R.id.btn_weixin_pay) {
                 doWeixinPay();
             } else if (selectedPayButtonId == R.id.btn_ali_pay) {
