@@ -18,12 +18,18 @@ import java.util.List;
 public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, BaseViewHolder> {
     Context context;
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    String title;
     public ShopGoodsGridAdapter(Context context, @Nullable List<GoodsPair> data) {
         super(data);
         this.context = context;
 
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.shop_goods_grid_item);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
+        addItemType(Constant.ITEM_TYPE_TITLE, R.layout.shop_commodity_title);
     }
 
     @Override
@@ -55,6 +61,8 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                         .setVisible(R.id.ll_right_goods_container, false);
             }
         } else if (itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT){ // 加載完成的提示，顯示即可，不用特別處理
+        }else if (itemViewType == Constant.ITEM_TYPE_TITLE){
+            helper.setText(R.id.item_title, goodsPair.getItemTitle());
         }
     }
 }

@@ -32,6 +32,7 @@ import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.entity.VideoItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -101,6 +102,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     public static final int VIEW_STYLE_LIST = 0;  // 以列表形式查看
     public static final int VIEW_STYLE_GRID = 1;  // 以網格形式查看
     int currentViewStyle = VIEW_STYLE_GRID;
+    private String title;
 
     /**
      * 新建一個實例
@@ -424,7 +426,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 storeCategoryListAdapter.notifyItemChanged(position);
 
                 storeCategoryListAdapter.setPrevSelectedItemIndex(position);
-
+                title =String.format("%s(%d)",storeLabel.getStoreLabelName(),storeLabel.getGoodsCount());
                 loadCategoryGoods(storeLabel.getStoreLabelId());
             }
         });
@@ -562,6 +564,19 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             loadEndGoodsPair.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
                             goodsPairList.add(loadEndGoodsPair);
                         }
+                        if (goodsPairList != null && goodsPairList.size() > 0) {
+                            if(goodsPairList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE){
+
+                                if (!StringUtil.isEmpty(title)) {
+                                    GoodsPair titleGoodsPair = new GoodsPair();
+                                    titleGoodsPair.itemType = Constant.ITEM_TYPE_TITLE;
+                                    titleGoodsPair.setItemTitle(title);
+                                    title = "";
+                                    goodsPairList.add(0,titleGoodsPair);
+                                }
+
+                            };
+                        }
 
                         shopGoodsGridAdapter.setNewData(goodsPairList);
                         shopGoodsGridAdapter.loadMoreComplete();
@@ -653,6 +668,17 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     }
                     goodsCountTotal = responseObj.getInt("datas.storeGoodsCount");
                     shopStoreLabelList.get(0).setGoodsCount(goodsCountTotal);  // 添加【全部產品】的項數
+                    if (goodsPairList != null && goodsPairList.size() > 0) {
+                        if (goodsPairList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE) {
+                            GoodsPair titleItem = new GoodsPair();
+                            titleItem.itemType = Constant.ITEM_TYPE_TITLE;
+                            titleItem.setItemTitle(title);
+                            title = "";
+                            goodsPairList.add(titleItem);
+                            shopGoodsGridAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    title = String.format("%s(%d)", shopStoreLabelList.get(0).getStoreLabelName(), goodsCountTotal);
                     storeCategoryListAdapter.setNewData(shopStoreLabelList);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -777,8 +803,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         SLog.info("onSelected, type[%s], id[%d]", type, id);
         if (PopupType.DEFAULT == type) {
             storeCategoryListAdapter.notifyItemChanged(id);
-
-            int subCategoryId = (int) extra;  // 二級分類Id
+            StoreLabel storeLabel = (StoreLabel) extra;
+            int subCategoryId = storeLabel.getStoreLabelId();  // 二級分類Id
+            title = storeLabel.getStoreLabelName();
             loadCategoryGoods(subCategoryId);
         }
     }

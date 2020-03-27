@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Uri;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.HackyViewPager;
@@ -28,12 +29,15 @@ import java.util.List;
 public class ViewPagerFragment extends BaseFragment implements View.OnClickListener {
     private List<String> currGalleryImageList;
     private SamplePagerAdapter viewPagerAdapter;
+    private int start;
+    private HackyViewPager viewPager;
 
     public static ViewPagerFragment newInstance(List<String> currGalleryImageList) {
         ViewPagerFragment fragment = new ViewPagerFragment();
         fragment.currGalleryImageList = currGalleryImageList;
         return fragment;
     }
+
 
     @Nullable
     @Override
@@ -47,11 +51,26 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
         super.onViewCreated(view, savedInstanceState);
         Util.setOnClickListener(view,R.id.view_pager,this);
         Util.setOnClickListener(view,R.id.btn_back_round,this);
-        HackyViewPager viewPager = view.findViewById(R.id.view_pager);
+        viewPager = view.findViewById(R.id.view_pager);
         viewPagerAdapter = SamplePagerAdapter.newInstance(currGalleryImageList, getContext());
+
         viewPagerAdapter.setmOnItemClickListener(v ->
                 pop());
         viewPager.setAdapter(viewPagerAdapter);
+
+    }
+
+    public void setStart(int start) {
+        SLog.info("start%d",start);
+        this.start = start;
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (start < currGalleryImageList.size()) {
+            viewPager.setCurrentItem(start);
+        }
     }
 
     @Override

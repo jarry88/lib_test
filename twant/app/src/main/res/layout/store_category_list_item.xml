@@ -33,12 +33,13 @@
             android:lineSpacingMultiplier="1.1"
             android:lineSpacingExtra="1dp"
             android:textSize="12sp"
-            android:text="sdfsadfasdfasdfasdf啊手動閥手動閥阿斯蒂芬撒地方啊手動閥打發士大夫士大夫撒打發士大夫士大夫sa'a's'd'f"
+            android:text=""
             android:ellipsize="end"
             android:textColor="@color/tw_black"
             />
 
         <FrameLayout
+            android:visibility="gone"
             android:id="@+id/fl_goods_category_item_count_container"
             android:layout_width="30dp"
             android:layout_height="13dp"
@@ -52,16 +53,14 @@
                 android:layout_gravity="center"
                 android:paddingLeft="3.5dp"
                 android:paddingRight="3.5dp"
-                android:text="-"
                 android:textColor="@android:color/white"
-                android:textSize="10sp"
                 android:background="@drawable/goods_category_item_count_bg">
             </TextView>
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/ll_sub_category_list"
+        android:id="@+id/ll_sub_ategory_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
