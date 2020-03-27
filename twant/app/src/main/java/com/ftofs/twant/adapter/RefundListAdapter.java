@@ -36,6 +36,7 @@ public class RefundListAdapter extends BaseQuickAdapter<RefundItem, BaseViewHold
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goodsImage)).centerCrop().into(goodsImage);
 
         TextView btnCancelRefund = helper.getView(R.id.btn_cancel_refund);
+        TextView btnReturnSend = helper.getView(R.id.btn_return_send);
         TextView btnViewRefundInfo = helper.getView(R.id.btn_view_refund_info);
 
         if (item.enableMemberCancel == 1) {
@@ -50,6 +51,12 @@ public class RefundListAdapter extends BaseQuickAdapter<RefundItem, BaseViewHold
         } else if (item.action == Constant.ACTION_RETURN) {
             btnCancelRefund.setText(R.string.text_cancel_return);
             btnViewRefundInfo.setText(R.string.text_return_detail);
+
+            if (item.showMemberReturnShip == Constant.TRUE_INT) {
+                btnReturnSend.setVisibility(View.VISIBLE);
+            } else {
+                btnReturnSend.setVisibility(View.GONE);
+            }
         } else {
             btnCancelRefund.setText(R.string.text_cancel_complain);
             btnViewRefundInfo.setText(R.string.text_complain_detail);
@@ -63,6 +70,6 @@ public class RefundListAdapter extends BaseQuickAdapter<RefundItem, BaseViewHold
                     .setGone(R.id.ll_refund_amount_container, false);
         }
 
-        helper.addOnClickListener(R.id.btn_view_refund_info, R.id.btn_cancel_refund);
+        helper.addOnClickListener(R.id.btn_view_refund_info, R.id.btn_cancel_refund, R.id.btn_return_send);
     }
 }

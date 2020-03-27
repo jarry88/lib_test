@@ -135,4 +135,9 @@ public enum PopupType {
      * 選擇退款方式
      */
     SELECT_REFUND_WAY,
+
+    /**
+     * 選擇物流公司
+     */
+    SELECT_LOGISTICS_COMPANY,
 }

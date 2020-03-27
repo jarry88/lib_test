@@ -17,6 +17,7 @@ import com.ftofs.twant.adapter.RefundListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.entity.RefundItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
@@ -137,6 +138,8 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                             "goodsFullSpecs", refundItem.goodsFullSpecs,
                             "goodsPrice", refundItem.goodsPrice,
                             "buyNum", refundItem.buyNum).toString()));
+                } else if (id == R.id.btn_return_send) {
+                    startForResult(ReturnShipFragment.newInstance(refundItem.refundId), RequestCode.RETURN_SHIP.ordinal());
                 }
             }
         });
@@ -193,6 +196,26 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        SLog.info("requestCode[%d], resultCode[%d]", requestCode, resultCode);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == RequestCode.RETURN_SHIP.ordinal()) { // 從【退貨發貨】頁面返回，刷新一下數據
+            SLog.info("___HERE");
+            returnDataLoaded = false;
+            rvRefundList.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadRefundList();
+                }
+            }, 1500); // 服務器數據未及時更新，需要延時一會
+        }
+    }
+
     private void loadRefundList() {
         if (action == Constant.ACTION_REFUND && refundDataLoaded) {
             refundListAdapter.setNewData(refundItemList);
@@ -211,7 +234,7 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                 SLog.info("Error!token 為空");
                 return;
             }
-
+            SLog.info("___HERE");
             EasyJSONObject params = EasyJSONObject.generate("token", token);
 
             SLog.info("params[%s]", params);
@@ -253,6 +276,14 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                             refundItemVoList = responseObj.getSafeArray("datas.complainList");
                         }
 
+                        if (action == Constant.ACTION_REFUND) {
+                            refundItemList.clear();
+                        } else if (action == Constant.ACTION_RETURN) {
+                            returnItemList.clear();
+                        } else if (action == Constant.ACTION_COMPLAIN) {
+                            complainItemList.clear();
+                        }
+
                         for (Object object : refundItemVoList) {
                             EasyJSONObject item = (EasyJSONObject) object;
                             RefundItem refundItem = new RefundItem();
@@ -260,6 +291,7 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                             if (action == Constant.ACTION_REFUND || action == Constant.ACTION_RETURN) {
                                 refundItem.storeName = item.getSafeString("storeName");
                                 refundItem.refundId = item.getInt("refundId");
+                                refundItem.showMemberReturnShip = item.getInt("showMemberReturnShip");
                                 refundItem.goodsName = item.getSafeString("ordersGoodsVoList[0].goodsName");
                                 refundItem.goodsFullSpecs = item.getSafeString("ordersGoodsVoList[0].goodsFullSpecs");
                                 refundItem.goodsPrice = (float) item.getDouble("ordersGoodsVoList[0].goodsPrice");
@@ -313,7 +345,7 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 

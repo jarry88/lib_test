@@ -128,6 +128,11 @@ public enum RequestCode {
     EDUCATE_EXP ,
     EDIT_SKILL,
     CERTIFICATION,
-    WINNINGEXPERIENCE;
+    WINNINGEXPERIENCE,
+
+    /**
+     * 退貨發貨
+     */
+    RETURN_SHIP,
 
 }
