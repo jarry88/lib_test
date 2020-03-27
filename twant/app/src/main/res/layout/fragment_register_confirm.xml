@@ -75,7 +75,7 @@
             android:inputType="text"
             android:imeOptions="actionNext"
             android:singleLine="true"
-            android:textSize="17sp"
+            android:textSize="15sp"
             />
     </RelativeLayout>
 
@@ -107,7 +107,7 @@
             android:inputType="textPassword"
             android:imeOptions="actionNext"
             android:singleLine="true"
-            android:textSize="17sp"
+            android:textSize="15sp"
             />
     </RelativeLayout>
 
@@ -141,7 +141,7 @@
             android:inputType="textPassword"
             android:imeOptions="actionNext"
             android:singleLine="true"
-            android:textSize="17sp"
+            android:textSize="15sp"
             />
     </RelativeLayout>
 
@@ -175,7 +175,7 @@
             android:inputType="text"
             android:imeOptions="actionDone"
             android:singleLine="true"
-            android:textSize="17sp"
+            android:textSize="15sp"
             />
     </RelativeLayout>
 
