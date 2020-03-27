@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,8 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -39,6 +42,7 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
     EditText etPersonalProfile;
     TextView tvWordCount;
     boolean isUser;
+    private int MaxLenth=500;
 
 
     public static PersonalProfileFragment newInstance() {
@@ -88,6 +92,9 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
         updateWordCount(profile.length());
         etPersonalProfile = view.findViewById(R.id.et_personal_profile);
         etPersonalProfile.setText(profile);
+        InputFilter[] inputFilters = new InputFilter[1];
+        inputFilters[0]=new InputFilter.LengthFilter(MaxLenth);
+        etPersonalProfile.setFilters(inputFilters);
         // 字數計數
         if(isUser){
             etPersonalProfile.addTextChangedListener(new TextWatcher() {
@@ -104,6 +111,7 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
                 @Override
                 public void afterTextChanged(Editable s) {
                     int len = s.length();
+
                     updateWordCount(len);
                 }
             });
@@ -184,6 +192,10 @@ public class PersonalProfileFragment extends BaseFragment implements View.OnClic
     }
 
     private void updateWordCount(int wordCount) {
-        tvWordCount.setText(String.format("%d/500", 500-wordCount));
+        if (wordCount < MaxLenth) {
+            tvWordCount.setText(String.format("%d/500", MaxLenth - wordCount));
+        } else {
+            tvWordCount.setText(String.format("0/500"));
+        }
     }
 }

@@ -126,7 +126,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:gravity="center_horizontal"
         android:orientation="vertical">
-
+        <ImageView
+            android:id="@+id/btn_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:src="@drawable/icon_goto_cart_red"
+            />
         <LinearLayout
             android:id="@+id/btn_customer_list"
             android:layout_width="match_parent"
@@ -186,13 +192,7 @@
                 android:src="@drawable/icon_customer_without_shadow" />
 
         </LinearLayout>
-        <ImageView
-            android:id="@+id/btn_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="0dp"
-            android:src="@drawable/icon_goto_cart_red"
-            />
+
         <ImageView
             android:id="@+id/btn_comment"
             android:layout_width="wrap_content"

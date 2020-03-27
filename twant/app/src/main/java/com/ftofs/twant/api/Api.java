@@ -1589,8 +1589,10 @@ public class Api {
             @Override
             public void onMessage() {
                 Object data = message;
-                if (data.toString().equals("1")) {
-                    ToastUtil.error(TwantApplication.getInstance().getApplicationContext(),"網絡異常，上傳失敗");
+                if (data != null) {
+                    if ("1".equals(data.toString())){
+                        ToastUtil.error(TwantApplication.getInstance().getApplicationContext(), "網絡異常，上傳失敗");
+                    }
                 }
             }
         };
