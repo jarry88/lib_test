@@ -294,6 +294,35 @@ public class StringUtil {
         return str.startsWith("http://") || str.startsWith("https://");
     }
 
+    /**
+     * 二代身份証正則校驗合規性
+     * 校驗規則：
+     * 校验位的计算:
+     * <p>
+     * 有17位数字，分别是：
+     * 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2
+     * 分别用身份证的前 17 位乘以上面相应位置的数字，然后相加。
+     * <p>
+     * 接着用相加的和对 11 取模。
+     * <p>
+     * 用获得的值在下面 11 个字符里查找对应位置的字符，这个字符就是校验位。
+     * '1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'
+     *
+     * @param idCard 身份証
+     * @return 校驗結果
+     */
+    public static boolean validIdCard(String idCard) {
+        //基礎校驗校驗身份証格式是否正確
+        if (!isCardNumber(idCard)) {
+            return false;
+        }
+        return false;
+    }
+
+    private static boolean isCardNumber(String idCard) {
+//        const REGX = '(^\d{17}(\d|X)$)#';
+        return false;
+    }
 
     /**
      * 規范圖片的Url，如果沒有前綴，添加前綴
