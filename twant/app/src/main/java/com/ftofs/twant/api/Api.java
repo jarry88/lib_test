@@ -1203,6 +1203,15 @@ public class Api {
      */
     public static final String PATH_SHOP_SESSION="/shop/goods/list";
 
+    /**
+     * 退货发货信息
+     */
+    public static final String PATH_RETURN_SHIP = "/member/return/ship";
+
+    /**
+     * 退货发货信息保存
+     */
+    public static final String PATH_RETURN_SHIP_SAVE = "/member/return/ship/save";
 
     /**
      * 發送Http請求
@@ -1580,8 +1589,10 @@ public class Api {
             @Override
             public void onMessage() {
                 Object data = message;
-                if (data.toString().equals("1")) {
-                    ToastUtil.error(TwantApplication.getInstance().getApplicationContext(),"網絡異常，上傳失敗");
+                if (data != null) {
+                    if ("1".equals(data.toString())){
+                        ToastUtil.error(TwantApplication.getInstance().getApplicationContext(), "網絡異常，上傳失敗");
+                    }
                 }
             }
         };

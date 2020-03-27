@@ -90,6 +90,8 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
 
                     SLog.info("storeLabel.getIsFold, i[%d], isFold[%d]", i, storeLabel.getIsFold());
                     tvSubCategory.setMaxLines(2);
+                    tvSubCategory.setLineSpacing(1,1.1f);
+                    tvSubCategory.setTextSize(12);
                     tvSubCategory.setEllipsize(TextUtils.TruncateAt.END);
                     if (storeLabel.getIsFold() == 0) {
                         tvSubCategory.setTextColor(twBlue);

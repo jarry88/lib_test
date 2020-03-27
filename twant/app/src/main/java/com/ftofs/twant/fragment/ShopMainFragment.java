@@ -298,6 +298,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         } else {
             tvShopTitle.setVisibility(View.VISIBLE);
             btnCart.setVisibility(View.GONE);
+            btnComment.setVisibility(View.VISIBLE);
             llTabButtonContainer.setVisibility(View.GONE);
         }
     }

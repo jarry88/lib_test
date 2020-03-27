@@ -26,14 +26,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:layout_marginEnd="16dp"
-            android:padding="0.5dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:maxLines="2"
+            android:lineSpacingMultiplier="1.1"
+            android:lineSpacingExtra="1dp"
+            android:textSize="12sp"
+            android:text="sdfsadfasdfasdfasdf啊手動閥手動閥阿斯蒂芬撒地方啊手動閥打發士大夫士大夫撒打發士大夫士大夫sa'a's'd'f"
             android:ellipsize="end"
-            android:text=""
-            android:textSize="14sp"
             android:textColor="@color/tw_black"
             />
 

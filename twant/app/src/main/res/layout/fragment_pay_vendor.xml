@@ -15,7 +15,7 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="55dp"
-                android:layout_marginLeft="64dp"
+                android:layout_marginStart="64dp"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
                             android:layout_marginTop="16dp"
                             android:src="@drawable/new_icon_pay_mpay"
                             />
@@ -126,7 +126,7 @@
                             android:id="@+id/ll_mpay_activity_container"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="64dp"
+                            android:layout_marginStart="64dp"
                             android:layout_centerVertical="true"
                             android:orientation="vertical"
                             android:visibility="gone">
@@ -155,7 +155,7 @@
                             android:id="@+id/tv_mpay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="64dp"
+                            android:layout_marginStart="64dp"
                             android:layout_centerVertical="true"
                             android:textSize="16sp"
                             android:textColor="@android:color/white"
@@ -175,7 +175,7 @@
                             android:id="@+id/icon_mpay_activity_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
                             android:translationX="14dp"
                             android:translationY="-12dp"
                             android:src="@drawable/icon_mpay_activity_label"
@@ -214,7 +214,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
                             android:layout_marginTop="16dp"
                             android:src="@drawable/new_icon_pay_wallet"
                             />
@@ -282,7 +282,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
                             android:layout_marginTop="16dp"
                             android:src="@drawable/new_icon_pay_taifung"
                             />
@@ -383,7 +383,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
                             android:layout_marginTop="16dp"
                             android:src="@drawable/new_icon_pay_alipay_hk"
                             />
@@ -436,14 +436,14 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
                             android:layout_marginTop="16dp"
                             android:src="@drawable/new_icon_pay_weixin"
                             />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="64dp"
+                            android:layout_marginStart="64dp"
                             android:layout_centerVertical="true"
                             android:textSize="16sp"
                             android:textColor="@android:color/white"
@@ -490,14 +490,14 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
                             android:layout_marginTop="16dp"
                             android:src="@drawable/new_icon_pay_alipay"
                             />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="64dp"
+                            android:layout_marginStart="64dp"
                             android:layout_centerVertical="true"
                             android:textSize="16sp"
                             android:textColor="@android:color/white"
@@ -522,6 +522,34 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/card_shadow"
                         />
+
+                    <RelativeLayout
+                        android:id="@+id/btn_expand_pay"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="495dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_below="@id/vw_first_separator"
+                        android:background="@drawable/pay_vendor_bg_blue">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="64dp"
+                            android:layout_centerVertical="true"
+                            android:textSize="16sp"
+                            android:textColor="@android:color/white"
+                            android:text="支付寶（內地）"
+                            />
+                        <ImageView
+                            android:id="@+id/mask_expand_pay"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/pay_vendor_mask"
+                            android:visibility="gone"
+                            />
+                    </RelativeLayout>
 
                     <!-- 最后一個用于支付的View -->
                     <View
