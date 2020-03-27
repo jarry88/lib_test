@@ -1581,10 +1581,32 @@ public class Api {
         TwantApplication.getThreadPool().execute(new Runnable() {
             @Override
             public void run() {
+
+            }
+        });
+
+        TaskObserver taskObserver = new TaskObserver() {
+            @Override
+            public void onMessage() {
+                Object data = message;
+                if (data.toString().equals("1")) {
+                    ToastUtil.error(TwantApplication.getInstance().getApplicationContext(),"網絡異常，上傳失敗");
+                }
+            }
+        };
+
+        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            @Override
+            public Object doWork() {
                 String avatarUrl = syncUploadFile(file);
+                SLog.info("成功調用異步上傳  %s",avatarUrl);
                 if (avatarUrl != null) {
                     EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPLOAD_FILE_SUCCESS, avatarUrl);
+                } else {
+                    return 1;
                 }
+
+                return null;
             }
         });
     }

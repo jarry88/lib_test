@@ -271,7 +271,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                 int rvPostListY = Util.getYOnScreen(rvPostList);
                 int containerViewY = Util.getYOnScreen(containerView);
 
-                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
+//                SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
                 if (rvPostListY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
                     rvPostList.setNestedScrollingEnabled(true);
                 } else {

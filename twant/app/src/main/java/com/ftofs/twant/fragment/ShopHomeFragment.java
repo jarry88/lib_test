@@ -442,7 +442,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         String shopDay = storeInfo.getString("shopDay");
 //                        int storeView=  responseObj.getInt("datas.storeView");
                         int storeView=  storeInfo.getInt("storeView");
-                        tvStoreView.setText(String.valueOf(storeView));
+                        tvStoreView.setText(StringUtil.formatPostView(storeView));
 //                        tvShopOpenDay.setText(shopDay);
                         updateBanner(hasSlider);
 

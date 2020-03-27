@@ -521,7 +521,12 @@ public class StringUtil {
     public static String getEMMessageText(String message) {
         // txt:"abc" 返回 abc
         SLog.info("message[%s]", message);
-        return message.substring(5, message.length() - 1);
+        if (message.length() > 5) {
+            return message.substring(5, message.length() - 1);
+        } else {
+            return message;
+        }
+
     }
     /**
      * 提取環信的body中的屬性
