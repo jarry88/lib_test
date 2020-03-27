@@ -79,7 +79,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:paddingEnd="@dimen/dp_4">
                 <TextView
                     android:id="@+id/tv_left_goods_price"
                     android:layout_width="match_parent"
@@ -94,7 +95,7 @@
                     android:id="@+id/btn_add_to_cart_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_add_to_cart_blue"
                     />
