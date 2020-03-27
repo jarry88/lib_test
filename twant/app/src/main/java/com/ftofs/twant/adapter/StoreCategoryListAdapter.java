@@ -70,14 +70,14 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
         }
 
         if (item.getIsFold() == Constant.TRUE_INT) {
-            helper.itemView.setBackgroundColor(Color.parseColor("#F3F3F3"));
+            helper.itemView.setBackgroundColor(Color.WHITE);
             helper.setGone(R.id.vw_selected_indicator, false);
             tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_black, null));
             tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             llSubCategoryList.setVisibility(View.GONE);
         } else {
-            helper.itemView.setBackgroundColor(Color.WHITE);
+            helper.itemView.setBackgroundColor(Color.parseColor("#F3F3F3"));
             helper.setGone(R.id.vw_selected_indicator, true);
             tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_blue, null));
 //            tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
