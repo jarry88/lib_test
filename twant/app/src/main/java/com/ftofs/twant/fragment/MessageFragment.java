@@ -369,7 +369,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                        conversation.unreadMsgCount, memberName, conversation.lastMessageText, Time.fromMillisUnixtime(timestamp, "Y-m-d H:i:s"),
                         friendInfo.nickname, friendInfo.avatarUrl);
 
-                SLog.info("friendInfo[%s]", friendInfo);
+                SLog.info("friendInfo[%s],lastMessage %s", friendInfo,conversation.lastMessageText);
 
                 ChatConversation chatConversation = new ChatConversation();
 
@@ -770,6 +770,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             String avatar = conversation.getSafeString("avatar");
                             String storeAvatar = conversation.getSafeString("storeAvatar");
                             String messageContent=conversation.getSafeString("messageContent");
+                            if (EasyJSONBase.isJSONString(messageContent)) {
+                                messageContent = "[電子名片]";
+                            }
+                            if (messageContent.startsWith("image")) {
+                                messageContent = "[圖片]";
+                            }
+                            SLog.info("messageFragment [%s]",messageContent);
                             String storeName = conversation.getSafeString("storeName");
                             String sendTime =conversation.getSafeString("sendTime");
                             int role = conversation.getInt("role");
@@ -798,6 +805,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 conversation1.nickname = name;
                                 conversation1.avatarUrl = avatarUrl;
                                 conversation1.lastMessageText = messageContent;
+                                conversation1.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 conversation1.storeId = storeId;
                                 conversation1.role = role;
                                 conversation1.timestamp = time;
