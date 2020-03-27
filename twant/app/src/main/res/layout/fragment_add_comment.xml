@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<com.ftofs.twant.widget.SoftToolPaneLayout
+    android:id="@+id/stpl_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:stpl_tool_pane="@id/ll_emoji_pane">
     <!-- 工具欄 -->
     <RelativeLayout
         android:id="@+id/tool_bar"
@@ -51,7 +53,9 @@
     <!-- END OF 工具欄 -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
         android:background="#F3F3F3">
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +65,7 @@
             android:background="@android:color/white">
 
             <!-- 正文 -->
-            <EditText
+            <com.ftofs.twant.widget.TouchEditText
                 android:id="@+id/et_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,4 +115,44 @@
             </com.ftofs.twant.widget.SquareGridLayout>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tool_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/border_type_e">
+            <ImageView
+                android:id="@+id/btn_insert_post_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16.5dp"
+                android:src="@drawable/icon_add_post_insert_emoji"
+                />
+        </LinearLayout>
+        <!-- 底部表情面板 -->
+        <LinearLayout
+            android:id="@+id/ll_emoji_pane"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/border_type_e">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_emoji_page_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+    </LinearLayout>
+</com.ftofs.twant.widget.SoftToolPaneLayout>
