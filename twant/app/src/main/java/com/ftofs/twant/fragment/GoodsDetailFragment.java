@@ -1496,7 +1496,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
         SLog.info("onDestroyView");
         EventBus.getDefault().unregister(this);
     }

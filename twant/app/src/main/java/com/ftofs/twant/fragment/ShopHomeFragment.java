@@ -318,7 +318,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
     }
 
     private void broadcastNestedScrollingEnabled(boolean enable) {
@@ -609,6 +611,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             rvGalleryImageList.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    if (rvGalleryImageList == null) {
+                        return;
+                    }
+                    
                     // 先去到大概中間的位置
                     int targetPosition = Integer.MAX_VALUE / 2;
                     // 然后去到倍數開始的位置

@@ -317,7 +317,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        if (unbinder != null) {
+            unbinder.unbind();
+        }
         EventBus.getDefault().unregister(this);
     }
 
