@@ -185,7 +185,7 @@
     <string name="input_sms_code_hint">請輸入基因碼</string>
     <string name="input_captcha_hint">請輸入驗證碼</string>
 
-    <string name="input_password_hint">請輸入6%s20位英文字母，符號或數字</string>
+    <string name="input_password_hint">請輸入密碼，8%s20位英文字母，符號或數字</string>
     <string name="input_password_confirm_hint">請再次輸入密碼</string>
     <string name="input_nickname_hint">請輸入您的暱稱</string>
     <string name="input_login_password_hint">請輸入密碼，8–20位英文字母、符號或數字</string>
