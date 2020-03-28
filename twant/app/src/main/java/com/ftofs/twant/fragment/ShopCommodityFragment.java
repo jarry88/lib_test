@@ -32,6 +32,7 @@ import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.entity.VideoItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -565,14 +566,16 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             goodsPairList.add(loadEndGoodsPair);
                         }
                         if (goodsPairList != null && goodsPairList.size() > 0) {
-                            if(goodsPairList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE){
+                            SLog.info("當前list Size %d,type %d,title %s",goodsPairList.size(),goodsPairList.get(0).getItemType(),title);
 
+                            if(goodsPairList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE&&currPage==0){
+
+                                GoodsPair titleGoodsPair = new GoodsPair();
+                                titleGoodsPair.itemType = Constant.ITEM_TYPE_TITLE;
                                 if (!StringUtil.isEmpty(title)) {
-                                    GoodsPair titleGoodsPair = new GoodsPair();
-                                    titleGoodsPair.itemType = Constant.ITEM_TYPE_TITLE;
                                     titleGoodsPair.setItemTitle(title);
                                     title = "";
-                                    goodsPairList.add(0,titleGoodsPair);
+                                    goodsPairList.add(0, titleGoodsPair);
                                 }
 
                             };
@@ -668,17 +671,24 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     }
                     goodsCountTotal = responseObj.getInt("datas.storeGoodsCount");
                     shopStoreLabelList.get(0).setGoodsCount(goodsCountTotal);  // 添加【全部產品】的項數
+                    title = String.format("%s(%d)", shopStoreLabelList.get(0).getStoreLabelName(), goodsCountTotal);
                     if (goodsPairList != null && goodsPairList.size() > 0) {
                         if (goodsPairList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE) {
-                            GoodsPair titleItem = new GoodsPair();
-                            titleItem.itemType = Constant.ITEM_TYPE_TITLE;
-                            titleItem.setItemTitle(title);
-                            title = "";
-                            goodsPairList.add(titleItem);
-                            shopGoodsGridAdapter.notifyDataSetChanged();
+                            //這裏是僅僅針對初始默認情況
+                            if (currPage == 1) {
+                                GoodsPair titleItem = new GoodsPair();
+                                titleItem.itemType = Constant.ITEM_TYPE_TITLE;
+                                titleItem.setItemTitle(title);
+                                title = "";
+                                goodsPairList.add(0,titleItem);
+
+                                shopGoodsGridAdapter.notifyDataSetChanged();
+                                shopGoodsListAdapter.notifyDataSetChanged();
+                            }
+
                         }
                     }
-                    title = String.format("%s(%d)", shopStoreLabelList.get(0).getStoreLabelName(), goodsCountTotal);
+
                     storeCategoryListAdapter.setNewData(shopStoreLabelList);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

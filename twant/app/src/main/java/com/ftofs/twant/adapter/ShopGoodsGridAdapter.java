@@ -35,6 +35,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
     @Override
     protected void convert(BaseViewHolder helper, GoodsPair goodsPair) {
         int itemViewType = helper.getItemViewType();
+
         if (itemViewType == Constant.ITEM_TYPE_NORMAL) {
             if (goodsPair.leftGoods != null) {
                 Goods leftGoods = goodsPair.leftGoods;
