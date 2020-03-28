@@ -248,7 +248,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
                             goodsInfoMap.put(goodsId, goodsInfo);
                         }
-
+                        if (viewPagerFragment != null) {
+                            viewPagerFragment.updateMap(goodsInfoMap);
+                        }
                         populateData();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -426,10 +428,13 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         if (id == R.id.ll_title_padding || id == R.id.btn_close) {
             dismiss();
         }else if (id==R.id.sku_image){
-            SLog.info("here");
             if (viewPagerFragment == null) {
-                viewPagerFragment = ViewPagerFragment.newInstance(currGalleryImageList);
+                viewPagerFragment = ViewPagerFragment.newInstance(null);
             }
+            viewPagerFragment.updateMap(goodsInfoMap);
+            int goodsId= specValueIdMap.get(getSelectedSpecValueIdStr());
+            viewPagerFragment.setStartPage(goodsId);
+            SLog.info("here goodsId %d, goodsInfoMap %d",goodsId,goodsInfoMap.size());
             Util.startFragment(viewPagerFragment);
             dismiss();
         } else if (id == R.id.btn_ok) {

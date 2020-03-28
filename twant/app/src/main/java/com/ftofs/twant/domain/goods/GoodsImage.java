@@ -89,7 +89,7 @@ public class GoodsImage implements Serializable {
     }
 
     public String getImageSrc() {
-        return imageName;
+        return imageSrc;
     }
 
     @Override
@@ -103,5 +103,9 @@ public class GoodsImage implements Serializable {
                 ", isDefault=" + isDefault +
                 ", imageSrc='" + imageSrc + '\'' +
                 '}';
+    }
+
+    public void setImageSrc(String imageSrc) {
+        this.imageSrc = imageSrc;
     }
 }

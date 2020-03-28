@@ -1,5 +1,7 @@
 package com.ftofs.twant.entity;
 
+import com.ftofs.twant.domain.goods.GoodsImage;
+
 /**
  * 產品的各種SKU的信息
  * @author zwm
@@ -45,5 +47,12 @@ public class GoodsInfo {
 
         // 如果有限購，返回兩者較小的值
         return Math.min(limitAmount, finalStorage);
+    }
+
+    public GoodsImage toGoodsImage() {
+        GoodsImage goodsImage = new GoodsImage();
+        goodsImage.setImageSrc(imageSrc);
+        goodsImage.setImageId(goodsId);
+        return goodsImage;
     }
 }

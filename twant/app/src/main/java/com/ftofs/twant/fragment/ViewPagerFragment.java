@@ -13,26 +13,47 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Uri;
+import com.ftofs.twant.domain.goods.GoodsImage;
+import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.HackyViewPager;
 import com.github.chrisbanes.photoview.PhotoView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
  * 縮放圖片，橫滑動切換下一張圖片
  * @author gzp
  */
 public class ViewPagerFragment extends BaseFragment implements View.OnClickListener {
-    private List<String> currGalleryImageList;
+    public int start;
+    private List<GoodsImage> currGalleryImageList;
     private SamplePagerAdapter viewPagerAdapter;
+    private HackyViewPager viewPager;
 
-    public static ViewPagerFragment newInstance(List<String> currGalleryImageList) {
+    public static ViewPagerFragment newInstance(List<GoodsImage> currGalleryImageList) {
         ViewPagerFragment fragment = new ViewPagerFragment();
+        if (currGalleryImageList == null) {
+            currGalleryImageList = new ArrayList<>();
+        }
         fragment.currGalleryImageList = currGalleryImageList;
         return fragment;
+    }
+
+    public static ViewPagerFragment newInstance(List<String> imageList,boolean s) {
+        List<GoodsImage> list = new ArrayList<>();
+        for (String src : imageList) {
+            GoodsImage goodsImage = new GoodsImage();
+            goodsImage.setImageSrc(src);
+            list.add(goodsImage);
+        }
+        return newInstance(list);
     }
 
     @Nullable
@@ -43,11 +64,20 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
     }
 
     @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (start > currGalleryImageList.size()) {
+            start = 0;
+        }
+        viewPager.setCurrentItem(start);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Util.setOnClickListener(view,R.id.view_pager,this);
         Util.setOnClickListener(view,R.id.btn_back_round,this);
-        HackyViewPager viewPager = view.findViewById(R.id.view_pager);
+        viewPager = view.findViewById(R.id.view_pager);
         viewPagerAdapter = SamplePagerAdapter.newInstance(currGalleryImageList, getContext());
         viewPagerAdapter.setmOnItemClickListener(v ->
                 pop());
@@ -71,8 +101,32 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
         return true;
     }
 
+    public void updateMap(Map<Integer, GoodsInfo> goodsInfoMap){
+
+    // 更新圖片的顯示
+        currGalleryImageList.clear();
+        for (Map.Entry<Integer, GoodsInfo> entry : goodsInfoMap.entrySet()) {
+            if (entry.getValue() != null) {
+                currGalleryImageList.add(entry.getValue().toGoodsImage());
+            }
+        }
+        SLog.info("imagelistSize %d",currGalleryImageList.size());
+    }
+
+    public void setStartPage(int goodsId) {
+        int i=0 ,j= 0;
+        for (GoodsImage goodsImage : currGalleryImageList) {
+            if (goodsImage.getImageId() == goodsId) {
+                j = i;
+                    break;
+            }
+            i++;
+        }
+        start = j;
+    }
+
     static class SamplePagerAdapter extends PagerAdapter {
-        private List<String> currGalleryImageList;
+        private List<GoodsImage> currGalleryImageList;
         private Context context;
 
         public void setmOnItemClickListener(View.OnClickListener mOnItemClickListener) {
@@ -81,7 +135,7 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
 
         private View.OnClickListener mOnItemClickListener;
 
-        public static SamplePagerAdapter newInstance(List<String> currGalleryImageList, Context context) {
+        public static SamplePagerAdapter newInstance(List<GoodsImage> currGalleryImageList, Context context) {
             SamplePagerAdapter samplePagerAdapter = new SamplePagerAdapter();
             samplePagerAdapter.currGalleryImageList = currGalleryImageList;
             samplePagerAdapter.context = context;
@@ -97,12 +151,13 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
             PhotoView photoView = new PhotoView(container.getContext());
 
             // 如果是本地路徑，還要添加上file://協議前綴
-            String imagePath=currGalleryImageList.get(position);
+            String imagePath=currGalleryImageList.get(position).getImageSrc();
+            SLog.info("imagepath %s",imagePath);
             if (imagePath.startsWith("/")) {
                 imagePath = "file://" + imagePath;
                 Glide.with(context).load(android.net.Uri.parse(imagePath)).into(photoView);
             } else {
-                imagePath=StringUtil.normalizeImageUrl(currGalleryImageList.get(position));
+                imagePath=StringUtil.normalizeImageUrl(currGalleryImageList.get(position).getImageSrc());
 
                 Glide.with(context).load(imagePath).into(photoView);
             }

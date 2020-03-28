@@ -536,9 +536,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         goodsGalleryAdapter.setOnItemClickListener(v -> {
             int position = currGalleryPosition % currGalleryImageList.size();
             if (viewPagerFragment == null) {
-                viewPagerFragment = ViewPagerFragment.newInstance(currGalleryImageList);
+                viewPagerFragment = ViewPagerFragment.newInstance(currGalleryImageList,false);
             }
             SLog.info(currGalleryImageList.toString());
+            viewPagerFragment.start = position;
             Util.startFragment(viewPagerFragment);
             SLog.info("currPosition[%d][%d]", currGalleryPosition,position);
 

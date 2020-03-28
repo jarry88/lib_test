@@ -945,7 +945,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                     List<String> imageList = new ArrayList<>();
                     imageList.add(imageUri);
-                    Util.startFragment(ViewPagerFragment.newInstance(imageList));
+                    Util.startFragment(ViewPagerFragment.newInstance(imageList,false));
 
                 } else if (id == R.id.img_your_avatar) {
                     hideSoftInput();
