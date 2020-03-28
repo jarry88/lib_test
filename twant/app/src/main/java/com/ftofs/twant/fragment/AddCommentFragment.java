@@ -1,28 +1,42 @@
 package com.ftofs.twant.fragment;
 
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.adapter.EmojiPageAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.UnicodeEmoji;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.EBMessage;
+import com.ftofs.twant.entity.EmojiPage;
+import com.ftofs.twant.entity.UnicodeEmojiItem;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -30,6 +44,8 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.SoftToolPaneLayout;
+import com.ftofs.twant.widget.TouchEditText;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -37,6 +53,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -46,14 +64,14 @@ import okhttp3.Call;
  * 發表評論Fragment 
  * @author zwm
  */
-public class AddCommentFragment extends BaseFragment implements View.OnClickListener {
+public class AddCommentFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     RelativeLayout commentImageContainer;
 
     ImageView btnAddImage;
     ScaledButton btnRemoveImage;
     ImageView commentImage;
 
-    EditText etContent;
+    TouchEditText etContent;
 
     String imageAbsolutePath;
 
@@ -61,6 +79,20 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
     int commentChannel;
     // 評論內容
     String content;
+
+    SoftToolPaneLayout stplContainer;
+    LinearLayout llToolContainer;
+    LinearLayout llBottomToolbar;
+    LinearLayout llEmojiPane;
+
+    RecyclerView rvEmojiPageList;
+    EmojiPageAdapter emojiPageAdapter;
+    List<EmojiPage> emojiPageList = new ArrayList<>();
+
+    private static final int BTN_EMOJI_USAGE_EMOJI = 0;
+    private static final int BTN_EMOJI_USAGE_SOFT_INPUT = 1;
+    ImageView btnInsertPostEmoji;
+    int usageBtnEmoji = BTN_EMOJI_USAGE_EMOJI; // btnEmoji的用途 0 -- 顯示表情圖標 1 -- 顯示軟鍵盤圖標
 
     public static AddCommentFragment newInstance(int bindId, int commentChannel) {
         SLog.info("onClickhere2");
@@ -88,11 +120,26 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         SLog.info("__onViewCreate");
 
+
         EventBus.getDefault().register(this);
         SLog.info("__onViewCreate");
         Bundle args = getArguments();
         bindId = args.getInt("bindId");
         commentChannel = args.getInt("commentChannel");
+
+        llToolContainer = view.findViewById(R.id.ll_tool_container);
+        llBottomToolbar = view.findViewById(R.id.ll_bottom_toolbar);
+        llEmojiPane = view.findViewById(R.id.ll_emoji_pane);
+        stplContainer = view.findViewById(R.id.stpl_container);
+        stplContainer.setStatusChangedListener(new SoftToolPaneLayout.OnStatusChangedListener() {
+            @Override
+            public void onStatusChanged(int oldStatus, int newStatus) {
+                SLog.info("oldStatus[%d], newStatus[%d]", oldStatus, newStatus);
+                if (newStatus == SoftToolPaneLayout.STATUS_NONE_SHOWN) {
+                    llToolContainer.setVisibility(View.GONE);
+                }
+            }
+        });
 
         btnAddImage = view.findViewById(R.id.btn_add_image);
         btnAddImage.setOnClickListener(this);
@@ -103,11 +150,17 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
         commentImage = view.findViewById(R.id.comment_image);
         commentImageContainer = view.findViewById(R.id.comment_image_container);
 
+        btnInsertPostEmoji = view.findViewById(R.id.btn_insert_post_emoji);
+        btnInsertPostEmoji.setOnClickListener(this);
         etContent = view.findViewById(R.id.et_content);
+        etContent.setSimpleCallback(this);
         SLog.info("__onViewCreate");
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
         SLog.info("__onViewCreate");
+
+        initEmojiPage(view);
+        loadEmojiData();
     }
 
     @Override
@@ -139,6 +192,16 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
             imageAbsolutePath = null;
         } else if (id == R.id.btn_commit) {
             commitComment();
+        } else if (id == R.id.btn_insert_post_emoji) {
+            if (usageBtnEmoji == BTN_EMOJI_USAGE_EMOJI) {
+                stplContainer.showToolPane();
+                btnInsertPostEmoji.setImageResource(R.drawable.icon_keyboard);
+            } else {
+                stplContainer.showSoftInput(etContent);
+                btnInsertPostEmoji.setImageResource(R.drawable.icon_add_post_insert_emoji);
+            }
+
+            usageBtnEmoji = 1 - usageBtnEmoji;
         }
     }
 
@@ -286,5 +349,126 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                 }
             }
         });
+    }
+
+    /**
+     * 初始化表情輸入面板
+     * @param contentView
+     */
+    private void initEmojiPage(View contentView) {
+        rvEmojiPageList = contentView.findViewById(R.id.rv_emoji_page_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
+        rvEmojiPageList.setLayoutManager(layoutManager);
+
+        // 使RecyclerView像ViewPager一样的效果，一次只能滑一页，而且居中显示
+        // https://www.jianshu.com/p/e54db232df62
+        (new PagerSnapHelper()).attachToRecyclerView(rvEmojiPageList);
+
+
+        emojiPageAdapter = new EmojiPageAdapter(R.layout.emoji_page, emojiPageList);
+        emojiPageAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                EmojiPage emojiPage = emojiPageList.get(position);
+                int id = view.getId();
+                SLog.info("id[%d]", id);
+
+                if (id == R.id.btn_delete_emoji) {
+                    SLog.info("btn_delete_emoji");
+
+                    /*
+                    KEYCODE_DEL	        退格键	       67
+                    KEYCODE_FORWARD_DEL	删除键	      112
+                     */
+                    TwantApplication.getThreadPool().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Instrumentation inst = new Instrumentation();
+                            inst.sendKeyDownUpSync(KeyEvent.KEYCODE_DEL);
+                        }
+                    });
+                } else {
+                    int index = 0;
+                    for (int btnId : EmojiPageAdapter.btnIds) {
+                        if (btnId == id) {
+                            if (index >= emojiPage.emojiList.size()) {
+                                return;
+                            }
+                            UnicodeEmojiItem emojiItem = emojiPage.emojiList.get(index);
+
+                            Editable message = etContent.getEditableText();
+                            SLog.info("message[%s]", message);
+
+                            // Get the selected text.
+                            int start = etContent.getSelectionStart();
+                            int end = etContent.getSelectionEnd();
+
+                            // Insert the emoticon.
+                            if (start < 0) {
+                                start = 0;
+                            }
+                            if (end < 0) {
+                                end = 0;
+                            }
+                            message.replace(start, end, emojiItem.emoji);
+                            SLog.info("message[%s]", message);
+
+                            etContent.setText(message);
+                            // 重新定位光標
+                            etContent.setSelection(start + emojiItem.emoji.length());
+                            break;
+                        }
+                        index++;
+                    }
+                }
+            }
+        });
+        rvEmojiPageList.setAdapter(emojiPageAdapter);
+    }
+
+    private void loadEmojiData() {
+        // 表情數
+        int emojiCount = UnicodeEmoji.emojiList.length;
+        // 表情頁數
+        int pageCount = (emojiCount + EmojiPage.EMOJI_PER_PAGE - 1) / EmojiPage.EMOJI_PER_PAGE;
+
+        SLog.info("emojiCount[%d], pageCount[%d]", emojiCount, pageCount);
+
+        for (int i = 0; i < pageCount; i++) {
+            int start = EmojiPage.EMOJI_PER_PAGE * i;
+            int stop = start + EmojiPage.EMOJI_PER_PAGE;
+            if (stop > emojiCount) {
+                stop = emojiCount;
+            }
+
+            EmojiPage emojiPage = new EmojiPage();
+            for (int j = start; j < stop; j++) {
+                emojiPage.emojiList.add(new UnicodeEmojiItem(UnicodeEmoji.emojiList[j]));
+            }
+
+            emojiPageList.add(emojiPage);
+        }
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        int id = (int) data;
+        if (id == R.id.et_content) {
+            SLog.info("點擊內容");
+            showBottomToolbar();
+        }
+    }
+
+    private void showBottomToolbar() {
+        llEmojiPane.setVisibility(View.GONE);
+        llToolContainer.setVisibility(View.VISIBLE);
+        llBottomToolbar.setVisibility(View.VISIBLE);
+
+        resetBtnInsertEmoji();
+    }
+
+    private void resetBtnInsertEmoji() {
+        btnInsertPostEmoji.setImageResource(R.drawable.icon_add_post_insert_emoji);
+        usageBtnEmoji = BTN_EMOJI_USAGE_EMOJI;
     }
 }
