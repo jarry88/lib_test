@@ -154,6 +154,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.setGone(R.id.btn_play_game, true);
             }
         } else {
+            helper.addOnClickListener(R.id.icon_publish_want_post);
+
             // 顯示即可，不用特別處理
             if (animation == null) {
                 animation = AnimationUtils.loadAnimation(mContext, R.anim.takewant_message);

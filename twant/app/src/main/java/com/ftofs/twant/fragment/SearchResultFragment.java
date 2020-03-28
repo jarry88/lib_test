@@ -515,6 +515,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     start(H5GameFragment.newInstance(url, true));
                 } else if (id == R.id.btn_back) {
                     hideSoftInputPop();
+                } else if (id == R.id.icon_publish_want_post) {
+                    Util.startFragment(AddPostFragment.newInstance(false));
                 }
             }
         });
