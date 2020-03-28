@@ -667,7 +667,9 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     private void updatePostCommentCount() {
-        tvReplyCount.setText(String.format(getString(R.string.text_view_comment_count), postComment));
+        if (isAdded()) {  //  修復：Fragment not attached to a context. 的異常
+            tvReplyCount.setText(String.format(getString(R.string.text_view_comment_count), postComment));
+        }
     }
 
     private void loadCommentList() {
