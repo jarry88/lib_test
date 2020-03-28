@@ -193,41 +193,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     // END OF 获取StickyView
 
 
-                    // 获取CarouselView
-                    card = cardList.get(2); // 索引为2的是CarouselView
-                    cells = new JSONArray();
-
-                    EasyJSONArray itemList = responseObj.getSafeArray("datas.webSliderItem");
-                    for (Object object : itemList) {
-                        EasyJSONObject itemObj = (EasyJSONObject) object;
-
-                        String goodsCommonsStr;
-                        Object goodsCommons = itemObj.get("goodsCommons");
-                        if (Util.isJsonNull(goodsCommons)) {
-                            goodsCommonsStr = "[]";
-                        } else if ("null".equals(goodsCommons.toString())) {
-                            goodsCommonsStr = "[]";
-                        } else {
-                            goodsCommonsStr = goodsCommons.toString();
-                        }
-
-                        WebSliderItem webSliderItem = new WebSliderItem(
-                                itemObj.getSafeString("image"),
-                                itemObj.getSafeString("linkType"),
-                                itemObj.getSafeString("linkValue"),
-                                itemObj.getSafeString("goodsIds"),
-                                goodsCommonsStr);
-
-                        obj = new JSONObject();
-                        obj.put("type", TangramCellType.CAROUSEL_CELL);
-                        obj.put("data", webSliderItem);
-                        cells.put(obj);
-                    }
-                    cs = tangramEngine.parseComponent(cells);
-                    card.setCells(cs);
-                    card.notifyDataChange();
-                    // END OF 获取CarouselView
-
                     // 彈出廣告
                     String enableAppPopupAdStr = responseObj.getSafeString("datas.enableAppPopupAd");
 
