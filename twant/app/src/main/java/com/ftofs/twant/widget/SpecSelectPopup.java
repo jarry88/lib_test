@@ -345,7 +345,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
                         selSpecValueIdList.set(currData.position, currData.specValueId);
                         selSpecButtonList.set(currData.position, currButton);
-                        currPosition = currData.position;
+                        currPosition=((SpecButtonData) currButton.getTag()).index;
                         updateCurrGoodsId();
                     }
                 });
