@@ -534,15 +534,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         goodsGalleryAdapter = new GoodsGalleryAdapter(_mActivity, currGalleryImageList);
 
         goodsGalleryAdapter.setOnItemClickListener(v -> {
-            int position = currGalleryPosition % currGalleryImageList.size();
-            if (viewPagerFragment == null) {
-                viewPagerFragment = ViewPagerFragment.newInstance(currGalleryImageList,false);
+            if (currGalleryImageList.size() == 0) {
+                return;
             }
-            SLog.info(currGalleryImageList.toString());
+            int position = currGalleryPosition % currGalleryImageList.size();
+            viewPagerFragment = ViewPagerFragment.newInstance(currGalleryImageList,false);
+            // SLog.info(currGalleryImageList.toString());
             viewPagerFragment.start = position;
             Util.startFragment(viewPagerFragment);
-            SLog.info("currPosition[%d][%d]", currGalleryPosition,position);
-
+            SLog.info("currPosition[%d][%d]", currGalleryPosition, position);
         });
         rvGalleryImageList.setAdapter(goodsGalleryAdapter);
         rvGalleryImageList.addOnScrollListener(new RecyclerView.OnScrollListener() {
