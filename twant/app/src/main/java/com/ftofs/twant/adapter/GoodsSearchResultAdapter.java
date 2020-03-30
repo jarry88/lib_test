@@ -78,7 +78,13 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 helper.setText(R.id.tv_store_name_left, item.left.storeName);
                 helper.setText(R.id.tv_goods_name_left, item.left.goodsName);
-                helper.setText(R.id.tv_goods_jingle_left, item.left.jingle);
+                TextView tvGoodsJingleLeft = helper.getView(R.id.tv_goods_jingle_left);
+                if (StringUtil.isEmpty(item.left.jingle)) {
+                    tvGoodsJingleLeft.setVisibility(View.GONE);
+                } else {
+                    tvGoodsJingleLeft.setText(item.left.jingle);
+                    tvGoodsJingleLeft.setVisibility(View.VISIBLE);
+                }
                 helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context, item.left.price, 1,false));
 
                 helper.setGone(R.id.tv_freight_free_left, item.left.isFreightFree)
@@ -116,7 +122,13 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 helper.setText(R.id.tv_store_name_right, item.right.storeName);
                 helper.setText(R.id.tv_goods_name_right, item.right.goodsName);
-                helper.setText(R.id.tv_goods_jingle_right, item.right.jingle);
+                TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);
+                if (StringUtil.isEmpty(item.right.jingle)) {
+                    tvGoodsJingleRight.setVisibility(View.GONE);
+                } else {
+                    tvGoodsJingleRight.setText(item.right.jingle);
+                    tvGoodsJingleRight.setVisibility(View.VISIBLE);
+                }
                 helper.setText(R.id.tv_goods_price_right, StringUtil.formatPrice(context, item.right.price, 1,false));
 
                 helper.setGone(R.id.tv_freight_free_right, item.right.isFreightFree)
