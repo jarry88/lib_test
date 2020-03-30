@@ -681,9 +681,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                                 titleItem.setItemTitle(title);
                                 title = "";
                                 goodsPairList.add(0,titleItem);
-
-                                shopGoodsGridAdapter.notifyDataSetChanged();
-                                shopGoodsListAdapter.notifyDataSetChanged();
+//                                int s = shopGoodsGridAdapter.getData().size();
+                                shopGoodsGridAdapter.notifyItemInserted(0);
+                                shopGoodsListAdapter.notifyItemInserted(0);
                             }
 
                         }

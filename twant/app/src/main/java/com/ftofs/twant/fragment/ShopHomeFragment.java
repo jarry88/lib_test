@@ -2,6 +2,8 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.DrawableWrapper;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -207,6 +210,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private String storeBusInfo;
     private int storeReply;
 
+
     static class CountDownHandler extends Handler {
 
         private PageIndicatorView pageIndicatorView;
@@ -247,6 +251,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
+
         storeId = parentFragment.storeId;
 
         viewpager.setOffscreenPageLimit(tabCount-1);
@@ -285,6 +290,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         Util.setOnClickListener(view, R.id.rl_shop_comment_container, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
+        Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_menu, this);
+        Util.setOnClickListener(view, R.id.btn_search, this);
+
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
@@ -303,16 +312,43 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         loadStoreData();
         setImageBanner();
 
+        parentFragment.adjustFlHeight(true);
+        parentFragment.toolbar.setAlpha(0.0f);
+        parentFragment.preToolbar.setAlpha(1.0f);
+        parentFragment.toolbar.setBackgroundColor(getResources().getColor(R.color.tw_white,null));
         containerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 int rvPostListY = Util.getYOnScreen(smartTabLayout);
                 int containerViewY = Util.getYOnScreen(containerView);
 
-                // SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
-                broadcastNestedScrollingEnabled(rvPostListY <= containerViewY);  // 如果列表滑动到顶部，则启用嵌套滚动
+                 SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
+                broadcastNestedScrollingEnabled(rvPostListY <= containerViewY+parentFragment.tool.getHeight());  // 如果列表滑动到顶部，则启用嵌套滚动
+                hideBarTitle(scrollY);
             }
         });
+    }
+
+    private void hideBarTitle( int scrollY) {
+        int fadingHeight = 255;
+        int initHeight = 20;
+        if (scrollY > initHeight) {
+            parentFragment.hideTitle(true);
+            if (scrollY > fadingHeight) {
+                parentFragment.toolbar.setAlpha(1.0f);
+                parentFragment.preToolbar.setAlpha(0);
+
+            } else {
+                parentFragment.toolbar.setAlpha((float) scrollY / fadingHeight);
+                parentFragment.preToolbar.setAlpha(1.0f-(float) scrollY / fadingHeight);
+
+                //rlTopBarContainer.getBackground().setAlpha(scrollY);
+            }
+        } else {
+            parentFragment.hideTitle(false);
+            parentFragment.toolbar.setAlpha(0.0f);
+            parentFragment.preToolbar.setAlpha(1.0f);
+        }
     }
 
     @Override
@@ -1183,9 +1219,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             SLog.info("containerViewHeight[%d]", containerViewHeight);
 
             int tabHeight = smartTabLayout.getHeight();
+            int toolBarHeight = parentFragment.tool.getHeight();
 
             ViewGroup.LayoutParams layoutParams = viewpager.getLayoutParams();
-            layoutParams.height = containerViewHeight - tabHeight;
+            layoutParams.height = containerViewHeight - tabHeight-toolBarHeight;
             viewpager.setLayoutParams(layoutParams);
         }
 
