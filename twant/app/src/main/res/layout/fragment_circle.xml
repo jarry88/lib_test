@@ -95,7 +95,7 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/icon_clear_all_circle"
                     />
-                <EditText
+                <com.ftofs.twant.widget.TouchEditText
                     android:id="@+id/et_keyword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -117,56 +117,81 @@
         </RelativeLayout>
         <!-- END OF 工具欄 -->
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:background="@drawable/border_type_d">
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <LinearLayout
-                    android:id="@+id/ll_tab_button_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/post_category_gradient"
-                    />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/btn_post_filter"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/icon_post_filter"
-                    />
-            </RelativeLayout>
-        </LinearLayout>
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#F1F1F1">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_post_list"
+            android:layout_height="match_parent">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp">
-            </androidx.recyclerview.widget.RecyclerView>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp"
+                    android:background="@drawable/border_type_d">
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+                        <LinearLayout
+                            android:id="@+id/ll_tab_button_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/post_category_gradient"
+                            />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/btn_post_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/icon_post_filter"
+                            />
+                    </RelativeLayout>
+                </LinearLayout>
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe_refresh_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#F1F1F1">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_post_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp">
+                    </androidx.recyclerview.widget.RecyclerView>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_search_history_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/tw_mask_bg_color"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <include android:id="@+id/history_popup_layout" layout="@layout/post_search_history_container"></include>
+                <FrameLayout
+                    android:id="@+id/fl_mask_empty_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </FrameLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+
     </LinearLayout>
     <LinearLayout
         android:id="@+id/ll_float_button_container"

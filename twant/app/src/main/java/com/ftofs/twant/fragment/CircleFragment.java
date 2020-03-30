@@ -21,6 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.PostListAdapter;
+import com.ftofs.twant.adapter.SearchHistoryItemAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
@@ -30,8 +31,10 @@ import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PostCategory;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.entity.SearchHistoryItem;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -41,9 +44,11 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.PostFilterDrawerPopupView;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
+import com.ftofs.twant.widget.TouchEditText;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.enums.PopupPosition;
+import com.nex3z.flowlayout.FlowLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,24 +63,32 @@ import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
+import static com.ftofs.twant.widget.SearchHistoryPopup.SEARCH_HISTORY_ITEM;
+
 /**
  * 想要圈
  * @author zwm
  */
 public class CircleFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener,
-        BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+        BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener, SimpleCallback {
     List<PostCategory> postCategoryList = new ArrayList<>();
     List<PostItem> postItemList = new ArrayList<>();
 
     LinearLayout llTabButtonContainer;
     BasePopupView loadingPopup;
 
+
+
     PostListAdapter adapter;
     SearchPostParams searchPostParams = new SearchPostParams();
     RecyclerView rvPostList;
     SwipeRefreshLayout swipeRefreshLayout;
 
-    EditText etKeyword;
+    TouchEditText etKeyword;
+    View llSearchHistoryContainer;
+    View flMaskEmptyArea;
+    View historyPopupLayout;
+    FlowLayout flHistoryContainer;
 
     // 當前要加載第幾頁(從1開始）
     int currPage = 0;
@@ -91,6 +104,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
      */
     boolean isStandalone;
     boolean isPostDataLoaded;
+
 
     /**
      * 選中的過濾索引
@@ -129,13 +143,27 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         swipeRefreshLayout.setOnRefreshListener(this);
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
 
+
+        flHistoryContainer = view.findViewById(R.id.fl_search_history_container);
+
+        llSearchHistoryContainer = view.findViewById(R.id.ll_search_history_container);
+        flMaskEmptyArea = view.findViewById(R.id.fl_mask_empty_area);
+        flMaskEmptyArea.setOnClickListener(this);
+        historyPopupLayout = view.findViewById(R.id.history_popup_layout);
+        historyPopupLayout.setOnClickListener(this);
+
         etKeyword = view.findViewById(R.id.et_keyword);
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchPostParams.keyword = textView.getText().toString().trim();
+                    if (!StringUtil.isEmpty(searchPostParams.keyword)) {
+                        SearchHistoryUtil.saveSearchHistory(SearchType.POST.ordinal(), searchPostParams.keyword);
+                    }
+                    hideSearchHistoryContainer();
+
                     currPage = 0;
-                    searchPostParams.keyword = textView.getText().toString();
                     loadPostData(currPage + 1);
 
                     return true;
@@ -143,6 +171,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 return false;
             }
         });
+        etKeyword.setSimpleCallback(this);
 
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
 
@@ -260,11 +289,18 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         item.categoryName = "全部";
         postCategoryList.add(item);
 
+        if (!StringUtil.isEmpty(searchPostParams.keyword)) {
+            etKeyword.setText(searchPostParams.keyword);
+        }
+
         if (searchPostParams.page > 0) {
             loadPostData(searchPostParams.page);
         } else {
             loadPostData(currPage + 1);
         }
+
+        initSearchHistory();
+        view.findViewById(R.id.btn_clear_all_history).setOnClickListener(this);
     }
 
 
@@ -289,7 +325,29 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.btn_back) {
+        // 處理歷史搜索的點擊事件
+        if (v instanceof TextView) {
+            Object tag = v.getTag();
+            if (tag != null && tag instanceof String && SEARCH_HISTORY_ITEM.equals(tag)) {
+                TextView btnSearchHistoryItem = (TextView) v;
+                String keyword = btnSearchHistoryItem.getText().toString();
+                etKeyword.setText(keyword);
+
+                hideSoftInput();
+                hideSearchHistoryContainer();
+
+                currPage = 0;
+                searchPostParams.keyword = keyword;
+                loadPostData(currPage + 1);
+
+                return;
+            }
+        }
+
+        if (id == R.id.btn_clear_all_history) {
+            flHistoryContainer.removeAllViews();
+            SearchHistoryUtil.clearSearchHistory(SearchType.POST.ordinal());
+        } else if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_add_post) {
             Util.startFragment(AddPostFragment.newInstance(false));
@@ -307,6 +365,25 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             rvPostList.scrollToPosition(0);
         } else if (id == R.id.btn_clear_all) {
             etKeyword.setText("");
+        } else if (id == R.id.fl_mask_empty_area) { // 點擊彈窗蒙板的空白區域，則隱藏歷史彈窗
+            hideSearchHistoryContainer();
+        } else if (id == R.id.history_popup_layout) {
+            // 屏蔽點擊事件，不要刪除
+        }
+    }
+
+    private void initSearchHistory() {
+        List<SearchHistoryItem> historyItemList = SearchHistoryUtil.loadSearchHistory(SearchType.POST.ordinal());
+        flHistoryContainer.removeAllViews();
+        for (SearchHistoryItem item : historyItemList) {
+            TextView textView = (TextView) LayoutInflater.from(_mActivity)
+                    .inflate(R.layout.search_history_popup_item, flHistoryContainer, false);
+            textView.setText(item.keyword);
+
+            textView.setTag(SEARCH_HISTORY_ITEM);
+            textView.setOnClickListener(this);
+
+            flHistoryContainer.addView(textView);
         }
     }
 
@@ -336,7 +413,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 params.set("token", token);
             }
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         SLog.info("url[%s],params[%s]",Api.PATH_SEARCH_POST, params);
@@ -666,5 +743,24 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
         llFloatButtonContainer.setTranslationX(Util.dip2px(_mActivity, 31));
         floatButtonShown = false;
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        if (data instanceof Integer) {
+            int id = (int) data;
+            if (id == R.id.et_keyword) {
+                showSearchHistoryContainer();
+            }
+        }
+    }
+
+    private void showSearchHistoryContainer() {
+        initSearchHistory();
+        llSearchHistoryContainer.setVisibility(View.VISIBLE);
+    }
+
+    private void hideSearchHistoryContainer() {
+        llSearchHistoryContainer.setVisibility(View.GONE);
     }
 }

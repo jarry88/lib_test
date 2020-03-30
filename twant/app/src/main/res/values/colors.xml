@@ -24,4 +24,6 @@
     <color name="tw_no_color">#00000000</color>
     <color name="tw_mask15_black_color">#26000000</color>
     <color name="tw_take_off_grey">#CECECE</color>
+
+    <color name="tw_mask_bg_color">#7f000000</color>
 </resources>

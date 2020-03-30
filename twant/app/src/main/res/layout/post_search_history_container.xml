@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:background="#F7F7F7"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="31dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="歷史搜索"
+            android:textSize="14sp"
+            android:textColor="#676666"
+            />
+    </RelativeLayout>
+    <com.nex3z.flowlayout.FlowLayout
+        android:id="@+id/fl_search_history_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flChildSpacing="15dp"
+        app:flRowSpacing="15dp">
+    </com.nex3z.flowlayout.FlowLayout>
+
+    <LinearLayout
+        android:id="@+id/btn_clear_all"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="43dp"
+        android:paddingRight="43dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/category_search_history_item_bg">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_delete"
+            />
+        <TextView
+            android:id="@+id/btn_clear_all_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="#676666"
+            android:textSize="14sp"
+            android:text="清除歷史"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_search_hot_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="熱門搜索"
+            android:textColor="#676666"
+            android:textSize="14sp"
+            />
+
+        <com.nex3z.flowlayout.FlowLayout
+            android:id="@+id/fl_search_hot_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </com.nex3z.flowlayout.FlowLayout>
+    </LinearLayout>
+
+</LinearLayout>
+
