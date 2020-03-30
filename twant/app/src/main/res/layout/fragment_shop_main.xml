@@ -162,16 +162,8 @@
                 android:layout_gravity="center"
                 android:src="@drawable/icon_shop_menu"
                 />
-
         </LinearLayout>
-        <View
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/tool_bar_main"
-            android:layout_marginTop="-1dp"
-            android:background="@color/tw_light_grey"
-            android:id="@+id/line_title"/>
+
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/ll_float_button_container"

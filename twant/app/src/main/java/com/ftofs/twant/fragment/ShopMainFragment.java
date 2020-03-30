@@ -472,12 +472,12 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             imgIcon.setImageResource(bottomBarSelIconResources[index]);
             toolbar.setBackgroundResource(R.drawable.border_type_d);
             hideTitle(true);
-            getView().findViewById(R.id.line_title).setVisibility(View.INVISIBLE);
+//            getView().findViewById(R.id.line_title).setAlpha(0);
             adjustFlHeight(false);
             toolbar.setAlpha(1.0f);
             preToolbar.setAlpha(0);
         } else {
-            toolbar.setBackgroundColor(getResources().getColor(R.color.tw_white,null));
+            toolbar.setBackgroundResource(R.drawable.white_border_type_d);
             adjustFlHeight(true);
         }
 
@@ -701,7 +701,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         view.findViewById(R.id.btn_back).setVisibility(isVisible?View.VISIBLE:View.INVISIBLE);
         view.findViewById(R.id.btn_menu).setVisibility(isVisible?View.VISIBLE:View.INVISIBLE);
         view.findViewById(R.id.btn_search).setVisibility(isVisible?View.VISIBLE:View.INVISIBLE);
-        view.findViewById(R.id.line_title).setVisibility(isVisible?View.VISIBLE:View.INVISIBLE);
+//        view.findViewById(R.id.line_title).setAlpha(isVisible?1.0f:0);
     }
 
     public void adjustFlHeight(boolean isTop) {

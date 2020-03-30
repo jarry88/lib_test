@@ -315,7 +315,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         parentFragment.adjustFlHeight(true);
         parentFragment.toolbar.setAlpha(0.0f);
         parentFragment.preToolbar.setAlpha(1.0f);
-        parentFragment.toolbar.setBackgroundColor(getResources().getColor(R.color.tw_white,null));
+        parentFragment.toolbar.setBackgroundResource(R.drawable.white_border_type_d);
         containerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
