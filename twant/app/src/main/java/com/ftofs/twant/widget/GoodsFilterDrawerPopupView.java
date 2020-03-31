@@ -2,6 +2,8 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -244,8 +246,8 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
                 }
 
                 if (!StringUtil.isEmpty(lowestPrice) && !StringUtil.isEmpty(highestPrice)) {
-                    float lowest = Float.valueOf(lowestPrice);
-                    float highest = Float.valueOf(highestPrice);
+                    float lowest = Float.parseFloat(lowestPrice);
+                    float highest = Float.parseFloat(highestPrice);
 
                     if (lowest < 0) {
                         ToastUtil.error(context, "價格不能小于零");
@@ -279,7 +281,7 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
                     params.set("cat", categoryId);
                 }
             } catch (Exception e) {
-
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
             SLog.info("params[%s]", params.toString());
 
