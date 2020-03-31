@@ -33,6 +33,7 @@ import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -177,7 +178,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                 if (postItem.getItemType() == Constant.ITEM_TYPE_NORMAL) {
                     Util.startFragment(PostDetailFragment.newInstance(postItem.postId));
                 } else {
-                    Util.startFragment(AddPostFragment.newInstance(false));
+//                    Util.startFragment(AddPostFragment.newInstance(false));
+                    ApiUtil.addPost(_mActivity,false);
                 }
             }
         });
@@ -292,7 +294,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_add_post) {
-            Util.startFragment(AddPostFragment.newInstance(false));
+            ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_post_filter) {
             new XPopup.Builder(_mActivity)
                     .popupPosition(PopupPosition.Right)//右边
@@ -302,7 +304,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         } else if (id == R.id.btn_search_post) {
             Util.startFragment(CategoryFragment.newInstance(SearchType.POST, "想要"));
         } else if (id == R.id.btn_publish_want_post) {
-            Util.startFragment(AddPostFragment.newInstance(false));
+            ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_goto_top) {
             rvPostList.scrollToPosition(0);
         } else if (id == R.id.btn_clear_all) {

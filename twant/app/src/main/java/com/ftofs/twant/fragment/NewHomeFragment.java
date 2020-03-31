@@ -24,6 +24,7 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -322,7 +323,7 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
         if (id == R.id.btn_goto_top) {
             rvList.scrollToPosition(0);
         } else if (id == R.id.btn_publish_want_post) {
-            Util.startFragment(AddPostFragment.newInstance(false));
+            ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
 
         }

@@ -1115,6 +1115,10 @@ public class Api {
      * 店鋪導航菜單
      */
     public static final String PATH_STORE_NAVIGATION = "/store/navigation";
+    /**
+     * 貼文發表驗證
+     */
+    public static final String PATH_WANT_POST_ISSUE_VALIDATE = "/member/want_post/issue/validate";
 
 
     /**

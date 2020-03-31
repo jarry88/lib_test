@@ -45,6 +45,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.SearchHistoryUtil;
@@ -437,7 +438,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 if (storeSearchItem.getItemType() == Constant.ITEM_TYPE_NORMAL) {
                     Util.startFragment(ShopMainFragment.newInstance(storeSearchItem.storeId));
                 } else {
-                    Util.startFragment(AddPostFragment.newInstance(false));
+                    ApiUtil.addPost(_mActivity,false);
                 }
             }
         });
@@ -1107,7 +1108,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 doSearch(SearchType.STORE, currPage + 1, keyword, currFilter);
                 break;
             case R.id.btn_publish_want_post:
-                Util.startFragment(AddPostFragment.newInstance(false));
+                ApiUtil.addPost(_mActivity,false);
                 break;
             case R.id.btn_prev_page:
                 if (currPage <= 1) {
