@@ -39,8 +39,6 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.member.MemberVo;
-import com.hyphenate.chat.EMClient;
-import com.ycbjie.webviewlib.X5WebView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -63,7 +61,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     EditText etUrlWithToken;
 
 
-    X5WebView x5WebView;
+
 
 
     TextView textView;
@@ -95,7 +93,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         EventBus.getDefault().register(this);
         mNotificationManager = (NotificationManager) _mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
         createNotificationChanel();
-        x5WebView = view.findViewById(R.id.x5_web_view);
+
         Util.setOnClickListener(view,R.id.tv_28,this);
         Util.setOnClickListener(view,R.id.tv_29,this);
         Util.setOnClickListener(view,R.id.tv_prod,this);
@@ -161,12 +159,6 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
-
-        if (x5WebView != null) {
-            x5WebView.clearHistory();
-            x5WebView.destroy();
-        }
-
     }
 
     private void parseUrl(String origUrl) {
@@ -280,9 +272,6 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
                 SLog.info("清空浏览器缓存成功");
                 h5.clearCache();
             }
-            x5WebView.clearCache(true);
-            x5WebView.clearFormData();
-            x5WebView.clearHistory();
             ToastUtil.success(_mActivity, "清空浏览器缓存成功");
         } else if (id == R.id.tv_28) {
             User.logout();
