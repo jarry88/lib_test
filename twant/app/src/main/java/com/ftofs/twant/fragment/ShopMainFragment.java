@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -45,6 +48,7 @@ import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.WhiteDropdownMenu;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.tabs.TabLayout;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
 
@@ -69,6 +73,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     int storeId;
     String storeFigure;
     LinearLayout toolbar;
+    RelativeLayout preToolbar;
 
     TextView tvShopTitle;
 
@@ -81,7 +86,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     String storeName = "";
 
     FloatingActionMenu btnCustomerMenu;
-    ScaledButton btnSearch;
+    public ScaledButton btnSearch;
     LinearLayout llTabButtonContainer;
 
     SimpleTabManager simpleTabManager;
@@ -134,6 +139,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private int customerCount;
     private ImageView btnCart;
     private ImageView btnComment;
+    RelativeLayout tool;
 
     public static ShopMainFragment newInstance(int shopId) {
         Bundle args = new Bundle();
@@ -161,12 +167,15 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         llFloatButtonList = view.findViewById(R.id.btn_customer_list);
         Util.setOnClickListener(view,R.id.btn_comment,this);
-        toolbar = view.findViewById(R.id.tool_bar);
+        tool = view.findViewById(R.id.tool_bar);
+        toolbar = view.findViewById(R.id.tool_bar_main);
+        preToolbar = view.findViewById(R.id.rv_pre_tool_bar);
         tvShopTitle = view.findViewById(R.id.tv_shop_title);
         imgBottomBarShopAvatar = view.findViewById(R.id.img_bottom_bar_shop_avatar);
 
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
         Util.setOnClickListener(view,R.id.btn_menu,this);
+        Util.setOnClickListener(view,R.id.btn_menu_round,this);
         Util.setOnClickListener(view,R.id.btn_cart,this);
         btnComment = view.findViewById(R.id.btn_comment);
         btnCart = view.findViewById(R.id.btn_cart);
@@ -195,6 +204,8 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         btnSearch = view.findViewById(R.id.btn_search);
         btnSearch.setOnClickListener(this);
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_back_round, this);
+        Util.setOnClickListener(view, R.id.btn_search_round, this);
 
         simpleTabManager = new SimpleTabManager(0) {
             @Override
@@ -332,9 +343,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_back) {
+        if (id == R.id.btn_back||id==R.id.btn_back_round) {
             hideSoftInputPop();
-        } else if (id == R.id.btn_menu) {
+        } else if (id == R.id.btn_menu||id==R.id.btn_menu_round) {
             SLog.info("here");
             new XPopup.Builder(_mActivity)
                     .offsetX(-Util.dip2px(_mActivity, 15))
@@ -344,7 +355,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     .atView(v)
                     .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_STORE))
                     .show();
-        } else if (id == R.id.btn_search) {
+        } else if (id == R.id.btn_search||id==R.id.btn_search_round) {
             start(ShopSearchFragment.newInstance(storeId, null));
         } else if(id==R.id.btn_customer){
             customerListShow();
@@ -459,6 +470,15 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         if (index != HOME_FRAGMENT) {
             ImageView imgIcon = bottomBarIcons[index];
             imgIcon.setImageResource(bottomBarSelIconResources[index]);
+            toolbar.setBackgroundResource(R.drawable.border_type_d);
+            hideTitle(true);
+//            getView().findViewById(R.id.line_title).setAlpha(0);
+            adjustFlHeight(false);
+            toolbar.setAlpha(1.0f);
+            preToolbar.setAlpha(0);
+        } else {
+            toolbar.setBackgroundResource(R.drawable.white_border_type_d);
+            adjustFlHeight(true);
         }
 
 
@@ -671,5 +691,31 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
     public ShopHomeFragment getHomeFragment() {
         return (ShopHomeFragment)mFragments[HOME_FRAGMENT];
+    }
+
+    public void hideTitle(boolean isVisible) {
+        View view = getView();
+        if (view == null) {
+            return;
+        }
+        view.findViewById(R.id.btn_back).setVisibility(isVisible?View.VISIBLE:View.INVISIBLE);
+        view.findViewById(R.id.btn_menu).setVisibility(isVisible?View.VISIBLE:View.INVISIBLE);
+        view.findViewById(R.id.btn_search).setVisibility(isVisible?View.VISIBLE:View.INVISIBLE);
+//        view.findViewById(R.id.line_title).setAlpha(isVisible?1.0f:0);
+    }
+
+    public void adjustFlHeight(boolean isTop) {
+        ConstraintLayout layout= getView().findViewById(R.id.constraint_container);
+        ConstraintSet set = new ConstraintSet();
+        set.clone(layout);
+        if (isTop) {
+            set.connect(R.id.fl_tab_container,ConstraintSet.TOP,ConstraintSet.PARENT_ID,ConstraintSet.TOP);
+            set.connect(R.id.tool_bar,ConstraintSet.TOP,ConstraintSet.PARENT_ID,ConstraintSet.TOP);
+            set.applyTo(layout);
+        } else {
+            set.connect(R.id.fl_tab_container,ConstraintSet.TOP,R.id.tool_bar,ConstraintSet.BOTTOM);
+            set.connect(R.id.tool_bar,ConstraintSet.TOP,ConstraintSet.PARENT_ID,ConstraintSet.TOP);
+            set.applyTo(layout);
+        }
     }
 }

@@ -81,6 +81,7 @@ public class NotificationSettingFragment extends BaseFragment implements View.On
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
         return true;
     }
 }

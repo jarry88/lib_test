@@ -51,7 +51,7 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
         TextView tvCategoryName = helper.getView(R.id.tv_category_name);
         tvCategoryName.setText(labelName);
 
-        LinearLayout llSubCategoryList = helper.getView(R.id.ll_sub_category_list);
+        LinearLayout llSubCategoryList = helper.getView(R.id.ll_sub_ategory_list);
 
 
         int goodsCount = item.getGoodsCount();
@@ -66,18 +66,19 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
                 goodsCountText = "...";
             }
             helper.setText(R.id.tv_goods_category_item_count, goodsCountText);
-            helper.setGone(R.id.fl_goods_category_item_count_container, true);
+            helper.setGone(R.id.fl_goods_category_item_count_container, false);
         }
 
         if (item.getIsFold() == Constant.TRUE_INT) {
-            helper.itemView.setBackgroundColor(Color.parseColor("#F3F3F3"));
+            helper.itemView.setBackgroundColor(Color.WHITE);
             helper.setGone(R.id.vw_selected_indicator, false);
             tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_black, null));
             tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
 
             llSubCategoryList.setVisibility(View.GONE);
         } else {
-            helper.itemView.setBackgroundColor(Color.WHITE);
+            helper.itemView.setBackgroundColor(Color.parseColor("#F3F3F3"));
+            tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             helper.setGone(R.id.vw_selected_indicator, true);
             tvCategoryName.setTextColor(context.getResources().getColor(R.color.tw_blue, null));
 //            tvCategoryName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -117,7 +118,7 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
 
                             SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
                             prevSelectedSubItemIndex = finalI;
-                            onSelectedListener.onSelected(PopupType.DEFAULT, helper.getAdapterPosition(), storeLabel.getStoreLabelId());
+                            onSelectedListener.onSelected(PopupType.DEFAULT, helper.getAdapterPosition(), storeLabel);
                         }
                     });
 

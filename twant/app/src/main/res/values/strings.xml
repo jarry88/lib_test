@@ -8,7 +8,7 @@
     <string name="register_fragment_title">注冊賬號</string>
     <string name="login_fragment_title">登入</string>
     <string name="security_setting_fragment_title">安全設置</string>
-    <string name="new_notification_setting">新消息提醒</string>
+    <string name="new_notification_setting">新消息設置</string>
     <string name="_setting_fragment_title">安全設置</string>
     <string name="payment_password_fragment_title">設置支付密碼</string>
     <string name="modify_payment_password">修改支付密碼</string>
@@ -759,4 +759,11 @@
     <string name="agree_server">請先同意服務協議</string>
     <string name="agree_and_login">閲讀并同意</string>
     <string name="tip_number_is_null">手機號不能爲空</string>
+    <string name="mpay_name">Mpay</string>
+    <string name="wallet_name">想付錢包</string>
+    <string name="taifung_name">大豐銀行電子支付</string>
+    <string name="alihk_name">AlipayHK</string>
+    <string name="weixin_name">微信支付（內地）</string>
+    <string name="alipay_name">支付寳（內地）</string>
+    <string name="select_other_pay">選擇其他支付</string>
 </resources>

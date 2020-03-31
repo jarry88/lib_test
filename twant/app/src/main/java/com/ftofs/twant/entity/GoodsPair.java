@@ -7,6 +7,7 @@ public class GoodsPair implements MultiItemEntity {
     public int itemType;
     public Goods leftGoods;
     public Goods rightGoods;
+    private String itemTitle;
 
     public GoodsPair() {
         itemType = Constant.ITEM_TYPE_NORMAL;
@@ -15,5 +16,12 @@ public class GoodsPair implements MultiItemEntity {
     @Override
     public int getItemType() {
         return itemType;
+    }
+
+    public String getItemTitle() {
+        return itemTitle;
+    }
+    public void setItemTitle(String title) {
+        this.itemTitle=title;
     }
 }

@@ -8,9 +8,11 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.domain.im.ImMemberStatus;
 import com.ftofs.twant.domain.member.Member;
+import com.ftofs.twant.fragment.AddPostFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.vo.member.MemberVo;
+import com.lxj.xpopup.impl.LoadingPopupView;
 
 import java.io.IOException;
 
@@ -98,6 +100,44 @@ public class ApiUtil {
             });
         } catch (Exception e) {
             SLog.info("Error![%s]", e);
+        }
+    }
+
+    /**
+     * 查取能否發送貼文
+     * @param fromWeb imName 會員id
+     */
+    public static void addPost(Context context,boolean fromWeb) {
+        addPost(context,fromWeb,null);
+
+    }
+
+    public static void addPost(Context context, boolean fromWeb, EasyJSONObject dataObj) {
+        try {
+            EasyJSONObject params = EasyJSONObject.generate();
+            params.set("token", User.getToken());
+            Api.getUI(Api.PATH_WANT_POST_ISSUE_VALIDATE, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(context, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try{
+                        SLog.info("responseStr[%s]",responseStr);
+                        if (dataObj == null) {
+                            Util.startFragment(AddPostFragment.newInstance(fromWeb));
+                        } else {
+                            Util.startFragment(AddPostFragment.newInstance(dataObj,fromWeb));
+                        }
+                    }catch (Exception e){
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        }catch (Exception e){
+            SLog.info("Error![%s]",e);
         }
     }
 }

@@ -56,6 +56,10 @@ public class Constant {
     public static final int SERVER_ORDERS_STATE_UNINITIALIZED = -1; // 未初始化的，表示未取到服務器端的值
     public static final int SERVER_ORDERS_STATE_TO_BE_PAID = 10; // 待付款
 
+/**
+ * 標題Item
+ */
+     public static final int ITEM_TYPE_TITLE =4;
 
     /**
      * 正常的Item

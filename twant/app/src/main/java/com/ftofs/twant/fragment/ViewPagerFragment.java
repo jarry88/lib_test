@@ -16,6 +16,7 @@ import com.ftofs.twant.constant.Uri;
 import com.ftofs.twant.domain.goods.GoodsImage;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.HackyViewPager;
@@ -56,6 +57,7 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
         return newInstance(list);
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if (start > currGalleryImageList.size()) {
+        if (start >=currGalleryImageList.size()) {
             start = 0;
         }
         viewPager.setCurrentItem(start);
@@ -79,10 +81,18 @@ public class ViewPagerFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view,R.id.btn_back_round,this);
         viewPager = view.findViewById(R.id.view_pager);
         viewPagerAdapter = SamplePagerAdapter.newInstance(currGalleryImageList, getContext());
+
         viewPagerAdapter.setmOnItemClickListener(v ->
                 pop());
         viewPager.setAdapter(viewPagerAdapter);
+
     }
+
+    public void setStart(int start) {
+        SLog.info("start%d",start);
+        this.start = start;
+    }
+
 
     @Override
     public void onClick(View v) {
