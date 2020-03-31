@@ -713,4 +713,18 @@ public class StringUtil {
 
         return memberName;
     }
+
+    public static String parseZone(String mobie) {
+        if (isEmpty(mobie)) {
+            return null;
+        } else {
+            int index = mobie.lastIndexOf(",");
+            if (index == -1) {
+                return null;
+            } else {
+                String zone = mobie.substring(0, index);
+                return zone;
+            }
+        }
+    }
 }

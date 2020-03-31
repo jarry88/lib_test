@@ -322,7 +322,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 int rvPostListY = Util.getYOnScreen(smartTabLayout);
                 int containerViewY = Util.getYOnScreen(containerView);
 
-                 SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
+//                 SLog.info("rvPostListY[%s], containerViewY[%s]", rvPostListY, containerViewY);
                 broadcastNestedScrollingEnabled(rvPostListY <= containerViewY+parentFragment.tool.getHeight());  // 如果列表滑动到顶部，则启用嵌套滚动
                 hideBarTitle(scrollY);
             }
