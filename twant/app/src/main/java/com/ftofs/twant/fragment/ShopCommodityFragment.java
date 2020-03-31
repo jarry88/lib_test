@@ -33,6 +33,7 @@ import com.ftofs.twant.entity.VideoItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.SloganView;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -258,6 +259,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 GoodsPair goodsPair = goodsPairList.get(position);
                 // padding忽略點擊
                 if (goodsPair.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
+                    ApiUtil.addPost(_mActivity,false);
                     return;
                 }
 
