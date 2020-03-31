@@ -92,7 +92,7 @@ public class ApiUtil {
                         updateUI.onSimpleCall(memberVo);
 
                     } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                        SLog.info("Error!不用处理，message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });

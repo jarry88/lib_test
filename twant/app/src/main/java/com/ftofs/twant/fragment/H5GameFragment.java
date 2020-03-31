@@ -1,11 +1,19 @@
 package com.ftofs.twant.fragment;
 
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,16 +38,8 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
-import com.tencent.smtt.export.external.interfaces.SslError;
-import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
-import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
-import com.tencent.smtt.sdk.WebView;
 import com.yanzhenjie.permission.runtime.Permission;
-import com.ycbjie.webviewlib.InterWebListener;
-import com.ycbjie.webviewlib.WebProgress;
-import com.ycbjie.webviewlib.X5WebUtils;
-import com.ycbjie.webviewlib.X5WebView;
-import com.ycbjie.webviewlib.X5WebViewClient;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,8 +53,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
     BasePopupView loadingPopup;
     String url;
     String customTitle; // 显示自定义的标题
-    private X5WebView mWebView;
-    private WebProgress progress;
+    private WebView mWebView;
 
     boolean ignoreSslError = true; // 忽略ssl错误
     boolean reloadOnVisible;  // fragment重新可见时，是否刷新浏览器
@@ -62,6 +61,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
     boolean isFirstVisible = true;
 
     TextView tvFragmentTitle;
+
 
     public static H5GameFragment newInstance(String url, boolean ignoreSslError, boolean reloadOnVisible, String title) {
         Bundle args = new Bundle();
@@ -111,15 +111,9 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
         Util.setOnClickListener(view, R.id.btn_back, this);
 
         mWebView=view.findViewById(R.id.x5_web_view);
-        progress = view.findViewById(R.id.progress);
-        progress.show();
-        progress.setColor(getResources().getColor(R.color.colorAccent,null),this.getResources().getColor(R.color.colorPrimaryDark,null));
-
         loadingPopup = Util.createLoadingPopup(_mActivity).show();
         SLog.info("mwebView url[%s]",url);
         mWebView.loadUrl(url);
-        mWebView.getX5WebChromeClient().setWebListener(interWebListener);
-        mWebView.getX5WebViewClient().setWebListener(interWebListener);
         //webView = view.findViewById(R.id.web_view);
         //webView.getSettings().setJavaScriptEnabled(true);
         NativeJsBridge nativeJsBridge = new NativeJsBridge(_mActivity, this);
@@ -127,7 +121,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
         // webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         mWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);  // WebView自动开始播放音乐要加上这个设定
         mWebView.getSettings().setDomStorageEnabled(true);  // 啟用localStorage
-        mWebView.setWebViewClient(new X5WebViewClient(mWebView, _mActivity) {
+        mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -149,24 +143,51 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
                 }
             }
 
-          // 如果忽略Ssl校驗錯誤
-          // 一個提示不安全的網址   https://inv-veri.chinatax.gov.cn/
+            // 如果忽略Ssl校驗錯誤
+            // 一個提示不安全的網址   https://inv-veri.chinatax.gov.cn/
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 if (ignoreSslError) {
                     handler.proceed();//忽略证书的错误继续加载页面内容，不会变成空白页面
                 } else {
-                    //handler.cancel();// super中默认的处理方式，WebView变成空白页
-                    super.onReceivedSslError(view, handler, error);
+                    handler.cancel();// super中默认的处理方式，WebView变成空白页
+                    // super.onReceivedSslError(view, handler, error);
                 }
             }
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 return super.shouldOverrideUrlLoading(view, request);
+
                 // SLog.info("url[%s]", url);
                 // view.loadUrl(url);
                 // return false;
+            }
+        });
+
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                super.onReceivedTitle(view, title);
+                SLog.info("title[%s]", title);
+            }
+
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                SLog.info("url[%s], message[%s]", url, message);
+                return super.onJsAlert(view, url, message, result);
+            }
+
+            @Override
+            public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
+                SLog.info("url[%s], message[%s]", url, message);
+                return super.onJsConfirm(view, url, message, result);
+            }
+
+            @Override
+            public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+                SLog.info("url[%s], message[%s]", url, message);
+                return super.onJsPrompt(view, url, message, defaultValue, result);
             }
         });
 
@@ -384,45 +405,6 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
             }
         });
     }
-    private InterWebListener interWebListener = new InterWebListener() {
-        @Override
-        public void hindProgressBar() {
-            progress.hide();
-        }
-
-        @Override
-        public void showErrorView(@X5WebUtils.ErrorType int type) {
-            switch (type){
-                //没有网络
-                case X5WebUtils.ErrorMode.NO_NET:
-                    break;
-                //404，网页无法打开
-                case X5WebUtils.ErrorMode.STATE_404:
-
-                    break;
-                //onReceivedError，请求网络出现error
-                case X5WebUtils.ErrorMode.RECEIVED_ERROR:
-
-                    break;
-                //在加载资源时通知主机应用程序发生SSL错误
-                case X5WebUtils.ErrorMode.SSL_ERROR:
-
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        @Override
-        public void startProgress(int newProgress) {
-            progress.setWebProgress(newProgress);
-        }
-
-        @Override
-        public void showTitle(String title) {
-
-        }
-    };
 
     public String getUrl() {
         return url;
