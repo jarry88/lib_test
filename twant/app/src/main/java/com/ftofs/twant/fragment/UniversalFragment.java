@@ -59,6 +59,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_my_e_name_card, this);
         Util.setOnClickListener(view, R.id.btn_security_setting, this);
         Util.setOnClickListener(view, R.id.btn_notification_setting, this);
+        Util.setOnClickListener(view, R.id.btn_real_name_auth, this);
 
         Util.setOnClickListener(view, R.id.btn_logistics_address_setting, this);
         Util.setOnClickListener(view, R.id.btn_feedback, this);
@@ -123,6 +124,9 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
                 break;
             case R.id.btn_notification_setting:
                 start(NotificationSettingFragment.newInstance());
+                break;
+            case R.id.btn_real_name_auth:
+                Util.startFragment(RealNameListFragment.newInstance());
                 break;
             default:
                 break;
