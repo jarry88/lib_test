@@ -34,6 +34,7 @@ import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
+import com.ftofs.twant.entity.RealNameListItem;
 import com.ftofs.twant.entity.StoreAmount;
 import com.ftofs.twant.entity.StoreVoucherVo;
 import com.ftofs.twant.entity.VoucherUseStatus;
@@ -49,6 +50,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.OrderVoucherPopup;
 import com.ftofs.twant.widget.PayWayPopup;
+import com.ftofs.twant.widget.RealNamePopup;
+import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -257,12 +260,58 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         loadOrderData();
 
         getMobileZoneList();
+
+        determineShowRealNamePopup();
     }
 
     @Override
     public boolean onBackPressedSupport() {
         popWithOutRefresh();
         return true;
+    }
+
+    private void determineShowRealNamePopup() {
+        SLog.info("determineShowRealNamePopup");
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token
+        );
+
+        SLog.info("path[%s], params[%s]", Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params);
+        Api.getUI(Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    int isShowAuth = responseObj.getInt("datas.isShowAuth");
+                    if (isShowAuth == Constant.TRUE_INT) {
+                        SLog.info("determineShowRealNamePopup");
+                        new XPopup.Builder(_mActivity)
+                                // 如果不加这个，评论弹窗会移动到软键盘上面
+                                .moveUpToKeyboard(true)
+                                .asCustom(new RealNamePopup(_mActivity))
+                                .show();
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
 

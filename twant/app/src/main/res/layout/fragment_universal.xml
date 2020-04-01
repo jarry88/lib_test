@@ -136,6 +136,32 @@
             android:background="@color/tw_light_grey"
             />
         <RelativeLayout
+            android:id="@+id/btn_real_name_auth"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="跨城購實名認證"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tw_light_grey"
+            />
+        <RelativeLayout
             android:id="@+id/btn_security_setting"
             android:layout_width="match_parent"
             android:layout_height="50dp">
