@@ -37,6 +37,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.view.CustomerLinearLayoutManager;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.SpecSelectPopup;
@@ -178,24 +179,18 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 imgPriceOrderIndicator.setVisibility(View.GONE);
                 if (id == R.id.btn_order_general) { // 綜合
                     SLog.info("btn_order_general");
-                    goodsList.clear();
-                    goodsPairList.clear();
-                    //默認字段
+                    clearAdapter();
                     mExtra =EasyJSONObject.generate("sort", "default_desc");;
-                    currPage = 0;
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_sale) { // 銷量
                     SLog.info("btn_order_sale");
-                    goodsList.clear();
-                    goodsPairList.clear();
-                    currPage = 0;
+                    clearAdapter();
                     mExtra = EasyJSONObject.generate("sort", "sale_desc");
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_new) { // 上新
                     SLog.info("btn_order_new");
-                    goodsList.clear();
-                    goodsPairList.clear();
-                    currPage = 0;
+                    clearAdapter();
+
                     mExtra = EasyJSONObject.generate("sort", "new_desc");
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_price) { // 價格
@@ -217,9 +212,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     imgPriceOrderIndicator.setVisibility(View.VISIBLE);
 
                     SLog.info("btn_order_price");
-                    goodsList.clear();
-                    goodsPairList.clear();
-                    currPage = 0;
+                    clearAdapter();
+
                     mExtra = EasyJSONObject.generate("sort", sort);
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 }
@@ -233,7 +227,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
         imgPriceOrderIndicator = view.findViewById(R.id.img_price_order_indicator);
 
-        layoutManager = new LinearLayoutManager(_mActivity);
+        layoutManager = new CustomerLinearLayoutManager(_mActivity);//防止原生閃退
         rvGoodsList.setLayoutManager(layoutManager);
         rvGoodsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -438,6 +432,17 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
         btnChangeViewStyle = view.findViewById(R.id.btn_change_view_style);
         btnChangeViewStyle.setOnClickListener(this);
+    }
+
+    private void clearAdapter() {
+        if (currAnimIndex == VIEW_STYLE_GRID) {
+            goodsList.clear();
+            shopGoodsListAdapter.notifyDataSetChanged();
+        }else{
+            goodsPairList.clear();
+            shopGoodsGridAdapter.notifyDataSetChanged();
+        }
+        currPage = 0;
     }
 
     /**

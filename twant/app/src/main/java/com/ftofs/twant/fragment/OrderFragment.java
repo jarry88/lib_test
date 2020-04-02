@@ -34,6 +34,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.view.CustomerLinearLayoutManager;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.TwTabButton;
 import com.lxj.xpopup.XPopup;
@@ -185,7 +186,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         }
 
         rvOrderList = view.findViewById(R.id.rv_order_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
+        CustomerLinearLayoutManager layoutManager = new CustomerLinearLayoutManager(_mActivity, LinearLayoutManager.VERTICAL, false);
         rvOrderList.setLayoutManager(layoutManager);
         payItemListAdapter = new PayItemListAdapter(_mActivity, payItemList, this);
         payItemListAdapter.setEnableLoadMore(true);
@@ -550,6 +551,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         handleOrderStatusSwitch(id);
         currPage = 0;
         payItemList.clear();
+        payItemListAdapter.notifyDataSetChanged();
         payItemListAdapter.setEnableLoadMore(true);
         loadOrderData(orderStatus, currPage + 1);
 
