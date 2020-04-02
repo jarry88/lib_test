@@ -27,8 +27,8 @@ import com.ftofs.twant.entity.SpecValue;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.fragment.ViewPagerFragment;
-import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -53,6 +53,7 @@ import okhttp3.Call;
  * @author zwm
  */
 public class SpecSelectPopup extends BottomPopupView implements View.OnClickListener {
+    private int limitBuy;
     private ViewPagerFragment viewPagerFragment;
     Context context;
     int action;
@@ -99,10 +100,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * @param quantity 数量
      * @param goodsInfoMap
      * @param viewPagerFragment 圖片瀏覽器
+     * @param limitBuy
      */
     public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
-                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment) {
+                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy) {
         super(context);
 
         this.context = context;
@@ -114,6 +116,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         this.goodsInfoMap = goodsInfoMap;
         this.quantity = quantity;
         this.currGalleryImageList = viewPagerFragment;
+        this.limitBuy = limitBuy;
     }
 
     @Override
@@ -444,7 +447,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 if (action == Constant.ACTION_ADD_TO_CART) {
                     addToCart();
                 } if (action == Constant.ACTION_BUY) {
-                    buy();
+                    SLog.info("購買商品 limitBuy %d",limitBuy);
+                    if (limitBuy < 0) {
+                        ToastUtil.error(context, getResources().getString(R.string.out_of_buy_limit));
+                    } else {
+                        buy();
+                    }
                 } else {
                     // 選擇規格
                     selectSpecs();
@@ -530,6 +538,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             maxValue = goodsInfo.limitAmount;
             outOfMaxValueReason = String.format("每人限購%d%s", goodsInfo.limitAmount, goodsInfo.unitName);
         }
+        if (limitBuy < 0) {
+            maxValue = 1;
+            outOfMaxValueReason = getResources().getString(R.string.out_of_buy_limit);
+        }
         SLog.info("maxValue[%d]", maxValue);
         abQuantity.setMaxValue(maxValue, new AdjustButton.OutOfValueCallback() {
             @Override
@@ -537,6 +549,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 ToastUtil.error(context, outOfMaxValueReason);
             }
         });
+//        abQuantity.
 
 
         if (finalStorage > 0) {

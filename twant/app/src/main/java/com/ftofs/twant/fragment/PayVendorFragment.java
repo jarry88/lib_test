@@ -64,6 +64,7 @@ import okhttp3.Call;
 import static com.umeng.analytics.pro.k.a.c;
 import static com.umeng.analytics.pro.k.a.f;
 import static com.umeng.analytics.pro.k.a.i;
+import static com.umeng.analytics.pro.k.a.r;
 import static com.umeng.analytics.pro.k.a.t;
 import static com.umeng.analytics.pro.k.a.v;
 
@@ -181,6 +182,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_pay, this);
         rvPayVendorList=view.findViewById(R.id.rv_pay_vendor_list);
+        rvPayVendorList.setNestedScrollingEnabled(false);
         initPayCardList();
         btnExpressContainer = view.findViewById(R.id.btn_pay_express);
         btnExpressOtherPay = view.findViewById(R.id.btn_express_pay);
@@ -188,23 +190,28 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         SLog.info("rvpaylist height %d",rvPayListHeight);
         btnExpressOtherPay.setOnClickListener(v -> {
             isExpressed = true;
+            rvPayVendorList.setNestedScrollingEnabled(true);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) btnExpressContainer.getLayoutParams();
-            layoutParams.setMargins(Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,460), Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,10));
+            layoutParams.setMargins(Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,480), Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,10));
             ViewGroup.LayoutParams rvParams=rvPayVendorList.getLayoutParams();
             rvParams.height = Util.dip2px(_mActivity, 500);
             rvPayVendorList.setLayoutParams(rvParams);
             btnExpressContainer.setLayoutParams(layoutParams);
             btnUpOtherPay.setVisibility(View.VISIBLE);
             btnExpressOtherPay.setVisibility(View.GONE);
+            rvPayVendorList.scrollToPosition(0);
+
         });
         btnUpOtherPay = view.findViewById(R.id.btn_up_pay);
         btnUpOtherPay.setOnClickListener(v->{
             isExpressed = false;
+            rvPayVendorList.setNestedScrollingEnabled(false);
+            rvPayVendorList.scrollToPosition(0);
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) btnExpressContainer.getLayoutParams();
-            layoutParams.setMargins(Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,280), Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,10));
+            layoutParams.setMargins(Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,270), Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,10));
             btnExpressContainer.setLayoutParams(layoutParams);
             ViewGroup.LayoutParams rvParams=rvPayVendorList.getLayoutParams();
-            rvParams.height = Util.dip2px(_mActivity, 290);
+            rvParams.height = Util.dip2px(_mActivity, 270);
             rvPayVendorList.setLayoutParams(rvParams);
             btnExpressOtherPay.setVisibility(View.VISIBLE);
             btnUpOtherPay.setVisibility(View.GONE);
