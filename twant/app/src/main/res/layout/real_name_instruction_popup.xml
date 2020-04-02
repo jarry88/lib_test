@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/real_name_instruction_popup_bg">
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/btn_close_popup">
+
+    </ImageView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:layout_gravity="center"
+            android:text="實名制說明"
+            android:textColor="#333"
+            android:textSize="18sp">
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:background="@drawable/border_type_d"
+                android:textSize="14sp"
+                android:textColor="#333"
+                android:text="根據海關總署公告2016年第26號《關於跨境電子商務零售進出口商品有關監管事宜的公告》，電子商務企業應向海關提供購買跨境電子商務零售進出口商品的個人（訂購人）的有效身份信息，訂購人與收貨人應為同一人。">
+
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="9dp"
+                    android:background="@drawable/grey_dot">
+                </View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="9dp"
+                    android:text="如果您下單購買的跨境商品訂購人與收貨人不是同一人，請補充提交收貨人的姓名、身份證號，否則無法辦理清關手續，無法成功發貨。"
+                    android:textSize="14sp"
+                    android:textColor="#999">
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="9dp"
+                    android:background="@drawable/grey_dot">
+                </View>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="9dp"
+                    android:text="想要城承諾您提交的身份信息僅用於辦理跨境商品清關手續，不另做他用，且會對數據進行加密他人無法查看。"
+                    android:textSize="14sp"
+                    android:textColor="#999">
+                </TextView>
+            </LinearLayout>
+
+            
+        </LinearLayout>
+        
+        <TextView
+            android:id="@+id/btn_ok"
+            android:layout_width="271dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/blue_button"
+            android:gravity="center"
+            android:text="確認"
+            android:textColor="@android:color/white"
+            android:textSize="16sp">
+        </TextView>
+    </LinearLayout>
+</RelativeLayout>

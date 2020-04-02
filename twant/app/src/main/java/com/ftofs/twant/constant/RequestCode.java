@@ -135,4 +135,8 @@ public enum RequestCode {
      */
     RETURN_SHIP,
 
+    /**
+     * 添加/編輯實名信息
+     */
+    REAL_NAME_INFO,
 }

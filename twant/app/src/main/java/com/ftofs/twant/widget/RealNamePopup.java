@@ -1,0 +1,170 @@
+package com.ftofs.twant.widget;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BottomPopupView;
+import com.lxj.xpopup.util.XPopupUtils;
+
+import java.io.IOException;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
+
+/**
+ * 實名認證彈窗
+ * @author zwm
+ */
+public class RealNamePopup extends BottomPopupView implements View.OnClickListener {
+    Context context;
+    EditText etName; // 姓名
+    EditText etId; // 身份證號
+
+    public RealNamePopup(@NonNull Context context) {
+        super(context);
+
+        this.context = context;
+    }
+
+
+    @Override
+    protected int getImplLayoutId() {
+        return R.layout.real_name_popup;
+    }
+
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+
+        findViewById(R.id.btn_clear_name).setOnClickListener(this);
+        findViewById(R.id.btn_clear_id).setOnClickListener(this);
+        findViewById(R.id.btn_dismiss).setOnClickListener(this);
+        findViewById(R.id.btn_view_real_name_prompt).setOnClickListener(this);
+        findViewById(R.id.btn_commit).setOnClickListener(this);
+
+        etName = findViewById(R.id.et_name);
+        etId = findViewById(R.id.et_id);
+        etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    commitData();
+                }
+
+                return false;
+            }
+        });
+    }
+
+    //完全可见执行
+    @Override
+    protected void onShow() {
+        super.onShow();
+    }
+
+    //完全消失执行
+    @Override
+    protected void onDismiss() {
+
+    }
+
+    @Override
+    protected int getMaxHeight() {
+        return (int) (XPopupUtils.getWindowHeight(getContext())*.85f);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_dismiss) {
+            dismiss();
+        } else if (id == R.id.btn_commit) {
+            commitData();
+        } else if (id == R.id.btn_clear_name) {
+            etName.setText("");
+        } else if (id == R.id.btn_clear_id) {
+            etId.setText("");
+        } else if (id == R.id.btn_view_real_name_prompt) {
+            new XPopup.Builder(context)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new RealNameInstructionPopup(context))
+                    .show();
+        }
+    }
+
+
+    private void commitData() {
+        try {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+
+            String name = etName.getText().toString().trim();
+            String idNum = etId.getText().toString().trim();
+
+            if (StringUtil.isEmpty(name)) {
+                ToastUtil.error(context, etName.getHint().toString());
+                return;
+            }
+
+            if (StringUtil.isEmpty(idNum)) {
+                ToastUtil.error(context, etId.getHint().toString());
+                return;
+            }
+
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "consigneeName", name,
+                    "idCartNumber", idNum
+            );
+
+            SLog.info("url[%s], params[%s]", Api.PATH_SAVE_REAL_NAME_INFO, params);
+            Api.postUI(Api.PATH_SAVE_REAL_NAME_INFO, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(context, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(context, responseObj)) {
+                            return;
+                        }
+
+                        ToastUtil.success(context, "保存成功");
+
+                        RealNamePopup.this.dismiss();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+}

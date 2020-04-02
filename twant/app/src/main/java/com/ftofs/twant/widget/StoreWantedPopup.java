@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -180,7 +182,7 @@ public class StoreWantedPopup extends BottomPopupView implements View.OnClickLis
                         item.isFavor = 1 - item.isFavor;
                         updateFollowStatus(item.isFavor);
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
