@@ -177,6 +177,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     String enableAppIndexNavigationStr = responseObj.getSafeString("datas.enableAppIndexNavigation");
                     int enableAppIndexNavigation = Integer.parseInt(enableAppIndexNavigationStr);
                     stickyCellData.activityEnable = (enableAppIndexNavigation == Constant.TRUE_INT);
+
+                    boolean currVersionShowActivityIndex = Hawk.get(SPField.FIELD_CURR_VERSION_SHOW_ACTIVITY_INDEX, true);
+                    SLog.info("currVersionShowActivityIndex[%s]", currVersionShowActivityIndex);
+                    if (!currVersionShowActivityIndex) {
+                        stickyCellData.activityEnable = false;
+                    }
                     if (stickyCellData.activityEnable) {
                         stickyCellData.appIndexNavigationImage = responseObj.getSafeString("datas.appIndexNavigationImage");
                         stickyCellData.appIndexNavigationLinkType = responseObj.getSafeString("datas.appIndexNavigationLinkType");
