@@ -1081,7 +1081,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     //產品状态 可以购买1，下架0
                     int status = goodsDetail.getInt("goodsStatus");
                     //針對用戶id限購 可以购买0，提示限購-1
-                    limitBuy = goodsDetail.getInt("limitBuy");
                     setGoodsStatus(status);
 
                     promotionDiscountRate = (float) goodsDetail.getDouble("promotionDiscountRate");
@@ -1274,6 +1273,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     } else {
                         btnPlay.setVisibility(GONE);
                     }
+                    limitBuy = goodsDetail.getInt("limitBuy");
+
                     SLog.info("goodsDetail exists,discount[%s]", goodsDetail.exists("discount"));
                     // 限時折扣
                     EasyJSONObject discount = goodsDetail.getObject("discount");
