@@ -478,6 +478,7 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
         }
         ElemePrimaryAdapterConfig primaryAdapterConfig = new ElemePrimaryAdapterConfig();
         primaryAdapterConfig.setBackgroundColor(R.color.mask15_background_color, getResources().getDrawable(white_4dp_right_radius_bg));
+        SLog.info("twColor%s",twColor);
         primaryAdapterConfig.setTwColor(twColor);
         ElemeSecondaryAdapterConfig secondaryAdapterConfig = new ElemeSecondaryAdapterConfig();
         linkage.init(items,primaryAdapterConfig,secondaryAdapterConfig);
@@ -534,7 +535,7 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
                 tvTitle.setBackgroundColor(Color.argb(0,0,0,0));
             }
             tvTitle.setTextColor(selected ? ContextCompat.getColor(mContext,
-                    com.kunminx.linkage.R.color.colorLightBlue): twColor);
+                    com.kunminx.linkage.R.color.colorLightBlue):ContextCompat.getColor(mContext,twColor));
             tvTitle.setEllipsize(selected ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
             tvTitle.setFocusable(selected);
             tvTitle.setFocusableInTouchMode(selected);

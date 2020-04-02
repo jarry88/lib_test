@@ -919,7 +919,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 "goodsList", goodsList,
                                 "shipTimeType", shipTimeType));
                     }  // END OF 遍歷每家商店
-                    SLog.info("HERE");
 
                     // 添加上汇总项目
                     ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();

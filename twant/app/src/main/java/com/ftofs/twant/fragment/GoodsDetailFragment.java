@@ -257,6 +257,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private RelativeLayout preTopBarContainer;
 
     float goodsPrice;
+    private int limitBuy;
 
     static class scrollStateHandler extends Handler {
         ScrollView scrollViewContainer;
@@ -922,7 +923,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList))
+                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy))
                 .show();
     }
 
@@ -1079,6 +1080,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     tvGoodsJingle.setText(jingle);
                     //產品状态 可以购买1，下架0
                     int status = goodsDetail.getInt("goodsStatus");
+                    //針對用戶id限購 可以购买0，提示限購-1
+                    limitBuy = goodsDetail.getInt("limitBuy");
                     setGoodsStatus(status);
 
                     promotionDiscountRate = (float) goodsDetail.getDouble("promotionDiscountRate");

@@ -766,4 +766,5 @@
     <string name="weixin_name">微信支付（內地）</string>
     <string name="alipay_name">支付寳（內地）</string>
     <string name="select_other_pay">選擇其他支付</string>
+    <string name="out_of_buy_limit">您已達到購買上限啦，去看看別的產品吧~</string>
 </resources>

@@ -141,6 +141,10 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvGoodsAmount;
     @BindView(R.id.ll_ship_type)
     LinearLayout llShipType;
+    @BindView(R.id.btn_buy_again)
+    TextView btnBuyAgain;
+    @BindView(R.id.btn_pay_order)
+    TextView btnPayOrder;
 
     @OnClick(R.id.btn_back)
     public void back() {
@@ -159,6 +163,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> {ToastUtil.success(_mActivity, "添加購物袋成功");
                 Util.startFragment(CartFragment.newInstance(true));});
         }
+    }
+    @OnClick(R.id.btn_pay_order)
+    public void payOrder(View v) {
+        SLog.info("添加到購物袋%d",ordersId);
+        Util.startFragment(PayVendorFragment.newInstance(payId, ordersAmount, 0));
     }
 
     @BindView(R.id.btn_goto_store)
@@ -633,6 +642,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                             tvOrderStatusDesc.setText(String.format("您的訂單還未付款，%d小時%d分鐘後將取消訂單請及時完成支付~", 23-diff / 60, 60-diff % 60));
                             llShipInfo.setVisibility(View.GONE);
                             llShipType.setVisibility(View.GONE);
+                            btnBuyAgain.setVisibility(View.GONE);
+                            btnPayOrder.setVisibility(View.VISIBLE);
                             break;
                         case OrderState.TO_BE_SEND:
                             iconOrderStatus.setImageResource(R.drawable.icon_wait_send);
