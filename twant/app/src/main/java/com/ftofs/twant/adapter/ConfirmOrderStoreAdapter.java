@@ -93,7 +93,8 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             if (payWayIndex == 1) {  // 如果是門店自提，則不算運費
                 realFreightAmount = 0;
             }
-            float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
+            // float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
+            double finalPayAmount = item.buyItemAmount + realFreightAmount;
             helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, realFreightAmount, 0))
                 .setText(R.id.tv_store_discount, discountAmountText)

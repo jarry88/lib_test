@@ -131,6 +131,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     Map<Integer, Float> freightAmountMap = new HashMap<>();
     // 商店Id => 商店優惠
     Map<Integer, StoreAmount> storeAmountMap = new HashMap<>();
+    // 商店Id => 商店满优惠列表(conformId，整型)
+    Map<Integer, Integer> storeConformIdMap = new HashMap<>();
 
 
     int platformCouponIndex = -1; // 當前正在使用的平台券列表Index(-1表示沒有使用)
@@ -385,6 +387,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             "storeName", storeItem.storeId,
                             "shipTimeType", summaryItem.shipTimeType);
 
+                    // 看是否要conformId
+                    Integer conformId = storeConformIdMap.get(storeItem.storeId);
+                    if (conformId != null) {
+                        store.set("conformId", conformId.toString());
+                    }
+
                     // 留言
                     if (!StringUtil.isEmpty(storeItem.leaveMessage)) {
                         store.set("receiverMessage", storeItem.leaveMessage);
@@ -476,7 +484,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     "clientType", Constant.CLIENT_TYPE_ANDROID,
                     "buyData", commitBuyData.toString());
 
-            SLog.info("params[%s]", params.toString());
+            SLog.info("collectParams.params[%s]", params.toString());
             return params;
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -836,6 +844,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         }
 
                         voucherMap.put(storeId, storeVoucherVoList);
+
+                        // 获取满减优惠
+                        if (buyStoreVo.exists("conform.conformId")) {
+                            int conformId = buyStoreVo.getInt("conform.conformId");
+                            storeConformIdMap.put(storeId, conformId);
+                        }
 
                         String storeName = buyStoreVo.getSafeString("storeName");
                         // int itemCount = buyStoreVo.getInt("itemCount");
