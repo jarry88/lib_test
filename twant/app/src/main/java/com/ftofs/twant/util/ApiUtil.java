@@ -124,7 +124,12 @@ public class ApiUtil {
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if(ToastUtil.checkError(context, responseObj)){
+                        return;
+                    };
                     try{
+
                         SLog.info("responseStr[%s]",responseStr);
                         if (dataObj == null) {
                             Util.startFragment(AddPostFragment.newInstance(fromWeb));

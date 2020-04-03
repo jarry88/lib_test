@@ -80,7 +80,7 @@ public class ToastUtil {
                         return true;
                     }
                 } else {
-                    error(context, "返回內容為空");
+                    error(context, "返回内容為空");
                 }
             }
 
