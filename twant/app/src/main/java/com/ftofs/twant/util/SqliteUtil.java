@@ -105,10 +105,8 @@ public class SqliteUtil {
                 });
             }
         } catch (Exception e) {
-            SLog.info("Error,%s",e.getMessage());
-            SLog.bt();
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
-
     }
 
 

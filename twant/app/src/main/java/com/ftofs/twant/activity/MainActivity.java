@@ -513,7 +513,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 //切換環境后singletask模式會進入這裏，設置初始化homefragment
                 boolean exit = bundle.getBoolean("exit");
                 if (exit) {
-                    ToastUtil.success(getApplicationContext(),String.format("重啓homefragment,當前為%d環境",28+Config.currEnv));
+                    ToastUtil.success(getApplicationContext(),String.format("重啓homefragment,當前為%d環境",27+Config.currEnv));
                     HomeFragment homeFragment = mainFragment.getHomeFragment();
                     //切換環境
                     if (homeFragment != null) {

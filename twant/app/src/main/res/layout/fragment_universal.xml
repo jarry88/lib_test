@@ -136,14 +136,15 @@
             android:background="@color/tw_light_grey"
             />
         <RelativeLayout
-            android:id="@+id/btn_security_setting"
+            android:id="@+id/btn_real_name_auth"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:visibility="gone">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/text_security_setting"
+                android:text="跨城購實名認證"
                 android:textColor="@color/tw_black"
                 android:textSize="16sp"
                 />
@@ -160,7 +161,40 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/tw_light_grey"
+            android:visibility="gone"
             />
+        <RelativeLayout
+            android:id="@+id/btn_logistics_address_setting"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/text_logistics_address_setting"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingStart="@dimen/toolbar_margin_left"
+        android:paddingEnd="@dimen/toolbar_margin_right"
+        android:background="@android:color/white"
+        android:orientation="vertical">
         <RelativeLayout
             android:id="@+id/btn_notification_setting"
             android:layout_width="match_parent"
@@ -182,33 +216,14 @@
                 android:src="@drawable/expand_button_big"
                 />
         </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/tw_light_grey"
             />
-        <RelativeLayout
-            android:id="@+id/btn_logistics_address_setting"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/text_logistics_address_setting"
-                android:textColor="@color/tw_black"
-                android:textSize="16sp"
-                />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/expand_button_big"
-                />
 
-        </RelativeLayout>
         <RelativeLayout
             android:visibility="gone"
             android:id="@+id/btn_member_document"
@@ -237,6 +252,27 @@
                 />
 
         </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/btn_security_setting"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/text_security_setting"
+                android:textColor="@color/tw_black"
+                android:textSize="16sp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/expand_button_big"
+                />
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -264,7 +300,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/expand_button_big"
                 />

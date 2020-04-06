@@ -10,6 +10,8 @@ public class SpuStatus extends BaseStatus {
     private int cartId;
     private int count;  // 數量
     private float price;  // 價錢
+    private int limitBuy; //限購狀態
+
     @Override
     public void changeCheckStatus(boolean checked, int phrase) {
         super.changeCheckStatus(checked, phrase);
@@ -70,5 +72,9 @@ public class SpuStatus extends BaseStatus {
 
     public void setCartId(int cartId) {
         this.cartId = cartId;
+    }
+
+    public void setLimitState(int limitBuy) {
+        this.limitBuy = limitBuy;
     }
 }

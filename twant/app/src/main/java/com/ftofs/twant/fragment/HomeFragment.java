@@ -24,6 +24,7 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -176,6 +177,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     String enableAppIndexNavigationStr = responseObj.getSafeString("datas.enableAppIndexNavigation");
                     int enableAppIndexNavigation = Integer.parseInt(enableAppIndexNavigationStr);
                     stickyCellData.activityEnable = (enableAppIndexNavigation == Constant.TRUE_INT);
+
+                    boolean currVersionShowActivityIndex = Hawk.get(SPField.FIELD_CURR_VERSION_SHOW_ACTIVITY_INDEX, true);
+                    SLog.info("currVersionShowActivityIndex[%s]", currVersionShowActivityIndex);
+                    if (!currVersionShowActivityIndex) {
+                        stickyCellData.activityEnable = false;
+                    }
                     if (stickyCellData.activityEnable) {
                         stickyCellData.appIndexNavigationImage = responseObj.getSafeString("datas.appIndexNavigationImage");
                         stickyCellData.appIndexNavigationLinkType = responseObj.getSafeString("datas.appIndexNavigationLinkType");
@@ -222,8 +229,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                                     appPopupAdImage, appPopupAdLinkType, appPopupAdLinkValue);
                             showPopupAd();
                         }
-                    }
 
+                    }
                     carouselLoaded = true;
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -287,7 +294,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         if (id == R.id.btn_goto_top) {
             rvList.scrollToPosition(0);
         } else if (id == R.id.btn_publish_want_post) {
-            Util.startFragment(AddPostFragment.newInstance(false));
+//            Util.startFragment(AddPostFragment.newInstance(false));
+            ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
 
         }

@@ -1115,6 +1115,10 @@ public class Api {
      * 店鋪導航菜單
      */
     public static final String PATH_STORE_NAVIGATION = "/store/navigation";
+    /**
+     * 貼文發表驗證
+     */
+    public static final String PATH_WANT_POST_ISSUE_VALIDATE = "/member/want_post/issue/validate";
 
 
     /**
@@ -1212,6 +1216,33 @@ public class Api {
      * 退货发货信息保存
      */
     public static final String PATH_RETURN_SHIP_SAVE = "/member/return/ship/save";
+
+    /**
+     * 【實名認證】保存
+     */
+    public static final String PATH_SAVE_REAL_NAME_INFO = "/consigneeNameAuth/identification";
+
+    /**
+     * 【實名認證】認證列表
+     */
+    public static final String PATH_REAL_NAME_LIST = "/consigneeNameAuth/list";
+
+    /**
+     * 【實名認證】刪除
+     */
+    public static final String PATH_DELETE_REAL_NAME_INFO = "/consigneeNameAuth/delete";
+
+    /**
+     * 【實名認證】編輯認證信息
+     */
+    public static final String PATH_EDIT_REAL_NAME_INFO = "/consigneeNameAuth/edit";
+
+
+    /**
+     * 【實名認證】是否顯示認證入口
+     */
+    public static final String PATH_DETERMINE_SHOW_REAL_NAME_POPUP = "/consigneeNameAuth/show";
+
 
     /**
      * 發送Http請求

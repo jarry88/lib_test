@@ -20,8 +20,8 @@ android {
         targetSdkVersion 29
 
 
-        versionCode 99
-        versionName "1.2.3.60"
+        versionCode 103
+        versionName "1.2.3.70"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -139,7 +139,7 @@ dependencies {
 
 
 
-    implementation 'cn.yc:WebViewLib:1.2.2'//新增騰訊webViewx5庫
+    // implementation 'cn.yc:WebViewLib:1.2.2'//新增騰訊webViewx5庫
     implementation 'com.getbase:floatingactionbutton:1.10.1'//增加懸浮窗組件
 
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9

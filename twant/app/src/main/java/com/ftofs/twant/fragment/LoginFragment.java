@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,6 +120,29 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                 SLog.info( "page %d" ,position);
+                Editable editable1 = ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.getText();
+                Editable editable = ((PasswordLoginFragment) fragmentList.get(0)).etMobile.getText();
+                if (position == 1) {
+                    ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.setText(editable);
+                } else {
+                    ((PasswordLoginFragment) fragmentList.get(0)).etMobile.setText(editable1);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);

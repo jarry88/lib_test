@@ -36,6 +36,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AdjustButton;
 import com.ftofs.twant.widget.CartAdjustButton;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
@@ -270,14 +271,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                         spuCount++;
                         for (Object object2 : cartSpuVoList) { // spu LOOP
                             EasyJSONObject cartSpuVo = (EasyJSONObject) object2;
+
                             EasyJSONArray cartItemVoList = cartSpuVo.getSafeArray("cartItemVoList");
                             int skuCount=0;
                             for (Object object3 : cartItemVoList) { // sku LOOP
                                 LinearLayout cartSpuItemContainer = cartStoreItem.findViewById(R.id.ll_cart_spu_item_container);
                                 SpuStatus spuStatus = new SpuStatus();
+
                                 spuStatus.parent = storeStatus;
                                 View cartSpuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_spu_item, null, false);
-                                SLog.info("spu%d spulenth%d,sku%d,skulenth%d",spuCount,cartSpuVoList.length(),skuCount,cartItemVoList.length());
+                                SLog.info("spu%d spulenth%d,sku%d,skulenth%d,",spuCount,cartSpuVoList.length(),skuCount,cartItemVoList.length());
                                 skuCount++;
                                 if (spuCount == cartSpuVoList.length()&&skuCount==cartItemVoList.length()) {
                                     cartSpuItem.findViewById(R.id.line).setVisibility(View.GONE);
@@ -315,22 +318,32 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 // 購買數量調節按鈕
                                 CartAdjustButton abQuantity = cartSkuItem.findViewById(R.id.ab_quantity);
                                 abQuantity.setMinValue(1, null);  // 調節數量不能小于1
+
                                 abQuantity.setSpuStatus(spuStatus);
                                 setCheckButtonOnClickListener(btnCheckSpu);
                                 spuStatus.setRadio(btnCheckSpu);
 
                                 EasyJSONObject cartSkuVo = (EasyJSONObject) object3;
+                                int limitBuy = cartSkuVo.getInt("limitBuy");
+                                //如果有限購限制增加數量
+                                if (limitBuy < 0) {
+                                    abQuantity.setMaxValue(1, () -> {
+                                        ToastUtil.error(_mActivity,getString(R.string.out_of_buy_limit));
+                                    });
+                                }
 
                                 spuStatus.setGoodsId(cartSkuVo.getInt("goodsId"));
                                 spuStatus.setCartId(cartSkuVo.getInt("cartId"));
                                 tvGoodsFullSpecs.setText(cartSkuVo.getSafeString("goodsFullSpecs"));
                                 float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
                                 int buyNum = cartSkuVo.getInt("buyNum");
+                                SLog.info("buyNum %d,limitNum %d ",buyNum,limitBuy);
                                 tvPriceSum.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
                                 abQuantity.setValue(buyNum);
 
                                 spuStatus.setPrice(goodsPrice);
                                 spuStatus.setCount(buyNum);
+                                spuStatus.setLimitState(limitBuy);
 
                                 // 贈品列表
                                 EasyJSONArray giftVoList = cartSkuVo.getSafeArray("giftVoList");

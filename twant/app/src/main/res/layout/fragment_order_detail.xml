@@ -86,6 +86,17 @@
                         android:text="@string/text_buy_again"
                         android:background="@drawable/btn_bg_white"
                         />
+                    <TextView
+                        android:id="@+id/btn_pay_order"
+                        android:visibility="gone"
+                        android:layout_width="115dp"
+                        android:layout_height="32dp"
+                        android:textColor="@color/tw_white"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:text="@string/text_pay_order"
+                        android:background="@drawable/btn_bg_white"
+                        />
 
                 </LinearLayout>
                 <!-- END OF order head -->
@@ -660,21 +671,24 @@
                                 android:id="@+id/tv_receiver_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
                                 android:layout_marginStart="35dp"
                                 android:layout_centerVertical="true"
-                                android:text=""
-                                android:textSize="16sp"
+                                android:layout_toStartOf="@id/tv_mobile"
+                                android:singleLine="true"
+                                android:ellipsize="end"
+                                android:textSize="15sp"
                                 android:textColor="@color/tw_black"
                                 />
                             <TextView
                                 android:id="@+id/tv_mobile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dp_10"
                                 android:layout_marginEnd="15dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_centerVertical="true"
-                                android:text=""
-                                android:textSize="16sp"
+                                android:textSize="15sp"
                                 android:textColor="@color/tw_black"
                                 />
                         </RelativeLayout>

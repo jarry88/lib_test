@@ -20,7 +20,7 @@
                 android:id="@+id/btn_back"
                 android:layout_width="31dp"
                 android:layout_height="31dp"
-                android:layout_marginLeft="7dp"
+                android:layout_marginStart="7dp"
                 android:layout_centerVertical="true"
                 app:icon_src="@drawable/icon_back"
                 />
@@ -40,8 +40,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/toolbar_margin_left"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
             android:paddingBottom="40dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -79,8 +79,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:paddingLeft="@dimen/toolbar_margin_left"
-        android:paddingRight="@dimen/toolbar_margin_right"
+        android:paddingStart="@dimen/toolbar_margin_left"
+        android:paddingEnd="@dimen/toolbar_margin_right"
         android:background="@android:color/white"
         android:orientation="vertical">
         <RelativeLayout
@@ -224,8 +224,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:paddingLeft="@dimen/toolbar_margin_left"
-        android:paddingRight="@dimen/toolbar_margin_right"
+        android:paddingStart="@dimen/toolbar_margin_left"
+        android:paddingEnd="@dimen/toolbar_margin_right"
         android:background="@android:color/white"
         android:orientation="vertical">
         <RelativeLayout

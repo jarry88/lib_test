@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tw_slight_grey">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/icon_no_real_name_info">
+        </ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="你還沒填寫實名信息喲～"
+            android:textSize="16sp"
+            android:textColor="@color/tw_black">
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="為了能順利進行跨境商品購買，快來添加一個吧～"
+            android:textColor="#FF999699"
+            android:textSize="14sp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/btn_add"
+            android:layout_width="271dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:text="添加實名信息"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/blue_button">
+
+        </TextView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/btn_view_real_name_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_info">
+        </ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:text="為什麼要實名登記？"
+            android:textColor="#CCC">
+
+        </TextView>
+    </LinearLayout>
+</RelativeLayout>

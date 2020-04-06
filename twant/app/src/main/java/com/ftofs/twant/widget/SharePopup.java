@@ -20,6 +20,7 @@ import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Guid;
@@ -213,6 +214,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                     .show();
         } else if (id == R.id.btn_share_to_takewant_circle) { // 分享到想要圈
             EasyJSONObject dataObj = (EasyJSONObject) data;
+            ApiUtil.addPost(getContext(),false,dataObj);
             Util.startFragment(AddPostFragment.newInstance(dataObj, false));
             dismiss();
         }

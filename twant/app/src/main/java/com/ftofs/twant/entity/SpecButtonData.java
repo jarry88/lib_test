@@ -14,4 +14,5 @@ public class SpecButtonData {
     public int specValueId;
     public String imageSrc;
     public boolean isSelected; // 是否選中
+    public int index;
 }

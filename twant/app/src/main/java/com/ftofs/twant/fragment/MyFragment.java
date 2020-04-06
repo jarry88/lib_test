@@ -38,6 +38,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.HawkUtil;
@@ -341,7 +342,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                 Util.startFragment(EditMemberSignatureFragment.newInstance(signature));
                 break;
             case R.id.btn_publish_post:
-                Util.startFragment(AddPostFragment.newInstance(false));
+                ApiUtil.addPost(_mActivity,false);
                 break;
             // 點擊兩個地方都顯示【想粉】Fragment
             case R.id.btn_show_more:

@@ -32,9 +32,12 @@ import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.entity.VideoItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ApiUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.view.CustomerLinearLayoutManager;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.SpecSelectPopup;
@@ -48,7 +51,6 @@ import java.util.List;
 import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -101,6 +103,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     public static final int VIEW_STYLE_LIST = 0;  // 以列表形式查看
     public static final int VIEW_STYLE_GRID = 1;  // 以網格形式查看
     int currentViewStyle = VIEW_STYLE_GRID;
+    private String title;
 
     /**
      * 新建一個實例
@@ -176,24 +179,18 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 imgPriceOrderIndicator.setVisibility(View.GONE);
                 if (id == R.id.btn_order_general) { // 綜合
                     SLog.info("btn_order_general");
-                    goodsList.clear();
-                    goodsPairList.clear();
-                    //默認字段
+                    clearAdapter();
                     mExtra =EasyJSONObject.generate("sort", "default_desc");;
-                    currPage = 0;
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_sale) { // 銷量
                     SLog.info("btn_order_sale");
-                    goodsList.clear();
-                    goodsPairList.clear();
-                    currPage = 0;
+                    clearAdapter();
                     mExtra = EasyJSONObject.generate("sort", "sale_desc");
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_new) { // 上新
                     SLog.info("btn_order_new");
-                    goodsList.clear();
-                    goodsPairList.clear();
-                    currPage = 0;
+                    clearAdapter();
+
                     mExtra = EasyJSONObject.generate("sort", "new_desc");
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 } else if (id == R.id.btn_order_price) { // 價格
@@ -215,9 +212,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     imgPriceOrderIndicator.setVisibility(View.VISIBLE);
 
                     SLog.info("btn_order_price");
-                    goodsList.clear();
-                    goodsPairList.clear();
-                    currPage = 0;
+                    clearAdapter();
+
                     mExtra = EasyJSONObject.generate("sort", sort);
                     loadStoreGoods(paramsOriginal, mExtra, 1);
                 }
@@ -231,7 +227,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
         imgPriceOrderIndicator = view.findViewById(R.id.img_price_order_indicator);
 
-        layoutManager = new LinearLayoutManager(_mActivity);
+        layoutManager = new CustomerLinearLayoutManager(_mActivity);//防止原生閃退
         rvGoodsList.setLayoutManager(layoutManager);
         rvGoodsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -255,6 +251,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 GoodsPair goodsPair = goodsPairList.get(position);
                 // padding忽略點擊
                 if (goodsPair.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
+                    ApiUtil.addPost(_mActivity,false);
                     return;
                 }
 
@@ -424,7 +421,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 storeCategoryListAdapter.notifyItemChanged(position);
 
                 storeCategoryListAdapter.setPrevSelectedItemIndex(position);
-
+                title =String.format("%s(%d)",storeLabel.getStoreLabelName(),storeLabel.getGoodsCount());
                 loadCategoryGoods(storeLabel.getStoreLabelId());
             }
         });
@@ -435,6 +432,17 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
         btnChangeViewStyle = view.findViewById(R.id.btn_change_view_style);
         btnChangeViewStyle.setOnClickListener(this);
+    }
+
+    private void clearAdapter() {
+        if (currAnimIndex == VIEW_STYLE_GRID) {
+            goodsList.clear();
+            shopGoodsListAdapter.notifyDataSetChanged();
+        }else{
+            goodsPairList.clear();
+            shopGoodsGridAdapter.notifyDataSetChanged();
+        }
+        currPage = 0;
     }
 
     /**
@@ -562,6 +570,21 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             loadEndGoodsPair.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
                             goodsPairList.add(loadEndGoodsPair);
                         }
+                        if (goodsPairList != null && goodsPairList.size() > 0) {
+                            SLog.info("當前list Size %d,type %d,title %s",goodsPairList.size(),goodsPairList.get(0).getItemType(),title);
+
+                            if(goodsPairList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE&&currPage==0){
+
+                                GoodsPair titleGoodsPair = new GoodsPair();
+                                titleGoodsPair.itemType = Constant.ITEM_TYPE_TITLE;
+                                if (!StringUtil.isEmpty(title)) {
+                                    titleGoodsPair.setItemTitle(title);
+                                    title = "";
+                                    goodsPairList.add(0, titleGoodsPair);
+                                }
+
+                            };
+                        }
 
                         shopGoodsGridAdapter.setNewData(goodsPairList);
                         shopGoodsGridAdapter.loadMoreComplete();
@@ -653,6 +676,24 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     }
                     goodsCountTotal = responseObj.getInt("datas.storeGoodsCount");
                     shopStoreLabelList.get(0).setGoodsCount(goodsCountTotal);  // 添加【全部產品】的項數
+                    title = String.format("%s(%d)", shopStoreLabelList.get(0).getStoreLabelName(), goodsCountTotal);
+                    if (goodsPairList != null && goodsPairList.size() > 0) {
+                        if (goodsPairList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE) {
+                            //這裏是僅僅針對初始默認情況
+                            if (currPage == 1) {
+                                GoodsPair titleItem = new GoodsPair();
+                                titleItem.itemType = Constant.ITEM_TYPE_TITLE;
+                                titleItem.setItemTitle(title);
+                                title = "";
+                                goodsPairList.add(0,titleItem);
+//                                int s = shopGoodsGridAdapter.getData().size();
+                                shopGoodsGridAdapter.notifyItemInserted(0);
+                                shopGoodsListAdapter.notifyItemInserted(0);
+                            }
+
+                        }
+                    }
+
                     storeCategoryListAdapter.setNewData(shopStoreLabelList);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -777,8 +818,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         SLog.info("onSelected, type[%s], id[%d]", type, id);
         if (PopupType.DEFAULT == type) {
             storeCategoryListAdapter.notifyItemChanged(id);
-
-            int subCategoryId = (int) extra;  // 二級分類Id
+            StoreLabel storeLabel = (StoreLabel) extra;
+            int subCategoryId = storeLabel.getStoreLabelId();  // 二級分類Id
+            title = storeLabel.getStoreLabelName();
             loadCategoryGoods(subCategoryId);
         }
     }
@@ -801,7 +843,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null))
+                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0))
                 .show();
     }
 }

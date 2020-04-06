@@ -556,6 +556,7 @@ public class Util {
      *      * 如果version1與version2相同，返回0
      */
     public static int versionCompare(String version1, String version2) {
+        SLog.info("version1[%s], version2[%s]", version1, version2);
         String[] version1Arr = version1.split("\\.");
         String[] version2Arr = version2.split("\\.");
 

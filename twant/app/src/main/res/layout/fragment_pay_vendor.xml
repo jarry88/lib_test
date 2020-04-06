@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:clipChildren="false">
     <!-- 工具欄 -->
     <RelativeLayout
         android:id="@+id/tool_bar"
@@ -41,52 +42,113 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="32dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            >
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="55dp"
-                android:layout_marginStart="64dp"
-                android:orientation="vertical">
-                <TextView
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#A8A8A8"
-                    android:textSize="14sp"
-                    android:text="MOP$"
-                    />
+                    android:layout_marginTop="55dp"
+                    android:layout_marginStart="64dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="14sp"
+                        android:text="MOP$"
+                        />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#A8A8A8"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#A8A8A8"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_pay_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="16dp"
+                    android:text="0.00"
+                    android:textSize="40sp"
+                    android:textColor="@color/tw_red"
                     />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_pay_amount"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/second_monny_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginLeft="16dp"
-                android:text="0.00"
-                android:textSize="40sp"
-                android:textColor="@color/tw_red"
-                />
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="23dp"
+                    android:layout_marginStart="64dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_second_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#A8A8A8"
+                        android:textSize="14sp"
+                        android:text="CNY$"
+                        />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#A8A8A8"
+                        />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_second_pay_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginStart="20dp"
+                    android:text="0.00"
+                    android:textSize="18sp"
+                    android:textColor="@color/tw_black"
+                    />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/toolbar_margin_left"
-            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
             android:background="@drawable/pay_vendor_container_bg"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
+
             <View
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/permission_dp_15"
+                android:id="@+id/top_view"
+                android:layout_alignParentTop="true"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:clipToPadding="false"
+                android:id="@+id/rv_pay_vendor_list"
                 android:layout_width="match_parent"
-                android:layout_height="10dp">
-            </View>
+                android:layout_height="280dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/top_view"
+                android:paddingBottom="@dimen/permission_dp_20"
+                android:paddingTop="@dimen/permission_dp_15"
+                />
+
             <ScrollView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -236,7 +298,7 @@
                                 android:id="@+id/tv_wallet_balance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
                                 android:textSize="14sp"
                                 android:textColor="@android:color/white"
                                 android:text="(餘額：$0.00)"
@@ -563,13 +625,72 @@
                         />
                 </RelativeLayout>
             </ScrollView>
+            <LinearLayout
+                android:minHeight="45dp"
+                android:id="@+id/btn_pay_express"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_above="@id/btn_pay"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="270dp"
+                android:orientation="vertical"
+                android:background="@color/tw_white"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_10"
+                >
+                <LinearLayout
+                    android:id="@+id/btn_express_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/permission_dp_20"
+                    android:paddingEnd="@dimen/permission_dp_20"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+                    <TextView
+                        android:id="@+id/text_express_other_pay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:text="@string/select_other_pay"
+                        android:layout_margin="@dimen/dp_10"/>
 
+                    <ImageView android:id="@+id/icon_express_pay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/btn_pay_vendor_expand"/>
+                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/btn_up_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/permission_dp_20"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:visibility="gone">
+                <ImageView android:id="@+id/icon_up_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_pay_up"
+                    android:visibility="visible"/>
+                <TextView
+                    android:id="@+id/text_up_other_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="收起"
+                    android:layout_margin="@dimen/dp_10"
+                    android:visibility="visible"/>
+            </LinearLayout>
+            </LinearLayout>
             <TextView
                 android:id="@+id/btn_pay"
                 android:layout_width="245dp"
                 android:layout_height="44dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:text="去支付"
@@ -577,7 +698,7 @@
                 android:textColor="@android:color/white"
                 android:background="@drawable/red_button"
                 />
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
 

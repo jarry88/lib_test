@@ -2,6 +2,7 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import androidx.annotation.Nullable;
@@ -33,7 +34,7 @@ public class StoreDesktop extends View {
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         path = new Path();
-        color = context.getColor(R.color.tw_slight_grey);
+        color = Color.parseColor("#D9DADB");
     }
 
     @Override

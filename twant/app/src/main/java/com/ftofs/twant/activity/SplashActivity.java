@@ -26,6 +26,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
+import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -214,6 +215,41 @@ public class SplashActivity extends BaseActivity {
         }
 
         loadAppGuideData();
+
+        EasyJSONObject params = EasyJSONObject.generate("version", BuildConfig.VERSION_NAME);
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_CHECK_UPDATE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(SplashActivity.this, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(SplashActivity.this, responseObj)) {
+                        return;
+                    }
+
+                    if (responseObj.exists("datas.currentVersion")) {
+                        String remoteVersion = responseObj.getSafeString("datas.currentVersion");
+                        // 如果当前版本号比服务器版本号高，则不显示
+                        if (Util.versionCompare(BuildConfig.VERSION_NAME, remoteVersion) == 1) {
+                            Hawk.put(SPField.FIELD_CURR_VERSION_SHOW_ACTIVITY_INDEX, false);
+                        } else {
+                            Hawk.put(SPField.FIELD_CURR_VERSION_SHOW_ACTIVITY_INDEX, true);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    SLog.info("Error!%s", e.getMessage());
+                }
+
+            }
+        });
     }
 
     @Override

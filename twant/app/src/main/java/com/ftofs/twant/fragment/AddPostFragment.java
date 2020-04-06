@@ -70,6 +70,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -146,6 +147,8 @@ public class AddPostFragment extends BaseFragment implements
     LinearLayout llPostStoreContainer;
 
     boolean commitButtonEnable = true;
+    private String successText ="提交成功";
+    private EasyJSONObject responseObj;
 
 
     /**
@@ -507,11 +510,11 @@ public class AddPostFragment extends BaseFragment implements
                 boolean success = (boolean) message;
 
                 if (success) {
-                    ToastUtil.success(_mActivity, "提交成功");
+                    ToastUtil.success(_mActivity, successText);
                     hideSoftInputPop();
                 } else {
                     commitButtonEnable = true;
-                    ToastUtil.error(_mActivity, "提交失敗");
+                    ToastUtil.checkError(_mActivity, responseObj);
                 }
             }
         };
@@ -574,7 +577,7 @@ public class AddPostFragment extends BaseFragment implements
 
                     String responseStr = Api.syncPostJson(path, json);
                     SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
                         return false;
                     }
