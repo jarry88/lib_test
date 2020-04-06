@@ -263,7 +263,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
         getMobileZoneList();
 
-        determineShowRealNamePopup();
+        // determineShowRealNamePopup();
     }
 
     @Override
