@@ -22,7 +22,6 @@ import java.util.List;
  * @author zwm
  */
 public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapter.ViewHolder> {
-    private Context context;
     // 分類類型
     int categoryType;
     private OnSelectedListener onSelectedListener;
@@ -49,7 +48,6 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
 
     public CategoryMenuAdapter(Context context, int categoryType, List<CategoryMenu> categoryMenuList,
                                OnSelectedListener onSelectedListener) {
-        this.context = context;
         this.categoryType = categoryType;
         this.categoryMenuList = categoryMenuList;
         this.onSelectedListener = onSelectedListener;
