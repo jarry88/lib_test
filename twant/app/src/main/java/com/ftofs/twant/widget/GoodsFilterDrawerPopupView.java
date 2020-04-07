@@ -35,12 +35,14 @@ import cn.snailpad.easyjson.EasyJSONObject;
 public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.OnClickListener {
     Context context;
     List<FilterCategoryGroup> filterCategoryGroupList;
+    EasyJSONObject currentFilter;
     OnSelectedListener onSelectedListener;
 
     String lowestPrice;
     String highestPrice;
     boolean giftEnable;
     boolean discountEnable;
+    boolean videoEnable;
     private boolean disFreeShipping;
     // 當前選中的category的Id
     int categoryId;
@@ -59,6 +61,7 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
     int twBlue;
     int twBlack;
     private TextView btnFilterShip;
+    TextView btnFilterVideo;
 
     public GoodsFilterDrawerPopupView(@NonNull Context context, List<FilterCategoryGroup> filterCategoryGroupList,
                                       OnSelectedListener onSelectedListener) {
@@ -94,6 +97,9 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
 
         btnFilterShip = findViewById(R.id.btn_filter_free_shipping);
         btnFilterShip.setOnClickListener(this);
+
+        btnFilterVideo = findViewById(R.id.btn_filter_video);
+        btnFilterVideo.setOnClickListener(this);
 
         btnOk = findViewById(R.id.btn_ok);
         btnOk.setOnClickListener(this);
@@ -142,8 +148,10 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
         giftEnable = false;
         discountEnable = false;
         disFreeShipping = false;
+        videoEnable = false;
         setActivityButton(btnFilterGift, false);
         setActivityButton(btnFilterDiscount, false);
+        setActivityButton(btnFilterVideo, false);
 
         categoryId = -1;
         categoryIndex = -1;
@@ -222,9 +230,12 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
         } else if (id == R.id.btn_filter_discount) {
             setActivityButton(btnFilterDiscount, !discountEnable);
             discountEnable = !discountEnable;
-        } else if (id==R.id.btn_filter_free_shipping) {
+        } else if (id == R.id.btn_filter_free_shipping) {
             setActivityButton(btnFilterShip,!disFreeShipping);
             disFreeShipping = !disFreeShipping;
+        } else if (id == R.id.btn_filter_video) {
+            setActivityButton(btnFilterVideo, !videoEnable);
+            videoEnable = !videoEnable;
         } else if (id == R.id.btn_reset) {
             reset();
         } else if (id == R.id.btn_ok) {
@@ -273,6 +284,9 @@ public class GoodsFilterDrawerPopupView extends DrawerPopupView implements View.
                 }
                 if (discountEnable) {
                     params.set("promotion", 1);
+                }
+                if (videoEnable) {
+                    params.set("hasVideo", 1);
                 }
                 if (disFreeShipping) {
                     params.set("express", 1);
