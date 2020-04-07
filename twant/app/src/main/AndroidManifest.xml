@@ -43,6 +43,9 @@
     <!-- 安裝應用權限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 
     <application
         android:name=".TwantApplication"
@@ -74,6 +77,10 @@
             android:name=".activity.MainActivity"
             android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTask"/>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"

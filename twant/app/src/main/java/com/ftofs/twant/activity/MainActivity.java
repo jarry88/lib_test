@@ -4,6 +4,7 @@ package com.ftofs.twant.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,6 +53,7 @@ import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.interfaces.CommonCallback;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.CarouselView;
 import com.ftofs.twant.tangram.HomeStickyView;
@@ -60,6 +62,7 @@ import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.tangram.StoreItemView;
 import com.ftofs.twant.tangram.TangramClickSupport;
 import com.ftofs.twant.task.TencentLocationTask;
+import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
 import com.ftofs.twant.util.PermissionUtil;
@@ -70,8 +73,10 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.DragFloatActionButton;
 import com.ftofs.twant.widget.AppUpdatePopup;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.macau.pay.sdk.base.PayResult;
 import com.macau.pay.sdk.interfaces.MPaySdkInterfaces;
 import com.orhanobut.hawk.Hawk;
@@ -85,6 +90,7 @@ import com.tmall.wireless.tangram.support.async.AsyncLoader;
 import com.tmall.wireless.tangram.support.async.AsyncPageLoader;
 import com.tmall.wireless.tangram.support.async.CardLoadSupport;
 import com.tmall.wireless.tangram.util.IInnerImageSetter;
+import com.yalantis.ucrop.UCrop;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
@@ -916,6 +922,45 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         if (requestCode == RequestCode.REQUEST_INSTALL_APP_PERMISSION.ordinal()) { // 不用判斷resultCode，因為有時候是按返回鍵的
             SLog.info("here_0");
             installUpdate(updateApkPath);
+        }
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            final Uri resultUri = UCrop.getOutput(data);
+            String absolutePath = FileUtil.getRealFilePath(this, resultUri);  // 相册文件的源路径
+            SLog.info("absolutePath[%s]", absolutePath);
+            File file = new File(absolutePath);
+            if(Util.bigImageError(this,file)){
+                new XPopup.Builder(this)
+//                         .dismissOnTouchOutside(false)
+                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                        .setPopupCallback(new XPopupCallback() {
+                            @Override
+                            public void onShow() {
+                            }
+                            @Override
+                            public void onDismiss() {
+                            }
+                        }).asCustom(new TwConfirmPopup(this, "圖片過大是否壓縮后上傳",null   , "確認", "取消",new OnConfirmCallback() {
+                    @Override
+                    public void onYes() {
+                        SLog.info("onYes");
+
+                    }
+
+                    @Override
+                    public void onNo() {
+                        SLog.info("onNo");
+                    }
+                }))
+                        .show();
+                return;
+            }else {
+                SLog.info("上傳失敗");
+                Api.asyncUploadFile(file);
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+            ToastUtil.error(this,"圖片上傳失敗");
         }
     }
 

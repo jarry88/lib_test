@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +27,9 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.CommonCallback;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
@@ -41,10 +44,14 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.DateSelectPopup;
+import com.ftofs.twant.widget.ImagePreviewPopup;
 import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnSelectListener;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
+import com.yalantis.ucrop.UCrop;
 import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,6 +66,8 @@ import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
+
+import static com.facebook.FacebookSdk.getCacheDir;
 
 /**
  * 基礎信息
@@ -103,6 +112,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
     File captureImageFile;
 
     int action; // 打開相冊的操作
+    private String SAMPLE_CROPPED_IMAGE_NAME ="sample_cropped";
 
     public static PersonalInfoFragment newInstance() {
         Bundle args = new Bundle();
@@ -518,19 +528,15 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             return;
         }
 
+
         // 設置頭像
         if (action == ACTION_SET_AVATAR) {
             if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
                 Uri uri = data.getData();
-                String absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
-                SLog.info("absolutePath[%s]", absolutePath);
+                startCrop(uri);
 
-                File file = new File(absolutePath);
-                if(Util.bigImageError(_mActivity,file)){
-                    return;
-                }
 
-                Api.asyncUploadFile(file);
+//
             }
         } else if (action == ACTION_SET_PERSONAL_BACKGROUND) { // 設置個人專頁背景圖
             if (requestCode == RequestCode.OPEN_ALBUM.ordinal() || requestCode == RequestCode.CAMERA_IMAGE.ordinal()) {
@@ -586,6 +592,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         }
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
         if (message.messageType == EBMessageType.MESSAGE_TYPE_UPLOAD_FILE_SUCCESS) {
@@ -632,7 +639,31 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             }
         });
     }
+    private void startCrop(@NonNull Uri uri) {
+        String destinationFileName = SAMPLE_CROPPED_IMAGE_NAME;
 
+        destinationFileName += ".png";
+
+
+
+        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
+        UCrop.Options options = new UCrop.Options();
+        options.setHideBottomControls(true);
+        uCrop.withAspectRatio(16, 9)
+                .withMaxResultSize(250, 250)
+                .withOptions(options)
+                .start(_mActivity);
+
+//        uCrop = basisConfig(uCrop);
+//        uCrop = advancedConfig(uCrop);
+//
+//        if (requestMode == REQUEST_SELECT_PICTURE_FOR_FRAGMENT) {       //if build variant = fragment
+//            setupFragment(uCrop);
+//        } else {                                                        // else start uCrop Activity
+//            uCrop.start(SampleActivity.this);
+//        }
+
+    }
     private void selectPersonalBackground() {
         new XPopup.Builder(getContext())
 //                        .maxWidth(600)
