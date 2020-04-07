@@ -729,18 +729,21 @@
                     <!-- END OF block1 -->
                     <!-- 留言 -->
                     <LinearLayout
+                        android:id="@+id/ll_leave_message_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/length_15dp"
+                        android:layout_marginLeft="@dimen/toolbar_margin_left"
+                        android:layout_marginRight="@dimen/toolbar_margin_right"
+                        android:padding="15dp"
                         android:visibility="gone"
-                        android:background="#fff"
-                        android:id="@+id/ll_leave_message_container">
+                        android:background="#F7F7F7"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="35dp"
-                            android:text="@string/text_leave_message"
+                            android:text="留言:"
                             android:textSize="16sp"
                             android:textColor="@color/tw_black"
                             />
@@ -748,7 +751,7 @@
                             android:id="@+id/tv_leave_message"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="15dp"
+                            android:layout_marginStart="15dp"
                             android:text=""
                             android:textSize="16sp"
                             android:textColor="@color/tw_black"
