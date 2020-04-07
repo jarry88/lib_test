@@ -245,6 +245,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                             PopupType.DEFAULT, reasonItemList, reasonIndex != -1 ? reasonIndex : 0, this))
                     .show();
         } else if (id == R.id.btn_select_refund_way) {
+            hideSoftInput();
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
