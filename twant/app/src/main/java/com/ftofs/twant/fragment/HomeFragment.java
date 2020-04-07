@@ -297,7 +297,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-
+            Util.startFragment(DragFragment.newInstance());
         }
     }
 

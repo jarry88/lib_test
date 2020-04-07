@@ -1,13 +1,17 @@
 package com.ftofs.twant.fragment;
 
 import android.app.Instrumentation;
+import android.app.Service;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,6 +93,7 @@ public class AddPostFragment extends BaseFragment implements
     public static final int POST_CATEGORY_INDEX_SUGGEST = 2;
 
     boolean fromWeb;
+    View currentDragView;
 
     RecyclerView rvEmojiPageList;
     EmojiPageAdapter emojiPageAdapter;
@@ -247,6 +252,27 @@ public class AddPostFragment extends BaseFragment implements
 
         postContentImageContainer = view.findViewById(R.id.post_content_image_container);
         tvPostCategory = view.findViewById(R.id.tv_post_category);
+        postContentImageContainer.setOnDragListener((v, event) -> {
+            // SLog.info("containerLayout", "event.getAction():" + event.getAction());
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_ENDED: //拖拽停止
+                    //your operation
+                    currentDragView.setVisibility(View.VISIBLE);
+                    SLog.info("DragEvent.ACTION_DRAG_ENDED");
+                    updateIndexTagData();
+                    break;
+                case DragEvent.ACTION_DROP://拖拽中
+                    //your operation
+                    SLog.info("DragEvent.ACTION_DROP");
+                    currentDragView.setVisibility(View.VISIBLE);
+                    updateIndexTagData();
+                    break;
+                default:
+                    // SLog.info("DragEvent.ACTION_DEFAULT[%d]", event.getAction());
+                    break;
+            }
+            return true;
+        });
 
         llPostGoodsContainer = view.findViewById(R.id.ll_post_goods_container);
         ShadowDrawable.setShadowDrawable(llPostGoodsContainer, Color.parseColor("#FFFFFF"), Util.dip2px(_mActivity, 5),
@@ -420,13 +446,67 @@ public class AddPostFragment extends BaseFragment implements
             final View itemView = LayoutInflater.from(_mActivity).inflate(R.layout.post_content_image_widget, postContentImageContainer, false);
             ImageView postImage = itemView.findViewById(R.id.post_image);
             Glide.with(_mActivity).load(absolutePath).centerCrop().into(postImage);
-            itemView.setTag(absolutePath);
+            itemView.setTag(R.id.data_absolute_path, absolutePath);
+
+            itemView.setOnLongClickListener(v -> {
+                View.DragShadowBuilder builder = new View.DragShadowBuilder(v);
+                ClipData clipData = ClipData.newPlainText("Stub", ""); // 防止拖放到EditText上，editText取剪貼板數據時崩潰
+                v.startDrag(clipData, builder, v, View.DRAG_FLAG_OPAQUE);//第三个参数是传入一个关于这个view信息的任意对象（getLocalState），它即你需要在拖拽监听中的调用event.getLocalState()获取到这个对象来操作用的(比如传入一个RecyclerView中的position)。如果不需要这个对象，传null
+                SLog.info("startDrag");
+                v.setVisibility(View.INVISIBLE);
+                currentDragView = v;
+
+                Vibrator vibrator = (Vibrator) _mActivity.getSystemService(Service.VIBRATOR_SERVICE);   //获取系统震动服务
+                if (vibrator != null) {
+                    vibrator.vibrate(70);   //震动70毫秒
+                }
+
+                return true;
+            });
+
+            itemView.setOnDragListener(((v, event) -> {
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_ENTERED:// 拖拽进入
+                        View dragView = (View) event.getLocalState();
+                        //之前讲到的v.startDrag(null, builder, null, 0);第三个参数如果传入一个int 类型的值，在这里便可以 通过(int) event.getLocalState()取出来。如果传的是null，上面这行代码就去掉好了
+                        SLog.info("v[%s]", v.toString());
+                        int childIndex = (int) v.getTag(R.id.data_index);
+                        int dragViewIndex = (int) dragView.getTag(R.id.data_index);
+                        SLog.info("DragEvent.ACTION_DRAG_ENTERED, child[%s], v[%s]", childIndex, dragViewIndex);
+                        Util.exchangeChild(postContentImageContainer, childIndex, dragViewIndex);
+                        updateIndexTagData();
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED: // 拖拽退出
+                        dragView = (View) event.getLocalState();
+                        SLog.info("DragEvent.ACTION_DRAG_EXITED, child[%s], v[%s]", v.getTag(R.id.data_index), dragView.getTag(R.id.data_index));
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        dragView = (View) event.getLocalState();
+                        SLog.info("DragEvent.ACTION_DROP, child[%s], v[%s]", v.getTag(R.id.data_index), dragView.getTag(R.id.data_index));
+                        currentDragView.setVisibility(View.VISIBLE);
+                        updateIndexTagData();
+                        break;
+                        /*
+                    case DragEvent.ACTION_DRAG_ENDED: //拖拽停止
+                        //your operation
+                        currentDragView.setVisibility(View.VISIBLE);
+                        SLog.info("DragEvent.ACTION_DRAG_ENDED");
+                        updateIndexTagData();
+                        break;
+
+                         */
+                    default:
+                        break;
+                }
+                return true;
+            }));
 
             ScaledButton btnRemoveImage = itemView.findViewById(R.id.btn_remove_image);
             btnRemoveImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     postContentImageContainer.removeView(itemView);
+                    updateIndexTagData();
                     btnAddPostContentImage.setVisibility(View.VISIBLE);
                 }
             });
@@ -441,6 +521,8 @@ public class AddPostFragment extends BaseFragment implements
             if (childCount >= 10) {
                 btnAddPostContentImage.setVisibility(View.GONE);
             }
+
+            updateIndexTagData();
         }
     }
 
@@ -533,7 +615,7 @@ public class AddPostFragment extends BaseFragment implements
                         View childView = postContentImageContainer.getChildAt(i);
 
                         if (childView instanceof RelativeLayout) {
-                            String absolutePath = (String) childView.getTag();
+                            String absolutePath = (String) childView.getTag(R.id.data_absolute_path);
                             url = Api.syncUploadFile(new File(absolutePath));
                             SLog.info("url[%s]", url);
                             if (StringUtil.isEmpty(url)) {
@@ -795,5 +877,18 @@ public class AddPostFragment extends BaseFragment implements
     private void resetBtnInsertEmoji() {
         btnInsertPostEmoji.setImageResource(R.drawable.icon_add_post_insert_emoji);
         usageBtnEmoji = BTN_EMOJI_USAGE_EMOJI;
+    }
+
+    /**
+     * 更新里面各个拖放子View的位置数据
+     */
+    private void updateIndexTagData() {
+        int childCount = postContentImageContainer.getChildCount();
+        SLog.info("childCount__[%d]", childCount);
+        for (int i = 0; i < childCount - 1; i++) {
+            View child = postContentImageContainer.getChildAt(i);
+            SLog.info("child[%s]", child.toString());
+            child.setTag(R.id.data_index, i);
+        }
     }
 }

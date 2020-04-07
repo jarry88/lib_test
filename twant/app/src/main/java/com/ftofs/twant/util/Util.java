@@ -17,6 +17,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -1172,6 +1173,33 @@ public class Util {
         } else {
             ToastUtil.error(activity, "圖片打開失敗");
             return true;
+        }
+    }
+
+    public static void exchangeChild(ViewGroup parent, int indexA, int indexB) {
+        if (parent == null || indexA < 0 || indexB < 0 || indexA == indexB) {
+            return;
+        }
+
+        int childCount = parent.getChildCount();
+        if (indexA >= childCount || indexB >= childCount) {
+            return;
+        }
+
+        View viewA = parent.getChildAt(indexA);
+        View viewB = parent.getChildAt(indexB);
+
+        // 从后往前删除子View，从前往后添加子View
+        if (indexA > indexB) {
+            parent.removeViewAt(indexA);
+            parent.removeViewAt(indexB);
+            parent.addView(viewA, indexB);
+            parent.addView(viewB, indexA);
+        } else {
+            parent.removeViewAt(indexB);
+            parent.removeViewAt(indexA);
+            parent.addView(viewB, indexA);
+            parent.addView(viewA, indexB);
         }
     }
 }

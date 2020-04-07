@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="btn_show_store_qr_code" type="id" />
+
+    <item name="data_absolute_path" type="id"></item>
+    <item name="data_index" type="id"></item>
 </resources>
