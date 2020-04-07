@@ -713,7 +713,7 @@ public class AddPostFragment extends BaseFragment implements
         if (!goodsShown && goods != null) {
             Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(postGoodsImage);
             tvPostGoodsName.setText(goods.name);
-            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, (float) goods.price, 1));
+            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity,  goods.price, 1));
             llPostGoodsContainer.setVisibility(View.VISIBLE);
 
             goodsShown = true;

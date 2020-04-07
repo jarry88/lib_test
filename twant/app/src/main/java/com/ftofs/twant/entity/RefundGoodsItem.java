@@ -8,6 +8,6 @@ public class RefundGoodsItem {
     public String goodsImageUrl;
     public String goodsName;
     public String goodsFullSpecs;
-    public float price;
+    public double price;
     public int goodsNum;
 }

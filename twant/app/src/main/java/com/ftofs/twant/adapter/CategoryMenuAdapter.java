@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
@@ -12,6 +13,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.CategoryMenu;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.log.SLog;
 
 import java.util.List;
 
@@ -20,7 +22,6 @@ import java.util.List;
  * @author zwm
  */
 public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapter.ViewHolder> {
-    private Context context;
     // 分類類型
     int categoryType;
     private OnSelectedListener onSelectedListener;
@@ -31,6 +32,7 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
     private int twBlack;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivCategoryIcon;
         View vwIndicator;
         TextView tvCategoryNameChinese;
         TextView tvCategoryNameEnglish;
@@ -40,12 +42,12 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
             vwIndicator = view.findViewById(R.id.vw_indicator);
             tvCategoryNameChinese = view.findViewById(R.id.tv_category_name_chinese);
             tvCategoryNameEnglish = view.findViewById(R.id.tv_category_name_english);
+            ivCategoryIcon = view.findViewById(R.id.category_icon);
         }
     }
 
     public CategoryMenuAdapter(Context context, int categoryType, List<CategoryMenu> categoryMenuList,
                                OnSelectedListener onSelectedListener) {
-        this.context = context;
         this.categoryType = categoryType;
         this.categoryMenuList = categoryMenuList;
         this.onSelectedListener = onSelectedListener;
@@ -75,6 +77,11 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
         holder.tvCategoryNameChinese.setText(categoryMenu.categoryNameChinese);
         if (categoryType == Constant.CATEGORY_TYPE_SHOP) {
             holder.tvCategoryNameEnglish.setText(categoryMenu.categoryNameEnglish);
+            SLog.info("id %d,name %s",categoryMenu.categoryId,categoryMenu.categoryNameChinese);
+            if (categoryMenu.categoryId == 75) {
+                holder.ivCategoryIcon.setVisibility(View.VISIBLE);
+            }
+            holder.tvCategoryNameEnglish.setVisibility(View.GONE);
         }
 
         changeItemStatus(holder, position == selectedIndex);

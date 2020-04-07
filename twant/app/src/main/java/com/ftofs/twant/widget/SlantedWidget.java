@@ -52,7 +52,7 @@ public class SlantedWidget extends RelativeLayout {
     }
 
 
-    public void setDiscountInfo(Context context, float discount, float originalPrice) {
+    public void setDiscountInfo(Context context, double discount, double originalPrice) {
         tvDiscount.setText(String.valueOf(discount));
         tvOriginalPrice.setText(StringUtil.formatPrice(context, originalPrice, 1,false));
     }

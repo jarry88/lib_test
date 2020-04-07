@@ -255,14 +255,14 @@ public class Util {
      * @param goods
      * @return
      */
-    public static float getSpuPrice(EasyJSONObject goods) {
-        float price = 0;
+    public static double getSpuPrice(EasyJSONObject goods) {
+        double price = 0;
         try {
             int appUsable = goods.getInt("appUsable");
             if (appUsable > 0) {
-                price = (float) goods.getDouble("appPrice0");
+                price = goods.getDouble("appPrice0");
             } else {
-                price = (float) goods.getDouble("batchPrice2");
+                price = goods.getDouble("batchPrice2");
             }
         } catch (Exception e) {
 
@@ -275,14 +275,14 @@ public class Util {
      * @param goods
      * @return
      */
-    public static float getSkuPrice(EasyJSONObject goods) {
-        float price = 0;
+    public static double getSkuPrice(EasyJSONObject goods) {
+        double price = 0;
         try {
             int appUsable = goods.getInt("appUsable");
             if (appUsable > 0) {
-                price = (float) goods.getDouble("appPrice0");
+                price =  goods.getDouble("appPrice0");
             } else {
-                price = (float) goods.getDouble("goodsPrice0");
+                price =  goods.getDouble("goodsPrice0");
             }
         } catch (Exception e) {
 
@@ -1001,6 +1001,44 @@ public class Util {
 
         SLog.info("params[%s]", params.toString());
         Api.postUI(Api.PATH_ADD_CART, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(context, responseObj)) {
+                    return;
+                }
+
+                // 通知更新購物袋紅點提示
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE, null);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_ADD_CART, null);
+
+                // 如果要添加各種自定義動作，寫在simpleCallback裏面
+                if (simpleCallback != null) {
+                    simpleCallback.onSimpleCall(null);
+                }
+            }
+        });
+    }
+    public static void modifyCartContent(Context context, int cartId, int buyNum, SimpleCallback simpleCallback) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "cartId",cartId,
+                "buyNum",buyNum,
+                "clientType", Constant.CLIENT_TYPE_ANDROID);
+
+        SLog.info("params[%s]", params.toString());
+        Api.postUI(Api.PATH_EDIT_CART, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(context, e);

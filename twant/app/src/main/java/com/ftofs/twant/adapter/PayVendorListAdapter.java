@@ -68,13 +68,11 @@ public class PayVendorListAdapter extends BaseQuickAdapter<PayCardItem, BaseView
             if (helper.getAdapterPosition() == 0) {
 //                layoutParams.topMargin = Util.dip2px(mContext,80);
             }
-            layoutParams.height += Util.dip2px(mContext, 23);
             view.setLayoutParams(layoutParams);
             view.setRotation(6);
         } else {
             view.setLayoutParams(layoutParams);
             if (view.getRotation() > 0) {
-                layoutParams.height -= Util.dip2px(mContext, 23);
                 view.setRotation(0);
             }
         }

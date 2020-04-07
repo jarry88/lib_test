@@ -201,6 +201,10 @@ public class Api {
      * 添加購物袋
      */
     public static final String PATH_ADD_CART = "/cart/add";
+    /**
+     * 修改購物袋
+     */
+    public static final String PATH_EDIT_CART = "/cart/edit";
 
     /**
      * 刪除購物袋

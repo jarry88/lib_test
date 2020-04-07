@@ -576,7 +576,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
                         refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
                         refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
-                        refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                        refundGoodsItem.price =  ordersGoodsVo.getDouble("goodsPrice");
                         refundGoodsItem.goodsNum = ordersGoodsVo.getInt("buyNum");
                         refundGoodsItemList.add(refundGoodsItem);
                         adapter.setData(refundGoodsItemList);
@@ -643,7 +643,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                             refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
                             refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
                             refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
-                            refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                            refundGoodsItem.price =  ordersGoodsVo.getDouble("goodsPrice");
                             refundGoodsItem.goodsNum = ordersGoodsVo.getInt("buyNum");
                             refundGoodsItemList.add(refundGoodsItem);
                         }
@@ -713,7 +713,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
                         refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
                         refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
-                        refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                        refundGoodsItem.price = ordersGoodsVo.getDouble("goodsPrice");
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
                         refundGoodsItem.goodsNum = goodsNum;
                         refundGoodsItemList.add(refundGoodsItem);

@@ -641,14 +641,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
                         CustomerServiceStaff staff = new CustomerServiceStaff();
                         Util.packStaffInfo(staff, serviceStaff);
-//                        FloatingActionButton floatingActionButton = new FloatingActionButton(context);
-//                        floatingActionButton.setButtonSize(FloatingActionButton.SIZE_MINI);
-//                        CircleImageView view =new CircleImageView(context);
-//                        view.setMaxWidth(25);
-//                        view.setMaxHeight(25);
 
-
-//                        floatingActionButton.setColorNormal(getResources().getColor(R.color.tw_white));
                         SLog.info("staff.avatar %s",staff.avatar);
                         boolean defaultAvatar = "img/default_avatar.png".equals(staff.avatar);
                         if (!defaultAvatar) {
@@ -678,7 +671,6 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                                 Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
                             }
                                 });
-//                        customerList.add(floatingActionButton);
                     }
                     customerListLoaded=true;
 

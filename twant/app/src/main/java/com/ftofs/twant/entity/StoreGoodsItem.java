@@ -5,5 +5,5 @@ public class StoreGoodsItem {
     public String imageSrc;
     public String goodsName;
     public String jingle;
-    public float price;
+    public double price;
 }

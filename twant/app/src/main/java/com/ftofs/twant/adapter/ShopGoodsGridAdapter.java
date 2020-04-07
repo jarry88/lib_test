@@ -42,7 +42,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 ImageView goodsImage = helper.getView(R.id.img_left_goods);
                 Glide.with(context).load(leftGoods.imageUrl).centerCrop().into(goodsImage);
                 helper.setText(R.id.tv_left_goods_name, leftGoods.name);
-                helper.setText(R.id.tv_left_goods_price, StringUtil.formatPrice(context, (float) leftGoods.price, 1,false));
+                helper.setText(R.id.tv_left_goods_price, StringUtil.formatPrice(context,  leftGoods.price, 1,false));
 
                 helper.addOnClickListener(R.id.img_left_goods, R.id.btn_add_to_cart_left);
             }
@@ -51,7 +51,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 ImageView goodsImage = helper.getView(R.id.img_right_goods);
                 Glide.with(context).load(rightGoods.imageUrl).centerCrop().into(goodsImage);
                 helper.setText(R.id.tv_right_goods_name, rightGoods.name);
-                helper.setText(R.id.tv_right_goods_price, StringUtil.formatPrice(context, (float) rightGoods.price, 1,false));
+                helper.setText(R.id.tv_right_goods_price, StringUtil.formatPrice(context, rightGoods.price, 1,false));
 
                 helper.setGone(R.id.img_right_goods, true)
                         .setVisible(R.id.ll_right_goods_container, true);
