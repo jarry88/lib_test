@@ -450,7 +450,9 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                     SLog.info("購買商品 limitBuy %d",limitBuy);
                     if (limitBuy < 0) {
                         ToastUtil.error(context, getResources().getString(R.string.out_of_buy_limit));
-                    } else {
+                    } else if(limitBuy==0) {
+                        buy();
+                    } else if (limitBuy > 0) {
                         buy();
                     }
                 } else {
@@ -521,8 +523,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         SLog.info("goodsInfo.price[%s]", goodsInfo.price);
         tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
         tvGoodsStorage.setText("( 庫存: " + finalStorage + goodsInfo.unitName + " )");
-        if (goodsInfo.limitAmount > 0) {
-            tvBuyLimit.setText(context.getString(R.string.text_buy_limit) + ": " + goodsInfo.limitAmount + goodsInfo.unitName);
+        if (limitBuy > 0) {
+            tvBuyLimit.setText(context.getString(R.string.text_buy_limit) + ": " + limitBuy + goodsInfo.unitName);
             tvBuyLimit.setVisibility(VISIBLE);
         } else {
             tvBuyLimit.setVisibility(INVISIBLE);
@@ -533,10 +535,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         SLog.info("finalStorage[%d], limitAmount[%d]", finalStorage, goodsInfo.limitAmount);
 
         int maxValue = finalStorage;
-        if (goodsInfo.limitAmount > 0  // limitAmount 大于0才表示有效
-                && maxValue > goodsInfo.limitAmount) {
-            maxValue = goodsInfo.limitAmount;
-            outOfMaxValueReason = String.format("每人限購%d%s", goodsInfo.limitAmount, goodsInfo.unitName);
+        if (limitBuy > 0  // limitAmount 大于0才表示有效
+                && maxValue > limitBuy) {
+            maxValue = limitBuy;
+            outOfMaxValueReason = String.format("商品限購，最多在買%d%s", limitBuy, goodsInfo.unitName);
         }
         if (limitBuy < 0) {
             maxValue = 1;

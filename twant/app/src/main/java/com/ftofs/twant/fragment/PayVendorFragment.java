@@ -103,8 +103,6 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     List<PayCardItem> payCardItems = new ArrayList<>();
     RecyclerView rvPayVendorList;
     int rvPayListHeight;
-    int[] payButtonIdArr = {R.id.btn_wallet, R.id.btn_mpay, R.id.btn_taifung_pay, /* R.id.btn_union_pay, */ R.id.btn_alihk_pay, R.id.btn_weixin_pay, R.id.btn_ali_pay};
-    int[] payMaskIdArr = {R.id.mask_wallet, R.id.mask_mpay, R.id.mask_taifung_pay, /* R.id.mask_union_pay, */ R.id.mask_alihk_pay, R.id.mask_weixin_pay, R.id.mask_ali_pay};
     /**
      * 支付商按鈕Id與View的Map
      */
@@ -172,12 +170,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         tvSecondPayTag = view.findViewById(R.id.tv_second_money);
 
         Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, payAmount);
-        tvWalletBalance = view.findViewById(R.id.tv_wallet_balance);
-        tvWalletBalance.setText("(未激活)");
 
-        llMPayActivityContainer = view.findViewById(R.id.ll_mpay_activity_container);
-        tvMPay = view.findViewById(R.id.tv_mpay);
-        iconMPayActivityLabel = view.findViewById(R.id.icon_mpay_activity_label);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_pay, this);
@@ -191,12 +184,11 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         btnExpressOtherPay.setOnClickListener(v -> {
             isExpressed = true;
             rvPayVendorList.setNestedScrollingEnabled(true);
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) btnExpressContainer.getLayoutParams();
-            layoutParams.setMargins(Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,480), Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,10));
-            ViewGroup.LayoutParams rvParams=rvPayVendorList.getLayoutParams();
+            LinearLayout.LayoutParams rvParams= (LinearLayout.LayoutParams) rvPayVendorList.getLayoutParams();
+            rvParams.height=0;
+            rvParams.width=1;
             rvParams.height = Util.dip2px(_mActivity, 500);
             rvPayVendorList.setLayoutParams(rvParams);
-            btnExpressContainer.setLayoutParams(layoutParams);
             btnUpOtherPay.setVisibility(View.VISIBLE);
             btnExpressOtherPay.setVisibility(View.GONE);
             rvPayVendorList.scrollToPosition(0);
@@ -207,11 +199,9 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             isExpressed = false;
             rvPayVendorList.setNestedScrollingEnabled(false);
             rvPayVendorList.scrollToPosition(0);
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) btnExpressContainer.getLayoutParams();
-            layoutParams.setMargins(Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,270), Util.dip2px(_mActivity,10), Util.dip2px(_mActivity,10));
-            btnExpressContainer.setLayoutParams(layoutParams);
-            ViewGroup.LayoutParams rvParams=rvPayVendorList.getLayoutParams();
+            LinearLayout.LayoutParams rvParams= (LinearLayout.LayoutParams) rvPayVendorList.getLayoutParams();
             rvParams.height = Util.dip2px(_mActivity, 270);
+            rvParams.weight =0;
             rvPayVendorList.setLayoutParams(rvParams);
             btnExpressOtherPay.setVisibility(View.VISIBLE);
             btnUpOtherPay.setVisibility(View.GONE);
@@ -462,7 +452,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
      * @return 如果是選擇支付商事件，返回true
      */
     private boolean handleSelectPayVendor(View view, int id) {
-        for (int i = 0; i < payButtonIdArr.length; i++) {
+        for (int i = 0; i <payCardItems.size(); i++) {
             // 如果是用錢包支付，先判斷余額
             if (id == R.id.btn_wallet) {
                 if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED) { // 如果錢包未激活，跳轉到激活界面
@@ -478,8 +468,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 }
             }
 
-            if (id == payButtonIdArr[i]) {
-                if (id == selectedPayButtonId) { // 再次點擊，表示取消選擇
+                if (payCardItems.get(i).payType == selectedPayButtonId) { // 再次點擊，表示取消選擇
                     selectedPayButtonId = -1;
                     setStatus(view, Constant.STATUS_UNSELECTED);
 
@@ -491,11 +480,6 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     iconMPayActivityLabel.setImageResource(R.drawable.icon_mpay_activity_label);
                 } else {
                     setStatus(view, Constant.STATUS_SELECTED);
-                    if (id == R.id.btn_mpay) {
-                        iconMPayActivityLabel.setImageResource(R.drawable.icon_mpay_activity_label);
-                    } else {
-                        iconMPayActivityLabel.setImageResource(R.drawable.icon_mpay_activity_label_dark);
-                    }
 
                     // 將之前選中的View取消選擇
                     if (selectedPayButtonId != -1) {
@@ -503,20 +487,9 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                         setStatus(prevSelView, Constant.STATUS_UNSELECTED);
                     }
                     selectedPayButtonId = id;
-
-                    // 顯示所有的蒙板，除了自己
-                    for (Map.Entry<Integer, View> entry : payMaskMap.entrySet()) {
-                        if (entry.getKey() == id) {
-                            entry.getValue().setVisibility(View.GONE);
-                        } else {
-                            entry.getValue().setVisibility(View.VISIBLE);
-                        }
-                    }
                 }
                 return true;
             }
-        }
-
         return false;
     }
 

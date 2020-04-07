@@ -1024,6 +1024,44 @@ public class Util {
             }
         });
     }
+    public static void modifyCartContent(Context context, int cartId, int buyNum, SimpleCallback simpleCallback) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "cartId",cartId,
+                "buyNum",buyNum,
+                "clientType", Constant.CLIENT_TYPE_ANDROID);
+
+        SLog.info("params[%s]", params.toString());
+        Api.postUI(Api.PATH_EDIT_CART, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(context, responseObj)) {
+                    return;
+                }
+
+                // 通知更新購物袋紅點提示
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE, null);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_ADD_CART, null);
+
+                // 如果要添加各種自定義動作，寫在simpleCallback裏面
+                if (simpleCallback != null) {
+                    simpleCallback.onSimpleCall(null);
+                }
+            }
+        });
+    }
 
     /**
      * 啟用/禁用按鈕

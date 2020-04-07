@@ -31,9 +31,9 @@ public class CartAdjustButton extends AdjustButton {
 
         Context context = getContext();
 //        int goodsId = skuStatus.getGoodsId();
-        int goodsId = spuStatus.getGoodsId();
+        int cartId = spuStatus.getCartId();
 
-        Util.changeCartContent(context, goodsId, delta, new SimpleCallback() {
+        Util.modifyCartContent(context, cartId, delta, new SimpleCallback() {
             @Override
             public void onSimpleCall(Object data) {
                 CartAdjustButton.super.changeValue(delta);
