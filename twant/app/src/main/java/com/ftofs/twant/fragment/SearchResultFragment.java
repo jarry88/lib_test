@@ -90,6 +90,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     public static final String STORE_SORT_FOLLOW = "collect_desc";
     public static final String STORE_SORT_OPEN = "startBusiness_desc";
 
+    BasePopupView goodsFilterDrawerPopupView;
+
 
     /**
      * 當前選中的過濾條件的類型： 【所在地】和【商圈】只能二選一
@@ -1215,13 +1217,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
 
     private void showGoodsFilterPopup() {
-        new XPopup.Builder(_mActivity)
-                //右边
-                .popupPosition(PopupPosition.Right)
-                //启用状态栏阴影
-                .hasStatusBarShadow(true)
-                .asCustom(new GoodsFilterDrawerPopupView(_mActivity, filterCategoryGroupList, this))
-                .show();
+
+        if (goodsFilterDrawerPopupView == null) {
+            goodsFilterDrawerPopupView = new XPopup.Builder(_mActivity)
+                    //右边
+                    .popupPosition(PopupPosition.Right)
+                    //启用状态栏阴影
+                    .hasStatusBarShadow(true)
+                    .asCustom(new GoodsFilterDrawerPopupView(_mActivity, filterCategoryGroupList, this));
+        }
+        goodsFilterDrawerPopupView.show();
     }
 
     @Override
