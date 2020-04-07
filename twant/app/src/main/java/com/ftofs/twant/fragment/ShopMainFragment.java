@@ -1,11 +1,8 @@
 package com.ftofs.twant.fragment;
 
 
-import android.app.Notification;
 import android.content.Context;
-import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +18,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.RequestOptions;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
@@ -59,7 +53,6 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
-import de.hdodenhof.circleimageview.CircleImageView;
 import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 
@@ -292,6 +285,11 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         storeNavigationItem.id = -2;
         storeNavigationItem.title = "聯繫我們";
         storeNavigationItemList.add(storeNavigationItem);
+
+        storeNavigationItem = new StoreNavigationItem();
+        storeNavigationItem.id = -3;
+        storeNavigationItem.title = "相關文章";
+        storeNavigationItemList.add(storeNavigationItem);
     }
 
     /**
@@ -347,6 +345,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             hideSoftInputPop();
         } else if (id == R.id.btn_menu||id==R.id.btn_menu_round) {
             SLog.info("here");
+            if (selectedFragmentIndex == HOME_FRAGMENT) {
+                toolbar.setBackgroundResource(R.drawable.white_border_type_d);
+            }
             new XPopup.Builder(_mActivity)
                     .offsetX(-Util.dip2px(_mActivity, 15))
                     .offsetY(-Util.dip2px(_mActivity, 9))

@@ -583,10 +583,16 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                         hideSoftInputPop();
 
+
                         SLog.info("paymentTypeCode[%s]", paymentTypeCode);
                         if (Constant.PAYMENT_TYPE_CODE_ONLINE.equals(paymentTypeCode) || Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
                             // 在線支付或門店自提都需要先付款
                             try {
+                                int isAuth = responseObj.getInt("datas.isAuth");
+                                if (isAuth == 1) {
+                                    startForResult(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.REAL_NAME_INFO.ordinal());
+                                    return;
+                                }
                                 int payId = responseObj.getInt("datas.payId");
                                 start(PayVendorFragment.newInstance(payId, totalPrice, 0));
                             } catch (Exception e) {
@@ -634,6 +640,13 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         // 從哪個Fragment返回
         String from = data.getString("from");
         SLog.info("requestCode[%d], resultCode[%d], from[%s]", requestCode, resultCode, from);
+        if (requestCode == RequestCode.REAL_NAME_INFO.ordinal()) {
+            SLog.info("data[%s]",data.toString());
+            boolean reloadData = data.getBoolean("reloadData");
+            if (reloadData) { // 如果有變動，則重新加載數據
+                loadOrderData();
+            }
+        }
         if (AddrManageFragment.class.getName().equals(from) || AddAddressFragment.class.getName().equals(from)) {
             // 從地址管理Fragment返回 或 從地址添加Fragment返回
             boolean isNoAddress = data.getBoolean("isNoAddress", false); // 標記是否刪除了所有地址
