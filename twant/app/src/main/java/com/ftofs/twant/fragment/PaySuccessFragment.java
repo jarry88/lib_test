@@ -258,7 +258,7 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
                         storeInfoItem.transportInstruction = storeVo.getSafeString("chainTrafficLine");
 
                         if (storeVo.exists("conform.templatePrice")) {
-                            storeInfoItem.templatePrice = (float) storeVo.getDouble("conform.templatePrice");
+                            storeInfoItem.templatePrice =  storeVo.getDouble("conform.templatePrice");
                             SLog.info("storeInfoItem.templatePrice[%s]", storeInfoItem.templatePrice);
                             // storeInfoItem.templatePrice = 999;
 

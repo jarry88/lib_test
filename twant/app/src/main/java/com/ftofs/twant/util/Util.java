@@ -254,14 +254,14 @@ public class Util {
      * @param goods
      * @return
      */
-    public static float getSpuPrice(EasyJSONObject goods) {
-        float price = 0;
+    public static double getSpuPrice(EasyJSONObject goods) {
+        double price = 0;
         try {
             int appUsable = goods.getInt("appUsable");
             if (appUsable > 0) {
-                price = (float) goods.getDouble("appPrice0");
+                price = goods.getDouble("appPrice0");
             } else {
-                price = (float) goods.getDouble("batchPrice2");
+                price = goods.getDouble("batchPrice2");
             }
         } catch (Exception e) {
 
@@ -274,14 +274,14 @@ public class Util {
      * @param goods
      * @return
      */
-    public static float getSkuPrice(EasyJSONObject goods) {
-        float price = 0;
+    public static double getSkuPrice(EasyJSONObject goods) {
+        double price = 0;
         try {
             int appUsable = goods.getInt("appUsable");
             if (appUsable > 0) {
-                price = (float) goods.getDouble("appPrice0");
+                price =  goods.getDouble("appPrice0");
             } else {
-                price = (float) goods.getDouble("goodsPrice0");
+                price =  goods.getDouble("goodsPrice0");
             }
         } catch (Exception e) {
 

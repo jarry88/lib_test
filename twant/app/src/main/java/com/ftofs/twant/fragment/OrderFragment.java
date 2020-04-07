@@ -457,7 +457,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                                     int goodsId = ordersGoodsVo.getInt("goodsId");
                                     String goodsName = ordersGoodsVo.getSafeString("goodsName");
                                     String imageSrc = ordersGoodsVo.getSafeString("imageSrc");
-                                    float goodsPrice = (float) ordersGoodsVo.getDouble("goodsPrice");
+                                    double goodsPrice =  ordersGoodsVo.getDouble("goodsPrice");
                                     String goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
                                     int buyNum = ordersGoodsVo.getInt("buyNum");
 

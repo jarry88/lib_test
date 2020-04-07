@@ -19,7 +19,7 @@ public class Footprint {
 
 
     public Footprint(int footprintId, String date, int storeId, String storeName, int commonId, String imageSrc,
-                     String goodsName, String jingle, float price) {
+                     String goodsName, String jingle, double price) {
         this.footprintId = footprintId;
         this.date = date;
         this.storeId = storeId;
@@ -42,5 +42,5 @@ public class Footprint {
     public String imageSrc;
     public String goodsName;
     public String jingle;
-    public float price;
+    public double price;
 }

@@ -139,7 +139,6 @@ public class StringUtil {
 
             }
         }
-        SLog.info("轉換前%d，轉換後%s",price,result);
         return result;
     }
 

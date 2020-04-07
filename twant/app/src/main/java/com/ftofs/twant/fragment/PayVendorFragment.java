@@ -186,8 +186,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             rvPayVendorList.setNestedScrollingEnabled(true);
             LinearLayout.LayoutParams rvParams= (LinearLayout.LayoutParams) rvPayVendorList.getLayoutParams();
             rvParams.height=0;
-            rvParams.width=1;
-            rvParams.height = Util.dip2px(_mActivity, 500);
+            rvParams.weight=1;
             rvPayVendorList.setLayoutParams(rvParams);
             btnUpOtherPay.setVisibility(View.VISIBLE);
             btnExpressOtherPay.setVisibility(View.GONE);
@@ -388,9 +387,6 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
 
-        if (handleSelectPayVendor(v, id)) {
-            return;
-        }
 
         if (id == R.id.btn_back) {
             showCancelConfirm();
@@ -444,54 +440,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         }
     }
 
-    /**
-     * 選擇支付商事件的處理
-     *
-     * @param view
-     * @param id
-     * @return 如果是選擇支付商事件，返回true
-     */
-    private boolean handleSelectPayVendor(View view, int id) {
-        for (int i = 0; i <payCardItems.size(); i++) {
-            // 如果是用錢包支付，先判斷余額
-            if (id == R.id.btn_wallet) {
-                if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED) { // 如果錢包未激活，跳轉到激活界面
-                    start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, false));
-                    return true;
-                }
-                if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_UNKNOWN) { // 如果錢包狀態未知，則不處理，等到獲取狀態先
-                    return true;
-                }
-                if (payAmount > walletBalance) {
-                    ToastUtil.error(_mActivity, "余額不足");
-                    return true;
-                }
-            }
 
-                if (payCardItems.get(i).payType == selectedPayButtonId) { // 再次點擊，表示取消選擇
-                    selectedPayButtonId = -1;
-                    setStatus(view, Constant.STATUS_UNSELECTED);
-
-                    // 隱藏所有蒙板
-                    for (Map.Entry<Integer, View> entry : payMaskMap.entrySet()) {
-                        entry.getValue().setVisibility(View.GONE);
-                    }
-
-                    iconMPayActivityLabel.setImageResource(R.drawable.icon_mpay_activity_label);
-                } else {
-                    setStatus(view, Constant.STATUS_SELECTED);
-
-                    // 將之前選中的View取消選擇
-                    if (selectedPayButtonId != -1) {
-                        View prevSelView = payVendorButtonMap.get(selectedPayButtonId);
-                        setStatus(prevSelView, Constant.STATUS_UNSELECTED);
-                    }
-                    selectedPayButtonId = id;
-                }
-                return true;
-            }
-        return false;
-    }
 
     @Override
     public boolean onBackPressedSupport() {
@@ -500,19 +449,6 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         return true;
     }
 
-    private void setStatus(View view, int status) {
-        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-
-        if (status == Constant.STATUS_SELECTED) {
-            layoutParams.height += Util.dip2px(_mActivity, 23);
-            view.setLayoutParams(layoutParams);
-            view.setRotation(7);
-        } else {
-            layoutParams.height -= Util.dip2px(_mActivity, 23);
-            view.setLayoutParams(layoutParams);
-            view.setRotation(0);
-        }
-    }
 
     private void doWalletPay() {
         new XPopup.Builder(getContext())

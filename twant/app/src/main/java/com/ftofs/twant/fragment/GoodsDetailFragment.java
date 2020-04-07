@@ -256,7 +256,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private int goodsStatus=1;
     private RelativeLayout preTopBarContainer;
 
-    float goodsPrice;
+    double goodsPrice;
     private int limitBuy;
 
     static class scrollStateHandler extends Handler {
@@ -1341,7 +1341,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.commonId = commonId;
                         goodsInfo.goodsFullSpecs = goodsInfoVo.getSafeString("goodsFullSpecs");
                         goodsInfo.specValueIds = goodsInfoVo.getSafeString("specValueIds");
-                        goodsInfo.goodsPrice0 = (float) goodsInfoVo.getDouble("goodsPrice0");
+                        goodsInfo.goodsPrice0 =  goodsInfoVo.getDouble("goodsPrice0");
                         goodsInfo.price = Util.getSkuPrice(goodsInfoVo);
                         SLog.info("__goodsInfo.price[%s], goodsInfoVo[%s]", goodsInfo.price, goodsInfoVo.toString());
                         goodsInfo.imageSrc = goodsInfoVo.getSafeString("imageSrc");
