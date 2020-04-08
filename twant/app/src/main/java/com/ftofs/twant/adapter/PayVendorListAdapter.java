@@ -62,6 +62,7 @@ public class PayVendorListAdapter extends BaseQuickAdapter<PayCardItem, BaseView
         helper.setVisible(R.id.mask_pay, item.showMask);
         if (item.payType == PayCardItem.PAY_TYPE_MPAY) {
             helper.setImageResource(R.id.icon_pay_activity_label, item.showMask ? R.drawable.icon_mpay_activity_label_dark : R.drawable.icon_mpay_activity_label);
+            ((TextView)helper.getView(R.id.tv_pay_name)).setTextColor(mContext.getColor(R.color.tw_white));
         }
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
         if (item.status == Constant.STATUS_SELECTED) {

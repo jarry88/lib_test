@@ -158,7 +158,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         super.onViewCreated(view, savedInstanceState);
 
         Bundle args = getArguments();
-        user_zone =StringUtil.parseZone(User.getUserInfo(SPField.FIELD_MOBILE, ""));
+        user_zone =StringUtil.parseZone();
         payId = args.getInt("payId");
         payAmount = args.getFloat("payAmount");
         walletBalance = args.getFloat("walletBalance");
@@ -223,17 +223,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             PayCardItem item = (PayCardItem) adapter.getItem(position);
             int type= item.payType;
             if (type == PayCardItem.PAY_TYPE_WALLET) {
-                if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED) { // 如果錢包未激活，跳轉到激活界面
-                    start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, false));
-                    return;
-                }
-                if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_UNKNOWN) { // 如果錢包狀態未知，則不處理，等到獲取狀態先
-                    return;
-                }
-                if (payAmount > walletBalance) {
-                    ToastUtil.error(_mActivity, "余額不足");
-                    return;
-                }
+                updateWallet();
             }
             if (type == selectedPayButtonId) { // 再次點擊，表示取消選擇
                 selectedPayButtonId = -1;
@@ -257,8 +247,32 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             adapter.notifyDataSetChanged();
 
         });
-
+//        for (PayCardItem item : payCardItems) {
+//            if (item.payType == PayCardItem.PAY_TYPE_WALLET) {
+//                if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_UNKNOWN) { // 如果錢包狀態未知，則不處理，等到獲取狀態先
+//                    return;
+//                }
+//                if (payAmount > walletBalance) {
+//                    ToastUtil.error(_mActivity, "余額不足");
+//                    return;
+//                }
+//            }
+//        }
         rvPayVendorList.setAdapter(adpter);
+    }
+
+    private void updateWallet() {
+        if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_NOT_ACTIVATED) { // 如果錢包未激活，跳轉到激活界面
+            start(ResetPasswordFragment.newInstance(Constant.USAGE_SET_PAYMENT_PASSWORD, false));
+            return;
+        }
+        if (walletStatus == Constant.WANT_PAY_WALLET_STATUS_UNKNOWN) { // 如果錢包狀態未知，則不處理，等到獲取狀態先
+            return;
+        }
+        if (payAmount > walletBalance) {
+            ToastUtil.error(_mActivity, "余額不足");
+            return;
+        }
     }
 
 

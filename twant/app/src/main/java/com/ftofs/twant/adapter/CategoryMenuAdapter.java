@@ -80,8 +80,9 @@ public class CategoryMenuAdapter extends RecyclerView.Adapter<CategoryMenuAdapte
             SLog.info("id %d,name %s",categoryMenu.categoryId,categoryMenu.categoryNameChinese);
             if (categoryMenu.categoryId == 75) {
                 holder.ivCategoryIcon.setVisibility(View.VISIBLE);
+                holder.tvCategoryNameEnglish.setVisibility(View.GONE);
+
             }
-            holder.tvCategoryNameEnglish.setVisibility(View.GONE);
         }
 
         changeItemStatus(holder, position == selectedIndex);

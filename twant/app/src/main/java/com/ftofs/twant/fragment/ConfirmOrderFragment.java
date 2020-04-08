@@ -107,7 +107,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     String currencyTypeSign;
     int totalItemCount; // 整個訂單的總件數： 如果sku1有2件，sku2有3件，那么總件數就是5
     String textConfirmOrderTotalItemCount;
-    String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_ONLINE, Constant.PAYMENT_TYPE_CODE_CHAIN};
+    String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_ONLINE,Constant.PAYMENT_TYPE_CODE_CHAIN};
 
     boolean isFirstShowSelfFetchInfo = true; // 是否首次顯示門店自提信息，如果是，則自動填充默認地址信息
     EditText etSelfFetchNickname;
@@ -310,8 +310,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         new XPopup.Builder(_mActivity)
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(true)
-                                .asCustom(new RealNamePopup(_mActivity,mAddrItem.realName))
+                                .asCustom(new RealNamePopup(_mActivity, mAddrItem.realName))
                                 .show();
+                    } else {
+
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -354,7 +356,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             // 收集表單信息
             EasyJSONObject commitBuyData = EasyJSONObject.generate(
                     // "paymentTypeCode", "online",
-                    "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_OFFLINE,
+                    "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_ONLINE,
                     "isCart", isFromCart,
                     "isExistTrys", isExistTrys,
                     "storeList", commitStoreList);
@@ -433,7 +435,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 }
 
 
-                commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
+                commitBuyData.set("paymentTypeCode", Constant.PAYMENT_TYPE_CODE_ONLINE);
                 commitBuyData.set("storeList", storeList);
 
                 // 如果是門店自提的話，還要自提手機號和買家姓名
@@ -593,7 +595,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             try {
                                 int isAuth = responseObj.getInt("datas.isAuth");
                                 if (isAuth == 1) {
-                                    determineShowRealNamePopup();
+                                    new XPopup.Builder(_mActivity)
+                                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                                            .moveUpToKeyboard(true)
+                                            .asCustom(new RealNamePopup(_mActivity, mAddrItem.realName))
+                                            .show();
                                     return;
                                 } else {
                                     pop();
@@ -700,7 +706,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             btnAddShippingAddress.setVisibility(View.GONE);
             btnChangeShippingAddress.setVisibility(View.VISIBLE);
 
-            tvReceiverName.setText(getResources().getString(R.string.text_receiver) + ": " + mAddrItem.realName);
+            tvReceiverName.setText(_mActivity.getString(R.string.text_receiver) + ": " + mAddrItem.realName);
             tvMobile.setText(mAddrItem.mobPhone);
             tvAddress.setText(mAddrItem.areaInfo + " " + mAddrItem.address);
         }
@@ -1043,7 +1049,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("summaryItem, summaryItem.totalFreight【%s】totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
                             summaryItem.totalFreight,summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
-                    totalPrice = summaryItem.calcTotalPrice();
+//                    totalPrice = summaryItem.calcTotalPrice();
+                    totalPrice = (float) (responseObj.getDouble("datas.buyGoodsItemAmount")-responseObj.getDouble("datas.storeTotalDiscountAmount")-responseObj.getDouble("datas.platTotalDiscountAmount"));
                     tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

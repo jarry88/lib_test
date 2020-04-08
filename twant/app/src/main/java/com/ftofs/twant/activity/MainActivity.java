@@ -516,7 +516,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     String huanjingName = String.format("當前為%d環境",27+Config.currEnv);
                     if (Config.currEnv == Config.ENV_F1) {
                         huanjingName = "當前環境為驗收環境";
-                    } else (Config.currEnv == Config.ENV_PROD){
+                    } else if(Config.currEnv == Config.ENV_PROD){
                         huanjingName = "當前環境為正式生成環境";
                     }
                     ToastUtil.success(getApplicationContext(),huanjingName);

@@ -20,6 +20,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EntityReplace;
 import com.ftofs.twant.entity.Mobile;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -743,15 +744,16 @@ public class StringUtil {
         return memberName;
     }
 
-    public static String parseZone(String mobie) {
-        if (isEmpty(mobie)) {
+    public static String parseZone() {
+        String mobile = User.getUserInfo(SPField.FIELD_MOBILE, "");
+        if (isEmpty(mobile)) {
             return null;
         } else {
-            int index = mobie.lastIndexOf(",");
+            int index = mobile.lastIndexOf(",");
             if (index == -1) {
                 return null;
             } else {
-                String zone = mobie.substring(0, index);
+                String zone = mobile.substring(0, index);
                 return zone;
             }
         }
