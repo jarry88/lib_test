@@ -23,6 +23,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.RealNameInstructionPopup;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 
@@ -186,6 +188,12 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
             etName.setText("");
         } else if (id == R.id.btn_clear_id) {
             etId.setText("");
+        } else if (id == R.id.btn_view_real_name_prompt) {
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new RealNameInstructionPopup(_mActivity))
+                    .show();
         }
     }
 

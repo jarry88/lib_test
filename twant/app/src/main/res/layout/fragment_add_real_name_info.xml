@@ -56,7 +56,7 @@
             android:id="@+id/btn_view_real_name_prompt"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <ImageView

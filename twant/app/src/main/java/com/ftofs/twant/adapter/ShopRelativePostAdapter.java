@@ -11,7 +11,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.PostItem;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
 
 import org.litepal.util.Const;
 
@@ -36,7 +38,8 @@ public class ShopRelativePostAdapter extends BaseMultiItemQuickAdapter<PostItem,
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.authorAvatar)).centerCrop().into(imgAuthorAvatar);
 
             helper.setText(R.id.tv_title, item.title)
-                    .setText(R.id.tv_author_nickname, item.authorNickname+"·"+item.createTime)
+                    .setText(R.id.tv_author_nickname, item.authorNickname)
+                    .setText(R.id.tv_create_time, Jarbon.formatMessageTime(0,item.createTime))
                     .setText(R.id.tv_follow_count, String.valueOf(item.postFollow))
                     .setText(R.id.tv_like_count,String.valueOf(item.postLike))
                     .setText(R.id.tv_look_count,String.valueOf(item.postView))

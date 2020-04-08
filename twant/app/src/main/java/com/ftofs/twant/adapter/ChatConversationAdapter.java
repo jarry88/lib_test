@@ -76,7 +76,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         }
 
 
-        helper.setText(R.id.tv_message_time, formatMessageTime(chatConversation.timestamp));
+        helper.setText(R.id.tv_message_time, Jarbon.formatMessageTime(chatConversation.timestamp));
         if (chatConversation.isDoNotDisturb) {
             helper.setGone(R.id.icon_do_not_disturb, true);
             helper.setGone(R.id.tv_unread_count, false);
@@ -119,24 +119,5 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         }
     }
 
-    private String formatMessageTime(long timestampMillis) {
-        if (timestampMillis < 1) {
-            return "";
-        }
-        Jarbon jarbon = new Jarbon(timestampMillis);
 
-        int diffInDays = jarbon.diffInDays(now);
-        SLog.info("diffInDays[%d]", diffInDays);
-        if (diffInDays < 1) {
-            // 今天的顯示幾時幾分
-            return jarbon.format("H:i");
-        } else if (diffInDays == 1) {
-            return "昨天";
-        } else if (diffInDays == 2) {
-            return "前天";
-        } else {
-            // 其它的顯示幾月幾日
-            return jarbon.format("n月j日");
-        }
-    }
 }

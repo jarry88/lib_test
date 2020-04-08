@@ -41,6 +41,7 @@ import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
@@ -263,7 +264,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
         getMobileZoneList();
 
-        determineShowRealNamePopup();
+//        determineShowRealNamePopup();
     }
 
     @Override
@@ -306,7 +307,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         new XPopup.Builder(_mActivity)
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(true)
-                                .asCustom(new RealNamePopup(_mActivity))
+                                .asCustom(new RealNamePopup(_mActivity,mAddrItem.realName))
                                 .show();
                     }
                 } catch (Exception e) {
@@ -566,7 +567,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 } else {
                     path = Api.PATH_COMMIT_BILL_DATA;
                 }
-
+                SLog.info("url[%s],params[%s]",path,params.toString());
                 Api.postUI(path, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -581,8 +582,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             return;
                         }
 
-                        hideSoftInputPop();
-
+                        hideSoftInput();
 
                         SLog.info("paymentTypeCode[%s]", paymentTypeCode);
                         if (Constant.PAYMENT_TYPE_CODE_ONLINE.equals(paymentTypeCode) || Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
@@ -590,8 +590,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             try {
                                 int isAuth = responseObj.getInt("datas.isAuth");
                                 if (isAuth == 1) {
-                                    startForResult(AddRealNameInfoFragment.newInstance(Constant.ACTION_ADD, null), RequestCode.REAL_NAME_INFO.ordinal());
+                                    determineShowRealNamePopup();
                                     return;
+                                } else {
+                                    pop();
                                 }
                                 int payId = responseObj.getInt("datas.payId");
                                 start(PayVendorFragment.newInstance(payId, totalPrice, 0));
@@ -600,6 +602,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             }
                         } else {
                             Util.startFragment(PaySuccessFragment.newInstance(0));
+                            pop();
                             ToastUtil.success(_mActivity, "提交訂單成功");
 
                             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_GOODS_DETAIL, null);
@@ -643,9 +646,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         if (requestCode == RequestCode.REAL_NAME_INFO.ordinal()) {
             SLog.info("data[%s]",data.toString());
             boolean reloadData = data.getBoolean("reloadData");
-            if (reloadData) { // 如果有變動，則重新加載數據
-                loadOrderData();
-            }
+          SLog.info("執行realname result了回調");
+            return;
         }
         if (AddrManageFragment.class.getName().equals(from) || AddAddressFragment.class.getName().equals(from)) {
             // 從地址管理Fragment返回 或 從地址添加Fragment返回

@@ -61,7 +61,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/toolbar_margin_right"
+                    android:layout_marginStart="@dimen/toolbar_margin_right"
                     android:layout_centerVertical="true"
                     android:text="@string/text_add_shipping_address"
                     android:textSize="16sp"
@@ -180,7 +180,7 @@
                         android:id="@+id/et_self_take_nickname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:singleLine="true"
                         android:inputType="text"
                         android:imeOptions="actionNext"

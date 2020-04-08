@@ -33,14 +33,16 @@ import okhttp3.Call;
  * @author zwm
  */
 public class RealNamePopup extends BottomPopupView implements View.OnClickListener {
+    private final String defaultRealName;
     Context context;
     EditText etName; // 姓名
     EditText etId; // 身份證號
 
-    public RealNamePopup(@NonNull Context context) {
+    public RealNamePopup(@NonNull Context context,String realName) {
         super(context);
 
         this.context = context;
+        this.defaultRealName = realName;
     }
 
 
@@ -60,6 +62,7 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
         findViewById(R.id.btn_commit).setOnClickListener(this);
 
         etName = findViewById(R.id.et_name);
+        etName.setText(defaultRealName);
         etId = findViewById(R.id.et_id);
         etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

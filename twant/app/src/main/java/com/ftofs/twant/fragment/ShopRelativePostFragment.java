@@ -22,6 +22,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -100,6 +101,7 @@ public class ShopRelativePostFragment extends BaseFragment implements View.OnCli
         adapter.setOnLoadMoreListener(this, rvRelativeList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         rvRelativeList.setLayoutManager(linearLayoutManager);
+        rvRelativeList.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -135,6 +137,7 @@ public class ShopRelativePostFragment extends BaseFragment implements View.OnCli
     private void loadShopPost(int page) {
         String token = User.getToken();
         EasyJSONObject params = EasyJSONObject.generate("token",token,"storeId",storeId,"page",page);
+        SLog.info("params %s",params.toString());
         final BasePopupView loadingPopup =Util.createLoadingPopup(_mActivity).show();
         Api.getUI(showShopPost?Api.PATH_STORE_POST:Api.PATH_STORE_GOODS_POST, params, new UICallback() {
             @Override
@@ -146,7 +149,7 @@ public class ShopRelativePostFragment extends BaseFragment implements View.OnCli
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
-                SLog.info("responstr %s",responseStr);
+                SLog.info("responseStr %s",responseStr);
                 loadingPopup.dismiss();
 
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
@@ -156,7 +159,9 @@ public class ShopRelativePostFragment extends BaseFragment implements View.OnCli
                 }
                 try {
                     EasyJSONArray storePostList = responseObj.getArray(showShopPost?"datas.storePostList":"datas.goodsPostList");
-                    shopPostList.clear();
+                    if (currPage == 0) {
+                        shopPostList.clear();
+                    }
                     if (responseObj.exists("datas.showPage")) {
                         hasMore = responseObj.getBoolean("datas.showPage.hasMore");
                         if (!hasMore) {
@@ -177,28 +182,33 @@ public class ShopRelativePostFragment extends BaseFragment implements View.OnCli
                             post.postView = postItem.getInt("postView");
                             post.postLike = postItem.getInt("postLike");
                             post.postFollow = postItem.getInt("postFavor");
-                            post.postThumb = postItem.getInt("postThumb");
-                            post.goodsimage = postItem.getSafeString("goodsImage");
-                            post.authorAvatar = postItem.getSafeString("memberVo.avatar");
-                            post.authorNickname = postItem.getSafeString("memberVo.nickName");
+                            post.postThumb = postItem.getInt("postReply");
+                            if (!showShopPost) {
+                                post.goodsimage = postItem.getSafeString("coverImage");
+                            }
+                            post.createTime = postItem.getSafeString("createTime");
+                            if (postItem.exists("memberVo")) {
+                                post.authorAvatar = postItem.getSafeString("memberVo.avatar");
+                                post.authorNickname = postItem.getSafeString("memberVo.nickName");
+                            }
                             shopPostList.add(post);
                         }
                     }
 
-                    totalPage = responseObj.getInt("datas.showPage.totalPage");
+//                    totalPage = responseObj.getInt("datas.showPage.totalPage");
 
-                    if (!hasMore ) {
-                        if(shopPostList.size()==0||shopPostList.size()>0&&shopPostList.get(shopPostList.size()).getItemType()!=Constant.ITEM_TYPE_LOAD_END_HINT){
+                    if (!hasMore && shopPostList.size() > 1) {
                         // 如果全部加載完畢，添加加載完畢的提示
                         PostItem item = new PostItem();
                         item.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
                         shopPostList.add(item);
-                        }
+                        loadingPopup.dismiss();
                     }
 
                     swipeRefreshLayout.setRefreshing(false);
                     adapter.loadMoreComplete();
                     isPostDataLoaded = true;
+                    SLog.info("shopPostListSize [%d]",shopPostList.size());
                     adapter.setNewData(shopPostList);
                     currPage++;
                 }catch (Exception e) {

@@ -10,7 +10,8 @@
         android:layout_height="@dimen/toolbar_height"
         android:paddingEnd="@dimen/toolbar_margin_right"
         android:paddingStart="0dp"
-        android:background="@drawable/border_type_d">
+        android:background="@drawable/border_type_d"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/btn_back"

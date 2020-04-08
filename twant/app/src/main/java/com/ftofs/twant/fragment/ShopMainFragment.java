@@ -345,9 +345,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
             hideSoftInputPop();
         } else if (id == R.id.btn_menu||id==R.id.btn_menu_round) {
             SLog.info("here");
-            if (selectedFragmentIndex == HOME_FRAGMENT) {
-                toolbar.setBackgroundResource(R.drawable.white_border_type_d);
-            }
+
             new XPopup.Builder(_mActivity)
                     .offsetX(-Util.dip2px(_mActivity, 15))
                     .offsetY(-Util.dip2px(_mActivity, 9))
@@ -449,6 +447,7 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         if (index == MORE_FRAGMENT) {
             ImageView imgIcon = bottomBarIcons[MORE_FRAGMENT];
+
             new XPopup.Builder(_mActivity)
                     .offsetX(-Util.dip2px(_mActivity, 45))
                     .offsetY(-Util.dip2px(_mActivity, 6))
@@ -457,6 +456,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     .atView(imgIcon)
                     .asCustom(new WhiteDropdownMenu(_mActivity, storeId, storeFigure, storeNavigationItemList, this))
                     .show();
+            if (selectedFragmentIndex == HOME_FRAGMENT) {
+                toolbar.setBackgroundResource(R.drawable.white_border_type_d);
+            }
 
             tmpSwitchSelectedIcon(false);
             return;
