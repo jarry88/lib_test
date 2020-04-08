@@ -285,14 +285,17 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         );
 
         SLog.info("path[%s], params[%s]", Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params);
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         Api.getUI(Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 

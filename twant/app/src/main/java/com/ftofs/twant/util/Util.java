@@ -1061,7 +1061,7 @@ public class Util {
 
                 // 如果要添加各種自定義動作，寫在simpleCallback裏面
                 if (simpleCallback != null) {
-                    simpleCallback.onSimpleCall(null);
+                    simpleCallback.onSimpleCall(responseObj);
                 }
             }
         });

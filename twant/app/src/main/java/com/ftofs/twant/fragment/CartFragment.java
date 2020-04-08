@@ -32,6 +32,7 @@ import com.ftofs.twant.entity.cart.StoreStatus;
 import com.ftofs.twant.entity.cart.TotalStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -190,6 +191,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
      * 重新加載購物袋
      */
     private void reloadList() {
+        SLog.info("執行購物車重載");
         totalStatus.storeStatusList.clear();
         loadCartData();
         updateTotalData();
