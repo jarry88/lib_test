@@ -158,6 +158,11 @@ public class PasswordLoginFragment extends BaseFragment implements
             refreshCaptcha();
         } else if (id == R.id.btn_mobile_zone) {
             List<ListPopupItem> itemList = new ArrayList<>();
+            if (mobileZoneList == null) {
+                return;
+            } else if(mobileZoneList.size()==0){
+                return;
+            }
             for (MobileZone mobileZone : mobileZoneList) {
                 ListPopupItem item = new ListPopupItem(mobileZone.areaId, mobileZone.areaName, null);
                 itemList.add(item);
