@@ -9,6 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.RealNameListItem;
+import com.ftofs.twant.log.SLog;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class RealNameListAdapter extends BaseQuickAdapter<RealNameListItem, Base
 
         RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
         if (position == itemCount - 1) {
+//            SLog.info("position %d,itemcount-1");
             // 最后一項，不顯示分隔線
             rlContainer.setBackground(null);
         } else {

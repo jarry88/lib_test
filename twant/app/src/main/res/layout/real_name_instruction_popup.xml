@@ -25,6 +25,7 @@
             android:layout_marginTop="28dp"
             android:layout_gravity="center"
             android:text="實名制說明"
+            android:textStyle="bold"
             android:textColor="#333"
             android:textSize="18sp">
         </TextView>
@@ -40,13 +41,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="15dp"
-                android:background="@drawable/border_type_d"
                 android:textSize="14sp"
                 android:textColor="#333"
                 android:text="根據海關總署公告2016年第26號《關於跨境電子商務零售進出口商品有關監管事宜的公告》，電子商務企業應向海關提供購買跨境電子商務零售進出口商品的個人（訂購人）的有效身份信息，訂購人與收貨人應為同一人。">
 
             </TextView>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#EEEEEE"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

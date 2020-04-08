@@ -81,17 +81,28 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_clear_id, this);
 
         etName = view.findViewById(R.id.et_name);
+        etName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    view.findViewById(R.id.btn_clear_name).setVisibility(v.getText().length() > 0?View.VISIBLE:View.GONE);
+                }
+                return false;
+            }
+        });
         etId = view.findViewById(R.id.et_id);
         etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    view.findViewById(R.id.btn_clear_id).setVisibility(v.getText().length() > 0?View.VISIBLE:View.GONE);
                     commitData();
                 }
 
                 return false;
             }
         });
+
 
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         if (action == Constant.ACTION_ADD) {

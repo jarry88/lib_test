@@ -98,6 +98,7 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
                         public void onYes() {
                             SLog.info("onYes");
                             deleteRealNameInfo(position);
+                            adapter.notifyDataSetChanged();
                         }
 
                         @Override
