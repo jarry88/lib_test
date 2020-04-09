@@ -523,12 +523,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         SLog.info("goodsInfo.price[%s]", goodsInfo.price);
         tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
         tvGoodsStorage.setText("( 庫存: " + finalStorage + goodsInfo.unitName + " )");
-        if (limitBuy > 0) {
-            tvBuyLimit.setText(context.getString(R.string.text_buy_limit) + ": " + limitBuy + goodsInfo.unitName);
-            tvBuyLimit.setVisibility(VISIBLE);
-        } else {
-            tvBuyLimit.setVisibility(INVISIBLE);
-        }
 
         // 限定購買的數量
         outOfMaxValueReason = "購買數量不能大于庫存數量";
@@ -539,10 +533,24 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 && maxValue > limitBuy) {
             maxValue = limitBuy;
             outOfMaxValueReason = String.format("商品限購，最多在買%d%s", limitBuy, goodsInfo.unitName);
-        }
-        if (limitBuy < 0) {
+            tvBuyLimit.setText(context.getString(R.string.text_buy_limit) + ": " + limitBuy + goodsInfo.unitName);
+            tvBuyLimit.setVisibility(VISIBLE);
+        } else if (limitBuy < 0) {
             maxValue = 1;
             outOfMaxValueReason = getResources().getString(R.string.out_of_buy_limit);
+        } else {
+            //對原有限購邏輯兼容
+            if (goodsInfo.limitAmount > 0) {
+                tvBuyLimit.setText(context.getString(R.string.text_buy_limit) + ": " + goodsInfo.limitAmount + goodsInfo.unitName);
+                tvBuyLimit.setVisibility(VISIBLE);
+                if (maxValue > goodsInfo.limitAmount) {
+                    maxValue = goodsInfo.limitAmount;
+                    outOfMaxValueReason = String.format("每人限購%d%s", goodsInfo.limitAmount, goodsInfo.unitName);
+                }
+            } else {
+                tvBuyLimit.setVisibility(INVISIBLE);
+            }
+
         }
         SLog.info("maxValue[%d]", maxValue);
         abQuantity.setMaxValue(maxValue, new AdjustButton.OutOfValueCallback() {
