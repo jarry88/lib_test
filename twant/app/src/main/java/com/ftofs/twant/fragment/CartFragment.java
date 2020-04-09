@@ -307,7 +307,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 });
                                 TextView tvGoodsName = cartSkuItem.findViewById(R.id.tv_goods_name);
                                 tvGoodsName.setText(cartSpuVo.getSafeString("goodsName"));
-                                Glide.with(CartFragment.this).load(cartSpuVo.getSafeString("imageSrc")).centerCrop().into(goodsImage);
 
                                 ++totalCartItemCount;
 //                                SkuStatus skuStatus = new SkuStatus();
@@ -326,6 +325,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 spuStatus.setRadio(btnCheckSpu);
 
                                 EasyJSONObject cartSkuVo = (EasyJSONObject) object3;
+                                Glide.with(CartFragment.this).load(cartSkuVo.getSafeString("imageSrc")).centerCrop().into(goodsImage);
                                 int limitBuy = cartSkuVo.getInt("limitBuy");
                                 //如果有限購限制增加數量
                                 if (limitBuy < 0) {
