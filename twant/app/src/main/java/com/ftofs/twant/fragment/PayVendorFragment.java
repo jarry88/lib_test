@@ -325,13 +325,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     if (hk.equals(code)||cny.equals(code)) {
                         double secondPrice = responseObj.getDouble("datas.defaultPrice");
-                        if (cny.equals(code)) {
-                            cny += "¥";
-                            updateSecondMoney(cny,secondPrice);
-                        } else if (hk.equals(code)) {
-                            hk += "$";
-                            updateSecondMoney(hk,secondPrice);
-                        }
+
                         updateSecondMoney(code,secondPrice);
                     }
 
@@ -343,6 +337,11 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void updateSecondMoney(String code, double secondPrice) {
+        if ("CNY".equals(code)) {
+            code += "¥";
+        } else if ("HK".equals(code)) {
+            code += "$";
+        }
         tvSecondPayTag.setText(code);
         tvSecondAmount.setText(StringUtil.formatFloat(secondPrice));
         secondPayAmount.setVisibility(View.VISIBLE);
