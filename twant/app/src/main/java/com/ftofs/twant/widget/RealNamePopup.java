@@ -16,6 +16,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -63,6 +64,7 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
 
         etName = findViewById(R.id.et_name);
         etName.setText(defaultRealName);
+        EditTextUtil.cursorSeekToEnd(etName);
         etId = findViewById(R.id.et_id);
         etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -132,6 +134,12 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
 
             if (StringUtil.isEmpty(idNum)) {
                 ToastUtil.error(context, etId.getHint().toString());
+                return;
+            }
+
+            if (!defaultRealName.equals(name)) {
+                etName.requestFocus();
+                ToastUtil.error(context, "實名認證的姓名與收貨人姓名不一致");
                 return;
             }
 

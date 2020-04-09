@@ -81,6 +81,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_member_document, this);
 
         btnRealNameSet = view.findViewById(R.id.btn_real_name_auth);
+        btnRealNameSet.setOnClickListener(this);
         tvMemberName = view.findViewById(R.id.tv_member_name);
         tvMemberNumber = view.findViewById(R.id.tv_member_number);
         avatar =view.findViewById((R.id.img_avatar));

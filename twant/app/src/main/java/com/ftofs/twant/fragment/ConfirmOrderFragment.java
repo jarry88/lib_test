@@ -594,7 +594,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             // 在線支付或門店自提都需要先付款
                             try {
                                 int isAuth = responseObj.getInt("datas.isAuth");
-                                if (isAuth == 1) {
+                                SLog.info("__isAuth[%d]", isAuth);
+                                if (isAuth == Constant.TRUE_INT) {
                                     new XPopup.Builder(_mActivity)
                                             // 如果不加这个，评论弹窗会移动到软键盘上面
                                             .moveUpToKeyboard(true)
