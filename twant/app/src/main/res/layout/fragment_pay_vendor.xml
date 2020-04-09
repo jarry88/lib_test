@@ -171,7 +171,7 @@
                     android:paddingEnd="@dimen/permission_dp_20"
                     android:orientation="vertical"
                     android:gravity="center_horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
                     <TextView
                         android:id="@+id/text_express_other_pay"
                         android:layout_width="wrap_content"
@@ -186,13 +186,15 @@
                         android:src="@drawable/btn_pay_vendor_expand"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:layout_marginTop="5dp"
+
                     android:id="@+id/btn_up_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:orientation="vertical"
                     android:gravity="center_horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <ImageView android:id="@+id/icon_up_pay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
