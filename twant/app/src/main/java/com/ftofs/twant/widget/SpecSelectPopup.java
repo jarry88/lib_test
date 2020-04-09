@@ -53,6 +53,7 @@ import okhttp3.Call;
  * @author zwm
  */
 public class SpecSelectPopup extends BottomPopupView implements View.OnClickListener {
+    private final int discountState;
     private int limitBuy;
     private ViewPagerFragment viewPagerFragment;
     Context context;
@@ -104,7 +105,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      */
     public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
-                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy) {
+                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy,int discountState) {
         super(context);
 
         this.context = context;
@@ -117,6 +118,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         this.quantity = quantity;
         this.currGalleryImageList = viewPagerFragment;
         this.limitBuy = limitBuy;
+        this.discountState = discountState;
     }
 
     @Override
@@ -389,6 +391,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     private void addToCart() {
 
 
+
         // 當前選中的goodsId
         int goodsId = getSelectedGoodsId();
         int buyNum = abQuantity.getValue();
@@ -540,7 +543,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             outOfMaxValueReason = getResources().getString(R.string.out_of_buy_limit);
         } else {
             //對原有限購邏輯兼容
-            if (goodsInfo.limitAmount > 0) {
+            if (goodsInfo.limitAmount > 0&&discountState==2) {
                 tvBuyLimit.setText(context.getString(R.string.text_buy_limit) + ": " + goodsInfo.limitAmount + goodsInfo.unitName);
                 tvBuyLimit.setVisibility(VISIBLE);
                 if (maxValue > goodsInfo.limitAmount) {
