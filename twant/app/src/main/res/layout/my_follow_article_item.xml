@@ -118,6 +118,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="1.5dp"
                         android:text="@string/text_unuseful"
                         android:background="@drawable/job_type_bg"
                         android:id="@+id/tv_unuseful"

@@ -2,10 +2,12 @@ package com.ftofs.twant.fragment;
 
 import android.app.Notification;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,14 +16,24 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+
+import java.io.IOException;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * 通用設置Fragment
@@ -32,6 +44,8 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
     TextView tvMemberName;
     String memberName;
     TextView tvMemberNumber;
+    RelativeLayout btnRealNameSet;
+
     public static UniversalFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -59,7 +73,6 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_my_e_name_card, this);
         Util.setOnClickListener(view, R.id.btn_security_setting, this);
         Util.setOnClickListener(view, R.id.btn_notification_setting, this);
-        Util.setOnClickListener(view, R.id.btn_real_name_auth, this);
 
         Util.setOnClickListener(view, R.id.btn_logistics_address_setting, this);
         Util.setOnClickListener(view, R.id.btn_feedback, this);
@@ -67,6 +80,8 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_about_takewant, this);
         Util.setOnClickListener(view, R.id.btn_member_document, this);
 
+        btnRealNameSet = view.findViewById(R.id.btn_real_name_auth);
+        btnRealNameSet.setOnClickListener(this);
         tvMemberName = view.findViewById(R.id.tv_member_name);
         tvMemberNumber = view.findViewById(R.id.tv_member_number);
         avatar =view.findViewById((R.id.img_avatar));
@@ -83,6 +98,46 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
             view.findViewById(R.id.text_build).setVisibility(View.VISIBLE);
             ((TextView)view.findViewById(R.id.text_build)).setText(String.format("當前環境%d",27+Config.currEnv));
         }
+        showHideRealNameButton();
+    }
+
+    private void showHideRealNameButton() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token
+        );
+
+        Api.getUI(Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    int isShowAuth = responseObj.getInt("datas.isShowAuth");
+                    if (isShowAuth == Constant.TRUE_INT) {
+                        btnRealNameSet.setVisibility(View.VISIBLE);
+                    } else {
+                        btnRealNameSet.setVisibility(View.GONE);
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
 

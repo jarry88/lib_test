@@ -57,6 +57,9 @@ public class TestFriendFragment extends BaseFragment implements View.OnClickList
     ImageView imgAvatar;
     TextView tvNickname;
     TextView tvMemberLevel;
+
+
+
     TextView tvPopularity;
     TextView tvFansCount;
     TextView tvArticleCount;
@@ -119,7 +122,7 @@ public class TestFriendFragment extends BaseFragment implements View.OnClickList
         tvPopularity = view.findViewById(R.id.tv_popularity);
         tvFansCount = view.findViewById(R.id.tv_fans_count);
         tvArticleCount = view.findViewById(R.id.tv_article_count);
-        tvPersonalProfile = view.findViewById(R.id.tv_personal_profile);
+        tvPersonalProfile = view.findViewById(R.id.tv_personal_sign);
         tvPersonalProfile.setOnClickListener(this);
 
         RecyclerView rvFollowHimList = view.findViewById(R.id.rv_follow_him_list);
@@ -331,10 +334,10 @@ public class TestFriendFragment extends BaseFragment implements View.OnClickList
                     tvArticleCount.setText(String.valueOf(responseObj.getInt("datas.memberHomeStat.post")));
 
                     memberProfile = responseObj.getSafeString("datas.memberVo.memberBio");
-                    if (StringUtil.isEmpty(memberProfile)) {
-                        tvPersonalProfile.setText(memberSignature);
+                    if (StringUtil.isEmpty(memberSignature)) {
+                        tvPersonalProfile.setText(getString(R.string.input_personal_sign_hint));
                     } else {
-                        tvPersonalProfile.setText(memberProfile);
+                        tvPersonalProfile.setText(memberSignature);
                     }
 
                     // 【想粉】數據
@@ -440,5 +443,10 @@ public class TestFriendFragment extends BaseFragment implements View.OnClickList
                 memberPostListAdapter.notifyItemChanged(position);
             }
         });
+    }
+    @Override
+    public boolean onBackPressedSupport() {
+        hideSoftInputPop();
+        return true;
     }
 }

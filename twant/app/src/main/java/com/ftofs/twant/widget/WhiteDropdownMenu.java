@@ -13,6 +13,7 @@ import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.entity.StoreNavigationItem;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.ShopCustomerServiceFragment;
+import com.ftofs.twant.fragment.ShopRelativePostFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
@@ -57,25 +58,25 @@ public class WhiteDropdownMenu extends AttachPopupView {
 
         LinearLayout llMenuList = findViewById(R.id.ll_menu_list);
         storeNavigationAdapter = new StoreNavigationAdapter(context, llMenuList, R.layout.store_navigation_item);
-        storeNavigationAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(ViewGroupAdapter adapter, View view, int position) {
-                StoreNavigationItem item = storeNavigationItemList.get(position);
+        storeNavigationAdapter.setItemClickListener((adapter, view, position) -> {
+            StoreNavigationItem item = storeNavigationItemList.get(position);
 
-                int id = item.id;
-                btnId = id;
-                if (id == -1) {
-                    SLog.info("btn_item_1");
-                } else if (id == -2) {
-                    SLog.info("btn_item_2");
-                    Util.startFragment(ShopCustomerServiceFragment.newInstance(storeId, storeFigureUrl));
-                } else {
-                    String url = item.url;
-                    String title = item.title;
-                    Util.startFragment(H5GameFragment.newInstance(url, title));
-                }
-                dismiss();
+            int id = item.id;
+            btnId = id;
+            if (id == -1) {
+                SLog.info("btn_item_1");
+            } else if (id == -2) {
+                SLog.info("btn_item_2");
+                Util.startFragment(ShopCustomerServiceFragment.newInstance(storeId, storeFigureUrl));
+            } else if (id == -3) {
+                SLog.info("btn_item_3");
+                Util.startFragment(ShopRelativePostFragment.newInstance(storeId));
+            } else {
+                String url = item.url;
+                String title = item.title;
+                Util.startFragment(H5GameFragment.newInstance(url, title));
             }
+            dismiss();
         });
         storeNavigationAdapter.setData(storeNavigationItemList);
     }

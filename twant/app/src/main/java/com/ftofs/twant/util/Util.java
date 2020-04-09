@@ -17,6 +17,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -254,14 +255,14 @@ public class Util {
      * @param goods
      * @return
      */
-    public static float getSpuPrice(EasyJSONObject goods) {
-        float price = 0;
+    public static double getSpuPrice(EasyJSONObject goods) {
+        double price = 0;
         try {
             int appUsable = goods.getInt("appUsable");
             if (appUsable > 0) {
-                price = (float) goods.getDouble("appPrice0");
+                price = goods.getDouble("appPrice0");
             } else {
-                price = (float) goods.getDouble("batchPrice2");
+                price = goods.getDouble("batchPrice2");
             }
         } catch (Exception e) {
 
@@ -274,14 +275,14 @@ public class Util {
      * @param goods
      * @return
      */
-    public static float getSkuPrice(EasyJSONObject goods) {
-        float price = 0;
+    public static double getSkuPrice(EasyJSONObject goods) {
+        double price = 0;
         try {
             int appUsable = goods.getInt("appUsable");
             if (appUsable > 0) {
-                price = (float) goods.getDouble("appPrice0");
+                price =  goods.getDouble("appPrice0");
             } else {
-                price = (float) goods.getDouble("goodsPrice0");
+                price =  goods.getDouble("goodsPrice0");
             }
         } catch (Exception e) {
 
@@ -556,6 +557,9 @@ public class Util {
      *      * 如果version1與version2相同，返回0
      */
     public static int versionCompare(String version1, String version2) {
+        if (StringUtil.isEmpty(version2)) {
+            return 0;
+        }
         SLog.info("version1[%s], version2[%s]", version1, version2);
         String[] version1Arr = version1.split("\\.");
         String[] version2Arr = version2.split("\\.");
@@ -1024,6 +1028,44 @@ public class Util {
             }
         });
     }
+    public static void modifyCartContent(Context context, int cartId, int buyNum, SimpleCallback simpleCallback) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "cartId",cartId,
+                "buyNum",buyNum,
+                "clientType", Constant.CLIENT_TYPE_ANDROID);
+
+        SLog.info("params[%s]", params.toString());
+        Api.postUI(Api.PATH_EDIT_CART, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(context, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                if (ToastUtil.checkError(context, responseObj)) {
+                    return;
+                }
+
+                // 通知更新購物袋紅點提示
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE, null);
+                EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_ADD_CART, null);
+
+                // 如果要添加各種自定義動作，寫在simpleCallback裏面
+                if (simpleCallback != null) {
+                    simpleCallback.onSimpleCall(responseObj);
+                }
+            }
+        });
+    }
 
     /**
      * 啟用/禁用按鈕
@@ -1172,6 +1214,33 @@ public class Util {
         } else {
             ToastUtil.error(activity, "圖片打開失敗");
             return true;
+        }
+    }
+
+    public static void exchangeChild(ViewGroup parent, int indexA, int indexB) {
+        if (parent == null || indexA < 0 || indexB < 0 || indexA == indexB) {
+            return;
+        }
+
+        int childCount = parent.getChildCount();
+        if (indexA >= childCount || indexB >= childCount) {
+            return;
+        }
+
+        View viewA = parent.getChildAt(indexA);
+        View viewB = parent.getChildAt(indexB);
+
+        // 从后往前删除子View，从前往后添加子View
+        if (indexA > indexB) {
+            parent.removeViewAt(indexA);
+            parent.removeViewAt(indexB);
+            parent.addView(viewA, indexB);
+            parent.addView(viewB, indexA);
+        } else {
+            parent.removeViewAt(indexB);
+            parent.removeViewAt(indexA);
+            parent.addView(viewB, indexA);
+            parent.addView(viewA, indexB);
         }
     }
 }

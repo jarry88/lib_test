@@ -98,6 +98,7 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
                         public void onYes() {
                             SLog.info("onYes");
                             deleteRealNameInfo(position);
+                            adapter.notifyDataSetChanged();
                         }
 
                         @Override
@@ -210,7 +211,7 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
 
                     ToastUtil.success(_mActivity, "刪除成功");
                     realNameItemList.remove(position);
-                    realNameListAdapter.notifyItemRemoved(position);
+                    realNameListAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

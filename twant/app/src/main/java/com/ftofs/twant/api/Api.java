@@ -201,6 +201,10 @@ public class Api {
      * 添加購物袋
      */
     public static final String PATH_ADD_CART = "/cart/add";
+    /**
+     * 修改購物袋
+     */
+    public static final String PATH_EDIT_CART = "/cart/edit";
 
     /**
      * 刪除購物袋
@@ -1105,6 +1109,14 @@ public class Api {
      * 作者相關想要帖
      */
     public static final String PATH_WANT_POST_MEMBER_INFO_LIST = "/want_post/member/info/list";
+    /**
+     * 商店相關想要帖
+     */
+    public static final String PATH_STORE_POST = "/store/post";
+    /**
+     * 商店產品相關想要帖
+     */
+    public static final String PATH_STORE_GOODS_POST = "/store/goods/post";
 
     /**
      * 商品SKU列表

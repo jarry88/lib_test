@@ -27,13 +27,14 @@ public class CartAdjustButton extends AdjustButton {
 
     @Override
     public void changeValue(final int delta) {
-        SLog.info("value[%d], delta[%d]", this.value, delta);
+        int buyNum = spuStatus.getCount()+delta;
+        SLog.info("value[%d], delta[%d],buyNum[%d]", this.value, delta,buyNum);
 
         Context context = getContext();
 //        int goodsId = skuStatus.getGoodsId();
-        int goodsId = spuStatus.getGoodsId();
+        int cartId = spuStatus.getCartId();
 
-        Util.changeCartContent(context, goodsId, delta, new SimpleCallback() {
+        Util.modifyCartContent(context, cartId, buyNum, new SimpleCallback() {
             @Override
             public void onSimpleCall(Object data) {
                 CartAdjustButton.super.changeValue(delta);

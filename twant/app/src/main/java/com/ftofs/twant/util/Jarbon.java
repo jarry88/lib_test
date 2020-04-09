@@ -1,5 +1,7 @@
 package com.ftofs.twant.util;
 
+import com.ftofs.twant.log.SLog;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -133,6 +135,54 @@ public class Jarbon {
         }
 
         return create(Y, m, d, H, i, s, u);
+    }
+
+    public static String formatMessageTime(long timestampMillis) {
+        Jarbon now = new Jarbon();
+        if (timestampMillis < 1) {
+            return "";
+        }
+        Jarbon jarbon = new Jarbon(timestampMillis);
+
+        int diffInDays = jarbon.diffInDays(now);
+        SLog.info("diffInDays[%d]", diffInDays);
+        if (diffInDays < 1) {
+            // 今天的顯示幾時幾分
+            return jarbon.format("H:i");
+        } else if (diffInDays == 1) {
+            return "昨天";
+        } else if (diffInDays == 2) {
+            return "前天";
+        } else {
+            // 其它的顯示幾月幾日
+            return jarbon.format("n月j日");
+        }
+    }
+    public static String formatMessageTime(long timestampMillis,String createTime) {
+        Jarbon now = new Jarbon();
+        Jarbon jarbon ;
+        if (!StringUtil.isEmpty(createTime)) {
+            jarbon = Jarbon.parse(createTime);
+        } else {
+            if (timestampMillis < 1) {
+                return "";
+            }
+            jarbon = new Jarbon(timestampMillis);
+        }
+
+        int diffInDays = jarbon.diffInDays(now);
+        SLog.info("diffInDays[%d]", diffInDays);
+        if (diffInDays < 1) {
+            // 今天的顯示幾時幾分
+            return jarbon.format("H:i");
+        } else if (diffInDays == 1) {
+            return "昨天";
+        } else if (diffInDays == 2) {
+            return "前天";
+        } else {
+            // 其它的顯示幾月幾日
+            return jarbon.format("n月j日");
+        }
     }
 
     public Jarbon startOfDay() {

@@ -245,6 +245,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                             PopupType.DEFAULT, reasonItemList, reasonIndex != -1 ? reasonIndex : 0, this))
                     .show();
         } else if (id == R.id.btn_select_refund_way) {
+            hideSoftInput();
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
@@ -575,7 +576,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
                         refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
                         refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
-                        refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                        refundGoodsItem.price =  ordersGoodsVo.getDouble("goodsPrice");
                         refundGoodsItem.goodsNum = ordersGoodsVo.getInt("buyNum");
                         refundGoodsItemList.add(refundGoodsItem);
                         adapter.setData(refundGoodsItemList);
@@ -642,7 +643,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                             refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
                             refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
                             refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
-                            refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                            refundGoodsItem.price =  ordersGoodsVo.getDouble("goodsPrice");
                             refundGoodsItem.goodsNum = ordersGoodsVo.getInt("buyNum");
                             refundGoodsItemList.add(refundGoodsItem);
                         }
@@ -712,7 +713,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                         refundGoodsItem.goodsImageUrl = StringUtil.normalizeImageUrl(ordersGoodsVo.getSafeString("goodsImage"));
                         refundGoodsItem.goodsName = ordersGoodsVo.getSafeString("goodsName");
                         refundGoodsItem.goodsFullSpecs = ordersGoodsVo.getSafeString("goodsFullSpecs");
-                        refundGoodsItem.price = (float) ordersGoodsVo.getDouble("goodsPrice");
+                        refundGoodsItem.price = ordersGoodsVo.getDouble("goodsPrice");
                         int goodsNum = ordersGoodsVo.getInt("buyNum");
                         refundGoodsItem.goodsNum = goodsNum;
                         refundGoodsItemList.add(refundGoodsItem);

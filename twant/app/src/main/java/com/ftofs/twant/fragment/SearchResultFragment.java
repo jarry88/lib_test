@@ -90,6 +90,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     public static final String STORE_SORT_FOLLOW = "collect_desc";
     public static final String STORE_SORT_OPEN = "startBusiness_desc";
 
+    BasePopupView goodsFilterDrawerPopupView;
+
 
     /**
      * 當前選中的過濾條件的類型： 【所在地】和【商圈】只能二選一
@@ -632,17 +634,17 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 int commonId = goods.getInt("commonId");
                                 String goodsName = goods.getSafeString("goodsName");
                                 String jingle  = goods.getSafeString("jingle");
-                                float price;
+                                double price;
                                 int appUsable = goods.getInt("appUsable");
                                 if (appUsable > 0) {
-                                    price = (float) goods.getDouble("appPrice0");
+                                    price =  goods.getDouble("appPrice0");
                                 } else {
-                                    price = (float) goods.getDouble("batchPrice2");
+                                    price =  goods.getDouble("batchPrice2");
                                 }
 
 
-                                float extendPrice0 = (float) goods.getDouble("extendPrice0");
-                                float batchPrice0 = (float) goods.getDouble("batchPrice0");
+                                double extendPrice0 =  goods.getDouble("extendPrice0");
+                                double batchPrice0 =  goods.getDouble("batchPrice0");
 
                                 int promotionState = goods.getInt("promotionState");
                                 int promotionType = goods.getInt("promotionType");
@@ -1215,13 +1217,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
 
     private void showGoodsFilterPopup() {
-        new XPopup.Builder(_mActivity)
-                //右边
-                .popupPosition(PopupPosition.Right)
-                //启用状态栏阴影
-                .hasStatusBarShadow(true)
-                .asCustom(new GoodsFilterDrawerPopupView(_mActivity, filterCategoryGroupList, this))
-                .show();
+
+        if (goodsFilterDrawerPopupView == null) {
+            goodsFilterDrawerPopupView = new XPopup.Builder(_mActivity)
+                    //右边
+                    .popupPosition(PopupPosition.Right)
+                    //启用状态栏阴影
+                    .hasStatusBarShadow(true)
+                    .asCustom(new GoodsFilterDrawerPopupView(_mActivity, filterCategoryGroupList, this));
+        }
+        goodsFilterDrawerPopupView.show();
     }
 
     @Override

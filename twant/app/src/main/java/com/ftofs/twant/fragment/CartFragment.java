@@ -32,6 +32,7 @@ import com.ftofs.twant.entity.cart.StoreStatus;
 import com.ftofs.twant.entity.cart.TotalStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -190,6 +191,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
      * 重新加載購物袋
      */
     private void reloadList() {
+        SLog.info("執行購物車重載");
         totalStatus.storeStatusList.clear();
         loadCartData();
         updateTotalData();
@@ -305,7 +307,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 });
                                 TextView tvGoodsName = cartSkuItem.findViewById(R.id.tv_goods_name);
                                 tvGoodsName.setText(cartSpuVo.getSafeString("goodsName"));
-                                Glide.with(CartFragment.this).load(cartSpuVo.getSafeString("imageSrc")).centerCrop().into(goodsImage);
 
                                 ++totalCartItemCount;
 //                                SkuStatus skuStatus = new SkuStatus();
@@ -324,6 +325,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 spuStatus.setRadio(btnCheckSpu);
 
                                 EasyJSONObject cartSkuVo = (EasyJSONObject) object3;
+                                Glide.with(CartFragment.this).load(cartSkuVo.getSafeString("imageSrc")).centerCrop().into(goodsImage);
                                 int limitBuy = cartSkuVo.getInt("limitBuy");
                                 //如果有限購限制增加數量
                                 if (limitBuy < 0) {

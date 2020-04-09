@@ -2,6 +2,8 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.EditTextUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -33,14 +36,19 @@ import okhttp3.Call;
  * @author zwm
  */
 public class RealNamePopup extends BottomPopupView implements View.OnClickListener {
+    private final String defaultRealName;
     Context context;
     EditText etName; // 姓名
     EditText etId; // 身份證號
 
-    public RealNamePopup(@NonNull Context context) {
+    View btnClearName;
+    View btnClearId;
+
+    public RealNamePopup(@NonNull Context context,String realName) {
         super(context);
 
         this.context = context;
+        this.defaultRealName = realName;
     }
 
 
@@ -53,14 +61,59 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
     protected void onCreate() {
         super.onCreate();
 
-        findViewById(R.id.btn_clear_name).setOnClickListener(this);
-        findViewById(R.id.btn_clear_id).setOnClickListener(this);
+        btnClearName = findViewById(R.id.btn_clear_name);
+        btnClearName.setOnClickListener(this);
+        btnClearId = findViewById(R.id.btn_clear_id);
+        btnClearId.setOnClickListener(this);
+
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
         findViewById(R.id.btn_view_real_name_prompt).setOnClickListener(this);
         findViewById(R.id.btn_commit).setOnClickListener(this);
 
         etName = findViewById(R.id.et_name);
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearName.setVisibility(VISIBLE);
+                } else {
+                    btnClearName.setVisibility(GONE);
+                }
+            }
+        });
+        etName.setText(defaultRealName);
+        EditTextUtil.cursorSeekToEnd(etName);
         etId = findViewById(R.id.et_id);
+        etId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearId.setVisibility(VISIBLE);
+                } else {
+                    btnClearId.setVisibility(GONE);
+                }
+            }
+        });
         etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -129,6 +182,12 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
 
             if (StringUtil.isEmpty(idNum)) {
                 ToastUtil.error(context, etId.getHint().toString());
+                return;
+            }
+
+            if (!defaultRealName.equals(name)) {
+                etName.requestFocus();
+                ToastUtil.error(context, "實名認證的姓名與收貨人姓名不一致");
                 return;
             }
 

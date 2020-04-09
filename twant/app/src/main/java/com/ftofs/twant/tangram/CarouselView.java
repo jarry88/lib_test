@@ -231,7 +231,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                     try {
                         goods = goodsArray.getObject(i);
                         int commonId = goods.getInt("commonId");
-                        float price = (float) goods.getDouble("goodsPrice0");
+                        double price =  goods.getDouble("goodsPrice0");
                         String goodsImage = StringUtil.normalizeImageUrl(goods.getSafeString("goodsImage"));
                         if (StringUtil.isEmpty(goodsImage)) {
                             goodsImageArr[i].setVisibility(View.GONE);

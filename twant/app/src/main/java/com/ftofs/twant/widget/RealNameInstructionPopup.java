@@ -49,7 +49,7 @@ public class RealNameInstructionPopup extends CenterPopupView implements View.On
 
     @Override
     protected int getMaxWidth() {
-        return (int) (XPopupUtils.getWindowWidth(getContext()) * .85f);
+        return (int) (XPopupUtils.getWindowWidth(getContext()) * .8f);
     }
 
     @Override

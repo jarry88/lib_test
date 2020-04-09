@@ -1,6 +1,8 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +25,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.RealNameInstructionPopup;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 
@@ -39,6 +43,9 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
      */
     int action;
     RealNameListItem realNameItem;
+
+    View btnClearName;
+    View btnClearId;
 
     EditText etName; // 姓名
     EditText etId; // 身份證號
@@ -75,21 +82,78 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
         Util.setOnClickListener(view, R.id.btn_view_real_name_prompt, this);
-        Util.setOnClickListener(view, R.id.btn_clear_name, this);
-        Util.setOnClickListener(view, R.id.btn_clear_id, this);
+        btnClearName = view.findViewById(R.id.btn_clear_name);
+        btnClearName.setOnClickListener(this);
+        btnClearId = view.findViewById(R.id.btn_clear_id);
+        btnClearId.setOnClickListener(this);
 
         etName = view.findViewById(R.id.et_name);
+        etName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    view.findViewById(R.id.btn_clear_name).setVisibility(v.getText().length() > 0?View.VISIBLE:View.GONE);
+                }
+                return false;
+            }
+        });
+
+
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearName.setVisibility(View.VISIBLE);
+                } else {
+                    btnClearName.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
         etId = view.findViewById(R.id.et_id);
         etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    view.findViewById(R.id.btn_clear_id).setVisibility(v.getText().length() > 0?View.VISIBLE:View.GONE);
                     commitData();
                 }
 
                 return false;
             }
         });
+        etId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearId.setVisibility(View.VISIBLE);
+                } else {
+                    btnClearId.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
         tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         if (action == Constant.ACTION_ADD) {
@@ -156,7 +220,13 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
-
+                        if (responseObj.exists("datas.isAuth")) {
+                            int isAuth = responseObj.getInt("datas.isAuth");
+                            if (isAuth == 1) {
+                                ToastUtil.success(_mActivity, "datas.message");
+                                return;
+                            }
+                        }
                         ToastUtil.success(_mActivity, "保存成功");
 
                         Bundle bundle = new Bundle();
@@ -186,6 +256,12 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
             etName.setText("");
         } else if (id == R.id.btn_clear_id) {
             etId.setText("");
+        } else if (id == R.id.btn_view_real_name_prompt) {
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new RealNameInstructionPopup(_mActivity))
+                    .show();
         }
     }
 

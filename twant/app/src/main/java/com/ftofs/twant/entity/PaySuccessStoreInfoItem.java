@@ -24,7 +24,7 @@ public class PaySuccessStoreInfoItem implements MultiItemEntity {
     public String businessTimeWeekend;
     public String transportInstruction;
     public String storeBusInfo;
-    public float templatePrice;  // 店鋪優惠券,大於0才顯示
+    public double templatePrice;  // 店鋪優惠券,大於0才顯示
 
     @Override
     public int getItemType() {

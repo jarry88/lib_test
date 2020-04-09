@@ -11,8 +11,8 @@ public class GoodsInfo {
     public int commonId;
     public String goodsFullSpecs;
     public String specValueIds;
-    public float goodsPrice0; // 原價
-    public float price;  // 最終價，如果沒有打折，最終價與原價相同
+    public double goodsPrice0; // 原價
+    public double price;  // 最終價，如果沒有打折，最終價與原價相同
     public String imageSrc;
     public int goodsStorage;  // 產品庫存
     public int reserveStorage;  // 預留庫存

@@ -115,7 +115,14 @@ public class ApiUtil {
     public static void addPost(Context context, boolean fromWeb, EasyJSONObject dataObj) {
         try {
             EasyJSONObject params = EasyJSONObject.generate();
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                Util.showLoginFragment();
+                return;
+            }
             params.set("token", User.getToken());
+
+
             Api.getUI(Api.PATH_WANT_POST_ISSUE_VALIDATE, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -124,7 +131,12 @@ public class ApiUtil {
 
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if(ToastUtil.checkError(context, responseObj)){
+                        return;
+                    };
                     try{
+
                         SLog.info("responseStr[%s]",responseStr);
                         if (dataObj == null) {
                             Util.startFragment(AddPostFragment.newInstance(fromWeb));

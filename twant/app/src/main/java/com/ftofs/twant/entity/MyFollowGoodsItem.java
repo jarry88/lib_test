@@ -8,7 +8,7 @@ public class MyFollowGoodsItem extends MyFollowItem{
     public String goodsName;
     public String imageSrc;
     public String jingle;
-    public float price;
+    public double price;
     public int goodsFavorite;
     public String storeAvatarUrl;
     public int likeCount;

@@ -41,6 +41,7 @@ import com.ftofs.twant.entity.VoucherUseStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.StringUtil;
@@ -106,7 +107,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     String currencyTypeSign;
     int totalItemCount; // 整個訂單的總件數： 如果sku1有2件，sku2有3件，那么總件數就是5
     String textConfirmOrderTotalItemCount;
-    String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_ONLINE, Constant.PAYMENT_TYPE_CODE_CHAIN};
+    String[] paymentTypeCodeArr = new String[] {Constant.PAYMENT_TYPE_CODE_ONLINE,Constant.PAYMENT_TYPE_CODE_CHAIN};
 
     boolean isFirstShowSelfFetchInfo = true; // 是否首次顯示門店自提信息，如果是，則自動填充默認地址信息
     EditText etSelfFetchNickname;
@@ -263,7 +264,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
         getMobileZoneList();
 
-        determineShowRealNamePopup();
+//        determineShowRealNamePopup();
     }
 
     @Override
@@ -284,14 +285,17 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         );
 
         SLog.info("path[%s], params[%s]", Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params);
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
         Api.getUI(Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
                 try {
                     SLog.info("responseStr[%s]", responseStr);
 
@@ -306,8 +310,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         new XPopup.Builder(_mActivity)
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(true)
-                                .asCustom(new RealNamePopup(_mActivity))
+                                .asCustom(new RealNamePopup(_mActivity, mAddrItem.realName))
                                 .show();
+                    } else {
+
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -350,7 +356,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             // 收集表單信息
             EasyJSONObject commitBuyData = EasyJSONObject.generate(
                     // "paymentTypeCode", "online",
-                    "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_OFFLINE,
+                    "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_ONLINE,
                     "isCart", isFromCart,
                     "isExistTrys", isExistTrys,
                     "storeList", commitStoreList);
@@ -392,7 +398,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     if (conformId != null) {
                         store.set("conformId", conformId.toString());
                     }
-
+//                    store.set("conformId", "196");
                     // 留言
                     if (!StringUtil.isEmpty(storeItem.leaveMessage)) {
                         store.set("receiverMessage", storeItem.leaveMessage);
@@ -429,7 +435,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 }
 
 
-                commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
+                commitBuyData.set("paymentTypeCode", Constant.PAYMENT_TYPE_CODE_ONLINE);
                 commitBuyData.set("storeList", storeList);
 
                 // 如果是門店自提的話，還要自提手機號和買家姓名
@@ -566,7 +572,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 } else {
                     path = Api.PATH_COMMIT_BILL_DATA;
                 }
-
+                SLog.info("url[%s],params[%s]",path,params.toString());
                 Api.postUI(path, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -581,12 +587,24 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             return;
                         }
 
-                        hideSoftInputPop();
+                        hideSoftInput();
 
                         SLog.info("paymentTypeCode[%s]", paymentTypeCode);
                         if (Constant.PAYMENT_TYPE_CODE_ONLINE.equals(paymentTypeCode) || Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
                             // 在線支付或門店自提都需要先付款
                             try {
+                                int isAuth = responseObj.getInt("datas.isAuth");
+                                SLog.info("__isAuth[%d]", isAuth);
+                                if (isAuth == Constant.TRUE_INT) {
+                                    new XPopup.Builder(_mActivity)
+                                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                                            .moveUpToKeyboard(true)
+                                            .asCustom(new RealNamePopup(_mActivity, mAddrItem.realName))
+                                            .show();
+                                    return;
+                                } else {
+                                    pop();
+                                }
                                 int payId = responseObj.getInt("datas.payId");
                                 start(PayVendorFragment.newInstance(payId, totalPrice, 0));
                             } catch (Exception e) {
@@ -594,6 +612,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             }
                         } else {
                             Util.startFragment(PaySuccessFragment.newInstance(0));
+                            pop();
                             ToastUtil.success(_mActivity, "提交訂單成功");
 
                             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_GOODS_DETAIL, null);
@@ -634,6 +653,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         // 從哪個Fragment返回
         String from = data.getString("from");
         SLog.info("requestCode[%d], resultCode[%d], from[%s]", requestCode, resultCode, from);
+        if (requestCode == RequestCode.REAL_NAME_INFO.ordinal()) {
+            SLog.info("data[%s]",data.toString());
+            boolean reloadData = data.getBoolean("reloadData");
+          SLog.info("執行realname result了回調");
+            return;
+        }
         if (AddrManageFragment.class.getName().equals(from) || AddAddressFragment.class.getName().equals(from)) {
             // 從地址管理Fragment返回 或 從地址添加Fragment返回
             boolean isNoAddress = data.getBoolean("isNoAddress", false); // 標記是否刪除了所有地址
@@ -682,7 +707,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             btnAddShippingAddress.setVisibility(View.GONE);
             btnChangeShippingAddress.setVisibility(View.VISIBLE);
 
-            tvReceiverName.setText(getResources().getString(R.string.text_receiver) + ": " + mAddrItem.realName);
+            tvReceiverName.setText(_mActivity.getString(R.string.text_receiver) + ": " + mAddrItem.realName);
             tvMobile.setText(mAddrItem.mobPhone);
             tvAddress.setText(mAddrItem.areaInfo + " " + mAddrItem.address);
         }
@@ -844,10 +869,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         }
 
                         voucherMap.put(storeId, storeVoucherVoList);
-
+                        int conformId = 0;
                         // 获取满减优惠
                         if (buyStoreVo.exists("conform.conformId")) {
-                            int conformId = buyStoreVo.getInt("conform.conformId");
+                             conformId = buyStoreVo.getInt("conform.conformId");
                             storeConformIdMap.put(storeId, conformId);
                         }
 
@@ -917,7 +942,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 "storeId", storeId,
                                 "storeName", storeName,
                                 "goodsList", goodsList,
-                                "shipTimeType", shipTimeType));
+                                "shipTimeType", shipTimeType,
+                                "conformId",conformId));
                     }  // END OF 遍歷每家商店
 
                     // 添加上汇总项目

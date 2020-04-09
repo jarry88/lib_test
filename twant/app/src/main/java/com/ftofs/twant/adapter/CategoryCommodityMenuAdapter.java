@@ -34,7 +34,6 @@ public class CategoryCommodityMenuAdapter extends BaseQuickAdapter<CategoryMenu,
             helper.setGone(R.id.vw_indicator, false);
             helper.setTextColor(R.id.tv_category_name_chinese, twBlack);
         }
-
         helper.setText(R.id.tv_category_name_chinese, item.categoryNameChinese);
     }
 }

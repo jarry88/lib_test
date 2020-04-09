@@ -4,11 +4,13 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 public class PostItem extends MyFollowItem implements MultiItemEntity {
     public int itemType;
+    public final static int POST_TYPE_ABOUT_GOOD =6;
     public final static int POST_TYPE_DEFAULT = 1;
     public final static int POST_TYPE_WANT = 2;
     public final static int POST_TYPE_MESSAGE = 3;
     public final static int POST_TYPE_AUTHOR = 4;
     public final static int POST_TYPE_MY_FOLLOW = 5;
+    public final static int POST_TYPE_ABOUT_SHOP =7;
     public int postId;
     public String coverImage;
     public String postCategory;

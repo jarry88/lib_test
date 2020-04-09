@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_alignParentRight="true"
+        android:layout_marginEnd="12dp"
+        android:layout_alignParentEnd="true"
         android:src="@drawable/btn_close_popup">
 
     </ImageView>
@@ -25,6 +25,7 @@
             android:layout_marginTop="28dp"
             android:layout_gravity="center"
             android:text="實名制說明"
+            android:textStyle="bold"
             android:textColor="#333"
             android:textSize="18sp">
         </TextView>
@@ -40,13 +41,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="15dp"
-                android:background="@drawable/border_type_d"
                 android:textSize="14sp"
                 android:textColor="#333"
                 android:text="根據海關總署公告2016年第26號《關於跨境電子商務零售進出口商品有關監管事宜的公告》，電子商務企業應向海關提供購買跨境電子商務零售進出口商品的個人（訂購人）的有效身份信息，訂購人與收貨人應為同一人。">
 
             </TextView>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#EEEEEE"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +65,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="9dp"
+                    android:layout_marginStart="9dp"
                     android:text="如果您下單購買的跨境商品訂購人與收貨人不是同一人，請補充提交收貨人的姓名、身份證號，否則無法辦理清關手續，無法成功發貨。"
                     android:textSize="14sp"
                     android:textColor="#999">
@@ -96,7 +99,9 @@
         
         <TextView
             android:id="@+id/btn_ok"
-            android:layout_width="271dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/permission_dp_25"
+            android:layout_marginEnd="@dimen/permission_dp_25"
             android:layout_height="44dp"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"
