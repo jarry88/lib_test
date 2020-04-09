@@ -2,6 +2,8 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,6 +41,9 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
     EditText etName; // 姓名
     EditText etId; // 身份證號
 
+    View btnClearName;
+    View btnClearId;
+
     public RealNamePopup(@NonNull Context context,String realName) {
         super(context);
 
@@ -56,16 +61,59 @@ public class RealNamePopup extends BottomPopupView implements View.OnClickListen
     protected void onCreate() {
         super.onCreate();
 
-        findViewById(R.id.btn_clear_name).setOnClickListener(this);
-        findViewById(R.id.btn_clear_id).setOnClickListener(this);
+        btnClearName = findViewById(R.id.btn_clear_name);
+        btnClearName.setOnClickListener(this);
+        btnClearId = findViewById(R.id.btn_clear_id);
+        btnClearId.setOnClickListener(this);
+
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
         findViewById(R.id.btn_view_real_name_prompt).setOnClickListener(this);
         findViewById(R.id.btn_commit).setOnClickListener(this);
 
         etName = findViewById(R.id.et_name);
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearName.setVisibility(VISIBLE);
+                } else {
+                    btnClearName.setVisibility(GONE);
+                }
+            }
+        });
         etName.setText(defaultRealName);
         EditTextUtil.cursorSeekToEnd(etName);
         etId = findViewById(R.id.et_id);
+        etId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearId.setVisibility(VISIBLE);
+                } else {
+                    btnClearId.setVisibility(GONE);
+                }
+            }
+        });
         etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
