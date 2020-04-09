@@ -44,7 +44,6 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
     TextView tvMemberName;
     String memberName;
     TextView tvMemberNumber;
-    private boolean showRealNameBtn;
     RelativeLayout btnRealNameSet;
 
     public static UniversalFragment newInstance() {
@@ -74,7 +73,6 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         Util.setOnClickListener(view, R.id.btn_my_e_name_card, this);
         Util.setOnClickListener(view, R.id.btn_security_setting, this);
         Util.setOnClickListener(view, R.id.btn_notification_setting, this);
-        Util.setOnClickListener(view, R.id.btn_real_name_auth, this);
 
         Util.setOnClickListener(view, R.id.btn_logistics_address_setting, this);
         Util.setOnClickListener(view, R.id.btn_feedback, this);
@@ -103,57 +101,42 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void showHideRealNameButton() {
-        String user_zone =StringUtil.parseZone();
-        if (StringUtil.isEmpty(user_zone)) {
-            showRealNameBtn = false;
-        } else if(user_zone.equals(Constant.AREA_CODE_MACAO)){
-            showRealNameBtn = false;
-        } else if (user_zone.equals(Constant.AREA_CODE_HONGKONG)) {
-            showRealNameBtn=true;
-        } else if (user_zone.equals(Constant.AREA_CODE_MAINLAND)) {
-            showRealNameBtn = false;
-        } else {
-            showRealNameBtn = false;
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
         }
-        if (showRealNameBtn) {
-            btnRealNameSet.setVisibility(View.VISIBLE);
-        } else {
-            String token = User.getToken();
-            if (StringUtil.isEmpty(token)) {
-                return;
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token
+        );
+
+        Api.getUI(Api.PATH_DETERMINE_SHOW_REAL_NAME_POPUP, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
             }
 
-            EasyJSONObject params = EasyJSONObject.generate(
-                    "token", token
-            );
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
 
-            Api.getUI(Api.PATH_REAL_NAME_LIST, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(_mActivity, e);
-                }
-
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    try {
-                        SLog.info("responseStr[%s]", responseStr);
-
-                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                        if (ToastUtil.checkError(_mActivity, responseObj)) {
-                            return;
-                        }
-
-                        EasyJSONArray consigneeNameAuthList = responseObj.getSafeArray("datas.consigneeNameAuthList");
-                        if (!Util.isJsonArrayEmpty(consigneeNameAuthList)) {
-                            showRealNameBtn = true;
-                            btnRealNameSet.setVisibility(View.VISIBLE);
-                        }
-                    } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
                     }
+
+                    int isShowAuth = responseObj.getInt("datas.isShowAuth");
+                    if (isShowAuth == Constant.TRUE_INT) {
+                        btnRealNameSet.setVisibility(View.VISIBLE);
+                    } else {
+                        btnRealNameSet.setVisibility(View.GONE);
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
-            });
-        }
+            }
+        });
     }
 
 
