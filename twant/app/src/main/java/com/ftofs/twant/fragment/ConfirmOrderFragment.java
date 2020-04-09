@@ -787,8 +787,13 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             public void onMessage() {
                 loadingPopup.dismiss();
                 String result = (String) message;
-                if (!"success".equals(result)) {
-                    ToastUtil.error(_mActivity, "生成訂單失敗");
+                if (!"success".equals(result)) {  // 如果沒有具體的錯誤消息，則顯示 生成訂單失敗
+                    if (StringUtil.isEmpty(result)) {
+                        ToastUtil.error(_mActivity, "生成訂單失敗");
+                    } else { // 否則，顯示具體的錯誤消息
+                        ToastUtil.error(_mActivity, result);
+                    }
+
                     hideSoftInputPop();
                     return;
                 }
@@ -822,7 +827,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                   */
                     String token = User.getToken();
                     if (StringUtil.isEmpty(token)) {
-                        return null;
+                        return "用戶未登錄";
                     }
 
                     // 整個訂單的總件數
@@ -840,6 +845,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
+                        if (responseObj.exists("datas.error")) {
+                            return responseObj.getSafeString("datas.error");
+                        }
                         return null;
                     }
 
@@ -964,6 +972,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         SLog.info("responseStr[%s]", responseStr);
                         responseObj = EasyJSONObject.parse(responseStr);
                         if (ToastUtil.isError(responseObj)) {
+                            if (responseObj.exists("datas.error")) {
+                                return responseObj.getSafeString("datas.error");
+                            }
                             return null;
                         }
 
