@@ -42,7 +42,7 @@ public class SlantedWidget extends RelativeLayout {
         llPriceInfo.setRotation(-45);
 
         RelativeLayout.MarginLayoutParams layoutParams = new RelativeLayout.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.leftMargin = Util.dip2px(context, 4);
+        layoutParams.leftMargin = Util.dip2px(context, 5);
         layoutParams.topMargin = Util.dip2px(context, 1);
         addView(llPriceInfo, layoutParams);
 
