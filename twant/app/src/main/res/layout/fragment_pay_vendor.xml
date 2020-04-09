@@ -81,7 +81,7 @@
                     />
             </LinearLayout>
             <LinearLayout
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/second_monny_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
