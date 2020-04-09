@@ -1,6 +1,8 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -42,6 +44,9 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
     int action;
     RealNameListItem realNameItem;
 
+    View btnClearName;
+    View btnClearId;
+
     EditText etName; // 姓名
     EditText etId; // 身份證號
 
@@ -77,8 +82,10 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
         Util.setOnClickListener(view, R.id.btn_view_real_name_prompt, this);
-        Util.setOnClickListener(view, R.id.btn_clear_name, this);
-        Util.setOnClickListener(view, R.id.btn_clear_id, this);
+        btnClearName = view.findViewById(R.id.btn_clear_name);
+        btnClearName.setOnClickListener(this);
+        btnClearId = view.findViewById(R.id.btn_clear_id);
+        btnClearId.setOnClickListener(this);
 
         etName = view.findViewById(R.id.et_name);
         etName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -90,6 +97,30 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                 return false;
             }
         });
+
+
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearName.setVisibility(View.VISIBLE);
+                } else {
+                    btnClearName.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
         etId = view.findViewById(R.id.et_id);
         etId.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -100,6 +131,26 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                 }
 
                 return false;
+            }
+        });
+        etId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearId.setVisibility(View.VISIBLE);
+                } else {
+                    btnClearId.setVisibility(View.GONE);
+                }
             }
         });
 
