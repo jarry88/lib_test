@@ -80,7 +80,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.setText(R.id.tv_goods_name_left, item.left.goodsName);
                 TextView tvGoodsJingleLeft = helper.getView(R.id.tv_goods_jingle_left);
                 if (StringUtil.isEmpty(item.left.jingle)) {
-                    tvGoodsJingleLeft.setVisibility(View.GONE);
+                    tvGoodsJingleLeft.setVisibility(View.INVISIBLE);
                 } else {
                     tvGoodsJingleLeft.setText(item.left.jingle);
                     tvGoodsJingleLeft.setVisibility(View.VISIBLE);
@@ -124,7 +124,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.setText(R.id.tv_goods_name_right, item.right.goodsName);
                 TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);
                 if (StringUtil.isEmpty(item.right.jingle)) {
-                    tvGoodsJingleRight.setVisibility(View.GONE);
+                    tvGoodsJingleRight.setVisibility(View.INVISIBLE);
                 } else {
                     tvGoodsJingleRight.setText(item.right.jingle);
                     tvGoodsJingleRight.setVisibility(View.VISIBLE);
