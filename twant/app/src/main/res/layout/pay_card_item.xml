@@ -27,7 +27,7 @@
             android:id="@+id/ll_pay_activity_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="64dp"
             android:orientation="vertical"
             android:visibility="gone">
@@ -58,9 +58,10 @@
             android:id="@+id/ll_pay_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="@dimen/permission_dp_20"
             android:layout_marginStart="64dp"
             android:gravity="center_vertical"
+            android:visibility="visible"
             android:orientation="horizontal">
 
             <TextView
@@ -104,9 +105,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/ll_pay_balance"
-            android:layout_marginTop="3.5dp"
             android:layout_marginStart="64dp"
-            android:text="支持銀聯、Visa、萬事達卡支付"
+            android:text="支持銀聯信用卡和大陸提款卡支付"
             android:textColor="@color/tw_black"
             android:textSize="10sp"/>
 
@@ -122,6 +122,6 @@
         android:layout_width="match_parent"
         android:layout_marginStart="@dimen/dp_10"
         android:layout_marginEnd="@dimen/dp_10"
-        android:layout_height="15dp"
+        android:layout_height="12dp"
         android:background="@color/tw_white"/>
 </LinearLayout>

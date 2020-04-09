@@ -17,6 +17,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.PayCardItem;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
+import com.libra.Utils;
 
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class PayVendorListAdapter extends BaseQuickAdapter<PayCardItem, BaseView
         helper.setText(R.id.tv_pay_name, item.getPayName());
         if (item.payType == PayCardItem.PAY_TYPE_TAIFUNG) {
             helper.setTextColor(R.id.tv_balance_name, mContext.getColor(R.color.tw_black));
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) helper.getView(R.id.ll_pay_balance).getLayoutParams();
+            layoutParams.topMargin = Util.dip2px(mContext, 14.0f);
         }
         if (item.getPayDesc() != null &&item.showActivityDesc) {
             helper.setVisible(R.id.ll_pay_activity_container,true);
@@ -62,6 +65,8 @@ public class PayVendorListAdapter extends BaseQuickAdapter<PayCardItem, BaseView
         helper.setVisible(R.id.mask_pay, item.showMask);
         if (item.payType == PayCardItem.PAY_TYPE_MPAY) {
             helper.setImageResource(R.id.icon_pay_activity_label, item.showMask ? R.drawable.icon_mpay_activity_label_dark : R.drawable.icon_mpay_activity_label);
+            TextView tvName = helper.getView(R.id.tv_balance_name);
+            tvName.setTextColor(mContext.getColor(R.color.tw_white));
             ((TextView)helper.getView(R.id.tv_pay_name)).setTextColor(mContext.getColor(R.color.tw_white));
         }
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();

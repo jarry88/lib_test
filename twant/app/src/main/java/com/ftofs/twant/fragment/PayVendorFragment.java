@@ -62,6 +62,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 import static com.umeng.analytics.pro.k.a.c;
+import static com.umeng.analytics.pro.k.a.e;
 import static com.umeng.analytics.pro.k.a.f;
 import static com.umeng.analytics.pro.k.a.i;
 import static com.umeng.analytics.pro.k.a.r;
@@ -324,8 +325,16 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     if (hk.equals(code)||cny.equals(code)) {
                         double secondPrice = responseObj.getDouble("datas.defaultPrice");
+                        if (cny.equals(code)) {
+                            cny += "¥";
+                            updateSecondMoney(cny,secondPrice);
+                        } else if (hk.equals(code)) {
+                            hk += "$";
+                            updateSecondMoney(hk,secondPrice);
+                        }
                         updateSecondMoney(code,secondPrice);
                     }
+
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -334,7 +343,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void updateSecondMoney(String code, double secondPrice) {
-        tvSecondPayTag.setText(code+"$");
+        tvSecondPayTag.setText(code);
         tvSecondAmount.setText(StringUtil.formatFloat(secondPrice));
         secondPayAmount.setVisibility(View.VISIBLE);
     }

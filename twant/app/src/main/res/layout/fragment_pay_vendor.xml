@@ -41,7 +41,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="32dp"
+            android:paddingBottom="26dp"
             android:orientation="vertical"
             >
             <LinearLayout
@@ -144,7 +144,7 @@
                 android:clipToPadding="false"
                 android:id="@+id/rv_pay_vendor_list"
                 android:layout_width="match_parent"
-                android:layout_height="270dp"
+                android:layout_height="300dp"
                 android:layout_weight="0"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
@@ -153,11 +153,10 @@
                 android:paddingTop="@dimen/permission_dp_15"
                 />
             <LinearLayout
-                android:minHeight="45dp"
                 android:id="@+id/btn_pay_express"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.15"
+                android:layout_weight="0.1"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:background="@color/tw_white"
@@ -190,7 +189,7 @@
                     android:id="@+id/btn_up_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_10"
+                    android:padding="5dp"
                     android:orientation="vertical"
                     android:gravity="center_horizontal"
                     android:visibility="gone">

@@ -144,8 +144,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
+                android:layout_marginStart="@dimen/toolbar_margin_left"
+                android:layout_marginEnd="@dimen/toolbar_margin_right"
                 android:orientation="vertical"
                 android:visibility="gone">
                 <TextView

@@ -398,7 +398,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     if (conformId != null) {
                         store.set("conformId", conformId.toString());
                     }
-
+//                    store.set("conformId", "196");
                     // 留言
                     if (!StringUtil.isEmpty(storeItem.leaveMessage)) {
                         store.set("receiverMessage", storeItem.leaveMessage);
@@ -868,10 +868,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         }
 
                         voucherMap.put(storeId, storeVoucherVoList);
-
+                        int conformId = 0;
                         // 获取满减优惠
                         if (buyStoreVo.exists("conform.conformId")) {
-                            int conformId = buyStoreVo.getInt("conform.conformId");
+                             conformId = buyStoreVo.getInt("conform.conformId");
                             storeConformIdMap.put(storeId, conformId);
                         }
 
@@ -941,7 +941,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 "storeId", storeId,
                                 "storeName", storeName,
                                 "goodsList", goodsList,
-                                "shipTimeType", shipTimeType));
+                                "shipTimeType", shipTimeType,
+                                "conformId",conformId));
                     }  // END OF 遍歷每家商店
 
                     // 添加上汇总项目
@@ -1049,8 +1050,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     SLog.info("summaryItem, summaryItem.totalFreight【%s】totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
                             summaryItem.totalFreight,summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
-//                    totalPrice = summaryItem.calcTotalPrice();
-                    totalPrice = (float) (responseObj.getDouble("datas.buyGoodsItemAmount")-responseObj.getDouble("datas.storeTotalDiscountAmount")-responseObj.getDouble("datas.platTotalDiscountAmount"));
+                    totalPrice = summaryItem.calcTotalPrice();
                     tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

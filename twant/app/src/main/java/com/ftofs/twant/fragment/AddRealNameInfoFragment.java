@@ -169,7 +169,13 @@ public class AddRealNameInfoFragment extends BaseFragment implements View.OnClic
                         if (ToastUtil.checkError(_mActivity, responseObj)) {
                             return;
                         }
-
+                        if (responseObj.exists("datas.isAuth")) {
+                            int isAuth = responseObj.getInt("datas.isAuth");
+                            if (isAuth == 1) {
+                                ToastUtil.success(_mActivity, "datas.message");
+                                return;
+                            }
+                        }
                         ToastUtil.success(_mActivity, "保存成功");
 
                         Bundle bundle = new Bundle();

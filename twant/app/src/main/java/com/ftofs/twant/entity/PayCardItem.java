@@ -68,7 +68,7 @@ public class PayCardItem {
                 walletCard.textBalance = "(未激活)";
                 return walletCard;
             case PAY_TYPE_TAIFUNG:
-                String textSupport = "支持銀聯、Visa、萬事達卡支付";
+                String textSupport = "支持銀聯信用卡和大陸提款卡支付";
                 PayCardItem taifungCard = new PayCardItem("大豐銀行電子支付", R.drawable.pay_vendor_bg_yellow, R.drawable.new_icon_pay_taifung, PayCardItem.PAY_TYPE_TAIFUNG);
                 taifungCard.textSupport = textSupport;
                 taifungCard.showSupport = true;
