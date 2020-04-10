@@ -55,7 +55,6 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
 import com.ftofs.twant.widget.StoreFilterPopup;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -426,15 +425,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     StoreSearchItem storeSearchItem = storeItemList.get(position);
                     String storeVideoUrl = storeSearchItem.storeVideoUrl;
                     String videoId = Util.getYoutubeVideoId(storeVideoUrl);
-                    if (!Util.isYoutubeInstalled(_mActivity)) {
-                        ToastUtil.error(_mActivity, getString(R.string.install_youtube_player_hint));
-                        return;
-                    }
-
-                    if (!StringUtil.isEmpty(videoId)) {
-                        Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, videoId);
-                        startActivity(intent);
-                    }
+                    Util.playYoutubeVideo(_mActivity, videoId);
                 }
             }
         });

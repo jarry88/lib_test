@@ -64,7 +64,6 @@ import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.TwQRCodePopup;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -1025,8 +1024,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 }
 
                 if (!StringUtil.isEmpty(videoId)) {
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, videoId);
-                    startActivity(intent);
+                    Util.playYoutubeVideo(_mActivity, videoId);
                 }
                 break;
             default:

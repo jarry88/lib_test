@@ -41,7 +41,6 @@ import com.ftofs.twant.view.CustomerLinearLayoutManager;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.SpecSelectPopup;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -155,7 +154,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         }
 
         // 獲取屏幕寬度
-        int screenWidth = Util.getScreenDimemsion(_mActivity).first;
+        int screenWidth = Util.getScreenDimension(_mActivity).first;
         llPage1 = view.findViewById(R.id.ll_page_1);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) llPage1.getLayoutParams();
         layoutParams.width = screenWidth;
@@ -385,14 +384,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
                 if (id == R.id.btn_play) { // 點擊播放按鈕
-                    if (!Util.isYoutubeInstalled(_mActivity)) {
-                        ToastUtil.error(_mActivity, getString(R.string.install_youtube_player_hint));
-                        return;
-                    }
-
                     VideoItem videoItem = videoItemList.get(position);
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, videoItem.videoId);
-                    startActivity(intent);
+                    Util.playYoutubeVideo(_mActivity, videoItem.videoId);
                 }
             }
         });

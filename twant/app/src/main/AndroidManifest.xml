@@ -25,24 +25,14 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <!-- 华为角标 -->
-    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
-
-    <!-- 三星角标 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 华为角标 -->
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" /> <!-- 三星角标 -->
     <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
-    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" />
-
-    <!-- 索尼角标 -->
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" /> <!-- 索尼角标 -->
     <uses-permission android:name="com.sonymobile.home.permission.PROVIDER_INSERT_BADGE" />
     <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" />
-    <uses-permission android:name="com.sonyericsson.home.action.UPDATE_BADGE" />
-
-
-    <!-- 安裝應用權限 -->
+    <uses-permission android:name="com.sonyericsson.home.action.UPDATE_BADGE" /> <!-- 安裝應用權限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
 
     <application
         android:name=".TwantApplication"
@@ -53,8 +43,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AppGuideActivity"></activity>
-        <activity android:name=".activity.SplashActivity"
+        <activity android:name=".activity.YoutubeActivity"></activity>
+        <activity android:name=".activity.AppGuideActivity" />
+        <activity
+            android:name=".activity.SplashActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,29 +54,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!--需要添加下面的intent-filter配置-->
+            <!-- 需要添加下面的intent-filter配置 -->
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="@string/app_uri_scheme"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/app_uri_scheme" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity> <!-- 大豐支付所需Activity -->
+            android:screenOrientation="behind" /> <!-- 大豐支付所需Activity -->
         <activity
             android:name="com.vivebest.taifung.ui.LauncherActivity"
             android:launchMode="singleTask"
@@ -165,7 +158,6 @@
                 <data android:scheme="@string/weixin_app_id" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
@@ -179,10 +171,9 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="umengshare" />
-
-
-        <meta-data android:name="TencentMapSDK" android:value="@string/tencent_map_key" />
-
+        <meta-data
+            android:name="TencentMapSDK"
+            android:value="@string/tencent_map_key" />
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="@string/amap_key" /> <!-- 環信的設置 -->
@@ -222,13 +213,11 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-
-        <!-- facebook -->
+        </provider> <!-- facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -238,17 +227,18 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider339526026920454"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
-        <!-- END OF facebook -->
-        
+            android:authorities="com.facebook.app.FacebookContentProvider339526026920454"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -7,18 +7,15 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
-import com.tmall.wireless.tangram.support.TimerSupport;
 
 public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
     Context context;
@@ -68,7 +65,7 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
         animInitialized = true;
 
         long animDuration = 1500;
-        int blockWidth = Util.getScreenDimemsion(getContext()).first / 3; // 分3塊
+        int blockWidth = Util.getScreenDimension(getContext()).first / 3; // 分3塊
         animatorArr[0] = ObjectAnimator.ofFloat(vwSloganHighLighter,"translationX",-blockWidth,0).setDuration(animDuration);
         animatorArr[1] = ObjectAnimator.ofFloat(vwSloganHighLighter,"translationX",0,blockWidth).setDuration(animDuration);
         animatorArr[2] = ObjectAnimator.ofFloat(vwSloganHighLighter,"translationX",blockWidth,2*blockWidth).setDuration(animDuration);
