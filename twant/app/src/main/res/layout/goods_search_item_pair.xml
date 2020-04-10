@@ -265,7 +265,7 @@
                         android:background="@drawable/icon_goods_bargain_bg"
                         android:paddingStart="4dp"
                         android:paddingEnd="4dp"
-                        android:text="贈"
+                        android:text="@string/text_gift"
                         android:textColor="@android:color/white"
                         android:textSize="9sp"
                         android:visibility="gone" />
@@ -406,7 +406,7 @@
                         android:layout_marginEnd="@dimen/dp_4"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
-                        android:text="贈"
+                        android:text="@string/text_gift"
                         android:textSize="9sp"
                         android:textColor="@android:color/white"
                         android:background="@drawable/icon_goods_bargain_bg"

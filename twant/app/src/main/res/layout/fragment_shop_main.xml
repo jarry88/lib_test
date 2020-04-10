@@ -351,7 +351,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="活動"
+                android:text="優惠"
                 android:textColor="#fff"
                 android:textSize="10sp" />
         </LinearLayout>

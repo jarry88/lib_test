@@ -727,7 +727,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     if (responseObj.exists("datas.sellerMobile")) {
                         storePhone = responseObj.getSafeString("datas.sellerMobile");
                     }
-                    tvReceiverName.setText(getString(R.string.text_receiver) + ":  " + receiverName);
+                    tvReceiverName.setText(receiverName);
                     tvMobile.setText(mobile);
                     tvAddress.setText(address);
                     tvStoreName.setText(storeName);

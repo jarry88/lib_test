@@ -629,8 +629,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 ImageView payWayImage = new ImageView(_mActivity);
 
                 LinearLayout.LayoutParams layoutParams =
-                        new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 30), Util.dip2px(_mActivity, 21));
-                layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
+                        new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 28), Util.dip2px(_mActivity, 20));
+                layoutParams.setMarginEnd(Util.dip2px(_mActivity, 8));
                 Glide.with(this).load(payWayImageUrl).into(payWayImage);
                 llPayWayContainer.addView(payWayImage, layoutParams);
             }
