@@ -877,7 +877,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         }
 
                         voucherMap.put(storeId, storeVoucherVoList);
-                        int conformId = 0;
+                        int conformId = -1;
                         // 获取满减优惠
                         if (buyStoreVo.exists("conform.conformId")) {
                              conformId = buyStoreVo.getInt("conform.conformId");
@@ -951,7 +951,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 "storeName", storeName,
                                 "goodsList", goodsList,
                                 "shipTimeType", shipTimeType,
-                                "conformId",conformId));
+                                //沒有活動是傳空字符串
+                                "conformId",conformId>=0?conformId:""));
                     }  // END OF 遍歷每家商店
 
                     // 添加上汇总项目
