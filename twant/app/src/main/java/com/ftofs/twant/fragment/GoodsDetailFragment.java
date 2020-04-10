@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -574,7 +575,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             SLog.info("調用隱藏");
             showFloatButton = false;
             llFloatButton.postDelayed(() -> {
-                        llFloatButton.setTranslationX(60);
+                        TranslateAnimation translateAnimation = new TranslateAnimation(0, 100, 0, 0);
+                        translateAnimation.setDuration(400);
+                        translateAnimation.setFillAfter(true);
+                        llFloatButton.setAnimation(translateAnimation);
+                        llFloatButton.startAnimation(translateAnimation);
                         SLog.info("執行隱藏");
                     }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY
             );

@@ -594,7 +594,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             snsImage.setId(R.id.btn_show_store_qr_code);
             snsImage.setCustomData(EasyJSONObject.generate("socialName", "takewant", "socialForm", 0));
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 31), Util.dip2px(_mActivity, 31));
-            layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
+            layoutParams.setMarginEnd(Util.dip2px(_mActivity, 8));
             Glide.with(this).load(R.drawable.app_logo).into(snsImage);
             llSnsContainer.addView(snsImage, layoutParams);
 
@@ -607,7 +607,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 snsImage.setCustomData(snsObject);
 
                 layoutParams = new LinearLayout.LayoutParams(Util.dip2px(_mActivity, 31), Util.dip2px(_mActivity, 31));
-                layoutParams.setMarginEnd(Util.dip2px(_mActivity, 15));
+                layoutParams.setMarginEnd(Util.dip2px(_mActivity, 8));
                 Glide.with(this).load(snsImageUrl).into(snsImage);
                 llSnsContainer.addView(snsImage, layoutParams);
             }
@@ -795,7 +795,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         announcement.getInt("id"), title, content);
                 storeAnnouncement.createTime = announcement.getLong("createTime");
                 storeAnnouncementList.add(storeAnnouncement);
-                announcementTextList.add(Html.fromHtml("<font color='#FFFFFF'>" + title + "</font>"));
+                announcementTextList.add(Html.fromHtml("<font color='#FFFFFF' size = '2'>" + title + "</font>"));
             } catch (Exception e) {
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }

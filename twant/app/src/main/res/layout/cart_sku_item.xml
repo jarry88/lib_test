@@ -18,7 +18,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginStart="7dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/tv_goods_name"
@@ -28,48 +27,51 @@
             android:text=""
             android:textColor="@color/tw_black"
             />
-        <RelativeLayout
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_goods_full_specs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="123132"
+            android:textColor="#FF929292"
+            android:textSize="12sp"
+            />
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
             >
             <TextView
-                android:id="@+id/tv_goods_full_specs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="123132"
-                android:textColor="#FF929292"
-                android:textSize="13sp"
-                />
-
-            <TextView
                 android:id="@+id/tv_price_sum"
-                android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_4"
-                android:layout_marginBottom="12dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="3dp"
                 android:text="5131321"
                 android:textColor="@color/tw_red"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textStyle="normal"
                 />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
             <com.ftofs.twant.widget.CartAdjustButton
                 android:id="@+id/ab_quantity"
+                android:layout_centerVertical="true"
                 android:layout_width="92dp"
-                android:layout_height="25dp"
-                android:layout_marginBottom="7dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:textSize="16sp"
                 android:textColor="@color/tw_black"
                 />
-        </RelativeLayout>
+        </LinearLayout>
 
         <!-- 贈品列表 -->
         <LinearLayout
