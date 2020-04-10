@@ -71,7 +71,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
 
                 if (!StringUtil.isEmpty(item.left.nationalFlag)) {
-                    ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag_right);
+                    ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag_left);
                     Glide.with(context).load(StringUtil.normalizeImageUrl(item.left.nationalFlag)).centerCrop().into(imgGoodsNationalFlag);
                     imgGoodsNationalFlag.setVisibility(View.VISIBLE);
                 }

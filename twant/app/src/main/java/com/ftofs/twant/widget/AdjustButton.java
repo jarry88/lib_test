@@ -9,6 +9,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.entity.cart.SkuStatus;
 import com.ftofs.twant.entity.cart.SpuStatus;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 
 /**
@@ -125,11 +126,17 @@ public class AdjustButton extends androidx.appcompat.widget.AppCompatTextView {
 
         return true;
     }
-
+    public void setZero() {
+        this.value = 0;
+        setClickable(false);
+        updateView();
+    }
     /**
      * 通過按鈕增減數值
+     *
      * @param delta 負數減少，正數增加
      */
+
     public void changeValue(int delta) {
         setValue(value + delta);
     }
