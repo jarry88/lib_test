@@ -92,14 +92,14 @@ public class StoreItemView extends LinearLayout implements ITangramViewLifeCycle
         if (StringUtil.isEmpty(storeItem.storeFigureImage)) {
             Glide.with(getContext()).load(R.drawable.store_figure_default).centerCrop().into(imgStoreFigure);
         } else {
-            Glide.with(getContext()).load(StringUtil.normalizeImageUrl(storeItem.storeFigureImage)).centerCrop().into(imgStoreFigure);
+            Glide.with(getContext()).load(StringUtil.normalizeImageUrl(storeItem.storeFigureImage, "?x-oss-process=image/resize,w_800")).centerCrop().into(imgStoreFigure);
         }
 
         goodsImageLeftContainer.setVisibility(GONE);
         goodsImageMiddleContainer.setVisibility(GONE);
         goodsImageRightContainer.setVisibility(GONE);
         for (int i = 0; i < storeItem.goodsList.size(); i++) {
-            String imageSrc = StringUtil.normalizeImageUrl(storeItem.goodsList.get(i).imageUrl);
+            String imageSrc = StringUtil.normalizeImageUrl(storeItem.goodsList.get(i).imageUrl, "?x-oss-process=image/resize,w_300");
 
             if (i == 0) {
                 goodsImageLeftContainer.setVisibility(View.VISIBLE);
