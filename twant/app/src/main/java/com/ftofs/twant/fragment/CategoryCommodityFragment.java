@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -81,7 +80,7 @@ public class CategoryCommodityFragment extends BaseFragment implements View.OnCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Pair<Integer, Integer> dim = Util.getScreenDimemsion(_mActivity);
+        Pair<Integer, Integer> dim = Util.getScreenDimension(_mActivity);
         screenWidth = dim.first;
 
         menuShrunkWidth = Util.dip2px(_mActivity, 100);

@@ -155,7 +155,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         }
 
         // 獲取屏幕寬度
-        int screenWidth = Util.getScreenDimemsion(_mActivity).first;
+        int screenWidth = Util.getScreenDimension(_mActivity).first;
         llPage1 = view.findViewById(R.id.ll_page_1);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) llPage1.getLayoutParams();
         layoutParams.width = screenWidth;

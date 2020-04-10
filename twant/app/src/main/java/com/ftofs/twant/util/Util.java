@@ -685,7 +685,7 @@ public class Util {
      * @param context
      * @return (寬，高)
      */
-    public static Pair<Integer, Integer> getScreenDimemsion(Context context) {
+    public static Pair<Integer, Integer> getScreenDimension(Context context) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
