@@ -67,13 +67,15 @@
             android:orientation="vertical"
             >
             <com.makeramen.roundedimageview.RoundedImageView
+                android:background="@drawable/list_popup_bg_5dp_radio"
+
                 android:id="@+id/goods_image_middle"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginBottom="4dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/cs_avatar_160"
-                app:riv_border_width="1dp"
+                app:riv_border_width="0dp"
                 app:riv_border_color="@android:color/white"
                 app:riv_corner_radius="5dp"
                 />
@@ -95,11 +97,13 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.14"
+            app:layout_constraintHorizontal_bias="0.17"
             app:layout_constraintWidth_percent="0.25"
+
             android:visibility="gone"
             android:orientation="vertical">
             <com.makeramen.roundedimageview.RoundedImageView
+                android:background="@drawable/list_popup_bg_5dp_radio"
                 android:id="@+id/goods_image_left"
                 android:layout_width="79dp"
                 android:layout_height="79dp"
@@ -107,7 +111,7 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/cs_avatar_160"
                 app:riv_corner_radius="5dp"
-                app:riv_border_width="1dp"
+                app:riv_border_width="0dp"
                 app:riv_border_color="@android:color/white"
                 />
 
@@ -123,6 +127,7 @@
 
         <LinearLayout
             android:id="@+id/goods_image_right_container"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintDimensionRatio="1:1"
@@ -130,18 +135,19 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.86"
+            app:layout_constraintHorizontal_bias="0.83"
             app:layout_constraintWidth_percent="0.25"
             android:visibility="gone"
             android:orientation="vertical">
             <com.makeramen.roundedimageview.RoundedImageView
+                android:background="@drawable/list_popup_bg_5dp_radio"
                 android:id="@+id/goods_image_right"
                 android:layout_width="79dp"
                 android:layout_height="79dp"
                 android:layout_marginBottom="3dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/cs_avatar_160"
-                app:riv_border_width="1dp"
+                app:riv_border_width="0dp"
                 app:riv_border_color="@android:color/white"
                 app:riv_corner_radius="5dp"
                 />

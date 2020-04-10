@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -95,6 +96,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
     int twRed;
     int twBlue;
     private TextView tvCategoryTopHint;
+    private FrameLayout btnClearKeyWord;
 
     public void setParams(SearchType searchType, String from) {
         this.searchType = searchType;
@@ -145,6 +147,8 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
         Util.setOnClickListener(view, R.id.btn_message, this);
         Util.setOnClickListener(view, R.id.ll_mask, this);
         Util.setOnClickListener(view, R.id.btn_clear_all, this);
+        btnClearKeyWord = view.findViewById(R.id.btn_clear_all);
+        btnClearKeyWord.setVisibility(View.GONE);
 
         viewPager = view.findViewById(R.id.category_viewpager);
         vwAnchor = view.findViewById(R.id.vw_anchor);
@@ -254,11 +258,17 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void afterTextChanged(Editable s) {
                 // 如果在搜索產品時，才提供搜索建議
+                if (s.length() > 0) {
+                    btnClearKeyWord.setVisibility(View.VISIBLE);
+                } else {
+                    btnClearKeyWord.setVisibility(View.GONE);
+                }
                 if (searchType == SearchType.GOODS) {
                     String term = s.toString();
                     SLog.info("afterTextChanged, term[%s]", term);
                     loadSearchSuggestionData(term);
                 }
+
             }
         });
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {

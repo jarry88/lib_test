@@ -1,8 +1,11 @@
 package com.ftofs.twant.fragment;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -203,6 +207,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     private int isHaveGoods;
     private int isHaveStore;
     private int associateSearchTime;
+    private FrameLayout btnClearKeyWord;
 
     public static SearchResultFragment newInstance(String searchTypeStr, String paramsStr) {
         Bundle args = new Bundle();
@@ -268,6 +273,28 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_goods_filter, this);
         etKeyword = view.findViewById(R.id.et_keyword);
+        btnClearKeyWord = view.findViewById(R.id.btn_clear_all);
+        btnClearKeyWord.setVisibility(View.GONE);
+        etKeyword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearKeyWord.setVisibility(View.VISIBLE);
+                } else {
+                    btnClearKeyWord.setVisibility(View.GONE);
+                }
+            }
+        });
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
