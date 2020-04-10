@@ -59,7 +59,7 @@ public class GoodsGalleryAdapter extends RecyclerView.Adapter<GoodsGalleryAdapte
                 // 如果沒有圖片，加一張默認的空櫥窗占位圖
                 Glide.with(context).load(R.drawable.store_figure_default).centerCrop().into(viewHolder.imgItem);
             } else {
-                Glide.with(context).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(viewHolder.imgItem);
+                Glide.with(context).load(StringUtil.normalizeImageUrl(url)).fitCenter().into(viewHolder.imgItem);
             }
             // item click
             viewHolder.itemView.setOnClickListener(onItemClickListener);
