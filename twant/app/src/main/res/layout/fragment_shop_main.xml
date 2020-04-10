@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="@dimen/dp_10"
+                android:layout_marginEnd="6.5dp"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/icon_menu_round"
                 />
@@ -76,11 +76,11 @@
                 android:id="@+id/btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:paddingStart="@dimen/permission_dp_15"
+                android:paddingStart="@dimen/margin12"
                 android:paddingEnd="@dimen/toolbar_margin_right"
                 android:orientation="horizontal">
                 <ImageView
-                    android:paddingLeft="2.5dp"
+                    android:paddingStart="6dp"
                     android:layout_marginTop="1dp"
                     android:id="@+id/btn_back_img"
                     android:layout_width="wrap_content"
