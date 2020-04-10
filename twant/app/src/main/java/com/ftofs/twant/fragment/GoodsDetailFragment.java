@@ -992,10 +992,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 if (limitAmount == 0) {
                                     // 如果為0，表示無門檻
                                     // tvVoucher.setText(String.format("$%d無門檻", couponPrice));
-                                    tvVoucher.setText(String.format("%d圓券", couponPrice));
+                                    tvVoucher.setText(String.format("%d元券", couponPrice));
                                 } else {
                                     // tvVoucher.setText(String.format("滿%d減%d", limitAmount, couponPrice));
-                                    tvVoucher.setText(String.format("%d圓券", couponPrice));
+                                    tvVoucher.setText(String.format("%d元券", couponPrice));
                                 }
                                 llVoucherContainer.addView(linearLayout, layoutParams);
 
