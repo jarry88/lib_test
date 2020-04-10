@@ -101,7 +101,7 @@ import static android.view.View.VISIBLE;
  * @author zwm
  */
 public class GoodsDetailFragment extends BaseFragment implements View.OnClickListener {
-    private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800;
+    private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 80;
     Unbinder unbinder;
     // 產品Id
     int commonId;
@@ -578,7 +578,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         SLog.info("執行隱藏");
                     }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY
             );
-            SLog.info("執行隱藏完畢");
         }
     }
 

@@ -101,6 +101,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 helper.addOnClickListener(R.id.btn_goto_store_left, R.id.cl_container_left);
             }
+            // 設置右邊item的可見性
 
             if (item.right != null) {
                 ImageView goodsImage = helper.getView(R.id.goods_image_right);
@@ -145,9 +146,6 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 helper.addOnClickListener(R.id.btn_goto_store_right, R.id.cl_container_right);
             }
-
-
-            // 設置右邊item的可見性
             boolean rightHandSideVisible = (item.right != null);
             helper.setGone(R.id.cl_container_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_name_right, rightHandSideVisible)
@@ -155,6 +153,17 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     .setGone(R.id.vw_right_bottom_separator, rightHandSideVisible)
                     .setGone(R.id.btn_goto_store_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_price_right, rightHandSideVisible);
+            if (item.right != null) {
+                TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);
+                if (StringUtil.isEmpty(item.right.jingle)) {
+                    tvGoodsJingleRight.setVisibility(View.GONE);
+                } else {
+                    tvGoodsJingleRight.setText(item.right.jingle);
+                    tvGoodsJingleRight.setVisibility(View.VISIBLE);
+                }
+            }
+
+
 
         } else if (itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
             helper.addOnClickListener(R.id.btn_play_game)

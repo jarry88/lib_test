@@ -82,31 +82,25 @@
                     <ImageView
                         android:id="@+id/img_store_figure"
                         android:layout_width="220dp"
-                        android:layout_height="63dp"
+                        android:layout_height="64dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/length_15dp"
+                        android:layout_marginTop="16dp"
                         />
                     <!-- 營業中還是休息中 -->
                     <ImageView
                         android:id="@+id/img_store_status"
                         android:layout_width="wrap_content"
-                        android:layout_height="87dp"
+                        android:layout_height="8dp"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:scaleType="fitXY"
-                        android:layout_marginEnd="32dp"
+                        android:layout_marginEnd="24dp"
                         />
-                    <View
-                        android:visibility="gone"
-                        android:layout_width="20dp"
-                        android:layout_height="100dp"
-                        android:background="@color/tw_blue"/>
 
                 </RelativeLayout>
             </RelativeLayout>
             <LinearLayout
                 android:id="@+id/ll_shop_signature_container"
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -117,9 +111,10 @@
                     android:id="@+id/tv_store_name"
                     android:layout_width="wrap_content"
                     android:layout_height="22dp"
+                    android:layout_marginTop="8dp"
+
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="60dp"
-                    android:layout_marginBottom="@dimen/length_15dp"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
@@ -130,6 +125,8 @@
                 <TextView
                     android:id="@+id/tv_shop_signature"
                     android:layout_width="wrap_content"
+                    android:layout_marginTop="8dp"
+
                     android:layout_height="22dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="60dp"
@@ -148,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:id="@+id/tv_shop_open_day"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/tw_black"
                     android:textSize="12sp"
                     android:text="-"
@@ -160,6 +157,7 @@
                 android:id="@+id/rl_shop_friend_container"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
                 android:layout_marginEnd="@dimen/toolbar_margin_right">
 
@@ -171,7 +169,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/text_store_friend"
                     android:textColor="@color/tw_dark_grey"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <LinearLayout
                     android:id="@+id/btn_show_all_store_friends"
@@ -181,7 +179,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="15dp"
+                    android:paddingStart="12dp"
                     android:paddingEnd="1dp"
                     >
 
@@ -209,13 +207,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="@dimen/toolbar_margin_right"
                 android:background="#F3F3F3"
                 android:gravity="center"
                 android:text="-"
-                android:textColor="#666"
-                android:textSize="14sp"
+                android:textColor="#676666"
+                android:textSize="12sp"
                 />
 
             <!-- 用戶操作 -->
@@ -223,7 +221,7 @@
                 android:id="@+id/cl_user_operation_container"
 
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
                 android:layout_marginEnd="@dimen/toolbar_margin_right"
                 android:paddingLeft="15dp"
@@ -410,13 +408,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="@dimen/toolbar_margin_right"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingBottom="@dimen/permission_sp_16"
                 android:background="@drawable/store_info_bg"
                 android:orientation="vertical">
 
@@ -436,7 +434,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="8dp"
                         android:layout_toRightOf="@id/icon_mobile"
                         android:textColor="@color/tw_black"
                         android:textSize="17sp"
@@ -447,7 +445,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="16dp">
 
                     <ImageView
                         android:id="@+id/icon_work_time"
@@ -460,8 +458,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@id/icon_work_time"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/icon_work_time"
                         android:orientation="vertical">
                         <TextView
                             android:id="@+id/tv_business_time_working_day"
@@ -483,7 +481,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="16dp">
 
                     <ImageView
                         android:id="@+id/icon_shop_location"
@@ -498,7 +496,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/icon_shop_map"
-                        android:paddingLeft="9dp"
+                        android:paddingStart="8dp"
                         android:paddingTop="3dp"
                         android:paddingRight="9dp"
                         android:paddingBottom="3dp"
@@ -512,10 +510,10 @@
                         android:id="@+id/tv_shop_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_toLeftOf="@id/btn_shop_map"
-                        android:layout_toRightOf="@id/icon_shop_location"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_toStartOf="@id/btn_shop_map"
+                        android:layout_toEndOf="@id/icon_shop_location"
                         android:textColor="@color/tw_black"
                         android:textSize="17sp"
                         android:text="-"
@@ -528,7 +526,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="10dp">
 
                     <ImageView
@@ -542,8 +540,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@id/icon_share_to">
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/icon_share_to">
 
                         <LinearLayout
                             android:id="@+id/ll_sns_container"
@@ -558,7 +556,7 @@
                     android:id="@+id/rl_pay_way"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="@dimen/length_15dp">
 
                     <ImageView
@@ -572,8 +570,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@id/icon_pay_with">
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/icon_pay_with">
 
                         <LinearLayout
                             android:id="@+id/ll_pay_way_container"

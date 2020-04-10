@@ -53,6 +53,7 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.yokeyword.fragmentation.SupportFragment;
 import okhttp3.Call;
 
@@ -123,9 +124,9 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private boolean customerListLoaded =false;
     private float serversAvatarSize =36;
     private LinearLayout llFloatButtonList;
-    private ImageView customer1;
-    private ImageView customer2;
-    private ImageView customer3;
+    private CircleImageView customer1;
+    private CircleImageView customer2;
+    private CircleImageView customer3;
     private ImageView customerMore;
     private ImageView btnCustomer;
     private boolean customerExpanded =false;
