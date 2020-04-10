@@ -65,7 +65,6 @@ import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.StoreGiftPopup;
 import com.ftofs.twant.widget.StoreVoucherPopup;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.rd.PageIndicatorView;
@@ -766,13 +765,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 Util.startFragment(ArrivalNoticeFragment.newInstance(commonId, currGoodsId));
                 break;
             case R.id.btn_play:
-                if (!Util.isYoutubeInstalled(_mActivity)) {
-                    ToastUtil.error(_mActivity, getString(R.string.install_youtube_player_hint));
-                    return;
-                }
-
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, goodsVideoId);
-                startActivity(intent);
+                Util.playYoutubeVideo(_mActivity, goodsVideoId);
                 break;
             default:
                 break;
@@ -1196,13 +1189,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 detailVideoView.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        if (!Util.isYoutubeInstalled(_mActivity)) {
-                                            ToastUtil.error(_mActivity, getString(R.string.install_youtube_player_hint));
-                                            return;
-                                        }
-
-                                        Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, detailVideoId);
-                                        startActivity(intent);
+                                        Util.playYoutubeVideo(_mActivity, detailVideoId);
                                     }
                                 });
 
