@@ -344,6 +344,9 @@ public class StringUtil {
             return imageUrl;
         }
         if (isUrlString(imageUrl)) {
+            if (StringUtil.isEmpty(params)) {
+                return imageUrl;
+            }
             return imageUrl + params;
         }
 
