@@ -31,9 +31,9 @@
                 android:layout_width="123dp"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:background="@drawable/post_filter_button_bg_blue"
+                android:background="@drawable/post_filter_button_bg_grey"
                 android:text="@string/text_viewed_most"
-                android:textColor="@color/tw_blue"
+                android:textColor="@color/tw_black"
                 android:textSize="14sp"
                 />
 
