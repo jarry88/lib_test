@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Time;
@@ -58,8 +59,11 @@ public class StoreNoticeFragment extends ScrollableBaseFragment {
             tvAnnouncementTime.setText(Time.fromMillisUnixtime(announcement.createTime,"Y-m-d H:i:s"));
 
             tvAnnouncementTitle.setOnClickListener(v -> {
-                SLog.info("onClick, announcement.title[%s], announcement.content[%s]", announcement.title, announcement.content);
-                Util.startFragment(StoreAnnouncementDetailFragment.newInstance(announcement));
+                SLog.info("onClick, announcement.id[%d], announcement.title[%s], announcement.content[%s]",
+                        announcement.id, announcement.title, announcement.content);
+                // Util.startFragment(StoreAnnouncementDetailFragment.newInstance(announcement));
+                String url = Config.WEB_BASE_URL + "/store/announcement/" + announcement.id;
+                Util.startFragment(H5GameFragment.newInstance(url, announcement.title));
             });
 
             llContainer.addView(announcementItemView);

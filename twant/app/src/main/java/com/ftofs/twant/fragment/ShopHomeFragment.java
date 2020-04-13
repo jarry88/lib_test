@@ -782,7 +782,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void setAnnouncements(EasyJSONArray announcements) {
-        SLog.info("_announcements[%s]", announcements.toString());
+        SLog.info("____announcements[%s]", announcements.toString());
         for (Object object : announcements) {
             EasyJSONObject announcement = (EasyJSONObject) object;
             String title;
