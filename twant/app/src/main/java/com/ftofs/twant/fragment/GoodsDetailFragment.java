@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -100,7 +101,7 @@ import static android.view.View.VISIBLE;
  * @author zwm
  */
 public class GoodsDetailFragment extends BaseFragment implements View.OnClickListener {
-    private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 800;
+    private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 80;
     Unbinder unbinder;
     // 產品Id
     int commonId;
@@ -573,11 +574,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             SLog.info("調用隱藏");
             showFloatButton = false;
             llFloatButton.postDelayed(() -> {
-                        llFloatButton.setTranslationX(60);
+                        TranslateAnimation translateAnimation = new TranslateAnimation(0, 100, 0, 0);
+                        translateAnimation.setDuration(400);
+                        translateAnimation.setFillAfter(true);
+                        llFloatButton.setAnimation(translateAnimation);
+                        llFloatButton.startAnimation(translateAnimation);
                         SLog.info("執行隱藏");
                     }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY
             );
-            SLog.info("執行隱藏完畢");
         }
     }
 
@@ -587,8 +591,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 return;
             }
             llFloatButton.postDelayed(() -> {
+                TranslateAnimation translateAnimation = new TranslateAnimation(100, 0, 0, 0);
+                translateAnimation.setDuration(400);
+                translateAnimation.setFillAfter(true);
+                llFloatButton.setAnimation(translateAnimation);
+                llFloatButton.startAnimation(translateAnimation);
                 SLog.info("執行顯示");
-                llFloatButton.setTranslationX(0);
                 showFloatButton = true;
             }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY);
         }
@@ -892,9 +900,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      */
     private void updateFavoriteView() {
         if (isFavorite == Constant.ONE) {
-            iconFollow.setImageResource(R.drawable.icon_store_favorite_red);
+            iconFollow.setImageResource(R.drawable.icon_store_favorite_yellow);
             tvFollow.setText(R.string.text_followed);
-            tvFollow.setTextColor(_mActivity.getColor(R.color.tw_red));
+            tvFollow.setTextColor(_mActivity.getColor(R.color.tw_yellow));
         } else {
             iconFollow.setImageResource(R.drawable.icon_store_favorite_grey);
             tvFollow.setText(R.string.text_follow);
@@ -985,10 +993,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 if (limitAmount == 0) {
                                     // 如果為0，表示無門檻
                                     // tvVoucher.setText(String.format("$%d無門檻", couponPrice));
-                                    tvVoucher.setText(String.format("%d圓券", couponPrice));
+                                    tvVoucher.setText(String.format("%d元券", couponPrice));
                                 } else {
                                     // tvVoucher.setText(String.format("滿%d減%d", limitAmount, couponPrice));
-                                    tvVoucher.setText(String.format("%d圓券", couponPrice));
+                                    tvVoucher.setText(String.format("%d元券", couponPrice));
                                 }
                                 llVoucherContainer.addView(linearLayout, layoutParams);
 

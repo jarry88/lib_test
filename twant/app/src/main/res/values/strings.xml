@@ -623,7 +623,7 @@
 
     <string name="no_post_hint">暫無符合條件的想要帖數據！</string>
     <string name="no_data_hint">暫無符合條件的數據！</string>
-    <string name="no_store_activity_hint">商店沒有設置活動，逛逛別的吧</string>
+    <string name="no_store_activity_hint">商店沒有設置優惠，逛逛別的吧</string>
     <string name="no_order_hint">還沒有相關訂單哦~</string>
 
 

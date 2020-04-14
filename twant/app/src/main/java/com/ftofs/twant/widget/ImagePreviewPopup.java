@@ -1,6 +1,8 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -9,6 +11,9 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.util.StringUtil;
+import com.isseiaoki.simplecropview.CropImageView;
+import com.isseiaoki.simplecropview.callback.CropCallback;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -24,6 +29,7 @@ public class ImagePreviewPopup extends CenterPopupView implements View.OnClickLi
     Context context;
     SimpleCallback simpleCallback;
     String absolutePath;
+    private CropImageView mCropView;
 
     public ImagePreviewPopup(@NonNull Context context, SimpleCallback simpleCallback, String absolutePath) {
         super(context);
@@ -43,10 +49,11 @@ public class ImagePreviewPopup extends CenterPopupView implements View.OnClickLi
         super.onCreate();
 
         imgContent = findViewById(R.id.img_content);
-        Glide.with(context).load(absolutePath).into(imgContent);
+        Glide.with(context).load(StringUtil.getImageContentUri(context,absolutePath)).into(imgContent);
 
         findViewById(R.id.btn_cancel).setOnClickListener(this);
         findViewById(R.id.btn_ok).setOnClickListener(this);
+
     }
 
     //完全可见执行

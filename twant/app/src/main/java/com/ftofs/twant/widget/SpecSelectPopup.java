@@ -156,7 +156,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         abQuantity.setMinValue(1, new AdjustButton.OutOfValueCallback() {
             @Override
             public void outOfValue() {
-                ToastUtil.error(context, "購買數量不能小于1");
+                ToastUtil.error(context, "購買數量不能再減少了");
             }
         });
 
@@ -530,7 +530,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         // 限定購買的數量
         outOfMaxValueReason = "購買數量不能大于庫存數量";
         SLog.info("finalStorage[%d], limitAmount[%d]", finalStorage, goodsInfo.limitAmount);
-
+        //任務4346 庫存為0時禁止點擊
+        if (finalStorage == 0) {
+            abQuantity.setZero();
+        }
         int maxValue = finalStorage;
         if (limitBuy > 0  // limitAmount 大于0才表示有效
                 && maxValue > limitBuy) {

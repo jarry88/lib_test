@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:visibility="gone">
+            android:visibility="visible">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,16 +32,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="36dp"
                     android:gravity="center"
                     android:text="鎮 店 之 寶"
                     android:textColor="@color/tw_black"
+                    android:layout_gravity="center"
                     android:textSize="21sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:text="U n i q u e   P r o d u c t"
                     android:textColor="@color/tw_black"
@@ -96,7 +97,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:text="H O T   S A L E"
                 android:textColor="@color/tw_black"
@@ -129,7 +130,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:text="N E W   I N"
                 android:textColor="@color/tw_black"

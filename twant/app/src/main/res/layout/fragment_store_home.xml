@@ -82,31 +82,25 @@
                     <ImageView
                         android:id="@+id/img_store_figure"
                         android:layout_width="220dp"
-                        android:layout_height="63dp"
+                        android:layout_height="64dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/length_15dp"
+                        android:layout_marginTop="16dp"
                         />
                     <!-- 營業中還是休息中 -->
                     <ImageView
                         android:id="@+id/img_store_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="87dp"
+                        android:layout_width="24dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:scaleType="fitXY"
-                        android:layout_marginEnd="32dp"
+                        android:layout_marginEnd="24dp"
                         />
-                    <View
-                        android:visibility="gone"
-                        android:layout_width="20dp"
-                        android:layout_height="100dp"
-                        android:background="@color/tw_blue"/>
 
                 </RelativeLayout>
             </RelativeLayout>
             <LinearLayout
                 android:id="@+id/ll_shop_signature_container"
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -117,9 +111,10 @@
                     android:id="@+id/tv_store_name"
                     android:layout_width="wrap_content"
                     android:layout_height="22dp"
+                    android:layout_marginTop="8dp"
+
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="60dp"
-                    android:layout_marginBottom="@dimen/length_15dp"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
@@ -130,6 +125,8 @@
                 <TextView
                     android:id="@+id/tv_shop_signature"
                     android:layout_width="wrap_content"
+                    android:layout_marginTop="8dp"
+
                     android:layout_height="22dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="60dp"
@@ -148,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:id="@+id/tv_shop_open_day"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/tw_black"
                     android:textSize="12sp"
                     android:text="-"
@@ -160,6 +157,7 @@
                 android:id="@+id/rl_shop_friend_container"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
+                android:layout_marginTop="18dp"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
                 android:layout_marginEnd="@dimen/toolbar_margin_right">
 
@@ -171,7 +169,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/text_store_friend"
                     android:textColor="@color/tw_dark_grey"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <LinearLayout
                     android:id="@+id/btn_show_all_store_friends"
@@ -181,7 +179,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="15dp"
+                    android:paddingStart="12dp"
                     android:paddingEnd="1dp"
                     >
 
@@ -195,7 +193,7 @@
                     android:id="@+id/rv_store_friends_list"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="8dp"
                     android:layout_toStartOf="@id/btn_show_all_store_friends"
                     android:layout_toEndOf="@id/tv_shop_friend" />
 
@@ -209,13 +207,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
                 android:layout_marginEnd="@dimen/toolbar_margin_right"
                 android:background="#F3F3F3"
                 android:gravity="center"
                 android:text="-"
-                android:textColor="#666"
-                android:textSize="14sp"
+                android:textColor="#676666"
+                android:textSize="12sp"
                 />
 
             <!-- 用戶操作 -->
@@ -223,18 +222,16 @@
                 android:id="@+id/cl_user_operation_container"
 
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="54dp"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
                 android:layout_marginEnd="@dimen/toolbar_margin_right"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
                 app:layout_constraintTop_toBottomOf="@id/tv_visitor_count">
                 <LinearLayout
                     android:id="@+id/ll_open_days_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginStart="10dp"
+                    android:paddingStart="@dimen/margin12"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -243,7 +240,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="8dp"
                         android:src="@drawable/icon_store_open_days" />
 
                     <TextView
@@ -268,7 +265,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="8dp"
                         android:src="@drawable/icon_store_view" />
 
                     <TextView
@@ -314,17 +311,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginEnd="@dimen/dp_10"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginEnd="@dimen/margin12">
 
                     <ImageView
                         android:id="@+id/btn_store_favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="8dp"
+                        android:paddingBottom="2dp"
                         android:src="@drawable/icon_store_favorite_grey" />
 
                     <TextView
@@ -378,13 +376,15 @@
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/toolbar_margin_left"
                 android:paddingEnd="@dimen/toolbar_margin_right"
+                android:layout_marginBottom="16dp"
                 >
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="2dp"
                     android:src="@drawable/icon_broadcast"
                     />
 
@@ -410,13 +410,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="@dimen/toolbar_margin_right"
-                android:layout_marginBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:layout_marginBottom="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 android:background="@drawable/store_info_bg"
                 android:orientation="vertical">
 
@@ -436,10 +435,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@id/icon_mobile"
-                        android:textColor="@color/tw_black"
-                        android:textSize="17sp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/icon_mobile"
+                        android:textColor="@color/tw_text_dark"
+                        android:textSize="14sp"
                         android:text="-"
                         />
                 </RelativeLayout>
@@ -447,7 +446,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="16dp">
 
                     <ImageView
                         android:id="@+id/icon_work_time"
@@ -460,21 +459,21 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@id/icon_work_time"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/icon_work_time"
                         android:orientation="vertical">
                         <TextView
                             android:id="@+id/tv_business_time_working_day"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/tw_black"
-                            android:textSize="17sp" />
+                            android:textColor="@color/tw_text_dark"
+                            android:textSize="14sp" />
                         <TextView
                             android:id="@+id/tv_business_time_weekend"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/tw_black"
-                            android:textSize="17sp" />
+                            android:textColor="@color/tw_text_dark"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -483,7 +482,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="16dp">
 
                     <ImageView
                         android:id="@+id/icon_shop_location"
@@ -498,7 +497,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/icon_shop_map"
-                        android:paddingLeft="9dp"
+                        android:paddingStart="8dp"
                         android:paddingTop="3dp"
                         android:paddingRight="9dp"
                         android:paddingBottom="3dp"
@@ -512,12 +511,12 @@
                         android:id="@+id/tv_shop_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_toLeftOf="@id/btn_shop_map"
-                        android:layout_toRightOf="@id/icon_shop_location"
-                        android:textColor="@color/tw_black"
-                        android:textSize="17sp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_toStartOf="@id/btn_shop_map"
+                        android:layout_toEndOf="@id/icon_shop_location"
+                        android:textColor="@color/tw_text_dark"
+                        android:textSize="14sp"
                         android:text="-"
                         android:maxLines="2"
                         android:ellipsize="end"
@@ -528,7 +527,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginBottom="10dp">
 
                     <ImageView
@@ -542,8 +541,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@id/icon_share_to">
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/icon_share_to">
 
                         <LinearLayout
                             android:id="@+id/ll_sns_container"
@@ -552,14 +551,17 @@
                             android:orientation="horizontal" />
                     </HorizontalScrollView>
                 </RelativeLayout>
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/margin8"
+                    android:layout_height="1dp"
+                    android:background="@color/tw_light_grey"/>
                 <!-- 支付方式 -->
                 <RelativeLayout
                     android:id="@+id/rl_pay_way"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="@dimen/length_15dp">
+                    android:layout_marginTop="16dp">
 
                     <ImageView
                         android:id="@+id/icon_pay_with"
@@ -572,8 +574,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@id/icon_pay_with">
+                        android:layout_marginStart="10dp"
+                        android:layout_toEndOf="@id/icon_pay_with">
 
                         <LinearLayout
                             android:id="@+id/ll_pay_way_container"
@@ -585,12 +587,16 @@
             </LinearLayout>
         </LinearLayout>
         <!-- END OF 商店信息 -->
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_height="1dp"
+            android:background="@color/tw_light_grey"/>
         <!-- Tab -->
         <com.ogaclejapan.smarttablayout.SmartTabLayout
             android:id="@+id/smartTabLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="44dp"
             android:layout_toStartOf="@+id/ivCategoryBtn"
             android:background="@drawable/border_type_d"
             android:overScrollMode="never"
@@ -600,7 +606,8 @@
             app:stl_dividerThickness="0dp"
             app:stl_indicatorColor="@color/tw_blue"
             app:stl_indicatorInterpolation="linear"
-            app:stl_indicatorThickness="2dp"
+            app:stl_indicatorThickness="1dp"
+            app:stl_indicatorWidth ="32dp"
             app:stl_titleOffset="auto_center"
             app:stl_underlineColor="@android:color/transparent"
             app:stl_underlineThickness="0dp" />

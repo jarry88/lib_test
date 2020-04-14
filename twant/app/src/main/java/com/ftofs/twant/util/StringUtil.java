@@ -382,7 +382,6 @@ public class StringUtil {
             }
         }
     }
-
     /**
      * 將[空格]替換為真正的空格，將[換行]替換為\n
      * @param text
@@ -757,6 +756,7 @@ public class StringUtil {
 
         return memberName;
     }
+
 
     public static String parseZone() {
         String mobile = User.getUserInfo(SPField.FIELD_MOBILE, "");

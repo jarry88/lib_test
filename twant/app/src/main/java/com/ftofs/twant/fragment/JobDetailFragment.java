@@ -250,10 +250,12 @@ public class JobDetailFragment extends BaseFragment implements View.OnClickListe
 
     private void updateFollowState() {
         if (isFavor == 1) {
-            imgFollow.setImageResource(R.drawable.icon_store_favorite_red);
+            imgFollow.setImageResource(R.drawable.icon_store_favorite_yellow);
             tvFollow.setText("已關注");
+            tvFollow.setTextColor(_mActivity.getColor(R.color.tw_yellow));
         } else {
             imgFollow.setImageResource(R.drawable.icon_job_follow);
+            tvFollow.setTextColor(_mActivity.getColor(R.color.tw_black));
             tvFollow.setText("關注");
         }
     }

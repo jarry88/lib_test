@@ -468,16 +468,18 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     } else if (type == STATE_TYPE_LIKE) {
                         isFavor = 1 - isFavor;
                         if (isFavor == 1) {
-                            imgLike.setImageResource(R.drawable.icon_post_like_blue);
+                            imgLike.setImageResource(R.drawable.icon_store_favorite_yellow);
                         } else {
                             imgLike.setImageResource(R.drawable.icon_post_like_black);
                         }
 
                         int favorCount = responseObj.getInt("datas.favorCount");
                         if (favorCount > 0) {
-                            tvLikeCount.setText(String.valueOf(favorCount));
+                            tvLikeCount.setText(_mActivity.getString(R.string.text_followed));
+                            tvLikeCount.setTextColor(_mActivity.getColor(R.color.tw_yellow));
                         } else {
                             tvLikeCount.setText("");
+
                         }
                     }
                 } catch (Exception e) {

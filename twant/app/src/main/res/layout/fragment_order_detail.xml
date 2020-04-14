@@ -105,7 +105,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:background="#fff"
                     android:orientation="vertical">
                     <RelativeLayout
@@ -245,12 +244,12 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="@dimen/dp_10"
-                    android:layout_marginEnd="@dimen/dp_10"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="@dimen/length_15dp"
+                    android:layout_marginEnd="@dimen/length_15dp"
                     android:paddingBottom="15dp"
                     android:layout_marginBottom="@dimen/length_15dp"
-                    android:background="@drawable/list_popup_bg"
+                    android:background="@drawable/list_popup_bg_5dp_radio"
                     android:orientation="vertical">
                     <!-- 自提碼 -->
                     <RelativeLayout

@@ -111,7 +111,11 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
         voucherListAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
             @Override
             public void onClick(ViewGroupAdapter adapter, View view, int position) {
-                int id = view.getId();
+                String token = User.getToken();
+                if (StringUtil.isEmpty(token)) {
+                    Util.startFragment(LoginFragment.newInstance());
+                    return;
+                }
                 StoreVoucher storeVoucher = storeVoucherList.get(position);
                 SLog.info("storeVoucher.isUsable[%s]", storeVoucher.isUsable());
                 // 檢查未領取才調用領取接口
@@ -177,14 +181,13 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
     private void loadStoreActivityData() {
         try {
             String token = User.getToken();
-            if (StringUtil.isEmpty(token)) {
-                SLog.info("Error!token 為空");
-                return;
-            }
+            //允许未登录情况查看活动
 
             EasyJSONObject params = EasyJSONObject.generate(
-                    "storeId", parentFragment.getStoreId(),
-                    "token", token);
+                    "storeId", parentFragment.getStoreId());
+            if (!StringUtil.isEmpty(token)) {
+                params.set("token", token);
+            }
 
             SLog.info("_11params[%s]", params);
 
@@ -217,10 +220,12 @@ public class ShopActivityFragment extends BaseFragment implements View.OnClickLi
                             for (Object object : voucherList) {
                                 EasyJSONObject voucher = (EasyJSONObject) object;
 
-                                int memberIsReceive = voucher.getInt("memberIsReceive");
                                 int state = Constant.COUPON_STATE_UNRECEIVED;
-                                if (memberIsReceive == 1) {
-                                    state = Constant.COUPON_STATE_RECEIVED;
+                                if (voucher.exists("memberIsReceive")) {
+                                    int memberIsReceive = voucher.getInt("memberIsReceive");
+                                    if (memberIsReceive == 1) {
+                                        state = Constant.COUPON_STATE_RECEIVED;
+                                    }
                                 }
                                 StoreVoucher storeVoucher = new StoreVoucher(
                                         voucher.getInt("storeId"),

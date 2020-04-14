@@ -71,8 +71,9 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
 
                 if (!StringUtil.isEmpty(item.left.nationalFlag)) {
-                    ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag_right);
-                    Glide.with(context).load(StringUtil.normalizeImageUrl(item.left.nationalFlag)).centerCrop().into(imgGoodsNationalFlag);
+                    ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag_left);
+                    //fitcenter塞到国旗圆框里
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(item.left.nationalFlag)).centerInside().into(imgGoodsNationalFlag);
                     imgGoodsNationalFlag.setVisibility(View.VISIBLE);
                 }
 
@@ -80,7 +81,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.setText(R.id.tv_goods_name_left, item.left.goodsName);
                 TextView tvGoodsJingleLeft = helper.getView(R.id.tv_goods_jingle_left);
                 if (StringUtil.isEmpty(item.left.jingle)) {
-                    tvGoodsJingleLeft.setVisibility(View.INVISIBLE);
+                    tvGoodsJingleLeft.setVisibility(View.GONE);
                 } else {
                     tvGoodsJingleLeft.setText(item.left.jingle);
                     tvGoodsJingleLeft.setVisibility(View.VISIBLE);
@@ -88,8 +89,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context, item.left.price, 1,false));
 
                 helper.setGone(R.id.tv_freight_free_left, item.left.isFreightFree)
-                        .setGone(R.id.tv_gift_left, item.left.hasGift)
-                        .setGone(R.id.tv_discount_left, item.left.hasDiscount);
+                        .setGone(R.id.tv_gift_left, item.left.hasGift);
+//                        .setGone(R.id.tv_discount_left, item.left.hasDiscount)
 
                 SlantedWidget slantedWidget = helper.getView(R.id.slanted_widget_left);
                 if (item.left.showDiscountLabel) {
@@ -101,6 +102,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 helper.addOnClickListener(R.id.btn_goto_store_left, R.id.cl_container_left);
             }
+            // 設置右邊item的可見性
 
             if (item.right != null) {
                 ImageView goodsImage = helper.getView(R.id.goods_image_right);
@@ -116,7 +118,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 if (!StringUtil.isEmpty(item.right.nationalFlag)) {
                     ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag_right);
-                    Glide.with(context).load(StringUtil.normalizeImageUrl(item.right.nationalFlag)).centerCrop().into(imgGoodsNationalFlag);
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(item.right.nationalFlag)).centerInside().into(imgGoodsNationalFlag);
                     imgGoodsNationalFlag.setVisibility(View.VISIBLE);
                 }
 
@@ -124,7 +126,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.setText(R.id.tv_goods_name_right, item.right.goodsName);
                 TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);
                 if (StringUtil.isEmpty(item.right.jingle)) {
-                    tvGoodsJingleRight.setVisibility(View.INVISIBLE);
+                    tvGoodsJingleRight.setVisibility(View.GONE);
                 } else {
                     tvGoodsJingleRight.setText(item.right.jingle);
                     tvGoodsJingleRight.setVisibility(View.VISIBLE);
@@ -132,8 +134,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                 helper.setText(R.id.tv_goods_price_right, StringUtil.formatPrice(context, item.right.price, 1,false));
 
                 helper.setGone(R.id.tv_freight_free_right, item.right.isFreightFree)
-                        .setGone(R.id.tv_gift_right, item.right.hasGift)
-                        .setGone(R.id.tv_discount_right, item.right.hasDiscount);
+                        .setGone(R.id.tv_gift_right, item.right.hasGift);
+//                        .setGone(R.id.tv_discount_right, item.right.hasDiscount);
 
                 SlantedWidget slantedWidget = helper.getView(R.id.slanted_widget_right);
                 if (item.right.showDiscountLabel) {
@@ -145,9 +147,6 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 helper.addOnClickListener(R.id.btn_goto_store_right, R.id.cl_container_right);
             }
-
-
-            // 設置右邊item的可見性
             boolean rightHandSideVisible = (item.right != null);
             helper.setGone(R.id.cl_container_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_name_right, rightHandSideVisible)
@@ -155,6 +154,17 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     .setGone(R.id.vw_right_bottom_separator, rightHandSideVisible)
                     .setGone(R.id.btn_goto_store_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_price_right, rightHandSideVisible);
+            if (item.right != null) {
+                TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);
+                if (StringUtil.isEmpty(item.right.jingle)) {
+                    tvGoodsJingleRight.setVisibility(View.GONE);
+                } else {
+                    tvGoodsJingleRight.setText(item.right.jingle);
+                    tvGoodsJingleRight.setVisibility(View.VISIBLE);
+                }
+            }
+
+
 
         } else if (itemType == Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER) {
             helper.addOnClickListener(R.id.btn_play_game)
