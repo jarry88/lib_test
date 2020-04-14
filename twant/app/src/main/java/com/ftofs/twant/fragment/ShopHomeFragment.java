@@ -66,7 +66,6 @@ import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.ftofs.twant.widget.TwQRCodePopup;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -822,7 +821,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void setAnnouncements(EasyJSONArray announcements) {
-        SLog.info("_announcements[%s]", announcements.toString());
+        SLog.info("____announcements[%s]", announcements.toString());
         for (Object object : announcements) {
             EasyJSONObject announcement = (EasyJSONObject) object;
             String title;
@@ -1068,8 +1067,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 }
 
                 if (!StringUtil.isEmpty(videoId)) {
-                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(_mActivity, Config.YOUTUBE_DEVELOPER_KEY, videoId);
-                    startActivity(intent);
+                    Util.playYoutubeVideo(_mActivity, videoId);
                 }
                 break;
             default:
@@ -1326,7 +1324,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     }
                 }
             }
-        }, 500, 3000);  // 0.5秒后启动，每隔2秒运行一次
+        }, 500, 3000);  // 0.5秒后启动，每隔3秒运行一次
     }
 
     private void stopCountDown() {

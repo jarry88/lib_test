@@ -392,7 +392,7 @@
     <string name="input_budget_price_hint">請輸入預算價格</string>
     <string name="text_dead_line">截止</string>
     <string name="text_budget">預算</string>
-    <string name="no_store_friend_hint">暫時沒有進店好友</string>
+    <string name="no_store_friend_hint">暫時沒有進店好友~</string>
 
     <string name="text_comment_content_can_not_be_empty">發表說說的內容不能為空</string>
 

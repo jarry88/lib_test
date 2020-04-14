@@ -77,7 +77,7 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
     LinearLayout llTabButtonContainer;
     BasePopupView loadingPopup;
-
+    BasePopupView postFilterDrawerPopupView;
 
 
     PostListAdapter adapter;
@@ -354,11 +354,13 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
         } else if (id == R.id.btn_add_post) {
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_post_filter) {
-            new XPopup.Builder(_mActivity)
-                    .popupPosition(PopupPosition.Right)//右边
-                    .hasStatusBarShadow(true) //启用状态栏阴影
-                    .asCustom(new PostFilterDrawerPopupView(_mActivity, this, filterSelectedIndex))
-                    .show();
+            if (postFilterDrawerPopupView == null) {
+                postFilterDrawerPopupView = new XPopup.Builder(_mActivity)
+                        .popupPosition(PopupPosition.Right)//右边
+                        .hasStatusBarShadow(true) //启用状态栏阴影
+                        .asCustom(new PostFilterDrawerPopupView(_mActivity, this, filterSelectedIndex));
+            }
+            postFilterDrawerPopupView.show();
         } else if (id == R.id.btn_search_post) {
             Util.startFragment(CategoryFragment.newInstance(SearchType.POST, "想要"));
         } else if (id == R.id.btn_publish_want_post) {

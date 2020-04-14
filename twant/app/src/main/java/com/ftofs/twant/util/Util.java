@@ -36,6 +36,7 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.facebook.AccessToken;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.YoutubeActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -285,7 +286,7 @@ public class Util {
                 price =  goods.getDouble("goodsPrice0");
             }
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         return price;
     }
@@ -685,7 +686,7 @@ public class Util {
      * @param context
      * @return (寬，高)
      */
-    public static Pair<Integer, Integer> getScreenDimemsion(Context context) {
+    public static Pair<Integer, Integer> getScreenDimension(Context context) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
@@ -1242,6 +1243,39 @@ public class Util {
             parent.addView(viewB, indexA);
             parent.addView(viewA, indexB);
         }
+    }
+
+    public static void playYoutubeVideo(Activity activity, String videoId) {
+        // 先获取Youtube视频的信息，获取成功后才启动播放
+        String videoInfoUrl = String.format("https://www.youtube.com/oembed?url=http://www.youtube.com/watch?v=%s&format=json", videoId);
+        SLog.info("videoInfoUrl[%s]", videoInfoUrl);
+
+        Api.getUI(videoInfoUrl, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    int videoWidth = responseObj.getInt("width");
+                    int videoHeight = responseObj.getInt("height");
+
+                    Intent intent = new Intent(activity, YoutubeActivity.class);
+                    intent.putExtra("videoId", videoId);
+                    intent.putExtra("videoWidth", videoWidth);
+                    intent.putExtra("videoHeight", videoHeight);
+
+                    activity.startActivity(intent);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 }
 

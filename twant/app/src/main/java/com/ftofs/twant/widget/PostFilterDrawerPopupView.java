@@ -69,19 +69,37 @@ public class PostFilterDrawerPopupView extends DrawerPopupView implements View.O
                 @Override
                 public void onClick(View v) {
                     int index = (int) v.getTag();
-                    String desc = filterDescArr[index];
+
+                    TextView currBtn = (TextView) v;
+                    if (selectedIndex == index) { // 点击原先选中的按钮，取消选择
+                        currBtn.setBackgroundResource(R.drawable.post_filter_button_bg_grey);
+                        currBtn.setTextColor(twBlack);
+                        selectedIndex = -1;
+                    } else {
+                        // 选中当前的按钮
+                        currBtn.setBackgroundResource(R.drawable.post_filter_button_bg_blue);
+                        currBtn.setTextColor(twBlue);
+
+                        if (selectedIndex != -1) {
+                            // 如果之前有选中的按钮，取消之前的选择
+                            TextView prevBtn = btnArr[selectedIndex];
+
+                            prevBtn.setBackgroundResource(R.drawable.post_filter_button_bg_grey);
+                            prevBtn.setTextColor(twBlack);
+                        }
+
+                        selectedIndex = index;
+                    }
+
+
+                    String desc = "";
+                    if (selectedIndex != -1) {
+                        desc = filterDescArr[selectedIndex];
+                    }
                     onSelectedListener.onSelected(PopupType.POST_FILTER, index, desc);
                     dismiss();
                 }
             });
-
-            if (selectedIndex == i) {
-                btn.setBackgroundResource(R.drawable.post_filter_button_bg_blue);
-                btn.setTextColor(twBlue);
-            } else {
-                btn.setBackgroundResource(R.drawable.post_filter_button_bg_grey);
-                btn.setTextColor(twBlack);
-            }
         }
 
         //通过设置topMargin，可以让Drawer弹窗进行局部阴影展示

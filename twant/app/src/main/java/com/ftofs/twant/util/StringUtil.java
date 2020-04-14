@@ -330,19 +330,33 @@ public class StringUtil {
         return false;
     }
 
+    public static String normalizeImageUrl(String imageUrl) {
+        return normalizeImageUrl(imageUrl, null);
+    }
+
     /**
      * 規范圖片的Url，如果沒有前綴，添加前綴
      * @param imageUrl
+     * @param params 请求参数, 例如：?x-oss-process=image/resize,w_800
      */
-    public static String normalizeImageUrl(String imageUrl) {
+    public static String normalizeImageUrl(String imageUrl, String params) {
         if (isEmpty(imageUrl)) {
             return imageUrl;
         }
         if (isUrlString(imageUrl)) {
-            return imageUrl;
+            if (StringUtil.isEmpty(params)) {
+                return imageUrl;
+            }
+            return imageUrl + params;
         }
 
-        return Config.OSS_BASE_URL + "/" + imageUrl;
+        String url = Config.OSS_BASE_URL + "/" + imageUrl;
+
+        if (!StringUtil.isEmpty(params)) {
+            url += params;
+        }
+
+        return url;
     }
     /**
      * 安卓10要路徑轉uri后才能獲取圖片

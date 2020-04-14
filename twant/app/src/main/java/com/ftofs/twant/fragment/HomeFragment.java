@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
@@ -22,7 +21,6 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.StickyCellData;
-import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
@@ -37,7 +35,6 @@ import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
-import com.tmall.wireless.tangram.support.SimpleClickSupport;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,7 +42,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -297,7 +293,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            Util.startFragment(DragFragment.newInstance());
+            Util.playYoutubeVideo(_mActivity, "jIseBrjAmP8");
         }
     }
 
