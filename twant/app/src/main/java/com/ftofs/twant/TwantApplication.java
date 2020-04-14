@@ -239,10 +239,10 @@ public class TwantApplication extends Application {
 
         // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT
         if (Config.DEVELOPER_MODE) {
-            ConstantBase.MPayPackageName = ConstantBase.mpay_uat_packetname;
+            ConstantBase.setMPayPackageName(ConstantBase.ConnectUrl_UAT);
             MPaySdk.setEnvironmentType(ConstantBase.ConnectUrl_UAT);
         } else {
-            ConstantBase.MPayPackageName = ConstantBase.mpay_prd_packetname;
+            ConstantBase.setMPayPackageName(ConstantBase.ConnectUrl_PRD);
             MPaySdk.setEnvironmentType(ConstantBase.ConnectUrl_PRD);
         }
 

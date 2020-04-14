@@ -1281,7 +1281,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     }
                 }
             }
-        }, 500, 3000);  // 0.5秒后启动，每隔2秒运行一次
+        }, 500, 3000);  // 0.5秒后启动，每隔3秒运行一次
     }
 
     private void stopCountDown() {

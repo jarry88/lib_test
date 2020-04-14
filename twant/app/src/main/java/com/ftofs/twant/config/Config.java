@@ -118,9 +118,9 @@ public class Config {
             USE_F1 = env == ENV_F1;
         }
         // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT
-        ConstantBase.MPayPackageName =Config.DEVELOPER_MODE?
-                ConstantBase.mpay_uat_packetname
-                :ConstantBase.mpay_prd_packetname;
+        ConstantBase.setMPayPackageName(Config.DEVELOPER_MODE ?
+                ConstantBase.ConnectUrl_UAT
+                :ConstantBase.ConnectUrl_PRD);
         MPaySdk.setEnvironmentType(Config.DEVELOPER_MODE ?
                 ConstantBase.ConnectUrl_UAT
                 :ConstantBase.ConnectUrl_PRD);
