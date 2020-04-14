@@ -513,7 +513,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     hideSoftInputPop();
 
                     EasyJSONObject datas = (EasyJSONObject) responseObj.get("datas");
-                    MPaySdk.mPay(_mActivity, datas.toString(), (MainActivity) _mActivity);
+                    MPaySdk.mPayNew(_mActivity, datas.toString(), (MainActivity) _mActivity);
 
                     markPayId(SPField.FIELD_MPAY_PAY_ID);
                 } catch (Exception e) {
