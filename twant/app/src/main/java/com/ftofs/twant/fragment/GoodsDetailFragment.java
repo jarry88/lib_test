@@ -592,8 +592,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 return;
             }
             llFloatButton.postDelayed(() -> {
+                TranslateAnimation translateAnimation = new TranslateAnimation(100, 0, 0, 0);
+                translateAnimation.setDuration(400);
+                translateAnimation.setFillAfter(true);
+                llFloatButton.setAnimation(translateAnimation);
+                llFloatButton.startAnimation(translateAnimation);
                 SLog.info("執行顯示");
-                llFloatButton.setTranslationX(0);
                 showFloatButton = true;
             }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY);
         }

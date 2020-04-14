@@ -431,11 +431,11 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         }
 
         if (index == ACTIVITY_FRAGMENT) {
-            // 如果是點擊【商店活動】的按鈕，檢查用戶是否已經登錄
-            if (!User.isLogin()) {
-                Util.showLoginFragment();
-                return;
-            }
+            // 如果是點擊【商店活動】的按鈕，檢查用戶是否已經登錄,未登录时允许查看
+//            if (!User.isLogin()) {
+//                Util.showLoginFragment();
+//                return;
+//            }
         }
 
         if (index == COMMODITY_FRAGMENT) { // 如果切換到產品Tab，頂部工具欄隱藏分隔線

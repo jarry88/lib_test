@@ -12,10 +12,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.FeaturesGoodsAdapter;
@@ -81,6 +83,8 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
         timerHandler = new TimerHandler(this);
 
         llContainer = view.findViewById(R.id.ll_container);
+
+
         rlFeaturesGoodsContainer = view.findViewById(R.id.rl_features_goods_container);
         rvFeaturesGoodsList = view.findViewById(R.id.rv_features_goods_list);
         pagerSnapHelper = new PagerSnapHelper();
@@ -361,5 +365,6 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
                 scrollFeatureGoods(1);
             }
         }
+
     }
 }

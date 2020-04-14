@@ -534,8 +534,6 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
             if (requestCode == RequestCode.OPEN_ALBUM.ordinal()) {
                 Uri uri = data.getData();
                 startCrop(uri);
-
-
 //
             }
         } else if (action == ACTION_SET_PERSONAL_BACKGROUND) { // 設置個人專頁背景圖

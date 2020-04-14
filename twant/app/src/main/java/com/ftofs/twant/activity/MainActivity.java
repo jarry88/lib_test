@@ -950,7 +950,6 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     @Override
                     public void onYes() {
                         SLog.info("onYes");
-
                     }
 
                     @Override

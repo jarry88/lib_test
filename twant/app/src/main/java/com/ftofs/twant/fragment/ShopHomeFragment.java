@@ -11,6 +11,7 @@ import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -59,6 +60,7 @@ import com.ftofs.twant.widget.AmapPopup;
 import com.ftofs.twant.widget.DataImageView;
 import com.ftofs.twant.widget.ImagePopup;
 import com.ftofs.twant.widget.InStorePersonPopup;
+import com.ftofs.twant.widget.LockableNestedScrollView;
 import com.ftofs.twant.widget.MerchantIntroductionPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
@@ -169,6 +171,43 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @BindView(R.id.container_view)
     NestedScrollView containerView;
     int containerViewHeight;
+    private scrollStateHandler mHandler;
+
+    static class scrollStateHandler extends Handler {
+        NestedScrollView scrollViewContainer;
+        ShopHomeFragment fragment;
+        ShopMainFragment mainFragment;
+        int lastY = -1;
+        private boolean showFloatButton = true;
+
+        public scrollStateHandler(ShopHomeFragment fragment) {
+            this.fragment = fragment;
+            this.mainFragment = (ShopMainFragment) fragment.getParentFragment();
+            this.scrollViewContainer = fragment.containerView;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0) {// 打印 每次 Y坐标 滚动的距离
+                //Slog.info(scrollView.getScrollY() + "");
+                //    获取到 滚动的 Y 坐标距离
+                int scrollY = scrollViewContainer.getScrollY();
+                // 如果 滚动 的Y 坐标 的 最后一次 滚动到的Y坐标 一致说明  滚动已经完成
+                if (scrollY == lastY) {
+                    //  ScrollView滚动完成  处理相应的事件
+                    mainFragment.isScrolling = false;
+                    mainFragment.onCbStartNestedScroll();
+                } else {
+                    // 滚动的距离 和 之前的不相等 那么 再发送消息 判断一次
+// 将滚动的 Y 坐标距离 赋值给 lastY
+                    lastY = scrollY;
+                    this.sendEmptyMessageDelayed(0, 10);
+                }
+            }
+        }
+
+
+    }
 
     List<StoreAnnouncement> storeAnnouncementList = new ArrayList<>();
     private ArrayList<CharSequence> announcementTextList = new ArrayList<>();
@@ -251,12 +290,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
-
         storeId = parentFragment.storeId;
 
         viewpager.setOffscreenPageLimit(tabCount-1);
-
         imgShopLogo.setOnClickListener(this);
+        containerView.setOnClickListener(this);
 
         btnPlay = view.findViewById(R.id.btn_play);
         btnPlay.setOnClickListener(this);
@@ -327,6 +365,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 hideBarTitle(scrollY);
             }
         });
+        mHandler = new ShopHomeFragment.scrollStateHandler(this);
     }
 
     private void hideBarTitle( int scrollY) {
@@ -989,6 +1028,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             case R.id.rl_shop_comment_container:
                 Util.startFragment(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
                 break;
+            case R.id.container_view:
+                    SLog.info("scroll view");
+                    parentFragment.onCbStopNestedScroll();
+                    break;
 //            case R.id.ll_store_wanted_container:
 //                new XPopup.Builder(_mActivity)
 //                        // 如果不加这个，评论弹窗会移动到软键盘上面

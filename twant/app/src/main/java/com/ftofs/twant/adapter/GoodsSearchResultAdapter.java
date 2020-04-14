@@ -72,7 +72,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 if (!StringUtil.isEmpty(item.left.nationalFlag)) {
                     ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag_left);
-                    Glide.with(context).load(StringUtil.normalizeImageUrl(item.left.nationalFlag)).centerCrop().into(imgGoodsNationalFlag);
+                    //fitcenter塞到国旗圆框里
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(item.left.nationalFlag)).centerInside().into(imgGoodsNationalFlag);
                     imgGoodsNationalFlag.setVisibility(View.VISIBLE);
                 }
 
@@ -117,7 +118,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
                 if (!StringUtil.isEmpty(item.right.nationalFlag)) {
                     ImageView imgGoodsNationalFlag = helper.getView(R.id.img_goods_national_flag_right);
-                    Glide.with(context).load(StringUtil.normalizeImageUrl(item.right.nationalFlag)).centerCrop().into(imgGoodsNationalFlag);
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(item.right.nationalFlag)).centerInside().into(imgGoodsNationalFlag);
                     imgGoodsNationalFlag.setVisibility(View.VISIBLE);
                 }
 
