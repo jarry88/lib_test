@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -255,9 +256,8 @@ public class PasswordLoginFragment extends BaseFragment implements
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         // 如果出錯，刷新驗證碼
-                         loginButtonEnable = true;
-
-                         refreshCaptcha();
+                        refreshCaptcha();
+                        loginButtonEnable = true;
                         return;
                     }
 
@@ -274,7 +274,8 @@ public class PasswordLoginFragment extends BaseFragment implements
                         commonCallback.onSuccess(null);
                     }
                 } catch (Exception e) {
-
+                    loginButtonEnable = true;
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

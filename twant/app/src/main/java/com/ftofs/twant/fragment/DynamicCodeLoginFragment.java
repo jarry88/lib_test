@@ -330,6 +330,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                         ToastUtil.error(_mActivity, responseObj.getSafeString("datas.error"));
                         // 如果出錯，刷新驗證碼
                         refreshCaptcha();
+                        loginButtonEnable = true;
                         return;
                     }
 
@@ -344,6 +345,7 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                         commonCallback.onSuccess(null);
                     }
                 } catch (Exception e) {
+                    loginButtonEnable = true;
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
