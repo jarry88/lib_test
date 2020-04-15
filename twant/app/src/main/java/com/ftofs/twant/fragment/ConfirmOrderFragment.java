@@ -435,7 +435,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 }
 
 
-                commitBuyData.set("paymentTypeCode", Constant.PAYMENT_TYPE_CODE_ONLINE);
+                commitBuyData.set("paymentTypeCode", summaryItem.paymentTypeCode);
                 commitBuyData.set("storeList", storeList);
 
                 // 如果是門店自提的話，還要自提手機號和買家姓名
@@ -593,7 +593,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         if (Constant.PAYMENT_TYPE_CODE_ONLINE.equals(paymentTypeCode) || Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
                             // 在線支付或門店自提都需要先付款
                             try {
-                                int isAuth = responseObj.getInt("datas.isAuth");
+                                int isAuth = Constant.TRUE_INT;
+                                if (responseObj.exists("datas.isAuth")) {
+                                   isAuth= responseObj.getInt("datas.isAuth");
+                                }
                                 SLog.info("__isAuth[%d]", isAuth);
                                 if (isAuth == Constant.TRUE_INT) {
                                     new XPopup.Builder(_mActivity)
