@@ -550,6 +550,9 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
                                 item.coverImage = postImageObj.getSafeString("goodsImage");
                             }
                         }
+                        if (item.coverImage == null) {
+                            item.coverImage=post.getSafeString("coverImage");
+                        }
                         item.postCategory = post.getSafeString("postCategory");
                         item.title = post.getSafeString("title");
                         item.content = post.getSafeString("content");

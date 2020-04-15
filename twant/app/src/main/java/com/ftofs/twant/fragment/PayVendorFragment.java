@@ -325,7 +325,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     if (hk.equals(code)||cny.equals(code)) {
                         double secondPrice = responseObj.getDouble("datas.defaultPrice");
-                        SLog.info("secongPrice %s",secondPrice);
+                        SLog.info("secondPrice %s",secondPrice);
                         updateSecondMoney(code,secondPrice);
                     }
 

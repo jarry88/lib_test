@@ -72,18 +72,12 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-<<<<<<< HEAD
             android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTask"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-
-=======
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize" />
->>>>>>> 78bd8e28064442a0080655b3833e89f08d8df342
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"

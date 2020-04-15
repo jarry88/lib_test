@@ -46,7 +46,7 @@ public class PostListAdapter extends BaseMultiItemQuickAdapter<PostItem, BaseVie
         if (itemType == Constant.ITEM_TYPE_NORMAL) {
             ImageView coverImage = helper.getView(R.id.post_cover_image);
             TextView tvPostSummary = helper.getView(R.id.tv_post_summary);
-            SLog.info("coverImage[%s]", item.coverImage);
+            SLog.info("item[%s],coverImage[%s]", item.toString(),item.coverImage);
             if (StringUtil.isEmpty(item.coverImage)) {
                 tvPostSummary.setText(StringUtil.translateEmoji(mContext, item.content, (int) tvPostSummary.getTextSize()));
                 coverImage.setVisibility(View.GONE);

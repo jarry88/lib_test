@@ -1,6 +1,9 @@
 package com.ftofs.twant.entity;
 
+import androidx.annotation.NonNull;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.ftofs.twant.util.StringUtil;
 
 public class PostItem extends MyFollowItem implements MultiItemEntity {
     public int itemType;
@@ -48,5 +51,11 @@ public class PostItem extends MyFollowItem implements MultiItemEntity {
     @Override
     public int getItemType() {
         return itemType;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("shopAvatar[%s],coverImage[%s]",shopAvatar,coverImage);
     }
 }
