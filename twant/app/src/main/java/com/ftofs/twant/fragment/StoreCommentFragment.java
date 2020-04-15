@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -129,6 +130,12 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                 Util.startFragment(CommentDetailFragment.newInstance(commentItem));
             }
         });
+
+        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.store_empty_data_view, null, false);
+        // 設置空頁面的提示語
+        TextView tvEmptyHint = emptyView.findViewById(R.id.tv_empty_hint);
+        tvEmptyHint.setText("暂时还没有说说哦~");
+        adapter.setEmptyView(emptyView);
         rvCommentList.setAdapter(adapter);
         loadCommentData(currPage);
     }

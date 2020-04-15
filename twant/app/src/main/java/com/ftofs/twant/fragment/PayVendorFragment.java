@@ -517,7 +517,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
                     markPayId(SPField.FIELD_MPAY_PAY_ID);
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

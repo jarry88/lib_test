@@ -7,6 +7,7 @@ import androidx.core.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +28,10 @@ import java.util.List;
 public class StoreNoticeFragment extends ScrollableBaseFragment {
     LinearLayout llContainer;
     LockableNestedScrollView nestedScrollView;
+    List<StoreAnnouncement> storeAnnouncementList;
+
+    boolean viewStubInflated;
+
     public static StoreNoticeFragment newInstance() {
         StoreNoticeFragment fragment = new StoreNoticeFragment();
         return fragment;
@@ -51,6 +56,7 @@ public class StoreNoticeFragment extends ScrollableBaseFragment {
     }
 
     public void setAnnouncementData(List<StoreAnnouncement> storeAnnouncementList) {
+        this.storeAnnouncementList = storeAnnouncementList;
         for (StoreAnnouncement announcement : storeAnnouncementList) {
             View announcementItemView = LayoutInflater.from(_mActivity).inflate(R.layout.store_announcement_item, llContainer, false);
             TextView tvAnnouncementTitle = announcementItemView.findViewById(R.id.tv_announcement_title);
@@ -77,5 +83,28 @@ public class StoreNoticeFragment extends ScrollableBaseFragment {
         if (nestedScrollView != null) {
             nestedScrollView.setScrollable(scrollable);
         }
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        View contentView = getView();
+
+        if (!viewStubInflated && contentView != null && (storeAnnouncementList == null || storeAnnouncementList.size() == 0)) {
+
+            ViewStub vsEmptyView = getView().findViewById(R.id.vs_empty_view);
+            if (vsEmptyView != null) {
+                vsEmptyView.inflate();
+                viewStubInflated = true;
+
+                TextView tvEmptyHint = contentView.findViewById(R.id.tv_empty_hint);
+                tvEmptyHint.setText("暂时还没有公告哦~");
+            }
+        }
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
     }
 }
