@@ -419,11 +419,11 @@
     <string name="text_complain_tab">投訴</string>
     <string name="text_refund_list">退款列表</string>
     <string name="text_view_complaint">查看投訴</string>
-    <string name="select_refund_reason_hint">请选择退款原因</string>
-    <string name="input_refund_amount_hint">请输入退款金额</string>
-    <string name="select_return_reason_hint">请选择退貨原因</string>
-    <string name="select_complain_subject_hint">请选投訴主題</string>
-    <string name="input_return_amount_hint">请输入退貨金额</string>
+    <string name="select_refund_reason_hint">請選擇退款原因</string>
+    <string name="input_refund_amount_hint">請輸入退款金額</string>
+    <string name="select_return_reason_hint">請選擇退貨原因</string>
+    <string name="select_complain_subject_hint">請選擇投訴主題</string>
+    <string name="input_return_amount_hint">請輸入退貨金额</string>
     <string name="input_complain_content_hint">請輸入您的投訴內容</string>
 
     <string name="text_refund_way_wallet">退至預存款</string>
