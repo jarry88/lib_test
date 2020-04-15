@@ -753,7 +753,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * 更新地址信息的顯示
      */
     private void updateAddrView() {
-        if (mAddrItem == null) {
+        if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(getSummaryItem().paymentTypeCode)) {
+            btnChangeShippingAddress.setVisibility(View.GONE);
+            btnChangeShippingAddress.setVisibility(View.GONE);
+            llSelfFetchInfoContainer.setVisibility(View.VISIBLE);
+        }else if (mAddrItem == null) {
             // 用戶沒有收貨地址，顯示【新增收貨地址】按鈕
             btnAddShippingAddress.setVisibility(View.VISIBLE);
             btnChangeShippingAddress.setVisibility(View.GONE);
@@ -765,12 +769,15 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             tvMobile.setText(mAddrItem.mobPhone);
             tvAddress.setText(mAddrItem.areaInfo + " " + mAddrItem.address);
         }
+        //門店自提時隱藏地址欄顯示 自提欄
+
     }
 
     /**
      * 顯示自提信息
      */
     private void showSelfFetchInfo() {
+        SLog.info("顯示自提信息");
         btnAddShippingAddress.setVisibility(View.GONE);
         btnChangeShippingAddress.setVisibility(View.GONE);
 
