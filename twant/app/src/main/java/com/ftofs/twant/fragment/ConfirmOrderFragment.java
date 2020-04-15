@@ -687,45 +687,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             SLog.info("addrItem: %s", addrItem);
             mAddrItem = addrItem;
-
-            Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
-                @Override
-                public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                    SLog.info("observable.threadId[%s]", Thread.currentThread().getId());
-
-                    Pair<Boolean, String> result = calcFreight(null);
-
-                    if (result.first) {
-                        emitter.onComplete();
-                    } else {
-                        emitter.onError(new Throwable(result.second));
-                    }
-                }
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
-
-            Observer<String> observer = new Observer<String>() {
-                @Override
-                public void onSubscribe(Disposable d) {
-                    SLog.info("onSubscribe, threadId[%s]", Thread.currentThread().getId());
-                }
-                @Override
-                public void onNext(String s) {
-                    SLog.info("onNext[%s], threadId[%s]", s, Thread.currentThread().getId());
-                }
-                @Override
-                public void onError(Throwable e) {
-                    SLog.info("onError[%s], threadId[%s]", e.getMessage(), Thread.currentThread().getId());
-                }
-                @Override
-                public void onComplete() {
-                    SLog.info("onComplete, threadId[%s]", Thread.currentThread().getId());
-                    updateOrderView();
-                    calcAmount();
-                }
-            };
-
-            observable.subscribe(observer);
+            updateFreightTotalAmount();
         } else if (ReceiptInfoFragment.class.getName().equals(from)) {
             int position = data.getInt("position");
             int action = data.getInt("action");
@@ -743,6 +705,48 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             adapter.notifyItemChanged(position);
         }
+    }
+
+    private void updateFreightTotalAmount() {
+        SLog.info("重新計算整個頁面運費");
+        Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                SLog.info("observable.threadId[%s]", Thread.currentThread().getId());
+
+                Pair<Boolean, String> result = calcFreight(null);
+
+                if (result.first) {
+                    emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(result.second));
+                }
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                SLog.info("onSubscribe, threadId[%s]", Thread.currentThread().getId());
+            }
+            @Override
+            public void onNext(String s) {
+                SLog.info("onNext[%s], threadId[%s]", s, Thread.currentThread().getId());
+            }
+            @Override
+            public void onError(Throwable e) {
+                SLog.info("onError[%s], threadId[%s]", e.getMessage(), Thread.currentThread().getId());
+            }
+            @Override
+            public void onComplete() {
+                SLog.info("onComplete, threadId[%s]", Thread.currentThread().getId());
+                updateOrderView();
+                calcAmount();
+            }
+        };
+
+        observable.subscribe(observer);
     }
 
     /**
@@ -1227,6 +1231,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             adapter.setPayWayIndex(payWayIndex);
             adapter.notifyDataSetChanged();
+            updateFreightTotalAmount();
         } else if (type == PopupType.SHIPPING_TIME) {
             int position = (int) extra;
             ConfirmOrderSummaryItem summaryItem = (ConfirmOrderSummaryItem) confirmOrderItemList.get(position);

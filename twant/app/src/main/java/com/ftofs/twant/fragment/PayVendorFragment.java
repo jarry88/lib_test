@@ -165,7 +165,6 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         walletBalance = args.getFloat("walletBalance");
 
         tvPayAmount = view.findViewById(R.id.tv_pay_amount);
-        tvPayAmount.setText(StringUtil.formatFloat(payAmount));
         secondPayAmount = view.findViewById(R.id.second_monny_container);
         tvSecondAmount = view.findViewById(R.id.tv_second_pay_amount);
         tvSecondPayTag = view.findViewById(R.id.tv_second_money);
@@ -320,6 +319,10 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                         }
                     }
                     String code = responseObj.getSafeString("datas.defaultCode");
+                    payAmount = (float)responseObj.getDouble("datas.mopPrice");
+                    SLog.info("使用後端返回價格");
+                    tvPayAmount.setText(StringUtil.formatFloat(payAmount));
+
                     String hk = "HK";
                     String cny = "CNY";
 
