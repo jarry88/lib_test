@@ -356,7 +356,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             // 收集表單信息
             EasyJSONObject commitBuyData = EasyJSONObject.generate(
                     // "paymentTypeCode", "online",
-                    "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_ONLINE,
+                    "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_OFFLINE,
                     "isCart", isFromCart,
                     "isExistTrys", isExistTrys,
                     "storeList", commitStoreList);
