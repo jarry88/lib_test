@@ -602,7 +602,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         if (Constant.PAYMENT_TYPE_CODE_ONLINE.equals(paymentTypeCode) || Constant.PAYMENT_TYPE_CODE_CHAIN.equals(paymentTypeCode)) {
                             // 在線支付或門店自提都需要先付款
                             try {
-                                int isAuth = Constant.TRUE_INT;
+                                int isAuth = Constant.FALSE_INT;
                                 if (responseObj.exists("datas.isAuth")) {
                                    isAuth= responseObj.getInt("datas.isAuth");
                                 }
