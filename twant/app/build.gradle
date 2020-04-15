@@ -19,7 +19,6 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
 
-        
         versionCode 116
 
         versionName "1.2.3.71"
