@@ -493,6 +493,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             if (mAddrItem != null) {
                 commitBuyData.set("addressId", mAddrItem.addressId);
             }
+            //門店自提必須addId設置為0，防止後臺誤判為跨城購
+            if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(getSummaryItem().paymentTypeCode)) {
+                commitBuyData.set("addressId", "0");
+            }
 
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
