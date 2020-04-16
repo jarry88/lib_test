@@ -928,7 +928,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     SLog.info("socialName[%s], socialForm[%d]", socialName, socialForm);
 
                     // socialForm   1 链接，2 二维码 3 賬號類型
-                    if (socialForm == 1) {
+                    if (socialForm == 1) { // 鏈接
                         Intent intent =new Intent(Intent.ACTION_VIEW);
                         String accountAddress = dataObject.getSafeString("accountAddress");
                         if (StringUtil.isEmpty(accountAddress)) {
@@ -938,12 +938,12 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         intent.setData(uri);
 
                         _mActivity.startActivity(intent);
-                    } else if (socialForm == 2) {
+                    } else if (socialForm == 2) { // 二維碼
                         String accountImageAddress = StringUtil.normalizeImageUrl(dataObject.getSafeString("accountImageAddress"));
                         new XPopup.Builder(_mActivity)
-                                .asCustom(new TwQRCodePopup(_mActivity, accountImageAddress))
+                                .asCustom(new TwQRCodePopup(_mActivity, accountImageAddress, true))
                                 .show();
-                    } else if (socialForm == 3) {
+                    } else if (socialForm == 3) { // 帳號類型
                         String account = dataObject.getSafeString("account");
 
                         String content = String.format("%s: %s", socialName, account);
