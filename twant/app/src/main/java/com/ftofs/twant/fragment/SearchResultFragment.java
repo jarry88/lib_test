@@ -424,6 +424,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvSearchResultList.setLayoutManager(layoutManager);
+        //已經創建過mStoreAdapter就不需要再新建一遍了
+        if (mStoreAdapter != null) {
+            return;
+        }
         mStoreAdapter = new StoreSearchResultAdapter(storeItemList);
         mStoreAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -499,6 +503,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         }
 
+        if (mGoodsAdapter != null) {
+            if (!isActivityShopping) { // 活動專場採用點擊【上一頁】、【下一頁】的分頁方式
+                mGoodsAdapter.setEnableLoadMore(true);
+                mGoodsAdapter.setOnLoadMoreListener(this, rvSearchResultList);
+            }
+            return;
+        }
         rvSearchResultList.setLayoutManager(new LinearLayoutManager(_mActivity));
         mGoodsAdapter = new GoodsSearchResultAdapter(_mActivity, goodsItemPairList);
         mGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -555,10 +566,6 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
-        if (!isActivityShopping) { // 活動專場採用點擊【上一頁】、【下一頁】的分頁方式
-            mGoodsAdapter.setEnableLoadMore(true);
-            mGoodsAdapter.setOnLoadMoreListener(this, rvSearchResultList);
-        }
         rvSearchResultList.setAdapter(mGoodsAdapter);
     }
 
@@ -709,7 +716,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 // 如果全部加載完畢，添加加載完畢的提示
                                 goodsItemPairList.add(new GoodsSearchItemPair(Constant.ITEM_TYPE_LOAD_END_HINT));
                             }
-                            SLog.info("goodsItemPairList.size[%d]", goodsItemPairList.size());
+                            SLog.info("goodsItemPairList.size[%d],isActivityShopping[%s]", goodsItemPairList.size(),isActivityShopping);
                             if (!isActivityShopping) {
                                 mGoodsAdapter.loadMoreComplete();
                             }
