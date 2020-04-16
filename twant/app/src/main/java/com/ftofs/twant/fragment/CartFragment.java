@@ -59,6 +59,8 @@ import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
+import static android.view.View.VISIBLE;
+
 
 /**
  * 購物袋
@@ -379,6 +381,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                     Glide.with(_mActivity).load(R.drawable.icon_no_storage).into(maskImage);
                                 }else if(cartSkuVo.getInt("goodsStorage")<=2){
                                     Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
+                                }
+                                //跨城購圖標
+                                ImageView iconTariff = cartSkuItem.findViewById(R.id.icon_tariffEnable);
+                                int tariffEnable = cartSkuVo.getInt("tariffEnable");
+                                if (tariffEnable == Constant.TRUE_INT) {
+                                    iconTariff.setVisibility(VISIBLE);
+                                } else {
+                                    iconTariff.setVisibility(View.INVISIBLE);
                                 }
                                 storeStatus.spuStatusList.add(spuStatus);
                                 cartSpuItemContainer.addView(cartSpuItem);
