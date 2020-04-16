@@ -591,7 +591,7 @@
                         android:id="@+id/btn_select_spec"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="24dp"
                         android:layout_toEndOf="@id/text_spec"
 
                         android:layout_alignParentEnd="true"
@@ -637,11 +637,20 @@
                         android:textSize="16sp"
                         android:textColor="@color/tw_dark_grey"
                         />
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="15dp"
+                        android:layout_toEndOf="@id/text_send_to"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:id="@+id/icon_tariffEnable"
+                        android:src="@drawable/icon_among_city"
+                        android:visibility="invisible"
+                        android:layout_centerVertical="true"/>
                     <RelativeLayout
                         android:id="@+id/btn_select_addr"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="24dp"
                         android:layout_toEndOf="@id/text_send_to"
                         android:layout_alignParentEnd="true">
                         <TextView

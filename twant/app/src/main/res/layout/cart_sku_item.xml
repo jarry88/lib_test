@@ -31,15 +31,34 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/tv_goods_full_specs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="123132"
-            android:textColor="#FF929292"
-            android:textSize="12sp"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_goods_full_specs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="123132"
+                android:textColor="#FF929292"
+                android:textSize="12sp"
+                />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+            <ImageView
+                android:id="@+id/icon_tariffEnable"
+                android:layout_width="92dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:visibility="invisible"
+                android:textSize="16sp"
+                android:src="@drawable/icon_among_city_with_text"
+                android:textColor="@color/tw_black"
+                />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_4"
-                android:text="5131321"
+                android:text="-"
                 android:textColor="@color/tw_red"
                 android:textSize="14sp"
                 android:textStyle="normal"
@@ -63,7 +82,6 @@
                 android:layout_weight="1" />
             <com.ftofs.twant.widget.CartAdjustButton
                 android:id="@+id/ab_quantity"
-                android:layout_centerVertical="true"
                 android:layout_width="92dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"

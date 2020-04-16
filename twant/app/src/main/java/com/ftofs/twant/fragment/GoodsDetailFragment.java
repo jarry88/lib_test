@@ -258,6 +258,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     double goodsPrice;
     private int limitBuy;
+    private int tariffEnable =Constant.FALSE_INT;
+    private ImageView iconTariff;
 
     static class scrollStateHandler extends Handler {
         ScrollView scrollViewContainer;
@@ -350,6 +352,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         SLog.info("onViewCreated");
         countDownHandler = new CountDownHandler(this);
         EventBus.getDefault().register(this);
+        iconTariff = view.findViewById(R.id.icon_tariffEnable);
 
         Bundle args = getArguments();
         commonId = args.getInt("commonId");
@@ -1270,6 +1273,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
                     limitBuy = goodsDetail.getInt("limitBuy");
 
+//                     goodsDetail.limitBuy   >0限購數量，0不限購，-1限購
+//                    goodsDetail .tariffEnable  1是0否支持跨城購
+//                    goodsDetail .goodsInfoVoList[]：tariffAmount   SKU跨城購稅費
+
                     SLog.info("goodsDetail exists,discount[%s]", goodsDetail.exists("discount"));
                     // 限時折扣
                     EasyJSONObject discount = goodsDetail.getObject("discount");
@@ -1468,6 +1475,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     isDataValid = true;
                     adapter.setNewData(storeFriendsItemList);
+
+                    // 跨城購標識
+                    tariffEnable = goodsDetail.getInt("tariffEnable");
+                    if (tariffEnable == Constant.TRUE_INT) {
+                        iconTariff.setVisibility(VISIBLE);
+                    } else {
+                        iconTariff.setVisibility(View.INVISIBLE);
+                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
