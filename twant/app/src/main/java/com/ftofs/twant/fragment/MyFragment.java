@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 
+import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +42,7 @@ import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.PermissionUtil;
@@ -47,6 +50,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.vo.member.MemberVo;
 import com.ftofs.twant.widget.BottomConfirmPopup;
 import com.ftofs.twant.widget.QuickClickButton;
 import com.ftofs.twant.widget.SharePopup;
@@ -116,6 +120,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     private TextView tvShoppingMessageCount;
     private int PostCountMax=10;
     private boolean showBack;
+    private FrameLayout btnSeller;
+    private boolean showSeller;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -158,6 +164,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
 
 
         Util.setOnClickListener(view, R.id.btn_setting, this);
+        btnSeller = view.findViewById(R.id.btn_goto_seller);
+        btnSeller.setOnClickListener(this);
+
         Util.setOnClickListener(view, R.id.btn_back_round, this);
         view.findViewById(R.id.btn_back_round).setVisibility(showBack ? View.VISIBLE : View.GONE);
 
@@ -334,6 +343,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
             case R.id.btn_back_round:
                 hideSoftInputPop();
                 break;
+            case R.id.btn_goto_seller:
+                Util.startFragment(SellerHomeFragment.newInstance());
+                break;
             case R.id.tv_member_signature:
                 String signature = memberSignature;
                 if (StringUtil.isEmpty(signature)) {
@@ -388,7 +400,15 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     private void loadUserData() {
         String token = User.getToken();
         String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+        MemberVo memberVo = TwantApplication.getInstance().getMemberVo();
+        if (memberVo == null) {
+            showSeller = false;
+        }else {
+            showSeller = memberVo.role != ChatUtil.ROLE_MEMBER;
+            SLog.info("顯示商家後臺入口%s",showSeller);
 
+        }
+        btnSeller.setVisibility(showSeller?View.VISIBLE:View.GONE);
         if (StringUtil.isEmpty(token) || StringUtil.isEmpty(memberName)) {
             return;
         }
