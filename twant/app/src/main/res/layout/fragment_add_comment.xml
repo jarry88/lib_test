@@ -56,64 +56,70 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fillViewport="true"
-        android:background="#F3F3F3">
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:orientation="vertical"
-            android:background="@android:color/white">
-
-            <!-- 正文 -->
-            <com.ftofs.twant.widget.TouchEditText
-                android:id="@+id/et_content"
+            android:background="#F3F3F3">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:gravity="top"
-                android:hint="@string/input_post_content_hint"
-                android:minHeight="150dp"
-                android:background="@null"
-                />
+                android:paddingBottom="15dp"
+                android:orientation="vertical"
+                android:background="@color/tw_white">
 
-
-            <com.ftofs.twant.widget.SquareGridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                app:sgl_column_count="3">
-                <ImageView
-                    android:id="@+id/btn_add_image"
+                <!-- 正文 -->
+                <com.ftofs.twant.widget.TouchEditText
+                    android:id="@+id/et_content"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    android:src="@drawable/btn_add_post_content_image"
-                    android:scaleType="fitXY"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:gravity="top"
+                    android:hint="@string/input_post_content_hint"
+                    android:minHeight="150dp"
+                    android:background="@null"
                     />
-                <RelativeLayout
-                    android:id="@+id/comment_image_container"
+
+
+                <com.ftofs.twant.widget.SquareGridLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    android:visibility="gone">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    app:sgl_column_count="3">
                     <ImageView
-                        android:id="@+id/comment_image"
+                        android:id="@+id/btn_add_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="3dp"
+                        android:src="@drawable/btn_add_post_content_image"
+                        android:scaleType="fitXY"
                         />
-                    <com.ftofs.twant.widget.ScaledButton
-                        android:id="@+id/btn_remove_image"
-                        android:layout_width="23dp"
-                        android:layout_height="23dp"
-                        android:layout_alignParentRight="true"
-                        app:icon_src="@drawable/icon_remove_post_image"
-                        app:icon_width="15dp"
-                        app:icon_height="15dp"
-                        />
-                </RelativeLayout>
-            </com.ftofs.twant.widget.SquareGridLayout>
+                    <RelativeLayout
+                        android:id="@+id/comment_image_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="3dp"
+                        android:visibility="gone">
+                        <ImageView
+                            android:id="@+id/comment_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            />
+                        <com.ftofs.twant.widget.ScaledButton
+                            android:id="@+id/btn_remove_image"
+                            android:layout_width="23dp"
+                            android:layout_height="23dp"
+                            android:layout_alignParentRight="true"
+                            app:icon_src="@drawable/icon_remove_post_image"
+                            app:icon_width="15dp"
+                            app:icon_height="15dp"
+                            />
+                    </RelativeLayout>
+                </com.ftofs.twant.widget.SquareGridLayout>
+            </LinearLayout>
         </LinearLayout>
+
     </ScrollView>
 
     <LinearLayout
