@@ -116,6 +116,26 @@ public class StringUtil {
         return sb.toString();
     }
     /**
+     * 格式化价格
+     * @param context
+     * @param price
+     * @param spaceCount 美元符$与价格的空格个数
+     * @param net2 保留小數點后2位
+     * @return
+     */
+    public static String formatPrice(Context context, double price, int spaceCount,int net2) {
+        if (isEmpty(currencyTypeSign)) {
+            currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
+        }
+
+        StringBuilder sb = new StringBuilder(currencyTypeSign);
+        for (int i = 0; i < spaceCount; i++) {
+            sb.append(" ");
+        }
+        sb.append(String.format("%.2f", price));
+        return sb.toString();
+    }
+    /**
      * @param context
      * @param price
      * @param spaceCount 美元符$与价格的空格个数

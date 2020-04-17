@@ -24,7 +24,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:text=""
+            android:text="sdf sdfsdfas撒旦發射點發射點發撒旦飛灑地方阿斯蒂芬撒地方s'da'f'sa'd'f'sa'd'f"
+            android:maxLines="2"
+            android:textColor="@color/tw_black"
+            android:visibility="gone"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="sdf sdfsdfas撒旦發射點發射點發撒旦飛灑地方阿斯蒂芬撒地方s'da'f'sa'd'f'sa'd'f"
+            android:maxLines="2"
             android:textColor="@color/tw_black"
             />
         <View

@@ -291,6 +291,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         parentFragment = (ShopMainFragment) getParentFragment();
         storeId = parentFragment.storeId;
 
+        tvShopSignature.setOnClickListener(this);
         viewpager.setOffscreenPageLimit(tabCount-1);
         imgShopLogo.setOnClickListener(this);
         containerView.setOnClickListener(this);
@@ -998,6 +999,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         }
 
         switch (id) {
+            case R.id.tv_shop_signature:
+                tvShopSignature.setSingleLine(!tvShopSignature.isSingleLine());
+                break;
             case R.id.ll_uo_thumb_up_container:
                 switchThumbState();
                 break;

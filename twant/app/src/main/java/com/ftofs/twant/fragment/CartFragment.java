@@ -342,7 +342,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
                                 int buyNum = cartSkuVo.getInt("buyNum");
                                 SLog.info("buyNum %d,limitNum %d ",buyNum,limitBuy);
-                                tvPriceSum.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
+                                tvPriceSum.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0,2));
                                 abQuantity.setValue(buyNum);
 
                                 spuStatus.setPrice(goodsPrice);
@@ -384,12 +384,15 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 }
                                 //跨城購圖標
                                 ImageView iconTariff = cartSkuItem.findViewById(R.id.icon_tariffEnable);
-                                int tariffEnable = cartSkuVo.getInt("tariffEnable");
-                                if (tariffEnable == Constant.TRUE_INT) {
-                                    iconTariff.setVisibility(VISIBLE);
-                                } else {
-                                    iconTariff.setVisibility(View.INVISIBLE);
+                                if (cartSkuVo.exists("tariffEnable")) {
+                                    int tariffEnable = cartSkuVo.getInt("tariffEnable");
+                                    if (tariffEnable == Constant.TRUE_INT) {
+                                        iconTariff.setVisibility(VISIBLE);
+                                    } else {
+                                        iconTariff.setVisibility(View.INVISIBLE);
+                                    }
                                 }
+
                                 storeStatus.spuStatusList.add(spuStatus);
                                 cartSpuItemContainer.addView(cartSpuItem);
                             } // END OF sku LOOP
@@ -603,7 +606,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
 
         float totalPrice = totalData.first;  // 總價錢
         int totalCount = totalData.second;  // 總件數
-        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
+        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0,2));
         String btnSettlementText = textSettlement;
 
         if (totalCount > 0) {

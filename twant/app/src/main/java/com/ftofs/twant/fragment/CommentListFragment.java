@@ -120,11 +120,6 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 CommentItem commentItem = commentItemList.get(position);
                 int id = view.getId();
-
-                if (!User.isLogin()) {
-                    Util.showLoginFragment();
-                    return;
-                }
                 if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 } else if (id == R.id.btn_reply) {
@@ -140,6 +135,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("2進入評論詳情頁");
                 CommentItem commentItem = commentItemList.get(position);
                 Util.startFragment(CommentDetailFragment.newInstance(commentItem));
             }

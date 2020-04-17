@@ -82,7 +82,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             }
 
 
-            String discountAmountText = StringUtil.formatPrice(context, item.discountAmount, 0);
+            String discountAmountText = StringUtil.formatPrice(context, item.discountAmount, 0,2);
             if (item.discountAmount > 0) { // 如果有優惠，在前面加上負號
                 discountAmountText = "-" + discountAmountText;
             }
@@ -96,11 +96,11 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             // float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
             double finalPayAmount = item.buyItemAmount + realFreightAmount;
             helper.setText(R.id.tv_store_name, item.storeName)
-                .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, realFreightAmount, 0))
+                .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, realFreightAmount, 0,2))
                 .setText(R.id.tv_store_discount, discountAmountText)
                 .setText(R.id.tv_store_voucher_count, voucherStatus)
                 .setText(R.id.tv_store_item_count, String.format("共%d件，小計：", item.itemCount))
-                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, finalPayAmount, 0));
+                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, finalPayAmount, 0,2));
 
             EditText etLeaveMessage = helper.getView(R.id.et_leave_message);
             etLeaveMessage.setText(item.leaveMessage);
@@ -138,7 +138,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 String buyNum = timesSign + " " + confirmOrderSkuItem.buyNum;
                 tvBuyNum.setText(buyNum);
                 TextView tvSkuPrice = skuItemView.findViewById(R.id.tv_sku_price);
-                tvSkuPrice.setText(StringUtil.formatPrice(context, confirmOrderSkuItem.skuPrice, 0));
+                tvSkuPrice.setText(StringUtil.formatPrice(context, confirmOrderSkuItem.skuPrice, 0,2));
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, Util.dip2px(context, 15), 0, 0);
@@ -164,7 +164,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             }
 
             if (item.conformTemplatePrice > 0) {
-                String conformTitle = "送 " + StringUtil.formatPrice(context, item.conformTemplatePrice, 0) + " 店舖券一張";
+                String conformTitle = "送 " + StringUtil.formatPrice(context, item.conformTemplatePrice, 0,2) + " 店舖券一張";
                 helper.setText(R.id.tv_conform_title, conformTitle);
                 helper.setGone(R.id.ll_conform_container, true);
             } else {

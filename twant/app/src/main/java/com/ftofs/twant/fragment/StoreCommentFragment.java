@@ -110,10 +110,6 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                 CommentItem commentItem = commentItemList.get(position);
                 int id = view.getId();
 
-                if (!User.isLogin()) {
-                    Util.showLoginFragment();
-                    return;
-                }
                 if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 } else if (id == R.id.btn_reply) {

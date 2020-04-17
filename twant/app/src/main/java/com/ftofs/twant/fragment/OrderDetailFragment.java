@@ -733,12 +733,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     tvStoreName.setText(storeName);
                     tvOrderStatus.setText(ordersStateName);
                     tvOrdersStateName.setText(ordersStateName);
-                    tvFreightAmount.setText(StringUtil.formatPrice(_mActivity, freightAmount, 1));
+                    tvFreightAmount.setText(StringUtil.formatPrice(_mActivity, freightAmount, 1,2));
 
-                    tvGoodsAmount.setText(StringUtil.formatPrice(_mActivity, itemAmount, 1));
-                    tvStoreWelfare.setText("-"+StringUtil.formatPrice(_mActivity, storeDiscountAmount, 1));
-                    tvPlatformWelfare.setText("-"+StringUtil.formatPrice(_mActivity, counponAmount, 1));
-                    tvOrdersAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1));
+                    tvGoodsAmount.setText(StringUtil.formatPrice(_mActivity, itemAmount, 1,2));
+                    tvStoreWelfare.setText("-"+StringUtil.formatPrice(_mActivity, storeDiscountAmount, 1,2));
+                    tvPlatformWelfare.setText("-"+StringUtil.formatPrice(_mActivity, counponAmount, 1,2));
+                    tvOrdersAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1,2));
                     tvShipDate.setText(shipTime);
                     tvOrdersSn.setText(String.valueOf(ordersSn));
                     if (StringUtil.isEmpty(createTime)) {
