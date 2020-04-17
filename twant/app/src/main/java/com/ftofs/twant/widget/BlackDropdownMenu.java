@@ -31,6 +31,7 @@ import com.ftofs.twant.fragment.ShopHomeFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.AttachPopupView;
 
 /**
@@ -138,7 +139,12 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_add_friend);
         }else if (type == TYPE_CHAT) {
             ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_enc_mini);
-            ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_goto_enc);
+            int storeId = ((ChatFragment) baseFragment).getStoreId();
+            if (storeId > 0) {
+                ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_store_enc);
+            } else {
+                ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_goto_enc);
+            }
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_goto_member_info);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_goto_member_info);
         } else if (type == TYPE_POST_DETAIL) {
@@ -299,12 +305,25 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             case TYPE_CHAT:
                 // 查看名片
                 ChatFragment chatFragment = (ChatFragment) baseFragment;
-                if (chatFragment.getCard()) {
-                    Util.startFragment(ENameCardFragment.newInstance(chatFragment.getYourMemberName()));
+                int storeId = chatFragment.getStoreId();
+                if (storeId >= 0) {
+                    new XPopup.Builder(context)
+                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(new StoreCardPopup(context, chatFragment.getStoreId()))
+                            .show();
                 } else {
-                    ToastUtil.error(getContext(),"未收到對方名片");
+                    if (chatFragment.getCard()) {
+                        Util.startFragment(ENameCardFragment.newInstance(chatFragment.getYourMemberName()));
+                    } else {
+                        ToastUtil.error(getContext(),"未收到對方名片");
+                    }
                 }
+
+
+
                 break;
+
             default:
                 break;
         }

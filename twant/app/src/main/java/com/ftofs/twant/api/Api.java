@@ -1212,8 +1212,14 @@ public class Api {
      */
     public static final String PATH_EDIT_FACEBOOK_ID = "/member/memberfacebook/edit";
 
-
+    /**
+     * 個人名片
+     */
     public static final String MEMBER_CARD_DETAIL = "/member/card/detail";
+    /**
+     * 店鋪名片
+     */
+    public static final String STORE_CARD_DETAIL = "/app/store/business_card";
     /**
      * 新活動專場頁
      */

@@ -130,7 +130,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private static final int ACTION_SHOW_MENU = 1;
     private static final int ACTION_SEND_MESSAGE = 2;
 
-    int storeId;
+    int storeId=-1;
 
     int action = ACTION_SHOW_MENU;
 
@@ -415,11 +415,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             yourNickname = yourInfo.getNickName();
             yourAvatarUrl = yourInfo.getAvatarUrl();
             yourRole = yourInfo.role;
-            if (yourInfo.role > ChatUtil.ROLE_MEMBER) {
+            if (yourInfo.role != ChatUtil.ROLE_MEMBER) {
                 yourNickname = yourInfo.storeName+" "+yourInfo.staffName;
                 yourAvatarUrl = yourInfo.storeAvatar;
                 Conversation conversation=Conversation.getByMemberName(yourMemberName);
                 conversation.nickname = yourNickname;
+
                 conversation.save();
             }
             showGoodsAndOrder();
@@ -1611,6 +1612,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
+
+    public void popupStoreCard() {
+
+
+    }
+
+    public int getStoreId() {
+        return storeId;
+    }
+
     static class UiHandler extends Handler {
         WeakReference<ChatFragment> weakReference;
 

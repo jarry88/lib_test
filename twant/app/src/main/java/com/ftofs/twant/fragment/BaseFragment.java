@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.ftofs.twant.activity.CustomCaptureActivity;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.util.IntentUtil;
