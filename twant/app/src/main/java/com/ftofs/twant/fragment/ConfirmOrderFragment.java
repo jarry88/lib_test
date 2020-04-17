@@ -1169,7 +1169,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             summaryItem.totalFreight,summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
                     totalPrice = summaryItem.calcTotalPrice();
-                    tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0));
+                    tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0,2));
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

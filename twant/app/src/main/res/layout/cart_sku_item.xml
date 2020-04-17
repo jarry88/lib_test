@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
+    android:layout_height="match_parent"
     android:layout_marginTop="1dp"
     android:orientation="horizontal">
     <com.ftofs.twant.widget.ScaledButton
@@ -14,7 +14,7 @@
         android:visibility="gone"
         app:icon_src="@drawable/icon_cart_item_unchecked"
         />
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -23,19 +23,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:text="sdf sdfsdfas撒旦發射點發射點發撒旦飛灑地方阿斯蒂芬撒地方s'da'f'sa'd'f'sa'd'f"
+            android:layout_alignParentTop="true"
+            android:text=""
             android:maxLines="2"
             android:textColor="@color/tw_black"
             android:visibility="visible"
             />
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_4">
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_above="@id/ll_price_container">
             <TextView
                 android:id="@+id/tv_goods_full_specs"
                 android:layout_width="wrap_content"
@@ -62,10 +60,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_price_container"
             android:layout_width="match_parent"
             android:layout_height="24dp"
             android:gravity="center_vertical"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_above="@id/ll_gift_list_container"
             >
             <TextView
                 android:id="@+id/tv_price_sum"
@@ -100,8 +100,9 @@
             android:id="@+id/ll_gift_list_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
