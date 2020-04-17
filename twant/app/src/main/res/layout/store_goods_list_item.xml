@@ -6,74 +6,96 @@
     android:layout_height="wrap_content"
     android:paddingLeft="5dp"
     android:paddingRight="5dp">
-    <com.ftofs.twant.widget.StoreDesktop
-        android:id="@+id/store_desktop"
-        android:layout_width="match_parent"
-        android:layout_height="9dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_above="@id/ll_common_container"
-        />
-    <LinearLayout
-        android:id="@+id/ll_goods_image_container"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="9dp"
-        android:orientation="horizontal">
-        <!-- 左邊 -->
+        android:orientation="vertical">
+        <com.ftofs.twant.widget.StoreDesktop
+            android:layout_marginTop="-9dp"
+            android:id="@+id/store_desktop"
+            android:layout_width="match_parent"
+            android:layout_height="9dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_below="@id/ll_goods_image_container"
+            />
         <LinearLayout
-            android:id="@+id/ll_left_item_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingStart="5dp"
-            android:paddingEnd="2.5dp"
+            android:id="@+id/ll_goods_image_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
 
-            android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_container_left"
-                    android:layout_width="match_parent"
+            android:orientation="horizontal">
+            <!-- 左邊 -->
+            <LinearLayout
+                android:id="@+id/ll_left_item_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="5dp"
+                android:paddingEnd="2.5dp"
+
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:layout_marginLeft="9dp"
-                    android:layout_marginRight="9dp">
-                    <com.makeramen.roundedimageview.RoundedImageView
-                        android:id="@+id/left_goods_image"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:riv_corner_radius="3dp"
-                        app:riv_border_color="@color/tw_light_grey"
-                        app:riv_border_width="1dp"
-                        android:src="@drawable/cs_avatar_160"
-                        />
+                    >
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_container_left"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginLeft="9dp"
+                        android:layout_marginRight="9dp"
+                        android:layout_marginBottom="9dp">
+                        <com.makeramen.roundedimageview.RoundedImageView
+                            android:id="@+id/left_goods_image"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:riv_corner_radius="3dp"
+                            app:riv_border_color="@color/tw_light_grey"
+                            app:riv_border_width="1dp"
+                            android:src="@drawable/cs_avatar_160"
+                            />
+                        <ImageView
+                            android:visibility="gone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:src="@drawable/icon_goods_hot"
+                            />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                     <ImageView
-                        android:visibility="gone"
+                        android:id="@+id/left_goods_prop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:src="@drawable/icon_goods_hot"
                         />
-
                     <TextView
+                        android:layout_alignParentBottom="true"
                         android:id="@+id/tv_left_price"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:layout_marginBottom="1dp"
+                        android:layout_marginTop="150dp"
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         android:gravity="center"
                         android:text="$"
                         android:textColor="@color/tw_white"
@@ -81,51 +103,51 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-                <ImageView
-                    android:id="@+id/left_goods_prop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/icon_goods_hot"
-                    />
-            </RelativeLayout>
+                </RelativeLayout>
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <!-- 右邊 -->
-        <LinearLayout
-            android:id="@+id/ll_right_item_container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingStart="2.5dp"
-            android:paddingEnd="5dp"
-            android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_container_right"
+            <!-- 右邊 -->
+            <LinearLayout
+                android:id="@+id/ll_right_item_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="2.5dp"
+                android:paddingEnd="5dp"
+                android:orientation="vertical">
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:layout_marginLeft="9dp"
-                    android:layout_marginRight="9dp">
-                    <com.makeramen.roundedimageview.RoundedImageView
-                        android:id="@+id/right_goods_image"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
+                    android:layout_height="wrap_content">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_container_right"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginLeft="9dp"
+                        android:layout_marginRight="9dp">
+                        <com.makeramen.roundedimageview.RoundedImageView
+                            android:id="@+id/right_goods_image"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:riv_corner_radius="3dp"
+                            app:riv_border_color="@color/tw_light_grey"
+                            app:riv_border_width="1dp"
+                            android:src="@drawable/cs_avatar_160"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/right_goods_prop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintDimensionRatio="1:1"
-                        app:riv_corner_radius="3dp"
-                        app:riv_border_color="@color/tw_light_grey"
-                        app:riv_border_width="1dp"
-                        android:src="@drawable/cs_avatar_160"
+                        android:src="@drawable/icon_goods_hot"
                         />
                     <TextView
                         android:id="@+id/tv_right_price"
@@ -134,6 +156,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="1dp"
+                        android:layout_alignParentBottom="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -144,23 +167,15 @@
                         android:textSize="14sp"
                         android:textStyle="bold"
                         />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-                <ImageView
-                    android:id="@+id/right_goods_prop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/icon_goods_hot"
-                    />
-            </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:id="@+id/ll_common_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_goods_image_container"
+        android:layout_below="@id/ll_container"
         android:background="@drawable/new_arrivals_pane_bg"
         android:orientation="horizontal">
         <LinearLayout

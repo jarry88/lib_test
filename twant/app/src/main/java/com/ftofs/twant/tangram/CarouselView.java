@@ -308,6 +308,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                         }
                     });
                     bannerView.start();
+                    bannerView.setDelayedTime(2500);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
