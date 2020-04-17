@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -78,6 +80,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
 
         View contentView = LayoutInflater.from(context).inflate(R.layout.tangram_layout_home_carousel_view, this, false);
         bannerView = contentView.findViewById(R.id.banner_view);
+
 
         bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
@@ -307,6 +310,12 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                             return new BannerViewHolder(webSliderItemList);
                         }
                     });
+                    LinearLayout linearLayout =bannerView.getIndicatorContainer();
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();;
+                    params.setMarginStart(Util.dip2px(getContext(),10));
+                    linearLayout.setLayoutParams(params);
+                    bannerView.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT);
+                    bannerView.setIndicatorPadding(0,Util.dip2px(getContext(),20),0,0);
                     bannerView.start();
                     bannerView.setDelayedTime(2500);
                 } catch (Exception e) {

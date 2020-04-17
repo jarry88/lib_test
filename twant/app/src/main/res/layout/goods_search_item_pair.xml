@@ -206,7 +206,7 @@
 
                 <TextView
                     android:id="@+id/tv_goods_name_left"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="5dp"
@@ -222,7 +222,7 @@
 
                 <TextView
                     android:id="@+id/tv_goods_jingle_left"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
@@ -302,7 +302,7 @@
 
             <LinearLayout
                 android:id="@+id/btn_goto_store_left"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -322,9 +322,10 @@
 
                 <TextView
                     android:id="@+id/tv_store_name_left"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
+                    android:layout_marginEnd="2dp"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
@@ -343,13 +344,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:layout_marginStart="6dp"
+                android:layout_marginEnd="@dimen/dp_4"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tv_goods_name_right"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="8dp"
-                    android:paddingEnd="8dp"
 
                     android:text="剋服的sdfsdfsdfsdfsdfsssssdfsdfsdfsdfsdfsdfsdfd"
                     android:textColor="@color/tw_black"
@@ -360,24 +361,25 @@
                     android:ellipsize="end"
                     android:layout_marginBottom="1dp"
 
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     />
 
                 <TextView
                     android:id="@+id/tv_goods_jingle_right"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="3dp"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginEnd="3dp"
+                    android:layout_marginStart="1dp"
+
+                    android:layout_marginEnd="1.5dp"
                     android:textColor="#666"
                     android:textSize="13sp"
                     android:layout_gravity="center"
                     android:gravity="center_vertical"
-                    android:text="客厅装饰品"
+                    android:text="客厅装饰品sdfsadfasdfsadfsadf"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     />
 
 
@@ -450,7 +452,7 @@
                 />
             <LinearLayout
                 android:id="@+id/btn_goto_store_right"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp"
@@ -462,17 +464,18 @@
                     android:id="@+id/img_store_avatar_right"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp"
                     android:src="@drawable/cs_avatar_160"
                     app:civ_border_color="#EDEDED"
                     app:civ_border_width="0.5dp"
                     />
                 <TextView
                     android:id="@+id/tv_store_name_right"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="6dp"
+                    android:layout_marginEnd="4dp"
                     android:text="質簡"
                     android:textSize="13sp"
                     android:textColor="@color/tw_black"
