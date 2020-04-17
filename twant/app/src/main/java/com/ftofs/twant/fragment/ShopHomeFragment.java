@@ -504,7 +504,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         }
 
                         EasyJSONObject storeInfo = responseObj.getSafeObject("datas.storeInfo");
-                        SLog.info(String.format("storeInfo[%s]",storeInfo.toString()));
+                        // SLog.info(String.format("storeInfo[%s]",storeInfo.toString()));
                         setStoreInfo(storeInfo);
                         boolean hasSlider = storeInfo.exists("storeSlider");
                         SLog.info("hasSlider,%s",hasSlider);
