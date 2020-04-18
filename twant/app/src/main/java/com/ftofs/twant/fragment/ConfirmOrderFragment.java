@@ -239,6 +239,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     case R.id.btn_use_voucher:
                         storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(position);
                         if (storeItem.voucherCount == 0) {  // 沒有商店券
+                            ToastUtil.error(_mActivity,"無可用優惠券");
                             return;
                         }
                         List<StoreVoucherVo> storeVoucherVoList = voucherMap.get(storeItem.storeId);
@@ -496,6 +497,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             //門店自提必須addId設置為0，防止後臺誤判為跨城購
             if (Constant.PAYMENT_TYPE_CODE_CHAIN.equals(getSummaryItem().paymentTypeCode)) {
                 commitBuyData.set("addressId", "0");
+            } else if (!commitBuyData.exists("addressId")) {
+                commitBuyData.set("addressId","0");
+            } else if (StringUtil.isEmpty(commitBuyData.getSafeString("addressId"))) {
+                commitBuyData.set("addressId","0");
             }
 
             EasyJSONObject params = EasyJSONObject.generate(
@@ -1155,7 +1160,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         StoreAmount storeAmount = new StoreAmount(storeDiscountAmount, buyAmount2);
                         storeAmountMap.put(storeId, storeAmount);
                     }
-
                     updateStoreAmount();
                     adapter.setNewData(confirmOrderItemList);
 

@@ -422,10 +422,10 @@
                         <HorizontalScrollView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_toRightOf="@id/text_receive_voucher"
-                            android:layout_toLeftOf="@id/icon_expand_voucher"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_toEndOf="@id/text_receive_voucher"
+                            android:layout_toStartOf="@id/icon_expand_voucher"
                             android:layout_centerVertical="true">
                             <LinearLayout
                                 android:id="@+id/ll_voucher_container"
@@ -532,7 +532,7 @@
                                 android:textSize="12sp"
                                 android:textColor="@android:color/white"
                                 android:background="@drawable/icon_goods_bargain_bg"
-                                android:visibility="gone"
+                                android:visibility="visible"
                                 />
 
                             <TextView
