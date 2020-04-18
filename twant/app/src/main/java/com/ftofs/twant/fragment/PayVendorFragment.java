@@ -813,6 +813,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        btnUpOtherPay.performClick();
     }
 
     @Override

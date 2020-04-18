@@ -60,6 +60,10 @@ public class Constant {
  * 標題Item
  */
      public static final int ITEM_TYPE_TITLE =4;
+    /**
+     * 沒有數據的Item
+     */
+    public static final int ITEM_TYPE_NO_DATA = 5;
 
     /**
      * 正常的Item

@@ -171,6 +171,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     NestedScrollView containerView;
     int containerViewHeight;
     private scrollStateHandler mHandler;
+    private ImageView btnShopUp;
 
     static class scrollStateHandler extends Handler {
         NestedScrollView scrollViewContainer;
@@ -291,6 +292,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         parentFragment = (ShopMainFragment) getParentFragment();
         storeId = parentFragment.storeId;
 
+        btnShopUp = view.findViewById(R.id.btn_shop_signature_up);
+        btnShopUp.setOnClickListener(this);
         tvShopSignature.setOnClickListener(this);
         viewpager.setOffscreenPageLimit(tabCount-1);
         imgShopLogo.setOnClickListener(this);
@@ -1000,7 +1003,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         switch (id) {
             case R.id.tv_shop_signature:
-                tvShopSignature.setSingleLine(!tvShopSignature.isSingleLine());
+                tvShopSignature.setSingleLine(false);
+                btnShopUp.setVisibility(VISIBLE);
+
+                break;
+            case R.id.btn_shop_signature_up:
+                tvShopSignature.setSingleLine(true);
+                btnShopUp.setVisibility(View.GONE);
                 break;
             case R.id.ll_uo_thumb_up_container:
                 switchThumbState();

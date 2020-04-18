@@ -638,6 +638,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             // 如果是加載第一頁的數據，先清除舊數據
                             if (page == 1 || isActivityShopping) {
                                 goodsItemPairList.clear();
+
                             }
 
                             if (isActivityShopping) {
@@ -712,11 +713,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 pair = null;
                             }
 
+                            if (currPage == 1 && goodsItemPairList.size() == 0) {
+                                goodsItemPairList.add(new GoodsSearchItemPair(Constant.ITEM_TYPE_NO_DATA));
+                            }
                             if (!hasMore && !isActivityShopping) {
                                 // 如果全部加載完畢，添加加載完畢的提示
                                 goodsItemPairList.add(new GoodsSearchItemPair(Constant.ITEM_TYPE_LOAD_END_HINT));
                             }
-                            SLog.info("goodsItemPairList.size[%d],isActivityShopping[%s]", goodsItemPairList.size(),isActivityShopping);
+                            SLog.info("currpage[%d]goodsItemPairList.size[%d],isActivityShopping[%s]", currPage,goodsItemPairList.size(),isActivityShopping);
                             if (!isActivityShopping) {
                                 mGoodsAdapter.loadMoreComplete();
                             }
@@ -929,10 +933,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                         storeFigureImage, distance, shopDay, likeCount,followCount,viewCount, goodsCommonCount, goodsImageList, jobList,staff));
                             }
 
+
                             if (!hasMore) {
+                                if (page == 1 && storeItemList.size() == 0) {
+                                    storeItemList.add(new StoreSearchItem(Constant.ITEM_TYPE_NO_DATA));
+                                }
                                 // 如果全部加載完畢，添加加載完畢的提示
                                 storeItemList.add(new StoreSearchItem());
                             }
+                            SLog.info("currpage[%d]storeItemPairList.size[%d],isActivityShopping[%s],hasMore[%s]", page,storeItemList.size(),isActivityShopping,hasMore);
+
 
                             SLog.info("storeItemList.size[%d]", storeItemList.size());
                             mStoreAdapter.loadMoreComplete();

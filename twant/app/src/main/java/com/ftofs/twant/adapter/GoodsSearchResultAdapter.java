@@ -47,6 +47,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
         addItemType(Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER, R.layout.double_eleven_header);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.goods_search_item_pair);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint_new);
+        addItemType(Constant.ITEM_TYPE_NO_DATA, R.layout.ic_placeholder_no_data);
 
         this.context = context;
         currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
@@ -175,6 +176,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
             if (now > doubleElevenTimestamp) {
                 helper.setGone(R.id.btn_play_game, true);
             }
+        }else if(itemType==Constant.ITEM_TYPE_NO_DATA){
         } else {
             helper.addOnClickListener(R.id.icon_publish_want_post);
 

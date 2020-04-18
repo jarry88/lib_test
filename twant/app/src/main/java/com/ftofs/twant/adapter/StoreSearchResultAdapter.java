@@ -36,6 +36,7 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
 
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.store_search_item);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint_new);
+        addItemType(Constant.ITEM_TYPE_NO_DATA, R.layout.ic_placeholder_no_data);
     }
 
     @Override
@@ -152,20 +153,22 @@ public class StoreSearchResultAdapter extends BaseMultiItemQuickAdapter<StoreSea
                 helper.setGone(R.id.ll_recruitment_list, false)
                         .setGone(R.id.img_store_job_list_mask, false);
             }
-        } else {
-            //  加載發表想要的入口，不需要做特別處理
-            if (animation == null) {
-                animation = AnimationUtils.loadAnimation(mContext, R.anim.takewant_message);
-                animation.setAnimationListener(this);
-            }
-            animatingTextView = helper.getView(R.id.tv_load_end_hint_bubble);
-            if (item.animShowStatus == Constant.ANIM_SHOWING) {
-                item.animShowStatus = Constant.ANIM_SHOWN;
-                animatingTextView.startAnimation(animation);
-            }
+        } else if (item.getItemType() == Constant.ITEM_TYPE_NO_DATA){
 
-            ImageView iconPublishWantPost = helper.getView(R.id.icon_publish_want_post);
-            Glide.with(mContext).load("file:///android_asset/christmas/publish_want_post_dynamic.gif").centerCrop().into(iconPublishWantPost);
+        } else{
+                //  加載發表想要的入口，不需要做特別處理
+                if (animation == null) {
+                    animation = AnimationUtils.loadAnimation(mContext, R.anim.takewant_message);
+                    animation.setAnimationListener(this);
+                }
+                animatingTextView = helper.getView(R.id.tv_load_end_hint_bubble);
+                if (item.animShowStatus == Constant.ANIM_SHOWING) {
+                    item.animShowStatus = Constant.ANIM_SHOWN;
+                    animatingTextView.startAnimation(animation);
+                }
+
+                ImageView iconPublishWantPost = helper.getView(R.id.icon_publish_want_post);
+                Glide.with(mContext).load("file:///android_asset/christmas/publish_want_post_dynamic.gif").centerCrop().into(iconPublishWantPost);
         }
     }
 

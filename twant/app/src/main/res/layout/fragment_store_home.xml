@@ -122,25 +122,44 @@
                     android:textColor="@color/tw_black"
                     android:textSize="18sp" />
                 <!-- 店铺签名 -->
-                <TextView
-                    android:id="@+id/tv_shop_signature"
+                <LinearLayout
+                    android:id="@+id/btn_shop_signature"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="8dp"
-
                     android:layout_height="wrap_content"
-                    android:paddingBottom="2dp"
-                    android:paddingTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="60dp"
+
                     android:background="@drawable/shop_signature_bg"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:paddingLeft="19dp"
-                    android:paddingRight="19dp"
-                    android:singleLine="true"
-                    android:text="-"
-                    android:textColor="#fff"
-                    android:textSize="12sp" />
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_shop_signature"
+                        android:layout_width="wrap_content"
+
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:singleLine="true"
+                        android:text="-"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
+                    <ImageView
+                        android:id="@+id/btn_shop_signature_up"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="@dimen/dp_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_up_arrow_white"
+                        android:visibility="gone"/>
+                </LinearLayout>
                 <!-- 开店天数 -->
 
                 <TextView
