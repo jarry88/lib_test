@@ -65,6 +65,7 @@
             android:layout_height="24dp"
             android:gravity="center_vertical"
             android:layout_marginTop="8dp"
+            android:layout_alignParentBottom="true"
             android:layout_above="@id/ll_gift_list_container"
             >
             <TextView

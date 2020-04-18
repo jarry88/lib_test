@@ -341,7 +341,18 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 tvGoodsFullSpecs.setText(cartSkuVo.getSafeString("goodsFullSpecs"));
                                 float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
                                 int buyNum = cartSkuVo.getInt("buyNum");
-                                SLog.info("buyNum %d,limitNum %d ",buyNum,limitBuy);
+                                //跨城購圖標
+                                ImageView iconTariff = cartSkuItem.findViewById(R.id.icon_tariffEnable);
+                                int tariffEnable = Constant.FALSE_INT;
+                                if (cartSkuVo.exists("tariffEnable")) {
+                                    tariffEnable = cartSkuVo.getInt("tariffEnable");
+                                    if (tariffEnable == Constant.TRUE_INT) {
+                                        iconTariff.setVisibility(VISIBLE);
+                                    } else {
+                                        iconTariff.setVisibility(View.INVISIBLE);
+                                    }
+                                }
+                                SLog.info("buyNum %d,limitNum %d ，tariffEnable%d",buyNum,limitBuy,tariffEnable);
                                 tvPriceSum.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0,2));
                                 abQuantity.setValue(buyNum);
 
@@ -382,16 +393,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 }else if(cartSkuVo.getInt("goodsStorage")<=2){
                                     Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
                                 }
-                                //跨城購圖標
-                                ImageView iconTariff = cartSkuItem.findViewById(R.id.icon_tariffEnable);
-                                if (cartSkuVo.exists("tariffEnable")) {
-                                    int tariffEnable = cartSkuVo.getInt("tariffEnable");
-                                    if (tariffEnable == Constant.TRUE_INT) {
-                                        iconTariff.setVisibility(VISIBLE);
-                                    } else {
-                                        iconTariff.setVisibility(View.INVISIBLE);
-                                    }
-                                }
+
 
                                 storeStatus.spuStatusList.add(spuStatus);
                                 cartSpuItemContainer.addView(cartSpuItem);
