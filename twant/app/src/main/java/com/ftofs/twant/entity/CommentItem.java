@@ -4,7 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
-public class CommentItem implements Parcelable {
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.ftofs.twant.constant.Constant;
+
+public class CommentItem implements Parcelable, MultiItemEntity {
     public int commentId;
     /**
      * 說說類型 1全部 2視頻 3文本
@@ -42,12 +45,13 @@ public class CommentItem implements Parcelable {
     public final static int TYPE_STORE = 2;
     public final static int TYPE_GOOD = 1;
     public int commentRole;
+    public int itemType = Constant.ITEM_TYPE_NORMAL;
 
     public CommentItem() {
 
     }
 
-    protected CommentItem(Parcel in) {
+    public CommentItem(Parcel in) {
         commentId = in.readInt();
         commentType = in.readInt();
         commentChannel = in.readInt();
@@ -79,6 +83,10 @@ public class CommentItem implements Parcelable {
             return new CommentItem[size];
         }
     };
+
+    public CommentItem(int itemTypeNoData) {
+        this.itemType = itemTypeNoData;
+    }
 
     @Override
     public int describeContents() {
@@ -112,5 +120,10 @@ public class CommentItem implements Parcelable {
     public String toString() {
         return String.format("commentId[%s], commentType[%s], commentChannel[%s], content[%s], isLike[%s], commentLike[%s], commentReply[%s], commenterAvatar[%s], memberName[%s], nickname[%s], commentTime[%s], imageUrl[%s], relateCommonId[%s], relateStoreId[%s], replyCommentId[%s], relatePostId[%s], parentCommentId[%s]",
                 commentId, commentType, commentChannel, content, isLike, commentLike, commentReply, commenterAvatar, memberName, nickname, commentTime, imageUrl, relateCommonId, relateStoreId, replyCommentId, relatePostId, parentCommentId);
+    }
+
+    @Override
+    public int getItemType() {
+        return itemType;
     }
 }

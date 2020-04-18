@@ -101,7 +101,7 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-        adapter = new CommentListAdapter(R.layout.comment_item, commentItemList);
+        adapter = new CommentListAdapter(commentItemList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvCommentList);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -248,7 +248,9 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                             commentItemList.add(item);
                         }
                         adapter.loadMoreComplete();
-
+                        if (currPage == 1 && commentItemList.size() == 0) {
+                            commentItemList.add(new CommentItem(Constant.ITEM_TYPE_NO_DATA));
+                        }
                         currPage++;
                         adapter.setNewData(commentItemList);
                     } catch (Exception e) {

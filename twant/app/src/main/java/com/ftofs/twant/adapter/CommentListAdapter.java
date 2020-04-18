@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
@@ -21,15 +22,21 @@ import java.util.List;
  * 說說列表Adapter
  * @author zwm
  */
-public class CommentListAdapter extends BaseQuickAdapter<CommentItem, BaseViewHolder> {
+public class CommentListAdapter extends BaseMultiItemQuickAdapter<CommentItem, BaseViewHolder> {
 
 
-    public CommentListAdapter(int layoutResId, @Nullable List<CommentItem> data) {
-        super(layoutResId, data);
+    public CommentListAdapter( @Nullable List<CommentItem> data) {
+        super( data);
+
+        addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.comment_item);
+        addItemType(Constant.ITEM_TYPE_NO_DATA, R.layout.ic_placeholder_no_data);
     }
 
     @Override
     protected void convert(BaseViewHolder helper, CommentItem item) {
+        if (item.itemType == Constant.ITEM_TYPE_NO_DATA) {
+            return;
+        }
         ImageView imgCommenterAvatar = helper.getView(R.id.img_commenter_avatar);
         if(StringUtil.isEmpty(item.commenterAvatar)){
             Glide.with(mContext).load(R.drawable.icon_default_avatar).into(imgCommenterAvatar);

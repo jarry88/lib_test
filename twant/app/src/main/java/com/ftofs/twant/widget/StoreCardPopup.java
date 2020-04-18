@@ -46,7 +46,6 @@ class StoreCardPopup extends CenterPopupView implements View.OnClickListener{
     protected void onCreate() {
         super.onCreate();
 
-        findViewById(R.id.btn_goto_store).setOnClickListener(this);
         findViewById(R.id.btn_ok).setOnClickListener(this);
     }
 

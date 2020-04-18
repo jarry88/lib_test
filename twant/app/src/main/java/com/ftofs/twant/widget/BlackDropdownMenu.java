@@ -306,7 +306,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 // 查看名片
                 ChatFragment chatFragment = (ChatFragment) baseFragment;
                 int storeId = chatFragment.getStoreId();
-                if (storeId >= 0) {
+                if (storeId > 0) {
                     new XPopup.Builder(context)
                             // 如果不加这个，评论弹窗会移动到软键盘上面
                             .moveUpToKeyboard(false)

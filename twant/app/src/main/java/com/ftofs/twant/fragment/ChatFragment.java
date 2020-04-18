@@ -130,7 +130,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     private static final int ACTION_SHOW_MENU = 1;
     private static final int ACTION_SEND_MESSAGE = 2;
 
-    int storeId=-1;
+    int storeId=0;
 
     int action = ACTION_SHOW_MENU;
 
@@ -415,6 +415,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             yourNickname = yourInfo.getNickName();
             yourAvatarUrl = yourInfo.getAvatarUrl();
             yourRole = yourInfo.role;
+            storeId = ((MemberVo) memberVo).getStoreId();
             if (yourInfo.role != ChatUtil.ROLE_MEMBER) {
                 yourNickname = yourInfo.storeName+" "+yourInfo.staffName;
                 yourAvatarUrl = yourInfo.storeAvatar;
