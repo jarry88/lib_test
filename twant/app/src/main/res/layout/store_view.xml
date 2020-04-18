@@ -44,8 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="19dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="19dp"
         android:layout_below="@id/img_store_figure_container">
     </com.ftofs.twant.widget.StoreDesktop>
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -28,6 +28,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
 import com.ftofs.twant.entity.ConfirmOrderStoreItem;
@@ -147,6 +148,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     int platformCouponIndex = -1; // 當前正在使用的平台券列表Index(-1表示沒有使用)
     List<StoreVoucherVo> platformCouponList = new ArrayList<>();
+    private int tariffTotalEnable;
 
     /**
      * 創建確認訂單的實例
@@ -911,6 +913,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                     // 獲取配送時間列表
                     shippingItemList.clear();
+//                    tariffEnable = responseObj.getInt("datas.tariffEnable");
+//                    if (tariffEnable == Constant.TRUE_INT) {
+//
+//                    }
                     EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.shipTimeTypeList");
                     for (Object object : easyJSONArray) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
@@ -922,6 +928,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     // 獲取商店券
                     EasyJSONArray buyStoreVoList = responseObj.getSafeArray("datas.buyStoreVoList");
                     for (Object object : buyStoreVoList) {  // 遍歷每家商店
+                        int storeTariff = Constant.FALSE_INT;
                         List<StoreVoucherVo> storeVoucherVoList = new ArrayList<>();
                         EasyJSONObject buyStoreVo = (EasyJSONObject) object;
                         int storeId = buyStoreVo.getInt("storeId");
@@ -967,6 +974,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             String imageSrc = buyGoodsItem.getSafeString("imageSrc");
                             String goodsName = buyGoodsItem.getSafeString("goodsName");
                             String goodsFullSpecs = buyGoodsItem.getSafeString("goodsFullSpecs");
+                            int tariffEnable = buyGoodsItem.getInt("tariffEnable");
+                            if (tariffEnable == Constant.TRUE_INT) {
+                                storeTariff = Constant.TRUE_INT;
+                                tariffTotalEnable = Constant.TRUE_INT;
+                            }
                             float goodsPrice = (float) buyGoodsItem.getDouble("goodsPrice");
 
                             // 處理SKU贈品信息
@@ -1000,9 +1012,14 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             SLog.info("conformTemplatePrice[%s]", conformTemplatePrice);
                             // conformTemplatePrice = 999;
                         }
-
-                        confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
-                                0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice));
+                        if (storeTariff == Constant.TRUE_INT) {
+                            SLog.info("跨城購店鋪數據[%s]",buyStoreVo.toString());
+                            confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
+                                    0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice,0));
+                        } else {
+                            confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
+                                    0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice));
+                        }
 
                         commitStoreList.append(EasyJSONObject.generate(
                                 "storeId", storeId,
@@ -1062,7 +1079,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
         ConfirmOrderSummaryItem summaryItem = getSummaryItem();
         String template = getResources().getString(R.string.text_confirm_order_total_item_count);
+        if (tariffTotalEnable == Constant.TRUE_INT) {
+            template=getResources().getString(R.string.text_confirm_order_total_with_tax_item_count);
+        }
         tvItemCount.setText(String.format(template, totalItemCount));
+        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,summaryItem.calcTotalPrice(),0,2));
 
 
         // 更新每家商店的優惠額
@@ -1156,7 +1177,20 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         EasyJSONObject store = (EasyJSONObject) object;
                         int storeId = store.getInt("storeId");
                         float storeDiscountAmount = (float) store.getDouble("storeDiscountAmount");
+                        float tariffTotalAmount =  (float)store.getDouble("tariffTotalAmount");
                         float buyAmount2 = (float) store.getDouble("buyAmount2");
+                        for (MultiItemEntity item : confirmOrderItemList){
+                            if (item.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
+                                ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) item;
+                                if (storeItem.storeId == storeId) {
+                                    storeItem.taxAmount = tariffTotalAmount;
+                                    SLog.info("object[%s]",storeItem.toString());
+
+                                }
+                            }
+
+                        };
+
                         StoreAmount storeAmount = new StoreAmount(storeDiscountAmount, buyAmount2);
                         storeAmountMap.put(storeId, storeAmount);
                     }
@@ -1168,11 +1202,17 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     summaryItem.totalAmount = (float) responseObj.getDouble("datas.buyGoodsItemAmount");
                     summaryItem.storeDiscount = (float) responseObj.getDouble("datas.storeTotalDiscountAmount");
                     summaryItem.platformDiscount = (float) responseObj.getDouble("datas.platTotalDiscountAmount");
+                    summaryItem.totalTaxAmount = (float) responseObj.getDouble("datas.taxAmount");
                     summaryItem.totalFreight = totalFreightAmount;
                     SLog.info("summaryItem, summaryItem.totalFreight【%s】totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
                             summaryItem.totalFreight,summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
 
                     totalPrice = summaryItem.calcTotalPrice();
+                    String template = getResources().getString(R.string.text_confirm_order_total_item_count);
+                    if (tariffTotalEnable == Constant.TRUE_INT) {
+                        template=getResources().getString(R.string.text_confirm_order_total_with_tax_item_count);
+                    }
+                    tvItemCount.setText(String.format(template, totalItemCount));
                     tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0,2));
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1280,6 +1320,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 StoreVoucherVo platformCoupon = platformCouponList.get(platformCouponIndex);
                 String statusText = StringUtil.formatPrice(_mActivity, platformCoupon.price, 0) + platformCoupon.limitText;
                 confirmOrderSummaryItem.platformCouponStatus = statusText;
+                calcAmount();
             }
 
             SLog.info("platformCouponIndex[%d]", platformCouponIndex);

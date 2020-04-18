@@ -248,6 +248,7 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                             commentItemList.add(item);
                         }
                         adapter.loadMoreComplete();
+                        SLog.info("currcommentpage[%d]",currPage);
                         if (currPage == 1 && commentItemList.size() == 0) {
                             commentItemList.add(new CommentItem(Constant.ITEM_TYPE_NO_DATA));
                         }

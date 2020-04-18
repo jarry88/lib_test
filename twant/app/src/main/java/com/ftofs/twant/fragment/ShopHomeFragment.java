@@ -302,8 +302,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         btnPlay = view.findViewById(R.id.btn_play);
         btnPlay.setOnClickListener(this);
 
-        tvLikeCount = view.findViewById(R.id.tv_like_count);
-        btnStoreThumb = view.findViewById(R.id.btn_store_thumb);
         Util.setOnClickListener(view, R.id.ll_uo_thumb_up_container, this);
 
         llPayWayContainer = view.findViewById(R.id.ll_pay_way_container);
@@ -311,11 +309,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvBusinessTimeWorkingDay = view.findViewById(R.id.tv_business_time_working_day);
         tvBusinessTimeWeekend = view.findViewById(R.id.tv_business_time_weekend);
 
+        tvLikeCount = view.findViewById(R.id.tv_like_count);
         tvFavoriteCount = view.findViewById(R.id.tv_favorite_count);
+        tvVisitorCount = view.findViewById(R.id.tv_visitor_count);
         btnStoreFavorite = view.findViewById(R.id.btn_store_favorite);
+        btnStoreThumb = view.findViewById(R.id.btn_store_thumb);
         Util.setOnClickListener(view, R.id.ll_uo_like_container, this);
 
-        tvVisitorCount = view.findViewById(R.id.tv_visitor_count);
         Util.setOnClickListener(view, R.id.ll_uo_share_container, this);
 
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);

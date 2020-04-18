@@ -94,13 +94,19 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 realFreightAmount = 0;
             }
             // float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
-            double finalPayAmount = item.buyItemAmount + realFreightAmount;
+            float taxAmount =item.taxAmount;
+            SLog.info(item.toString());
+            double finalPayAmount = item.buyItemAmount + realFreightAmount+item.taxAmount;
+            if (item.tariffEnable == Constant.TRUE_INT) {
+                helper.setVisible(R.id.rl_tax_container, true);
+            }
             helper.setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, realFreightAmount, 0,2))
                 .setText(R.id.tv_store_discount, discountAmountText)
                 .setText(R.id.tv_store_voucher_count, voucherStatus)
                 .setText(R.id.tv_store_item_count, String.format("共%d件，小計：", item.itemCount))
-                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, finalPayAmount, 0,2));
+                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, finalPayAmount, 0,2))
+            .setText(R.id.tv_tax_number,StringUtil.formatPrice(context,taxAmount,0,2));
 
             EditText etLeaveMessage = helper.getView(R.id.et_leave_message);
             etLeaveMessage.setText(item.leaveMessage);

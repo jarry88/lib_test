@@ -34,7 +34,7 @@ public class StoreDesktop extends View {
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         path = new Path();
-        color = Color.parseColor("#D9DADB");
+        color = Color.parseColor("#F3F3F3");
     }
 
     @Override

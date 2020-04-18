@@ -715,6 +715,7 @@
     <string name="times_sign">X</string>
 
     <string name="text_confirm_order_total_item_count">共%d件, 合計:</string>
+    <string name="text_confirm_order_total_with_tax_item_count">共%d件, 合計(含稅):</string>
     <string name="text_eduction_experience">教育經歷</string>
     <string name="text_education_experience_init">當前教育經歷為空</string>
     <string name="text_certificate">資格證書</string>
