@@ -140,4 +140,9 @@ public enum PopupType {
      * 選擇物流公司
      */
     SELECT_LOGISTICS_COMPANY,
+
+    /**
+     * 選擇跨境購的購物車拆單
+     */
+    SELECT_SPLIT_CROSS_BORDER,
 }
