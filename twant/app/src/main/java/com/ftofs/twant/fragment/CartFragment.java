@@ -343,6 +343,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                     });
                                 }
 
+                                spuStatus.setStoreId(cartSkuVo.getInt("storeId"));
+                                spuStatus.setStoreName(cartSkuVo.getString("storeName"));
                                 spuStatus.setGoodsId(cartSkuVo.getInt("goodsId"));
                                 spuStatus.setCartId(cartSkuVo.getInt("cartId"));
                                 tvGoodsFullSpecs.setText(cartSkuVo.getSafeString("goodsFullSpecs"));
@@ -357,18 +359,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                 cartSkuItem.findViewById(R.id.cross_border_indicator).setVisibility(tariffEnable ? View.VISIBLE: View.GONE);
 
                                 int buyNum = cartSkuVo.getInt("buyNum");
-                                //跨城購圖標
-                                ImageView iconTariff = cartSkuItem.findViewById(R.id.icon_tariffEnable);
-                                int tariffEnable = Constant.FALSE_INT;
-                                if (cartSkuVo.exists("tariffEnable")) {
-                                    tariffEnable = cartSkuVo.getInt("tariffEnable");
-                                    if (tariffEnable == Constant.TRUE_INT) {
-                                        iconTariff.setVisibility(VISIBLE);
-                                    } else {
-                                        iconTariff.setVisibility(View.INVISIBLE);
-                                    }
-                                }
-                                SLog.info("buyNum %d,limitNum %d ，tariffEnable%d",buyNum,limitBuy,tariffEnable);
+
+                                SLog.info("buyNum %d,limitNum %d ，tariffEnable %s", buyNum, limitBuy, tariffEnable);
                                 tvPriceSum.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0,2));
                                 abQuantity.setValue(buyNum);
 
@@ -546,6 +538,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         crossBorderStoreMap.clear();
 
         try {
+            SLog.info("buyData[%s]", buyData);
             for (Object object : buyData) {
                 EasyJSONObject item = (EasyJSONObject) object;
 
@@ -578,6 +571,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+
+        SLog.info("crossBorderStoreMap[%s]", crossBorderStoreMap);
 
         return crossBorderStoreMap.size() <= 1;
     }

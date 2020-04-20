@@ -633,7 +633,9 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String mobile = ordersVo.getSafeString("receiverPhone");
                     String address = ordersVo.getSafeString("receiverAreaInfo") + ordersVo.getSafeString("receiverAddress");
                     tariffBuy =ordersVo.getInt("tariffBuy");
+                    double tariffAmount =0;
                     if (tariffBuy == Constant.TRUE_INT) {
+                        tariffAmount = ordersVo.getDouble("taxAmount");
                         rlTaxContainer.setVisibility(View.VISIBLE);
 
                     }
@@ -825,7 +827,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     int showMemberComplain = ordersVo.getInt("showMemberComplain");
                     EasyJSONArray ordersGoodsVoList = ordersVo.getSafeArray("ordersGoodsVoList");
                     orderDetailGoodsItemList.clear();
-                    double tariffAmount =0;
+
                     for (Object object : ordersGoodsVoList) {
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
 
@@ -844,12 +846,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("refundType"),
                                 goodsVo.getInt("showRefund"),
                                 showMemberComplain,
-                                goodsVo.getInt("complainId"),
-                                (float )goodsVo.getDouble("tariffAmount")
+                                goodsVo.getInt("complainId")
+//                                (float )goodsVo.getDouble("tariffAmount")
                         )
 
                         );
-                        tariffAmount+=goodsVo.getDouble("tariffAmount");
                     }
 
                     tvTaxAmount.setText(StringUtil.formatPrice(_mActivity,tariffAmount,0,2));
