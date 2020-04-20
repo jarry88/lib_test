@@ -117,6 +117,9 @@ public class TotalStatus extends BaseStatus {
                     }
 
                     buyData.append(EasyJSONObject.generate(
+                            "storeId", spuStatus.getStoreId(),
+                            "storeName", spuStatus.getStoreName(),
+                            "isCrossBorder", spuStatus.isCrossBorder(),
                             "buyNum", spuStatus.getCount(),
                             "goodsId", spuStatus.getCartId(),
                             "cartId", spuStatus.getCartId()));

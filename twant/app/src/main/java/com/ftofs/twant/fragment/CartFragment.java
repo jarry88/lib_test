@@ -23,7 +23,9 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.CrossBorderStoreInfo;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.cart.BaseStatus;
@@ -31,6 +33,7 @@ import com.ftofs.twant.entity.cart.SpuStatus;
 import com.ftofs.twant.entity.cart.StoreStatus;
 import com.ftofs.twant.entity.cart.TotalStatus;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
@@ -39,6 +42,8 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
 import com.ftofs.twant.widget.CartAdjustButton;
+import com.ftofs.twant.widget.CartCrossBorderPopup;
+import com.ftofs.twant.widget.RealNameInstructionPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
@@ -52,7 +57,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -64,7 +71,7 @@ import okhttp3.Call;
  * 購物袋
  * @author zwm
  */
-public class CartFragment extends BaseFragment implements View.OnClickListener {
+public class CartFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     TextView tvFragmentTitle;
     LinearLayout cartStoreItemContainer;
     String textSettlement;
@@ -79,6 +86,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
     TextView tvTotalPrice;
 
     ScaledButton btnBack;
+
+    Map<Integer, CrossBorderStoreInfo> crossBorderStoreMap = new HashMap<>();
 
     int totalCartItemCount; // 購物袋中的項數，用于顯示在主頁的底部工具欄中
 
@@ -156,9 +165,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-
-
-
     private void displayCartItemCount(int totalUnreadCount) {
         MainFragment mainFragment = MainFragment.getInstance();
         if (mainFragment != null) {
@@ -228,6 +234,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             public void onResponse(Call call, String responseStr) throws IOException {
                 loadingPopup.dismiss();
 
+                responseStr = "{\"code\":200,\"datas\":{\"cartDbMaxCount\":50,\"cartStoreVoList\":[{\"cartItemVoList\":[],\"cartSpuVoList\":[{\"cartItemVoList\":[{\"cartId\":2395,\"goodsId\":4235,\"commonId\":3232,\"goodsName\":\"233\",\"goodsFullSpecs\":\"顔色：白色ddddddd；鞋碼：26；尺碼：XXS\",\"goodsPrice\":0.01,\"imageName\":\"image/19/e1/19e1b342d46e97749e4c8ed34085b867.jpg\",\"buyNum\":1,\"itemAmount\":0.01,\"goodsStorage\":9974,\"goodsStatus\":1,\"storeId\":85,\"storeName\":\"內測門店_測試改名\",\"storageStatus\":1,\"memberId\":247,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/19/e1/19e1b342d46e97749e4c8ed34085b867.jpg\",\"unitName\":\"盒\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":0.01,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":0.01,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":0.01,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/19/e1/19e1b342d46e97749e4c8ed34085b867.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionTypeText\":\"限時折扣\",\"promotionTitle\":\"233\",\"goodsPrice0\":0.01,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"promotionType\":1,\"isBook\":0,\"isGift\":0,\"giftVoList\":[],\"bundlingId\":0,\"buyBundlingItemVoList\":null,\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"realGoodsId\":0,\"realCommonId\":0,\"chainGoodsId\":0,\"isVirtual\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"isForeign\":0,\"isChain\":0,\"goodsType\":0,\"reserveStorage\":10,\"onlineStorage\":9964,\"jingle\":\"233\",\"batchPrice0\":123123.00,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null,\"tariffEnable\":1}],\"commonId\":3232,\"goodsName\":\"233\",\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/19/e1/19e1b342d46e97749e4c8ed34085b867.jpg\",\"goodsModal\":1,\"batchNum0\":1,\"batchNum1\":0,\"batchNum2\":0,\"batchNum0End\":0,\"batchNum1End\":0,\"goodsStatus\":1,\"isValid\":1,\"buyNum\":0,\"bundlingId\":0,\"chainId\":0,\"realCommonId\":0,\"goodsType\":0}],\"voucherTemplateVoList\":[],\"conformList\":[{\"conformId\":156,\"conformName\":\"333\",\"conformTitle\":null,\"conformTileFinal\":\"滿優惠\",\"startTime\":\"2019-12-24 19:11:38\",\"endTime\":\"2020-12-04 23:59:59\",\"conformState\":1,\"limitAmount\":300.00,\"conformPrice\":0.00,\"isFreeFreight\":0,\"ruleOutAreaIds\":\"\",\"ruleOutAreaNames\":\"\",\"templateId\":269,\"templatePrice\":10.00,\"isGift\":0,\"giftVoList\":[],\"storeId\":85,\"storeName\":null,\"conformStateText\":\"進行中\",\"shortRule\":\"送劵\",\"contentCartRule\":\"滿300元，送10元店鋪劵\"}],\"cartAmount\":0.01,\"storeName\":\"內測門店_測試改名\",\"storeId\":85,\"sellerId\":85,\"isOnline\":0,\"buyNum\":1,\"cartBundlingVoList\":[],\"chainId\":0,\"chainName\":null,\"serviceStaffList\":null},{\"cartItemVoList\":[],\"cartSpuVoList\":[{\"cartItemVoList\":[{\"cartId\":2097,\"goodsId\":4797,\"commonId\":3637,\"goodsName\":\"陽澄湖大閘蟹\",\"goodsFullSpecs\":\"種類：母蟹；個頭：2兩\",\"goodsPrice\":399.00,\"imageName\":\"image/c0/74/c074a4ecf50840f3ba714cb8ea3357cc.jpg\",\"buyNum\":3,\"itemAmount\":1197.00,\"goodsStorage\":100,\"goodsStatus\":1,\"storeId\":280,\"storeName\":\"螃蟹好吃\",\"storageStatus\":1,\"memberId\":247,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/c0/74/c074a4ecf50840f3ba714cb8ea3357cc.jpg\",\"unitName\":\"件\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":399.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":399.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":399.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/c0/74/c074a4ecf50840f3ba714cb8ea3357cc.jpg\",\"spuBuyNum\":4,\"joinBigSale\":1,\"promotionTypeText\":\"限時折扣\",\"promotionTitle\":\"複製折扣\",\"goodsPrice0\":399.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"promotionType\":1,\"isBook\":0,\"isGift\":0,\"giftVoList\":[],\"bundlingId\":0,\"buyBundlingItemVoList\":null,\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"realGoodsId\":0,\"realCommonId\":0,\"chainGoodsId\":0,\"isVirtual\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"isForeign\":0,\"isChain\":0,\"goodsType\":0,\"reserveStorage\":10,\"onlineStorage\":90,\"jingle\":\"蟹黃多\",\"batchPrice0\":1200.00,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null},{\"cartId\":2096,\"goodsId\":4796,\"commonId\":3637,\"goodsName\":\"陽澄湖大閘蟹\",\"goodsFullSpecs\":\"種類：公蟹；個頭：5兩\",\"goodsPrice\":499.00,\"imageName\":\"image/c0/74/c074a4ecf50840f3ba714cb8ea3357cc.jpg\",\"buyNum\":1,\"itemAmount\":499.00,\"goodsStorage\":48,\"goodsStatus\":1,\"storeId\":280,\"storeName\":\"螃蟹好吃\",\"storageStatus\":1,\"memberId\":247,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/c0/74/c074a4ecf50840f3ba714cb8ea3357cc.jpg\",\"unitName\":\"件\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":499.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":499.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":499.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/c0/74/c074a4ecf50840f3ba714cb8ea3357cc.jpg\",\"spuBuyNum\":4,\"joinBigSale\":1,\"promotionTypeText\":\"限時折扣\",\"promotionTitle\":\"複製折扣\",\"goodsPrice0\":499.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"promotionType\":1,\"isBook\":0,\"isGift\":0,\"giftVoList\":[],\"bundlingId\":0,\"buyBundlingItemVoList\":null,\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"realGoodsId\":0,\"realCommonId\":0,\"chainGoodsId\":0,\"isVirtual\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"isForeign\":0,\"isChain\":0,\"goodsType\":0,\"reserveStorage\":5,\"onlineStorage\":43,\"jingle\":\"蟹黃多\",\"batchPrice0\":1200.00,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null}],\"commonId\":3637,\"goodsName\":\"陽澄湖大閘蟹\",\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/c0/74/c074a4ecf50840f3ba714cb8ea3357cc.jpg\",\"goodsModal\":1,\"batchNum0\":1,\"batchNum1\":0,\"batchNum2\":0,\"batchNum0End\":0,\"batchNum1End\":0,\"goodsStatus\":1,\"isValid\":1,\"buyNum\":0,\"bundlingId\":0,\"chainId\":0,\"realCommonId\":0,\"goodsType\":0}],\"voucherTemplateVoList\":[],\"conformList\":[],\"cartAmount\":1696.00,\"storeName\":\"螃蟹好吃\",\"storeId\":280,\"sellerId\":280,\"isOnline\":0,\"buyNum\":2,\"cartBundlingVoList\":[],\"chainId\":0,\"chainName\":null,\"serviceStaffList\":null},{\"cartItemVoList\":[],\"cartSpuVoList\":[{\"cartItemVoList\":[{\"cartId\":1807,\"goodsId\":4725,\"commonId\":3597,\"goodsName\":\"高腰寬鬆牛仔褲\",\"goodsFullSpecs\":\"顔色：顏色隨機\",\"goodsPrice\":99.00,\"imageName\":\"image/32/98/3298e60059bf720abc4da9f3f2c79634.jpg\",\"buyNum\":1,\"itemAmount\":99.00,\"goodsStorage\":2,\"goodsStatus\":1,\"storeId\":263,\"storeName\":\"好運來\",\"storageStatus\":0,\"memberId\":247,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/32/98/3298e60059bf720abc4da9f3f2c79634.jpg\",\"unitName\":\"件\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":99.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":99.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":99.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/32/98/3298e60059bf720abc4da9f3f2c79634.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionTypeText\":\"\",\"promotionTitle\":\"\",\"goodsPrice0\":99.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"promotionType\":0,\"isBook\":0,\"isGift\":0,\"giftVoList\":[],\"bundlingId\":0,\"buyBundlingItemVoList\":null,\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"realGoodsId\":0,\"realCommonId\":0,\"chainGoodsId\":0,\"isVirtual\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"isForeign\":0,\"isChain\":0,\"goodsType\":0,\"reserveStorage\":2,\"onlineStorage\":0,\"jingle\":\"高腰 寬鬆 時尚\",\"batchPrice0\":99.00,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null}],\"commonId\":3597,\"goodsName\":\"高腰寬鬆牛仔褲\",\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/32/98/3298e60059bf720abc4da9f3f2c79634.jpg\",\"goodsModal\":1,\"batchNum0\":1,\"batchNum1\":0,\"batchNum2\":0,\"batchNum0End\":0,\"batchNum1End\":0,\"goodsStatus\":1,\"isValid\":1,\"buyNum\":0,\"bundlingId\":0,\"chainId\":0,\"realCommonId\":0,\"goodsType\":0}],\"voucherTemplateVoList\":[],\"conformList\":[],\"cartAmount\":99.00,\"storeName\":\"好運來\",\"storeId\":263,\"sellerId\":263,\"isOnline\":0,\"buyNum\":1,\"cartBundlingVoList\":[],\"chainId\":0,\"chainName\":null,\"serviceStaffList\":null},{\"cartItemVoList\":[],\"cartSpuVoList\":[{\"cartItemVoList\":[{\"cartId\":1665,\"goodsId\":4778,\"commonId\":3628,\"goodsName\":\"法國BEABA嬰兒360°訓練勺\",\"goodsFullSpecs\":\"顔色：橙色\",\"goodsPrice\":139.00,\"imageName\":\"image/06/52/0652065b2c549562ab7e181054d4b301.jpg\",\"buyNum\":1,\"itemAmount\":139.00,\"goodsStorage\":0,\"goodsStatus\":1,\"storeId\":274,\"storeName\":\"111\",\"storageStatus\":0,\"memberId\":247,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/06/52/0652065b2c549562ab7e181054d4b301.jpg\",\"unitName\":\"瓶\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":139.00,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":139.00,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":139.00,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/06/52/0652065b2c549562ab7e181054d4b301.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionTypeText\":\"\",\"promotionTitle\":\"\",\"goodsPrice0\":139.00,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"promotionType\":0,\"isBook\":0,\"isGift\":0,\"giftVoList\":[],\"bundlingId\":0,\"buyBundlingItemVoList\":null,\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"realGoodsId\":0,\"realCommonId\":0,\"chainGoodsId\":0,\"isVirtual\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"isForeign\":0,\"isChain\":0,\"goodsType\":0,\"reserveStorage\":0,\"onlineStorage\":0,\"jingle\":\"360可旋轉勺柄，不再怕BB灑出事物，鍛煉BB抓握能力\",\"batchPrice0\":139.00,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null}],\"commonId\":3628,\"goodsName\":\"法國BEABA嬰兒360°訓練勺\",\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/06/52/0652065b2c549562ab7e181054d4b301.jpg\",\"goodsModal\":1,\"batchNum0\":1,\"batchNum1\":0,\"batchNum2\":0,\"batchNum0End\":0,\"batchNum1End\":0,\"goodsStatus\":1,\"isValid\":1,\"buyNum\":0,\"bundlingId\":0,\"chainId\":0,\"realCommonId\":0,\"goodsType\":0}],\"voucherTemplateVoList\":[],\"conformList\":[],\"cartAmount\":139.00,\"storeName\":\"111\",\"storeId\":274,\"sellerId\":274,\"isOnline\":0,\"buyNum\":1,\"cartBundlingVoList\":[],\"chainId\":0,\"chainName\":null,\"serviceStaffList\":null},{\"cartItemVoList\":[],\"cartSpuVoList\":[{\"cartItemVoList\":[{\"cartId\":1580,\"goodsId\":4692,\"commonId\":3599,\"goodsName\":\"到貨通知測試法棍\",\"goodsFullSpecs\":\"顔色：白色\",\"goodsPrice\":0.13,\"imageName\":\"image/1f/24/1f2498c841aff1a88114222dbadc6541.jpg\",\"buyNum\":1,\"itemAmount\":0.13,\"goodsStorage\":3,\"goodsStatus\":1,\"storeId\":179,\"storeName\":\"結算日期測試8——心享店\",\"storageStatus\":0,\"memberId\":247,\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/1f/24/1f2498c841aff1a88114222dbadc6541.jpg\",\"unitName\":\"袋\",\"batchNumState\":1,\"batchNum0\":1,\"batchNum0End\":0,\"batchNum1\":0,\"batchNum1End\":0,\"batchNum2\":0,\"webPrice0\":0.13,\"webPrice1\":0.00,\"webPrice2\":0.00,\"webUsable\":0,\"appPrice0\":0.13,\"appPrice1\":0.00,\"appPrice2\":0.00,\"appUsable\":0,\"wechatPrice0\":0.13,\"wechatPrice1\":0.00,\"wechatPrice2\":0.00,\"wechatUsable\":0,\"promotionBeginTime\":null,\"promotionEndTime\":null,\"goodsModal\":1,\"spuImageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/1f/24/1f2498c841aff1a88114222dbadc6541.jpg\",\"spuBuyNum\":1,\"joinBigSale\":1,\"promotionTypeText\":\"\",\"promotionTitle\":\"\",\"goodsPrice0\":0.13,\"goodsPrice1\":0.00,\"goodsPrice2\":0.00,\"promotionType\":0,\"isBook\":0,\"isGift\":0,\"giftVoList\":[],\"bundlingId\":0,\"buyBundlingItemVoList\":null,\"contractItem1\":0,\"contractItem2\":0,\"contractItem3\":0,\"contractItem4\":0,\"contractItem5\":0,\"contractItem6\":0,\"contractItem7\":0,\"contractItem8\":0,\"contractItem9\":0,\"contractItem10\":0,\"goodsContractVoList\":[],\"limitAmount\":0,\"chainId\":0,\"chainName\":null,\"realGoodsId\":0,\"realCommonId\":0,\"chainGoodsId\":0,\"isVirtual\":0,\"isSecKill\":0,\"seckillGoodsId\":0,\"isForeign\":0,\"isChain\":0,\"goodsType\":0,\"reserveStorage\":3,\"onlineStorage\":0,\"jingle\":\"\",\"batchPrice0\":0.26,\"limitBuy\":0,\"limitBuyStartTime\":null,\"limitBuyEndTime\":null}],\"commonId\":3599,\"goodsName\":\"到貨通知測試法棍\",\"imageSrc\":\"https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/1f/24/1f2498c841aff1a88114222dbadc6541.jpg\",\"goodsModal\":1,\"batchNum0\":1,\"batchNum1\":0,\"batchNum2\":0,\"batchNum0End\":0,\"batchNum1End\":0,\"goodsStatus\":1,\"isValid\":1,\"buyNum\":0,\"bundlingId\":0,\"chainId\":0,\"realCommonId\":0,\"goodsType\":0}],\"voucherTemplateVoList\":[],\"conformList\":[],\"cartAmount\":0.13,\"storeName\":\"結算日期測試8——心享店\",\"storeId\":179,\"sellerId\":179,\"isOnline\":0,\"buyNum\":1,\"cartBundlingVoList\":[],\"chainId\":0,\"chainName\":null,\"serviceStaffList\":null}],\"skuCount\":6}}";
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
@@ -338,6 +345,15 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                                 spuStatus.setCartId(cartSkuVo.getInt("cartId"));
                                 tvGoodsFullSpecs.setText(cartSkuVo.getSafeString("goodsFullSpecs"));
                                 float goodsPrice = (float) cartSkuVo.getDouble("goodsPrice");
+
+                                // 跨境購功能
+                                boolean tariffEnable = false;
+                                if (cartSkuVo.exists("tariffEnable")) {
+                                    tariffEnable = cartSkuVo.getInt("tariffEnable") == Constant.TRUE_INT;
+                                    spuStatus.setCrossBorder(tariffEnable);
+                                }
+                                cartSkuItem.findViewById(R.id.cross_border_indicator).setVisibility(tariffEnable ? View.VISIBLE: View.GONE);
+
                                 int buyNum = cartSkuVo.getInt("buyNum");
                                 SLog.info("buyNum %d,limitNum %d ",buyNum,limitBuy);
                                 tvPriceSum.setText(StringUtil.formatPrice(_mActivity, goodsPrice, 0));
@@ -448,9 +464,24 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
                             SLog.info("onNo");
                         }
                     })).show();
-                } else {
-                    Util.startFragmentForResult(ConfirmOrderFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
+
+                    return;
                 }
+
+                /*
+                校驗是否符合跨境購結算條件
+                a.  屬於跨城購的商品不可和非跨城購商品合併生成訂單；
+                b.  屬於跨城購的商品不可和其他店鋪的商品合併生成訂單；
+                 */
+                if (!checkCrossBorderCondition(buyData)) {
+                    new XPopup.Builder(_mActivity)
+                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(new CartCrossBorderPopup(_mActivity, crossBorderStoreMap, this))
+                            .show();
+                    return;
+                }
+                Util.startFragmentForResult(ConfirmOrderFragment.newInstance(1, buyData.toString()), RequestCode.CONFIRM_ORDER.ordinal());
                 break;
             case R.id.btn_delete:
                 buyData = totalStatus.getBuyDataNew();
@@ -488,6 +519,52 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    /**
+     * 檢查是否符合購境條件
+     * @param buyData
+     * @return true -- 不需要拆單
+     *         false -- 需要拆單
+     */
+    private boolean checkCrossBorderCondition(EasyJSONArray buyData) {
+        crossBorderStoreMap.clear();
+
+        try {
+            for (Object object : buyData) {
+                EasyJSONObject item = (EasyJSONObject) object;
+
+                int storeId = item.getInt("storeId");
+                String storeName = item.getString("storeName");
+                boolean isCrossBorder = item.getBoolean("isCrossBorder");
+                int buyNum = item.getInt("buyNum");
+                int goodsId = item.getInt("goodsId");
+                int cartId = item.getInt("cartId");
+
+                int key;
+                if (isCrossBorder) { // 如果是購境購商品，按店鋪切分
+                    key = storeId;
+                } else { // key為0表示非跨境購商品
+                    key = 0;
+                }
+                CrossBorderStoreInfo crossBorderStoreInfo = crossBorderStoreMap.get(key);
+                if (crossBorderStoreInfo == null) {
+                    crossBorderStoreInfo = new CrossBorderStoreInfo(storeId, storeName, isCrossBorder);
+                }
+                crossBorderStoreInfo.productCount += buyNum;
+                crossBorderStoreInfo.buyData.append(
+                        EasyJSONObject.generate(
+                                "buyNum", buyNum,
+                                "goodsId", goodsId,
+                                "cartId", cartId)
+                );
+                crossBorderStoreMap.put(key, crossBorderStoreInfo);
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+        return crossBorderStoreMap.size() <= 1;
     }
 
     private void deleteCartItem(EasyJSONArray buyData) {
@@ -602,6 +679,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         btnSettlement.setText(btnSettlementText);
     }
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -616,6 +695,13 @@ public class CartFragment extends BaseFragment implements View.OnClickListener {
         } else if (message.messageType == EBMessageType.MESSAGE_TYPE_UPDATE_TOOLBAR_RED_BUBBLE ||
                     message.messageType == EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS) {
             reloadList();
+        }
+    }
+
+    @Override
+    public void onSelected(PopupType type, int id, Object extra) {
+        if (type == PopupType.SELECT_SPLIT_CROSS_BORDER) {
+
         }
     }
 }
