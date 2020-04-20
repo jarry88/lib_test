@@ -425,7 +425,7 @@ public class Util {
 
     public static void startFragment(ISupportFragment fragment) {
         String fragmentClassName = fragment.getClass().getSimpleName();
-        SLog.bt();
+//        SLog.bt();
         SLog.info("fragmentClassName[%s]", fragmentClassName);
 
         if (needLoginFragmentName.contains(fragmentClassName)) {

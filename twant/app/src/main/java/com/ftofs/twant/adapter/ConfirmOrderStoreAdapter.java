@@ -141,7 +141,23 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 TextView tvFullSpecs = skuItemView.findViewById(R.id.tv_goods_full_specs);
                 tvFullSpecs.setText(confirmOrderSkuItem.goodsFullSpecs);
                 TextView tvBuyNum = skuItemView.findViewById(R.id.tv_sku_count);
+                TextView tvBuyNumError = skuItemView.findViewById(R.id.tv_error_status);
                 String buyNum = timesSign + " " + confirmOrderSkuItem.buyNum;
+                if (confirmOrderSkuItem.allowSend == 0) {
+                    tvBuyNum.setVisibility(View.GONE);
+                    tvBuyNumError.setVisibility(View.VISIBLE);
+                    tvBuyNumError.setText(context.getString(R.string.text_not_allow_send));
+
+                } else if (confirmOrderSkuItem.storageStatus == 0) {
+                    tvBuyNum.setVisibility(View.GONE);
+                    tvBuyNumError.setVisibility(View.VISIBLE);
+                    tvBuyNumError.setText(context.getString(R.string.text_storage_out));
+
+
+                } else {
+                    tvBuyNum.setVisibility(View.VISIBLE);
+                    tvBuyNumError.setVisibility(View.GONE);
+                }
                 tvBuyNum.setText(buyNum);
                 TextView tvSkuPrice = skuItemView.findViewById(R.id.tv_sku_price);
                 tvSkuPrice.setText(StringUtil.formatPrice(context, confirmOrderSkuItem.skuPrice, 0,2));

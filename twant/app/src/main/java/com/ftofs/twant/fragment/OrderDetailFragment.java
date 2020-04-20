@@ -853,7 +853,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         );
                     }
 
-                    tvTaxAmount.setText(StringUtil.formatPrice(_mActivity,tariffAmount,0,2));
+                    tvTaxAmount.setText(StringUtil.formatPrice(_mActivity,tariffAmount,1,2));
                     adapter.setData(orderDetailGoodsItemList);
                     needReloadData = false;
                 } catch (Exception e) {
