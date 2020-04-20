@@ -385,8 +385,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                 // 如果是用于提交訂單，需要從新收集最新的數據
                 EasyJSONArray storeList = EasyJSONArray.generate();
-                for (int i = 0; i < confirmOrderItemList.size() - 1; i++) {
-                    ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) confirmOrderItemList.get(i);
+                for (MultiItemEntity multiItemEntity:confirmOrderItemList) {
+                    if (multiItemEntity.getItemType() != Constant.ITEM_VIEW_TYPE_COMMON) {
+                        //防止强制轉換失敗
+                        continue;
+                    }
+                    ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) multiItemEntity;
                     /*
                     storeId int 店铺Id,必填
                     receiverMessage string 购买留言，可以为空
@@ -696,7 +700,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             SLog.info("addrItem: %s", addrItem);
             mAddrItem = addrItem;
-            updateFreightTotalAmount();
+            loadOrderData();
+//            updateFreightTotalAmount();
         } else if (ReceiptInfoFragment.class.getName().equals(from)) {
             int position = data.getInt("position");
             int action = data.getInt("action");
@@ -959,6 +964,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         EasyJSONArray buyGoodsItemVoList = buyStoreVo.getSafeArray("buyGoodsItemVoList");
                         List<ConfirmOrderSkuItem> confirmOrderSkuItemList = new ArrayList<>();
                         int storeItemCount = 0;
+                        confirmOrderItemList.clear();
                         for (Object object2 : buyGoodsItemVoList) { // 遍歷每個Sku
                             EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
                             int goodsId;
@@ -973,6 +979,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             String imageSrc = buyGoodsItem.getSafeString("imageSrc");
                             String goodsName = buyGoodsItem.getSafeString("goodsName");
                             String goodsFullSpecs = buyGoodsItem.getSafeString("goodsFullSpecs");
+                            int storageStatus =buyGoodsItem.getInt("storageStatus");
+                            int allowSend =buyGoodsItem.getInt("allowSend");
                             int tariffEnable = buyGoodsItem.getInt("tariffEnable");
                             if (tariffEnable == Constant.TRUE_INT) {
                                 storeTariff = Constant.TRUE_INT;
@@ -992,6 +1000,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                             ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, goodsId, goodsName,
                                     goodsFullSpecs, buyNum, goodsPrice, giftItemList);
+                            confirmOrderSkuItem.storageStatus = storageStatus;
+                            confirmOrderSkuItem.allowSend = allowSend;
                             confirmOrderSkuItemList.add(confirmOrderSkuItem);
 
                             String keyName = "cartId";

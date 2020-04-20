@@ -774,4 +774,5 @@
     <string name="text_among_citys">跨城購認證</string>
     <string name="text_store_enc">店鋪資料</string>
     <string name="text_tax">稅費</string>
+    <string name="text_storage_out">售罄</string>
 </resources>
