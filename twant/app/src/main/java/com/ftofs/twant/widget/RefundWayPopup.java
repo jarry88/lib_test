@@ -8,15 +8,19 @@ import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.util.User;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
+import com.orhanobut.hawk.Hawk;
 
 /**
  * 退款方式選擇彈窗
  * @author zwm
  */
 public class RefundWayPopup  extends BottomPopupView implements View.OnClickListener {
+    public static final int REFUND_WAY_UNKNOWN = 0;  // 未選擇退款方式
     public static final int REFUND_WAY_WALLET = 1;   // 退至預存款
     public static final int REFUND_WAY_ORIGINAL = 2; // 原路退回
 
@@ -48,7 +52,7 @@ public class RefundWayPopup  extends BottomPopupView implements View.OnClickList
         if (refundWay == REFUND_WAY_WALLET) {
             ((ImageView) findViewById(R.id.indicator_refund_to_wallet)).setImageResource(R.drawable.icon_checked);
             ((ImageView) findViewById(R.id.indicator_refund_to_original)).setImageResource(R.drawable.icon_unchecked);
-        } else {
+        } else if (refundWay == REFUND_WAY_ORIGINAL) {
             ((ImageView) findViewById(R.id.indicator_refund_to_wallet)).setImageResource(R.drawable.icon_unchecked);
             ((ImageView) findViewById(R.id.indicator_refund_to_original)).setImageResource(R.drawable.icon_checked);
         }
@@ -80,11 +84,27 @@ public class RefundWayPopup  extends BottomPopupView implements View.OnClickList
             dismiss();
         } else if (id == R.id.btn_refund_to_wallet) {
             onSelectedListener.onSelected(PopupType.SELECT_REFUND_WAY, REFUND_WAY_WALLET, null);
+            updateRefundWayRecord(REFUND_WAY_WALLET);
             dismiss();
         } else if (id == R.id.btn_refund_to_original) {
             onSelectedListener.onSelected(PopupType.SELECT_REFUND_WAY, REFUND_WAY_ORIGINAL, null);
+            updateRefundWayRecord(REFUND_WAY_ORIGINAL);
             dismiss();
         }
+    }
+
+    private void updateRefundWayRecord(int refundWay) {
+        if (refundWay == REFUND_WAY_UNKNOWN) {
+            return;
+        }
+
+        int userId = User.getUserId();
+        if (userId == 0) {
+            return;
+        }
+
+        String refundWayKey = String.format(SPField.FIELD_USER_REFUND_WAY, userId);
+        Hawk.put(refundWayKey, refundWay);
     }
 }
 
