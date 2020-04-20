@@ -8,6 +8,7 @@ public class CartCrossBorderItem {
     public CartCrossBorderItem(boolean selected, boolean isCrossBorder, int storeId, String storeName, int productCount) {
         this.selected = selected;
         this.isCrossBorder = isCrossBorder;
+        this.storeId = storeId;
         this.storeName = storeName;
         this.productCount = productCount;
     }
@@ -15,6 +16,7 @@ public class CartCrossBorderItem {
     public boolean selected; // 是否選中
 
     public boolean isCrossBorder; // 是否為跨境購
+    public int storeId;
     public String storeName; // 店鋪名稱
     public int productCount; // 產品數
 }
