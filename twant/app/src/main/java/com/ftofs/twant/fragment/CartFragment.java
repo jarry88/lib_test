@@ -393,12 +393,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 //                                spuStatus.skuStatusList.add(skuStatus);
                                 cartSkuItemContainer.addView(cartSkuItem);
 
+                                int goodsStatus = cartSkuVo.getInt("goodsStatus");
+                                int onlineStorage = cartSkuVo.getInt("onlineStorage");
                                 ImageView maskImage = cartSpuItem.findViewById(R.id.mask_image);
-                                if (cartSkuVo.getInt("goodsStatus") == 0) {
+                                if (goodsStatus == 0) { // 產品下架
                                     Glide.with(_mActivity).load(R.drawable.icon_take_off).into(maskImage);
-                                } else if(cartSkuVo.getInt("goodsStorage")<=0){
+                                } else if (onlineStorage == 0) { // 售罄
                                     Glide.with(_mActivity).load(R.drawable.icon_no_storage).into(maskImage);
-                                }else if(cartSkuVo.getInt("goodsStorage")<=2){
+                                }else if (onlineStorage <= 2) { // 庫存緊張
                                     Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
                                 }
 
