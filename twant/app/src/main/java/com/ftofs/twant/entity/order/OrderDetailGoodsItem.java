@@ -6,10 +6,12 @@ package com.ftofs.twant.entity.order;
  * @author zwm
  */
 public class OrderDetailGoodsItem {
+    private float tariffAmount;
+
     public OrderDetailGoodsItem(int commonId, int goodsId, int ordersId, int orderState, int showRefundWaiting, int ordersGoodsId,
                                 String imageSrc, String goodsName, float goodsPrice, int buyNum,
                                 String goodsFullSpecs, int refundType, int showRefund, int showMemberComplain,
-                                int complainId) {
+                                int complainId, float tariffAmount) {
         this.commonId = commonId;
         this.goodsId = goodsId;
         this.ordersId = ordersId;
@@ -26,6 +28,7 @@ public class OrderDetailGoodsItem {
         this.showRefund = showRefund;
         this.showMemberComplain = showMemberComplain;
         this.complainId = complainId;
+        this.tariffAmount = tariffAmount;
 
     }
 
