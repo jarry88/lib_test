@@ -6,11 +6,14 @@ import java.util.List;
 public class SpuStatus extends BaseStatus {
     public StoreStatus parent;
     public List<SkuStatus> skuStatusList = new ArrayList<>();
+    private int storeId;
+    private String storeName;
     private int goodsId; // Sku Id
     private int cartId;
     private int count;  // 數量
     private float price;  // 價錢
     private int limitBuy; //限購狀態
+    private boolean isCrossBorder; // 是否支持跨境購
 
     @Override
     public void changeCheckStatus(boolean checked, int phrase) {
@@ -57,6 +60,22 @@ public class SpuStatus extends BaseStatus {
         this.price = price;
     }
 
+    public int getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
     public int getGoodsId() {
         return goodsId;
     }
@@ -76,5 +95,13 @@ public class SpuStatus extends BaseStatus {
 
     public void setLimitState(int limitBuy) {
         this.limitBuy = limitBuy;
+    }
+
+    public boolean isCrossBorder() {
+        return isCrossBorder;
+    }
+
+    public void setCrossBorder(boolean crossBorder) {
+        isCrossBorder = crossBorder;
     }
 }
