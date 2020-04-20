@@ -15,6 +15,7 @@ import com.ftofs.twant.entity.CartCrossBorderItem;
 import com.ftofs.twant.entity.CrossBorderStoreInfo;
 import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
@@ -122,8 +123,12 @@ public class CartCrossBorderPopup extends CenterPopupView implements View.OnClic
                 onSelectedListener.onSelected(PopupType.SELECT_SPLIT_CROSS_BORDER, cartCrossBorderAdapter.selectedPosition, null);
             }
 
-            CrossBorderStoreInfo crossBorderStoreInfo = crossBorderStoreMap.get(cartCrossBorderAdapter.selectedPosition);
+            SLog.info("cartCrossBorderAdapter.selectedPosition[%d]", cartCrossBorderAdapter.selectedPosition);
+            CartCrossBorderItem cartCrossBorderItem = cartCrossBorderItemList.get(cartCrossBorderAdapter.selectedPosition);
+            CrossBorderStoreInfo crossBorderStoreInfo = crossBorderStoreMap.get(cartCrossBorderItem.storeId);
+            SLog.info("crossBorderStoreInfo[%s]", crossBorderStoreInfo);
             if (crossBorderStoreInfo != null && crossBorderStoreInfo.buyData != null) {
+                SLog.info("crossBorderStoreInfo.buyData[%s]", crossBorderStoreInfo.buyData);
                 Util.startFragment(ConfirmOrderFragment.newInstance(1, crossBorderStoreInfo.buyData.toString()));
             }
 
