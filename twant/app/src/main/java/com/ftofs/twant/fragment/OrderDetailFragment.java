@@ -73,6 +73,7 @@ import okhttp3.Call;
 public class OrderDetailFragment extends BaseFragment implements View.OnClickListener {
     int ordersId;
     int storeId;
+    int tariffBuy;
     String storeName;
     String paySnStr;
     int payId;
@@ -106,8 +107,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvLeaveMessage;
     @BindView(R.id.ll_leave_message_container)
     LinearLayout llLeaveMessageContainer;
-
+    @BindView(R.id.rl_tax_container)
+    RelativeLayout rlTaxContainer;
+    @BindView(R.id.tv_tax_amount)
+    TextView tvTaxAmount;
     String storePhone;
+
     boolean needReloadData;
 
     int ordersState;
@@ -627,6 +632,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String receiverName = ordersVo.getSafeString("receiverName");
                     String mobile = ordersVo.getSafeString("receiverPhone");
                     String address = ordersVo.getSafeString("receiverAreaInfo") + ordersVo.getSafeString("receiverAddress");
+                    tariffBuy =ordersVo.getInt("tariffBuy");
+                    if (tariffBuy == Constant.TRUE_INT) {
+                        rlTaxContainer.setVisibility(View.VISIBLE);
+
+                    }
 
                     storeId = ordersVo.getInt("storeId");
                     storeName = ordersVo.getSafeString("storeName");
@@ -815,6 +825,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     int showMemberComplain = ordersVo.getInt("showMemberComplain");
                     EasyJSONArray ordersGoodsVoList = ordersVo.getSafeArray("ordersGoodsVoList");
                     orderDetailGoodsItemList.clear();
+                    double tariffAmount =0;
                     for (Object object : ordersGoodsVoList) {
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
 
@@ -833,10 +844,15 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("refundType"),
                                 goodsVo.getInt("showRefund"),
                                 showMemberComplain,
-                                goodsVo.getInt("complainId")
-                                )
+                                goodsVo.getInt("complainId"),
+                                (float )goodsVo.getDouble("tariffAmount")
+                        )
+
                         );
+                        tariffAmount+=goodsVo.getDouble("tariffAmount");
                     }
+
+                    tvTaxAmount.setText(StringUtil.formatPrice(_mActivity,tariffAmount,0,2));
                     adapter.setData(orderDetailGoodsItemList);
                     needReloadData = false;
                 } catch (Exception e) {

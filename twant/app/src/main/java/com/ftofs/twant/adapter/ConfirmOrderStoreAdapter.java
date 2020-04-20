@@ -78,7 +78,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                     voucherStatus = Util.getAvailableCouponCountDesc(item.voucherCount);
                 }
             } else { // 如果沒有可用的優惠券，則隱藏
-                helper.setGone(R.id.rl_voucher_container, false);
+//                helper.setGone(R.id.rl_voucher_container, false);
             }
 
 
@@ -96,7 +96,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             // float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
             float taxAmount =item.taxAmount;
             SLog.info(item.toString());
-            double finalPayAmount = item.buyItemAmount + realFreightAmount+item.taxAmount;
+            double finalPayAmount = item.buyItemAmount + realFreightAmount;
             if (item.tariffEnable == Constant.TRUE_INT) {
                 helper.setVisible(R.id.rl_tax_container, true);
             }

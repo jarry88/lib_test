@@ -501,8 +501,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 commitBuyData.set("addressId", "0");
             } else if (!commitBuyData.exists("addressId")) {
                 commitBuyData.set("addressId","0");
-            } else if (StringUtil.isEmpty(commitBuyData.getSafeString("addressId"))) {
-                commitBuyData.set("addressId","0");
             }
 
             EasyJSONObject params = EasyJSONObject.generate(
@@ -747,6 +745,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             @Override
             public void onError(Throwable e) {
+//                ToastUtil.error();
                 SLog.info("onError[%s], threadId[%s]", e.getMessage(), Thread.currentThread().getId());
             }
             @Override

@@ -70,8 +70,8 @@
                 <com.ftofs.twant.widget.ScaledButton
                     android:layout_width="31dp"
                     android:layout_height="31dp"
-                    android:layout_marginRight="7dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="7dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     app:icon_src="@drawable/expand_button"
                     />
@@ -171,7 +171,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=":"
                         android:textColor="@color/tw_black"
                         android:textSize="16sp"
                         />
@@ -239,7 +238,7 @@
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="@dimen/dp_10"
                             android:src="@drawable/expand_button_red"
                             />
                     </LinearLayout>
@@ -280,7 +279,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:text=""
                 android:textColor="@color/tw_black"
                 android:textSize="16sp"
