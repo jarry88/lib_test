@@ -62,6 +62,7 @@ import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -700,8 +701,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             SLog.info("addrItem: %s", addrItem);
             mAddrItem = addrItem;
-            loadOrderData();
-//            updateFreightTotalAmount();
+//            loadOrderData();
+            updateTotalOrderData();
+            updateFreightTotalAmount();
         } else if (ReceiptInfoFragment.class.getName().equals(from)) {
             int position = data.getInt("position");
             int action = data.getInt("action");
@@ -719,6 +721,233 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             adapter.notifyItemChanged(position);
         }
+    }
+
+    /**
+     * 主要用來在更換地址時更新商品庫存情況
+     */
+    private void updateTotalOrderData() {
+        SLog.info("重新加載商品庫存數據");
+
+        Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                SLog.info("observable.threadId[%s]", Thread.currentThread().getId());
+
+                Pair<Boolean, String> result = loadOrder(null);
+
+                if (result.first) {
+                    emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(result.second));
+                }
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                SLog.info("onSubscribe, threadId[%s]", Thread.currentThread().getId());
+            }
+            @Override
+            public void onNext(String s) {
+                SLog.info("onNext[%s], threadId[%s]", s, Thread.currentThread().getId());
+            }
+            @Override
+            public void onError(Throwable e) {
+//                ToastUtil.error();
+                SLog.info("onError[%s], threadId[%s]", e.getMessage(), Thread.currentThread().getId());
+            }
+            @Override
+            public void onComplete() {
+                SLog.info("onComplete, threadId[%s]", Thread.currentThread().getId());
+                updateOrderView();
+                calcAmount();
+            }
+        };
+
+        observable.subscribe(observer);
+
+
+
+    }
+
+    /**
+     * 同步加載商品信息
+     * @param o
+     * @return
+     */
+    private Pair<Boolean, String> loadOrder(Object o) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return new Pair<>(false,"用戶未登錄");
+        }
+        // 整個訂單的總件數
+        totalItemCount = 0;
+
+        // 第1步: 獲取配送時間列表 和 商店券列表
+        EasyJSONArray currBuyData =EasyJSONArray.generate();
+        for (MultiItemEntity multiItemEntity : confirmOrderItemList) {
+            if (multiItemEntity.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
+                ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) multiItemEntity;
+                for (ConfirmOrderSkuItem skuItem : storeItem.confirmOrderSkuItemList) {
+                    currBuyData.append(EasyJSONObject.generate("buyNum", skuItem.buyNum, "goodsId", skuItem.goodsId));
+                }
+            }
+        }
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "buyData", currBuyData.toString(),
+                "clientType", Constant.CLIENT_TYPE_ANDROID,
+                "isCart", isFromCart);
+        SLog.info("params[%s]", params.toString());
+        String responseStr = Api.syncPost(Api.PATH_DISPLAY_BILL_DATA, params);
+
+        SLog.info("responseStr[%s]", responseStr);
+        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+        try {
+            if (ToastUtil.isError(responseObj)) {
+                if (responseObj.exists("datas.error")) {
+                        return new Pair<>(false,responseObj.getSafeString("datas.error"));
+                }
+                return new Pair<>(false,"null");
+            }
+
+            // 獲取配送時間列表
+            shippingItemList.clear();
+            EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.shipTimeTypeList");
+            for (Object object : easyJSONArray) {
+                EasyJSONObject easyJSONObject = (EasyJSONObject) object;
+                shippingItemList.add(new ListPopupItem(easyJSONObject.getInt("id"), easyJSONObject.getSafeString("name"), null));
+            }
+            isExistTrys = responseObj.getInt("datas.isExistTrys");
+
+            confirmOrderItemList.clear();
+
+            // 獲取商店券
+            EasyJSONArray buyStoreVoList = responseObj.getSafeArray("datas.buyStoreVoList");
+            for (Object object : buyStoreVoList) {  // 遍歷每家商店
+                int storeTariff = Constant.FALSE_INT;
+                List<StoreVoucherVo> storeVoucherVoList = new ArrayList<>();
+                EasyJSONObject buyStoreVo = (EasyJSONObject) object;
+                int storeId = buyStoreVo.getInt("storeId");
+                EasyJSONArray voucherVoList = buyStoreVo.getSafeArray("voucherVoList");
+                for (Object object2 : voucherVoList) {
+                    StoreVoucherVo storeVoucherVo = null;
+                    storeVoucherVo = (StoreVoucherVo) EasyJSONBase.jsonDecode(StoreVoucherVo.class, object2.toString());
+
+                    if (storeVoucherVo.useEnable == Constant.TRUE_INT) {
+                        storeVoucherVoList.add(storeVoucherVo);
+                    }
+                    SLog.info("storeVoucherVo[%s]", storeVoucherVo);
+                }
+
+                voucherMap.put(storeId, storeVoucherVoList);
+                int conformId = -1;
+                // 获取满减优惠
+                if (buyStoreVo.exists("conform.conformId")) {
+                    conformId = buyStoreVo.getInt("conform.conformId");
+                    storeConformIdMap.put(storeId, conformId);
+                }
+
+                String storeName = buyStoreVo.getSafeString("storeName");
+                // int itemCount = buyStoreVo.getInt("itemCount");
+                // float freightAmount = (float) buyStoreVo.getDouble("freightAmount"); 在第2步中獲取運費
+                // float buyItemAmount = (float) buyStoreVo.getDouble("buyItemAmount"); 在第3步中獲取金額
+
+                int shipTimeType = 0;
+
+                EasyJSONArray goodsList = EasyJSONArray.generate();
+                EasyJSONArray buyGoodsItemVoList = buyStoreVo.getSafeArray("buyGoodsItemVoList");
+                List<ConfirmOrderSkuItem> confirmOrderSkuItemList = new ArrayList<>();
+                int storeItemCount = 0;
+                confirmOrderItemList.clear();
+                for (Object object2 : buyGoodsItemVoList) { // 遍歷每個Sku
+                    EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
+                    int goodsId;
+                    if (isFromCart == 1) {
+                        goodsId = buyGoodsItem.getInt("cartId");
+                    } else {
+                        goodsId = buyGoodsItem.getInt("goodsId");
+                    }
+
+                    int buyNum = buyGoodsItem.getInt("buyNum");
+
+                    String imageSrc = buyGoodsItem.getSafeString("imageSrc");
+                    String goodsName = buyGoodsItem.getSafeString("goodsName");
+                    String goodsFullSpecs = buyGoodsItem.getSafeString("goodsFullSpecs");
+                    int storageStatus =buyGoodsItem.getInt("storageStatus");
+                    int allowSend =buyGoodsItem.getInt("allowSend");
+                    int tariffEnable = buyGoodsItem.getInt("tariffEnable");
+                    if (tariffEnable == Constant.TRUE_INT) {
+                        storeTariff = Constant.TRUE_INT;
+                        tariffTotalEnable = Constant.TRUE_INT;
+                    }
+                    float goodsPrice = (float) buyGoodsItem.getDouble("goodsPrice");
+
+                    // 處理SKU贈品信息
+                    List<GiftItem> giftItemList = new ArrayList<>();
+                    EasyJSONArray giftVoList = buyGoodsItem.getSafeArray("giftVoList");
+                    if (giftVoList != null || giftVoList.length() > 0) {
+                        for (Object object3 : giftVoList) {
+                            GiftItem giftItem = (GiftItem) EasyJSONBase.jsonDecode(GiftItem.class, object3.toString());
+                            giftItemList.add(giftItem);
+                        }
+                    }
+
+                    ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, goodsId, goodsName,
+                            goodsFullSpecs, buyNum, goodsPrice, giftItemList);
+                    confirmOrderSkuItem.storageStatus = storageStatus;
+                    confirmOrderSkuItem.allowSend = allowSend;
+                    confirmOrderSkuItemList.add(confirmOrderSkuItem);
+
+                    String keyName = "cartId";
+                    if (isFromCart == Constant.ZERO) {
+                        keyName = "goodsId";
+                    }
+                    goodsList.append(EasyJSONObject.generate(keyName, goodsId, "buyNum", buyNum));
+
+                    storeItemCount += buyNum;
+                    totalItemCount += buyNum;
+                } // END OF 遍歷每個Sku
+
+                // 確認訂單時，店鋪滿減券
+                float conformTemplatePrice = 0;
+                if (buyStoreVo.exists("conform.templatePrice")) {
+                    conformTemplatePrice = (float) buyStoreVo.getDouble("conform.templatePrice");
+                    SLog.info("conformTemplatePrice[%s]", conformTemplatePrice);
+                    // conformTemplatePrice = 999;
+                }
+                if (storeTariff == Constant.TRUE_INT) {
+                    SLog.info("跨城購店鋪數據[%s]",buyStoreVo.toString());
+                    confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
+                            0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice,0));
+                } else {
+                    confirmOrderItemList.add(new ConfirmOrderStoreItem(storeId, storeName, 0,
+                            0, storeItemCount, storeVoucherVoList.size(), confirmOrderSkuItemList, conformTemplatePrice));
+                }
+
+                commitStoreList.append(EasyJSONObject.generate(
+                        "storeId", storeId,
+                        "storeName", storeName,
+                        "goodsList", goodsList,
+                        "shipTimeType", shipTimeType,
+                        //沒有活動是傳空字符串
+                        "conformId",conformId>=0?conformId:""));
+            }
+            // END OF 遍歷每家商店
+
+            // 添加上汇总项目
+            ConfirmOrderSummaryItem confirmOrderSummaryItem = new ConfirmOrderSummaryItem();
+            confirmOrderItemList.add(confirmOrderSummaryItem);
+            adapter.setNewData(confirmOrderItemList);
+            return new Pair<>(true, "");
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            return new Pair<>(false, "");
+        }
+
     }
 
     private void updateFreightTotalAmount() {
@@ -928,9 +1157,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     }
                     isExistTrys = responseObj.getInt("datas.isExistTrys");
 
-                    SLog.info("HERE");
                     // 獲取商店券
+                    confirmOrderItemList.clear();
+
                     EasyJSONArray buyStoreVoList = responseObj.getSafeArray("datas.buyStoreVoList");
+                    SLog.info("HERE storeSize[%d]",buyStoreVoList.length());
                     for (Object object : buyStoreVoList) {  // 遍歷每家商店
                         int storeTariff = Constant.FALSE_INT;
                         List<StoreVoucherVo> storeVoucherVoList = new ArrayList<>();
@@ -964,7 +1195,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         EasyJSONArray buyGoodsItemVoList = buyStoreVo.getSafeArray("buyGoodsItemVoList");
                         List<ConfirmOrderSkuItem> confirmOrderSkuItemList = new ArrayList<>();
                         int storeItemCount = 0;
-                        confirmOrderItemList.clear();
                         for (Object object2 : buyGoodsItemVoList) { // 遍歷每個Sku
                             EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
                             int goodsId;
@@ -1295,7 +1525,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             adapter.setPayWayIndex(payWayIndex);
             adapter.notifyDataSetChanged();
-            updateFreightTotalAmount();
+            loadOrderData();
+//            updateFreightTotalAmount();
         } else if (type == PopupType.SHIPPING_TIME) {
             int position = (int) extra;
             ConfirmOrderSummaryItem summaryItem = (ConfirmOrderSummaryItem) confirmOrderItemList.get(position);
