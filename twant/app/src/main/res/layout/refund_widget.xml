@@ -126,7 +126,7 @@
             android:id="@+id/btn_select_refund_way"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
@@ -134,7 +134,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginRight="9dp"
+                android:layout_marginEnd="9dp"
                 android:gravity="right"
                 android:text="@string/text_refund_way_wallet"
                 android:textColor="@color/tw_black"

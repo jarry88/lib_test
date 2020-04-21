@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -859,8 +860,10 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         if (tvRefundWay == null) {
             return;
         }
+        tvRefundWay.setTextColor(getResources().getColor(R.color.tw_black,null));
         if (refundWay == RefundWayPopup.REFUND_WAY_UNKNOWN) {
             tvRefundWay.setText("請選擇");
+            tvRefundWay.setTextColor(Color.parseColor("#A8A8A8"));
         } else if (refundWay == RefundWayPopup.REFUND_WAY_WALLET) {
             tvRefundWay.setText("退至預存款");
         } else if (refundWay == RefundWayPopup.REFUND_WAY_ORIGINAL) {

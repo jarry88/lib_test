@@ -286,7 +286,7 @@
                         android:id="@+id/tv_goods_jingle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#666"
+                        android:textColor="@color/tw_text_dark"
                         android:textSize="14sp"
                         />
                     <!--價格標籤-->

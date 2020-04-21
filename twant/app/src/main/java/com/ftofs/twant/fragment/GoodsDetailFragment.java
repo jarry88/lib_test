@@ -1278,30 +1278,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 //                    goodsDetail .goodsInfoVoList[]：tariffAmount   SKU跨城購稅費
 
                     SLog.info("goodsDetail exists,discount[%s]", goodsDetail.exists("discount"));
-                    // 限時折扣
-                    EasyJSONObject discount = goodsDetail.getObject("discount");
-                    if (discount != null) {
-                        // 表明有限時折扣活動
-                        String startTime = discount.getSafeString("startTime");
-                        String endTime = discount.getSafeString("endTime");
-                        Date date = DateTimeUtils.formatDate(endTime);
-                        Date startDate = DateTimeUtils.formatDate(startTime);
-                        discountStartTime = (int) (startDate.getTime() / 1000);
-                        SLog.info("startTime[%s],endTime[%s],discountStart[%s]", startTime, endTime, discountState);
-                        discountEndTime = (int) (date.getTime() / 1000);
-                        float time = System.currentTimeMillis() / 1000 - discountStartTime;
-                        if (time < 0) {
-                            discountState = 1;
-                        } else {
-                            time = System.currentTimeMillis() / 1000 - discountEndTime;
-                            if (time < 0) {
-                                discountState = 2;
-                            } else {
-                                discountState = 3;
-                            }
-                        }
-                        SLog.info("discountStartTime[%d],discountEndTime[%d]", discountStartTime, discountEndTime);
-                    }
+
 
                     // 【贈品】優惠
                     boolean first = true;
@@ -1352,10 +1329,24 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.limitAmount = goodsInfoVo.getInt("limitAmount");
                         goodsInfo.unitName = goodsInfoVo.getSafeString("unitName");
                         goodsInfo.goodsName = goodsName;
+                        goodsInfo.promotionType =goodsInfoVo.getInt("promotionType");
 
                         goodsInfoMap.put(goodsId, goodsInfo);
 
                         first = false;
+                    }
+                    // 限時折扣
+                    EasyJSONObject discount = goodsDetail.getObject("discount");
+                    if (discount != null) {
+                        // 表明有限時折扣活動
+                        String startTime = discount.getSafeString("startTime");
+                        String endTime = discount.getSafeString("endTime");
+                        Date date = DateTimeUtils.formatDate(endTime);
+                        Date startDate = DateTimeUtils.formatDate(startTime);
+                        discountStartTime = (int) (startDate.getTime() / 1000);
+                        SLog.info("startTime[%s],endTime[%s],discountStart[%s]", startTime, endTime, discountState);
+                        discountEndTime = (int) (date.getTime() / 1000);
+                        SLog.info("discountStartTime[%d],discountEndTime[%d]", discountStartTime, discountEndTime);
                     }
 
                     // 【滿減】優惠
@@ -1490,6 +1481,25 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         });
     }
 
+    private void updateDiscount(GoodsInfo goodsInfo) {
+        if (goodsInfo.promotionType == Constant.FALSE_INT) {
+            discountState = 0;
+        } else {
+            float time = System.currentTimeMillis() / 1000 - discountStartTime;
+            if (time < 0) {
+                discountState = 1;
+            } else {
+                time = System.currentTimeMillis() / 1000 - discountEndTime;
+                if (time < 0) {
+                    discountState = 2;
+                } else {
+                    discountState = 3;
+                }
+            }
+        }
+
+    }
+
     private void setGoodsStatus(int status) {
         goodsStatus = status;
         if (goodsStatus == 0) {
@@ -1535,6 +1545,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 int goodsId = easyJSONObject.getInt("goodsId");
                 buyNum = easyJSONObject.getInt("quantity");
                 selectSku(goodsId);
+                showPriceTag(goodsInfoMap.get(goodsId));
             } catch (Exception e) {
 
             }
@@ -1732,17 +1743,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         tvCurrentSpecs.setText(fullSpecs);
 
         SLog.info("goodsPrice0[]%f,goodsprice[%f] ", goodsInfo.goodsPrice0, goodsInfo.price);
-        if (discountState > 0 && discountState < 3) {  // 原價與最終價格有差值才算是折扣活動
-            SLog.info("1596here");
-            showPriceTag(false);
-
-            tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
-            tvGoodsPriceOriginal.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
-        } else {
-            showPriceTag(true);
-
-            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
-        }
+        showPriceTag(goodsInfo);
 
         // 看是否有現貨，如果沒有，則顯示到貨通知
         int finalStorage = goodsInfo.getFinalStorage();
@@ -1759,16 +1760,22 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     /**
      * 是顯示價格標簽還是顯示折扣活動信息
      *
-     * @param show
+     * @param goodsInfo sku信息
+     *
      */
-    private void showPriceTag(boolean show) {
+    private void showPriceTag(GoodsInfo goodsInfo) {
+        updateDiscount(goodsInfo);
+        boolean show = discountState > 0 && discountState < 3;
+        rlPriceTag.setVisibility(show?GONE:VISIBLE);
+        rlDiscountInfoContainer.setVisibility(show?VISIBLE:GONE);
         if (show) {
-            rlPriceTag.setVisibility(VISIBLE);
-            rlDiscountInfoContainer.setVisibility(GONE);
+            tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+            tvGoodsPriceOriginal.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
+
             stopCountDown();
         } else {
-            rlPriceTag.setVisibility(GONE);
-            rlDiscountInfoContainer.setVisibility(VISIBLE);
+            tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+
             startCountDown();
         }
     }
