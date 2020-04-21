@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
-    android:paddingLeft="@dimen/toolbar_margin_left"
-    android:paddingRight="@dimen/toolbar_margin_right"
+    android:paddingStart="@dimen/toolbar_margin_left"
+    android:paddingEnd="@dimen/toolbar_margin_right"
     android:paddingBottom="15dp"
     android:background="@android:color/white"
     android:orientation="vertical">

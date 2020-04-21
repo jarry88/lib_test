@@ -21,7 +21,7 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
         return String.format("storeName[%s],buyItemAmount[%s],taxAmount[%s]",storeName,buyItemAmount,taxAmount);
     }
 
-    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, float freightAmount,
+    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, double freightAmount,
                                  int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
                                  float conformTemplatePrice) {
         this.storeId = storeId;
@@ -36,7 +36,7 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
 
     public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, float freightAmount,
                                  int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
-                                 float conformTemplatePrice,float taxAmount) {
+                                 float conformTemplatePrice,double taxAmount) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.buyItemAmount = buyItemAmount;
