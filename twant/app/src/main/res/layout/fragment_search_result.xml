@@ -279,7 +279,6 @@
                             android:id="@+id/tv_location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
                             android:text="所在地"
                             android:textColor="@color/tw_black"
                             android:textSize="16sp"

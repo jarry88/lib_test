@@ -1196,7 +1196,6 @@ public class Util {
             } catch (Exception e) {
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
-            SLog.info("111here");
             // 1小時內的定位才考慮
             if (System.currentTimeMillis() - location.timestamp < Config.LOCATION_EXPIRE) {
                 try {
@@ -1211,7 +1210,6 @@ public class Util {
                 SLog.info("定位數據過期");
             }
         }
-        SLog.info("111here");
         SLog.info("params[%s]", params);
         return params;
     }

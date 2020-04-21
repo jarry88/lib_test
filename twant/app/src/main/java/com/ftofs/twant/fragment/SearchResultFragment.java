@@ -618,7 +618,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             if (associateSearchTime > 0) {
                                 SLog.info("搜過商品，來搜商店了");
                             }
-                            if (responseObj.exists("datas.isHaveStore")) {
+                            if (responseObj.exists("datas.isHaveStore")&&!StringUtil.isEmpty(keyword)) {
                                 SLog.info("沒有對應商品");
                                 isHaveStore = responseObj.getInt("datas.isHaveStore");
                                 if (isHaveStore > 0&&associateSearchTime++<1) {
@@ -765,6 +765,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     }
                 });
             } else if (searchType == SearchType.STORE) {
+                SLog.info("params[%s]", params);
                 params = Util.upLocation(params);
                 SLog.info("params[%s]", params);
                 Api.getUI(Api.PATH_SEARCH_STORE, params, new UICallback() {
@@ -793,7 +794,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             if (associateSearchTime > 0) {
                                 SLog.info("搜過商店，來搜商品了");
                             }
-                            if (responseObj.exists("datas.isHaveGoods")) {
+                            if (responseObj.exists("datas.isHaveGoods")&&!StringUtil.isEmpty(keyword)) {
                                 isHaveGoods = responseObj.getInt("datas.isHaveGoods");
                                 if (isHaveGoods > 0&&associateSearchTime++<1) {
                                     SLog.info("沒搜到商店，去搜商品了");
@@ -828,8 +829,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                                     EasyJSONArray areaList = searchStoreAreaVo.getSafeArray("areaList");
                                     for (Object object2 : areaList) {
+
                                         EasyJSONObject area = (EasyJSONObject) object2;
                                         int subId = area.getInt("areaId");
+                                        SLog.info("subItem.bizCircleId[%d]，subId[%s]", id,subId);
                                         String subName = area.getSafeString("areaName");
 
                                         bizCircleItem.subItemList.add(new BizCircleItem(subId, subName,  new BizCircleId(BizCircleId.ID_TYPE_AREA_ID, id)));
@@ -941,7 +944,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                             if (!hasMore) {
                                 if (page == 1 && storeItemList.size() == 0) {
-                                    storeItemList.add(new StoreSearchItem(Constant.ITEM_TYPE_NO_DATA));
+                                    storeItemList.add(new StoreSearchItem(Constant.ITEM_TYPE_NO_STORE_DATA));
                                 }
                                 // 如果全部加載完畢，添加加載完畢的提示
                                 storeItemList.add(new StoreSearchItem());
@@ -1178,6 +1181,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     private void togglePopup(PopupType popupType, View view, int id) {
         currSelId = id;
+        SLog.info("currselid [%d],popupType[%s],locationItemList[%d]",currSelId,popupType,locationItemList.size());
         if (storeFilterPopup == null) {
             storeFilterPopup = (StoreFilterPopup) new XPopup.Builder(_mActivity)
                     .atView(view)

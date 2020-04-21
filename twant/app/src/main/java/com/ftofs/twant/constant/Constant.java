@@ -74,6 +74,10 @@ public class Constant {
      */
     public static final int ITEM_TYPE_LOAD_END_HINT = 2;
     /**
+     * 數據全部加載完成的提示
+     */
+    public static final int ITEM_TYPE_NO_STORE_DATA = 6;
+    /**
      * 雙十一活動Banner
      */
     public static final int ITEM_TYPE_DOUBLE_ELEVEN_BANNER = 3;
@@ -306,4 +310,6 @@ public class Constant {
     public static final int TRUE_INT = 1;
     public static final int FALSE_INT = 0;
     public static final String MSG_NOTIFY_HXID ="hId" ;
+
+
 }

@@ -46,8 +46,9 @@ public class StoreSearchItem implements MultiItemEntity {
         this.staff = staff;
         if (jobList != null && jobList.size() > 0) {
             this.listCount = jobList.size();
-        }else
+        }else{
             this.likeCount = 0;
+        }
     }
 
     public int itemType;
