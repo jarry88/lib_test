@@ -187,7 +187,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
+        SLog.info("onSupportVisible");
         loadPersonalInfo(contentView);
     }
 

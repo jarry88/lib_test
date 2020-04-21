@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,6 +43,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.InStorePersonItem;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
@@ -49,6 +51,7 @@ import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.PermissionUtil;
@@ -1006,12 +1009,27 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         switch (id) {
             case R.id.tv_shop_signature:
-                tvShopSignature.setSingleLine(false);
-                btnShopUp.setVisibility(VISIBLE);
+
+                Layout layout = tvShopSignature.getLayout();
+                if (layout != null) {
+                    //返回要椭圆化的字符数，如果不发生省略号，则返回0。
+                    int ellipsisStatus=layout.getEllipsisCount(1);
+                    if (ellipsisStatus == Constant.FALSE_INT) {
+                        SLog.info("line_count%s,ellipsisStatus[%d],text",tvShopSignature.getLineCount(),ellipsisStatus);
+                        break;
+                    } else {
+                        SLog.info("line_text[%s]",tvShopSignature.getText().toString());
+                        tvShopSignature.setSingleLine(false);
+                        btnShopUp.setVisibility(VISIBLE);
+                        tvShopSignature.setPadding(12,12,12,12);
+                    }
+                }
 
                 break;
             case R.id.btn_shop_signature_up:
                 tvShopSignature.setSingleLine(true);
+                tvShopSignature.setPadding(12,0,12,0);
+
                 btnShopUp.setVisibility(View.GONE);
                 break;
             case R.id.ll_uo_thumb_up_container:

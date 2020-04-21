@@ -143,7 +143,7 @@
 
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:gravity="center"
+                        android:gravity="start"
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"
                         android:singleLine="true"
@@ -154,9 +154,9 @@
                         android:id="@+id/btn_shop_signature_up"
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"
-                        android:paddingTop="@dimen/dp_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/dp_4"
                         android:src="@drawable/icon_up_arrow_white"
                         android:visibility="gone"/>
                 </LinearLayout>

@@ -394,9 +394,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void initSearchStore(View view) {
+
         view.findViewById(R.id.ll_goods_filter).setVisibility(View.GONE);
         view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
-
+//已經創建過mStoreAdapter就不需要再新建一遍了
+        if (mStoreAdapter != null) {
+            return;
+        }
         tvFollow = view.findViewById(R.id.tv_follow);
         tvRecruitment = view.findViewById(R.id.tv_recruitment);
         tvSort = view.findViewById(R.id.tv_sort);
@@ -424,10 +428,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvSearchResultList.setLayoutManager(layoutManager);
-        //已經創建過mStoreAdapter就不需要再新建一遍了
-        if (mStoreAdapter != null) {
-            return;
-        }
+
         mStoreAdapter = new StoreSearchResultAdapter(storeItemList);
         mStoreAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
