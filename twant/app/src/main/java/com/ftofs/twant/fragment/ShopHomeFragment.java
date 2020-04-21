@@ -614,8 +614,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                         // 店鋪形象視頻
                         if (storeInfo.exists("videoUrl")) {
-                            storeVideoUrl = storeInfo.getSafeString("videoUrl");
-                            btnPlay.setVisibility(StringUtil.isEmpty(storeVideoUrl) ? View.GONE : VISIBLE);
+                            String videoUrl = storeInfo.getSafeString("videoUrl");
+                            if (videoUrl.contains("youtube.com") || videoUrl.contains("youtu.be")) {
+                                storeVideoUrl = videoUrl;
+                                btnPlay.setVisibility(VISIBLE);
+                            }
                         }
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
