@@ -52,7 +52,7 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
 
     public int storeId;
     public String storeName;
-    public float taxAmount=0;//稅費
+    public double taxAmount=0;//稅費
     public float buyItemAmount;  // 金額
     public float freightAmount; // 運費
     public float discountAmount;  // 商店優惠
