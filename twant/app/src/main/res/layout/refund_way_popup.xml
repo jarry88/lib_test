@@ -24,7 +24,7 @@
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_marginTop="19dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="4dp"
             android:layout_alignParentRight="true"
             app:icon_src="@drawable/btn_close"
             />
@@ -82,6 +82,13 @@
                 </TextView>
             </LinearLayout>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:background="@color/tw_slight_grey">
+        </View>
         <LinearLayout
             android:id="@+id/btn_refund_to_wallet"
             android:layout_width="match_parent"
@@ -124,6 +131,13 @@
                 </TextView>
             </LinearLayout>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/toolbar_margin_left"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:background="@color/tw_slight_grey">
+        </View>
     </LinearLayout>
 </LinearLayout>
 
