@@ -925,7 +925,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 // 店鋪形象視頻
                                 String storeVideoUrl = null;
                                 if (store.exists("videoUrl")) {
-                                    storeVideoUrl = store.getSafeString("videoUrl");
+                                    String videoUrl = store.getSafeString("videoUrl");
+                                    SLog.info("videoUrl[%s]", videoUrl);
+                                    if (videoUrl.contains("youtube.com") || videoUrl.contains("youtu.be")) {
+                                        storeVideoUrl = videoUrl;
+                                    }
                                 }
 
 

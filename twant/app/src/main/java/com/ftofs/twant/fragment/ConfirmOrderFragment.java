@@ -1440,9 +1440,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     for (Object object : storeList) {
                         EasyJSONObject store = (EasyJSONObject) object;
                         int storeId = store.getInt("storeId");
-                        float storeDiscountAmount = (float) store.getDouble("storeDiscountAmount");
-                        float tariffTotalAmount =  (float)store.getDouble("tariffTotalAmount");
-                        float buyAmount2 = (float) store.getDouble("buyAmount2");
+                        double storeDiscountAmount = store.getDouble("storeDiscountAmount");
+                        double tariffTotalAmount = store.getDouble("tariffTotalAmount");
+                        double buyAmount2 = store.getDouble("buyAmount2");
                         for (MultiItemEntity item : confirmOrderItemList){
                             if (item.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
                                 ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) item;
