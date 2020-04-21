@@ -21,7 +21,7 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
         return String.format("storeName[%s],buyItemAmount[%s],taxAmount[%s]",storeName,buyItemAmount,taxAmount);
     }
 
-    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, float freightAmount,
+    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, double freightAmount,
                                  int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
                                  float conformTemplatePrice) {
         this.storeId = storeId;
@@ -36,7 +36,7 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
 
     public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, float freightAmount,
                                  int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
-                                 float conformTemplatePrice,float taxAmount) {
+                                 float conformTemplatePrice,double taxAmount) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.buyItemAmount = buyItemAmount;
@@ -52,9 +52,9 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
 
     public int storeId;
     public String storeName;
-    public float taxAmount=0;//稅費
+    public double taxAmount=0;//稅費
     public float buyItemAmount;  // 金額
-    public float freightAmount; // 運費
+    public double freightAmount; // 運費
     public float discountAmount;  // 商店優惠
     public int itemCount;    // 商店訂單的產品件數: 如果sku1有2件，sku2有3件，那么件數就是5
     public String leaveMessage;  // 留言

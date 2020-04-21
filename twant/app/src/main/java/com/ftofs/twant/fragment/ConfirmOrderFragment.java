@@ -140,7 +140,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     // 商店Id => 商店券列表
     Map<Integer, List<StoreVoucherVo>> voucherMap = new HashMap<>();
     // 商店Id => 運費
-    Map<Integer, Float> freightAmountMap = new HashMap<>();
+    Map<Integer, Double> freightAmountMap = new HashMap<>();
     // 商店Id => 商店優惠
     Map<Integer, StoreAmount> storeAmountMap = new HashMap<>();
     // 商店Id => 商店满优惠列表(conformId，整型)
@@ -702,7 +702,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             SLog.info("addrItem: %s", addrItem);
             mAddrItem = addrItem;
 //            loadOrderData();
-            updateTotalOrderData();
+//            updateTotalOrderData();
             updateFreightTotalAmount();
         } else if (ReceiptInfoFragment.class.getName().equals(from)) {
             int position = data.getInt("position");
@@ -792,7 +792,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             if (multiItemEntity.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
                 ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) multiItemEntity;
                 for (ConfirmOrderSkuItem skuItem : storeItem.confirmOrderSkuItemList) {
-                    currBuyData.append(EasyJSONObject.generate("buyNum", skuItem.buyNum, "goodsId", skuItem.goodsId));
+                    currBuyData.append(EasyJSONObject.generate("buyNum", skuItem.buyNum, "goodsId", skuItem.goodsId,""));
                 }
             }
         }
@@ -1077,7 +1077,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             ConfirmOrderStoreItem item = (ConfirmOrderStoreItem) entity;
 
-            Float storeFreight = freightAmountMap.get(item.storeId);
+            Double storeFreight = freightAmountMap.get(item.storeId);
             if (storeFreight == null) {
                 continue;
             }
@@ -1198,8 +1198,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         for (Object object2 : buyGoodsItemVoList) { // 遍歷每個Sku
                             EasyJSONObject buyGoodsItem = (EasyJSONObject) object2;
                             int goodsId;
+                            int cartId=-1;
                             if (isFromCart == 1) {
                                 goodsId = buyGoodsItem.getInt("cartId");
+                                cartId = buyGoodsItem.getInt("cartId");
                             } else {
                                 goodsId = buyGoodsItem.getInt("goodsId");
                             }
@@ -1230,6 +1232,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                             ConfirmOrderSkuItem confirmOrderSkuItem = new ConfirmOrderSkuItem(imageSrc, goodsId, goodsName,
                                     goodsFullSpecs, buyNum, goodsPrice, giftItemList);
+                            confirmOrderSkuItem.cartId = cartId;
                             confirmOrderSkuItem.storageStatus = storageStatus;
                             confirmOrderSkuItem.allowSend = allowSend;
                             confirmOrderSkuItemList.add(confirmOrderSkuItem);
@@ -1368,11 +1371,33 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             // 獲取商店Id對應的運費數據
             EasyJSONArray storeList = responseObj.getSafeArray("datas.storeList");
+            SLog.info("conformOrderItemList size 为【%d】",confirmOrderItemList.size());
             for (Object object : storeList) {
                 EasyJSONObject store = (EasyJSONObject) object;
 
                 int storeId = store.getInt("storeId");
-                float freightAmount = (float) store.getDouble("freightAmount");
+                double freightAmount =  store.getDouble("freightAmount");
+                EasyJSONArray buyGoodsItemVoList= store.getSafeArray("buyGoodsItemVoList");
+                for (MultiItemEntity multiItemEntity : confirmOrderItemList) {
+                    if (multiItemEntity.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
+                        ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) multiItemEntity;
+                            if (storeItem.storeId == storeId) {
+                                SLog.info("进入店铺[%s]数据",storeItem.storeName);
+                                for (Object object1 : buyGoodsItemVoList) {
+                                    EasyJSONObject goodsItem = (EasyJSONObject) object1;
+                                    for (ConfirmOrderSkuItem skuItem : storeItem.confirmOrderSkuItemList) {
+                                        SLog.info("skuItem Id[%s]数据，\ngoodsItem为[%s]",skuItem.toString(),goodsItem.toString());
+                                        if (skuItem.goodsId == goodsItem.getInt("goodsId")||skuItem.cartId == goodsItem.getInt("cartId")) {
+                                            skuItem.storageStatus = goodsItem.getInt("storageStatus");
+                                            skuItem.allowSend = goodsItem.getInt("allowSend");
+                                            SLog.info("更新了[%s]数据，allowsend为【%d】",skuItem.goodsName,skuItem.allowSend);
+                                        }
+                                    }
+                                }
+                        }
+                    }
+
+                }
 
                 freightAmountMap.put(storeId, freightAmount);
             }
@@ -1476,6 +1501,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         }
 
         try {
+            platformCouponList.clear();
             EasyJSONArray couponList = responseObj.getSafeArray("datas.couponList");
             for (Object object : couponList) {
                 EasyJSONObject coupon = (EasyJSONObject) object;
@@ -1525,8 +1551,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             adapter.setPayWayIndex(payWayIndex);
             adapter.notifyDataSetChanged();
-            loadOrderData();
-//            updateFreightTotalAmount();
+//            loadOrderData();
+            updateFreightTotalAmount();
         } else if (type == PopupType.SHIPPING_TIME) {
             int position = (int) extra;
             ConfirmOrderSummaryItem summaryItem = (ConfirmOrderSummaryItem) confirmOrderItemList.get(position);

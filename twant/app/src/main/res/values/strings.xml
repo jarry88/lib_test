@@ -429,7 +429,7 @@
     <string name="text_refund_way_wallet">退至預存款</string>
     <string name="text_refund_way_original">原路退回</string>
 
-    <string name="text_not_allow_send">該地區無貨</string>
+    <string name="text_not_allow_send">所選地區售罄</string>
     <string name="not_allow_send_hint">所選地區不支持配送</string>
     <string name="text_feedback">建議表達</string>
     <string name="text_view">查看</string>
