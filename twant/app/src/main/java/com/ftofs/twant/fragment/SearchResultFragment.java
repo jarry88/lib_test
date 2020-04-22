@@ -611,7 +611,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                             if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                if (!isActivityShopping) {
+                                if (!isActivityShopping&& mGoodsAdapter != null) {
                                     mGoodsAdapter.loadMoreFail();
                                 }
                                 return;
@@ -633,7 +633,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             initSearchGoods(getView());
 
                             SLog.info("page[%d], hasMore[%s]isActivityShopping[%s]", page, hasMore,isActivityShopping);
-                            if (!hasMore && !isActivityShopping) {
+                            if (!hasMore && !isActivityShopping&& mGoodsAdapter != null) {
                                 mGoodsAdapter.loadMoreEnd();
                                 mGoodsAdapter.setEnableLoadMore(false);
                             }

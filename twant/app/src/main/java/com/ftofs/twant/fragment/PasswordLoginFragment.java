@@ -2,6 +2,8 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
@@ -115,6 +117,7 @@ public class PasswordLoginFragment extends BaseFragment implements
         btnRefreshCaptcha.setOnClickListener(this);
 
         etMobile = view.findViewById(R.id.et_mobile);
+
         etPassword = view.findViewById(R.id.et_password);
         etCaptcha = view.findViewById(R.id.et_captcha);
         etCaptcha.setOnEditorActionListener(new TextView.OnEditorActionListener() {

@@ -643,11 +643,10 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         destinationFileName += ".png";
 
 
-
         UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
         UCrop.Options options = new UCrop.Options();
         options.setHideBottomControls(true);
-        uCrop.withAspectRatio(16, 9)
+        uCrop.withAspectRatio(16, 16)
                 .withMaxResultSize(250, 250)
                 .withOptions(options)
                 .start(_mActivity);

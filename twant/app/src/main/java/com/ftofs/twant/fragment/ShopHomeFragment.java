@@ -1011,29 +1011,32 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
         switch (id) {
             case R.id.tv_shop_signature:
-
-                Layout layout = tvShopSignature.getLayout();
-                if (layout != null) {
-                    //返回要椭圆化的字符数，如果不发生省略号，则返回0。
-                    int ellipsisStatus=layout.getEllipsisCount(1);
-                    if (ellipsisStatus == Constant.FALSE_INT) {
-                        SLog.info("line_count%s,ellipsisStatus[%d],text",tvShopSignature.getLineCount(),ellipsisStatus);
-                        break;
-                    } else {
-                        SLog.info("line_text[%s]",tvShopSignature.getText().toString());
-                        tvShopSignature.setSingleLine(false);
-                        btnShopUp.setVisibility(VISIBLE);
-                        btnShopSignature.setPadding(Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,8));
+            case R.id.btn_shop_signature_up:
+            case R.id.btn_shop_signature:
+                if(btnShopUp.getVisibility() == View.GONE){
+                    Layout layout = tvShopSignature.getLayout();
+                    if (layout != null) {
+                        //返回要椭圆化的字符数，如果不发生省略号，则返回0。
+                        int ellipsisStatus=layout.getEllipsisCount(1);
+                        if (ellipsisStatus == Constant.FALSE_INT) {
+                            SLog.info("line_count%s,ellipsisStatus[%d],text",tvShopSignature.getLineCount(),ellipsisStatus);
+                            break;
+                        } else {
+                            SLog.info("line_text[%s]",tvShopSignature.getText().toString());
+                            tvShopSignature.setSingleLine(false);
+                            btnShopUp.setVisibility(VISIBLE);
+                            btnShopSignature.setPadding(Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,8));
 //                        tvShopSignature
+                        }
                     }
+                }else{
+                    tvShopSignature.setSingleLine(true);
+                    btnShopSignature.setPadding(Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,4),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,4));
+
+                    btnShopUp.setVisibility(View.GONE);
                 }
 
-                break;
-            case R.id.btn_shop_signature_up:
-                tvShopSignature.setSingleLine(true);
-                btnShopSignature.setPadding(Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,4),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,4));
 
-                btnShopUp.setVisibility(View.GONE);
                 break;
             case R.id.ll_uo_thumb_up_container:
                 switchThumbState();
