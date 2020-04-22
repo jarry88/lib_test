@@ -153,6 +153,7 @@
                         android:id="@+id/btn_shop_signature_up"
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"
+                        android:paddingBottom="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/icon_up_arrow_white"
