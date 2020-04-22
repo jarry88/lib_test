@@ -1,9 +1,11 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,8 +24,11 @@ import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 購物車跨境購商品列表彈窗
@@ -53,12 +58,24 @@ public class CartCrossBorderPopup extends CenterPopupView implements View.OnClic
         return R.layout.cart_cross_border_popup;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate() {
         super.onCreate();
 
         findViewById(R.id.btn_close).setOnClickListener(this);
         findViewById(R.id.btn_settlement).setOnClickListener(this);
+
+        Map<Integer, CrossBorderStoreInfo> sortedMap = new LinkedHashMap<>();
+        crossBorderStoreMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2) {
+                        return o2 - o1;
+                    }
+                }))
+                .forEachOrdered(x -> sortedMap.put(x.getKey(), x.getValue()));
+        crossBorderStoreMap = sortedMap;
 
         for (Map.Entry<Integer, CrossBorderStoreInfo> entry : crossBorderStoreMap.entrySet()) {
             CrossBorderStoreInfo crossBorderStoreInfo = entry.getValue();

@@ -58,6 +58,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +90,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
     ScaledButton btnBack;
 
-    Map<Integer, CrossBorderStoreInfo> crossBorderStoreMap = new HashMap<>();
+    Map<Integer, CrossBorderStoreInfo> crossBorderStoreMap = new LinkedHashMap<>();
 
     int totalCartItemCount; // 購物袋中的項數，用于顯示在主頁的底部工具欄中
 
