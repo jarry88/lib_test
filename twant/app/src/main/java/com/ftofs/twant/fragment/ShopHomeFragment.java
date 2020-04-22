@@ -1098,10 +1098,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_play:
                 String videoId = Util.getYoutubeVideoId(storeVideoUrl);
-                if (!Util.isYoutubeInstalled(_mActivity)) {
-                    ToastUtil.error(_mActivity, getString(R.string.install_youtube_player_hint));
-                    return;
-                }
 
                 if (!StringUtil.isEmpty(videoId)) {
                     Util.playYoutubeVideo(_mActivity, videoId);
