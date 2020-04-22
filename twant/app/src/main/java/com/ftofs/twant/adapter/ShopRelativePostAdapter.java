@@ -29,10 +29,12 @@ public class ShopRelativePostAdapter extends BaseMultiItemQuickAdapter<PostItem,
     @Override
     protected void convert(BaseViewHolder helper, PostItem item) {
         if (item.itemType == Constant.ITEM_TYPE_NORMAL) {
+            ImageView imgPostGood = helper.getView(R.id.iv_goods_img);
             if (!StringUtil.isEmpty(item.goodsimage)) {
-                ImageView imgPostGood = helper.getView(R.id.iv_goods_img);
                 imgPostGood.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goodsimage)).centerCrop().into(imgPostGood);
+            } else {
+                imgPostGood.setVisibility(View.GONE);
             }
             ImageView imgAuthorAvatar = helper.getView(R.id.img_author_avatar);
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.authorAvatar)).centerCrop().into(imgAuthorAvatar);
