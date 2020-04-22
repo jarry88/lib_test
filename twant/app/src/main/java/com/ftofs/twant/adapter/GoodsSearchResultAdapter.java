@@ -154,6 +154,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     .setGone(R.id.tv_goods_jingle_right, rightHandSideVisible)
                     .setGone(R.id.vw_right_bottom_separator, rightHandSideVisible)
                     .setGone(R.id.btn_goto_store_right, rightHandSideVisible)
+                    .setGone(R.id.tv_freight_free_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_price_right, rightHandSideVisible);
             if (item.right != null) {
                 TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);

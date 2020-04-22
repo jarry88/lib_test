@@ -215,7 +215,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
         } else if (id == R.id.btn_share_to_takewant_circle) { // 分享到想要圈
             EasyJSONObject dataObj = (EasyJSONObject) data;
             ApiUtil.addPost(getContext(),false,dataObj);
-            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
+//            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
             dismiss();
         }
     }
