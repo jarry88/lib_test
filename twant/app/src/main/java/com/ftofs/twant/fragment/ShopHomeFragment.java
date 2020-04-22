@@ -532,7 +532,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         updateBanner(hasSlider);
 
                          //好友
-
+                        boolean hasData = false;
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, TwantApplication.getStringRes(R.string.text_friend)));
                         EasyJSONArray friends = null;
                         if (responseObj.exists("datas.friendList")) {
@@ -547,14 +547,18 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     String nickname = friend.getSafeString("nickName");
                                     InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
                                     inStorePersonItemList.add(inStorePersonItem);
+
+                                    hasData = true;
                                 }
                             }
                             inStorePersonCount += friends.length();
-                        } else { // 為空則添加提示
-                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
+                        }
+                        if (!hasData) { // 為空則添加提示
+                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, "暫時沒有進店好友~"));
                         }
 
                         // 居民
+                        hasData = false;
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
                         EasyJSONArray members = responseObj.getArray("datas.memberList");
                         if (!Util.isJsonNull(members)) {
@@ -569,11 +573,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     inStorePersonItemList.add(inStorePersonItem);
                                     StoreFriendsItem sfitem = new StoreFriendsItem(memberName,avatar);
                                     storeFriendsItemList.add(sfitem);
+
+                                    hasData = true;
                                 }
                             }
                             inStorePersonCount += members.length();
-                        } else { // 為空則添加提示
-                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
+                        }
+                        if (!hasData) { // 為空則添加提示
+                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, "暫時沒有進店城友~"));
                         }
 
                         adapter.setNewData(storeFriendsItemList);
