@@ -197,14 +197,16 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
         int position = helper.getAdapterPosition();
         int itemCount = getItemCount();
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
         if (itemType == Constant.ITEM_TYPE_NORMAL && position == itemCount - 1) {
             // 最后一項，設置大一點的bottomMargin
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
             if (position == itemCount - 1) {
                 layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
             } else {
                 layoutParams.bottomMargin = 0;
             }
+        } else {
+            layoutParams.bottomMargin = 0;
         }
     }
 
