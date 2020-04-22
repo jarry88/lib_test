@@ -108,6 +108,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     ImageView imgShopLogo;
     @BindView(R.id.tv_store_name)
     TextView tvStoreName;
+    @BindView(R.id.btn_shop_signature)
+    LinearLayout btnShopSignature;
     @BindView(R.id.tv_shop_signature)
     TextView tvShopSignature;
     @BindView(R.id.tv_store_open_days)
@@ -1021,14 +1023,15 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         SLog.info("line_text[%s]",tvShopSignature.getText().toString());
                         tvShopSignature.setSingleLine(false);
                         btnShopUp.setVisibility(VISIBLE);
-                        tvShopSignature.setPadding(12,12,12,12);
+                        btnShopSignature.setPadding(Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,8));
+//                        tvShopSignature
                     }
                 }
 
                 break;
             case R.id.btn_shop_signature_up:
                 tvShopSignature.setSingleLine(true);
-                tvShopSignature.setPadding(12,0,12,0);
+                btnShopSignature.setPadding(Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,4),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,4));
 
                 btnShopUp.setVisibility(View.GONE);
                 break;

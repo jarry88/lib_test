@@ -133,6 +133,8 @@
                     android:paddingTop="4dp"
                     android:layout_marginLeft="60dp"
                     android:layout_marginRight="60dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
 
                     android:background="@drawable/shop_signature_bg"
                     >
@@ -140,12 +142,9 @@
                     <TextView
                         android:id="@+id/tv_shop_signature"
                         android:layout_width="wrap_content"
-
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:gravity="start"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
                         android:singleLine="true"
                         android:text="-"
                         android:textColor="#fff"
