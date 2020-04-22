@@ -686,6 +686,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             return;
         }
         if (AddrManageFragment.class.getName().equals(from) || AddAddressFragment.class.getName().equals(from)) {
+            SLog.info("from[%s]", from);
             // 從地址管理Fragment返回 或 從地址添加Fragment返回
             boolean isNoAddress = data.getBoolean("isNoAddress", false); // 標記是否刪除了所有地址
             if (isNoAddress) {
@@ -696,7 +697,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
             // 上一級Fragment返回的地址項
             AddrItem addrItem = data.getParcelable("addrItem");
+            SLog.info("addrItem[%s]", addrItem);
             if (addrItem == null) {
+                if (mAddrItem != null) {
+                    // 重新獲取地址信息（在這種場合下：用戶點擊了收貨地址，編輯了收貨人姓名等信息，但沒重新選擇，就需要重新刷新一下地址信息顯示）
+                    updateAddrData();
+                }
                 return;
             }
             SLog.info("addrItem: %s", addrItem);
@@ -1083,6 +1089,67 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             }
             item.freightAmount = storeFreight;
         }
+    }
+
+    /**
+     * 更新收貨地址顯示
+     */
+    private void updateAddrData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        if (mAddrItem == null) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate("token", token);
+        Api.postUI(Api.PATH_LIST_ADDRESS, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONArray addressList = responseObj.getSafeArray("datas.addressList");
+                    for (Object object : addressList) {
+                        EasyJSONObject item = (EasyJSONObject) object;
+
+                        int addressId = item.getInt("addressId");
+                        String realName = item.getSafeString("realName");
+                        List<Integer> areaIdList = new ArrayList<>();
+                        for (int i = 1; i <= 4; ++i) {
+                            areaIdList.add(item.getInt("areaId" + i));
+                        }
+                        int areaId = item.getInt("areaId");
+                        String areaInfo = item.getSafeString("areaInfo");
+                        String address = item.getSafeString("address");
+                        String mobileAreaCode = item.getSafeString("mobileAreaCode");
+                        String mobPhone = item.getSafeString("mobPhone");
+                        int isDefault = item.getInt("isDefault");
+
+                        // 已經加載到最新的地址信息
+                        if (addressId == mAddrItem.addressId) {
+                            mAddrItem = new AddrItem(addressId, realName, areaIdList, areaId, areaInfo, address, mobileAreaCode, mobPhone, isDefault);
+                            updateAddrView();
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     private void loadOrderData() {
