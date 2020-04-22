@@ -66,6 +66,7 @@ public class CartCrossBorderPopup extends CenterPopupView implements View.OnClic
         findViewById(R.id.btn_close).setOnClickListener(this);
         findViewById(R.id.btn_settlement).setOnClickListener(this);
 
+        // 排序，【其他產品】的排在後面
         Map<Integer, CrossBorderStoreInfo> sortedMap = new LinkedHashMap<>();
         crossBorderStoreMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey(new Comparator<Integer>() {

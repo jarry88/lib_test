@@ -233,7 +233,7 @@ public class AddrManageFragment extends BaseFragment implements View.OnClickList
 
                     adapter.setNewData(addrItemList);
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
