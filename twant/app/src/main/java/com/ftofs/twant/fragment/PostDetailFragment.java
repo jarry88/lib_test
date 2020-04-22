@@ -640,11 +640,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     }
 
                     isFavor = wantPostVoInfo.getInt("isFavor");
-                    if (isFavor == 1) {
-                        imgLike.setImageResource(R.drawable.icon_store_favorite_yellow);
-                    } else {
-                        imgLike.setImageResource(R.drawable.icon_post_like_black);
-                    }
+                    updatePostFollow(postFavor);
 
                     if (postLike > 0) {
                         tvThumbCount.setText(String.valueOf(postLike));
@@ -652,17 +648,24 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         tvThumbCount.setText("");
                     }
 
-                    if (postFavor > 0) {
-                        tvLikeCount.setText(String.valueOf(postFavor));
-                    } else {
-                        tvLikeCount.setText("");
-                    }
                     adapter.setData(adapter.getDataList());
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
+    }
+
+    private void updatePostFollow(int postFavor) {
+        if (isFavor == 1) {
+            tvLikeCount.setText(_mActivity.getString(R.string.text_followed));
+            tvLikeCount.setTextColor(_mActivity.getColor(R.color.tw_yellow));
+            imgLike.setImageResource(R.drawable.icon_store_favorite_yellow);
+        } else {
+            imgLike.setImageResource(R.drawable.icon_post_like_black);
+            tvLikeCount.setText(String.valueOf(postFavor));
+            tvLikeCount.setTextColor(_mActivity.getColor(R.color.tw_black));
+        }
     }
 
     private void updatePostCommentCount() {

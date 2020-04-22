@@ -145,6 +145,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:gravity="start"
+                       android:justificationMode="inter_word"
                         android:singleLine="true"
                         android:text="-"
                         android:textColor="#fff"
