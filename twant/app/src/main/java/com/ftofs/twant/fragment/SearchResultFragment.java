@@ -513,6 +513,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         }
         rvSearchResultList.setLayoutManager(new LinearLayoutManager(_mActivity));
         mGoodsAdapter = new GoodsSearchResultAdapter(_mActivity, goodsItemPairList);
+        mGoodsAdapter.setEnableLoadMore(true);
+        mGoodsAdapter.setOnLoadMoreListener(this, rvSearchResultList);
         mGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -630,7 +632,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             }
                             initSearchGoods(getView());
 
-                            SLog.info("page[%d], hasMore[%s]", page, hasMore);
+                            SLog.info("page[%d], hasMore[%s]isActivityShopping[%s]", page, hasMore,isActivityShopping);
                             if (!hasMore && !isActivityShopping) {
                                 mGoodsAdapter.loadMoreEnd();
                                 mGoodsAdapter.setEnableLoadMore(false);
