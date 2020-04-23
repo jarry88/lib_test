@@ -551,7 +551,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 } else if (id == R.id.btn_back) {
                     hideSoftInputPop();
                 } else if (id == R.id.icon_publish_want_post) {
-                    Util.startFragment(AddPostFragment.newInstance(false));
+                    ApiUtil.addPost(_mActivity,false);
                 }
             }
         });
