@@ -314,8 +314,8 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();;
                     params.setMarginStart(Util.dip2px(getContext(),10));
                     linearLayout.setLayoutParams(params);
-//                    bannerView.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT);
-//                    bannerView.setIndicatorPadding(Util.dip2px(getContext(),50),200,0,0);
+                    bannerView.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT);
+                    bannerView.setIndicatorPadding(Util.dip2px(getContext(),50),200,0,0);
 
                     bannerView.start();
                     bannerView.setDelayedTime(2500);
