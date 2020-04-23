@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -150,7 +149,7 @@ public class RefundDetailFragment extends BaseFragment implements View.OnClickLi
         goodsImage = view.findViewById(R.id.goods_image);
         tvGoodsName = view.findViewById(R.id.tv_goods_name);
         tvGoodsFullSpecs = view.findViewById(R.id.tv_goods_full_specs);
-        tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
+        tvGoodsPrice = view.findViewById(R.id.tv_goods_price_left);
         tvBuyNum = view.findViewById(R.id.tv_buy_num);
         tvRefundStatus = view.findViewById(R.id.tv_refund_status);
         tvReturnNo = view.findViewById(R.id.tv_return_no);

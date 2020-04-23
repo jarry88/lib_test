@@ -58,7 +58,7 @@
         android:layout_marginRight="3dp"
         />
     <TextView
-        android:id="@+id/tv_goods_price"
+        android:id="@+id/tv_goods_price_left"
         android:layout_above="@id/ll_container"
         android:layout_width="match_parent"
         android:layout_height="25dp"

@@ -132,7 +132,7 @@ public class FootprintListAdapter extends BaseQuickAdapter<Footprint, BaseViewHo
                 .setText(R.id.tv_store_name, item.storeName)
                 .setText(R.id.tv_goods_name, item.goodsName)
                 .setText(R.id.tv_goods_jingle, item.jingle)
-                .setText(R.id.tv_goods_price, StringUtil.formatPrice(context, item.price, 1,false));
+                .setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context, item.price, 1,false));
 
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(context).load(item.imageSrc).centerCrop().into(goodsImage);

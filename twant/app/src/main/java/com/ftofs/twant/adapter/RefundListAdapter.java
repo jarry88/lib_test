@@ -27,7 +27,7 @@ public class RefundListAdapter extends BaseQuickAdapter<RefundItem, BaseViewHold
                 .setText(R.id.tv_order_status, item.orderStatus)
                 .setText(R.id.tv_goods_name, item.goodsName)
                 .setText(R.id.tv_goods_full_specs, item.goodsFullSpecs)
-                .setText(R.id.tv_goods_price, StringUtil.formatPrice(mContext, item.goodsPrice, 0,false))
+                .setText(R.id.tv_goods_price_left, StringUtil.formatPrice(mContext, item.goodsPrice, 0,false))
                 .setText(R.id.tv_buy_num, mContext.getString(R.string.times_sign) + " " + item.buyNum)
                 .setText(R.id.tv_add_time, item.addTime)
                 .setText(R.id.tv_refund_amount, StringUtil.formatPrice(mContext, item.goodsPayAmount, 0,false));

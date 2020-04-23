@@ -110,7 +110,7 @@ dependencies {
 
     implementation 'org.litepal.android:java:3.0.0'
 
-    implementation 'com.github.pinguo-zhouwei:MZBannerView:v2.0.2'
+//    implementation 'com.github.pinguo-zhouwei:MZBannerView:v2.0.2'
 
     implementation 'com.nex3z:flow-layout:1.2.4'
 
@@ -235,6 +235,7 @@ dependencies {
 
     implementation(name: 'taifung-release-v20180615', ext: 'aar')
     implementation(name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
+    implementation(name: 'mzbanner-release', ext: 'aar')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     testImplementation 'junit:junit:4.12'
