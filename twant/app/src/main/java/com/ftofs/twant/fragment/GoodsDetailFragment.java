@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.serializer.BeforeFilter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
@@ -102,6 +103,11 @@ import static android.view.View.VISIBLE;
  */
 public class GoodsDetailFragment extends BaseFragment implements View.OnClickListener {
     private static final int FLOAT_BUTTON_SCROLLING_EFFECT_DELAY = 80;
+    int discountState;//0沒有折扣信息、1未開始、2已開始、3以結束
+    private static final int NO_DISCOUNT = 0;
+    private static final int BEFORE_DISCOUNT=1;
+    private static final int IN_DISCOUNT=2;
+    private static final int OUT_DISCOUNT=3;
     Unbinder unbinder;
     // 產品Id
     int commonId;
@@ -245,7 +251,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     LinearLayout llPage2;
     LinearLayout llPage3;
     LinearLayout bootomBar;
-    int discountState;//0沒有折扣信息、1未開始、2已開始、3以結束
     LinearLayout llFloatButton;
     private int commentChannel = Constant.COMMENT_CHANNEL_GOODS;//產品
     private Handler mHandler;
@@ -260,6 +265,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private int limitBuy;
     private int tariffEnable =Constant.FALSE_INT;
     private ImageView iconTariff;
+
 
     static class scrollStateHandler extends Handler {
         ScrollView scrollViewContainer;
@@ -1483,21 +1489,21 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     private void updateDiscount(GoodsInfo goodsInfo) {
         if (goodsInfo.promotionType == Constant.FALSE_INT) {
-            discountState = 0;
+            discountState = NO_DISCOUNT;
         } else {
             float time = System.currentTimeMillis() / 1000 - discountStartTime;
             if (time < 0) {
-                discountState = 1;
+                discountState = BEFORE_DISCOUNT;
             } else {
                 time = System.currentTimeMillis() / 1000 - discountEndTime;
                 if (time < 0) {
-                    discountState = 2;
+                    discountState = IN_DISCOUNT;
                 } else {
-                    discountState = 3;
+                    discountState = OUT_DISCOUNT;
                 }
             }
         }
-
+        SLog.info("discountState[%d]",discountState);
     }
 
     private void setGoodsStatus(int status) {
@@ -1622,7 +1628,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     public void onSupportVisible() {
         super.onSupportVisible();
         SLog.info("here onsupport");
-        if (discountState > 0 && discountState < 3) {
+        if (discountState==IN_DISCOUNT||discountState== BEFORE_DISCOUNT) {
             startCountDown();
         }
 
@@ -1765,18 +1771,18 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
      */
     private void showPriceTag(GoodsInfo goodsInfo) {
         updateDiscount(goodsInfo);
-        boolean show = discountState > 0 && discountState < 3;
-        rlPriceTag.setVisibility(show?GONE:VISIBLE);
-        rlDiscountInfoContainer.setVisibility(show?VISIBLE:GONE);
-        if (show) {
+        boolean showDiscountInfo = discountState==BEFORE_DISCOUNT||discountState==IN_DISCOUNT;
+        rlPriceTag.setVisibility(showDiscountInfo?GONE:VISIBLE);
+        rlDiscountInfoContainer.setVisibility(showDiscountInfo?VISIBLE:GONE);
+        if (showDiscountInfo) {
             tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
             tvGoodsPriceOriginal.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
 
-            stopCountDown();
+            startCountDown();
         } else {
             tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
 
-            startCountDown();
+            stopCountDown();
         }
     }
 
