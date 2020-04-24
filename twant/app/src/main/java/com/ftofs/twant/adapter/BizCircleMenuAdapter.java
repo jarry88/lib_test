@@ -36,7 +36,7 @@ public class BizCircleMenuAdapter extends BaseQuickAdapter<BizCircleItem, BaseVi
     @Override
     protected void convert(BaseViewHolder helper, BizCircleItem item) {
         helper.setText(R.id.tv_name, item.name);
-        helper.setVisible(R.id.vw_indicator, !item.selected);
+        helper.setVisible(R.id.vw_indicator, item.selected);
         helper.setTextColor(R.id.tv_name, item.selected?twBlue:twBlack);
         helper.setBackgroundColor(R.id.ll_container,item.selected?twWhite:twGray);
     }
