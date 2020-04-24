@@ -54,7 +54,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     /**
      * 當前正在顯示的Fragment的下標
      */
-    private int selectedFragmentIndex = HOME_FRAGMENT;
+    public int selectedFragmentIndex = HOME_FRAGMENT;
 
     private static MainFragment instance;
 
@@ -179,11 +179,8 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         // 切換未選中圖標
         bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarIconResources[selectedFragmentIndex]);
 
-        selectedFragmentIndex = index;
-
         // 切換選中圖標
-        bottomBarIcons[selectedFragmentIndex].setImageResource(bottomBarSelIconResources[selectedFragmentIndex]);
-
+        bottomBarIcons[index].setImageResource(bottomBarSelIconResources[index]);
     }
 
     @Override

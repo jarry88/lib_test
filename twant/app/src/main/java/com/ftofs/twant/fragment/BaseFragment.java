@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.activity.CustomCaptureActivity;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.interfaces.CommonCallback;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.IntentUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -90,5 +91,17 @@ public class BaseFragment extends SupportFragment {
      */
     public void setIntAttribute(String attributeName, int follow) {
         
+    }
+
+    /**
+     * 更新MainFragment裏選中的子Fragment
+     * @param selectedFragmentIndex
+     */
+    public void updateMainSelectedFragment(int selectedFragmentIndex) {
+        SLog.info("updateMainSelectedFragment:selectedFragmentIndex[%d]", selectedFragmentIndex);
+        MainFragment mainFragment = (MainFragment) getParentFragment();
+        if (mainFragment != null) {
+            mainFragment.selectedFragmentIndex = selectedFragmentIndex;
+        }
     }
 }
