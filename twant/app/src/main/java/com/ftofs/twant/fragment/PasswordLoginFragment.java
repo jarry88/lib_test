@@ -397,5 +397,7 @@ public class PasswordLoginFragment extends BaseFragment implements
         this.selectedMobileZoneIndex = id;
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
+        //刷新電話編輯文本框
+        etMobile.setText(etMobile.getText());
     }
 }

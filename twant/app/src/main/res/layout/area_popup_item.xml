@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="15dp"
+    android:layout_marginStart="20dp"
     android:paddingBottom="15dp"
-    android:gravity="center"
+    android:gravity="center_vertical"
     android:textColor="@color/tw_black"
     android:textSize="16sp">
 </TextView>

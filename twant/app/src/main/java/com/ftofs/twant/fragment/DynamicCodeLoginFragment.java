@@ -6,6 +6,8 @@ import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
@@ -15,11 +17,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
@@ -44,6 +48,8 @@ import com.lxj.xpopup.XPopup;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 import cn.snailpad.easyjson.EasyJSONException;
@@ -80,6 +86,8 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
     CommonCallback commonCallback;
     private ImageView imgClick;
     private boolean checkButtonState=true;
+    private TextView tvMobileError;
+    private LinearLayout llMobileErrorContainer;
 
     public void setCommonCallback(CommonCallback commonCallback) {
         this.commonCallback = commonCallback;
@@ -120,6 +128,8 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 btnGetSMSCode.setText(R.string.get_sms_code);
             }
         };
+        tvMobileError = view.findViewById(R.id.tv_mobile_error);
+        llMobileErrorContainer = view.findViewById(R.id.ll_container_mobile_error);
 
         Util.setOnClickListener(view, R.id.btn_login, this);
         Util.setOnClickListener(view, R.id.btn_facebook_login, this);
@@ -135,6 +145,57 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         btnRefreshCaptcha.setOnClickListener(this);
 
         etMobile = view.findViewById(R.id.et_mobile);
+        etMobile.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String mobile = s.toString();
+                if (!checkMobileZoneList()||StringUtil.isEmpty(mobile)) {
+                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
+                    return;
+                }
+                MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+                String[] mobileRex = new String[] {
+                        "",
+                        "^[569][0-9]{0,7}$", // 香港
+                        "^1[0-9]{0,10}$",    // 大陸
+                        "^6[0-9]{0,7}$"   // 澳門
+                };
+
+                Pattern pattern = Pattern.compile(mobileRex[mobileZone.areaId]);
+
+                Matcher matcher = pattern.matcher(mobile);
+
+                boolean result = matcher.matches();
+                if (!result) {
+                    String[] areaArray = new String[] {
+                            "",
+                            getString(R.string.text_hongkong),
+                            getString(R.string.text_mainland),
+                            getString(R.string.text_macao)
+                    };
+
+                    String msg = String.format(getString(R.string.text_error_tip_mobile), areaArray[mobileZone.areaId]);
+                    tvMobileError.setText(msg);
+                    tvMobileError.setTextColor(getResources().getColor(R.color.tw_red,null));
+                    if (llMobileErrorContainer.getVisibility() != View.VISIBLE) {
+                        llMobileErrorContainer.setVisibility(View.VISIBLE);
+                    }
+                    return;
+                }else{
+                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
         etCaptcha = view.findViewById(R.id.et_captcha);
         etSmsCode = view.findViewById(R.id.et_sms_code);
         etSmsCode.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -273,7 +334,12 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         }
     }
 
-
+    private boolean checkMobileZoneList() {
+        if (mobileZoneList == null || mobileZoneList.size() <= selectedMobileZoneIndex) {
+            return false;
+        }
+        return true;
+    }
     private void doLogin() {
         if (mobileZoneList.size() <= selectedMobileZoneIndex) {
             return;
@@ -401,5 +467,6 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         this.selectedMobileZoneIndex = id;
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
+        etMobile.setText(etMobile.getText());
     }
 }
