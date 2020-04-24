@@ -555,13 +555,13 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         }
 
                         if (!hasMore && goodsList.size() > 0) {
-                            // 如果全部加載完畢，添加加載完畢的提示
+                            // 如果全部加載完畢，不添加加載完畢的提示
                             Goods goods = new Goods();
                             goodsList.add(goods);
 
-                            GoodsPair loadEndGoodsPair = new GoodsPair();
-                            loadEndGoodsPair.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
-                            goodsPairList.add(loadEndGoodsPair);
+//                            GoodsPair loadEndGoodsPair = new GoodsPair();
+//                            loadEndGoodsPair.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
+//                            goodsPairList.add(loadEndGoodsPair);
                         }
                         if (goodsPairList != null && goodsPairList.size() > 0) {
                             SLog.info("當前list Size %d,type %d,title %s",goodsPairList.size(),goodsPairList.get(0).getItemType(),title);

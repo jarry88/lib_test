@@ -1,5 +1,9 @@
 package com.ftofs.twant.entity;
 
+import androidx.annotation.NonNull;
+
+import com.ftofs.twant.util.StringUtil;
+
 import java.util.List;
 
 /**
@@ -7,6 +11,8 @@ import java.util.List;
  * @author zwm
  */
 public class ConfirmOrderSkuItem {
+    public int storageStatus=1;//0时显示售罄
+    public int allowSend =1;//0时显示 所選地區無貨
     public ConfirmOrderSkuItem(String goodsImage, int goodsId, String goodsName, String goodsFullSpecs, int buyNum, float skuPrice, List<GiftItem> giftItemList) {
         this.goodsImage = goodsImage;
         this.goodsId = goodsId;
@@ -17,11 +23,19 @@ public class ConfirmOrderSkuItem {
         this.giftItemList = giftItemList;
     }
 
+
     public String goodsImage;
+    public int cartId;
     public int goodsId;
     public String goodsName;
     public String goodsFullSpecs;
     public int buyNum;
     public float skuPrice;
     public List<GiftItem> giftItemList;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("goodsId [%d],goodsName [%s]",goodsId,goodsName);
+    }
 }

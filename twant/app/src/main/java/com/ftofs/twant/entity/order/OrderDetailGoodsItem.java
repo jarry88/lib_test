@@ -6,6 +6,7 @@ package com.ftofs.twant.entity.order;
  * @author zwm
  */
 public class OrderDetailGoodsItem {
+
     public OrderDetailGoodsItem(int commonId, int goodsId, int ordersId, int orderState, int showRefundWaiting, int ordersGoodsId,
                                 String imageSrc, String goodsName, float goodsPrice, int buyNum,
                                 String goodsFullSpecs, int refundType, int showRefund, int showMemberComplain,
@@ -26,6 +27,7 @@ public class OrderDetailGoodsItem {
         this.showRefund = showRefund;
         this.showMemberComplain = showMemberComplain;
         this.complainId = complainId;
+//        this.tariffAmount = tariffAmount;
 
     }
 

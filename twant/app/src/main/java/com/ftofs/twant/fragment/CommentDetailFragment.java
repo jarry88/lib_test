@@ -39,6 +39,7 @@ import com.ftofs.twant.entity.EmojiPage;
 import com.ftofs.twant.entity.UnicodeEmojiItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -59,6 +60,16 @@ import okhttp3.Call;
  */
 public class CommentDetailFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener {
     CommentItem commentItem;
+    private boolean popLogined=false;
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (!User.isLogin()) {
+
+            popLogined=false;
+        }
+    }
 
     public static class QuoteReply {
         public boolean isQuoteReply;  // 是否為引用回覆，如果是引用回覆時，下面的字段才有用
@@ -119,6 +130,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        SLog.info("3進入評論詳情頁");
         Bundle args = getArguments();
         commentItem = args.getParcelable("commentItem");
 
@@ -251,8 +263,13 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 break;
             case R.id.et_reply_content:
                 // 如果點擊輸入區域，將圖標切換為表情輸入圖標
-                btnEmoji.setSelected(false);
-                btnEmoji.setImageResource(R.drawable.icon_emoji);
+                if (!popLogined&&!User.isLogin()) {
+                    popLogined = true;
+                    Util.showLoginFragment();
+                } else {
+                    btnEmoji.setSelected(false);
+                    btnEmoji.setImageResource(R.drawable.icon_emoji);
+                }
                 break;
             default:
                 break;
@@ -270,6 +287,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             hideSoftInputPop();
         } else if (id == R.id.btn_thumb) {
             if (!User.isLogin()) {
+                SLog.info("登錄");
                 start(LoginFragment.newInstance());
                 return;
             }

@@ -47,6 +47,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
         addItemType(Constant.ITEM_TYPE_DOUBLE_ELEVEN_BANNER, R.layout.double_eleven_header);
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.goods_search_item_pair);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint_new);
+        addItemType(Constant.ITEM_TYPE_NO_DATA, R.layout.ic_placeholder_no_data);
 
         this.context = context;
         currencyTypeSign = context.getResources().getString(R.string.currency_type_sign);
@@ -153,6 +154,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     .setGone(R.id.tv_goods_jingle_right, rightHandSideVisible)
                     .setGone(R.id.vw_right_bottom_separator, rightHandSideVisible)
                     .setGone(R.id.btn_goto_store_right, rightHandSideVisible)
+                    .setGone(R.id.tv_freight_free_right, rightHandSideVisible)
                     .setGone(R.id.tv_goods_price_right, rightHandSideVisible);
             if (item.right != null) {
                 TextView tvGoodsJingleRight = helper.getView(R.id.tv_goods_jingle_right);
@@ -175,6 +177,7 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
             if (now > doubleElevenTimestamp) {
                 helper.setGone(R.id.btn_play_game, true);
             }
+        }else if(itemType==Constant.ITEM_TYPE_NO_DATA){
         } else {
             helper.addOnClickListener(R.id.icon_publish_want_post);
 
@@ -195,14 +198,16 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
 
         int position = helper.getAdapterPosition();
         int itemCount = getItemCount();
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
         if (itemType == Constant.ITEM_TYPE_NORMAL && position == itemCount - 1) {
             // 最后一項，設置大一點的bottomMargin
-            RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) helper.itemView.getLayoutParams();
             if (position == itemCount - 1) {
                 layoutParams.bottomMargin = (int) mContext.getResources().getDimension(R.dimen.bottom_toolbar_max_height);
             } else {
                 layoutParams.bottomMargin = 0;
             }
+        } else {
+            layoutParams.bottomMargin = 0;
         }
     }
 

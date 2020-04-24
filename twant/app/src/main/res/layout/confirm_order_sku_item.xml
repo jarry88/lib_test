@@ -21,7 +21,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:orientation="vertical">
             <LinearLayout
@@ -32,11 +32,10 @@
                     android:id="@+id/tv_goods_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:textSize="14sp"
                     android:textColor="@color/tw_black"
-                    android:text="Yueaeow香薰精油香氛淡薰香家用室內臥室空氣清新留香"
                     android:lines="2"
                     android:ellipsize="end"
                     />
@@ -45,8 +44,8 @@
                     android:id="@+id/tv_sku_price"
                     android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="$129.00"
+                    android:gravity="end"
+                    android:text=""
                     android:textSize="14sp"
                     android:textColor="@color/tw_black"
                     />
@@ -61,21 +60,31 @@
                     android:id="@+id/tv_goods_full_specs"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:textSize="13sp"
                     android:textColor="#929292"
-                    android:text="类型:玫瑰, 规格:10ml, 颜色:黑色"
+                    android:text=""
                     />
 
                 <TextView
                     android:id="@+id/tv_sku_count"
                     android:layout_width="75dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="X 1"
+                    android:gravity="end"
+                    android:text=""
                     android:textSize="13sp"
                     android:textColor="#929292"
+                    />
+                <TextView
+                    android:id="@+id/tv_error_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@string/not_allow_send_hint"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_red"
+                    android:visibility="gone"
                     />
             </LinearLayout>
         </LinearLayout>

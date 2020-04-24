@@ -41,6 +41,8 @@ public class InStorePersonListAdapter extends BaseMultiItemQuickAdapter<InStoreP
             }
 
             helper.setText(R.id.tv_nickname, item.nickname);
+        } else if (itemViewType == InStorePersonItem.TYPE_EMPTY_HINT) {
+            helper.setText(R.id.tv_hint, item.nickname);
         }
     }
 }

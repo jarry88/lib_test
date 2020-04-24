@@ -4,13 +4,13 @@ public class StoreAmount {
     /**
      * 商店優惠額
      */
-    public float storeDiscountAmount;
+    public double storeDiscountAmount;
     /**
      * 店铺购买金额(不含运费)
      */
-    public float storeBuyAmount;
+    public double storeBuyAmount;
 
-    public StoreAmount(float storeDiscountAmount, float storeBuyAmount) {
+    public StoreAmount(double storeDiscountAmount, double storeBuyAmount) {
         this.storeDiscountAmount = storeDiscountAmount;
         this.storeBuyAmount = storeBuyAmount;
     }

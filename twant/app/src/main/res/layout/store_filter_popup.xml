@@ -20,15 +20,19 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_biz_circle_menu_list"
             android:layout_width="95dp"
-            android:layout_height="300dp"
+            android:layout_height="match_parent"
             android:background="@color/tw_slight_grey">
 
         </androidx.recyclerview.widget.RecyclerView>
-        <com.nex3z.flowlayout.FlowLayout
-            android:id="@+id/fl_biz_circle_container"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.nex3z.flowlayout.FlowLayout>
+            android:layout_height="193dp">
+            <com.nex3z.flowlayout.FlowLayout
+                android:id="@+id/fl_biz_circle_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.nex3z.flowlayout.FlowLayout>
+        </ScrollView>
     </LinearLayout>
 </LinearLayout>
 

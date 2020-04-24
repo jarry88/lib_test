@@ -47,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -162,7 +161,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
         postGoodsImage = view.findViewById(R.id.post_goods_image);
         tvPostGoodsName = view.findViewById(R.id.tv_post_goods_name);
-        tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
+        tvGoodsPrice = view.findViewById(R.id.tv_goods_price_left);
 
         sglImageContainer = view.findViewById(R.id.sgl_image_container);
 
@@ -467,20 +466,17 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         }
                     } else if (type == STATE_TYPE_LIKE) {
                         isFavor = 1 - isFavor;
+                        int favorCount = responseObj.getInt("datas.favorCount");
                         if (isFavor == 1) {
+                            tvLikeCount.setText(_mActivity.getString(R.string.text_followed));
+                            tvLikeCount.setTextColor(_mActivity.getColor(R.color.tw_yellow));
                             imgLike.setImageResource(R.drawable.icon_store_favorite_yellow);
                         } else {
                             imgLike.setImageResource(R.drawable.icon_post_like_black);
+                            tvLikeCount.setText(String.valueOf(favorCount));
+                            tvLikeCount.setTextColor(_mActivity.getColor(R.color.tw_black));
                         }
 
-                        int favorCount = responseObj.getInt("datas.favorCount");
-                        if (favorCount > 0) {
-                            tvLikeCount.setText(_mActivity.getString(R.string.text_followed));
-                            tvLikeCount.setTextColor(_mActivity.getColor(R.color.tw_yellow));
-                        } else {
-                            tvLikeCount.setText("");
-
-                        }
                     }
                 } catch (Exception e) {
 
@@ -643,11 +639,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     }
 
                     isFavor = wantPostVoInfo.getInt("isFavor");
-                    if (isFavor == 1) {
-                        imgLike.setImageResource(R.drawable.icon_post_like_blue);
-                    } else {
-                        imgLike.setImageResource(R.drawable.icon_post_like_black);
-                    }
+                    updatePostFollow(postFavor);
 
                     if (postLike > 0) {
                         tvThumbCount.setText(String.valueOf(postLike));
@@ -655,17 +647,24 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                         tvThumbCount.setText("");
                     }
 
-                    if (postFavor > 0) {
-                        tvLikeCount.setText(String.valueOf(postFavor));
-                    } else {
-                        tvLikeCount.setText("");
-                    }
                     adapter.setData(adapter.getDataList());
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
+    }
+
+    private void updatePostFollow(int postFavor) {
+        if (isFavor == 1) {
+            tvLikeCount.setText(_mActivity.getString(R.string.text_followed));
+            tvLikeCount.setTextColor(_mActivity.getColor(R.color.tw_yellow));
+            imgLike.setImageResource(R.drawable.icon_store_favorite_yellow);
+        } else {
+            imgLike.setImageResource(R.drawable.icon_post_like_black);
+            tvLikeCount.setText(String.valueOf(postFavor));
+            tvLikeCount.setTextColor(_mActivity.getColor(R.color.tw_black));
+        }
     }
 
     private void updatePostCommentCount() {

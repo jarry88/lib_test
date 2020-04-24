@@ -59,7 +59,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -133,13 +132,13 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
             mImageView = view.findViewById(R.id.img_banner);
 
             imgDesktop = view.findViewById(R.id.img_goods_desktop);
-            goodsImageArr[0] = view.findViewById(R.id.goods_image1);
-            goodsImageArr[1] = view.findViewById(R.id.goods_image2);
-            goodsImageArr[2] = view.findViewById(R.id.goods_image3);
+            goodsImageArr[0] = view.findViewById(R.id.goods_image_middle);
+            goodsImageArr[1] = view.findViewById(R.id.goods_image_left);
+            goodsImageArr[2] = view.findViewById(R.id.goods_image_right);
 
-            goodsPriceArr[0] = view.findViewById(R.id.tv_goods_price1);
-            goodsPriceArr[1] = view.findViewById(R.id.tv_goods_price2);
-            goodsPriceArr[2] = view.findViewById(R.id.tv_goods_price3);
+            goodsPriceArr[0] = view.findViewById(R.id.tv_goods_price_middle);
+            goodsPriceArr[1] = view.findViewById(R.id.tv_goods_price_left);
+            goodsPriceArr[2] = view.findViewById(R.id.tv_goods_price_right);
 
 
             for (int i = 0; i < GOODS_IMAGE_COUNT; i++) {
@@ -593,7 +592,7 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
 
             ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
             ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
-            ((TextView) holder.getView(R.id.tv_goods_price)).setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
+            ((TextView) holder.getView(R.id.tv_goods_price_left)).setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
             holder.getView(R.id.sw_price).setVisibility(item.info.show?View.VISIBLE:View.GONE);
             ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext,item.info.getDoscount(),item.info.getOriginal());
             ImageView imageView =  holder.getView(R.id.iv_goods_img);

@@ -187,7 +187,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
+        SLog.info("onSupportVisible");
         loadPersonalInfo(contentView);
     }
 
@@ -337,7 +337,8 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     setPersonalBackground();
 
                     TextView mobile = view.findViewById(R.id.tv_member_mobile);
-                    mobile.setText(memberInfo.getSafeString("mobile"));
+                    String mobileAreaCode = memberInfo.getSafeString("mobileAreaCode");
+                    mobile.setText(mobileAreaCode+memberInfo.getSafeString("mobile"));
                     mobile = view.findViewById(R.id.tv_top_mobile);
                     mobile.setText(memberInfo.getSafeString("mobile"));
                     TextView tvName =view.findViewById(R.id.tv_member_name);
@@ -643,11 +644,10 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
         destinationFileName += ".png";
 
 
-
         UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
         UCrop.Options options = new UCrop.Options();
         options.setHideBottomControls(true);
-        uCrop.withAspectRatio(16, 9)
+        uCrop.withAspectRatio(16, 16)
                 .withMaxResultSize(250, 250)
                 .withOptions(options)
                 .start(_mActivity);

@@ -20,6 +20,9 @@ public class StoreSearchItem implements MultiItemEntity {
     public StoreSearchItem() {
         this.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
     }
+    public StoreSearchItem(int itemType) {
+        this.itemType = itemType;
+    }
 
     public StoreSearchItem(int storeId, int storeView, String storeAvatarUrl, String storeVideoUrl, String storeName, String className, String mainBusiness, String storeFigureImage,
                            float distance, String shopDay, int likeCount,int followCount,int viewCount, int goodsCommonCount, List<String> goodsImageList, List<JobInfoItem> jobList,CustomerServiceStaff staff) {
@@ -43,8 +46,9 @@ public class StoreSearchItem implements MultiItemEntity {
         this.staff = staff;
         if (jobList != null && jobList.size() > 0) {
             this.listCount = jobList.size();
-        }else
+        }else{
             this.likeCount = 0;
+        }
     }
 
     public int itemType;

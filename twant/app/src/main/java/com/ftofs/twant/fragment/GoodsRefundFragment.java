@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.RefundGoodsItem;
@@ -39,9 +41,11 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AdjustButton;
 import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.PayWayPopup;
 import com.ftofs.twant.widget.RefundWayPopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.lxj.xpopup.XPopup;
+import com.orhanobut.hawk.Hawk;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,7 +107,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
     /**
      * 當前選中的退款方式
      */
-    int refundWay = RefundWayPopup.REFUND_WAY_WALLET;
+    int refundWay = RefundWayPopup.REFUND_WAY_UNKNOWN;
 
     RefundGoodsListAdapter adapter;
 
@@ -141,6 +145,13 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
             ordersGoodsId = paramsInObj.getInt("ordersGoodsId");
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+        // 讀取上一次記錄的退款方式
+        int userId = User.getUserId();
+        if (userId != 0) {
+            String refundWayKey = String.format(SPField.FIELD_USER_REFUND_WAY, userId);
+            refundWay = Hawk.get(refundWayKey, RefundWayPopup.REFUND_WAY_UNKNOWN);
         }
 
         llGoodsOuterContainer = view.findViewById(R.id.ll_goods_outer_container);
@@ -246,11 +257,7 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     .show();
         } else if (id == R.id.btn_select_refund_way) {
             hideSoftInput();
-            new XPopup.Builder(_mActivity)
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new RefundWayPopup(_mActivity, this, refundWay))
-                    .show();
+            showRefundWayPopup();
         } else if (id == R.id.btn_add_image) {
             openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
         } else if (id == R.id.btn_commit) {
@@ -258,11 +265,27 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    private void showRefundWayPopup() {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new RefundWayPopup(_mActivity, this, refundWay))
+                .show();
+    }
 
     private void commitRefundRequest() {
         final String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
             return;
+        }
+
+        // 如果是退款、全部退款、退貨，校驗是否有選擇【退款方式】
+        if (action == Constant.ACTION_REFUND || action == Constant.ACTION_REFUND_ALL || action == Constant.ACTION_RETURN) {
+            if (refundWay == RefundWayPopup.REFUND_WAY_UNKNOWN) {
+                ToastUtil.error(getContext(), "請選擇退款方式");
+                showRefundWayPopup();
+                return;
+            }
         }
 
         if (action == Constant.ACTION_REFUND || action == Constant.ACTION_REFUND_ALL) {
@@ -285,6 +308,8 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
                     return;
                 }
             }
+
+
 
             final String buyerMessage = etRefundDesc.getText().toString().trim();
             if (StringUtil.isEmpty(buyerMessage)) {
@@ -835,9 +860,13 @@ public class GoodsRefundFragment extends BaseFragment implements View.OnClickLis
         if (tvRefundWay == null) {
             return;
         }
-        if (refundWay == RefundWayPopup.REFUND_WAY_WALLET) {
+        tvRefundWay.setTextColor(getResources().getColor(R.color.tw_black,null));
+        if (refundWay == RefundWayPopup.REFUND_WAY_UNKNOWN) {
+            tvRefundWay.setText("請選擇");
+            tvRefundWay.setTextColor(Color.parseColor("#A8A8A8"));
+        } else if (refundWay == RefundWayPopup.REFUND_WAY_WALLET) {
             tvRefundWay.setText("退至預存款");
-        } else {
+        } else if (refundWay == RefundWayPopup.REFUND_WAY_ORIGINAL) {
             tvRefundWay.setText("原路退回");
         }
     }

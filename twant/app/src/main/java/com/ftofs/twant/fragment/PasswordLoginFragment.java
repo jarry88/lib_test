@@ -2,6 +2,8 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,6 +48,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -67,7 +72,8 @@ public class PasswordLoginFragment extends BaseFragment implements
     EditText etPassword;
     EditText etCaptcha;
     TextView tvAreaName;
-
+    LinearLayout llMobileErrorContainer;
+    TextView tvMobileError;
     CommonCallback commonCallback;
 
     ImageView btnWechatLogin;
@@ -114,7 +120,62 @@ public class PasswordLoginFragment extends BaseFragment implements
         btnRefreshCaptcha = view.findViewById(R.id.btn_refresh_captcha);
         btnRefreshCaptcha.setOnClickListener(this);
 
+        llMobileErrorContainer = view.findViewById(R.id.ll_container_mobile_error);
+        tvMobileError = view.findViewById(R.id.tv_mobile_error);
+
         etMobile = view.findViewById(R.id.et_mobile);
+        etMobile.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String mobile = s.toString();
+                if (!checkMobileZoneList()||StringUtil.isEmpty(mobile)) {
+                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
+                    return;
+                }
+                MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
+                String[] mobileRex = new String[] {
+                        "",
+                        "^[569][0-9]{0,7}$", // 香港
+                        "^1[0-9]{0,10}$",    // 大陸
+                        "^6[0-9]{0,7}$"   // 澳門
+                };
+
+                Pattern pattern = Pattern.compile(mobileRex[mobileZone.areaId]);
+
+                Matcher matcher = pattern.matcher(mobile);
+
+                boolean result = matcher.matches();
+                if (!result) {
+                    String[] areaArray = new String[] {
+                            "",
+                            getString(R.string.text_hongkong),
+                            getString(R.string.text_mainland),
+                            getString(R.string.text_macao)
+                    };
+
+                    String msg = String.format(getString(R.string.text_error_tip_mobile), areaArray[mobileZone.areaId]);
+                    tvMobileError.setText(msg);
+                    tvMobileError.setTextColor(getResources().getColor(R.color.tw_red,null));
+                    if (llMobileErrorContainer.getVisibility() != View.VISIBLE) {
+                        llMobileErrorContainer.setVisibility(View.VISIBLE);
+                    }
+                    return;
+                }else{
+                    llMobileErrorContainer.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         etPassword = view.findViewById(R.id.et_password);
         etCaptcha = view.findViewById(R.id.et_captcha);
         etCaptcha.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -187,9 +248,10 @@ public class PasswordLoginFragment extends BaseFragment implements
     }
 
     private void doLogin() {
-        if (mobileZoneList == null || mobileZoneList.size() <= selectedMobileZoneIndex) {
+        if (!checkMobileZoneList()) {
             return;
         }
+
         MobileZone mobileZone = mobileZoneList.get(selectedMobileZoneIndex);
 
         String mobile = etMobile.getText().toString().trim();
@@ -281,6 +343,13 @@ public class PasswordLoginFragment extends BaseFragment implements
         });
     }
 
+    private boolean checkMobileZoneList() {
+        if (mobileZoneList == null || mobileZoneList.size() <= selectedMobileZoneIndex) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * 刷新驗證碼
      */
@@ -328,5 +397,7 @@ public class PasswordLoginFragment extends BaseFragment implements
         this.selectedMobileZoneIndex = id;
         String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
         tvAreaName.setText(areaName);
+        //刷新電話編輯文本框
+        etMobile.setText(etMobile.getText());
     }
 }

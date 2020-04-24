@@ -785,6 +785,34 @@
                             android:textColor="#666"
                             />
                     </RelativeLayout>
+                    <!-- 税費-->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rl_tax_container"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/toolbar_margin_left"
+                            android:layout_centerVertical="true"
+                            android:text="@string/text_tax"
+                            android:textColor="#666"
+                            android:textSize="14sp"
+                            />
+                        <TextView
+                            android:id="@+id/tv_tax_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/toolbar_margin_right"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:text=""
+                            android:textSize="14sp"
+                            android:textColor="#666"
+                            />
+                    </RelativeLayout>
                     <!-- 運費-->
                     <RelativeLayout
                         android:layout_width="match_parent"

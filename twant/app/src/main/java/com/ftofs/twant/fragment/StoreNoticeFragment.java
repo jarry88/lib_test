@@ -57,6 +57,10 @@ public class StoreNoticeFragment extends ScrollableBaseFragment {
 
     public void setAnnouncementData(List<StoreAnnouncement> storeAnnouncementList) {
         this.storeAnnouncementList = storeAnnouncementList;
+        if (storeAnnouncementList == null || storeAnnouncementList.size() == 0) {
+            View announcementBlackItemView = LayoutInflater.from(_mActivity).inflate(R.layout.store_black_announcement_item, llContainer, false);
+            llContainer.addView(announcementBlackItemView);
+        }
         for (StoreAnnouncement announcement : storeAnnouncementList) {
             View announcementItemView = LayoutInflater.from(_mActivity).inflate(R.layout.store_announcement_item, llContainer, false);
             TextView tvAnnouncementTitle = announcementItemView.findViewById(R.id.tv_announcement_title);

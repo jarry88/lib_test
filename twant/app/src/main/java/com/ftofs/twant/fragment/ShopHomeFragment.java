@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,6 +43,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.ConfirmOrderStoreItem;
 import com.ftofs.twant.entity.InStorePersonItem;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.entity.StoreFriendsItem;
@@ -49,6 +51,7 @@ import com.ftofs.twant.entity.StoreMapInfo;
 import com.ftofs.twant.entity.WantedPostItem;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.PermissionUtil;
@@ -105,6 +108,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     ImageView imgShopLogo;
     @BindView(R.id.tv_store_name)
     TextView tvStoreName;
+    @BindView(R.id.btn_shop_signature)
+    LinearLayout btnShopSignature;
     @BindView(R.id.tv_shop_signature)
     TextView tvShopSignature;
     @BindView(R.id.tv_store_open_days)
@@ -171,6 +176,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     NestedScrollView containerView;
     int containerViewHeight;
     private scrollStateHandler mHandler;
+    private ImageView btnShopUp;
 
     static class scrollStateHandler extends Handler {
         NestedScrollView scrollViewContainer;
@@ -291,6 +297,9 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         parentFragment = (ShopMainFragment) getParentFragment();
         storeId = parentFragment.storeId;
 
+        btnShopUp = view.findViewById(R.id.btn_shop_signature_up);
+        btnShopUp.setOnClickListener(this);
+        tvShopSignature.setOnClickListener(this);
         viewpager.setOffscreenPageLimit(tabCount-1);
         imgShopLogo.setOnClickListener(this);
         containerView.setOnClickListener(this);
@@ -298,8 +307,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         btnPlay = view.findViewById(R.id.btn_play);
         btnPlay.setOnClickListener(this);
 
-        tvLikeCount = view.findViewById(R.id.tv_like_count);
-        btnStoreThumb = view.findViewById(R.id.btn_store_thumb);
         Util.setOnClickListener(view, R.id.ll_uo_thumb_up_container, this);
 
         llPayWayContainer = view.findViewById(R.id.ll_pay_way_container);
@@ -307,11 +314,13 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         tvBusinessTimeWorkingDay = view.findViewById(R.id.tv_business_time_working_day);
         tvBusinessTimeWeekend = view.findViewById(R.id.tv_business_time_weekend);
 
+        tvLikeCount = view.findViewById(R.id.tv_like_count);
         tvFavoriteCount = view.findViewById(R.id.tv_favorite_count);
+        tvVisitorCount = view.findViewById(R.id.tv_visitor_count);
         btnStoreFavorite = view.findViewById(R.id.btn_store_favorite);
+        btnStoreThumb = view.findViewById(R.id.btn_store_thumb);
         Util.setOnClickListener(view, R.id.ll_uo_like_container, this);
 
-        tvVisitorCount = view.findViewById(R.id.tv_visitor_count);
         Util.setOnClickListener(view, R.id.ll_uo_share_container, this);
 
         llFirstCommentContainer = view.findViewById(R.id.ll_first_comment_container);
@@ -504,7 +513,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         }
 
                         EasyJSONObject storeInfo = responseObj.getSafeObject("datas.storeInfo");
-                        SLog.info(String.format("storeInfo[%s]",storeInfo.toString()));
+                        // SLog.info(String.format("storeInfo[%s]",storeInfo.toString()));
                         setStoreInfo(storeInfo);
                         boolean hasSlider = storeInfo.exists("storeSlider");
                         SLog.info("hasSlider,%s",hasSlider);
@@ -523,7 +532,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         updateBanner(hasSlider);
 
                          //好友
-
+                        boolean hasData = false;
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, TwantApplication.getStringRes(R.string.text_friend)));
                         EasyJSONArray friends = null;
                         if (responseObj.exists("datas.friendList")) {
@@ -538,14 +547,18 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     String nickname = friend.getSafeString("nickName");
                                     InStorePersonItem inStorePersonItem = new InStorePersonItem(InStorePersonItem.TYPE_ITEM, memberName, avatar, nickname);
                                     inStorePersonItemList.add(inStorePersonItem);
+
+                                    hasData = true;
                                 }
                             }
                             inStorePersonCount += friends.length();
-                        } else { // 為空則添加提示
-                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
+                        }
+                        if (!hasData) { // 為空則添加提示
+                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, "暫時沒有進店好友~"));
                         }
 
                         // 居民
+                        hasData = false;
                         inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_LABEL, null, null, getString(R.string.text_store_friend)));
                         EasyJSONArray members = responseObj.getArray("datas.memberList");
                         if (!Util.isJsonNull(members)) {
@@ -560,11 +573,14 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                                     inStorePersonItemList.add(inStorePersonItem);
                                     StoreFriendsItem sfitem = new StoreFriendsItem(memberName,avatar);
                                     storeFriendsItemList.add(sfitem);
+
+                                    hasData = true;
                                 }
                             }
                             inStorePersonCount += members.length();
-                        } else { // 為空則添加提示
-                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, null));
+                        }
+                        if (!hasData) { // 為空則添加提示
+                            inStorePersonItemList.add(new InStorePersonItem(InStorePersonItem.TYPE_EMPTY_HINT, null, null, "暫時沒有進店城友~"));
                         }
 
                         adapter.setNewData(storeFriendsItemList);
@@ -610,8 +626,11 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
                         // 店鋪形象視頻
                         if (storeInfo.exists("videoUrl")) {
-                            storeVideoUrl = storeInfo.getSafeString("videoUrl");
-                            btnPlay.setVisibility(StringUtil.isEmpty(storeVideoUrl) ? View.GONE : VISIBLE);
+                            String videoUrl = storeInfo.getSafeString("videoUrl");
+                            if (videoUrl.contains("youtube.com") || videoUrl.contains("youtu.be")) {
+                                storeVideoUrl = videoUrl;
+                                btnPlay.setVisibility(VISIBLE);
+                            }
                         }
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -928,7 +947,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                     SLog.info("socialName[%s], socialForm[%d]", socialName, socialForm);
 
                     // socialForm   1 链接，2 二维码 3 賬號類型
-                    if (socialForm == 1) {
+                    if (socialForm == 1) { // 鏈接
                         Intent intent =new Intent(Intent.ACTION_VIEW);
                         String accountAddress = dataObject.getSafeString("accountAddress");
                         if (StringUtil.isEmpty(accountAddress)) {
@@ -938,12 +957,12 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         intent.setData(uri);
 
                         _mActivity.startActivity(intent);
-                    } else if (socialForm == 2) {
+                    } else if (socialForm == 2) { // 二維碼
                         String accountImageAddress = StringUtil.normalizeImageUrl(dataObject.getSafeString("accountImageAddress"));
                         new XPopup.Builder(_mActivity)
-                                .asCustom(new TwQRCodePopup(_mActivity, accountImageAddress))
+                                .asCustom(new TwQRCodePopup(_mActivity, accountImageAddress, true))
                                 .show();
-                    } else if (socialForm == 3) {
+                    } else if (socialForm == 3) { // 帳號類型
                         String account = dataObject.getSafeString("account");
 
                         String content = String.format("%s: %s", socialName, account);
@@ -998,6 +1017,34 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         }
 
         switch (id) {
+            case R.id.tv_shop_signature:
+            case R.id.btn_shop_signature_up:
+            case R.id.btn_shop_signature:
+                if(btnShopUp.getVisibility() == View.GONE){
+                    Layout layout = tvShopSignature.getLayout();
+                    if (layout != null) {
+                        //返回要椭圆化的字符数，如果不发生省略号，则返回0。
+                        int ellipsisStatus=layout.getEllipsisCount(1);
+                        if (ellipsisStatus == Constant.FALSE_INT) {
+                            SLog.info("line_count%s,ellipsisStatus[%d],text",tvShopSignature.getLineCount(),ellipsisStatus);
+                            break;
+                        } else {
+                            SLog.info("line_text[%s]",tvShopSignature.getText().toString());
+                            tvShopSignature.setSingleLine(false);
+                            btnShopUp.setVisibility(VISIBLE);
+                            btnShopSignature.setPadding(Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,8));
+//                        tvShopSignature
+                        }
+                    }
+                }else{
+                    tvShopSignature.setSingleLine(true);
+                    btnShopSignature.setPadding(Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,4),Util.dip2px(_mActivity,12),Util.dip2px(_mActivity,4));
+
+                    btnShopUp.setVisibility(View.GONE);
+                }
+
+
+                break;
             case R.id.ll_uo_thumb_up_container:
                 switchThumbState();
                 break;
@@ -1061,10 +1108,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_play:
                 String videoId = Util.getYoutubeVideoId(storeVideoUrl);
-                if (!Util.isYoutubeInstalled(_mActivity)) {
-                    ToastUtil.error(_mActivity, getString(R.string.install_youtube_player_hint));
-                    return;
-                }
 
                 if (!StringUtil.isEmpty(videoId)) {
                     Util.playYoutubeVideo(_mActivity, videoId);

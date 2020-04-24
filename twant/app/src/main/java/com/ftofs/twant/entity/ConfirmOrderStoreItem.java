@@ -1,5 +1,7 @@
 package com.ftofs.twant.entity;
 
+import androidx.annotation.NonNull;
+
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
 
@@ -11,7 +13,15 @@ import java.util.List;
 public class ConfirmOrderStoreItem implements MultiItemEntity {
 
 
-    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, float freightAmount,
+    public int tariffEnable =Constant.FALSE_INT;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("storeName[%s],buyItemAmount[%s],taxAmount[%s]",storeName,buyItemAmount,taxAmount);
+    }
+
+    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, double freightAmount,
                                  int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
                                  float conformTemplatePrice) {
         this.storeId = storeId;
@@ -24,12 +34,28 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
         this.conformTemplatePrice = conformTemplatePrice;
     }
 
+    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, float freightAmount,
+                                 int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
+                                 float conformTemplatePrice,double taxAmount) {
+        this.storeId = storeId;
+        this.storeName = storeName;
+        this.buyItemAmount = buyItemAmount;
+        this.freightAmount = freightAmount;
+        this.itemCount = itemCount;
+        this.voucherCount = voucherCount;
+        this.confirmOrderSkuItemList = confirmOrderSkuItemList;
+        this.conformTemplatePrice = conformTemplatePrice;
+        this.tariffEnable = Constant.TRUE_INT;
+        this.taxAmount = taxAmount;
+    }
+
 
     public int storeId;
     public String storeName;
-    public float buyItemAmount;  // 金額
-    public float freightAmount; // 運費
-    public float discountAmount;  // 商店優惠
+    public double taxAmount=0;//稅費
+    public double buyItemAmount;  // 金額
+    public double freightAmount; // 運費
+    public double discountAmount;  // 商店優惠
     public int itemCount;    // 商店訂單的產品件數: 如果sku1有2件，sku2有3件，那么件數就是5
     public String leaveMessage;  // 留言
     public int voucherCount;  // 商店券數量

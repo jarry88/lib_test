@@ -394,9 +394,13 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void initSearchStore(View view) {
+
         view.findViewById(R.id.ll_goods_filter).setVisibility(View.GONE);
         view.findViewById(R.id.ll_store_filter).setVisibility(View.VISIBLE);
-
+//已經創建過mStoreAdapter就不需要再新建一遍了
+        if (mStoreAdapter != null) {
+            return;
+        }
         tvFollow = view.findViewById(R.id.tv_follow);
         tvRecruitment = view.findViewById(R.id.tv_recruitment);
         tvSort = view.findViewById(R.id.tv_sort);
@@ -424,6 +428,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvSearchResultList.setLayoutManager(layoutManager);
+
         mStoreAdapter = new StoreSearchResultAdapter(storeItemList);
         mStoreAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -499,8 +504,17 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         }
 
+        if (mGoodsAdapter != null) {
+            if (!isActivityShopping) { // 活動專場採用點擊【上一頁】、【下一頁】的分頁方式
+                mGoodsAdapter.setEnableLoadMore(true);
+                mGoodsAdapter.setOnLoadMoreListener(this, rvSearchResultList);
+            }
+            return;
+        }
         rvSearchResultList.setLayoutManager(new LinearLayoutManager(_mActivity));
         mGoodsAdapter = new GoodsSearchResultAdapter(_mActivity, goodsItemPairList);
+        mGoodsAdapter.setEnableLoadMore(true);
+        mGoodsAdapter.setOnLoadMoreListener(this, rvSearchResultList);
         mGoodsAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -537,7 +551,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 } else if (id == R.id.btn_back) {
                     hideSoftInputPop();
                 } else if (id == R.id.icon_publish_want_post) {
-                    Util.startFragment(AddPostFragment.newInstance(false));
+                    ApiUtil.addPost(_mActivity,false);
                 }
             }
         });
@@ -555,10 +569,6 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
-        if (!isActivityShopping) { // 活動專場採用點擊【上一頁】、【下一頁】的分頁方式
-            mGoodsAdapter.setEnableLoadMore(true);
-            mGoodsAdapter.setOnLoadMoreListener(this, rvSearchResultList);
-        }
         rvSearchResultList.setAdapter(mGoodsAdapter);
     }
 
@@ -601,7 +611,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                             if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                if (!isActivityShopping) {
+                                if (!isActivityShopping&& mGoodsAdapter != null) {
                                     mGoodsAdapter.loadMoreFail();
                                 }
                                 return;
@@ -610,7 +620,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             if (associateSearchTime > 0) {
                                 SLog.info("搜過商品，來搜商店了");
                             }
-                            if (responseObj.exists("datas.isHaveStore")) {
+                            if (responseObj.exists("datas.isHaveStore")&&!StringUtil.isEmpty(keyword)) {
                                 SLog.info("沒有對應商品");
                                 isHaveStore = responseObj.getInt("datas.isHaveStore");
                                 if (isHaveStore > 0&&associateSearchTime++<1) {
@@ -622,8 +632,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             }
                             initSearchGoods(getView());
 
-                            SLog.info("page[%d], hasMore[%s]", page, hasMore);
-                            if (!hasMore && !isActivityShopping) {
+                            SLog.info("page[%d],currpage[%s] ,goodsItemPairList.size(%d)hasMore[%s]isActivityShopping[%s]", page,currPage, goodsItemPairList.size(),hasMore,isActivityShopping);
+                            if (!hasMore && !isActivityShopping&& mGoodsAdapter != null) {
                                 mGoodsAdapter.loadMoreEnd();
                                 mGoodsAdapter.setEnableLoadMore(false);
                             }
@@ -631,6 +641,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             // 如果是加載第一頁的數據，先清除舊數據
                             if (page == 1 || isActivityShopping) {
                                 goodsItemPairList.clear();
+
                             }
 
                             if (isActivityShopping) {
@@ -705,11 +716,14 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 pair = null;
                             }
 
+                            if (currPage == 0 && goodsItemPairList.size() == 0) {
+                                goodsItemPairList.add(new GoodsSearchItemPair(Constant.ITEM_TYPE_NO_DATA));
+                            }
                             if (!hasMore && !isActivityShopping) {
                                 // 如果全部加載完畢，添加加載完畢的提示
                                 goodsItemPairList.add(new GoodsSearchItemPair(Constant.ITEM_TYPE_LOAD_END_HINT));
                             }
-                            SLog.info("goodsItemPairList.size[%d]", goodsItemPairList.size());
+                            SLog.info("currpage[%d]goodsItemPairList.size[%d],isActivityShopping[%s]", currPage,goodsItemPairList.size(),isActivityShopping);
                             if (!isActivityShopping) {
                                 mGoodsAdapter.loadMoreComplete();
                             }
@@ -753,6 +767,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                     }
                 });
             } else if (searchType == SearchType.STORE) {
+                SLog.info("params[%s]", params);
                 params = Util.upLocation(params);
                 SLog.info("params[%s]", params);
                 Api.getUI(Api.PATH_SEARCH_STORE, params, new UICallback() {
@@ -781,7 +796,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             if (associateSearchTime > 0) {
                                 SLog.info("搜過商店，來搜商品了");
                             }
-                            if (responseObj.exists("datas.isHaveGoods")) {
+                            if (responseObj.exists("datas.isHaveGoods")&&!StringUtil.isEmpty(keyword)) {
                                 isHaveGoods = responseObj.getInt("datas.isHaveGoods");
                                 if (isHaveGoods > 0&&associateSearchTime++<1) {
                                     SLog.info("沒搜到商店，去搜商品了");
@@ -816,8 +831,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                                     EasyJSONArray areaList = searchStoreAreaVo.getSafeArray("areaList");
                                     for (Object object2 : areaList) {
+
                                         EasyJSONObject area = (EasyJSONObject) object2;
                                         int subId = area.getInt("areaId");
+                                        SLog.info("subItem.bizCircleId[%d]，subId[%s]", id,subId);
                                         String subName = area.getSafeString("areaName");
 
                                         bizCircleItem.subItemList.add(new BizCircleItem(subId, subName,  new BizCircleId(BizCircleId.ID_TYPE_AREA_ID, id)));
@@ -914,7 +931,11 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 // 店鋪形象視頻
                                 String storeVideoUrl = null;
                                 if (store.exists("videoUrl")) {
-                                    storeVideoUrl = store.getSafeString("videoUrl");
+                                    String videoUrl = store.getSafeString("videoUrl");
+                                    SLog.info("videoUrl[%s]", videoUrl);
+                                    if (videoUrl.contains("youtube.com") || videoUrl.contains("youtu.be")) {
+                                        storeVideoUrl = videoUrl;
+                                    }
                                 }
 
 
@@ -922,10 +943,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                         storeFigureImage, distance, shopDay, likeCount,followCount,viewCount, goodsCommonCount, goodsImageList, jobList,staff));
                             }
 
+
                             if (!hasMore) {
+                                if (page == 1 && storeItemList.size() == 0) {
+                                    storeItemList.add(new StoreSearchItem(Constant.ITEM_TYPE_NO_STORE_DATA));
+                                }
                                 // 如果全部加載完畢，添加加載完畢的提示
                                 storeItemList.add(new StoreSearchItem());
                             }
+                            SLog.info("currpage[%d]storeItemPairList.size[%d],isActivityShopping[%s],hasMore[%s]", page,storeItemList.size(),isActivityShopping,hasMore);
+
 
                             SLog.info("storeItemList.size[%d]", storeItemList.size());
                             mStoreAdapter.loadMoreComplete();
@@ -1156,6 +1183,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
     private void togglePopup(PopupType popupType, View view, int id) {
         currSelId = id;
+        SLog.info("currselid [%d],popupType[%s],locationItemList[%d]",currSelId,popupType,locationItemList.size());
         if (storeFilterPopup == null) {
             storeFilterPopup = (StoreFilterPopup) new XPopup.Builder(_mActivity)
                     .atView(view)

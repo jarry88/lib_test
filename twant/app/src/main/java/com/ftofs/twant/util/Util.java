@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -33,6 +34,13 @@ import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.facebook.AccessToken;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
@@ -45,6 +53,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.CustomerServiceStaff;
+import com.ftofs.twant.entity.DownloadImageResult;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.Location;
@@ -72,6 +81,7 @@ import org.urllib.Query;
 import org.urllib.Urls;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -415,6 +425,7 @@ public class Util {
 
     public static void startFragment(ISupportFragment fragment) {
         String fragmentClassName = fragment.getClass().getSimpleName();
+//        SLog.bt();
         SLog.info("fragmentClassName[%s]", fragmentClassName);
 
         if (needLoginFragmentName.contains(fragmentClassName)) {
@@ -1185,7 +1196,6 @@ public class Util {
             } catch (Exception e) {
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
-            SLog.info("111here");
             // 1小時內的定位才考慮
             if (System.currentTimeMillis() - location.timestamp < Config.LOCATION_EXPIRE) {
                 try {
@@ -1200,7 +1210,6 @@ public class Util {
                 SLog.info("定位數據過期");
             }
         }
-        SLog.info("111here");
         SLog.info("params[%s]", params);
         return params;
     }
@@ -1276,6 +1285,66 @@ public class Util {
                 }
             }
         });
+    }
+
+
+    /**
+     * 【異步】下載遠程圖片
+     * @param context
+     * @param url
+     * @param simpleCallback 回調接口
+     */
+    public static void getRemoteImage(Context context, String url, SimpleCallback simpleCallback) {
+        Glide.with(context)
+            .downloadOnly()
+            .load(url)
+            .listener(new RequestListener<File>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<File> target, boolean isFirstResource) {
+                    if (simpleCallback != null) {
+                        String errorMessage = "下載圖片失敗";
+                        if (e != null) {
+                            errorMessage = e.getMessage();
+                        }
+                        simpleCallback.onSimpleCall(new DownloadImageResult(false, errorMessage, null, null));
+                    }
+
+                    return false;
+                }
+
+
+                /**
+                 * 下載成功的回調
+                 * @param resource 原圖文件
+                 * @param model
+                 * @param target
+                 * @param dataSource
+                 * @param isFirstResource
+                 * @return
+                 */
+                @Override
+                public boolean onResourceReady(File resource, Object model, Target<File> target, DataSource dataSource, boolean isFirstResource) {
+                    try {
+                        // SLog.info("absolutePath[%s]", resource.getAbsolutePath());
+                        FileInputStream fis = new FileInputStream(resource);
+                        // 獲取Bitmap
+                        Bitmap bmp = BitmapFactory.decodeStream(fis);
+                        SLog.info("bmp, width[%d], height[%d]", bmp.getWidth(), bmp.getHeight());
+
+                        if (simpleCallback != null) {
+                            simpleCallback.onSimpleCall(new DownloadImageResult(true, null, resource, bmp));
+                        }
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
+                        if (simpleCallback != null) {
+                            simpleCallback.onSimpleCall(new DownloadImageResult(false, e.getMessage(), null, null));
+                        }
+                    }
+
+                    return false;
+                }
+            }).preload();
     }
 }
 

@@ -445,7 +445,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
             Util.startFragment(viewPagerFragment);
             dismiss();
-        } else if (id == R.id.btn_ok) {
+        } else if (id == R.id.btn_ok&&goodsInfo != null) {
             if (goodsInfo.getFinalStorage() > 0) {
                 if (action == Constant.ACTION_ADD_TO_CART) {
                     addToCart();

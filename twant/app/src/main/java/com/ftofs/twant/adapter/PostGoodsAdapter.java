@@ -30,7 +30,7 @@ public class PostGoodsAdapter extends BaseQuickAdapter<Goods, BaseViewHolder> {
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.imageUrl)).centerCrop().into(goodsImage);
 
         helper.setText(R.id.tv_goods_name, item.name)
-            .setText(R.id.tv_goods_price, StringUtil.formatPrice(mContext,item.price, 0,false));
+            .setText(R.id.tv_goods_price_left, StringUtil.formatPrice(mContext,item.price, 0,false));
 
         ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 5),
                 Color.parseColor("#19000000"), Util.dip2px(mContext, 5), 0, 0);

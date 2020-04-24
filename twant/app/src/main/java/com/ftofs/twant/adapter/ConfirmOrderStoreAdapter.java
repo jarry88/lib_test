@@ -68,7 +68,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                     .addOnClickListener(R.id.btn_use_voucher);  // 使用商店券
 
 
-            String voucherStatus = "";
+            String voucherStatus = "可用0張";
             if (item.voucherCount > 0) {
                 if (item.voucherId > 0) { // 如果正在使用優惠券，則顯示正在使用的券的名稱
                     SLog.info("HERE");
@@ -78,29 +78,35 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                     voucherStatus = Util.getAvailableCouponCountDesc(item.voucherCount);
                 }
             } else { // 如果沒有可用的優惠券，則隱藏
-                helper.setGone(R.id.rl_voucher_container, true);
+//                helper.setGone(R.id.rl_voucher_container, false);
             }
 
 
-            String discountAmountText = StringUtil.formatPrice(context, item.discountAmount, 0);
+            String discountAmountText = StringUtil.formatPrice(context, item.discountAmount, 0,2);
             if (item.discountAmount > 0) { // 如果有優惠，在前面加上負號
                 discountAmountText = "-" + discountAmountText;
             }
 
             //每家商店小計金額
-            float realFreightAmount = item.freightAmount;
+            double realFreightAmount = item.freightAmount;
             //
             if (payWayIndex == 1) {  // 如果是門店自提，則不算運費
                 realFreightAmount = 0;
             }
             // float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
+            double taxAmount =item.taxAmount;
+            SLog.info(item.toString());
             double finalPayAmount = item.buyItemAmount + realFreightAmount;
+            if (item.tariffEnable == Constant.TRUE_INT) {
+                helper.setVisible(R.id.rl_tax_container, true);
+            }
             helper.setText(R.id.tv_store_name, item.storeName)
-                .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, realFreightAmount, 0))
+                .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, realFreightAmount, 0,2))
                 .setText(R.id.tv_store_discount, discountAmountText)
                 .setText(R.id.tv_store_voucher_count, voucherStatus)
                 .setText(R.id.tv_store_item_count, String.format("共%d件，小計：", item.itemCount))
-                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, finalPayAmount, 0));
+                .setText(R.id.tv_store_pay_amount, StringUtil.formatPrice(context, finalPayAmount, 0,2))
+            .setText(R.id.tv_tax_number,StringUtil.formatPrice(context,taxAmount,0,2));
 
             EditText etLeaveMessage = helper.getView(R.id.et_leave_message);
             etLeaveMessage.setText(item.leaveMessage);
@@ -135,10 +141,26 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 TextView tvFullSpecs = skuItemView.findViewById(R.id.tv_goods_full_specs);
                 tvFullSpecs.setText(confirmOrderSkuItem.goodsFullSpecs);
                 TextView tvBuyNum = skuItemView.findViewById(R.id.tv_sku_count);
+                TextView tvBuyNumError = skuItemView.findViewById(R.id.tv_error_status);
                 String buyNum = timesSign + " " + confirmOrderSkuItem.buyNum;
+                if (confirmOrderSkuItem.allowSend == 0) {
+                    tvBuyNum.setVisibility(View.GONE);
+                    tvBuyNumError.setVisibility(View.VISIBLE);
+                    tvBuyNumError.setText(context.getString(R.string.text_not_allow_send));
+
+                } else if (confirmOrderSkuItem.storageStatus == 0) {
+                    tvBuyNum.setVisibility(View.GONE);
+                    tvBuyNumError.setVisibility(View.VISIBLE);
+                    tvBuyNumError.setText(context.getString(R.string.text_storage_out));
+
+
+                } else {
+                    tvBuyNum.setVisibility(View.VISIBLE);
+                    tvBuyNumError.setVisibility(View.GONE);
+                }
                 tvBuyNum.setText(buyNum);
                 TextView tvSkuPrice = skuItemView.findViewById(R.id.tv_sku_price);
-                tvSkuPrice.setText(StringUtil.formatPrice(context, confirmOrderSkuItem.skuPrice, 0));
+                tvSkuPrice.setText(StringUtil.formatPrice(context, confirmOrderSkuItem.skuPrice, 0,2));
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, Util.dip2px(context, 15), 0, 0);
@@ -164,7 +186,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             }
 
             if (item.conformTemplatePrice > 0) {
-                String conformTitle = "送 " + StringUtil.formatPrice(context, item.conformTemplatePrice, 0) + " 店舖券一張";
+                String conformTitle = "送 " + StringUtil.formatPrice(context, item.conformTemplatePrice, 0,2) + " 店舖券一張";
                 helper.setText(R.id.tv_conform_title, conformTitle);
                 helper.setGone(R.id.ll_conform_container, true);
             } else {

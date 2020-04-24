@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="20dp"
-    android:paddingBottom="20dp">
-
+    android:paddingBottom="20dp"
+    android:id="@+id/ll_container"
+    >
+    <TextView
+        android:id="@+id/vw_indicator"
+        android:layout_width="3dp"
+        android:layout_height="29dp"
+        android:background="@drawable/category_menu_indicator_bg"
+        />
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"

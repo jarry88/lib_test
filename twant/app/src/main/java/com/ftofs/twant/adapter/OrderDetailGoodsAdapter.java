@@ -43,9 +43,9 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
         Glide.with(context).load(itemData.imageSrc).centerCrop().into(goodsImage);
         setText(itemView, R.id.tv_goods_name, itemData.goodsName);
         setText(itemView, R.id.tv_goods_full_specs, itemData.goodsFullSpecs);
-        setText(itemView, R.id.tv_goods_price, StringUtil.formatPrice(context, itemData.goodsPrice, 0));
+        setText(itemView, R.id.tv_goods_price_left, StringUtil.formatPrice(context, itemData.goodsPrice, 0,2));
         setText(itemView, R.id.tv_buy_item_amount, timesSign + " " + itemData.buyNum);
-        setText(itemView,R.id.tv_goods_amount,StringUtil.formatPrice(context,itemData.goodsPrice,0));
+        setText(itemView,R.id.tv_goods_amount,StringUtil.formatPrice(context,itemData.goodsPrice,0,2));
         if (itemData.refundType == 0) {
             View btnRefund = itemView.findViewById(R.id.btn_refund);
             View btnRefundAll = itemView.findViewById(R.id.btn_refund_all);

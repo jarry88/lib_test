@@ -26,4 +26,5 @@
     <color name="tw_take_off_grey">#CECECE</color>
 
     <color name="tw_mask_bg_color">#7f000000</color>
+    <color name="scan_corner_color">#0effc2</color>
 </resources>

@@ -73,6 +73,7 @@ import okhttp3.Call;
 public class OrderDetailFragment extends BaseFragment implements View.OnClickListener {
     int ordersId;
     int storeId;
+    int tariffBuy;
     String storeName;
     String paySnStr;
     int payId;
@@ -106,8 +107,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     TextView tvLeaveMessage;
     @BindView(R.id.ll_leave_message_container)
     LinearLayout llLeaveMessageContainer;
-
+    @BindView(R.id.rl_tax_container)
+    RelativeLayout rlTaxContainer;
+    @BindView(R.id.tv_tax_amount)
+    TextView tvTaxAmount;
     String storePhone;
+
     boolean needReloadData;
 
     int ordersState;
@@ -627,6 +632,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     String receiverName = ordersVo.getSafeString("receiverName");
                     String mobile = ordersVo.getSafeString("receiverPhone");
                     String address = ordersVo.getSafeString("receiverAreaInfo") + ordersVo.getSafeString("receiverAddress");
+                    tariffBuy =ordersVo.getInt("tariffBuy");
+                    double tariffAmount =0;
+                    if (tariffBuy == Constant.TRUE_INT) {
+                        tariffAmount = ordersVo.getDouble("taxAmount");
+                        rlTaxContainer.setVisibility(View.VISIBLE);
+
+                    }
 
                     storeId = ordersVo.getInt("storeId");
                     storeName = ordersVo.getSafeString("storeName");
@@ -733,12 +745,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     tvStoreName.setText(storeName);
                     tvOrderStatus.setText(ordersStateName);
                     tvOrdersStateName.setText(ordersStateName);
-                    tvFreightAmount.setText(StringUtil.formatPrice(_mActivity, freightAmount, 1));
+                    tvFreightAmount.setText(StringUtil.formatPrice(_mActivity, freightAmount, 1,2));
 
-                    tvGoodsAmount.setText(StringUtil.formatPrice(_mActivity, itemAmount, 1));
-                    tvStoreWelfare.setText("-"+StringUtil.formatPrice(_mActivity, storeDiscountAmount, 1));
-                    tvPlatformWelfare.setText("-"+StringUtil.formatPrice(_mActivity, counponAmount, 1));
-                    tvOrdersAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1));
+                    tvGoodsAmount.setText(StringUtil.formatPrice(_mActivity, itemAmount, 1,2));
+                    tvStoreWelfare.setText("-"+StringUtil.formatPrice(_mActivity, storeDiscountAmount, 1,2));
+                    tvPlatformWelfare.setText("-"+StringUtil.formatPrice(_mActivity, counponAmount, 1,2));
+                    tvOrdersAmount.setText(StringUtil.formatPrice(_mActivity, ordersAmount, 1,2));
                     tvShipDate.setText(shipTime);
                     tvOrdersSn.setText(String.valueOf(ordersSn));
                     if (StringUtil.isEmpty(createTime)) {
@@ -815,6 +827,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     int showMemberComplain = ordersVo.getInt("showMemberComplain");
                     EasyJSONArray ordersGoodsVoList = ordersVo.getSafeArray("ordersGoodsVoList");
                     orderDetailGoodsItemList.clear();
+
                     for (Object object : ordersGoodsVoList) {
                         EasyJSONObject goodsVo = (EasyJSONObject) object;
 
@@ -834,9 +847,13 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                                 goodsVo.getInt("showRefund"),
                                 showMemberComplain,
                                 goodsVo.getInt("complainId")
-                                )
+//                                (float )goodsVo.getDouble("tariffAmount")
+                        )
+
                         );
                     }
+
+                    tvTaxAmount.setText(StringUtil.formatPrice(_mActivity,tariffAmount,1,2));
                     adapter.setData(orderDetailGoodsItemList);
                     needReloadData = false;
                 } catch (Exception e) {

@@ -103,25 +103,27 @@
             android:textSize="14sp"
             android:background="@drawable/price_room_edit_text_bg"
             />
+
+
         <TextView
-            android:id="@+id/btn_filter_gift"
+            android:id="@+id/btn_filter_discount"
             android:layout_width="87dp"
             android:layout_height="30dp"
             android:gravity="center"
-            android:text="@string/text_gift"
+            android:text="@string/text_discount"
             android:textColor="@color/tw_black"
             android:textSize="14sp"
             android:background="@drawable/price_room_edit_text_bg"
             />
-
         <TextView
-            android:id="@+id/btn_filter_discount"
+            android:id="@+id/btn_filter_gift"
             android:layout_width="86dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
             android:gravity="center"
-            android:text="@string/text_discount"
+            android:text="@string/text_gift"
             android:textColor="@color/tw_black"
+            android:layout_marginStart="10dp"
+
             android:textSize="14sp"
             android:background="@drawable/price_room_edit_text_bg"
             />

@@ -12,6 +12,8 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
         paymentTypeCode = Constant.PAYMENT_TYPE_CODE_ONLINE;
     }
 
+
+    public float totalTaxAmount;
     public String paymentTypeCode;
     public float totalAmount;
     public float totalFreight;
@@ -36,7 +38,7 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
      */
     public float calcTotalPrice() {
         // 總金額 + 總運費 - 商店折扣 - 平臺折扣
-        float result = totalAmount - storeDiscount - platformDiscount;
+        float result = totalAmount - storeDiscount - platformDiscount+totalTaxAmount;
         //1是門店自提現在
         if (payWayIndex != 1) { // 不是門店自提才加上運費
             result += totalFreight;

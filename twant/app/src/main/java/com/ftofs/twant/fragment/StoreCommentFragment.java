@@ -101,7 +101,7 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-        adapter = new CommentListAdapter(R.layout.comment_item, commentItemList);
+        adapter = new CommentListAdapter(commentItemList);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(this, rvCommentList);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -110,10 +110,6 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                 CommentItem commentItem = commentItemList.get(position);
                 int id = view.getId();
 
-                if (!User.isLogin()) {
-                    Util.showLoginFragment();
-                    return;
-                }
                 if (id == R.id.btn_thumb) {
                     switchThumbState(position);
                 } else if (id == R.id.btn_reply) {
@@ -252,7 +248,10 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                             commentItemList.add(item);
                         }
                         adapter.loadMoreComplete();
-
+                        SLog.info("currcommentpage[%d]",currPage);
+                        if (currPage == 1 && commentItemList.size() == 0) {
+                            commentItemList.add(new CommentItem(Constant.ITEM_TYPE_NO_DATA));
+                        }
                         currPage++;
                         adapter.setNewData(commentItemList);
                     } catch (Exception e) {

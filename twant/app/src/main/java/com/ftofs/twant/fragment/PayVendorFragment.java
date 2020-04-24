@@ -321,7 +321,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                     String code = responseObj.getSafeString("datas.defaultCode");
                     payAmount = (float)responseObj.getDouble("datas.mopPrice");
                     SLog.info("使用後端返回價格");
-                    tvPayAmount.setText(StringUtil.formatFloat(payAmount));
+                    tvPayAmount.setText(String.format("%.2f", payAmount));
 
                     String hk = "HK";
                     String cny = "CNY";
@@ -346,7 +346,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
             code += "$";
         }
         tvSecondPayTag.setText(code);
-        tvSecondAmount.setText(StringUtil.formatFloat(secondPrice));
+        tvSecondAmount.setText(String.format("%.2f", secondPrice));
         secondPayAmount.setVisibility(View.VISIBLE);
     }
 
@@ -813,6 +813,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        btnUpOtherPay.performClick();
     }
 
     @Override
