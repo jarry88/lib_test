@@ -192,12 +192,12 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
             mImageView = view.findViewById(R.id.img_banner);
 
             imgDesktop = view.findViewById(R.id.img_goods_desktop);
-            goodsImageArr[1] = view.findViewById(R.id.goods_image_middle);
-            goodsImageArr[0] = view.findViewById(R.id.goods_image_left);
+            goodsImageArr[0] = view.findViewById(R.id.goods_image_middle);
+            goodsImageArr[1] = view.findViewById(R.id.goods_image_left);
             goodsImageArr[2] = view.findViewById(R.id.goods_image_right);
 
-            goodsPriceArr[1] = view.findViewById(R.id.tv_goods_price_middle);
-            goodsPriceArr[0] = view.findViewById(R.id.tv_goods_price_left);
+            goodsPriceArr[0] = view.findViewById(R.id.tv_goods_price_middle);
+            goodsPriceArr[1] = view.findViewById(R.id.tv_goods_price_left);
             goodsPriceArr[2] = view.findViewById(R.id.tv_goods_price_right);
 
             for (int i = 0; i < GOODS_IMAGE_COUNT; i++) {
@@ -223,31 +223,41 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                 String goodsCommons = webSliderItem.goodsCommons;
                 EasyJSONArray goodsArray = (EasyJSONArray) EasyJSONArray.parse(goodsCommons);
                 //SLog.info("goodsArray%d",goodsArray.length());
+                boolean needChangeOrder = goodsArray.length() == 2;
                 for (int i=0;i<goodsArray.length();i++) {
-                    EasyJSONObject goods;
                     try {
-                        goods = goodsArray.getObject(i);
+                        EasyJSONObject goods = goodsArray.getObject(i);
                         int commonId = goods.getInt("commonId");
                         double price =  goods.getDouble("goodsPrice0");
                         String goodsImage = StringUtil.normalizeImageUrl(goods.getSafeString("goodsImage"));
-                        if (StringUtil.isEmpty(goodsImage)) {
-                            goodsImageArr[i].setVisibility(View.GONE);
+                        if (needChangeOrder) {
+                            updateGoodsImageIndex(context, 1-i, commonId, price, goodsImage);
+                        } else {
+                            updateGoodsImageIndex(context, i, commonId, price, goodsImage);
+
                         }
-                        Glide.with(context).load(goodsImage).centerCrop().into(goodsImageArr[i]);
-                        goodsImageArr[i].setCustomData(commonId);
-                        goodsPriceArr[i].setText(StringUtil.formatPrice(context, price, 0,false));
-                        goodsPriceArr[i].setVisibility(View.VISIBLE);
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
 
-                    if (goodsArray.length() > 0) {
-                        imgDesktop.setVisibility(View.VISIBLE);
-                        setGoodsImageVisibility(View.VISIBLE,goodsArray.length());
-                    }
+
+                }
+                if (goodsArray.length() > 0) {
+                    imgDesktop.setVisibility(View.VISIBLE);
+                    setGoodsImageVisibility(View.VISIBLE,goodsArray.length());
                 }
 
             }
+        }
+
+        private void updateGoodsImageIndex(Context context, int index, int commonId, double price, String goodsImage) {
+            if (StringUtil.isEmpty(goodsImage)) {
+                goodsImageArr[index].setVisibility(View.GONE);
+            }
+            Glide.with(context).load(goodsImage).centerCrop().into(goodsImageArr[index]);
+            goodsImageArr[index].setCustomData(commonId);
+            goodsPriceArr[index].setText(StringUtil.formatPrice(context, price, 0,false));
+            goodsPriceArr[index].setVisibility(View.VISIBLE);
         }
     }
 

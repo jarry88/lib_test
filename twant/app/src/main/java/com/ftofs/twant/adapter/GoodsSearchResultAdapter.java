@@ -18,6 +18,7 @@ import com.ftofs.twant.entity.GoodsSearchItemPair;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SlantedWidget;
 
@@ -88,6 +89,8 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     tvGoodsJingleLeft.setVisibility(View.VISIBLE);
                 }
                 helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context, item.left.price, 1,false));
+                TextView leftTextView = helper.getView(R.id.tv_goods_price_left);
+                UiUtil.toPriceUI(leftTextView,0);
 
                 helper.setGone(R.id.tv_freight_free_left, item.left.isFreightFree)
                         .setGone(R.id.tv_gift_left, item.left.hasGift);
