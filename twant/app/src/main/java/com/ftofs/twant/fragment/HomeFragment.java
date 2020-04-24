@@ -325,6 +325,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     public void onSupportVisible() {
         super.onSupportVisible();
 
+        updateMainSelectedFragment(MainFragment.HOME_FRAGMENT);
+
         // 加載輪播圖片
         if (!carouselLoaded) {
             loadCarousel();

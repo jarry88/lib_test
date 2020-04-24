@@ -698,6 +698,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     public void onSupportVisible() {
         super.onSupportVisible();
 
+        updateMainSelectedFragment(MainFragment.MESSAGE_FRAGMENT);
+
         int userId = User.getUserId();
         if (userId < 1) { // 用戶未登錄，顯示登錄頁面
             Util.showLoginFragment();
