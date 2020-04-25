@@ -11,9 +11,108 @@
         android:src="@drawable/cs_avatar_160">
     </ImageView>
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_marginLeft="12dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15.5dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_goods_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="奥迪双钻（AULDEY）超级飞侠益智玩具 变形机器人"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_black">
+                </TextView>
+                <TextView
+                    android:id="@+id/tv_goods_full_specs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text="顔色：白色ddddddd；鞋碼：26；尺碼：XXS"
+                    android:textColor="#999"
+                    android:textSize="11sp">
+                </TextView>
+            </LinearLayout>
 
+            <!-- 单价、数量信息 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$1080.55"
+                    android:textSize="13sp"
+                    android:textColor="@color/tw_black">
+                </TextView>
+                <TextView
+                    android:id="@+id/tv_buy_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="X 1"
+                    android:textColor="#999"
+                    android:textSize="11sp">
+                </TextView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/seller_order_sku_item_tag_bg"
+                android:text="限時折扣"
+                android:textSize="11sp"
+                android:textColor="@android:color/white">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/seller_order_sku_item_tag_bg"
+                android:text="包郵優惠"
+                android:textSize="11sp"
+                android:textColor="@android:color/white">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:background="@drawable/seller_order_sku_item_tag_bg"
+                android:text="贈品優惠"
+                android:textSize="11sp"
+                android:textColor="@android:color/white">
+            </TextView>
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>
