@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.R;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Util;
 
 /**
  * 商家訂單列表頁面
@@ -38,7 +39,7 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        Util.setOnClickListener(view, R.id.btn_back, this);
     }
 
 
@@ -53,6 +54,11 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         int id = v.getId();
 
+        if (id == R.id.btn_back) {
+            hideSoftInputPop();
+        } else if (id == R.id.btn_filter) {
+
+        }
     }
 }
 
