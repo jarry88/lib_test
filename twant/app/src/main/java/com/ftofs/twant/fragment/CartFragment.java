@@ -180,6 +180,8 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
         super.onSupportVisible();
         SLog.info("onSupportVisible");
 
+        updateMainSelectedFragment(MainFragment.CART_FRAGMENT);
+
         if (svItemContainerHeight == -1) {
             svItemContainerHeight = svItemContainer.getHeight();
         }

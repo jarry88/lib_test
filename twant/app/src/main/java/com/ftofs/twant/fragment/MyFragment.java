@@ -579,6 +579,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     public void onSupportVisible() {
         super.onSupportVisible();
 
+        updateMainSelectedFragment(MainFragment.MY_FRAGMENT);
+
         int userId = User.getUserId();
         if (userId < 1) { // 用戶未登錄，顯示登錄頁面
             Util.showLoginFragment();

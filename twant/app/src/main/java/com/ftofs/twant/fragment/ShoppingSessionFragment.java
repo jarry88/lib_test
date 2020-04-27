@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,6 +45,7 @@ import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryFooterViewHolder;
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryHeaderViewHolder;
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryViewHolder;
 import com.kunminx.linkage.bean.BaseGroupedItem;
+import com.kunminx.linkage.bean.DefaultGroupedItem;
 import com.kunminx.linkage.contract.ILinkagePrimaryAdapterConfig;
 import com.kunminx.linkage.contract.ILinkageSecondaryAdapterConfig;
 import com.lxj.xpopup.core.BasePopupView;
@@ -100,6 +102,7 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
 
     RecyclerView rvSecondList;
+    RecyclerView rvPrimaryList;
     TextView tvFooter;
 
     int containerViewHeight = 0;
@@ -286,6 +289,14 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
         });
 
         rvSecondList = linkage.findViewById(R.id.rv_secondary);
+        rvPrimaryList = linkage.findViewById(R.id.rv_primary);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
+        LinearLayout .LayoutParams layoutParams1 = (LinearLayout .LayoutParams) rvPrimaryList.getLayoutParams();
+        layoutParams.height =scrollView.getHeight()-44;
+        layoutParams1.height =scrollView.getHeight();
+//        rvSecondList.setLayoutParams(layoutParams);
+        rvPrimaryList.setLayoutParams(layoutParams1);
+
 
         SLog.info("isNestedScrollingEnabled[%s]", rvSecondList.isNestedScrollingEnabled());
         rvSecondList.setNestedScrollingEnabled(false);
@@ -294,9 +305,10 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 int linkageY = Util.getYOnScreen(linkage);
+                int linkageY_ = linkageY + linkage.getHeight();
                 int containerViewY = Util.getYOnScreen(scrollView);
 
-                SLog.info("linkageY[%s], containerViewY[%s]", linkageY, containerViewY);
+                SLog.info("linkageY[%s], containerViewY[%s],linkageY_[%s]", linkageY, containerViewY,linkageY_);
                 if (linkageY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
                     rvSecondList.setNestedScrollingEnabled(true);
                 } else {
@@ -311,6 +323,8 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
 
                 SLog.info("__newState[%d]", newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    int linkageY_ = Util.getYOnScreen(linkage) + linkage.getHeight();
+                    SLog.info("linkageY_[%s]", linkageY_);
                     hideFloatButton();
                 } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
 
@@ -381,8 +395,11 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
             SLog.info("containerViewHeight[%d]", containerViewHeight);
 
             ViewGroup.LayoutParams layoutParams = rvSecondList.getLayoutParams();
-            layoutParams.height = containerViewHeight;
+            LinearLayout .LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
+//            layoutParams.height = containerViewHeight-44;
+            layoutParams1.height = containerViewHeight;
             rvSecondList.setLayoutParams(layoutParams);
+            rvPrimaryList.setLayoutParams(layoutParams1);
         }
     }
 
@@ -589,22 +606,25 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
         @Override
         public void onBindViewHolder(LinkageSecondaryViewHolder holder,
                                      BaseGroupedItem<ElemeGroupedItem.ItemInfo> item) {
+            try {
+                ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
+                ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
+                ((TextView) holder.getView(R.id.tv_goods_price)).setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
+                holder.getView(R.id.sw_price).setVisibility(item.info.show?View.VISIBLE:View.GONE);
+                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext,item.info.getDoscount(),item.info.getOriginal());
+                ImageView imageView =  holder.getView(R.id.iv_goods_img);
+                Glide.with(mContext).load(item.info.getImgUrl()).centerCrop().into(imageView);
+                holder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
+                    //TODO
+                    Util.startFragment(GoodsDetailFragment.newInstance(item.info.commonId,0));
+                });
 
-            ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
-            ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
-            ((TextView) holder.getView(R.id.tv_goods_price_left)).setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
-            holder.getView(R.id.sw_price).setVisibility(item.info.show?View.VISIBLE:View.GONE);
-            ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext,item.info.getDoscount(),item.info.getOriginal());
-            ImageView imageView =  holder.getView(R.id.iv_goods_img);
-            Glide.with(mContext).load(item.info.getImgUrl()).centerCrop().into(imageView);
-            holder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
-                //TODO
-                Util.startFragment(GoodsDetailFragment.newInstance(item.info.commonId,0));
-            });
-
-            holder.getView(R.id.iv_goods_add).setOnClickListener(v -> {
-                //TODO
-            });
+                holder.getView(R.id.iv_goods_add).setOnClickListener(v -> {
+                    //TODO
+                });
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
         }
 
         @Override

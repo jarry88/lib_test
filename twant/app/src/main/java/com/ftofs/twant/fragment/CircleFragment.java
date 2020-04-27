@@ -621,6 +621,8 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
     public void onSupportVisible() {
         super.onSupportVisible();
 
+        updateMainSelectedFragment(MainFragment.CIRCLE_FRAGMENT);
+
         if (!isPostDataLoaded) {
             llTabButtonContainer.postDelayed(new Runnable() {
                 @Override
