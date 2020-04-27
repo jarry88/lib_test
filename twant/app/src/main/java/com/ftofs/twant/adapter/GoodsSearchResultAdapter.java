@@ -88,7 +88,9 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     tvGoodsJingleLeft.setText(item.left.jingle);
                     tvGoodsJingleLeft.setVisibility(View.VISIBLE);
                 }
-                helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context, item.left.price, 1,false));
+                TextView priceLeft = helper.getView(R.id.tv_goods_price_left);
+                priceLeft.setText(StringUtil.formatPrice(context, item.left.price, 1,false));
+                UiUtil.toPriceUI(priceLeft,0);
                 TextView leftTextView = helper.getView(R.id.tv_goods_price_left);
                 UiUtil.toPriceUI(leftTextView,0);
 
@@ -136,6 +138,9 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
                     tvGoodsJingleRight.setVisibility(View.VISIBLE);
                 }
                 helper.setText(R.id.tv_goods_price_right, StringUtil.formatPrice(context, item.right.price, 1,false));
+                TextView priceRight = helper.getView(R.id.tv_goods_price_right);
+                priceRight.setText(StringUtil.formatPrice(context, item.right.price, 1,false));
+                UiUtil.toPriceUI(priceRight,0);
 
                 helper.setGone(R.id.tv_freight_free_right, item.right.isFreightFree)
                         .setGone(R.id.tv_gift_right, item.right.hasGift);

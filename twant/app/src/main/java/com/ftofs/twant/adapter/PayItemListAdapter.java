@@ -1,8 +1,10 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -20,6 +22,7 @@ import com.ftofs.twant.fragment.OrderLogisticsInfoFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
@@ -149,7 +152,9 @@ public class PayItemListAdapter extends BaseMultiItemQuickAdapter<PayItem, BaseV
             if (item.showPayButton) {
                 // 子View點擊事件
                 helper.addOnClickListener(R.id.btn_pay_order);
-                helper.setText(R.id.btn_pay_order, "支付訂單 $" + StringUtil.formatFloat(item.payAmount));
+                TextView payOrder=helper.getView(R.id.btn_pay_order);
+                payOrder.setText("支付訂單 $ " + StringUtil.formatFloat(item.payAmount));
+                UiUtil.toPriceUI(payOrder, 0,5,6);
                 helper.setGone(R.id.btn_pay_order, true);
             } else {
                 helper.setGone(R.id.btn_pay_order, false);
