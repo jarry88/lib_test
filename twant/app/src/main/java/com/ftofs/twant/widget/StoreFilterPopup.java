@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.telephony.CellSignalStrength;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,7 @@ public class StoreFilterPopup extends PartShadowPopupView {
 
     FlowLayout flBizCircleContainer;
     int twBlack;
+    private BizCircleMenuAdapter bizCircleMenuAdapter;
 
     public StoreFilterPopup(@NonNull Context context, PopupType popupType, Object selectedData,
                             List<BizCircleItem> bizCircleItemList, OnSelectedListener onSelectedListener) {
@@ -101,24 +104,43 @@ public class StoreFilterPopup extends PartShadowPopupView {
 
             RecyclerView rvBizCircleMenuList = findViewById(R.id.rv_biz_circle_menu_list);
             rvBizCircleMenuList.setLayoutManager(new LinearLayoutManager(getContext()));
-            BizCircleMenuAdapter adapter = new BizCircleMenuAdapter(R.layout.biz_circle_menu_item, bizCircleItemList);
-            adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            bizCircleMenuAdapter = new BizCircleMenuAdapter(R.layout.biz_circle_menu_item, bizCircleItemList,getContext());
+            bizCircleMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     displaySubItem(position);
                 }
             });
-            rvBizCircleMenuList.setAdapter(adapter);
+            rvBizCircleMenuList.setAdapter(bizCircleMenuAdapter);
 
             displaySubItem(0);
         }
     }
 
     private void displaySubItem(int position) {
+        int count = 0;
+        for (BizCircleItem bizCircleItem : bizCircleItemList) {
+            bizCircleItem.selected = false;
+            if (position == count) {
+                bizCircleItem.selected = true;
+            }
+            count++;
+        }
+        if (bizCircleMenuAdapter != null) {
+            bizCircleMenuAdapter.notifyDataSetChanged();
+        }
+
         List<BizCircleItem> subItemList = bizCircleItemList.get(position).subItemList;
         SLog.info("subItemList.size[%d]", subItemList.size());
 
         flBizCircleContainer.removeAllViews();
+        LinearLayout linearLayoutLeft = new LinearLayout(getContext());
+        LinearLayout linearLayoutMiddle = new LinearLayout(getContext());
+        LinearLayout linearLayoutRight = new LinearLayout(getContext());
+        linearLayoutLeft.setOrientation(LinearLayout.VERTICAL);
+        linearLayoutMiddle.setOrientation(LinearLayout.VERTICAL);
+        linearLayoutRight.setOrientation(LinearLayout.VERTICAL);
+        int itemIndex = 0;
         for (BizCircleItem subItem : subItemList) {
             TextView tvItem = new TextView(getContext());
             tvItem.setText(subItem.name);
@@ -126,8 +148,8 @@ public class StoreFilterPopup extends PartShadowPopupView {
             MarginLayoutParams marginLayoutParams = new MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             marginLayoutParams.leftMargin = Util.dip2px(getContext(), 15);
             marginLayoutParams.rightMargin = Util.dip2px(getContext(), 15);
-            marginLayoutParams.topMargin = Util.dip2px(getContext(), 20);
-            marginLayoutParams.bottomMargin = Util.dip2px(getContext(), 20);
+            marginLayoutParams.topMargin = Util.dip2px(getContext(), 12);
+            marginLayoutParams.bottomMargin = Util.dip2px(getContext(), 12);
             tvItem.setLayoutParams(marginLayoutParams);
             tvItem.setTag(subItem.bizCircleId);
 
@@ -146,9 +168,26 @@ public class StoreFilterPopup extends PartShadowPopupView {
                     }
                 }
             });
-
-            flBizCircleContainer.addView(tvItem);
+            if (itemIndex % 3 == 0) {
+                linearLayoutLeft.addView(tvItem);
+            } else if(itemIndex%3==1) {
+                linearLayoutMiddle.addView(tvItem);
+            } else {
+                linearLayoutRight.addView(tvItem);
+            }
+            itemIndex++;
         }
+        LinearLayout.LayoutParams marginLayoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT,1);
+        linearLayoutLeft.setLayoutParams(marginLayoutParams);
+        linearLayoutMiddle.setLayoutParams(marginLayoutParams);
+        linearLayoutRight.setLayoutParams(marginLayoutParams);
+        LinearLayout llContainer = new LinearLayout(getContext());
+        llContainer.addView(linearLayoutLeft);
+        llContainer.addView(linearLayoutMiddle);
+        llContainer.addView(linearLayoutRight);
+        MarginLayoutParams layoutParams = new MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        llContainer.setLayoutParams(layoutParams);
+        flBizCircleContainer.addView(llContainer);
     }
 
     @Override

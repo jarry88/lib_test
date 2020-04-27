@@ -26,7 +26,7 @@
         </androidx.recyclerview.widget.RecyclerView>
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:layout_height="193dp">
             <com.nex3z.flowlayout.FlowLayout
                 android:id="@+id/fl_biz_circle_container"
                 android:layout_width="match_parent"

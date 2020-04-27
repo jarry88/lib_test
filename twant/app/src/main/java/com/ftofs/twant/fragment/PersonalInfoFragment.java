@@ -337,7 +337,8 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     setPersonalBackground();
 
                     TextView mobile = view.findViewById(R.id.tv_member_mobile);
-                    mobile.setText(memberInfo.getSafeString("mobile"));
+                    String mobileAreaCode = memberInfo.getSafeString("mobileAreaCode");
+                    mobile.setText(mobileAreaCode+memberInfo.getSafeString("mobile"));
                     mobile = view.findViewById(R.id.tv_top_mobile);
                     mobile.setText(memberInfo.getSafeString("mobile"));
                     TextView tvName =view.findViewById(R.id.tv_member_name);

@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="0.00"
+                android:text="-"
                 android:textColor="@android:color/white"
                 android:textSize="36sp"
                 />
@@ -74,7 +74,7 @@
             android:layout_below="@id/ll_balance_info_container"
             android:layout_centerHorizontal="true"
             android:padding="10dp"
-            android:text="立刻激活"
+            android:text="立即激活"
             android:textSize="14sp"
             android:textColor="@android:color/white"
             android:visibility="gone"
