@@ -1,6 +1,5 @@
 package com.ftofs.twant.adapter;
 
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,11 +12,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ChatConversation;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
@@ -109,7 +106,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         }
         else if(position==0&&chatConversation.isPlatformCustomer){
             //3797平台客服置頂新增淺灰底色
-            helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_light_grey));
+            helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_light_grey_EDED));
         }else {
             helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_white));
             llMessageItemContainer.setBackgroundResource(R.drawable.border_type_d);

@@ -37,6 +37,7 @@ import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.UniversalMemberItem;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
@@ -400,15 +401,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     private void loadUserData() {
         String token = User.getToken();
         String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
-        MemberVo memberVo = TwantApplication.getInstance().getMemberVo();
-        if (memberVo == null) {
-            showSeller = false;
-        }else {
-            showSeller = memberVo.role != ChatUtil.ROLE_MEMBER;
-            SLog.info("顯示商家後臺入口%s",showSeller);
+        updateMemberVo();
 
-        }
-        btnSeller.setVisibility(showSeller?View.VISIBLE:View.GONE);
         if (StringUtil.isEmpty(token) || StringUtil.isEmpty(memberName)) {
             return;
         }
@@ -538,6 +532,22 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
+            }
+        });
+    }
+
+    private void updateMemberVo() {
+        ApiUtil.getImInfo(_mActivity, null, new SimpleCallback() {
+            @Override
+            public void onSimpleCall(Object data) {
+                MemberVo memberVo = (MemberVo) (data);
+                if (memberVo == null) {
+                    showSeller = false;
+                }else {
+                    TwantApplication.getInstance().setMemberVo(memberVo);
+                    showSeller = memberVo.role != ChatUtil.ROLE_MEMBER;
+                }
+                btnSeller.setVisibility(showSeller?View.VISIBLE:View.GONE);
             }
         });
     }

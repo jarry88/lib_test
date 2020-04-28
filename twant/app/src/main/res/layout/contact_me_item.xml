@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            app:kswBackColor="@color/tw_light_grey"
+            app:kswBackColor="@color/tw_light_grey_EDED"
             app:kswThumbColor="@color/switch_button_thumb_color"
             />
         <TextView

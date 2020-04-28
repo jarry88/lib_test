@@ -44,7 +44,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/tw_light_grey"/>
+                android:background="@color/tw_light_grey_EDED"/>
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_avatar"
                 android:layout_width="65dp"
@@ -130,7 +130,7 @@
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/tw_light_grey"
+                android:background="@color/tw_light_grey_EDED"
                 android:layout_below="@id/ll_mailbox_container"
                 android:layout_marginStart="@dimen/toolbar_margin_left"
                 android:layout_marginEnd="@dimen/toolbar_margin_right"

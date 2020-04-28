@@ -97,7 +97,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="@color/tw_light_grey"
+        android:background="@color/tw_light_grey_EDED"
         />
 
     <androidx.recyclerview.widget.RecyclerView
