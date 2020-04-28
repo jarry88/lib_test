@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.ftofs.twant.R;
 import com.ftofs.twant.seller.entity.SellerOrderItem;
 
 import java.util.List;
@@ -19,9 +20,6 @@ public class SellerOrderAdapter extends BaseQuickAdapter<SellerOrderItem, BaseVi
 
     @Override
     protected void convert(BaseViewHolder helper, SellerOrderItem item) {
-
+        helper.addOnClickListener(R.id.tv_buyer);
     }
 }
-
-
-
