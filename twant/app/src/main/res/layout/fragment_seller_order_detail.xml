@@ -456,8 +456,6 @@
                         app:layout_constraintTop_toTopOf="parent">
                     </View>
 
-
-
                     <View
                         android:id="@+id/vw_top_line3"
                         android:layout_width="2dp"
@@ -678,6 +676,555 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="商品信息"
+                android:textSize="12sp"
+                android:textColor="@color/tw_black">
+            </TextView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@android:color/white">
+                <!-- 商品列表 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:background="@drawable/border_type_d"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="109dp"
+                            android:layout_height="109dp"
+                            android:src="@drawable/cs_avatar_160">
+                        </ImageView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="15.5dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/tv_goods_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="奥迪双钻（AULDEY）超级飞侠益智玩具 变形机器人"
+                                        android:textSize="13sp"
+                                        android:textColor="@color/tw_black">
+                                    </TextView>
+                                    <TextView
+                                        android:id="@+id/tv_goods_full_specs"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="9dp"
+                                        android:text="顔色：白色ddddddd；鞋碼：26；尺碼：XXS"
+                                        android:textColor="#999"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                </LinearLayout>
+
+                                <!-- 单价、数量信息 -->
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:id="@+id/tv_price"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="$1080.55"
+                                        android:textSize="13sp"
+                                        android:textColor="@color/tw_black">
+                                    </TextView>
+                                    <TextView
+                                        android:id="@+id/tv_buy_num"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="X 1"
+                                        android:textColor="#999"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="9dp"
+                                android:textColor="@color/tw_black"
+                                android:textSize="11sp"
+                                android:text="應付佣金：$ 108.00 * 10% = $ 10.80">
+                            </TextView>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:background="@drawable/border_type_d"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="109dp"
+                            android:layout_height="109dp"
+                            android:src="@drawable/cs_avatar_160">
+                        </ImageView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="15.5dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="奥迪双钻（AULDEY）超级飞侠益智玩具 变形机器人"
+                                        android:textSize="13sp"
+                                        android:textColor="@color/tw_black">
+                                    </TextView>
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="9dp"
+                                        android:text="顔色：白色ddddddd；鞋碼：26；尺碼：XXS"
+                                        android:textColor="#999"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                </LinearLayout>
+
+                                <!-- 单价、数量信息 -->
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="right"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="$1080.55"
+                                        android:textSize="13sp"
+                                        android:textColor="@color/tw_black">
+                                    </TextView>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="X 1"
+                                        android:textColor="#999"
+                                        android:textSize="11sp">
+                                    </TextView>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="9dp"
+                                android:textColor="@color/tw_black"
+                                android:textSize="11sp"
+                                android:text="應付佣金：$ 108.00 * 10% = $ 10.80">
+                            </TextView>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 商品彙總 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="right"
+                    android:padding="12dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="訂單應付金額："
+                            android:textColor="@color/tw_black"
+                            android:textSize="12sp">
+                        </TextView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="$1080.55"
+                            android:textSize="13sp"
+                            android:textColor="#FF6565">
+                        </TextView>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="物流狀態"
+                android:textSize="12sp"
+                android:textColor="@color/tw_black">
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="12dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="物流公司"
+                        android:textSize="13sp"
+                        android:textColor="#999999">
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="21dp"
+                        android:text="順豐物流"
+                        android:textColor="@color/tw_black"
+                        android:textSize="13sp">
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="聯繫電話"
+                        android:textSize="13sp"
+                        android:textColor="#999999">
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="21dp"
+                        android:text="100861100553215"
+                        android:textColor="@color/tw_black"
+                        android:textSize="13sp">
+                    </TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="快遞單號"
+                        android:textSize="13sp"
+                        android:textColor="#999999">
+                    </TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="21dp"
+                        android:text="快遞單號"
+                        android:textColor="@color/tw_black"
+                        android:textSize="13sp">
+                    </TextView>
+                </LinearLayout>
+
+
+                <!-- 物流狀態列表 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="vertical">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/logistics_ind1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="@id/ll_logistics_item_main_info_1"
+                            app:layout_constraintBottom_toBottomOf="@id/ll_logistics_item_main_info_1"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:src="@drawable/icon_checked">
+                        </ImageView>
+
+                        <View
+                            android:id="@+id/vw_logistics_top_line1"
+                            android:layout_width="2dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toLeftOf="@id/logistics_ind1"
+                            app:layout_constraintRight_toRightOf="@id/logistics_ind1"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/logistics_ind1"
+                            android:background="@color/tw_blue"
+                            android:visibility="gone">
+                        </View>
+                        <View
+                            android:id="@+id/vw_logistics_bottom_line1"
+                            android:layout_width="2dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toLeftOf="@id/logistics_ind1"
+                            app:layout_constraintRight_toRightOf="@id/logistics_ind1"
+                            app:layout_constraintTop_toBottomOf="@id/logistics_ind1"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:background="@color/tw_blue">
+                        </View>
+                        <LinearLayout
+                            android:id="@+id/ll_logistics_item_main_info_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginLeft="40dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="已簽收"
+                                android:textSize="15sp"
+                                android:textColor="#999">
+
+                            </TextView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:text="2019-02-30 17:17:23">
+
+                            </TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginLeft="40dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ll_logistics_item_main_info_1"
+                            android:paddingBottom="21dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="[CITY] 物流狀態的詳情通過物流系統接口獲得"
+                                android:textSize="13sp"
+                                android:textColor="#999999">
+
+                            </TextView>
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/logistics_ind2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="@id/ll_logistics_item_main_info_2"
+                            app:layout_constraintBottom_toBottomOf="@id/ll_logistics_item_main_info_2"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:src="@drawable/icon_checked">
+                        </ImageView>
+
+                        <View
+                            android:id="@+id/vw_logistics_top_line2"
+                            android:layout_width="2dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toLeftOf="@id/logistics_ind2"
+                            app:layout_constraintRight_toRightOf="@id/logistics_ind2"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/logistics_ind2"
+                            android:background="@color/tw_blue">
+                        </View>
+                        <View
+                            android:id="@+id/vw_logistics_bottom_line2"
+                            android:layout_width="2dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toLeftOf="@id/logistics_ind2"
+                            app:layout_constraintRight_toRightOf="@id/logistics_ind2"
+                            app:layout_constraintTop_toBottomOf="@id/logistics_ind2"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:background="@color/tw_blue">
+                        </View>
+                        <LinearLayout
+                            android:id="@+id/ll_logistics_item_main_info_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginLeft="40dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="已簽收"
+                                android:textSize="15sp"
+                                android:textColor="#999">
+
+                            </TextView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:text="2019-02-30 17:17:23">
+
+                            </TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginLeft="40dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ll_logistics_item_main_info_2"
+                            android:paddingBottom="21dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="[CITY] 物流狀態的詳情通過物流系統接口獲得"
+                                android:textSize="13sp"
+                                android:textColor="#999999">
+
+                            </TextView>
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/logistics_ind3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="@id/ll_logistics_item_main_info_3"
+                            app:layout_constraintBottom_toBottomOf="@id/ll_logistics_item_main_info_3"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:src="@drawable/icon_checked">
+                        </ImageView>
+
+                        <View
+                            android:id="@+id/vw_logistics_top_line3"
+                            android:layout_width="2dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toLeftOf="@id/logistics_ind3"
+                            app:layout_constraintRight_toRightOf="@id/logistics_ind3"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toTopOf="@id/logistics_ind3"
+                            android:background="@color/tw_blue">
+                        </View>
+                        <View
+                            android:id="@+id/vw_logistics_bottom_line3"
+                            android:layout_width="2dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintLeft_toLeftOf="@id/logistics_ind3"
+                            app:layout_constraintRight_toRightOf="@id/logistics_ind3"
+                            app:layout_constraintTop_toBottomOf="@id/logistics_ind3"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:background="@color/tw_blue"
+                            android:visibility="gone">
+                        </View>
+                        <LinearLayout
+                            android:id="@+id/ll_logistics_item_main_info_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginLeft="40dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="已簽收"
+                                android:textSize="15sp"
+                                android:textColor="#999">
+
+                            </TextView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:text="2019-02-30 17:17:23">
+
+                            </TextView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginLeft="40dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/ll_logistics_item_main_info_3"
+                            android:paddingBottom="21dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="[CITY] 物流狀態的詳情通過物流系統接口獲得"
+                                android:textSize="13sp"
+                                android:textColor="#999999">
+
+                            </TextView>
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 底部Padding -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp">
+
+            </View>
         </LinearLayout>
     </ScrollView>
 

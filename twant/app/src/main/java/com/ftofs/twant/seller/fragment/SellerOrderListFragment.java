@@ -16,18 +16,24 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.domain.store.Seller;
 import com.ftofs.twant.entity.FeedbackItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerOrderAdapter;
 import com.ftofs.twant.seller.entity.SellerOrderItem;
+import com.ftofs.twant.seller.entity.SellerOrderSkuItem;
+import com.ftofs.twant.seller.widget.BuyerInfoPopup;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +55,8 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
 
     public static final int TAB_COUNT = Constant.ORDER_STATUS_CANCELLED + 1;
 
+    // 訂單狀態(default:所有訂單, new:待付款, pay:待發貨, send:已發貨, finish:已完成, cancel:已取消)
+    String[] orderStateText = new String[] {"default", "new", "pay", "send", "finish", "cancel"};
 
     public static SellerOrderListFragment newInstance() {
         Bundle args = new Bundle();
@@ -90,14 +98,19 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
             ArrayList<SellerOrderItem> sellerOrderItemList = new ArrayList<>();
             dataListArr.add(sellerOrderItemList);
 
-            sellerOrderAdapterArr[i] = new SellerOrderAdapter(R.layout.seller_order_item, sellerOrderItemList);
+            sellerOrderAdapterArr[i] = new SellerOrderAdapter(_mActivity, R.layout.seller_order_item, sellerOrderItemList);
             sellerOrderAdapterArr[i].setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
                 @Override
                 public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                     int id = view.getId();
 
                     if (id == R.id.tv_buyer) {
-
+                        hideSoftInput();
+                        new XPopup.Builder(_mActivity)
+                                // 如果不加这个，评论弹窗会移动到软键盘上面
+                                .moveUpToKeyboard(false)
+                                .asCustom(new BuyerInfoPopup(_mActivity, _mActivity))
+                                .show();
                     }
                 }
             });
@@ -145,13 +158,13 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
             return;
         }
 
+        String url = Api.PATH_SELLER_ORDERS_LIST + "/" + orderStateText[tab];
+
         EasyJSONObject params = EasyJSONObject.generate(
-                "c", "Seller",
-                "a", "getOrderList",
                 "token", token);
 
-        SLog.info("params[%s]", params.toString());
-        Api.getUI("https://test.weshare.team/api", params, new UICallback() {
+        SLog.info("url[%s], params[%s]", url, params.toString());
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
@@ -167,13 +180,41 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
                         return;
                     }
 
-                    EasyJSONArray orderList = responseObj.getArray("data.order_list");
+                    EasyJSONArray orderList = responseObj.getArray("datas.ordersList");
                     List<SellerOrderItem> dataList = dataListArr.get(tab);
                     for (Object object : orderList) {
-                        EasyJSONObject item = (EasyJSONObject) object;
+                        EasyJSONObject orderItem = (EasyJSONObject) object;
 
-                        SellerOrderItem sellerOrderItem = new SellerOrderItem();
-                        dataList.add(sellerOrderItem);
+                        SellerOrderItem item = new SellerOrderItem();
+
+                        item.ordersId = orderItem.getInt("ordersId");
+                        item.ordersSnText = orderItem.getSafeString("ordersSnText");
+                        item.ordersStateName = orderItem.getSafeString("ordersStateName");
+                        item.createTime = orderItem.getSafeString("createTime");
+                        item.ordersFrom = orderItem.getString("ordersFrom");
+                        item.buyer = orderItem.getSafeString("nickName");
+                        item.paymentName = orderItem.getSafeString("paymentName");
+                        item.ordersAmount = orderItem.getDouble("ordersAmount");
+                        item.freightAmount = orderItem.getDouble("freightAmount");
+
+                        // 獲取各個商品列表
+                        EasyJSONArray goodsList = orderItem.getArray("ordersGoodsList");
+                        for (Object object2 : goodsList) {
+                            EasyJSONObject goodsItem = (EasyJSONObject) object2;
+
+                            SellerOrderSkuItem skuItem = new SellerOrderSkuItem();
+                            skuItem.goodsId = goodsItem.getInt("ordersGoodsId");
+                            skuItem.goodsName = goodsItem.getSafeString("goodsName");
+                            skuItem.goodsImage = goodsItem.getSafeString("goodsImage");
+                            skuItem.goodsPrice = goodsItem.getDouble("goodsPrice");
+                            skuItem.buyNum = goodsItem.getInt("buyNum");
+                            skuItem.goodsFullSpecs = goodsItem.getSafeString("goodsFullSpecs");
+                            skuItem.hasGift = (goodsItem.getInt("hasGift") == Constant.TRUE_INT);
+
+                            item.goodsList.add(skuItem);
+                        }
+
+                        dataList.add(item);
                     }
 
                     sellerOrderAdapterArr[tab].setNewData(dataList);
