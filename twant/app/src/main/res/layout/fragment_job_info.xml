@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/tw_light_grey"
+    android:background="@color/tw_light_grey_EDED"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <!-- 工具欄 -->
@@ -105,7 +105,7 @@
         app:layout_constraintTop_toBottomOf="@id/ll_tab_button_container"
         android:id="@+id/ll_my_resume_container"
         android:layout_width="match_parent"
-        android:background="@color/tw_light_grey"
+        android:background="@color/tw_light_grey_EDED"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
@@ -116,7 +116,7 @@
         app:layout_constraintTop_toBottomOf="@id/ll_my_resume_container"
         android:id="@+id/rv_job_info_list"
         android:layout_width="match_parent"
-        android:background="@color/tw_light_grey"
+        android:background="@color/tw_light_grey_EDED"
         android:layout_height="0dp"
         android:layout_weight="1">
 

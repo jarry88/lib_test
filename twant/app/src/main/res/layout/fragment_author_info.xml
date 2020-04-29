@@ -203,7 +203,7 @@
             android:layout_marginTop="@dimen/length_15dp"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="@color/tw_light_grey"/>
+            android:background="@color/tw_light_grey_EDED"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"

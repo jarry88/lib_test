@@ -38,7 +38,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/tw_light_grey"/>
+        android:background="@color/tw_light_grey_EDED"/>
     <!-- END OF 工具欄 -->
     <!-- 身高 -->
     <RelativeLayout
@@ -87,7 +87,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/length_15dp"
         android:layout_marginEnd="@dimen/length_15dp"
-        android:background="@color/tw_light_grey"/>
+        android:background="@color/tw_light_grey_EDED"/>
     <!-- 體重 -->
     <RelativeLayout
         android:id="@+id/btn_body_weight"
@@ -133,7 +133,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/length_15dp"
         android:layout_marginEnd="@dimen/length_15dp"
-        android:background="@color/tw_light_grey"/>
+        android:background="@color/tw_light_grey_EDED"/>
     <!-- 腳底長 -->
     <RelativeLayout
         android:id="@+id/btn_foot_size"
@@ -189,7 +189,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/length_15dp"
         android:layout_marginEnd="@dimen/length_15dp"
-        android:background="@color/tw_light_grey"/>
+        android:background="@color/tw_light_grey_EDED"/>
     <!-- 胸圍-->
     <RelativeLayout
         android:id="@+id/btn_breast_line"
@@ -235,7 +235,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/length_15dp"
         android:layout_marginEnd="@dimen/length_15dp"
-        android:background="@color/tw_light_grey"/>
+        android:background="@color/tw_light_grey_EDED"/>
     <!-- 腰圍 -->
     <RelativeLayout
         android:id="@+id/btn_waistline"
@@ -282,7 +282,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/length_15dp"
         android:layout_marginEnd="@dimen/length_15dp"
-        android:background="@color/tw_light_grey"/>
+        android:background="@color/tw_light_grey_EDED"/>
     <!-- 臀圍 -->
     <RelativeLayout
         android:id="@+id/btn_hip_line"
@@ -335,7 +335,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/length_15dp"
         android:layout_marginEnd="@dimen/length_15dp"
-        android:background="@color/tw_light_grey"/>
+        android:background="@color/tw_light_grey_EDED"/>
     <!-- 眼睛度數 -->
     <RelativeLayout
         app:layout_constraintTop_toBottomOf="@id/btn_hip_line"

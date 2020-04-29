@@ -64,5 +64,5 @@
         android:layout_height="0.5dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/tw_light_grey"/>
+        android:background="@color/tw_light_grey_EDED"/>
 </LinearLayout>

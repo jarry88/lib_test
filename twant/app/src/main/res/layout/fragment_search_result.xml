@@ -368,7 +368,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/tw_light_grey"
+                android:background="@color/tw_light_grey_EDED"
                 />
             <TextView
                 android:id="@+id/btn_next_page"

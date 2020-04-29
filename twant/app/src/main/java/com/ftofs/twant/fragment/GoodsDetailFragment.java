@@ -1,7 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.serializer.BeforeFilter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
@@ -34,7 +32,6 @@ import com.ftofs.twant.adapter.GoodsGalleryAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
@@ -89,7 +86,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -435,7 +431,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         simpleTabManager.add(view.findViewById(R.id.stb_good_comment));
         rvGalleryImageList = view.findViewById(R.id.rv_gallery_image_list);
 
-        tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
+        tvGoodsPrice = view.findViewById(R.id.tv_goods_price_left);
         tvGoodsName = view.findViewById(R.id.tv_goods_name);
         tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
 

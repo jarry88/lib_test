@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ftofs.twant.activity.CustomCaptureActivity;
+import com.ftofs.twant.activity.TwantCaptureActivity;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
@@ -44,7 +45,7 @@ public class BaseFragment extends SupportFragment {
         PermissionUtil.actionWithPermission(_mActivity, new String[] {Permission.CAMERA}, "掃一掃需要授予", new CommonCallback() {
             @Override
             public String onSuccess(@Nullable String data) {
-                Intent intent = new Intent(_mActivity, CaptureActivity.class);
+                Intent intent = new Intent(_mActivity, TwantCaptureActivity.class);
                 startActivityForResult(intent, RequestCode.SCAN_QR_CODE.ordinal());
                 return null;
             }

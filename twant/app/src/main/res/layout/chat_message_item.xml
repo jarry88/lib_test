@@ -124,7 +124,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/tv_goods_price"
+                            android:id="@+id/tv_goods_price_left"
                             android:textColor="@color/tw_red"
                             android:layout_alignParentStart="true"
                             android:layout_marginStart="@dimen/dp_4"/>
@@ -226,7 +226,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@color/tw_light_grey"
+                    android:background="@color/tw_light_grey_EDED"
                     />
 
                 <TextView

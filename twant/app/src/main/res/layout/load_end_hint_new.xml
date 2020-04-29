@@ -11,6 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/load_end_hint_bubble"
+        android:layout_marginTop="-5dp"
+        android:layout_marginBottom="-8dp"
         android:paddingTop="26.5dp"
         android:text="沒有想要?\n發表想要~"
         android:textColor="@color/tw_black"

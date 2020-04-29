@@ -830,11 +830,6 @@ public class TwantApplication extends Application {
     }
 
     public void updateCurrMemberInfo() {
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            currMemberInfo.getFromInterface = false;
-            return;
-        }
         ApiUtil.getImInfo(getApplicationContext(),User.getUserInfo(SPField.FIELD_MEMBER_NAME,null),(memberVo)->{
             currMemberInfo = (MemberVo) memberVo;
             currMemberInfo.getFromInterface = true;

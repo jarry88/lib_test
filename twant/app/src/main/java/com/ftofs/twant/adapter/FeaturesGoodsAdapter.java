@@ -20,7 +20,6 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.HwLoadingView;
@@ -48,7 +47,7 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
             goodsImage = view.findViewById(R.id.goods_image);
             tvGoodsName = view.findViewById(R.id.tv_goods_name);
             tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
-            tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
+            tvGoodsPrice = view.findViewById(R.id.tv_goods_price_left);
             loadingView = view.findViewById(R.id.loading_view);
         }
     }

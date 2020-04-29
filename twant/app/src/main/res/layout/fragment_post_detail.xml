@@ -208,7 +208,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp">
                             <TextView
-                                android:id="@+id/tv_goods_price"
+                                android:id="@+id/tv_goods_price_left"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
@@ -303,7 +303,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
                     android:layout_marginTop="15dp"
-                    android:background="@color/tw_light_grey"
+                    android:background="@color/tw_light_grey_EDED"
                     />
 
                 <TextView

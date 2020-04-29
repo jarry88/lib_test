@@ -281,8 +281,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             }
         };
         activityRoot.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
-        //這裏可以保證每次覆蓋安裝時獲取當前用戶的身份數據
-        TwantApplication.getInstance().updateCurrMemberInfo();
+//        //這裏可以保證每次覆蓋安裝時獲取當前用戶的身份數據
+//        TwantApplication.getInstance().updateCurrMemberInfo();
         loadMainFragment();
 
         // 2秒后，進行定位

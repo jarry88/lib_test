@@ -20,7 +20,7 @@
         />
 
     <com.ftofs.twant.widget.RoundedDataImageView
-        android:id="@+id/goods_image2"
+        android:id="@+id/goods_image_left"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_marginBottom="40dp"
@@ -35,7 +35,7 @@
         />
 
     <com.ftofs.twant.widget.RoundedDataImageView
-        android:id="@+id/goods_image3"
+        android:id="@+id/goods_image_right"
         android:layout_width="53dp"
         android:layout_height="55dp"
         android:layout_marginBottom="40dp"
@@ -50,12 +50,12 @@
         />
 
     <com.ftofs.twant.widget.RoundedDataImageView
-        android:id="@+id/goods_image1"
+        android:id="@+id/goods_image_middle"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginBottom="34dp"
-        android:layout_toStartOf="@id/goods_image3"
-        android:layout_toEndOf="@id/goods_image2"
+        android:layout_toStartOf="@id/goods_image_right"
+        android:layout_toEndOf="@id/goods_image_left"
         android:layout_alignParentBottom="true"
         android:background="@drawable/icon_white_goods_bg"
         app:riv_corner_radius="5dp"
@@ -64,13 +64,13 @@
         />
 
     <TextView
-        android:id="@+id/tv_goods_price1"
+        android:id="@+id/tv_goods_price_middle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="1dp"
-        android:layout_alignStart="@id/goods_image1"
-        android:layout_alignEnd="@id/goods_image1"
+        android:layout_alignStart="@id/goods_image_middle"
+        android:layout_alignEnd="@id/goods_image_middle"
         android:gravity="center"
         android:text=""
         android:textColor="@color/tw_red"
@@ -78,13 +78,13 @@
         android:visibility="gone"
         />
     <TextView
-        android:id="@+id/tv_goods_price2"
+        android:id="@+id/tv_goods_price_left"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="1dp"
-        android:layout_alignStart="@id/goods_image2"
-        android:layout_alignEnd="@id/goods_image2"
+        android:layout_alignStart="@id/goods_image_left"
+        android:layout_alignEnd="@id/goods_image_left"
         android:gravity="center"
         android:text=""
         android:textColor="@color/tw_red"
@@ -92,13 +92,13 @@
         android:visibility="gone"
         />
     <TextView
-        android:id="@+id/tv_goods_price3"
+        android:id="@+id/tv_goods_price_right"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="1dp"
-        android:layout_alignStart="@id/goods_image3"
-        android:layout_alignEnd="@id/goods_image3"
+        android:layout_alignStart="@id/goods_image_right"
+        android:layout_alignEnd="@id/goods_image_right"
         android:gravity="center"
         android:text=""
         android:textColor="@color/tw_red"
