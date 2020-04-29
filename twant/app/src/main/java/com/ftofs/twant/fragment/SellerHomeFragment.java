@@ -261,7 +261,6 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         swBusinessState.setText("  營業  ", " 休息  ");
 //        swBusinessState.setBackColorRes(getResources().getColor(R.color.tw_yellow));
 //        swBusinessState.setThumbColorRes(getResources().getColor(R.color.tw_blue));
-        swBusinessState.setPadding(200,0,200,0);
         // 初始化
         verticalScrollUtil = new AutoVerticalScrollTextViewUtil(tvVerticalScroll, announcementTextList);
         verticalScrollUtil.setDuration(3000)// 设置上下滚动時間间隔
@@ -402,8 +401,9 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                     currGalleryImageList.add(figure.toString());
                 }
             }
-            boolean hasSlider = responseObj.exists("datas.storeSlider");
-            SLog.info("hasSlider,%s",hasSlider);
+            if (responseObj.exists("datas.storeVideo")) {
+                storeVideo = responseObj.getSafeString("datas.storeVideo");
+            }
             updateBanner(false);
             updateNoticeView();
         } catch (Exception e) {
@@ -477,7 +477,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE&&!StringUtil.isArrayEmpty(currGalleryImageList)) {
                     currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
                     SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
                     int position = currGalleryPosition % currGalleryImageList.size();

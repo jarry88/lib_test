@@ -796,9 +796,9 @@ public class StringUtil {
 
     public static boolean isArrayEmpty(List list) {
         if (list == null || list.size() == 0) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
 }

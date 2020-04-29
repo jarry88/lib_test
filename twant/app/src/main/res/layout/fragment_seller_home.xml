@@ -57,7 +57,9 @@
                 android:paddingEnd="@dimen/dp_4"
                 android:textColor="@color/tw_white"
                 android:shadowColor="@color/tw_blue"
-                android:theme="@style/TwantSwitch"/>
+                app:kswThumbMargin="@dimen/dp_4"
+                app:kswBackColor="@color/switch_button_background_color"
+                app:kswThumbColor="@color/tw_white"/>
 
 
 
