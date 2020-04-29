@@ -1272,6 +1272,11 @@ public class Api {
      */
     public static final String PATH_SELLER_ORDERS_LIST = "/member/seller/orders/list";
 
+    /**
+     * 【商家】訂單詳情
+     */
+    public static final String PATH_SELLER_ORDER_DETAIL = "/member/seller/orders/info";
+
 
     /**
      * 發送Http請求

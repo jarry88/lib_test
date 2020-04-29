@@ -58,6 +58,7 @@
                     android:padding="12dp"
                     android:background="@drawable/seller_order_detail_summary_bg">
                     <TextView
+                        android:id="@+id/tv_order_status_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="待發貨"
@@ -67,6 +68,7 @@
                     </TextView>
 
                     <TextView
+                        android:id="@+id/tv_payment_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -96,6 +98,7 @@
                         </TextView>
 
                         <LinearLayout
+                            android:id="@+id/btn_copy_order_sn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
@@ -103,6 +106,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/tv_order_sn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="5950000000681700"
@@ -136,6 +140,7 @@
                         </TextView>
 
                         <LinearLayout
+                            android:id="@+id/btn_chat_with_user"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
@@ -143,6 +148,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
                             <TextView
+                                android:id="@+id/btn_buyer_info"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="卡西諾 (u_000515320757)"

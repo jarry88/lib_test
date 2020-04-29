@@ -53,6 +53,8 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
     ArrayList<ArrayList<SellerOrderItem>> dataListArr;
     SimpleTabButton[] tabButtons;
 
+    int currTab = Constant.ORDER_STATUS_ALL;
+
     public static final int TAB_COUNT = Constant.ORDER_STATUS_CANCELLED + 1;
 
     // 訂單狀態(default:所有訂單, new:待付款, pay:待發貨, send:已發貨, finish:已完成, cancel:已取消)
@@ -117,14 +119,14 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
             sellerOrderAdapterArr[i].setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    Util.startFragment(SellerOrderDetailFragment.newInstance());
+                    SellerOrderItem item = dataListArr.get(currTab).get(position);
+                    Util.startFragment(SellerOrderDetailFragment.newInstance(item.ordersId));
                 }
             });
         }
 
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         rvList.setAdapter(sellerOrderAdapterArr[Constant.ORDER_STATUS_ALL]);
-
 
         SimpleTabManager tabManager = new SimpleTabManager(Constant.ORDER_STATUS_ALL) {
             @Override
