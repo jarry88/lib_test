@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:background="@android:color/white"
     android:orientation="vertical">
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
                     android:textSize="12sp">
                 </TextView>
                 <TextView
-                    android:id="@+id/tv_order_no"
+                    android:id="@+id/tv_orders_sn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5950000000681700"
@@ -52,6 +53,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -61,7 +63,7 @@
                 android:textSize="12sp">
             </TextView>
             <TextView
-                android:id="@+id/tv_order_time"
+                android:id="@+id/tv_create_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2020-04-09 18:56:57"
@@ -73,6 +75,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -94,6 +97,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -106,19 +110,20 @@
                 android:id="@+id/tv_buyer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/tw_black"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="卡西諾(u_xxxxxxxx123)"
+                android:textColor="@color/tw_blue"
                 android:textSize="12sp">
             </TextView>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_sku_list"
+        android:id="@+id/ll_goods_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
     </LinearLayout>
 
     <!-- 彙總數據 -->
@@ -189,7 +194,7 @@
                 android:background="@drawable/blue_button_75_25"
                 android:backgroundTint="#FF6565"
                 android:textColor="@android:color/white"
-                android:text="確認發貨"
+                android:text="確認退款"
                 android:textSize="12sp"
                 android:gravity="center">
             </TextView>

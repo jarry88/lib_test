@@ -13,7 +13,12 @@
     <color name="tw_black">#2A292A</color>
     <color name="tw_grey">#BBBBBB</color>
     <color name="tw_dark_grey">#838383</color>
+
+    <color name="tw_bright_grey">#E5E5E5</color>
+    <color name="tw_light_grey">#EDEDED</color>
+
     <color name="tw_light_grey_EDED">#EDEDED</color>
+
     <color name="tw_medium_grey">#A8A8A8</color>
     <color name="tw_slight_grey">#F3F3F3</color>
     <color name="tw_dark_white">#FFF8F8F8</color>

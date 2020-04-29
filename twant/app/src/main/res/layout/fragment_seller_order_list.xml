@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,6 +26,7 @@
             android:layout_marginRight="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_filter"
+            android:visibility="gone"
             />
         <RelativeLayout
             android:layout_width="match_parent"
@@ -59,7 +61,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:layout_marginTop="4dp">
+        android:layout_marginTop="4dp"
+        android:background="@drawable/border_type_d">
         <com.ftofs.twant.widget.SimpleTabButton
             android:id="@+id/tab_all"
             android:layout_width="0dp"
@@ -94,7 +97,7 @@
             app:stb_use_cap="true">
         </com.ftofs.twant.widget.SimpleTabButton>
         <com.ftofs.twant.widget.SimpleTabButton
-            android:id="@+id/tab_shipped"
+            android:id="@+id/tab_to_be_received"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -131,7 +134,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/tw_slight_grey">
 
     </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

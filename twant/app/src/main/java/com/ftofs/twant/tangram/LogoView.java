@@ -3,12 +3,17 @@ package com.ftofs.twant.tangram;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.config.Config;
+import com.ftofs.twant.seller.fragment.SellerOrderDetailFragment;
+import com.ftofs.twant.seller.fragment.SellerOrderListFragment;
+import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
 
@@ -38,6 +43,15 @@ public class LogoView extends LinearLayout implements ITangramViewLifeCycle {
         imgLogo = new ImageView(context);
         imgLogo.setImageResource(R.drawable.icon_takewant);
         addView(imgLogo);
+
+        imgLogo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Config.DEVELOPER_MODE) {
+                    Util.startFragment(SellerOrderListFragment.newInstance());
+                }
+            }
+        });
     }
 
     @Override

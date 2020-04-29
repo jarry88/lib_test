@@ -491,8 +491,6 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
 
                                 } else {
                                     searchPostParams.follow = 0;
-                                    SLog.info("AAAAAAAAAAAAAAAAAAAAAAAA");
-
                                     searchPostParams.category = getCategoryName(id);
                                 }
 
