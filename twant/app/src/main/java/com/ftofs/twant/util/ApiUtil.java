@@ -105,7 +105,7 @@ public class ApiUtil {
                         memberVo.setMemberName(imMemberInfo.getSafeString("memberName"));
                         memberVo.setMemberId(imMemberInfo.getInt("memberId"));
                         memberVo.setStoreId(imMemberInfo.getInt("storeId"));
-                        SLog.info("獲取[%s]信息,身份%d",memberVo.role);
+                        SLog.info("獲取[%s]信息,身份%d",memberVo.getNickName(),memberVo.role);
                         updateUI.onSimpleCall(memberVo);
 
                     } catch (Exception e) {

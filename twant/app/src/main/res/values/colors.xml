@@ -8,6 +8,7 @@
     <color name="tw_orange">#FFF58500</color>
     <color name="tw_yellow">#FFFEB809</color>
     <color name="tw_red">#F50057</color>
+    <color name="tw_seller_warn_red">#FF6565</color>
     <color name="tw_blue">#00B0FF</color>
     <color name="tw_black">#2A292A</color>
     <color name="tw_grey">#BBBBBB</color>
@@ -20,6 +21,8 @@
     <color name="tw_grey_F1F1">#F1F1F1</color>
     <color name="tw_grey_F3F3">#F3F3F3</color>
     <color name="tw_white">#FFFFFF</color>
+    <color name="tw_warn_yellow">#FBBB43</color>
+    <color name="tw_seller_green">#49D1A3</color>
     <color name="test">#00a1ff</color>
     <color name="tw_no_color">#00000000</color>
     <color name="tw_mask15_black_color">#26000000</color>
@@ -27,4 +30,5 @@
 
     <color name="tw_mask_bg_color">#7f000000</color>
     <color name="scan_corner_color">#0effc2</color>
+    <color name="tw_seller_gray">#B7C3C8</color>
 </resources>
