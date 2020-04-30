@@ -213,6 +213,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
         args.putString("searchTypeStr", searchTypeStr);
         args.putString("paramsStr", paramsStr);
+        SLog.info("searchTypeStr[%s], paramsStr[%s]", searchTypeStr, paramsStr);
         SearchResultFragment fragment = new SearchResultFragment();
         fragment.setArguments(args);
 

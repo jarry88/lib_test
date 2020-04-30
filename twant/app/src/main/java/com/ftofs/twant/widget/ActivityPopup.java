@@ -14,13 +14,23 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.constant.SearchType;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
+import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.fragment.PostDetailFragment;
+import com.ftofs.twant.fragment.SearchResultFragment;
+import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 活動彈窗
@@ -103,11 +113,34 @@ public class ActivityPopup extends CenterPopupView implements View.OnClickListen
 
         if (id == R.id.img_content) {
             SLog.info("appPopupAdLinkType[%s]", appPopupAdLinkType);
-            if ("activity".equals(appPopupAdLinkType)) { // 打開活動主頁
+            if ("activity".equals(appPopupAdLinkType) || "url".equals(appPopupAdLinkType)) { // 打開活動主頁
                 Util.startFragment(H5GameFragment.newInstance(this.appPopupAdLinkValue, ""));
             } else if ("promotion".equals(appPopupAdLinkType)) { // 打開購物專場
                 SLog.info("跳轉到購物專場");
                 Util.startFragment(ShoppingSessionFragment.newInstance());
+            } else if ("none".equals(appPopupAdLinkType)) { // 無操作
+                SLog.info("無操作");
+                return;
+            } else if ("goods".equals(appPopupAdLinkType)) {
+                int commonId = Integer.parseInt(appPopupAdLinkValue);
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+            } else if ("store".equals(appPopupAdLinkType)) {
+                int storeId = Integer.parseInt(appPopupAdLinkValue);
+                Util.startFragment(ShopMainFragment.newInstance(storeId));
+            } else if ("category".equals(appPopupAdLinkType)) { // 商品分類
+                EasyJSONObject params = EasyJSONObject.generate(
+                        "cat", appPopupAdLinkValue);
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.toString(), params.toString()));
+            } else if ("wantPost".equals(appPopupAdLinkType)) { // 想要圈
+                MainFragment mainFragment = MainFragment.getInstance();
+                if (mainFragment == null) {
+                    ToastUtil.error(TwantApplication.getInstance(), "MainFragment為空");
+                    return;
+                }
+                mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);
+            } else if ("postId".equals(appPopupAdLinkType)) {
+                int postId = Integer.parseInt(appPopupAdLinkValue);
+                Util.startFragment(PostDetailFragment.newInstance(postId));
             }
             dismiss();
         } else if (id == R.id.btn_close) {
