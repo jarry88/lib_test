@@ -559,9 +559,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             Goods goods = new Goods();
                             goodsList.add(goods);
 
-//                            GoodsPair loadEndGoodsPair = new GoodsPair();
-//                            loadEndGoodsPair.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
-//                            goodsPairList.add(loadEndGoodsPair);
+                            GoodsPair loadEndGoodsPair = new GoodsPair();
+                            loadEndGoodsPair.itemType = Constant.ITEM_TYPE_LOAD_END_HINT;
+                            goodsPairList.add(loadEndGoodsPair);
                         }
                         if (goodsPairList != null && goodsPairList.size() > 0) {
                             SLog.info("當前list Size %d,type %d,title %s",goodsPairList.size(),goodsPairList.get(0).getItemType(),title);

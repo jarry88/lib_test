@@ -230,12 +230,12 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                         int commonId = goods.getInt("commonId");
                         double price =  goods.getDouble("goodsPrice0");
                         String goodsImage = StringUtil.normalizeImageUrl(goods.getSafeString("goodsImage"));
-                        if (needChangeOrder) {
-                            updateGoodsImageIndex(context, 1-i, commonId, price, goodsImage);
+                        if (i<2) {
+                            updateGoodsImageIndex(context, 1 - i, commonId, price, goodsImage);
                         } else {
                             updateGoodsImageIndex(context, i, commonId, price, goodsImage);
-
                         }
+
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
