@@ -372,7 +372,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                 // 贈品列表
                                 EasyJSONArray giftVoList = cartSkuVo.getSafeArray("giftVoList");
                                 if (giftVoList.length() > 0) {
-                                    LinearLayout llGiftListContainer = cartSkuItem.findViewById(R.id.ll_gift_list_container);
+                                    LinearLayout llGiftListContainer = cartSpuItem.findViewById(R.id.ll_gift_list_container);
                                     ConfirmOrderGiftListAdapter adapter = new ConfirmOrderGiftListAdapter(_mActivity, llGiftListContainer, R.layout.cart_gift_item);
                                     List<GiftItem> giftItemList = new ArrayList<>();
                                     for (Object object4 : giftVoList) {
