@@ -61,6 +61,8 @@ import com.ftofs.twant.tangram.LogoView;
 import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.tangram.StoreItemView;
 import com.ftofs.twant.tangram.TangramClickSupport;
+import com.ftofs.twant.task.TaskObservable;
+import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.task.TencentLocationTask;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
@@ -74,6 +76,8 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.DragFloatActionButton;
 import com.ftofs.twant.widget.AppUpdatePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
+import com.huawei.hms.aaid.HmsInstanceId;
+import com.hyphenate.chat.EMClient;
 import com.jaeger.library.StatusBarUtil;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.XPopupCallback;
@@ -283,6 +287,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         activityRoot.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
         //這裏可以保證每次覆蓋安裝時獲取當前用戶的身份數據
         TwantApplication.getInstance().updateCurrMemberInfo();
+        updateDeviceToken();
         loadMainFragment();
 
         // 2秒后，進行定位
@@ -310,6 +315,20 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         replyIntent();
     }
 
+    private void updateDeviceToken() {
+        // 請求華爲token
+
+        TwantApplication.getThreadPool().execute(() -> {
+            try{
+                String getToken = HmsInstanceId.getInstance(getBaseContext()).getToken(getString(R.string.huawei_app_id),"HCM");
+                EMClient.getInstance().sendHMSPushTokenToServer(getToken);
+                SLog.info("huaweiToken[%s]",getToken);
+                Hawk.put("HMC_TOKEN", getToken);
+            }catch (Exception e){
+                SLog.info("Error!getHuaweiToken message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+        });
+    }
 
 
     private void initTangram() {

@@ -34,6 +34,8 @@ import com.ftofs.twant.orm.FriendInfo;
 import com.ftofs.twant.orm.ImNameMap;
 import com.ftofs.twant.orm.Test;
 import com.ftofs.twant.orm.UserStatus;
+import com.ftofs.twant.task.TaskObservable;
+import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.HawkUtil;
@@ -48,6 +50,7 @@ import com.ftofs.twant.vo.member.MemberVo;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
+import com.huawei.hms.aaid.HmsInstanceId;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -57,7 +60,9 @@ import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessageBody;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.chat.EMPushConfigs;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.push.EMPushConfig;
 import com.macau.pay.sdk.MPaySdk;
 import com.macau.pay.sdk.base.ConstantBase;
 import com.orhanobut.hawk.Hawk;
@@ -264,6 +269,7 @@ public class TwantApplication extends Application {
         regToWx();
         //創建通知等級
     }
+
 
     private void initNotification() {
         //创建自定义通知渠道，和全局通知管理器
@@ -509,6 +515,9 @@ public class TwantApplication extends Application {
 
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
+        EMPushConfig.Builder builder = new EMPushConfig.Builder(getApplicationContext());
+        builder.enableHWPush();
+        options.setPushConfig(builder.build());
         options.setAcceptInvitationAlways(false);
         // 是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载，如果设为 false，需要开发者自己处理附件消息的上传和下载
         options.setAutoTransferMessageAttachments(true);
