@@ -55,5 +55,8 @@ public class SellerOrderAdapter extends BaseQuickAdapter<SellerOrderItem, BaseVi
         helper.setText(R.id.tv_order_info, orderInfo)
             .setText(R.id.tv_amount, StringUtil.formatPrice(context, item.ordersAmount, 0))
             .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0));
+
+        // 隱藏【確認退款】按鈕
+        helper.setGone(R.id.btn_refund, false);
     }
 }

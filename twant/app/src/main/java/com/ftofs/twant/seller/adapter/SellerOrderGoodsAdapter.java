@@ -36,7 +36,7 @@ public class SellerOrderGoodsAdapter extends ViewGroupAdapter<SellerOrderSkuItem
         ((TextView) itemView.findViewById(R.id.tv_buy_num)).setText("X " + itemData.buyNum);
 
         itemView.findViewById(R.id.tv_discount).setVisibility(itemData.isTimeLimitedDiscount ? View.VISIBLE : View.GONE);
-        itemView.findViewById(R.id.tv_discount).setVisibility(itemData.isTimeLimitedDiscount ? View.VISIBLE : View.GONE);
-        itemView.findViewById(R.id.tv_discount).setVisibility(itemData.isTimeLimitedDiscount ? View.VISIBLE : View.GONE);
+        itemView.findViewById(R.id.tv_freight_free).setVisibility(itemData.isFreightFree ? View.VISIBLE : View.GONE);
+        itemView.findViewById(R.id.tv_gift).setVisibility(itemData.hasGift ? View.VISIBLE : View.GONE);
     }
 }

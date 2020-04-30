@@ -131,11 +131,9 @@
         </com.ftofs.twant.widget.SimpleTabButton>
     </LinearLayout>
     <!-- END OF Tab欄 -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_list"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_page_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/tw_slight_grey">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        />
 </LinearLayout>
