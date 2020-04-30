@@ -280,7 +280,6 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
                         EasyJSONArray cartSpuVoList = cartStoreVo.getSafeArray("cartSpuVoList");
                         int spuCount=0;
-                        spuCount++;
                         for (Object object2 : cartSpuVoList) { // spu LOOP
                             EasyJSONObject cartSpuVo = (EasyJSONObject) object2;
 
@@ -294,9 +293,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                 View cartSpuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_spu_item, null, false);
                                 SLog.info("spu%d spulenth%d,sku%d,skulenth%d,",spuCount,cartSpuVoList.length(),skuCount,cartItemVoList.length());
                                 skuCount++;
-                                if (spuCount == cartSpuVoList.length()&&skuCount==cartItemVoList.length()) {
-                                    cartSpuItem.findViewById(R.id.line).setVisibility(View.GONE);
-                                }
+
                                 LinearLayout cartSkuItemContainer = cartSpuItem.findViewById(R.id.ll_cart_sku_item_container);
                                 View cartSkuItem = LayoutInflater.from(_mActivity).inflate(R.layout.cart_sku_item, cartSkuItemContainer, false);
 
@@ -405,10 +402,14 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                     Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
                                 }
 
+                                if (spuCount == cartSpuVoList.length()&&spuCount>0) {
+                                    cartSpuItem.findViewById(R.id.line).setVisibility(View.GONE);
+                                }
 
                                 storeStatus.spuStatusList.add(spuStatus);
                                 cartSpuItemContainer.addView(cartSpuItem);
                             } // END OF sku LOOP
+                            spuCount++;
 
                         } // END OF spu LOOP
 
