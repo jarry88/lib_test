@@ -1,9 +1,12 @@
 package com.ftofs.twant.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -12,11 +15,21 @@ import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.entity.order.OrderDetailGoodsItem;
 import com.ftofs.twant.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
+
+import static java.util.Comparator.*;
+
 /**
  * 訂單詳情頁面的產品列表Adapter
  * @author zwm
  */
 public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsItem> {
+    private Stream<View> btnViews;
     Context context;
     String timesSign;
 
@@ -31,12 +44,12 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
         super(context, container, itemLayoutId);
 
         this.context = context;
-
         timesSign = context.getString(R.string.times_sign);
         addClickableChildrenId(R.id.btn_goto_goods, R.id.btn_refund, R.id.btn_refund_all, R.id.btn_refund_waiting, R.id.btn_return, R.id.btn_view_complaint, R.id.btn_complain);
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void bindView(int position, View itemView, OrderDetailGoodsItem itemData) {
         ImageView goodsImage = itemView.findViewById(R.id.goods_image);
@@ -46,11 +59,15 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
         setText(itemView, R.id.tv_goods_price_left, StringUtil.formatPrice(context, itemData.goodsPrice, 0,2));
         setText(itemView, R.id.tv_buy_item_amount, timesSign + " " + itemData.buyNum);
         setText(itemView,R.id.tv_goods_amount,StringUtil.formatPrice(context,itemData.goodsPrice,0,2));
+        View btnRefund = itemView.findViewById(R.id.btn_refund);
+        View btnRefundAll = itemView.findViewById(R.id.btn_refund_all);
+        View btnRefundWaiting = itemView.findViewById(R.id.btn_refund_waiting);
+        View btnReturn = itemView.findViewById(R.id.btn_return);
+        View btnComplain = itemView.findViewById(R.id.btn_complain);
+        View btnViewComplaint = itemView.findViewById(R.id.btn_view_complaint);
+
         if (itemData.refundType == 0) {
-            View btnRefund = itemView.findViewById(R.id.btn_refund);
-            View btnRefundAll = itemView.findViewById(R.id.btn_refund_all);
-            View btnRefundWaiting = itemView.findViewById(R.id.btn_refund_waiting);
-            View btnReturn = itemView.findViewById(R.id.btn_return);
+
             if (itemData.showRefundWaiting == Constant.TRUE_INT) {
                 btnRefundWaiting.setVisibility(View.VISIBLE);
             } else {
@@ -80,8 +97,6 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
         }
 
         if (itemData.showMemberComplain == 1) {
-            View btnComplain = itemView.findViewById(R.id.btn_complain);
-            View btnViewComplaint = itemView.findViewById(R.id.btn_view_complaint);
             if (itemData.complainId == 0) {
                 btnComplain.setVisibility(View.VISIBLE);
                 btnViewComplaint.setVisibility(View.GONE);
@@ -90,6 +105,16 @@ public class OrderDetailGoodsAdapter extends ViewGroupAdapter<OrderDetailGoodsIt
                 btnViewComplaint.setVisibility(View.VISIBLE);
             }
         }
+        btnViews = Stream.of(btnViewComplaint,btnComplain,btnReturn,btnRefundWaiting,btnRefundAll,btnRefund);
+        AtomicInteger index=new AtomicInteger(0);
+        btnViews.filter(view -> view.getVisibility()==View.VISIBLE).forEach(view->{
+            if (index.getAndIncrement() % 2 == 1) {
+                view.setBackgroundResource(R.drawable.smaller_outline_button);
+            } else {
+                view.setBackgroundResource(R.drawable.smaller_outline_button_revert);
+            }
+        });
+
     }
 }
 

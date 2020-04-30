@@ -402,7 +402,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
                                     Glide.with(_mActivity).load(R.drawable.icon_less_storage).into(maskImage);
                                 }
 
-                                if (spuCount == cartSpuVoList.length()&&spuCount>0) {
+                                if (spuCount == cartSpuVoList.length()-1&&spuCount>0) {
                                     cartSpuItem.findViewById(R.id.line).setVisibility(View.GONE);
                                 }
 
