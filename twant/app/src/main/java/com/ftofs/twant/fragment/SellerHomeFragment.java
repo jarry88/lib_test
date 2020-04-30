@@ -148,7 +148,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     @OnClick(R.id.btn_goods_info)
     void showGoodsInfo() {
-        TextView textGoods = getView().findViewById(R.id.btn_orders_info);
+        TextView textGoods = getView().findViewById(R.id.btn_goods_info);
         TextView textOrders = getView().findViewById(R.id.btn_orders_info);
         textOrders .setBackgroundResource(R.drawable.grey_20dp_bg);
         textOrders.setTextColor(getResources().getColor(R.color.tw_black));
@@ -160,12 +160,12 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     @OnClick(R.id.btn_orders_info)
     void showOrdersInfo() {
-        TextView textGoods = getView().findViewById(R.id.btn_orders_info);
+        TextView textGoods = getView().findViewById(R.id.btn_goods_info);
         TextView textOrders = getView().findViewById(R.id.btn_orders_info);
         textGoods .setBackgroundResource(R.drawable.grey_20dp_bg);
         textGoods.setTextColor(getResources().getColor(R.color.tw_black));
         textOrders .setBackgroundResource(R.drawable.blue_20dp_bg);
-        textOrders.setTextColor(getResources().getColor(R.color.tw_blue));
+        textOrders.setTextColor(getResources().getColor(R.color.tw_white));
         getView().findViewById(R.id.ll_container_goods_info).setVisibility(View.GONE);
         getView().findViewById(R.id.ll_container_orders_info).setVisibility(View.VISIBLE);
     }
@@ -423,6 +423,9 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     private void updateSwitchButton(boolean enable) {
         swBusinessState.setChecked(enable);
+        swBusinessState.setTextColor(getResources().getColor(enable?R.color.tw_white:R.color.tw_black));
+
+
     }
 
     @Override
@@ -492,4 +495,10 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         });
     }
 
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
+    }
 }

@@ -396,7 +396,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             if (!isPlatformCustomer) {
                 if (platformCustomer == null) {
                     platformCustomer = new ChatConversation();
-                    platformCustomer.friendInfo = FriendInfo.newInstance("", "平台想想", "", ChatUtil.ROLE_CS_PLATFORM);
+                    platformCustomer.friendInfo = FriendInfo.newInstance("", "想要小城", "", ChatUtil.ROLE_CS_PLATFORM);
                     platformCustomer.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                     platformCustomer.lastMessage = "     歡迎來到想要城～有什麼想要了解... ";
                     platformCustomer.isPlatformCustomer = true;
