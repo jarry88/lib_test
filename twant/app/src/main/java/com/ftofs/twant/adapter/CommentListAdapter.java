@@ -99,6 +99,7 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<CommentItem, B
             ImageView imageView = helper.getView(R.id.image_view);
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.imageUrl)).centerCrop().into(imageView);
             helper.setVisible(R.id.image_view, true);
+            helper.addOnClickListener(R.id.image_view);
         }
 
         ImageView iconThumb = helper.getView(R.id.icon_thumb);

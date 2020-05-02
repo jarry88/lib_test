@@ -59,6 +59,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.DataImageView;
 import com.ftofs.twant.widget.InStorePersonPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SimpleTabManager;
@@ -208,6 +209,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int inStorePersonCount;
     StoreFriendsAdapter adapter;
     List<StoreFriendsItem> storeFriendsItemList = new ArrayList<>();
+
+    List<String> goodsDetailImageList = new ArrayList<>();
 
     ImageView btnPlay;
 
@@ -898,7 +901,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     updateThumbView();
 
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -1216,6 +1219,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     // 產品詳情圖片
+                    int imageIndex = 0;
                     EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.goodsMobileBodyVoList");
                     for (Object object : easyJSONArray) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
@@ -1228,20 +1232,26 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         if (goodsMobileBodyVo.getType().equals("image")) {
                             String imageUrl = StringUtil.normalizeImageUrl(easyJSONObject.getSafeString("value"));
 
-                            ImageView imageView = new ImageView(_mActivity);
+                            DataImageView imageView = new DataImageView(_mActivity);
+                            imageView.setCustomData(imageIndex);
                             imageView.setAdjustViewBounds(true);
                             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                             imageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     SLog.info("imageUrl[%s]", imageUrl);
-                                    Util.startFragment(ImageViewerFragment.newInstance(imageUrl));
+                                    int currImageIndex = (int) ((DataImageView) v).getCustomData();
+                                    Util.startFragment(ImageFragment.newInstance(currImageIndex, goodsDetailImageList));
                                 }
                             });
                             // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
                             // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
                             Glide.with(llGoodsDetailImageContainer).load(imageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
                             llGoodsDetailImageContainer.addView(imageView);
+
+                            goodsDetailImageList.add(StringUtil.normalizeImageUrl(imageUrl));
+
+                            imageIndex++;
                         } else if (goodsMobileBodyVo.getType().equals("text")) {
                             TextView textView = new TextView(_mActivity);
                             textView.setText(goodsMobileBodyVo.getValue());

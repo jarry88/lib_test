@@ -35,6 +35,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.DataImageView;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.ftofs.twant.widget.TwConfirmPopup;
@@ -103,6 +104,8 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
     PostCommentListAdapter adapter;
     List<CommentItem> commentItemList = new ArrayList<>();
+
+    List<String> postImageList = new ArrayList<>();
 
     int commonId;
     private boolean isMe;
@@ -480,7 +483,7 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
 
                     }
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -573,15 +576,20 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     postComment = wantPostVoInfo.getInt("postReply");
                     updatePostCommentCount();
 
+                    int imageIndex = 0;
                     EasyJSONArray wantPostImages = wantPostVoInfo.getSafeArray("wantPostImages");
                     for (Object object : wantPostImages) {
                         EasyJSONObject imageObj = (EasyJSONObject) object;
 
                         String imageUrl = imageObj.getSafeString("imageUrl");
-                        ImageView imageView = new ImageView(_mActivity);
+                        DataImageView imageView = new DataImageView(_mActivity);
+                        imageView.setCustomData(imageIndex);
 
-                        sglImageContainer.addImageView(imageView, null,imageUrl);
+                        sglImageContainer.addImageView(imageView, null, imageUrl);
+                        postImageList.add(StringUtil.normalizeImageUrl(imageUrl));
+                        ++imageIndex;
                     }
+                    sglImageContainer.imageList = postImageList;
 
                     EasyJSONArray wantPostGoodsVoList = wantPostVoInfo.getSafeArray("wantPostGoodsVoList");
                     if (wantPostGoodsVoList.length() > 0) {

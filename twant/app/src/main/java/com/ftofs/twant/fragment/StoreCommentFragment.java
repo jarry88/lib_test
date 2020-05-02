@@ -31,7 +31,9 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -56,6 +58,10 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
 
     // TabFragment是否可以滚动
     boolean scrollable = false;
+
+    // 评论的RecyclerView与图片索引的映射关系
+    Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
+    List<String> imageList = new ArrayList<>();
 
     public static StoreCommentFragment newInstance(int storeId) {
         SLog.info("__StoreCommentFragment.newInstance%d",storeId);
@@ -116,6 +122,11 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                     Util.startFragment(CommentDetailFragment.newInstance(commentItem));
                 } else if (id == R.id.img_commenter_avatar) {
                     Util.startFragment(MemberInfoFragment.newInstance(commentItem.memberName));
+                } else if (id == R.id.image_view) {
+                    Integer imageIndex = rvPositionToImageIndexMap.get(position);
+                    if (imageIndex != null) {
+                        Util.startFragment(ImageFragment.newInstance(imageIndex, imageList));
+                    }
                 }
             }
         });
@@ -241,6 +252,8 @@ public class StoreCommentFragment extends ScrollableBaseFragment implements Base
                                     for (Object object2 : images) {
                                         EasyJSONObject image = (EasyJSONObject) object2;
                                         item.imageUrl = image.getSafeString("imageUrl");
+                                        rvPositionToImageIndexMap.put(commentItemList.size(), imageList.size());
+                                        imageList.add(StringUtil.normalizeImageUrl(item.imageUrl));
                                     }
                                 }
                             }
