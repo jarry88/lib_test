@@ -11,8 +11,10 @@ import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.entity.SkuGalleryItem;
 import com.ftofs.twant.fragment.ImageFragment;
 import com.ftofs.twant.fragment.ImageViewerFragment;
+import com.ftofs.twant.fragment.SkuImageFragment;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
@@ -51,11 +53,15 @@ public class LogoView extends LinearLayout implements ITangramViewLifeCycle {
             @Override
             public void onClick(View v) {
                 if (Config.DEVELOPER_MODE) {
-                    List<String> imageList = new ArrayList<>();
-                    imageList.add("https://gfile.oss-cn-hangzhou.aliyuncs.com/img/ABTD3D72991D32C1A7A940FA59B3CC367EF16F6E37A1890A058E9A42EB46DACEDD5.jpg");
-                    imageList.add("https://gfile.oss-cn-hangzhou.aliyuncs.com/img/5f24336176dd4a80d94ba96d937992ca.png");
-                    imageList.add("https://gfile.oss-cn-hangzhou.aliyuncs.com/img/0159525979bab9a8012193a329c12d.jpg");
-                    Util.startFragment(ImageFragment.newInstance(0, imageList));
+                    List<SkuGalleryItem> imageList = new ArrayList<>();
+                    /*
+                    imageList.add(new SkuGalleryItem("https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/19/e1/19e1b342d46e97749e4c8ed34085b867.jpg", "", 0, ""));
+                    imageList.add(new SkuGalleryItem("https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/9e/8b/9e8b38b29f88a9ca0e90640efdc6f60d.png", "", 0, ""));
+                    imageList.add(new SkuGalleryItem("https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/d9/61/d961ac84a97b534e1f773f787e2e46d9.jpg", "", 0, ""));
+                    imageList.add(new SkuGalleryItem("https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/2d/7b/2d7b37b49011ad629becc4217df67366.png", "", 0, ""));
+
+                    Util.startFragment(SkuImageFragment.newInstance(null, imageList));
+                     */
                 }
             }
         });

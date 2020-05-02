@@ -45,6 +45,7 @@ import com.ftofs.twant.entity.GiftVo;
 import com.ftofs.twant.entity.GoodsConformItem;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.InStorePersonItem;
+import com.ftofs.twant.entity.SkuGalleryItem;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.entity.SpecValue;
@@ -189,6 +190,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     GoodsGalleryAdapter goodsGalleryAdapter;
     int currGalleryPosition;
     List<String> currGalleryImageList = new ArrayList<>();
+    List<SkuGalleryItem> skuGalleryItemList = new ArrayList<>();
+
     PageIndicatorView pageIndicatorView;
 
     RelativeLayout rlVoucherList;
@@ -936,7 +939,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy,discountState))
+                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy,discountState,skuGalleryItemList))
                 .show();
     }
 
@@ -1348,6 +1351,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.promotionType =goodsInfoVo.getInt("promotionType");
 
                         goodsInfoMap.put(goodsId, goodsInfo);
+
+                        SkuGalleryItem skuGalleryItem = new SkuGalleryItem(
+                                goodsId,
+                                StringUtil.normalizeImageUrl(goodsInfo.imageSrc),
+                                goodsInfoVo.getSafeString("goodsSpecString"),
+                                goodsInfo.goodsPrice0,
+                                goodsInfo.specValueIds
+                        );
+                        skuGalleryItemList.add(skuGalleryItem);
 
                         first = false;
                     }

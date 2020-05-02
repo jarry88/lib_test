@@ -21,14 +21,15 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsInfo;
+import com.ftofs.twant.entity.SkuGalleryItem;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.fragment.ViewPagerFragment;
+import com.ftofs.twant.fragment.SkuImageFragment;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -64,6 +65,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     TextView tvPrice;
     TextView tvGoodsStorage;
     TextView tvBuyLimit;
+    List<SkuGalleryItem> skuGalleryItemList;
 
     TextView btnOk;
 
@@ -90,6 +92,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     private List<String> currGalleryImageList;
     private int currPosition;
 
+    boolean canViewSkuImage = false;
+
 
     /**
      * @param context
@@ -102,10 +106,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * @param goodsInfoMap
      * @param viewPagerFragment 圖片瀏覽器
      * @param limitBuy
+     * @param skuGalleryItemList sku圖片列表（如果specList為null，skuGalleryItemList也必須為null）
      */
     public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
-                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy,int discountState) {
+                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy, int discountState, List<SkuGalleryItem> skuGalleryItemList) {
         super(context);
 
         this.context = context;
@@ -119,6 +124,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         this.currGalleryImageList = viewPagerFragment;
         this.limitBuy = limitBuy;
         this.discountState = discountState;
+        this.skuGalleryItemList = skuGalleryItemList;
     }
 
     @Override
@@ -162,7 +168,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
         if (specList != null) {
             populateData();
+            canViewSkuImage = true;
         } else {
+            assert skuGalleryItemList == null;
+            canViewSkuImage = false;
             String url = Api.PATH_SKU_LIST + "/" + commonId;
             EasyJSONObject params = EasyJSONObject.generate("commonId", commonId);
             Api.getUI(url, params, new UICallback() {
@@ -214,7 +223,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
                         specValueIdMap = new HashMap<>();
                         String goodsSpecValues = goodsCommon.getSafeString("goodsSpecValues");
-                        EasyJSONArray goodsSpecValueArr = (EasyJSONArray) EasyJSONArray.parse(goodsSpecValues);
+                        EasyJSONArray goodsSpecValueArr = EasyJSONArray.parse(goodsSpecValues);
                         for (Object object : goodsSpecValueArr) {
                             EasyJSONObject mapItem = (EasyJSONObject) object;
                             SLog.info("kkkkey[%s], vvvalue[%s]", mapItem.getSafeString("specValueIds"), mapItem.getInt("goodsId"));
@@ -223,6 +232,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                         }
 
                         goodsInfoMap = new HashMap<>();
+                        skuGalleryItemList = new ArrayList<>();
                         EasyJSONArray goodsInfoVoList = goodsCommon.getSafeArray("goodsList");
                         for (Object object : goodsInfoVoList) {
                             GoodsInfo goodsInfo = new GoodsInfo();
@@ -253,11 +263,23 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                             goodsInfo.unitName = unitName;
 
                             goodsInfoMap.put(goodsId, goodsInfo);
+
+                            SkuGalleryItem skuGalleryItem = new SkuGalleryItem(
+                                    goodsId,
+                                    StringUtil.normalizeImageUrl(goodsInfo.imageSrc),
+                                    goodsInfoVo.getSafeString("goodsSpecString"),
+                                    goodsInfo.goodsPrice0,
+                                    goodsInfo.specValueIds
+                            );
+
+                            skuGalleryItemList.add(skuGalleryItem);
                         }
                         if (viewPagerFragment != null) {
                             viewPagerFragment.updateMap(goodsInfoMap);
                         }
                         populateData();
+
+                        canViewSkuImage = true;
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
@@ -389,9 +411,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * 添加到購物袋
      */
     private void addToCart() {
-
-
-
         // 當前選中的goodsId
         int goodsId = getSelectedGoodsId();
         int buyNum = abQuantity.getValue();
@@ -436,6 +455,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         if (id == R.id.ll_title_padding || id == R.id.btn_close) {
             dismiss();
         }else if (id==R.id.sku_image){
+            /*
             if (viewPagerFragment == null) {
                 viewPagerFragment = ViewPagerFragment.newInstance(null);
             }
@@ -444,6 +464,13 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             viewPagerFragment.setStartPage(goodsId);
 
             Util.startFragment(viewPagerFragment);
+            dismiss();
+             */
+
+            if (!canViewSkuImage) {
+                return;
+            }
+            Util.startFragment(SkuImageFragment.newInstance(goodsInfo.goodsId, skuGalleryItemList));
             dismiss();
         } else if (id == R.id.btn_ok&&goodsInfo != null) {
             if (goodsInfo.getFinalStorage() > 0) {
