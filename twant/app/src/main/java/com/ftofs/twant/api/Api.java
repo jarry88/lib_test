@@ -1262,9 +1262,17 @@ public class Api {
     public static final String PATH_DETERMINE_SHOW_REAL_NAME_POPUP = "/consigneeNameAuth/show";
 
     /**
-     * 商家端首頁
+     * 【商家端】商家端首頁統計數據
      */
     public static final String PATH_SELLER_INDEX = "/member/seller/index";
+    /**
+     * 【商家端】是否顯示商家入口
+     */
+    public static final String PATH_SELLER_ISSELLER = "/member/seller/isSeller";
+    /**
+     * 【商家端】編輯店鋪是否營業
+     */
+    public static final String PATH_SELLER_ISOPEN = "/member/seller/isOpen";
 
 
     /**

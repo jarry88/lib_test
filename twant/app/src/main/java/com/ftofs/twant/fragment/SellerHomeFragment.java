@@ -7,11 +7,13 @@ import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceControl;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +55,7 @@ import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.yokeyword.fragmentation.ISupportFragment;
@@ -113,6 +116,20 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     TextView tvDiscountGoogsCount;
     private GoodsGalleryAdapter goodsGalleryAdapter;
     private int currGalleryPosition;
+    //店鋪營業狀態
+    private int storeState;
+    @BindView(R.id.btn_play)
+    ImageView btnPlay;
+
+    @OnClick(R.id.btn_play)
+    void playVideo() {
+        String videoId = Util.getYoutubeVideoId(storeVideoUrl);
+
+        if (!StringUtil.isEmpty(videoId)) {
+            Util.playYoutubeVideo(_mActivity, videoId);
+        }
+    }
+    private String storeVideoUrl;
 
     @OnClick(R.id.btn_goto_member)
     void popBack() {
@@ -259,6 +276,38 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         timer = new Timer();
         setImageBanner();
         swBusinessState.setText("  營業  ", " 休息  ");
+        swBusinessState.setOnClickListener(v -> {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                updateSwitchButton();
+                return;
+            }
+
+            int setStoreState=1-storeState;
+            Api.postUI(Api.PATH_SELLER_ISOPEN, EasyJSONObject.generate("token", token, "state", setStoreState), new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    updateSwitchButton();
+                    ToastUtil.showNetworkError(_mActivity,e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity,responseObj)) {
+                        updateSwitchButton();
+                        return;
+                    }
+                    try {
+                        ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+                        storeState = setStoreState;
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        });
 //        swBusinessState.setBackColorRes(getResources().getColor(R.color.tw_yellow));
 //        swBusinessState.setThumbColorRes(getResources().getColor(R.color.tw_blue));
         // 初始化
@@ -332,12 +381,14 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             }
             String memberNickName = responseObj.getSafeString("datas.memberNickName");
             tvMemberNickName.setText(memberNickName);
+            String storeName = responseObj.getSafeString("datas.storeName");
+            tvStoreName.setText(storeName);
             int billCount = responseObj.getInt("datas.billCount");
             tvBillCount.setText(String.valueOf(billCount));
             double ordersAmount = responseObj.getDouble("datas.ordersAmount");
             tvTodayAmount.setText(String.valueOf(ordersAmount));
-            int storeState = responseObj.getInt("datas.storeState");
-            updateSwitchButton(storeState == Constant.TRUE_INT);
+            storeState = responseObj.getInt("datas.storeState");
+            updateSwitchButton();
 
             String storeWeekDayEndTime = responseObj.getSafeString("datas.storeWeekDayEndTime");
             String storeAvatar = responseObj.getSafeString("datas.storeAvatar");
@@ -394,15 +445,17 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             EasyJSONArray figureList = responseObj.getSafeArray("datas.figureList");
             currGalleryImageList.clear();
 
-
             for (Object object : figureList) {
                 if (!Util.isJsonNull(object)) {
-                    EasyJSONObject figure = (EasyJSONObject) object;
-                    currGalleryImageList.add(figure.toString());
+                    currGalleryImageList.add(String.valueOf(object));
                 }
             }
             if (responseObj.exists("datas.storeVideo")) {
                 storeVideo = responseObj.getSafeString("datas.storeVideo");
+                if (storeVideo.contains("youtube.com") || storeVideo.contains("youtu.be")) {
+                    storeVideoUrl = storeVideo;
+                    btnPlay.setVisibility(VISIBLE);
+                }
             }
             updateBanner(false);
             updateNoticeView();
@@ -421,7 +474,8 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         }
     }
 
-    private void updateSwitchButton(boolean enable) {
+    private void updateSwitchButton() {
+        boolean enable = storeState == Constant.TRUE_INT;
         swBusinessState.setChecked(enable);
         swBusinessState.setTextColor(getResources().getColor(enable?R.color.tw_white:R.color.tw_black));
 
@@ -433,10 +487,10 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     }
     private void updateBanner(boolean hasSlider) {
-        if (!hasSlider || currGalleryImageList.size() < 1) {
-            currGalleryImageList.clear();
+        if ( currGalleryImageList.size() < 1) {
             currGalleryImageList.add("placeholder");  // 如果沒有圖片，加一張默認的空櫥窗占位圖
         }
+        SLog.info("設置banner數據 [%d]",currGalleryImageList.size());
         goodsGalleryAdapter.setNewData(currGalleryImageList);
         if (currGalleryImageList.size() > 1) {
             rvGalleryImageList.postDelayed(new Runnable() {

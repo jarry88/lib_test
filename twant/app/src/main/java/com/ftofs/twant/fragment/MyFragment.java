@@ -71,6 +71,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -537,17 +538,34 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     }
 
     private void updateMemberVo() {
-        ApiUtil.getImInfo(_mActivity, null, new SimpleCallback() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+        Api.getUI(Api.PATH_SELLER_ISSELLER, EasyJSONObject.generate("token", token), new UICallback() {
             @Override
-            public void onSimpleCall(Object data) {
-                MemberVo memberVo = (MemberVo) (data);
-                if (memberVo == null) {
-                    showSeller = false;
-                }else {
-                    TwantApplication.getInstance().setMemberVo(memberVo);
-                    showSeller = memberVo.role != ChatUtil.ROLE_MEMBER;
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity,e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                try {
+                    int isSeller = responseObj.getInt("datas.isSeller");
+                    showSeller = isSeller == Constant.TRUE_INT;
+                    if (!showSeller) {
+                        String message = responseObj.getSafeString("datas.message");
+                        SLog.info("message[%s]", message);
+                    }
+                    btnSeller.setVisibility(showSeller ? View.VISIBLE : View.GONE);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
                 }
-                btnSeller.setVisibility(showSeller?View.VISIBLE:View.GONE);
+
+
             }
         });
     }
