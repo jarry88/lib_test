@@ -15,14 +15,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SkuImageListAdapter;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.SkuGalleryItem;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SpecSelectPopup;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 public class SkuImageFragment extends BaseFragment implements View.OnClickListener {
     RecyclerView rvImageList;
@@ -39,7 +44,10 @@ public class SkuImageFragment extends BaseFragment implements View.OnClickListen
     // 商品Id與RecyclerView Position之間的關係
     Map<Integer, Integer> goodsIdToRvPositionMap = new HashMap<>();
 
-    public static SkuImageFragment newInstance(int initGoodsId, List<SkuGalleryItem> skuGalleryItemList) {
+    SpecSelectPopup specSelectPopup;  // 如果不為null，表示來自於規格選擇框
+    SimpleCallback simpleCallback;
+
+    public static SkuImageFragment newInstance(int initGoodsId, List<SkuGalleryItem> skuGalleryItemList, SpecSelectPopup specSelectPopup, SimpleCallback simpleCallback) {
         Bundle args = new Bundle();
 
         SkuImageFragment fragment = new SkuImageFragment();
@@ -47,6 +55,8 @@ public class SkuImageFragment extends BaseFragment implements View.OnClickListen
 
         fragment.initGoodsId = initGoodsId;
         fragment.skuGalleryItemList = skuGalleryItemList;
+        fragment.specSelectPopup = specSelectPopup;
+        fragment.simpleCallback = simpleCallback;
 
         return fragment;
     }
@@ -90,7 +100,7 @@ public class SkuImageFragment extends BaseFragment implements View.OnClickListen
         skuImageListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                pop();
+                commonPop();
             }
         });
         rvImageList.setAdapter(skuImageListAdapter);
@@ -144,12 +154,27 @@ public class SkuImageFragment extends BaseFragment implements View.OnClickListen
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
-        hideSoftInputPop();
+        commonPop();
         return true;
     }
 
     @Override
     public void onClick(View v) {
+        commonPop();
+    }
+
+    private void commonPop() {
         pop();
+        if (specSelectPopup != null) {
+            specSelectPopup.show();
+        }
+        if (simpleCallback != null) {
+            SkuGalleryItem skuGalleryItem = skuGalleryItemList.get(currPosition);
+            simpleCallback.onSimpleCall(EasyJSONObject.generate(
+                    "type", PopupType.SELECT_SKU_IMAGE.ordinal(),
+                    "goodsId", skuGalleryItem.goodsId,
+                    "specValueIds", skuGalleryItem.specValueIds
+            ));
+        }
     }
 }
