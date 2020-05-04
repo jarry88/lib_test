@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,14 +17,17 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.adapter.SellerOrderStatusAdapter;
 import com.ftofs.twant.seller.entity.SellerOrderItem;
 import com.ftofs.twant.seller.entity.SellerOrderSkuItem;
+import com.ftofs.twant.seller.entity.SellerOrderStatus;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -110,13 +114,54 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) itemView.findViewById(R.id.tv_order_status_desc)).setText(ordersVo.getSafeString("ordersStateName"));
 
                     String paymentInfoStr = String.format("買家已使用「%s」方式成功對訂單進行支付，支付單號 「%s」。",
-                            responseObj.getSafeString("paymentName"), ordersVo.getSafeString("paySnStr"));
+                            ordersVo.getSafeString("paymentName"), ordersVo.getSafeString("paySnText"));
                     ((TextView) itemView.findViewById(R.id.tv_payment_info)).setText(paymentInfoStr);
 
-                    orderSn = ordersVo.getSafeString("ordersSnStr");
+                    orderSn = ordersVo.getSafeString("ordersSnText");
                     ((TextView) itemView.findViewById(R.id.tv_order_sn)).setText(orderSn);
 
+                    buyerNickname = ordersVo.getSafeString("nickName");
+                    buyerMemberName = ordersVo.getSafeString("memberName");
 
+                    String buyerInfo = String.format("%s (%s)", buyerNickname, buyerMemberName);
+                    ((TextView) itemView.findViewById(R.id.btn_buyer_info)).setText(buyerInfo);
+
+                    String receiverInfo = ordersVo.getSafeString("receiverName") + " " + ordersVo.getSafeString("receiverPhone")
+                            + " " + ordersVo.getSafeString("receiverAreaInfo") + " " + ordersVo.getSafeString("receiverAddress");
+                    ((TextView) itemView.findViewById(R.id.tv_receiver)).setText(receiverInfo);
+
+                    ((TextView) itemView.findViewById(R.id.tv_ship_time)).setText(ordersVo.getSafeString("shipTime"));
+
+                    ((TextView) itemView.findViewById(R.id.tv_receiver_message)).setText(ordersVo.getSafeString("receiverMessage"));
+
+                    String payWay = String.format("%s（付款單號：%s）",
+                            ordersVo.getSafeString("paymentName"), ordersVo.getSafeString("paySnText"));
+                    ((TextView) itemView.findViewById(R.id.tv_pay_way)).setText(payWay);
+
+                    LinearLayout llOrderStatusContainer = itemView.findViewById(R.id.ll_order_status_container);
+                    SellerOrderStatusAdapter adapter = new SellerOrderStatusAdapter(_mActivity, llOrderStatusContainer, R.layout.seller_order_status_item);
+
+                    List<SellerOrderStatus> sellerOrderStatusList = new ArrayList<>();
+                    String createTime = ordersVo.getSafeString("createTime");
+                    sellerOrderStatusList.add(new SellerOrderStatus("提交訂單", createTime));
+                    String payTime = ordersVo.getSafeString("paymentTime");
+                    sellerOrderStatusList.add(new SellerOrderStatus("完成付款", payTime));
+                    String sendTime = ordersVo.getSafeString("sendTime");
+                    sellerOrderStatusList.add(new SellerOrderStatus("商家發貨", sendTime));
+                    String receiveTime = ordersVo.getSafeString("finishTime");
+                    sellerOrderStatusList.add(new SellerOrderStatus("確認收貨", receiveTime));
+                    String evaluationTime = ordersVo.getSafeString("evaluationTime");
+                    sellerOrderStatusList.add(new SellerOrderStatus("評價", evaluationTime));
+
+                    for (int i = sellerOrderStatusList.size() - 1; i >= 0; i--) {
+                        SellerOrderStatus item = sellerOrderStatusList.get(i);
+
+                        if (!StringUtil.isEmpty(item.timestamp)) {
+                            item.isLatestStatus = true;
+                            break;
+                        }
+                    }
+                    adapter.setData(sellerOrderStatusList);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
