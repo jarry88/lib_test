@@ -28,7 +28,9 @@ import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
@@ -58,6 +60,10 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
     CommentListAdapter adapter;
     RelativeLayout toolBar;
     private boolean showToolBar=true;
+
+    // 评论的RecyclerView与图片索引的映射关系
+    Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
+    List<String> imageList = new ArrayList<>();
 
     /**
      * 構造方法
@@ -126,9 +132,13 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                     Util.startFragment(CommentDetailFragment.newInstance(commentItem));
                 } else if (id == R.id.img_commenter_avatar) {
                     Util.startFragment(MemberInfoFragment.newInstance(commentItem.memberName));
-                }
-                else if (id == R.id.btn_delete) {
+                } else if (id == R.id.btn_delete) {
                     start(MemberInfoFragment.newInstance(commentItem.memberName));
+                } else if (id == R.id.image_view) {
+                    Integer imageIndex = rvPositionToImageIndexMap.get(position);
+                    if (imageIndex != null) {
+                        Util.startFragment(ImageFragment.newInstance(imageIndex, imageList));
+                    }
                 }
             }
         });
@@ -239,6 +249,8 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                                 for (Object object2 : images) {
                                     EasyJSONObject image = (EasyJSONObject) object2;
                                     item.imageUrl = image.getSafeString("imageUrl");
+                                    rvPositionToImageIndexMap.put(commentItemList.size(), imageList.size());
+                                    imageList.add(StringUtil.normalizeImageUrl(item.imageUrl));
                                 }
                             }
 
@@ -289,8 +301,6 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             return;
         }
         if (requestCode == RequestCode.ADD_COMMENT.ordinal()) {
-            SLog.info("HERE");
-
             CommentItem commentItem = data.getParcelable("commentItem");
             SLog.info("commentItem[%s]", commentItem);
             commentItemList.add(0, commentItem);
@@ -333,7 +343,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
 
                     adapter.notifyItemChanged(position);
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

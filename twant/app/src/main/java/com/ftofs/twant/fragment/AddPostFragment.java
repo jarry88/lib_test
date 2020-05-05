@@ -616,6 +616,7 @@ public class AddPostFragment extends BaseFragment implements
 
                         if (childView instanceof RelativeLayout) {
                             String absolutePath = (String) childView.getTag(R.id.data_absolute_path);
+                            SLog.info("absolutePath[%s]", absolutePath);
                             url = Api.syncUploadFile(new File(absolutePath));
                             SLog.info("url[%s]", url);
                             if (StringUtil.isEmpty(url)) {

@@ -10,11 +10,14 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.fragment.GifFragment;
+import com.ftofs.twant.fragment.ImageFragment;
 import com.ftofs.twant.fragment.ImageViewerFragment;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 正方形Grid布局
@@ -24,6 +27,7 @@ import java.util.ArrayList;
  * 3. 所有子元素的寬度和高度都只能設置為 MATCH_PARENT
  */
 public class SquareGridLayout extends ViewGroup {
+    public List<String> imageList;
     /**
      * 每行多少列
      */
@@ -180,7 +184,7 @@ public class SquareGridLayout extends ViewGroup {
      * @param imageView
      * @param params
      */
-    public void addImageView(ImageView imageView,LayoutParams params,String imageUrl){
+    public void addImageView(ImageView imageView, LayoutParams params, String imageUrl){
         Context context=imageView.getContext();
         if (params == null) {
             ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -193,14 +197,14 @@ public class SquareGridLayout extends ViewGroup {
         if (!StringUtil.isEmpty(imageUrl)) {
             Glide.with(context).load(StringUtil.normalizeImageUrl(imageUrl)).centerCrop().into(imageView);
             imageView.setOnClickListener(v -> {
-
-
                 if (imageUrl.endsWith(".gif")) { // 如果是Gif，顯示Gif動圖
                     Util.startFragment(GifFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                } else if (imageList != null && imageList.size() > 0) { // 做成可翻頁的圖片列表展示
+                    int currImageIndex = (int) ((DataImageView) v).getCustomData();
+                    Util.startFragment(ImageFragment.newInstance(currImageIndex, imageList));
                 } else {
                     Util.startFragment(ImageViewerFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
                 }
-
             });
         }
 

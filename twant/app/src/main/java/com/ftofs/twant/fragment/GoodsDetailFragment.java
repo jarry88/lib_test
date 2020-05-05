@@ -45,6 +45,7 @@ import com.ftofs.twant.entity.GiftVo;
 import com.ftofs.twant.entity.GoodsConformItem;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.entity.InStorePersonItem;
+import com.ftofs.twant.entity.SkuGalleryItem;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecPair;
 import com.ftofs.twant.entity.SpecValue;
@@ -59,6 +60,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
 import com.ftofs.twant.widget.BlackDropdownMenu;
+import com.ftofs.twant.widget.DataImageView;
 import com.ftofs.twant.widget.InStorePersonPopup;
 import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SimpleTabManager;
@@ -188,6 +190,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     GoodsGalleryAdapter goodsGalleryAdapter;
     int currGalleryPosition;
     List<String> currGalleryImageList = new ArrayList<>();
+    List<SkuGalleryItem> skuGalleryItemList = new ArrayList<>();
+
     PageIndicatorView pageIndicatorView;
 
     RelativeLayout rlVoucherList;
@@ -208,6 +212,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     int inStorePersonCount;
     StoreFriendsAdapter adapter;
     List<StoreFriendsItem> storeFriendsItemList = new ArrayList<>();
+
+    List<String> goodsDetailImageList = new ArrayList<>();
 
     ImageView btnPlay;
 
@@ -898,7 +904,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     updateThumbView();
 
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -933,7 +939,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy,discountState))
+                .asCustom(new SpecSelectPopup(_mActivity, action, 0, specList, specValueIdMap, selSpecValueIdList, buyNum, goodsInfoMap, currGalleryImageList,limitBuy,discountState,skuGalleryItemList))
                 .show();
     }
 
@@ -1216,6 +1222,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     }
 
                     // 產品詳情圖片
+                    int imageIndex = 0;
                     EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.goodsMobileBodyVoList");
                     for (Object object : easyJSONArray) {
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
@@ -1228,20 +1235,26 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         if (goodsMobileBodyVo.getType().equals("image")) {
                             String imageUrl = StringUtil.normalizeImageUrl(easyJSONObject.getSafeString("value"));
 
-                            ImageView imageView = new ImageView(_mActivity);
+                            DataImageView imageView = new DataImageView(_mActivity);
+                            imageView.setCustomData(imageIndex);
                             imageView.setAdjustViewBounds(true);
                             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                             imageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     SLog.info("imageUrl[%s]", imageUrl);
-                                    Util.startFragment(ImageViewerFragment.newInstance(imageUrl));
+                                    int currImageIndex = (int) ((DataImageView) v).getCustomData();
+                                    Util.startFragment(ImageFragment.newInstance(currImageIndex, goodsDetailImageList));
                                 }
                             });
                             // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
                             // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
                             Glide.with(llGoodsDetailImageContainer).load(imageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
                             llGoodsDetailImageContainer.addView(imageView);
+
+                            goodsDetailImageList.add(StringUtil.normalizeImageUrl(imageUrl));
+
+                            imageIndex++;
                         } else if (goodsMobileBodyVo.getType().equals("text")) {
                             TextView textView = new TextView(_mActivity);
                             textView.setText(goodsMobileBodyVo.getValue());
@@ -1338,6 +1351,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.promotionType =goodsInfoVo.getInt("promotionType");
 
                         goodsInfoMap.put(goodsId, goodsInfo);
+
+                        SkuGalleryItem skuGalleryItem = new SkuGalleryItem(
+                                goodsId,
+                                StringUtil.normalizeImageUrl(goodsInfo.imageSrc),
+                                goodsInfoVo.getSafeString("goodsSpecString"),
+                                goodsInfo.goodsPrice0,
+                                goodsInfo.specValueIds
+                        );
+                        skuGalleryItemList.add(skuGalleryItem);
 
                         first = false;
                     }

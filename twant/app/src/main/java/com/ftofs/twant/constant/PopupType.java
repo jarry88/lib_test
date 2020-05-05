@@ -145,4 +145,9 @@ public enum PopupType {
      * 選擇跨境購的購物車拆單
      */
     SELECT_SPLIT_CROSS_BORDER,
+
+    /**
+     * 瀏覽SKU圖片
+     */
+    SELECT_SKU_IMAGE,
 }

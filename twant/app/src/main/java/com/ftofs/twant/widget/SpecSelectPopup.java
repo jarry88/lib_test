@@ -18,17 +18,20 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsInfo;
+import com.ftofs.twant.entity.SkuGalleryItem;
 import com.ftofs.twant.entity.Spec;
 import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.entity.SpecValue;
 import com.ftofs.twant.fragment.ArrivalNoticeFragment;
 import com.ftofs.twant.fragment.ConfirmOrderFragment;
 import com.ftofs.twant.fragment.ViewPagerFragment;
+import com.ftofs.twant.fragment.SkuImageFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -52,7 +55,7 @@ import okhttp3.Call;
  * 有些產品沒有規格，只有一個goodsId
  * @author zwm
  */
-public class SpecSelectPopup extends BottomPopupView implements View.OnClickListener {
+public class SpecSelectPopup extends BottomPopupView implements View.OnClickListener, SimpleCallback {
     private final int discountState;
     private int limitBuy;
     private ViewPagerFragment viewPagerFragment;
@@ -64,6 +67,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     TextView tvPrice;
     TextView tvGoodsStorage;
     TextView tvBuyLimit;
+    List<SkuGalleryItem> skuGalleryItemList;
 
     TextView btnOk;
 
@@ -80,6 +84,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     List<TextView> selSpecButtonList;
     // 當前選中的SpecValueId
     List<Integer> selSpecValueIdList;
+    // SpecValueId與Button的映射關係
+    Map<Integer, TextView> specValueIdButtonMap = new HashMap<>();
 
     // 調整數量
     AdjustButton abQuantity;
@@ -88,7 +94,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     String outOfMaxValueReason; // 購買數量超過庫存數或限購數的提示
     private boolean isShowing;
     private List<String> currGalleryImageList;
-    private int currPosition;
+
+    boolean canViewSkuImage = false;
 
 
     /**
@@ -102,10 +109,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * @param goodsInfoMap
      * @param viewPagerFragment 圖片瀏覽器
      * @param limitBuy
+     * @param skuGalleryItemList sku圖片列表（如果specList為null，skuGalleryItemList也必須為null）
      */
     public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
-                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy,int discountState) {
+                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy, int discountState, List<SkuGalleryItem> skuGalleryItemList) {
         super(context);
 
         this.context = context;
@@ -119,6 +127,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         this.currGalleryImageList = viewPagerFragment;
         this.limitBuy = limitBuy;
         this.discountState = discountState;
+        this.skuGalleryItemList = skuGalleryItemList;
     }
 
     @Override
@@ -162,7 +171,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
         if (specList != null) {
             populateData();
+            canViewSkuImage = true;
         } else {
+            assert skuGalleryItemList == null;
+            canViewSkuImage = false;
             String url = Api.PATH_SKU_LIST + "/" + commonId;
             EasyJSONObject params = EasyJSONObject.generate("commonId", commonId);
             Api.getUI(url, params, new UICallback() {
@@ -214,7 +226,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
                         specValueIdMap = new HashMap<>();
                         String goodsSpecValues = goodsCommon.getSafeString("goodsSpecValues");
-                        EasyJSONArray goodsSpecValueArr = (EasyJSONArray) EasyJSONArray.parse(goodsSpecValues);
+                        EasyJSONArray goodsSpecValueArr = EasyJSONArray.parse(goodsSpecValues);
                         for (Object object : goodsSpecValueArr) {
                             EasyJSONObject mapItem = (EasyJSONObject) object;
                             SLog.info("kkkkey[%s], vvvalue[%s]", mapItem.getSafeString("specValueIds"), mapItem.getInt("goodsId"));
@@ -223,6 +235,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                         }
 
                         goodsInfoMap = new HashMap<>();
+                        skuGalleryItemList = new ArrayList<>();
                         EasyJSONArray goodsInfoVoList = goodsCommon.getSafeArray("goodsList");
                         for (Object object : goodsInfoVoList) {
                             GoodsInfo goodsInfo = new GoodsInfo();
@@ -253,11 +266,23 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                             goodsInfo.unitName = unitName;
 
                             goodsInfoMap.put(goodsId, goodsInfo);
+
+                            SkuGalleryItem skuGalleryItem = new SkuGalleryItem(
+                                    goodsId,
+                                    StringUtil.normalizeImageUrl(goodsInfo.imageSrc),
+                                    goodsInfoVo.getSafeString("goodsSpecString"),
+                                    goodsInfo.goodsPrice0,
+                                    goodsInfo.specValueIds
+                            );
+
+                            skuGalleryItemList.add(skuGalleryItem);
                         }
                         if (viewPagerFragment != null) {
                             viewPagerFragment.updateMap(goodsInfoMap);
                         }
                         populateData();
+
+                        canViewSkuImage = true;
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
@@ -284,7 +309,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             selSpecButtonList.add(null);
         }
 
-        int position = 0;
+        int position = 0; // 哪一類規格
         LinearLayout llSpecContainer = findViewById(R.id.ll_spec_container);
         for (Spec spec : specList) {
             LinearLayout llSpec = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.layout_spec,
@@ -292,7 +317,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             TextView tvSpecName = llSpec.findViewById(R.id.tv_spec_name);
             tvSpecName.setText(spec.specName);
 
-            int index = 0;
+            int index = 0; // 一類規格裏面的具體值
             int currSpecValueId = selSpecValueIdList.get(position);  // 當前選中的specValueId
             FlowLayout flSpecButtonContainer = llSpec.findViewById(R.id.fl_spec_button_container);
             for (SpecValue specValue : spec.specValueList) {
@@ -302,12 +327,10 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 if ((currSpecValueId != 0 && specValue.specValueId == currSpecValueId) || // 如果有傳specValueIdList的話，選中相等的
                         (currSpecValueId == 0 && index == 0) // 如果沒有傳specValueIdList的話，默認選中第1個
                 ) {
-                    button.setBackgroundResource(R.drawable.spec_item_selected_bg);
-                    button.setTextColor(context.getColor(R.color.tw_blue));
+                    setButtonSelected(button, true);
                     isSelected = true;
                 } else {
-                    button.setBackgroundResource(R.drawable.spec_item_unselected_bg);
-                    button.setTextColor(context.getColor(R.color.tw_black));
+                    setButtonSelected(button, false);
                 }
 
                 button.setText(specValue.specValueName);
@@ -333,7 +356,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                             SLog.info("如果已經選中，重復點擊，不處理");
                             return;
                         } else {
-                            SLog.info("選中第%d",specButtonData.index);
+                            SLog.info("選中第%d個", specButtonData.index);
                         }
 
                         // 前一個選中的按鈕
@@ -345,17 +368,17 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                         // 當前選中的按鈕
                         TextView currButton = (TextView) view;
                         // 將前一個選中的按鈕的邊框變灰，當前選中的變為高亮色
-                        prevButton.setTextColor(context.getColor(R.color.tw_black));
-                        prevButton.setBackgroundResource(R.drawable.spec_item_unselected_bg);
-                        currButton.setTextColor(context.getColor(R.color.tw_blue));
-                        currButton.setBackgroundResource(R.drawable.spec_item_selected_bg);
+                        setButtonSelected(prevButton, false);
+                        setButtonSelected(currButton, true);
 
                         selSpecValueIdList.set(currData.position, currData.specValueId);
                         selSpecButtonList.set(currData.position, currButton);
-                        currPosition=((SpecButtonData) currButton.getTag()).index;
-                        updateCurrGoodsId();
+
+                        int goodsId = getSelectedGoodsId();
+                        updateCurrGoodsId(goodsId);
                     }
                 });
+                specValueIdButtonMap.put(specValue.specValueId, button);
 
                 ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Util.dip2px(context, 32));
                 button.setGravity(Gravity.CENTER);
@@ -365,7 +388,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             llSpecContainer.addView(llSpec);
             ++position;
         }
-        updateCurrGoodsId();
+        int goodsId = getSelectedGoodsId();
+        updateCurrGoodsId(goodsId);
     }
 
     //完全可见执行
@@ -380,6 +404,16 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
     }
 
+    private void setButtonSelected(TextView button, boolean selected) {
+        if (selected) {
+            button.setTextColor(context.getColor(R.color.tw_blue));
+            button.setBackgroundResource(R.drawable.spec_item_selected_bg);
+        } else {
+            button.setTextColor(context.getColor(R.color.tw_black));
+            button.setBackgroundResource(R.drawable.spec_item_unselected_bg);
+        }
+    }
+
     @Override
     protected int getMaxHeight() {
         return (int) (XPopupUtils.getWindowHeight(getContext())*.85f);
@@ -389,9 +423,6 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * 添加到購物袋
      */
     private void addToCart() {
-
-
-
         // 當前選中的goodsId
         int goodsId = getSelectedGoodsId();
         int buyNum = abQuantity.getValue();
@@ -436,6 +467,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         if (id == R.id.ll_title_padding || id == R.id.btn_close) {
             dismiss();
         }else if (id==R.id.sku_image){
+            /*
             if (viewPagerFragment == null) {
                 viewPagerFragment = ViewPagerFragment.newInstance(null);
             }
@@ -444,6 +476,13 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             viewPagerFragment.setStartPage(goodsId);
 
             Util.startFragment(viewPagerFragment);
+            dismiss();
+             */
+
+            if (!canViewSkuImage) {
+                return;
+            }
+            Util.startFragment(SkuImageFragment.newInstance(goodsInfo.goodsId, skuGalleryItemList, this, this));
             dismiss();
         } else if (id == R.id.btn_ok&&goodsInfo != null) {
             if (goodsInfo.getFinalStorage() > 0) {
@@ -472,22 +511,19 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
     /**
      * 獲取當前選中的goodsId
-     * @return
+     * @return 成功 - 返回商品Id
+     *         失敗 - 返回0
      */
     private int getSelectedGoodsId() {
-        boolean first = true;
-        StringBuilder specValueIds = new StringBuilder();
-        for (Integer specValueId : selSpecValueIdList) {
-            if (!first) {
-                specValueIds.append(",");
-            }
-            specValueIds.append(specValueId);
-            first = false;
-        }
+        String specValueIds = getSelectedSpecValueIdStr();
         SLog.info("specValueIds[%s]", specValueIds);
 
-        int goodsId = specValueIdMap.get(specValueIds.toString());
-        SLog.info("goodsId[%d]", goodsId);
+        Integer goodsId = specValueIdMap.get(specValueIds);
+        if (goodsId == null) {
+            SLog.info("goodsId[%d]", goodsId);
+            return 0;
+        }
+        SLog.info("Error!根據規格Id[%s]找不到goodsId", specValueIds);
         return goodsId;
     }
 
@@ -498,17 +534,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     /**
      * 更新當前選中的GoodsId
      */
-    private void updateCurrGoodsId() {
-        String selectedSpecValueIdStr = getSelectedSpecValueIdStr();
-        SLog.info("selectedSpecValueIdStr[%s]", selectedSpecValueIdStr);
-        Integer goodsId = specValueIdMap.get(selectedSpecValueIdStr);
-        SLog.info("goodsId[%s]", goodsId);
-        if (goodsId == null) {
-            SLog.info("Error!找不到產品Id:" + selectedSpecValueIdStr);
-            ToastUtil.error(context, "Error!找不到產品Id:" + selectedSpecValueIdStr);
-            return;
-        }
-
+    private void updateCurrGoodsId(int goodsId) {
         // 更新圖片的顯示
         goodsInfo = goodsInfoMap.get(goodsId);
         if (goodsInfo == null) {
@@ -578,6 +604,45 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             }
         } else {
             btnOk.setText(R.string.text_arrival_notice);
+        }
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        EasyJSONObject easyJSONObject = (EasyJSONObject) data;
+        try {
+            int type = easyJSONObject.getInt("type");
+            if (type == PopupType.SELECT_SKU_IMAGE.ordinal()) {
+                int goodsId = easyJSONObject.getInt("goodsId");
+                String specValueIds = easyJSONObject.getSafeString("specValueIds");
+
+                SLog.info("goodsId[%d]", goodsId);
+
+                updateCurrGoodsId(goodsId);
+
+                // 取消之前按鈕的選中狀態
+                for (TextView button : selSpecButtonList) {
+                    SpecButtonData currData = (SpecButtonData) button.getTag();
+                    setButtonSelected(button, false);
+                    currData.isSelected = true;
+                }
+
+                // 設置當前按鈕的選中狀態
+                String[] specValueIdArr = specValueIds.split(",");
+                for (int i = 0; i < specValueIdArr.length; i++) {
+                    int specValueId = Integer.parseInt(specValueIdArr[i]);
+                    TextView button = specValueIdButtonMap.get(specValueId);
+                    setButtonSelected(button, true);
+
+                    SpecButtonData currData = (SpecButtonData) button.getTag();
+
+                    // 如果是開始的選中狀態，記錄一下
+                    selSpecButtonList.set(currData.position, button);
+                    selSpecValueIdList.set(currData.position, currData.specValueId);
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 }
