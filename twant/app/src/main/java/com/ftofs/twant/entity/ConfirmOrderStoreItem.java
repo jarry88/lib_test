@@ -21,9 +21,9 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
         return String.format("storeName[%s],buyItemAmount[%s],taxAmount[%s]",storeName,buyItemAmount,taxAmount);
     }
 
-    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, double freightAmount,
+    public ConfirmOrderStoreItem(int storeId, String storeName, double buyItemAmount, double freightAmount,
                                  int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
-                                 float conformTemplatePrice) {
+                                 double conformTemplatePrice) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.buyItemAmount = buyItemAmount;
@@ -34,9 +34,9 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
         this.conformTemplatePrice = conformTemplatePrice;
     }
 
-    public ConfirmOrderStoreItem(int storeId, String storeName, float buyItemAmount, float freightAmount,
+    public ConfirmOrderStoreItem(int storeId, String storeName, double buyItemAmount, double freightAmount,
                                  int itemCount, int voucherCount, List<ConfirmOrderSkuItem> confirmOrderSkuItemList,
-                                 float conformTemplatePrice,double taxAmount) {
+                                 double conformTemplatePrice,double taxAmount) {
         this.storeId = storeId;
         this.storeName = storeName;
         this.buyItemAmount = buyItemAmount;
@@ -63,7 +63,7 @@ public class ConfirmOrderStoreItem implements MultiItemEntity {
     public String voucherName; // 當前正在使用的商店券名稱
     public List<ConfirmOrderSkuItem> confirmOrderSkuItemList;  // 訂單的Sku列表
     // public Object payload; // 仿照RecyclerView的payload，用于局部刷新優化
-    public float conformTemplatePrice;  // 店鋪滿減優惠券,大於0才顯示
+    public double conformTemplatePrice;  // 店鋪滿減優惠券,大於0才顯示
 
     @Override
     public int getItemType() {

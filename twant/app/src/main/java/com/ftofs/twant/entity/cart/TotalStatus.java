@@ -40,8 +40,8 @@ public class TotalStatus extends BaseStatus {
      * 獲取合計數據
      * @return
      */
-    public Pair<Float, Integer> getTotalData() {
-        float totalPrice = 0f;
+    public Pair<Double, Integer> getTotalData() {
+        double totalPrice = 0f;
         int totalCount = 0;
         for (StoreStatus storeStatus : storeStatusList) {
             for (SpuStatus spuStatus : storeStatus.spuStatusList) {
@@ -62,8 +62,8 @@ public class TotalStatus extends BaseStatus {
      * 獲取合計數據
      * @return
      */
-    public Pair<Float, Integer> getTotalDataNew() {
-        float totalPrice = 0f;
+    public Pair<Double, Integer> getTotalDataNew() {
+        double totalPrice = 0f;
         int totalCount = 0;
         for (StoreStatus storeStatus : storeStatusList) {
             for (SpuStatus spuStatus : storeStatus.spuStatusList) {

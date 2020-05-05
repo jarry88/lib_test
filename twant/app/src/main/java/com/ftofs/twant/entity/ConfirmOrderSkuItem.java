@@ -13,7 +13,7 @@ import java.util.List;
 public class ConfirmOrderSkuItem {
     public int storageStatus=1;//0时显示售罄
     public int allowSend =1;//0时显示 所選地區無貨
-    public ConfirmOrderSkuItem(String goodsImage, int goodsId, String goodsName, String goodsFullSpecs, int buyNum, float skuPrice, List<GiftItem> giftItemList) {
+    public ConfirmOrderSkuItem(String goodsImage, int goodsId, String goodsName, String goodsFullSpecs, int buyNum, double skuPrice, List<GiftItem> giftItemList) {
         this.goodsImage = goodsImage;
         this.goodsId = goodsId;
         this.goodsName = goodsName;
@@ -30,7 +30,7 @@ public class ConfirmOrderSkuItem {
     public String goodsName;
     public String goodsFullSpecs;
     public int buyNum;
-    public float skuPrice;
+    public double skuPrice;
     public List<GiftItem> giftItemList;
 
     @NonNull

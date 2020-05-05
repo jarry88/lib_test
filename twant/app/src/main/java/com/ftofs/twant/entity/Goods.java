@@ -9,10 +9,10 @@ import com.ftofs.twant.constant.Constant;
  */
 public class Goods implements MultiItemEntity {
 
-    public Goods(int id, String imageUrl, String name, String jingle, double price) {
+    public Goods(int commonId, String imageUrl, String name, String jingle, double price) {
         itemType = Constant.ITEM_TYPE_NORMAL;
 
-        this.id = id;
+        this.id = commonId;
         this.imageUrl = imageUrl;
         this.name = name;
         this.jingle = jingle;

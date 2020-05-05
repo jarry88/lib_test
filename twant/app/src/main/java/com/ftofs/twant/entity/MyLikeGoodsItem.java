@@ -7,6 +7,6 @@ public class MyLikeGoodsItem {
     public String goodsName;
     public String imageSrc;
     public String jingle;
-    public float price;
+    public double price;
     public int likeCount;
 }

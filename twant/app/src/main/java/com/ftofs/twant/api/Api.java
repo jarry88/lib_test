@@ -1263,6 +1263,12 @@ public class Api {
 
 
     /**
+     * 【購物專場】新版可復用購物專場主頁
+     */
+    public static final String PATH_SHOPPING_ZONE = "/shoppingzone";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

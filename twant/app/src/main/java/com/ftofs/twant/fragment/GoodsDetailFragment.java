@@ -1503,7 +1503,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
             }
         }
-        SLog.info("discountState[%d]",discountState);
+        SLog.info("discountState[%d],goodsInfo.promotionType[%d]",discountState,goodsInfo.promotionType);
     }
 
     private void setGoodsStatus(int status) {

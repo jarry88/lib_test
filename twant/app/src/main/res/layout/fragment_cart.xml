@@ -85,7 +85,7 @@
                 android:layout_width="31dp"
                 android:layout_height="31dp"
                 android:layout_marginStart="7dp"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 app:icon_src="@drawable/icon_cart_item_unchecked"
                 />
@@ -93,8 +93,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
-                android:layout_toRightOf="@id/btn_select_all"
+                android:layout_marginStart="7dp"
+                android:layout_toEndOf="@id/btn_select_all"
                 android:layout_centerVertical="true"
                 android:text="@string/text_select_all"
                 android:textColor="#929292"
@@ -119,8 +119,8 @@
                 android:id="@+id/ll_view_mode_button_group"
                 android:layout_width="wrap_content"
                 android:layout_height="49dp"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
-                android:layout_alignParentRight="true">
+                android:layout_marginEnd="@dimen/toolbar_margin_right"
+                android:layout_alignParentEnd="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:text="$0.00"
                     android:textColor="@color/tw_red"
                     android:textSize="19sp"

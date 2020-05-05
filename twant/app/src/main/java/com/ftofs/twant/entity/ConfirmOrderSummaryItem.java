@@ -13,12 +13,12 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
     }
 
 
-    public float totalTaxAmount;
+    public double totalTaxAmount;
     public String paymentTypeCode;
-    public float totalAmount;
-    public float totalFreight;
-    public float storeDiscount;
-    public float platformDiscount;
+    public double totalAmount;
+    public double totalFreight;
+    public double storeDiscount;
+    public double platformDiscount;
     public Receipt receipt; // 單據信息
     public int shipTimeType; // 配送時間
     public int totalItemCount;  // 總件數
@@ -36,9 +36,9 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
      * 計算最終的總價
      * @return
      */
-    public float calcTotalPrice() {
+    public double calcTotalPrice() {
         // 總金額 + 總運費 - 商店折扣 - 平臺折扣
-        float result = totalAmount - storeDiscount - platformDiscount+totalTaxAmount;
+        double result = totalAmount - storeDiscount - platformDiscount+totalTaxAmount;
         //1是門店自提現在
         if (payWayIndex != 1) { // 不是門店自提才加上運費
             result += totalFreight;

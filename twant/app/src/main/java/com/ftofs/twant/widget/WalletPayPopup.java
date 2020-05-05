@@ -30,7 +30,7 @@ public class WalletPayPopup extends FullScreenPopupView implements View.OnClickL
     /**
      * 支付金額
      */
-    float payAmount;
+    double payAmount;
     /**
      * 支付結果回調
      */
@@ -65,7 +65,7 @@ public class WalletPayPopup extends FullScreenPopupView implements View.OnClickL
 
     View[] indicatorViewArr = new View[PASSWORD_DIGIT_COUNT];
 
-    public WalletPayPopup(@NonNull Context context, int payId, float payAmount, CommonCallback callback) {
+    public WalletPayPopup(@NonNull Context context, int payId, double payAmount, CommonCallback callback) {
         super(context);
 
         this.context = context;

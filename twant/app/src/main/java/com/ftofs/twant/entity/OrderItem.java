@@ -5,8 +5,8 @@ import com.ftofs.twant.constant.Constant;
 import java.util.List;
 
 public class OrderItem {
-    public OrderItem(int orderId, String storeName, String ordersStateName, float freightAmount,
-                     float ordersAmount, boolean showMemberCancel, boolean showMemberBuyAgain,
+    public OrderItem(int orderId, String storeName, String ordersStateName, double freightAmount,
+                     double ordersAmount, boolean showMemberCancel, boolean showMemberBuyAgain,
                      boolean showShipSearch, boolean showEvaluation, boolean showMemberReceive,
                      List<OrderSkuItem> orderSkuItemList, List<GiftItem> giftItemList) {
         this.orderId = orderId;
@@ -28,8 +28,8 @@ public class OrderItem {
     public String storeName;
     public int ordersState; // 服務器端定義的訂單狀態
     public String ordersStateName;
-    public float freightAmount;
-    public float ordersAmount;
+    public double freightAmount;
+    public double ordersAmount;
     public boolean showMemberCancel;
     public boolean showMemberBuyAgain;
     public boolean showShipSearch;

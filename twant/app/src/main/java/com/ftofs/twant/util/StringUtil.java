@@ -46,6 +46,7 @@ import java.util.regex.Pattern;
 
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
+import kotlin.math.UMathKt;
 import okhttp3.Call;
 
 /**
@@ -791,5 +792,23 @@ public class StringUtil {
                 return zone;
             }
         }
+    }
+
+    /**
+     *
+     * @param color 不加透明度的顔色： #004411
+     * @param percent 百分比，例如 60，即百分之60
+     * @return
+     */
+    public static String addAlphaToColor(String color, int percent) {
+        if (isEmpty(color)) {
+            return color;
+        }
+        if (color.length() > 7) {
+            return color;
+        }
+
+        String newColor = "#" + Integer.toHexString(0xFF * percent / 100) + color.substring(1);
+        return newColor;
     }
 }

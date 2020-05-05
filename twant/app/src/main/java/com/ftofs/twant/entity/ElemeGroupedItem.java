@@ -16,8 +16,8 @@ public class ElemeGroupedItem extends BaseGroupedItem<ElemeGroupedItem.ItemInfo>
 
     public static class ItemInfo extends BaseGroupedItem.ItemInfo {
         public boolean show=true;
-        private float discount;
-        private float original;
+        private double discount;
+        private double original;
         private String content;
         private String imgUrl;
         private String cost;
@@ -37,7 +37,7 @@ public class ElemeGroupedItem extends BaseGroupedItem<ElemeGroupedItem.ItemInfo>
             this(title, group, content, imgUrl);
             this.cost = cost;
         }
-        public ItemInfo(String title, String group, String content, String imgUrl, String cost,float discount,float original,int commonId,boolean showDiscount) {
+        public ItemInfo(String title, String group, String content, String imgUrl, String cost,double discount,double original,int commonId,boolean showDiscount) {
             this(title, group, content, imgUrl,cost);
             this.discount = discount;
             this.original = original;
@@ -69,11 +69,11 @@ public class ElemeGroupedItem extends BaseGroupedItem<ElemeGroupedItem.ItemInfo>
             this.cost = cost;
         }
 
-        public float getDoscount() {
+        public double getDiscount() {
             return discount;
         }
 
-        public float getOriginal() {
+        public double getOriginal() {
             return original;
         }
     }

@@ -14,11 +14,11 @@ import java.util.List;
 public class PayItem implements MultiItemEntity {
     public int itemType;
     public int payId;
-    public float payAmount;
+    public double payAmount;
     public boolean showPayButton;
     public List<OrderItem> orderItemList = new ArrayList<>();
 
-    public PayItem(int payId, float payAmount, boolean showPayButton) {
+    public PayItem(int payId, double payAmount, boolean showPayButton) {
         this.itemType = Constant.ITEM_TYPE_NORMAL;
         this.payId = payId;
         this.payAmount = payAmount;

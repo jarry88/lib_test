@@ -11,7 +11,7 @@ public class SpuStatus extends BaseStatus {
     private int goodsId; // Sku Id
     private int cartId;
     private int count;  // 數量
-    private float price;  // 價錢
+    private double price;  // 價錢
     private int limitBuy; //限購狀態
     private boolean isCrossBorder; // 是否支持跨境購
 
@@ -52,11 +52,11 @@ public class SpuStatus extends BaseStatus {
         this.count = count;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

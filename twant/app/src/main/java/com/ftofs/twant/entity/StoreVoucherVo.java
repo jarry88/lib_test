@@ -21,11 +21,11 @@ public class StoreVoucherVo {
     /**
      * 面额
      */
-    public float price;
+    public double price;
     /**
      * 店铺券使用时的订单限额
      */
-    public float limitAmount;
+    public double limitAmount;
     /**
      * 店铺Id
      */

@@ -8,7 +8,7 @@ package com.ftofs.twant.entity.order;
 public class OrderDetailGoodsItem {
 
     public OrderDetailGoodsItem(int commonId, int goodsId, int ordersId, int orderState, int showRefundWaiting, int ordersGoodsId,
-                                String imageSrc, String goodsName, float goodsPrice, int buyNum,
+                                String imageSrc, String goodsName, double goodsPrice, int buyNum,
                                 String goodsFullSpecs, int refundType, int showRefund, int showMemberComplain,
                                 int complainId) {
         this.commonId = commonId;
@@ -39,7 +39,7 @@ public class OrderDetailGoodsItem {
     public int ordersGoodsId;
     public String imageSrc;
     public String goodsName;
-    public float goodsPrice;
+    public double goodsPrice;
     public int buyNum;
     public String goodsFullSpecs;
 

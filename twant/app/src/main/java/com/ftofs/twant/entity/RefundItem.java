@@ -9,9 +9,9 @@ public class RefundItem {
     public String goodsImage;
     public String goodsName;
     public String goodsFullSpecs;
-    public float goodsPrice;
+    public double goodsPrice;
     public int buyNum;
     public String addTime;
-    public float goodsPayAmount;
+    public double goodsPayAmount;
     public int enableMemberCancel;
 }
