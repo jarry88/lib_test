@@ -93,7 +93,7 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
     /**
      * 支付單金額
      */
-    float payAmount;
+    double payAmount;
 
     TextView tvWalletBalance;
     TextView tvPayAmount;
@@ -135,12 +135,12 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
      * @param walletBalance 想要錢包余額
      * @return
      */
-    public static PayVendorFragment newInstance(int payId, float payAmount, float walletBalance) {
+    public static PayVendorFragment newInstance(int payId, double payAmount, double walletBalance) {
         Bundle args = new Bundle();
 
         args.putInt("payId", payId);
-        args.putFloat("payAmount", payAmount);
-        args.putFloat("walletBalance", walletBalance);
+        args.putDouble("payAmount", payAmount);
+        args.putDouble("walletBalance", walletBalance);
         PayVendorFragment fragment = new PayVendorFragment();
         fragment.setArguments(args);
 
@@ -161,8 +161,8 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         Bundle args = getArguments();
         user_zone =StringUtil.parseZone();
         payId = args.getInt("payId");
-        payAmount = args.getFloat("payAmount");
-        walletBalance = args.getFloat("walletBalance");
+        payAmount = args.getDouble("payAmount");
+        walletBalance = args.getDouble("walletBalance");
 
         tvPayAmount = view.findViewById(R.id.tv_pay_amount);
         secondPayAmount = view.findViewById(R.id.second_monny_container);

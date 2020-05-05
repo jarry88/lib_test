@@ -105,8 +105,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     TextView tvAddress;
     TextView tvItemCount;  // 共xxx件
     TextView tvTotalPrice;  // 合計:多少錢
-    float totalPrice;
-    float totalFreightAmount;
+    double totalPrice;
+    double totalFreightAmount;
 
     RelativeLayout btnAddShippingAddress;
     LinearLayout btnChangeShippingAddress;
@@ -537,7 +537,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         } else if (id == R.id.btn_commit) {
             ConfirmOrderSummaryItem summaryItem = getSummaryItem();
             if (summaryItem != null) {
-                float totalPrice = summaryItem.calcTotalPrice();
+                double totalPrice = summaryItem.calcTotalPrice();
                 SLog.info("summaryItem.totalPrice[%s]", totalPrice);
                 if (summaryItem.totalAmount >= 20000) {
 //                    ToastUtil.error(_mActivity, "每次交易總金額不得超過 $20,000，請調整購物數量再提交");

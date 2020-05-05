@@ -681,9 +681,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
      * 更新合計數據
      */
     private void updateTotalData() {
-        Pair<Float, Integer> totalData = totalStatus.getTotalDataNew();
+        Pair<Double, Integer> totalData = totalStatus.getTotalDataNew();
 
-        float totalPrice = totalData.first;  // 總價錢
+        double totalPrice = totalData.first;  // 總價錢
         int totalCount = totalData.second;  // 總件數
         tvTotalPrice.setText(StringUtil.formatPrice(_mActivity, totalPrice, 0,2));
         String btnSettlementText = textSettlement;

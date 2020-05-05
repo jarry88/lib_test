@@ -321,7 +321,8 @@
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fillViewport="true">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -404,24 +405,23 @@
                         android:id="@+id/rv_single_store_list"
                         android:visibility="gone"/>
                     <com.google.android.material.tabs.TabLayout
-                        app:tabBackground="@color/tw_blue"
                         android:id="@+id/shopping_tab_layout"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tool_bar"
-                        app:tabIndicatorColor="@color/tw_blue"
                         app:tabMode="fixed"
-                        app:tabSelectedTextColor="@color/tw_blue"
+                        app:tabIndicatorFullWidth="false"
+
                         app:tabTextColor="@color/tw_black"
-                        android:background="@color/tw_blue"
                         />
 
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/shopping_viewpager"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="300dp"
+                        android:background="@color/tw_blue"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/item_true"

@@ -251,21 +251,11 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
      * 加載購物專場數據
      */
     private void loadSessionData() {
-        //沒登錄也可以去
-//        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
-//        String token = User.getToken();
-//        if (StringUtil.isEmpty(token)) {
-//            return;
-//        }
 
-        EasyJSONObject params = EasyJSONObject.generate(
-//                "token", token
-                );
 
 
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
-        SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_SHOP_SESSION, params, new UICallback() {
+        Api.getUI(Api.PATH_SHOP_SESSION, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity,e);

@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,12 +34,14 @@ import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.ElemeGroupedItem;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.WebSliderItem;
+import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
+import com.ftofs.twant.view.TwantTabLayout;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
@@ -62,7 +66,7 @@ import okhttp3.Call;
  * 主題購物專場，同原有專場類似但是獨立，具有商品和店鋪及添加購物車，配置頁面主題顔色，生成結算金額等功能
  * @author gzp
  */
-public class ShoppingSpecialFragment extends BaseFragment implements View.OnClickListener {
+public class ShoppingSpecialFragment extends BaseFragment implements View.OnClickListener , NestedScrollingCallback {
 
     private Unbinder unbinder;
     @BindView(R.id.tv_zone_name)
@@ -81,6 +85,13 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     ViewPager viewPager;
     private List<String> titleList;
     private List<Fragment> fragmentList= new ArrayList<>();
+    private int LINKAGE_FRAGMENT=0;
+    private int STORE_FRAGMENT=1;
+    boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
+    private long lastScrollingTimestamp;
+    private boolean isScrolling;
+    private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=800;
+
 
     @OnClick(R.id.btn_goods)
     void showGoodsListInfo() {
@@ -126,14 +137,41 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private int zoneState;
     private int zoneType;
     int hasGoodsCategory;
-    List<ElemeGroupedItem> items = new ArrayList<>();
 
-    private ShopGoodsListAdapter shopGoodsListAdapter;
-    private List<Goods> goodsList;
 
     @OnClick(R.id.btn_back)
     void back() {
         hideSoftInputPop();
+    }
+    static class scrollStateHandler extends Handler {
+        NestedScrollView scrollViewContainer;
+        ShoppingSpecialFragment fragment;
+        int lastY = -1;
+        private boolean showFloatButton = true;
+
+        public scrollStateHandler(ShoppingSpecialFragment fragment) {
+            this.fragment = fragment;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0) {// 打印 每次 Y坐标 滚动的距离
+                //Slog.info(scrollView.getScrollY() + "");
+                //    获取到 滚动的 Y 坐标距离
+                int scrollY = scrollViewContainer.getScrollY();
+                // 如果 滚动 的Y 坐标 的 最后一次 滚动到的Y坐标 一致说明  滚动已经完成
+                if (scrollY == lastY) {
+                    //  ScrollView滚动完成  处理相应的事件
+                } else {
+                    // 滚动的距离 和 之前的不相等 那么 再发送消息 判断一次
+// 将滚动的 Y 坐标距离 赋值给 lastY
+                    lastY = scrollY;
+                    this.sendEmptyMessageDelayed(0, 10);
+                }
+            }
+        }
+
+
     }
     public static ShoppingSpecialFragment newInstance(int zoneId) {
         ShoppingSpecialFragment fragment = new ShoppingSpecialFragment();
@@ -207,6 +245,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             zoneType = zoneVo.getInt("zoneType");
 
             String appColor = zoneVo.getSafeString("appColor");
+            //調試階段試色
+            appColor="#F50057";
             String appLogo = zoneVo.getSafeString("appLogo");
             String zoneName = zoneVo.getSafeString("zoneName");
             tvZoneName.setText(zoneName);
@@ -226,17 +266,18 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             setBannerData(appAdImageList);
             EasyJSONArray zoneGoodsVoList = zoneVo.getArray("zoneGoodsVoList");
             EasyJSONArray zoneStoreVoList = zoneVo.getArray("zoneStoreVoList");
+            if (zoneStoreVoList != null&&zoneStoreVoList.length()>0) {
+                ((ShoppingStoreListFragment) fragmentList.get(STORE_FRAGMENT)).updateStoreList(zoneStoreVoList);
+            }
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
             //商品列表
             if (hasGoodsCategory == Constant.TRUE_INT) {
-//                setLinkageData(zoneGoodsCategoryVoList);
+                if (zoneGoodsCategoryVoList != null) {
+                    ((ShoppingLinkageFragment)fragmentList.get(LINKAGE_FRAGMENT)).setLinkageData(zoneGoodsCategoryVoList);
+                }
 
             } else {
-                goodsList.clear();
-                updateGoodVoList(zoneGoodsVoList,null);
-                SLog.info("添加沒有分類的商品列表goodsList[%d]",goodsList.size());
-                rvGoodsList.setVisibility(View.VISIBLE);
-                shopGoodsListAdapter.setNewData(goodsList);
+                ((ShoppingLinkageFragment)fragmentList.get(LINKAGE_FRAGMENT)).updateGoodVoList(zoneGoodsVoList);
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -244,55 +285,48 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 
     }
 
+
+
     private void updateAppColor(String appColor) {
         if ("#FFFFFF".equals(appColor)) {
             tvZoneName.setTextColor(getResources().getColor(R.color.tw_black));
         }
         rlToolBar.setBackgroundColor(Color.parseColor(appColor));
         int[] colors={Color.parseColor(appColor),0xff8B3097, 0xffD14E7A};
-        GradientDrawable bannerBackGround = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, colors);
+        GradientDrawable bannerBackGround = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
         clBannerContainer.setBackground(bannerBackGround);
         tabLayout.setTabTextColors(Color.parseColor(appColor),Color.parseColor(StringUtil.addAlphaToColor(appColor,60)));
+        tabLayout.setSelectedTabIndicatorColor(Color.parseColor(appColor));
+    }
+    private void showFloatButton() {
+        if (floatButtonShown){
+            return;
+        }
+
+        // 防止延遲時序問題導致的空引用異常
+        if (llFloatButtonContainer == null) {
+            return;
+        }
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = true;
+    }
+
+    private void hideFloatButton() {
+        if (!floatButtonShown) {
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = false;
     }
 
 
 
-    private void updateGoodVoList(EasyJSONArray goodsList,String groupName) {
-        try {
-        for (Object object1 : goodsList) {
-            EasyJSONObject goods = (EasyJSONObject) object1;
-            String goodsName = goods.getSafeString("goodsName");
 
-            String goodsImage = goods.getSafeString("goodsImage");
-            int commonId = goods.getInt("commonId");
-            String jingle  = goods.getSafeString("jingle");
-            double price;
-            int appUsable = goods.getInt("appUsable");
-            if (appUsable > 0) {
-                price =  goods.getDouble("appPriceMin");
-            } else {
-                price =  goods.getDouble("batchPrice0");
-            }
-
-            float batchPrice0 = (float) goods.getDouble("batchPrice0");
-            float promotionDiscountRate = (float) goods.getDouble("promotionDiscountRate");
-
-
-            if (groupName == null) {
-                Goods goodsInfo = new Goods(commonId, goodsImage, goodsName, jingle, price);
-                this.goodsList.add(goodsInfo);
-            } else {
-                ElemeGroupedItem.ItemInfo goodsInfo = new ElemeGroupedItem.ItemInfo(goodsName, groupName, jingle, StringUtil.normalizeImageUrl(goodsImage),
-                        StringUtil.formatPrice(getContext(), price, 0),promotionDiscountRate,batchPrice0,commonId,appUsable > 0);
-                ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
-                items.add(item1);
-            }
-        }
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @Override
     public void onClick(View v) {
@@ -311,7 +345,6 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private void initView(View view) {
         initBanner();
         initTabList();
-        initAdapter();
     }
 
     private void initBanner() {
@@ -382,9 +415,9 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         titleList = new ArrayList<>();
         titleList.add("-");
         titleList.add("-");
-        tabLayout.setOnClickListener(this);;
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
+        tabLayout.setOnClickListener(this);
+        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(LINKAGE_FRAGMENT)));
+        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(STORE_FRAGMENT)));
 
 
         fragmentList.add(ShoppingLinkageFragment.newInstance(this));
@@ -393,65 +426,28 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
+
         viewPager.setAdapter(adapter);
+        LinearLayout.LayoutParams layoutParams= (LinearLayout.LayoutParams) viewPager.getLayoutParams();
+        layoutParams.height=scrollView.getHeight()-44;
+        SLog.info("scrollView.getHeight() [%d]",scrollView.getHeight());
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);
-    }
-
-    private void initAdapter() {
-        goodsList = new ArrayList<>();
-        shopGoodsListAdapter = new ShopGoodsListAdapter(_mActivity, goodsList);
-        shopGoodsListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Goods goods = goodsList.get(position);
-                int commonId = goods.id;
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                int linkageY = Util.getYOnScreen(tabLayout);
+                int containerViewY = Util.getYOnScreen(scrollView);
 
-                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-            }
-        });
-        shopGoodsListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                int id = view.getId();
-
-                Goods goods = goodsList.get(position);
-                int commonId = goods.id;
-                int userId = User.getUserId();
-                if (id == R.id.btn_add_to_cart) {
-                    if (userId > 0) {
-                        showSpecSelectPopup(commonId);
-                    } else {
-                        Util.showLoginFragment();
-                    }
-                }
-            }
-        });
-
-        shopGoodsListAdapter.setEnableLoadMore(true);
-        shopGoodsListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                SLog.info("onLoadMoreRequested");
-
-//                if (!hasMore) {
-//                    shopGoodsListAdapter.setEnableLoadMore(false);
-//                    return;
+                SLog.info("linkageY[%s], containerViewY[%s],", linkageY, containerViewY);
+//                if (linkageY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
+//                    rvSecondList.setNestedScrollingEnabled(true);
+//                } else {
+//                    rvSecondList.setNestedScrollingEnabled(false);
 //                }
-//                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
             }
-        }, rvGoodsList);
+        });
     }
-
-    private void showSpecSelectPopup(int commonId) {
-        new XPopup.Builder(_mActivity)
-                // 如果不加这个，评论弹窗会移动到软键盘上面
-                .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0,2))
-                .show();
-    }
-
-
     private void setBannerData(EasyJSONArray discountBannerList) {
         SLog.info("bannerListLength %d",discountBannerList.length());
         try {
@@ -479,5 +475,26 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         if (unbinder != null) {
             unbinder.unbind();
         }
+    }
+    @Override
+    public void onCbStartNestedScroll() {
+        isScrolling = true;
+        lastScrollingTimestamp = System.currentTimeMillis();
+        hideFloatButton();
+    }
+
+    @Override
+    public void onCbStopNestedScroll() {
+        isScrolling = false;
+        llFloatButtonContainer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isScrolling) {
+                    return;
+                }
+
+                showFloatButton();
+            }
+        }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY);
     }
 }
