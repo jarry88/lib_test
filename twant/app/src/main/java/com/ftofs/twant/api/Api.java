@@ -1287,6 +1287,24 @@ public class Api {
 
 
     /**
+     * 【商家】訂單買家信息
+     */
+    public static final String PATH_SELLER_BUYER_INFO = "/member/seller/orders/memberInfo";
+
+
+    /**
+     * 【商家】訂單發貨物流信息
+     */
+    public static final String PATH_SELLER_LOGISTICS_LIST = "/member/seller/orders/send/info";
+
+
+    /**
+     * 【商家】訂單發貨
+     */
+    public static final String PATH_SELLER_ORDER_SHIP = "/member/seller/orders/send/save";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

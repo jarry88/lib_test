@@ -269,7 +269,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             SLog.info("yourMemberName[%s], yourNickname[%s], yourAvatarUrl[%s], yourRole[%d]",
                     yourMemberName, yourNickname, yourAvatarUrl, yourRole);
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         updateYourInfo();
         loadMemberInfo();
@@ -946,7 +946,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         absolutePath = easyJSONObject.getSafeString("absolutePath");
                         imgUrl = easyJSONObject.getSafeString("imgUrl");
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
 
                     String imageUri;
@@ -999,7 +999,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         int ordersId = easyJSONObject.getInt("ordersId");
                         start(OrderDetailFragment.newInstance(ordersId));
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 } else if (id == R.id.ll_enc_message_container) {
                     ChatMessage chatMessage = chatMessageList.get(position);
@@ -1008,7 +1008,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         String memberName = chatMessage.fromMemberName;
                         start(ENameCardFragment.newInstance(memberName));
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             }
@@ -1238,7 +1238,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                                     null, null, 0, null, null, 0, null);
                         }
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
 
@@ -1628,11 +1628,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
-    }
-
-    public void popupStoreCard() {
-
-
     }
 
     public int getStoreId() {

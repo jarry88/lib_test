@@ -19,6 +19,7 @@ public class SellerOrderItem {
     public String createTime; // 下單時間： 2020-04-09 18:56:57 這種格式
     public String ordersFrom; // 來源: PC或手機等
     public String buyer; // 買家暱稱
+    public String buyerMemberName;
 
     public List<SellerOrderSkuItem> goodsList = new ArrayList<>();
 

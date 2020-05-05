@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,8 +144,8 @@ public class TestMyFriendFragment extends BaseFragment implements View.OnClickLi
                     }
                     adapter.setNewData(myFriendListItems);
 
-                }catch (Exception e){
-                    SLog.info("error%s",e.getMessage());
+                } catch (Exception e){
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

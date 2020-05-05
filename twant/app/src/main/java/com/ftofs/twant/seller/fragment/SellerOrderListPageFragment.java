@@ -89,12 +89,14 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
 
+                SellerOrderItem sellerOrderItem = sellerOrderItemList.get(position);
+
                 if (id == R.id.tv_buyer) {
                     hideSoftInput();
                     new XPopup.Builder(_mActivity)
                             // 如果不加这个，评论弹窗会移动到软键盘上面
                             .moveUpToKeyboard(false)
-                            .asCustom(new BuyerInfoPopup(_mActivity, _mActivity))
+                            .asCustom(new BuyerInfoPopup(_mActivity, _mActivity, sellerOrderItem.ordersId, sellerOrderItem.buyerMemberName))
                             .show();
                 }
             }
@@ -104,6 +106,13 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SellerOrderItem item = sellerOrderItemList.get(position);
                 Util.startFragment(SellerOrderDetailFragment.newInstance(item.ordersId));
+            }
+        });
+        sellerOrderAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                SellerOrderItem item = sellerOrderItemList.get(position);
+                Util.startFragment(SellerOrderShipFragment.newInstance(item.ordersId, item.ordersSnText));
             }
         });
         sellerOrderAdapter.setEnableLoadMore(true);
@@ -155,6 +164,9 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                         sellerOrderAdapter.setEnableLoadMore(false);
                     }
 
+                    if (page == 1) {
+                        sellerOrderItemList.clear();
+                    }
                     EasyJSONArray orderList = responseObj.getArray("datas.ordersList");
                     for (Object object : orderList) {
                         EasyJSONObject orderItem = (EasyJSONObject) object;
@@ -167,6 +179,7 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                         item.createTime = orderItem.getSafeString("createTime");
                         item.ordersFrom = orderItem.getString("ordersFrom");
                         item.buyer = orderItem.getSafeString("nickName");
+                        item.buyerMemberName = orderItem.getSafeString("memberName");
                         item.paymentName = orderItem.getSafeString("paymentName");
                         item.ordersAmount = orderItem.getDouble("ordersAmount");
                         item.freightAmount = orderItem.getDouble("freightAmount");

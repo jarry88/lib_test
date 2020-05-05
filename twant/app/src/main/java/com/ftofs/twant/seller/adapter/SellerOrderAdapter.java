@@ -32,7 +32,7 @@ public class SellerOrderAdapter extends BaseQuickAdapter<SellerOrderItem, BaseVi
 
     @Override
     protected void convert(BaseViewHolder helper, SellerOrderItem item) {
-        helper.addOnClickListener(R.id.tv_buyer);
+        helper.addOnClickListener(R.id.tv_buyer, R.id.btn_ship);
         helper.setText(R.id.tv_orders_sn, item.ordersSnText)
                 .setText(R.id.tv_create_time, item.createTime)
                 .setText(R.id.tv_from, item.ordersFrom)

@@ -85,6 +85,7 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_copy_order_sn, this);
         Util.setOnClickListener(view, R.id.btn_chat_with_user, this);
+        Util.setOnClickListener(view, R.id.btn_ship, this);
 
         loadData();
     }
@@ -237,6 +238,8 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
             EMConversation conversation = ChatUtil.getConversation(buyerMemberName, buyerNickname, avatarUrl, ChatUtil.ROLE_CS_AVAILABLE);
 
             Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
+        } else if (id == R.id.btn_ship) {
+            Util.startFragment(SellerOrderShipFragment.newInstance(orderId, orderSn));
         }
     }
 }
