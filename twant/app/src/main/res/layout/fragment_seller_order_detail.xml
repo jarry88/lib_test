@@ -31,8 +31,6 @@
     </RelativeLayout>
     <!-- END OF 工具欄 -->
 
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -333,6 +331,7 @@
                 android:background="@android:color/white">
                 <!-- 商品列表 -->
                 <LinearLayout
+                    android:id="@+id/ll_seller_order_detail_goods_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
@@ -420,83 +419,6 @@
                             </TextView>
                         </LinearLayout>
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="12dp"
-                        android:paddingBottom="12dp"
-                        android:background="@drawable/border_type_d"
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="109dp"
-                            android:layout_height="109dp"
-                            android:src="@drawable/cs_avatar_160">
-                        </ImageView>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="12dp"
-                            android:orientation="vertical">
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="15.5dp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="奥迪双钻（AULDEY）超级飞侠益智玩具 变形机器人"
-                                        android:textSize="13sp"
-                                        android:textColor="@color/tw_black">
-                                    </TextView>
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="9dp"
-                                        android:text="顔色：白色ddddddd；鞋碼：26；尺碼：XXS"
-                                        android:textColor="#999"
-                                        android:textSize="11sp">
-                                    </TextView>
-                                </LinearLayout>
-
-                                <!-- 单价、数量信息 -->
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="right"
-                                    android:orientation="vertical">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="$1080.55"
-                                        android:textSize="13sp"
-                                        android:textColor="@color/tw_black">
-                                    </TextView>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="X 1"
-                                        android:textColor="#999"
-                                        android:textSize="11sp">
-                                    </TextView>
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="9dp"
-                                android:textColor="@color/tw_black"
-                                android:textSize="11sp"
-                                android:text="應付佣金：$ 108.00 * 10% = $ 10.80">
-                            </TextView>
-                        </LinearLayout>
-                    </LinearLayout>
                 </LinearLayout>
 
                 <!-- 商品彙總 -->
@@ -519,6 +441,7 @@
                             android:textSize="12sp">
                         </TextView>
                         <TextView
+                            android:id="@+id/tv_orders_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
@@ -557,10 +480,11 @@
                         android:textColor="#999999">
                     </TextView>
                     <TextView
+                        android:id="@+id/tv_ship_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="21dp"
-                        android:text="順豐物流"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="13sp">
                     </TextView>
@@ -578,10 +502,11 @@
                         android:textColor="#999999">
                     </TextView>
                     <TextView
+                        android:id="@+id/tv_ship_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="21dp"
-                        android:text="100861100553215"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="13sp">
                     </TextView>
@@ -599,10 +524,11 @@
                         android:textColor="#999999">
                     </TextView>
                     <TextView
+                        android:id="@+id/tv_ship_sn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="21dp"
-                        android:text="快遞單號"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="13sp">
                     </TextView>
@@ -615,7 +541,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:layout_marginLeft="20dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -870,7 +797,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:orientation="vertical">
+        android:background="@drawable/border_type_e">
         <TextView
             android:id="@+id/btn_ship"
             android:layout_width="141dp"

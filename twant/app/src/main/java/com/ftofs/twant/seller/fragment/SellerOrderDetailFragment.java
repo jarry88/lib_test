@@ -12,25 +12,35 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.fragment.ChatFragment;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.orm.FriendInfo;
+import com.ftofs.twant.seller.adapter.SellerOrderDetailGoodsAdapter;
 import com.ftofs.twant.seller.adapter.SellerOrderStatusAdapter;
+import com.ftofs.twant.seller.entity.SellerOrderDetailGoodsItem;
 import com.ftofs.twant.seller.entity.SellerOrderItem;
 import com.ftofs.twant.seller.entity.SellerOrderSkuItem;
 import com.ftofs.twant.seller.entity.SellerOrderStatus;
+import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.hyphenate.chat.EMConversation;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -43,6 +53,8 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
     String orderSn;
     String buyerNickname;
     String buyerMemberName;
+
+    List<SellerOrderDetailGoodsItem> sellerOrderDetailGoodsItemList = new ArrayList<>();
 
     public static SellerOrderDetailFragment newInstance(int orderId) {
         Bundle args = new Bundle();
@@ -71,6 +83,8 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_copy_order_sn, this);
+        Util.setOnClickListener(view, R.id.btn_chat_with_user, this);
 
         loadData();
     }
@@ -104,41 +118,41 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
                         return;
                     }
 
-                    View itemView = getView();
-                    if (itemView == null) {
+                    View contentView = getView();
+                    if (contentView == null) {
                         return;
                     }
 
                     EasyJSONObject ordersVo = responseObj.getSafeObject("datas.ordersVo");
 
-                    ((TextView) itemView.findViewById(R.id.tv_order_status_desc)).setText(ordersVo.getSafeString("ordersStateName"));
+                    ((TextView) contentView.findViewById(R.id.tv_order_status_desc)).setText(ordersVo.getSafeString("ordersStateName"));
 
                     String paymentInfoStr = String.format("買家已使用「%s」方式成功對訂單進行支付，支付單號 「%s」。",
                             ordersVo.getSafeString("paymentName"), ordersVo.getSafeString("paySnText"));
-                    ((TextView) itemView.findViewById(R.id.tv_payment_info)).setText(paymentInfoStr);
+                    ((TextView) contentView.findViewById(R.id.tv_payment_info)).setText(paymentInfoStr);
 
                     orderSn = ordersVo.getSafeString("ordersSnText");
-                    ((TextView) itemView.findViewById(R.id.tv_order_sn)).setText(orderSn);
+                    ((TextView) contentView.findViewById(R.id.tv_order_sn)).setText(orderSn);
 
                     buyerNickname = ordersVo.getSafeString("nickName");
                     buyerMemberName = ordersVo.getSafeString("memberName");
 
                     String buyerInfo = String.format("%s (%s)", buyerNickname, buyerMemberName);
-                    ((TextView) itemView.findViewById(R.id.btn_buyer_info)).setText(buyerInfo);
+                    ((TextView) contentView.findViewById(R.id.btn_buyer_info)).setText(buyerInfo);
 
                     String receiverInfo = ordersVo.getSafeString("receiverName") + " " + ordersVo.getSafeString("receiverPhone")
                             + " " + ordersVo.getSafeString("receiverAreaInfo") + " " + ordersVo.getSafeString("receiverAddress");
-                    ((TextView) itemView.findViewById(R.id.tv_receiver)).setText(receiverInfo);
+                    ((TextView) contentView.findViewById(R.id.tv_receiver)).setText(receiverInfo);
 
-                    ((TextView) itemView.findViewById(R.id.tv_ship_time)).setText(ordersVo.getSafeString("shipTime"));
+                    ((TextView) contentView.findViewById(R.id.tv_ship_time)).setText(ordersVo.getSafeString("shipTime"));
 
-                    ((TextView) itemView.findViewById(R.id.tv_receiver_message)).setText(ordersVo.getSafeString("receiverMessage"));
+                    ((TextView) contentView.findViewById(R.id.tv_receiver_message)).setText(ordersVo.getSafeString("receiverMessage"));
 
                     String payWay = String.format("%s（付款單號：%s）",
                             ordersVo.getSafeString("paymentName"), ordersVo.getSafeString("paySnText"));
-                    ((TextView) itemView.findViewById(R.id.tv_pay_way)).setText(payWay);
+                    ((TextView) contentView.findViewById(R.id.tv_pay_way)).setText(payWay);
 
-                    LinearLayout llOrderStatusContainer = itemView.findViewById(R.id.ll_order_status_container);
+                    LinearLayout llOrderStatusContainer = contentView.findViewById(R.id.ll_order_status_container);
                     SellerOrderStatusAdapter adapter = new SellerOrderStatusAdapter(_mActivity, llOrderStatusContainer, R.layout.seller_order_status_item);
 
                     List<SellerOrderStatus> sellerOrderStatusList = new ArrayList<>();
@@ -162,6 +176,31 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
                         }
                     }
                     adapter.setData(sellerOrderStatusList);
+
+                    LinearLayout llSellerOrderDetailGoodsContainer = contentView.findViewById(R.id.ll_seller_order_detail_goods_container);
+                    SellerOrderDetailGoodsAdapter goodsAdapter = new SellerOrderDetailGoodsAdapter(_mActivity, llSellerOrderDetailGoodsContainer, R.layout.seller_order_detail_goods_item);
+                    goodsAdapter.setItemClickListener(new ViewGroupAdapter.OnItemClickListener() {
+                        @Override
+                        public void onClick(ViewGroupAdapter adapter, View view, int position) {
+                            SellerOrderDetailGoodsItem item = sellerOrderDetailGoodsItemList.get(position);
+                            Util.startFragment(GoodsDetailFragment.newInstance(item.commonId, 0));
+                        }
+                    });
+
+
+                    EasyJSONArray ordersGoodsList = ordersVo.getArray("ordersGoodsList");
+                    for (Object object : ordersGoodsList) {
+                        SellerOrderDetailGoodsItem item = (SellerOrderDetailGoodsItem) EasyJSONBase.jsonDecode(SellerOrderDetailGoodsItem.class, object.toString());
+                        sellerOrderDetailGoodsItemList.add(item);
+                    }
+
+                    goodsAdapter.setData(sellerOrderDetailGoodsItemList);
+
+                    double ordersAmount = ordersVo.getDouble("ordersAmount");
+                    ((TextView) contentView.findViewById(R.id.tv_orders_amount)).setText(StringUtil.formatPrice(_mActivity, ordersAmount, 0));
+
+                    ((TextView) contentView.findViewById(R.id.tv_ship_name)).setText(ordersVo.getSafeString("shipName"));
+                    ((TextView) contentView.findViewById(R.id.tv_ship_sn)).setText(ordersVo.getSafeString("shipSn"));
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -183,6 +222,21 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
 
         if (id == R.id.btn_back) {
             pop();
+        } else if (id == R.id.btn_copy_order_sn) {
+            SLog.info("复制订单号[%s]", orderSn);
+            ClipboardUtils.copyText(_mActivity, orderSn);
+            ToastUtil.success(_mActivity, "訂單編號已複製");
+        } else if (id == R.id.btn_chat_with_user) {
+            String avatarUrl = "";
+
+            FriendInfo friendInfo = new FriendInfo();
+            friendInfo.memberName = buyerMemberName;
+            friendInfo.nickname = buyerNickname;
+            friendInfo.avatarUrl = avatarUrl;
+            friendInfo.role = ChatUtil.ROLE_MEMBER;
+            EMConversation conversation = ChatUtil.getConversation(buyerMemberName, buyerNickname, avatarUrl, ChatUtil.ROLE_CS_AVAILABLE);
+
+            Util.startFragment(ChatFragment.newInstance(conversation, friendInfo));
         }
     }
 }
