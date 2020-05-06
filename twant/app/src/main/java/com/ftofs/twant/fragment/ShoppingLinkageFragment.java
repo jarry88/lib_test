@@ -1,7 +1,10 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,7 +31,9 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ElemeGroupedItem;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SlantedWidget;
@@ -55,9 +60,10 @@ import static com.ftofs.twant.R.drawable.white_4dp_right_radius_bg;
 
 /**
  * 購物專場二級聯動子頁面
+ *
  * @author gzp
  */
-public class ShoppingLinkageFragment extends BaseFragment{
+public class ShoppingLinkageFragment extends BaseFragment implements View.OnClickListener{
 
     LinkageRecyclerView linkage;
     private RecyclerView rvSecondList;
@@ -72,9 +78,10 @@ public class ShoppingLinkageFragment extends BaseFragment{
     private EasyJSONArray zoneGoodsVoList;
     private EasyJSONArray zoneGoodsCategoryVoList;
     private boolean linkageLoaded;
+    private Typeface typeface;
 
 
-    public static ShoppingLinkageFragment newInstance(ShoppingSpecialFragment shoppingSpecialFragment) {
+    public static ShoppingLinkageFragment newInstance (ShoppingSpecialFragment shoppingSpecialFragment)  {
         ShoppingLinkageFragment fragment = new ShoppingLinkageFragment();
         fragment.parentFragment = shoppingSpecialFragment;
         return fragment;
@@ -91,10 +98,10 @@ public class ShoppingLinkageFragment extends BaseFragment{
     }
 
     private void updateView() {
-        linkage.setVisibility(parentFragment.hasGoodsCategory );
-        rvGoodsWithoutCategory.setVisibility(1-parentFragment.hasGoodsCategory);
+        linkage.setVisibility(parentFragment.hasGoodsCategory);
+        rvGoodsWithoutCategory.setVisibility(1 - parentFragment.hasGoodsCategory);
         if (parentFragment.hasGoodsCategory == 1) {
-            if (zoneGoodsCategoryVoList != null&&!linkageLoaded) {
+            if (zoneGoodsCategoryVoList != null && !linkageLoaded) {
                 updateLinkage();
             }
         } else {
@@ -104,9 +111,70 @@ public class ShoppingLinkageFragment extends BaseFragment{
         }
     }
 
+
+    private void initGoodsAdapter() {
+        shopGoodsListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+
+                Goods goods = goodsList.get(position);
+                int commonId = goods.id;
+                int userId = User.getUserId();
+                if (id == R.id.btn_add_to_cart) {
+                    if (userId > 0) {
+                        showSpecSelectPopup(commonId);
+                    } else {
+                        Util.showLoginFragment();
+                    }
+                }
+            }
+        });
+    }
+
+    private void initAdapter() {
+        goodsList = new ArrayList<>();
+        shopGoodsListAdapter = new ShopGoodsListAdapter(_mActivity, goodsList);
+        shopGoodsListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Goods goods = goodsList.get(position);
+                int commonId = goods.id;
+
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+            }
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
+        rvGoodsWithoutCategory.setLayoutManager(linearLayoutManager);
+        rvGoodsWithoutCategory.setAdapter(shopGoodsListAdapter);
+
+//
+        shopGoodsListAdapter.setEnableLoadMore(true);
+        shopGoodsListAdapter.setOnLoadMoreListener(() -> {
+            SLog.info("onLoadMoreRequested");
+
+//                if (!hasMore) {
+//                    shopGoodsListAdapter.setEnableLoadMore(false);
+//                    return;
+//                }
+//                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
+        }, rvGoodsWithoutCategory);
+    }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.layout_shopping_linkage, container, false);
+        return view;
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        typeface = AssetsUtil.getTypeface(_mActivity,"fonts/din_alternate_bold.ttf");
+
+        Util.setOnClickListener(view, R.id.btn_test, this);
+
         linkage = view.findViewById(R.id.linkage);
         rvSecondList = linkage.findViewById(R.id.rv_secondary);
         rvPrimaryList = linkage.findViewById(R.id.rv_primary);
@@ -117,8 +185,8 @@ public class ShoppingLinkageFragment extends BaseFragment{
         initGoodsAdapter();
 
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
-        LinearLayout.LayoutParams layoutParams1 = (LinearLayout .LayoutParams) rvPrimaryList.getLayoutParams();
-        layoutParams.height =parentFragment.scrollView.getHeight()-44;
+        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
+        layoutParams.height = parentFragment.scrollView.getHeight() - 44;
 //        layoutParams1.height =parentFragment.scrollView.getHeight();
         rvSecondList.setLayoutParams(layoutParams);
 //        rvPrimaryList.setLayoutParams(layoutParams1);
@@ -145,101 +213,6 @@ public class ShoppingLinkageFragment extends BaseFragment{
         });
     }
 
-    private void initGoodsAdapter() {
-        shopGoodsListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                int id = view.getId();
-
-                Goods goods = goodsList.get(position);
-                int commonId = goods.id;
-                int userId = User.getUserId();
-                if (id == R.id.btn_add_to_cart) {
-                    if (userId > 0) {
-                        showSpecSelectPopup(commonId);
-                    } else {
-                        Util.showLoginFragment();
-                    }
-                }
-            }
-        });
-    }
-    private void initAdapter() {
-        goodsList = new ArrayList<>();
-        shopGoodsListAdapter = new ShopGoodsListAdapter(_mActivity, goodsList);
-        shopGoodsListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Goods goods = goodsList.get(position);
-                int commonId = goods.id;
-
-                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-            }
-        });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
-        rvGoodsWithoutCategory.setLayoutManager(linearLayoutManager);
-        rvGoodsWithoutCategory.setAdapter(shopGoodsListAdapter);
-
-//
-//        shopGoodsListAdapter.setEnableLoadMore(true);
-//        shopGoodsListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-//            @Override
-//            public void onLoadMoreRequested() {
-//                SLog.info("onLoadMoreRequested");
-//
-////                if (!hasMore) {
-////                    shopGoodsListAdapter.setEnableLoadMore(false);
-////                    return;
-////                }
-////                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
-//            }
-//        }, rvGoodsWithoutCategory);
-    }
-    private void updateGoodVoList(EasyJSONArray goodsList,String groupName) {
-        try {
-            for (Object object1 : goodsList) {
-                EasyJSONObject goods = (EasyJSONObject) object1;
-                String goodsName = goods.getSafeString("goodsName");
-
-                String goodsImage = goods.getSafeString("goodsImage");
-                int commonId = goods.getInt("commonId");
-                String jingle  = goods.getSafeString("jingle");
-                double price;
-                int appUsable = goods.getInt("appUsable");
-                if (appUsable > 0) {
-                    price =  goods.getDouble("appPriceMin");
-                } else {
-                    price =  goods.getDouble("batchPrice0");
-                }
-
-                double batchPrice0 =  goods.getDouble("batchPrice0");
-                double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
-
-
-                if (groupName == null) {
-                    Goods goodsInfo = new Goods(commonId, goodsImage, goodsName, jingle, price);
-                    this.goodsList.add(goodsInfo);
-                } else {
-                    ElemeGroupedItem.ItemInfo goodsInfo = new ElemeGroupedItem.ItemInfo(goodsName, groupName, jingle, StringUtil.normalizeImageUrl(goodsImage),
-                            StringUtil.formatPrice(getContext(), price, 0),promotionDiscountRate,batchPrice0,commonId,appUsable > 0);
-                    ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
-                    items.add(item1);
-                }
-            }
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_shopping_linkage, container, false);
-        return view;
-    }
 
     public void updateGoodVoList(EasyJSONArray zoneGoodsVoList) {
         try {
@@ -260,21 +233,36 @@ public class ShoppingLinkageFragment extends BaseFragment{
         updateView();
     }
 
+    @Override
+    public void onClick(View v) {
+        SLog.info("onClick%s",v.getId());
+        int id = v.getId();
+        if (id == R.id.btn_test) {
+            SLog.info("here");
+        }
+    }
+
     private static class ElemePrimaryAdapterConfig implements ILinkagePrimaryAdapterConfig {
 
         private Context mContext;
         private int backgroundColor;
         private Drawable default_drawbg;
 
+        public ElemePrimaryAdapterConfig(Context context) {
+            this.mContext = context;
+        }
+
         public void setTwColor(int twColor) {
             this.twColor = twColor;
         }
 
-        private int twColor=R.color.tw_black;
+        private int twColor = R.color.tw_black;
 
+        @Override
         public void setContext(Context context) {
-            mContext = context;
+//            mContext = ;
         }
+
         public void setBackgroundColor(int color, Drawable bg) {
             backgroundColor = color;
             default_drawbg = bg;
@@ -301,16 +289,16 @@ public class ShoppingLinkageFragment extends BaseFragment{
             TextView tvTitle = ((TextView) holder.mGroupTitle);
             tvTitle.setText(title);
             View blue = holder.mLayout.findViewById(R.id.view_border);
-            blue.setVisibility(selected?View.VISIBLE:View.GONE);
+            blue.setVisibility(selected ? View.VISIBLE : View.GONE);
             if (selected) {
                 tvTitle.setBackground(default_drawbg);
-                holder.mLayout.setBackgroundColor(Color.argb(0,0,0,0));
+                holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
             } else {
-                holder.mLayout.setBackgroundColor(Color.argb(26,0,0,0));
-                tvTitle.setBackgroundColor(Color.argb(0,0,0,0));
+                holder.mLayout.setBackgroundColor(Color.argb(26, 0, 0, 0));
+                tvTitle.setBackgroundColor(Color.argb(0, 0, 0, 0));
             }
-            tvTitle.setTextColor( ContextCompat.getColor(mContext,
-                    selected ?R.color.tw_blue:R.color.tw_black));
+            tvTitle.setTextColor(ContextCompat.getColor(mContext,
+                    selected ? R.color.tw_blue : R.color.tw_black));
             tvTitle.setEllipsize(selected ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
             tvTitle.setFocusable(selected);
             tvTitle.setFocusableInTouchMode(selected);
@@ -320,19 +308,30 @@ public class ShoppingLinkageFragment extends BaseFragment{
         @Override
         public void onItemClick(LinkagePrimaryViewHolder holder, View view, String title) {
             //TODO
-//            ToastUtil.error(mContext,title);
+            ToastUtil.error(mContext, title);
         }
     }
+    //从asset 读取字体
+    //得到AssetManager
+
+
 
     private static class ElemeSecondaryAdapterConfig implements
             ILinkageSecondaryAdapterConfig<ElemeGroupedItem.ItemInfo> {
 
+        private final Typeface typeFace;
         private Context mContext;
+
+        public ElemeSecondaryAdapterConfig(Typeface typeface,Context context) {
+            this.typeFace = typeface;
+            this.mContext =context;
+        }
 
         @Override
         public void setContext(Context context) {
-            mContext = context;
+//            mContext = context;
         }
+
         @Override
         public int getGridLayoutId() {
             return 0;
@@ -340,7 +339,7 @@ public class ShoppingLinkageFragment extends BaseFragment{
 
         @Override
         public int getLinearLayoutId() {
-            return R.layout.adapter_eleme_secondary_linear;
+            return R.layout.adapter_shopping_zone_secondary_linear;
         }
 
         @Override
@@ -370,14 +369,24 @@ public class ShoppingLinkageFragment extends BaseFragment{
             try {
                 ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
                 ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
-                ((TextView) holder.getView(R.id.tv_goods_price)).setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
-                holder.getView(R.id.sw_price).setVisibility(item.info.show?View.VISIBLE:View.GONE);
-                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext,item.info.getDiscount(),item.info.getOriginal());
-                ImageView imageView =  holder.getView(R.id.iv_goods_img);
+                TextView tvPrice=holder.getView(R.id.tv_goods_price);
+                TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
+                tvPrice.setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
+                if (item.info.getOriginal() > 0) {
+                    tvOriginalPrice.setVisibility(View.VISIBLE);
+                    tvOriginalPrice.setText(StringUtil.formatPrice(mContext, item.info.getOriginal(), 0, true));
+                    tvPrice.setTypeface(typeFace);
+                    tvOriginalPrice.setTypeface(typeFace);
+                    // 原價顯示刪除線
+                    tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+                holder.getView(R.id.sw_price).setVisibility(item.info.show ? View.VISIBLE : View.GONE);
+                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
+                ImageView imageView = holder.getView(R.id.iv_goods_img);
                 Glide.with(mContext).load(item.info.getImgUrl()).centerCrop().into(imageView);
                 holder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
                     //TODO
-                    Util.startFragment(GoodsDetailFragment.newInstance(item.info.commonId,0));
+                    Util.startFragment(GoodsDetailFragment.newInstance(item.info.commonId, 0));
                 });
 
                 holder.getView(R.id.iv_goods_add).setOnClickListener(v -> {
@@ -402,23 +411,27 @@ public class ShoppingLinkageFragment extends BaseFragment{
 
         }
     }
+
     private void initLinkage() {
         if (items == null || items.size() == 0) {
             return;
         }
-        ElemePrimaryAdapterConfig primaryAdapterConfig = new ElemePrimaryAdapterConfig();
+
+        ElemePrimaryAdapterConfig primaryAdapterConfig = new ElemePrimaryAdapterConfig(getContext());
         primaryAdapterConfig.setBackgroundColor(R.color.mask15_background_color, getResources().getDrawable(white_4dp_right_radius_bg));
-        SLog.info("twColor%s,%d",twColor,items.size());
+        SLog.info("twColor%s,%d", twColor, items.size());
 //        primaryAdapterConfig.setTwColor(twColor);
-        ElemeSecondaryAdapterConfig secondaryAdapterConfig = new ElemeSecondaryAdapterConfig();
-        linkage.init(items,primaryAdapterConfig,secondaryAdapterConfig);
+        ElemeSecondaryAdapterConfig secondaryAdapterConfig = new ElemeSecondaryAdapterConfig(typeface,getContext());
+        linkage.init(items, primaryAdapterConfig, secondaryAdapterConfig);
         linkageLoaded = true;
     }
+
     public void setLinkageData(EasyJSONArray zoneGoodsCategoryVoList) {
         this.zoneGoodsCategoryVoList = zoneGoodsCategoryVoList;
         updateView();
     }
-    private void updateLinkage(){
+
+    private void updateLinkage() {
         try {
             SLog.info("設置二級聯動列表數據");
             items.clear();
@@ -428,7 +441,7 @@ public class ShoppingLinkageFragment extends BaseFragment{
                 String groupName = categoryData.getSafeString("categoryName");
                 EasyJSONArray goodsList = categoryData.getSafeArray("zoneGoodsVoList");
                 ElemeGroupedItem category = new ElemeGroupedItem(true, groupName);
-                if(goodsList==null){
+                if (goodsList == null) {
                     continue;
                 }
                 items.add(category);
@@ -437,20 +450,20 @@ public class ShoppingLinkageFragment extends BaseFragment{
                     String goodsName = goods.getSafeString("goodsName");
                     String goodsImage = goods.getSafeString("goodsImage");
                     int commonId = goods.getInt("commonId");
-                    String jingle  = goods.getSafeString("goodsFullSpecs");
+                    String jingle = goods.getSafeString("goodsFullSpecs");
                     double price;
                     int appUsable = goods.getInt("appUsable");
                     if (appUsable > 0) {
-                        price =  goods.getDouble("appPriceMin");
+                        price = goods.getDouble("appPriceMin");
                     } else {
-                        price =  goods.getDouble("batchPrice0");
+                        price = goods.getDouble("batchPrice0");
                     }
 
                     double batchPrice0 = goods.getDouble("batchPrice0");
-                    double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
+                    double promotionDiscountRate = goods.getDouble("promotionDiscountRate");
 
                     ElemeGroupedItem.ItemInfo goodsInfo = new ElemeGroupedItem.ItemInfo(goodsName, groupName, jingle, StringUtil.normalizeImageUrl(goodsImage),
-                            StringUtil.formatPrice(getContext(), price, 0),promotionDiscountRate,batchPrice0,commonId,appUsable > 0);
+                            StringUtil.formatPrice(getContext(), price, 0), promotionDiscountRate, batchPrice0, commonId, appUsable > 0);
                     ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
                     items.add(item1);
                 }
@@ -463,11 +476,12 @@ public class ShoppingLinkageFragment extends BaseFragment{
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
+
     private void showSpecSelectPopup(int commonId) {
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0,2,null))
+                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0, 2, null))
                 .show();
     }
 }

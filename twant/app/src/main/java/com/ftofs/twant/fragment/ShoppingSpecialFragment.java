@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.graphics.Color;
 import android.graphics.Outline;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -95,6 +96,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=800;
     private ShoppingLinkageFragment linkageFragment;
     private ShoppingStoreListFragment storeListFragment;
+    private Typeface typeFace;
 
 
     @OnClick(R.id.btn_goods)
@@ -452,7 +454,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 
         viewPager.setAdapter(adapter);
         LinearLayout.LayoutParams layoutParams= (LinearLayout.LayoutParams) viewPager.getLayoutParams();
-        layoutParams.height=2000;
+        layoutParams.height=Util.getScreenDimension(getContext()).second-Util.dip2px(_mActivity,88);
         //此處應獲取屏幕高度減標題
 
         SLog.info("scrollView.getHeight() [%d]",scrollView.getHeight());

@@ -214,9 +214,9 @@
         android:id="@+id/btn_goto_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_alignBottom="@id/ll_sticky_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:orientation="horizontal">
         <ImageView
             android:id="@+id/icon_activity_entrance"

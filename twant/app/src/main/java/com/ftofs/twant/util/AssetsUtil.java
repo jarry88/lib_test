@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 
 import com.ftofs.twant.log.SLog;
@@ -9,6 +10,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import me.yokeyword.fragmentation.SupportActivity;
 
 public class AssetsUtil {
     /**
@@ -73,5 +76,10 @@ public class AssetsUtil {
         }
 
         return false;
+    }
+
+    public static Typeface getTypeface(SupportActivity _mActivity, String path) {
+        Typeface typeface =Typeface.createFromAsset(_mActivity.getAssets(), path);
+        return typeface;
     }
 }
