@@ -125,7 +125,7 @@ public class ShoppingLinkageFragment extends BaseFragment{
 
         SLog.info("isNestedScrollingEnabled[%s]", rvSecondList.isNestedScrollingEnabled());
 
-//        rvSecondList.setNestedScrollingEnabled(false);
+        rvSecondList.setNestedScrollingEnabled(false);
         rvSecondList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
