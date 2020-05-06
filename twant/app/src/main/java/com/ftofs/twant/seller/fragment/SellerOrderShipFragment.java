@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,14 +47,16 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
     String orderSn;
     List<ShipCompany> shipCompanyList = new ArrayList<>();
 
-    public static final int SHIP_WAY_SEND_WANT = 1;
-    public static final int SHIP_WAY_THIRD_PARTY = 2;
-    public static final int SHIP_WAY_NO = 3;
+    public static final int SHIP_WAY_SEND_WANT = 0;
+    public static final int SHIP_WAY_THIRD_PARTY = 1;
+    public static final int SHIP_WAY_NO = 2;
 
-    // 物流方式
-    int shipWay = SHIP_WAY_SEND_WANT;
+    List<ListPopupItem> shipWayList = new ArrayList<>();
+
+    // 當前選中的物流方式索引
+    int shipWayIndex = SHIP_WAY_SEND_WANT;
     // 快遞公司Id
-    int shipId = 0;
+    int shipCompanyIndex = 0;
 
     int receiverAreaId1;
     int receiverAreaId2;
@@ -73,6 +76,15 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
     EditText etPackageDesc;
     EditText etShipRemark;
     EditText etShipDesc;
+
+    LinearLayout llLogisticsContainer;
+    LinearLayout llShipCompanyContainer;
+    LinearLayout llLogisticsOrderSnContainer;
+
+    TextView tvLogisticsWay;
+    TextView tvLogisticsCompany;
+
+    TextView tvReceiverInfo;
 
     public static SellerOrderShipFragment newInstance(int orderId, String orderSn) {
         Bundle args = new Bundle();
@@ -108,13 +120,27 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
         etShipRemark = view.findViewById(R.id.et_ship_remark);
         etShipDesc = view.findViewById(R.id.et_ship_desc);
 
+        llLogisticsContainer = view.findViewById(R.id.ll_logistics_container);
+        llLogisticsOrderSnContainer = view.findViewById(R.id.ll_logistics_order_sn_container);
+        llShipCompanyContainer = view.findViewById(R.id.ll_ship_company_container);
+
+        tvLogisticsWay = view.findViewById(R.id.tv_logistics_way);
+        tvLogisticsCompany = view.findViewById(R.id.tv_logistics_company);
+
+        tvReceiverInfo = view.findViewById(R.id.tv_receiver_info);
+
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
 
         Util.setOnClickListener(view, R.id.btn_select_logistics_way, this);
         Util.setOnClickListener(view, R.id.btn_select_logistics_company, this);
 
+
         ((TextView) view.findViewById(R.id.tv_order_sn)).setText(orderSn);
+
+        shipWayList.add(new ListPopupItem(SHIP_WAY_SEND_WANT, "想送物流(自營物流)", null));
+        shipWayList.add(new ListPopupItem(SHIP_WAY_THIRD_PARTY, "第三方物流", null));
+        shipWayList.add(new ListPopupItem(SHIP_WAY_NO, "不使用物流", null));
 
         loadLogisticsCompany();
     }
@@ -145,13 +171,34 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                         return;
                     }
 
+                    EasyJSONObject ordersBaseVo = responseObj.getObject("datas.ordersBaseVo");
+                    receiverAreaId1 = ordersBaseVo.getInt("receiverAreaId1");
+                    receiverAreaId2 = ordersBaseVo.getInt("receiverAreaId2");
+                    receiverAreaId3 = ordersBaseVo.getInt("receiverAreaId3");
+                    receiverAreaId4 = ordersBaseVo.getInt("receiverAreaId4");
+
+                    receiverAreaInfo = ordersBaseVo.getSafeString("receiverAreaInfo");
+                    receiverName = ordersBaseVo.getSafeString("receiverName");
+                    receiverPhone = ordersBaseVo.getSafeString("receiverPhone");
+                    receiverAddress = ordersBaseVo.getSafeString("receiverAddress");
+
                     EasyJSONArray shipCompanyArr = responseObj.getArray("datas.shipCompanyList");
                     for (Object object : shipCompanyArr) {
                         EasyJSONObject item = (EasyJSONObject) object;
-                        ShipCompany shipCompany = (ShipCompany) EasyJSONBase.jsonDecode(ShipCompany.class, item.toString());
+                        ShipCompany shipCompany = new ShipCompany();
+                        shipCompany.setShipId(item.getInt("shipId"));
+                        shipCompany.setShipName(item.getSafeString("shipName"));
+                        shipCompany.setShipCode(item.getSafeString("shipCode"));
+                        SLog.info("shipCompany[%s]", shipCompany);
 
                         shipCompanyList.add(shipCompany);
                     }
+
+                    String receiverInfo = StringUtil.implode(" " , new String[] {
+                            receiverName, receiverPhone, receiverAreaInfo, receiverAddress
+                    });
+
+                    tvReceiverInfo.setText(receiverInfo);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -161,6 +208,11 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
 
     private void commitOrderShip() {
         try {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+
             String packageCountStr = etPackageCount.getText().toString().trim();
             if (StringUtil.isEmpty(packageCountStr)) {
                 ToastUtil.error(_mActivity, "請輸入包裹數量");
@@ -224,8 +276,15 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
             );
 
             String json = params.toString();
-            SLog.info("json[%s]", json);
-            Api.postJsonUi(Api.PATH_SELLER_ORDER_SHIP, json, new UICallback() {
+            String path = Api.PATH_SELLER_ORDER_SHIP + Api.makeQueryString(EasyJSONObject.generate("token", token));
+            SLog.info("path[%s], json[%s]", path, json);
+
+            if (false) {
+                ToastUtil.error(_mActivity, "helloWorld");
+                return;
+            }
+
+            Api.postJsonUi(path, json, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
@@ -265,6 +324,7 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        SLog.info("ONCLICK");
         int id = v.getId();
         if (id == R.id.btn_back) {
             pop();
@@ -273,24 +333,54 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
         } else if (id == R.id.btn_select_logistics_way) {
             hideSoftInput();
 
-            List<ListPopupItem> itemList = new ArrayList<>();
-            itemList.add(new ListPopupItem(SHIP_WAY_SEND_WANT, "想送物流(自營物流)", null));
-            itemList.add(new ListPopupItem(SHIP_WAY_SEND_WANT, "第三方物流", null));
-            itemList.add(new ListPopupItem(SHIP_WAY_SEND_WANT, "不使用物流", null));
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new ListPopup(_mActivity, "選擇物流方式",
-                            PopupType.SELECT_SELLER_LOGISTICS_WAY, itemList, 0, this))
+                            PopupType.SELECT_SELLER_LOGISTICS_WAY, shipWayList, shipWayIndex, this))
                     .show();
         } else if (id == R.id.btn_select_logistics_company) {
+            SLog.info("HERE");
+            hideSoftInput();
 
+            List<ListPopupItem> itemList = new ArrayList<>();
+            int index = 0;
+            for (ShipCompany shipCompany : shipCompanyList) {
+                itemList.add(new ListPopupItem(index, shipCompany.getShipName(), null));
+                index++;
+            }
+            SLog.info("count[%d]", itemList.size());
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new ListPopup(_mActivity, "選擇快遞公司",
+                            PopupType.SELECT_SELLER_LOGISTICS_COMPANY, itemList, shipCompanyIndex, this))
+                    .show();
         }
     }
 
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
-        
+        SLog.info("type[%s], id[%s]", type, id);
+
+        if (type == PopupType.SELECT_SELLER_LOGISTICS_WAY) {
+            if (id == SHIP_WAY_SEND_WANT) {
+                llShipCompanyContainer.setVisibility(View.GONE);
+                llLogisticsOrderSnContainer.setVisibility(View.GONE);
+                llLogisticsContainer.setVisibility(View.VISIBLE);
+            } else if (id == SHIP_WAY_THIRD_PARTY) {
+                llShipCompanyContainer.setVisibility(View.VISIBLE);
+                llLogisticsOrderSnContainer.setVisibility(View.VISIBLE);
+                llLogisticsContainer.setVisibility(View.VISIBLE);
+            } else { // 不使用物流
+                llLogisticsContainer.setVisibility(View.GONE);
+            }
+            shipWayIndex = id;
+            tvLogisticsWay.setText(shipWayList.get(shipWayIndex).title);
+        } else if (type == PopupType.SELECT_SELLER_LOGISTICS_COMPANY) {
+            shipCompanyIndex = id;
+            tvLogisticsCompany.setText(shipCompanyList.get(shipCompanyIndex).getShipName());
+        }
     }
 }
 
