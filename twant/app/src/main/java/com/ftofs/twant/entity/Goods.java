@@ -39,7 +39,10 @@ public class Goods implements MultiItemEntity {
 
         String goodsImage = goods.getSafeString("goodsImage");
         int commonId = goods.getInt("commonId");
-        String jingle  = goods.getSafeString("jingle");
+        String jingle = "";
+        if (goods.exists("jingle")) {
+          jingle= goods.getSafeString("jingle");
+        }
         double price;
         int appUsable = goods.getInt("appUsable");
         if (appUsable > 0) {
@@ -49,7 +52,7 @@ public class Goods implements MultiItemEntity {
         }
 
         double batchPrice0 =  goods.getDouble("batchPrice0");
-        double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
+//        double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
         return new Goods(commonId,goodsImage,goodsName,jingle,price);
     }
 

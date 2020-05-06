@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -68,7 +69,7 @@ public class ShoppingLinkageFragment extends BaseFragment{
 
     private ShopGoodsListAdapter shopGoodsListAdapter;
     private List<Goods> goodsList;
-
+    private EasyJSONArray zoneGoodsVoList;
 
 
     public static ShoppingLinkageFragment newInstance(ShoppingSpecialFragment shoppingSpecialFragment) {
@@ -84,6 +85,13 @@ public class ShoppingLinkageFragment extends BaseFragment{
 
         linkage.setVisibility(parentFragment.hasGoodsCategory );
         rvGoodsWithoutCategory.setVisibility(1-parentFragment.hasGoodsCategory);
+        if (parentFragment.hasGoodsCategory == 1) {
+
+        } else {
+            if (zoneGoodsVoList != null) {
+                updateGoodVoList(zoneGoodsVoList);
+            }
+        }
 
 
     }
@@ -160,21 +168,24 @@ public class ShoppingLinkageFragment extends BaseFragment{
                 Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
             }
         });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
+        rvGoodsWithoutCategory.setLayoutManager(linearLayoutManager);
+        rvGoodsWithoutCategory.setAdapter(shopGoodsListAdapter);
 
-
-        shopGoodsListAdapter.setEnableLoadMore(true);
-        shopGoodsListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                SLog.info("onLoadMoreRequested");
-
-//                if (!hasMore) {
-//                    shopGoodsListAdapter.setEnableLoadMore(false);
-//                    return;
-//                }
-//                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
-            }
-        }, rvGoodsWithoutCategory);
+//
+//        shopGoodsListAdapter.setEnableLoadMore(true);
+//        shopGoodsListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+//            @Override
+//            public void onLoadMoreRequested() {
+//                SLog.info("onLoadMoreRequested");
+//
+////                if (!hasMore) {
+////                    shopGoodsListAdapter.setEnableLoadMore(false);
+////                    return;
+////                }
+////                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
+//            }
+//        }, rvGoodsWithoutCategory);
     }
     private void updateGoodVoList(EasyJSONArray goodsList,String groupName) {
         try {
@@ -226,28 +237,18 @@ public class ShoppingLinkageFragment extends BaseFragment{
         try {
             for (Object object1 : zoneGoodsVoList) {
                 EasyJSONObject goods = (EasyJSONObject) object1;
-                String goodsName = goods.getSafeString("goodsName");
-
-                String goodsImage = goods.getSafeString("goodsImage");
-                int commonId = goods.getInt("commonId");
-                String jingle  = goods.getSafeString("jingle");
-                double price;
-                int appUsable = goods.getInt("appUsable");
-                if (appUsable > 0) {
-                    price =  goods.getDouble("appPriceMin");
-                } else {
-                    price =  goods.getDouble("batchPrice0");
-                }
-
-                float batchPrice0 = (float) goods.getDouble("batchPrice0");
-                float promotionDiscountRate = (float) goods.getDouble("promotionDiscountRate");
-
-                Goods goodsInfo = new Goods(commonId, goodsImage, goodsName, jingle, price);
+                Goods goodsInfo = Goods.parse(goods);
                 goodsList.add(goodsInfo);
+                rvGoodsWithoutCategory.setVisibility(View.VISIBLE);
             }
-        } catch (EasyJSONException e) {
-            e.printStackTrace();
+            shopGoodsListAdapter.setNewData(goodsList);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+    public void setGoodVoList(EasyJSONArray zoneGoodsVoList) {
+        this.zoneGoodsVoList = zoneGoodsVoList;
     }
 
     private static class ElemePrimaryAdapterConfig implements ILinkagePrimaryAdapterConfig {
@@ -405,6 +406,8 @@ public class ShoppingLinkageFragment extends BaseFragment{
     }
     public void setLinkageData(EasyJSONArray zoneGoodsCategoryVoList) {
         try {
+            SLog.info("設置二級聯動列表數據");
+
             for (Object object : zoneGoodsCategoryVoList) {
                 EasyJSONObject categoryData = (EasyJSONObject) object;
 

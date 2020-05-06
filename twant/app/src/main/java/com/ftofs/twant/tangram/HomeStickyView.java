@@ -21,6 +21,7 @@ import com.ftofs.twant.fragment.CircleFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
+import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
@@ -127,7 +128,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_goto_activity) {
-            gotoActivity();
+            gotoTestFragment();
+//            gotoActivity();
         } else if (id == R.id.ll_search_box) {
             Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
         } else if (id == R.id.btn_category_store) {
@@ -141,6 +143,11 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             searchPostParams.keyword = "";
             Util.startFragment(CircleFragment.newInstance(true, searchPostParams));
         }
+    }
+
+    private void gotoTestFragment() {
+        Util.startFragment(ShoppingSpecialFragment.newInstance(1));
+
     }
 
     /**

@@ -36,6 +36,7 @@ import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -91,6 +92,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private long lastScrollingTimestamp;
     private boolean isScrolling;
     private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=800;
+    private ShoppingLinkageFragment linkageFragment;
+    private ShoppingStoreListFragment storeListFragment;
 
 
     @OnClick(R.id.btn_goods)
@@ -209,13 +212,26 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 //                }
 //            }
 //        });
-
+        storeListFragment = ShoppingStoreListFragment.newInstance(this);
+        linkageFragment = ShoppingLinkageFragment.newInstance(this);
 
         initView(view);
-        loadData();
+//        loadData();
+        loadTestData();
+    }
+
+    private void loadTestData() {
+        String responseStr = AssetsUtil.loadText(_mActivity, "tangram/test.json");
+        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+        if (ToastUtil.checkError(_mActivity, responseObj)) {
+            return;
+        }
+        updateView(responseObj);
     }
 
     private void loadData() {
+
+
         // 獲取商店首頁信息
         String path = Api.PATH_SHOPPING_ZONE + "/" + zoneId;
         Api.getUI(path, null, new UICallback() {
@@ -227,6 +243,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]",responseStr);
+                //測試數據
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
                     return;
@@ -246,7 +263,6 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 
             String appColor = zoneVo.getSafeString("appColor");
             //調試階段試色
-            appColor="#F50057";
             String appLogo = zoneVo.getSafeString("appLogo");
             String zoneName = zoneVo.getSafeString("zoneName");
             tvZoneName.setText(zoneName);
@@ -258,7 +274,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             String goodsTabTitle = zoneVo.getSafeString("goodsTabTitle");
             stbTagGoods.setText(goodsTabTitle);
             stbGoodsTabTitle.setText(goodsTabTitle);
-            tabLayout.getTabAt(0).setText(goodsTabTitle);
+            tabLayout.getTabAt(LINKAGE_FRAGMENT).setText(goodsTabTitle);
             tabLayout.getTabAt(1).setText(storeTabTitle);
 
 
@@ -266,18 +282,21 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             setBannerData(appAdImageList);
             EasyJSONArray zoneGoodsVoList = zoneVo.getArray("zoneGoodsVoList");
             EasyJSONArray zoneStoreVoList = zoneVo.getArray("zoneStoreVoList");
-            if (zoneStoreVoList != null&&zoneStoreVoList.length()>0) {
-                ((ShoppingStoreListFragment) fragmentList.get(STORE_FRAGMENT)).updateStoreList(zoneStoreVoList);
+            SLog.info("zoneStoreVoList,[%s]",zoneStoreVoList.toString());
+            if (zoneStoreVoList != null) {
+                SLog.info("設置商店列表數據");
+                storeListFragment.setStoreList(zoneStoreVoList);
             }
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
             //商品列表
             if (hasGoodsCategory == Constant.TRUE_INT) {
                 if (zoneGoodsCategoryVoList != null) {
-                    ((ShoppingLinkageFragment)fragmentList.get(LINKAGE_FRAGMENT)).setLinkageData(zoneGoodsCategoryVoList);
+                    linkageFragment.setLinkageData(zoneGoodsCategoryVoList);
                 }
 
             } else {
-                ((ShoppingLinkageFragment)fragmentList.get(LINKAGE_FRAGMENT)).updateGoodVoList(zoneGoodsVoList);
+                SLog.info("無類別商品標簽數據");
+                linkageFragment.setGoodVoList(zoneGoodsVoList);
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -420,8 +439,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(STORE_FRAGMENT)));
 
 
-        fragmentList.add(ShoppingLinkageFragment.newInstance(this));
-        fragmentList.add(ShoppingStoreListFragment.newInstance(this));
+        fragmentList.add(linkageFragment);
+        fragmentList.add(storeListFragment);
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
@@ -429,17 +448,19 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 
         viewPager.setAdapter(adapter);
         LinearLayout.LayoutParams layoutParams= (LinearLayout.LayoutParams) viewPager.getLayoutParams();
-        layoutParams.height=scrollView.getHeight()-44;
+        layoutParams.height=2000;
+        //此處應獲取屏幕高度減標題
+
         SLog.info("scrollView.getHeight() [%d]",scrollView.getHeight());
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                int linkageY = Util.getYOnScreen(tabLayout);
-                int containerViewY = Util.getYOnScreen(scrollView);
+//                int linkageY = Util.getYOnScreen(tabLayout);
+//                int containerViewY = Util.getYOnScreen(scrollView);
 
-                SLog.info("linkageY[%s], containerViewY[%s],", linkageY, containerViewY);
+//                SLog.info("linkageY[%s], containerViewY[%s],", linkageY, containerViewY);
 //                if (linkageY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
 //                    rvSecondList.setNestedScrollingEnabled(true);
 //                } else {

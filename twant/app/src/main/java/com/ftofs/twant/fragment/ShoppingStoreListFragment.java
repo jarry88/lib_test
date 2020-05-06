@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
     private RecyclerView rvStoreList;
     ShoppingStoreListAdapter storeListAdapter;
     List<StoreItem> storeItems=new ArrayList<>();
+    private EasyJSONArray zoneStoreVoList;
 
     public static ShoppingStoreListFragment newInstance(ShoppingSpecialFragment shoppingSpecialFragment) {
         ShoppingStoreListFragment fragment = new ShoppingStoreListFragment();
@@ -58,6 +60,12 @@ public class ShoppingStoreListFragment extends BaseFragment {
     public void onSupportVisible() {
         super.onSupportVisible();
         SLog.info("onSupportVisible");
+        if (zoneStoreVoList != null) {
+            if (storeListAdapter == null) {
+                storeListAdapter = new ShoppingStoreListAdapter(R.layout.store_view, storeItems);
+            }
+            updateStoreList(zoneStoreVoList);
+        }
     }
 
     @Override
@@ -88,8 +96,12 @@ public class ShoppingStoreListFragment extends BaseFragment {
         rvStoreList.setAdapter(storeListAdapter);
     }
 
-
-    public void updateStoreList(EasyJSONArray zoneStoreVoList) {
+    public void setStoreList(EasyJSONArray zoneStoreVoList) {
+        this.zoneStoreVoList = zoneStoreVoList;
+    }
+    private void updateStoreList(EasyJSONArray zoneStoreVoList) {
+        storeItems.clear();
+        SLog.info(" ");
         try {
             for (Object object : zoneStoreVoList) {
                 EasyJSONObject store = (EasyJSONObject) object;
@@ -107,7 +119,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
             }
             storeListAdapter.setNewData(storeItems);
         } catch (Exception e) {
-            e.printStackTrace();
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
     }
