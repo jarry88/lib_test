@@ -86,6 +86,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         tvMemberName = view.findViewById(R.id.tv_member_name);
         tvMemberNumber = view.findViewById(R.id.tv_member_number);
         tvTestInfo = view.findViewById(R.id.text_build);
+        tvTestInfo.setOnClickListener(this);
         tvTestInfo.setOnClickListener(v -> {
             //測試環境可進入此測試頁面
             Util.startFragment(ShoppingSpecialFragment.newInstance(19+(int)(Math.random()*10)%2));

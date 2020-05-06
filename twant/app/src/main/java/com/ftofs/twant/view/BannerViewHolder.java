@@ -50,13 +50,13 @@ public class BannerViewHolder implements MZViewHolder<WebSliderItem> {
         mImageView = view.findViewById(R.id.img_banner);
 
         imgDesktop = view.findViewById(R.id.img_goods_desktop);
-        goodsImageArr[0] = view.findViewById(R.id.goods_image1);
-        goodsImageArr[1] = view.findViewById(R.id.goods_image2);
-        goodsImageArr[2] = view.findViewById(R.id.goods_image3);
+        goodsImageArr[0] = view.findViewById(R.id.goods_image_left);
+        goodsImageArr[1] = view.findViewById(R.id.goods_image_middle);
+        goodsImageArr[2] = view.findViewById(R.id.goods_image_right);
 
-        goodsPriceArr[0] = view.findViewById(R.id.tv_goods_price1);
-        goodsPriceArr[1] = view.findViewById(R.id.tv_goods_price2);
-        goodsPriceArr[2] = view.findViewById(R.id.tv_goods_price3);
+        goodsPriceArr[0] = view.findViewById(R.id.tv_goods_price_left);
+        goodsPriceArr[1] = view.findViewById(R.id.tv_goods_price_middle);
+        goodsPriceArr[2] = view.findViewById(R.id.tv_goods_price_right);
 
 
         for (int i = 0; i < GOODS_IMAGE_COUNT; i++) {
