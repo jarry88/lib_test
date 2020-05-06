@@ -21,42 +21,79 @@
         android:id="@+id/rl_mobile_container"
         android:layout_width="0dp"
         android:layout_height="75dp"
-        android:layout_marginStart="@dimen/toolbar_margin_left"
-        android:layout_marginEnd="@dimen/toolbar_margin_right"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_mobile_zone_container"
-        android:background="@drawable/border_type_d">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:id="@+id/ll_container_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
             android:layout_centerVertical="true"
-            android:src="@drawable/mobile"
-            />
+            android:background="@drawable/border_type_d"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/toolbar_margin_left"
 
-        <EditText
-            android:id="@+id/et_mobile"
+                android:src="@drawable/mobile"
+                />
+
+            <EditText
+                android:id="@+id/et_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:background="@null"
+                android:textColor="@color/tw_black"
+                android:textColorHint="@color/tw_grey"
+                android:hint="@string/input_mobile_hint"
+                android:inputType="number"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="17sp"
+                />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_centerVertical="true"
-            android:layout_marginStart="41dp"
-            android:background="@null"
-            android:textColor="@color/tw_black"
-            android:textColorHint="@color/tw_grey"
-            android:hint="@string/input_mobile_hint"
-            android:inputType="number"
-            android:imeOptions="actionNext"
-            android:singleLine="true"
-            android:text=""
-            android:textSize="17sp"
-            />
+            android:layout_below="@id/ll_container_mobile"
+            android:id="@+id/ll_container_mobile_error"
+            >
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="53dp"
+
+                android:src="@drawable/icon_red_error"
+                />
+
+            <TextView
+                android:id="@+id/tv_mobile_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_4"
+                android:background="@null"
+                android:textColorHint="@color/tw_red"
+                android:hint="@string/input_mobile_hint"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="12sp"
+                />
+        </LinearLayout>
     </RelativeLayout>
 
     <!-- 驗證碼 -->
     <RelativeLayout
         android:id="@+id/rl_captcha_container"
         android:layout_width="0dp"
-        android:layout_height="75dp"
+        android:layout_height="65dp"
         android:layout_marginStart="@dimen/toolbar_margin_left"
         android:layout_marginEnd="@dimen/toolbar_margin_right"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -102,9 +139,10 @@
     <RelativeLayout
         android:id="@+id/rl_dynamic_code_container"
         android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
+        android:layout_height="65dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:paddingStart="@dimen/margin12"
+        android:paddingEnd="@dimen/margin12"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rl_captcha_container"

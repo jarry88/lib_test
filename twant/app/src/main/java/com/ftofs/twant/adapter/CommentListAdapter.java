@@ -29,7 +29,7 @@ public class CommentListAdapter extends BaseMultiItemQuickAdapter<CommentItem, B
         super( data);
 
         addItemType(Constant.ITEM_TYPE_NORMAL, R.layout.comment_item);
-        addItemType(Constant.ITEM_TYPE_NO_DATA, R.layout.ic_placeholder_no_data);
+        addItemType(Constant.ITEM_TYPE_NO_DATA, R.layout.ic_placeholder_no_data_match_parent);
     }
 
     @Override

@@ -115,7 +115,7 @@
                             android:id="@+id/btn_goto_store"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/toolbar_margin_left"
+                            android:layout_marginStart="@dimen/toolbar_margin_left"
                             android:layout_centerVertical="true"
                             android:orientation="horizontal">
                             <ImageView
@@ -129,7 +129,7 @@
                                 android:id="@+id/tv_store_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
                                 android:layout_gravity="center_vertical"
                                 android:text=""
                                 android:textColor="@color/tw_black"
@@ -139,7 +139,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_gravity="center_vertical"
                                 android:src="@drawable/expand_button"
                                 />

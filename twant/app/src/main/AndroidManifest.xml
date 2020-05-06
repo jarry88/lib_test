@@ -50,7 +50,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:requestLegacyExternalStorage ="true">
-        <activity android:name=".activity.YoutubeActivity"></activity>
+        <activity android:name=".activity.YoutubeActivity"/>
+        <activity android:name=".activity.TwantCaptureActivity"/>
         <activity android:name=".activity.AppGuideActivity" />
         <activity
             android:name=".activity.SplashActivity"

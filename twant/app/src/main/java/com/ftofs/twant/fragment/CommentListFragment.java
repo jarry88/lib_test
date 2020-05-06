@@ -147,7 +147,9 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("2進入評論詳情頁");
                 CommentItem commentItem = commentItemList.get(position);
-                Util.startFragment(CommentDetailFragment.newInstance(commentItem));
+                if (commentItem.getItemType() != Constant.ITEM_TYPE_NO_DATA) {
+                    Util.startFragment(CommentDetailFragment.newInstance(commentItem));
+                }
             }
         });
         rvCommentList.setAdapter(adapter);
@@ -257,7 +259,7 @@ public class CommentListFragment extends BaseFragment implements View.OnClickLis
                             commentItemList.add(item);
                         }
                         adapter.loadMoreComplete();
-                        if (currPage == 1 && commentItemList.size() == 0) {
+                        if (currPage == 0 && commentItemList.size() == 0) {
                             commentItemList.add(new CommentItem(Constant.ITEM_TYPE_NO_DATA));
                         }
                         currPage++;

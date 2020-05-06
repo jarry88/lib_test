@@ -1,7 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +25,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.serializer.BeforeFilter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
@@ -34,7 +32,6 @@ import com.ftofs.twant.adapter.GoodsGalleryAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
@@ -56,6 +53,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.goods.GoodsMobileBodyVo;
@@ -91,7 +89,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -441,7 +438,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         simpleTabManager.add(view.findViewById(R.id.stb_good_comment));
         rvGalleryImageList = view.findViewById(R.id.rv_gallery_image_list);
 
-        tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
+        tvGoodsPrice = view.findViewById(R.id.tv_goods_price_left);
         tvGoodsName = view.findViewById(R.id.tv_goods_name);
         tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
 
@@ -1125,6 +1122,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     goodsPrice = Util.getSpuPrice(goodsDetail);
                     tvGoodsPrice.setText(StringUtil.formatFloat(goodsPrice));
+                    UiUtil.toPriceUI(tvGoodsPrice,0);
 
                     // 是否点赞
                     isLike = goodsDetail.getInt("isLike");
@@ -1797,12 +1795,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         rlPriceTag.setVisibility(showDiscountInfo?GONE:VISIBLE);
         rlDiscountInfoContainer.setVisibility(showDiscountInfo?VISIBLE:GONE);
         if (showDiscountInfo) {
-            tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+            tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
+            UiUtil.toPriceUI(tvGoodsPrice,0);
             tvGoodsPriceOriginal.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
 
             startCountDown();
         } else {
             tvGoodsPrice.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 0));
+            UiUtil.toPriceUI(tvGoodsPrice,13);
 
             stopCountDown();
         }

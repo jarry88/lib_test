@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.OrderSkuItem;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.UiUtil;
 
 /**
  * 訂單列表里面每一項Sku的Adapter
@@ -34,7 +35,8 @@ public class OrderSkuItemListAdapter extends ViewGroupAdapter<OrderSkuItem> {
         TextView tvGoodsName = itemView.findViewById(R.id.tv_goods_name);
         tvGoodsName.setText(itemData.goodsName);
         TextView tvSkuPrice = itemView.findViewById(R.id.tv_sku_price);
-        tvSkuPrice.setText(StringUtil.formatPrice(context, itemData.goodsPrice, 1));
+        tvSkuPrice.setText(StringUtil.formatPrice(context, itemData.goodsPrice, 0));
+        UiUtil.toPriceUI(tvSkuPrice,9);
         TextView tvGoodsFullSpecs = itemView.findViewById(R.id.tv_goods_full_specs);
         tvGoodsFullSpecs.setText(itemData.goodsFullSpecs);
         TextView tvSkuCount = itemView.findViewById(R.id.tv_sku_count);

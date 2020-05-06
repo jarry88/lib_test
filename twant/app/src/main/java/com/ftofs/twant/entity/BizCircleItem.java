@@ -11,6 +11,7 @@ public class BizCircleItem {
     public String name;
     public BizCircleId bizCircleId;
     public List<BizCircleItem> subItemList;
+    public boolean selected =false;
 
     public BizCircleItem(int id, String name, BizCircleId bizCircleId) {
         this.id = id;

@@ -57,7 +57,11 @@ public class QrCodeCardFragment extends BaseFragment implements View.OnClickList
         int gender = User.getUserInfo(SPField.FIELD_GENDER, Constant.GENDER_UNKNOWN);
         if (gender == Constant.GENDER_FEMALE) {
             imgGenderIndicator.setImageResource(R.drawable.icon_female);
-        } else {
+        }if(gender==Constant.GENDER_UNKNOWN){
+
+            imgGenderIndicator.setVisibility(View.INVISIBLE);
+        }else {
+
             imgGenderIndicator.setImageResource(R.drawable.icon_male);
         }
 

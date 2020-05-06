@@ -74,8 +74,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -283,7 +281,7 @@ public class AddPostFragment extends BaseFragment implements
 
         postGoodsImage = view.findViewById(R.id.post_goods_image);
         tvPostGoodsName = view.findViewById(R.id.tv_post_goods_name);
-        tvGoodsPrice = view.findViewById(R.id.tv_goods_price);
+        tvGoodsPrice = view.findViewById(R.id.tv_goods_price_left);
 
         btnAddPostContentImage = view.findViewById(R.id.btn_add_post_content_image);
         btnAddPostContentImage.setOnClickListener(this);

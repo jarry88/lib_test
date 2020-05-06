@@ -116,6 +116,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     private TextView tvShoppingMessageCount;
     private int PostCountMax=10;
     private boolean showBack;
+    private RecyclerView rvFollowMeList;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -206,7 +207,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
         tvMemberSignature.setOnClickListener(this);
 
 
-        RecyclerView rvFollowMeList = view.findViewById(R.id.rv_follow_me_list);
+        rvFollowMeList = view.findViewById(R.id.rv_follow_me_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
         rvFollowMeList.setLayoutManager(layoutManager);
         followMeAvatarAdapter = new FollowMeAvatarAdapter(R.layout.follow_me_avatar_item, followMeList);
@@ -463,8 +464,12 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                         item.memberSignature = fans.getSafeString("memberSignature");
                         followMeList.add(item);
                     }
-
-                    followMeAvatarAdapter.setNewData(followMeList);
+                        if (followMeList.isEmpty()) {
+                            rvFollowMeList.setVisibility(View.GONE);
+                        } else {
+                            rvFollowMeList.setVisibility(View.VISIBLE);
+                            followMeAvatarAdapter.setNewData(followMeList);
+                        }
 
                     userDataLoaded = true;
                     }

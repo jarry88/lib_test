@@ -1,13 +1,11 @@
 package com.ftofs.twant.tangram;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,10 +18,8 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.SearchType;
-import com.ftofs.twant.entity.SearchPostParams;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.ExplorerFragment;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
@@ -40,7 +36,6 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
 import com.ftofs.twant.widget.RoundedDataImageView;
-import com.orhanobut.hawk.Hawk;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -228,8 +223,8 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                     RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();;
                     params.setMarginStart(Util.dip2px(getContext(),10));
                     linearLayout.setLayoutParams(params);
-//                    bannerView.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT);
-//                    bannerView.setIndicatorPadding(Util.dip2px(getContext(),50),200,0,0);
+                    bannerView.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT);
+                    bannerView.setIndicatorPadding(Util.dip2px(getContext(),50),Util.dip2px(getContext(),220),0,0);
 
                     bannerView.start();
                     bannerView.setDelayedTime(2500);

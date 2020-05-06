@@ -633,7 +633,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             }
                             initSearchGoods(getView());
 
-                            SLog.info("page[%d], hasMore[%s]isActivityShopping[%s]", page, hasMore,isActivityShopping);
+                            SLog.info("page[%d],currpage[%s] ,goodsItemPairList.size(%d)hasMore[%s]isActivityShopping[%s]", page,currPage, goodsItemPairList.size(),hasMore,isActivityShopping);
                             if (!hasMore && !isActivityShopping&& mGoodsAdapter != null) {
                                 mGoodsAdapter.loadMoreEnd();
                                 mGoodsAdapter.setEnableLoadMore(false);
@@ -717,7 +717,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 pair = null;
                             }
 
-                            if (currPage == 1 && goodsItemPairList.size() == 0) {
+                            if (currPage == 0 && goodsItemPairList.size() == 0) {
                                 goodsItemPairList.add(new GoodsSearchItemPair(Constant.ITEM_TYPE_NO_DATA));
                             }
                             if (!hasMore && !isActivityShopping) {

@@ -45,7 +45,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
             ImageView goodsImage = helper.getView(R.id.img_goods);
             Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(goodsImage);
             helper.setText(R.id.tv_goods_name, goods.name);
-            helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context,  goods.price, 1,false));
+            helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context,  goods.price, 1,false));
         } else if (itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT){
             // 顯示即可，不用特別處理
         }
