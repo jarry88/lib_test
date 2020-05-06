@@ -84,7 +84,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="@dimen/toolbar_margin_left"
             android:layout_marginEnd="@dimen/toolbar_margin_right"
-            android:background="@color/tw_light_grey"/>
+            android:background="@color/tw_light_grey_EDED"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rv_position_keyword"
@@ -129,7 +129,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="@dimen/toolbar_margin_left"
             android:layout_marginEnd="@dimen/toolbar_margin_right"
-            android:background="@color/tw_light_grey"/>
+            android:background="@color/tw_light_grey_EDED"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rv_position_category"
@@ -172,7 +172,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="@dimen/toolbar_margin_left"
             android:layout_marginEnd="@dimen/toolbar_margin_right"
-            android:background="@color/tw_light_grey"/>
+            android:background="@color/tw_light_grey_EDED"/>
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rv_expect_salary"
@@ -215,7 +215,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="@dimen/toolbar_margin_left"
             android:layout_marginEnd="@dimen/toolbar_margin_right"
-            android:background="@color/tw_light_grey"/>
+            android:background="@color/tw_light_grey_EDED"/>
     </RelativeLayout>
 
 

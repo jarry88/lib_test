@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 
+import android.app.Application;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,11 +37,13 @@ import com.ftofs.twant.entity.PostItem;
 import com.ftofs.twant.entity.UniversalMemberItem;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.CameraUtil;
+import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.PermissionUtil;
@@ -47,6 +51,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.vo.member.MemberVo;
 import com.ftofs.twant.widget.BottomConfirmPopup;
 import com.ftofs.twant.widget.QuickClickButton;
 import com.ftofs.twant.widget.SharePopup;
@@ -66,6 +71,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -117,6 +123,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     private int PostCountMax=10;
     private boolean showBack;
     private RecyclerView rvFollowMeList;
+    private FrameLayout btnSeller;
+    private boolean showSeller;
 
     public static MyFragment newInstance() {
         Bundle args = new Bundle();
@@ -159,6 +167,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
 
 
         Util.setOnClickListener(view, R.id.btn_setting, this);
+        btnSeller = view.findViewById(R.id.btn_goto_seller);
+        btnSeller.setOnClickListener(this);
+
         Util.setOnClickListener(view, R.id.btn_back_round, this);
         view.findViewById(R.id.btn_back_round).setVisibility(showBack ? View.VISIBLE : View.GONE);
 
@@ -335,6 +346,9 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
             case R.id.btn_back_round:
                 hideSoftInputPop();
                 break;
+            case R.id.btn_goto_seller:
+                Util.startFragment(SellerHomeFragment.newInstance());
+                break;
             case R.id.tv_member_signature:
                 String signature = memberSignature;
                 if (StringUtil.isEmpty(signature)) {
@@ -389,6 +403,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     private void loadUserData() {
         String token = User.getToken();
         String memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, null);
+        updateMemberVo();
 
         if (StringUtil.isEmpty(token) || StringUtil.isEmpty(memberName)) {
             return;
@@ -523,6 +538,39 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
+            }
+        });
+    }
+
+    private void updateMemberVo() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+        Api.getUI(Api.PATH_SELLER_ISSELLER, EasyJSONObject.generate("token", token), new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity,e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]", responseStr);
+                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                try {
+                    int isSeller = responseObj.getInt("datas.isSeller");
+                    showSeller = isSeller == Constant.TRUE_INT;
+                    if (!showSeller) {
+                        String message = responseObj.getSafeString("datas.message");
+                        SLog.info("message[%s]", message);
+                    }
+                    btnSeller.setVisibility(showSeller ? View.VISIBLE : View.GONE);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
+                }
+
+
             }
         });
     }

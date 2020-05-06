@@ -150,4 +150,15 @@ public enum PopupType {
      * 瀏覽SKU圖片
      */
     SELECT_SKU_IMAGE,
+
+    /**
+     * 【賣家】選擇物流方式
+     */
+    SELECT_SELLER_LOGISTICS_WAY,
+
+
+    /**
+     * 【賣家】選擇物流公司
+     */
+    SELECT_SELLER_LOGISTICS_COMPANY,
 }

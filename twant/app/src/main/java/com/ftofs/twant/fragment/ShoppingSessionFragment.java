@@ -507,7 +507,6 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
         @Override
         public void onBindViewHolder(LinkageSecondaryViewHolder holder,
                                      BaseGroupedItem<ElemeGroupedItem.ItemInfo> item) {
-
             try {
                 ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
                 ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
@@ -527,7 +526,6 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
             } catch (Exception e) {
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
-
         }
 
         @Override

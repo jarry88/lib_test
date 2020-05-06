@@ -521,7 +521,7 @@
             app:layout_constraintTop_toBottomOf="@id/ll_shop_info"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             />
 
         <!-- 商店說說 -->
@@ -624,7 +624,7 @@
             app:layout_constraintTop_toBottomOf="@id/rl_shop_comment_container"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             />
 
         <!-- 鎮店之寶 -->

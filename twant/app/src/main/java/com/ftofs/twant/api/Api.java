@@ -1261,6 +1261,48 @@ public class Api {
      */
     public static final String PATH_DETERMINE_SHOW_REAL_NAME_POPUP = "/consigneeNameAuth/show";
 
+    /**
+     * 【商家端】商家端首頁統計數據
+     */
+    public static final String PATH_SELLER_INDEX = "/member/seller/index";
+    /**
+     * 【商家端】是否顯示商家入口
+     */
+    public static final String PATH_SELLER_ISSELLER = "/member/seller/isSeller";
+    /**
+     * 【商家端】編輯店鋪是否營業
+     */
+    public static final String PATH_SELLER_ISOPEN = "/member/seller/isOpen";
+
+
+    /**
+     * 【商家】訂單列表
+     */
+    public static final String PATH_SELLER_ORDERS_LIST = "/member/seller/orders/list";
+
+    /**
+     * 【商家】訂單詳情
+     */
+    public static final String PATH_SELLER_ORDER_DETAIL = "/member/seller/orders/info";
+
+
+    /**
+     * 【商家】訂單買家信息
+     */
+    public static final String PATH_SELLER_BUYER_INFO = "/member/seller/orders/memberInfo";
+
+
+    /**
+     * 【商家】訂單發貨物流信息
+     */
+    public static final String PATH_SELLER_LOGISTICS_LIST = "/member/seller/orders/send/info";
+
+
+    /**
+     * 【商家】訂單發貨
+     */
+    public static final String PATH_SELLER_ORDER_SHIP = "/member/seller/orders/send/save";
+
 
     /**
      * 【購物專場】新版可復用購物專場主頁

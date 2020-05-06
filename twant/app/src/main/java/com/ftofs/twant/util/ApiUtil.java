@@ -6,6 +6,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSONPath;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.domain.im.ImMemberStatus;
 import com.ftofs.twant.domain.member.Member;
 import com.ftofs.twant.fragment.AddPostFragment;
@@ -13,6 +14,8 @@ import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.lxj.xpopup.impl.LoadingPopupView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
@@ -65,7 +68,15 @@ public class ApiUtil {
     public static void getImInfo(Context _mActivity, String memberName, SimpleCallback updateUI) {
         try {
             EasyJSONObject params = EasyJSONObject.generate();
-            params.set("token", User.getToken());
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
+            if (StringUtil.isEmpty(memberName)) {
+                //默認從hawk拿去
+                memberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
+            }
+            params.set("token", token);
             params.set("imName", memberName);
             SLog.info("params[%s]",params.toString());
             Api.getUI(Api.PATH_IM_INFO, params, new UICallback() {
@@ -79,6 +90,10 @@ public class ApiUtil {
                     try {
                         SLog.info("responseStr[%s]", responseStr);
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            SLog.info("獲取身份信息失敗");
+                            return;
+                        }
                         EasyJSONObject imMemberInfo = responseObj.getObject("datas.imMemberInfo");
                         MemberVo memberVo = new MemberVo();
                         memberVo.setAvatarUrl(imMemberInfo.getSafeString("memberAvatar"));
@@ -90,7 +105,7 @@ public class ApiUtil {
                         memberVo.setMemberName(imMemberInfo.getSafeString("memberName"));
                         memberVo.setMemberId(imMemberInfo.getInt("memberId"));
                         memberVo.setStoreId(imMemberInfo.getInt("storeId"));
-                        SLog.info("獲取[%s]信息,身份%d", memberName,memberVo.role);
+                        SLog.info("獲取[%s]信息,身份%d",memberVo.getNickName(),memberVo.role);
                         updateUI.onSimpleCall(memberVo);
 
                     } catch (Exception e) {

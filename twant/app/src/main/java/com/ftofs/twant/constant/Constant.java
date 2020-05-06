@@ -43,11 +43,12 @@ public class Constant {
     /**
      * 訂單狀態
      */
-    public static final int ORDER_STATUS_ALL = 0;
+    public static final int ORDER_STATUS_ALL = 0;  // 全部
     public static final int ORDER_STATUS_TO_BE_PAID = 1;  // 待付款
     public static final int ORDER_STATUS_TO_BE_SHIPPED = 2;  // 待發貨
     public static final int ORDER_STATUS_TO_BE_RECEIVED = 3; // 待收貨
     public static final int ORDER_STATUS_TO_BE_COMMENTED = 4; // 待評價
+    public static final int ORDER_STATUS_CANCELLED = 5;  // 已取消
 
 
     /**

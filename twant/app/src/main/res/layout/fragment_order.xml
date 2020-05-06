@@ -303,6 +303,6 @@
         android:id="@+id/rv_order_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/tw_light_grey">
+        android:background="@color/tw_light_grey_EDED">
     </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

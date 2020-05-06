@@ -199,7 +199,7 @@ public class NativeJsBridge {
             friendInfo.role = ChatUtil.ROLE_MEMBER;
             Util.startFragment(ChatFragment.newInstance(ChatUtil.getConversation(memberName, nickname, avatarUrl, ChatUtil.ROLE_MEMBER), friendInfo));
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         SLog.info("chat[%s]", data);

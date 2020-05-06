@@ -97,7 +97,7 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/tw_light_grey" />
+                android:background="@color/tw_light_grey_EDED" />
 
             <RelativeLayout
                 android:visibility="gone"
@@ -180,7 +180,7 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/tw_light_grey" />
+                android:background="@color/tw_light_grey_EDED" />
 
             <RelativeLayout
                 android:visibility="gone"
@@ -264,7 +264,7 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/tw_light_grey" />
+                android:background="@color/tw_light_grey_EDED" />
 
             <RelativeLayout
                 android:visibility="gone"

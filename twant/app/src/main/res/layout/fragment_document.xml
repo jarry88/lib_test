@@ -42,7 +42,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             android:layout_marginStart="@dimen/length_15dp"
             android:layout_marginEnd="@dimen/length_15dp"
             />
@@ -113,7 +113,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             android:layout_marginStart="@dimen/length_15dp"
             android:layout_marginEnd="@dimen/length_15dp"
             />
@@ -146,7 +146,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             />
         <RelativeLayout
             android:id="@+id/btn_education_experience"
@@ -178,7 +178,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             android:layout_marginStart="@dimen/length_15dp"
             android:layout_marginEnd="@dimen/length_15dp"
             />
@@ -211,7 +211,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             />
 
     </LinearLayout>

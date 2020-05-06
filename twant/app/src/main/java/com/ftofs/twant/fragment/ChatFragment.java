@@ -44,6 +44,7 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.UnicodeEmoji;
+import com.ftofs.twant.domain.member.Member;
 import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.CommonUsedSpeech;
@@ -268,10 +269,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             SLog.info("yourMemberName[%s], yourNickname[%s], yourAvatarUrl[%s], yourRole[%d]",
                     yourMemberName, yourNickname, yourAvatarUrl, yourRole);
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         updateYourInfo();
         loadMemberInfo();
+        updateMyInfo();
         tvNickname = view.findViewById(R.id.tv_nickname);
         tvNickname.setOnClickListener(this);
 
@@ -291,7 +293,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         view.findViewById(R.id.rv_message_list).setOnTouchListener(this);
 
         myMemberName = User.getUserInfo(SPField.FIELD_MEMBER_NAME, "");
-        myRole = TwantApplication.getInstance().getMemberVo().role;
+//        myRole = TwantApplication.getInstance().getMemberVo().role;
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_menu, this);
@@ -324,6 +326,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
         bindFriendInfo();
         showGoodsAndOrder();
+    }
+
+    private void updateMyInfo() {
+        ApiUtil.getImInfo(_mActivity, User.getUserInfo(SPField.FIELD_MEMBER_NAME, null), new SimpleCallback() {
+            @Override
+            public void onSimpleCall(Object data) {
+                MemberVo memberVo = (MemberVo) data;
+                if (memberVo != null) {
+                    myRole = memberVo.role;
+                    showGoodsAndOrder();
+                }
+            }
+        });
+
     }
 
     private void loadHistoryMessage(int pagesize) {
@@ -406,9 +422,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private void updateYourInfo() {
 
-        if (!TwantApplication.getInstance().getMemberVo().getFromInterface) {
-            TwantApplication.getInstance().updateCurrMemberInfo();
-        }
+//        if (!TwantApplication.getInstance().getMemberVo().getFromInterface) {
+//            TwantApplication.getInstance().updateCurrMemberInfo();
+//        }
         ApiUtil.getImInfo(_mActivity,yourMemberName,memberVo ->{
             MemberVo yourInfo = (MemberVo)memberVo;
             //指对话框标题
@@ -930,7 +946,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         absolutePath = easyJSONObject.getSafeString("absolutePath");
                         imgUrl = easyJSONObject.getSafeString("imgUrl");
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
 
                     String imageUri;
@@ -983,7 +999,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         int ordersId = easyJSONObject.getInt("ordersId");
                         start(OrderDetailFragment.newInstance(ordersId));
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 } else if (id == R.id.ll_enc_message_container) {
                     ChatMessage chatMessage = chatMessageList.get(position);
@@ -992,7 +1008,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         String memberName = chatMessage.fromMemberName;
                         start(ENameCardFragment.newInstance(memberName));
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             }
@@ -1222,7 +1238,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                                     null, null, 0, null, null, 0, null);
                         }
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
 
@@ -1612,11 +1628,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
-    }
-
-    public void popupStoreCard() {
-
-
     }
 
     public int getStoreId() {

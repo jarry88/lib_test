@@ -1,7 +1,6 @@
 package com.ftofs.twant.util;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -35,8 +34,6 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
@@ -82,13 +79,7 @@ import org.urllib.Urls;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -96,7 +87,6 @@ import java.util.regex.Pattern;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import cn.snailpad.easyjson.json.JSONObject;
 import me.yokeyword.fragmentation.ISupportFragment;
@@ -1090,7 +1080,7 @@ public class Util {
             return;
         }
         SLog.info("setButtonStatus, enable[%s], button[%s]", enable, button);
-        int color = context.getColor(enable ? R.color.tw_black : R.color.tw_light_grey);
+        int color = context.getColor(enable ? R.color.tw_black : R.color.tw_light_grey_EDED);
         button.setTextColor(color);
     }
 

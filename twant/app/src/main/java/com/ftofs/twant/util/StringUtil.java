@@ -23,6 +23,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EntityReplace;
 import com.ftofs.twant.entity.Mobile;
+import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
 import com.ftofs.twant.fragment.PostDetailFragment;
@@ -811,4 +812,12 @@ public class StringUtil {
         String newColor = "#" + Integer.toHexString(0xFF * percent / 100) + color.substring(1);
         return newColor;
     }
+
+    public static boolean isArrayEmpty(List list) {
+        if (list == null || list.size() == 0) {
+            return true;
+        }
+        return false;
+    }
+
 }

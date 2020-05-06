@@ -107,7 +107,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             />
         <RelativeLayout
             android:id="@+id/btn_my_e_name_card"
@@ -133,7 +133,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             />
         <RelativeLayout
             android:id="@+id/btn_real_name_auth"
@@ -159,7 +159,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/tw_light_grey"
+                android:background="@color/tw_light_grey_EDED"
                 android:layout_marginTop="49dp"
                 />
         </RelativeLayout>
@@ -221,7 +221,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/tw_light_grey"
+            android:background="@color/tw_light_grey_EDED"
             />
 
 
@@ -233,7 +233,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/tw_light_grey"
+                android:background="@color/tw_light_grey_EDED"
                 />
             <TextView
                 android:layout_width="wrap_content"
