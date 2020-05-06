@@ -170,7 +170,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         textOrders .setBackgroundResource(R.drawable.grey_20dp_bg);
         textOrders.setTextColor(getResources().getColor(R.color.tw_black));
         textGoods .setBackgroundResource(R.drawable.blue_20dp_bg);
-        textGoods.setTextColor(getResources().getColor(R.color.tw_blue));
+        textGoods.setTextColor(getResources().getColor(R.color.tw_white));
         getView().findViewById(R.id.ll_container_goods_info).setVisibility(View.VISIBLE);
         getView().findViewById(R.id.ll_container_orders_info).setVisibility(View.GONE);
     }
@@ -265,12 +265,6 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView();
-        loadSellerData();
-
-    }
-
-    private void initView() {
         storeAnnouncementList = new ArrayList<>();
         announcementTextList = new ArrayList<>();
         timer = new Timer();
@@ -311,11 +305,24 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 //        swBusinessState.setBackColorRes(getResources().getColor(R.color.tw_yellow));
 //        swBusinessState.setThumbColorRes(getResources().getColor(R.color.tw_blue));
         // 初始化
+        loadSellerData();
+
+    }
+
+    private void initView() {
+
         verticalScrollUtil = new AutoVerticalScrollTextViewUtil(tvVerticalScroll, announcementTextList);
         verticalScrollUtil.setDuration(3000)// 设置上下滚动時間间隔
                 .start();   // 如果只有一條，是否可以不調用start ?
         // 点击事件监听
         verticalScrollUtil.setOnMyClickListener(SellerHomeFragment.this);
+        // 如果沒有公告，則隱藏
+        if (storeAnnouncementList.size() < 1) {
+            llShopAnnouncementContainer.setVisibility(View.GONE);
+            return;
+        } else if(storeAnnouncementList.size()==1){
+            llShopAnnouncementContainer.findViewById(R.id.img_notice_more).setVisibility(View.GONE);
+        }
 
 //        LinearLayout llContainer;
 //        if (StringUtil.isArrayEmpty(storeAnnouncementList)) {
@@ -457,6 +464,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                     btnPlay.setVisibility(VISIBLE);
                 }
             }
+            initView();
             updateBanner(false);
             updateNoticeView();
         } catch (Exception e) {
