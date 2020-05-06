@@ -174,6 +174,7 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                         SellerOrderItem item = new SellerOrderItem();
 
                         item.ordersId = orderItem.getInt("ordersId");
+                        item.ordersState = orderItem.getInt("ordersState");
                         item.ordersSnText = orderItem.getSafeString("ordersSnText");
                         item.ordersStateName = orderItem.getSafeString("ordersStateName");
                         item.createTime = orderItem.getSafeString("createTime");

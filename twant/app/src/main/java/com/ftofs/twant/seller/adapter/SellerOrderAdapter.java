@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreSortCriteriaAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
+import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.seller.entity.SellerOrderItem;
 import com.ftofs.twant.seller.entity.SellerOrderSkuItem;
 import com.ftofs.twant.util.StringUtil;
@@ -58,5 +59,6 @@ public class SellerOrderAdapter extends BaseQuickAdapter<SellerOrderItem, BaseVi
 
         // 隱藏【確認退款】按鈕
         helper.setGone(R.id.btn_refund, false);
+        helper.setGone(R.id.btn_ship, item.ordersState == OrderState.TO_BE_SEND);
     }
 }

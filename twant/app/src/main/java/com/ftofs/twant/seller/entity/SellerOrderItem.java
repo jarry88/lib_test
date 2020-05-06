@@ -13,6 +13,7 @@ public class SellerOrderItem {
     public static final int MASK_REFUND = (1 << 1); // 顯示退款按鈕
 
     public int ordersId; // 訂單Id
+    public int ordersState;   // 訂單狀態
     public String ordersSnText;  // 訂單編號
     public String ordersStateName; // 訂單狀態描述: 如【待付款】
 

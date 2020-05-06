@@ -640,12 +640,12 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                             start(CartFragment.newInstance(true));
                         }
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 

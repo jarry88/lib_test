@@ -243,7 +243,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      */
     private void loadNewArrivals() {
         String json = AssetsUtil.loadText(_mActivity, "tangram/home.json");
-        SLog.info("json[%s]", json);
+        // SLog.info("json[%s]", json);
 
         try {
             JSONArray data = new JSONArray(json);
