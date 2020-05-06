@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/iv_goods_item"
+    android:layout_height="100dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="12dp"
+    >
+    <View android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@drawable/white_6dp_radius_bg"
+        android:layout_marginStart="@dimen/margin12"
+        android:layout_marginEnd="@dimen/margin12"
+        android:id="@+id/view_bg">
+
+    </View>
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/iv_goods_img"
+        android:layout_width="85dp"
+        android:layout_height="86dp"
+        android:layout_marginStart="11dp"
+        android:scaleType="fitXY"
+        app:riv_corner_radius="10dp"
+        app:riv_border_width="1dp"
+        app:riv_border_color="#F1F1F1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_goods_img_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/iv_goods_img"
+        app:layout_constraintTop_toTopOf="@+id/iv_goods_img" />
+    <com.ftofs.twant.widget.SlantedWidget
+        android:id="@+id/sw_price"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="10dp"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/tv_goods_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/tw_black"
+        android:maxLines="1"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/iv_goods_img"
+        app:layout_constraintTop_toTopOf="@+id/iv_goods_img"
+        app:layout_constraintRight_toRightOf="@id/view_bg"
+        tools:text="" />
+
+
+
+    <TextView
+        android:id="@+id/tv_goods_comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginStart="16dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:text=""
+        android:textColor="@color/colorGray"
+        android:textSize="12sp"
+        android:singleLine="true"
+        app:layout_constraintLeft_toRightOf="@+id/iv_goods_img"
+        app:layout_constraintTop_toBottomOf="@+id/tv_goods_name"
+        app:layout_constraintRight_toRightOf="@id/view_bg"
+        />
+
+    <TextView
+        android:id="@+id/tv_goods_price"
+        app:layout_constraintBottom_toBottomOf="@id/view_bg"
+        app:layout_constraintLeft_toLeftOf="@id/tv_goods_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_centerVertical="true"
+        android:textSize="16sp"
+        android:textColor="@color/tw_red"
+        android:textStyle="bold"
+        android:text="$0.00"
+        />
+    <TextView
+        android:id="@+id/tv_goods_original_price"
+        app:layout_constraintBottom_toBottomOf="@id/view_bg"
+        app:layout_constraintLeft_toRightOf="@id/tv_goods_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin8"
+        android:layout_marginEnd="5dp"
+        android:layout_centerVertical="true"
+        android:textSize="10sp"
+        android:textColor="#999999"
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
+
+
+    <ImageView
+        android:visibility="visible"
+        android:id="@+id/iv_goods_add"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_add_blue"
+        android:layout_marginEnd="@dimen/margin12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

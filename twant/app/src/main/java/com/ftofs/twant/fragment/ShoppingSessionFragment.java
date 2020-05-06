@@ -135,7 +135,6 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
         Util.setOnClickListener(view,R.id.btn_goto_top,this);
         Util.setOnClickListener(view,R.id.btn_goto_cart,this);
         Util.setOnClickListener(view,R.id.btn_back,this);
-        // setScrollView();//設置滾動後linkage吸頂效果失敗
 
         //設置banner頁圓角
         bannerView.setOutlineProvider(new ViewOutlineProvider() {
@@ -232,10 +231,10 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                SLog.info("__newState[%d]", newState);
+//                SLog.info("__newState[%d]", newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     int linkageY_ = Util.getYOnScreen(linkage) + linkage.getHeight();
-                    SLog.info("linkageY_[%s]", linkageY_);
+//                    SLog.info("linkageY_[%s]", linkageY_);
                     hideFloatButton();
                 } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
 
@@ -541,18 +540,6 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
 
         }
     }
-
-    /*
-    private void setScrollView() {
-        scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            int LinkageY = Util.getYOnScreen(linkage);
-            int FilterBarY = Util.getYOnScreen(llFilterBar);
-            int FilterBarHegiht = 40;
-            boolean scroll = LinkageY >= FilterBarY - FilterBarHegiht;
-            scrollView.setOnTouchListener((v1, event) -> {return scroll;});
-        });
-    }
-     */
 
     @Override
     public void onClick(View v) {
