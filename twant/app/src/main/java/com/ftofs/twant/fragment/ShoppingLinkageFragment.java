@@ -70,6 +70,8 @@ public class ShoppingLinkageFragment extends BaseFragment{
     private ShopGoodsListAdapter shopGoodsListAdapter;
     private List<Goods> goodsList;
     private EasyJSONArray zoneGoodsVoList;
+    private EasyJSONArray zoneGoodsCategoryVoList;
+    private boolean linkageLoaded;
 
 
     public static ShoppingLinkageFragment newInstance(ShoppingSpecialFragment shoppingSpecialFragment) {
@@ -83,17 +85,23 @@ public class ShoppingLinkageFragment extends BaseFragment{
         super.onSupportVisible();
         SLog.info("onSupportVisible");
 
+        updateView();
+
+
+    }
+
+    private void updateView() {
         linkage.setVisibility(parentFragment.hasGoodsCategory );
         rvGoodsWithoutCategory.setVisibility(1-parentFragment.hasGoodsCategory);
         if (parentFragment.hasGoodsCategory == 1) {
-
+            if (zoneGoodsCategoryVoList != null&&!linkageLoaded) {
+                updateLinkage();
+            }
         } else {
             if (zoneGoodsVoList != null) {
                 updateGoodVoList(zoneGoodsVoList);
             }
         }
-
-
     }
 
     @Override
@@ -105,19 +113,19 @@ public class ShoppingLinkageFragment extends BaseFragment{
         rvGoodsWithoutCategory = view.findViewById(R.id.rv_shopping_good_without_category_list);
         initAdapter();
 
-        initLinkage();
+//        initLinkage();
         initGoodsAdapter();
 
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
         LinearLayout.LayoutParams layoutParams1 = (LinearLayout .LayoutParams) rvPrimaryList.getLayoutParams();
         layoutParams.height =parentFragment.scrollView.getHeight()-44;
-        layoutParams1.height =parentFragment.scrollView.getHeight();
-//        rvSecondList.setLayoutParams(layoutParams);
-        rvPrimaryList.setLayoutParams(layoutParams1);
-
+//        layoutParams1.height =parentFragment.scrollView.getHeight();
+        rvSecondList.setLayoutParams(layoutParams);
+//        rvPrimaryList.setLayoutParams(layoutParams1);
 
         SLog.info("isNestedScrollingEnabled[%s]", rvSecondList.isNestedScrollingEnabled());
-        rvSecondList.setNestedScrollingEnabled(false);
+
+//        rvSecondList.setNestedScrollingEnabled(false);
         rvSecondList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -249,6 +257,7 @@ public class ShoppingLinkageFragment extends BaseFragment{
 
     public void setGoodVoList(EasyJSONArray zoneGoodsVoList) {
         this.zoneGoodsVoList = zoneGoodsVoList;
+        updateView();
     }
 
     private static class ElemePrimaryAdapterConfig implements ILinkagePrimaryAdapterConfig {
@@ -399,15 +408,20 @@ public class ShoppingLinkageFragment extends BaseFragment{
         }
         ElemePrimaryAdapterConfig primaryAdapterConfig = new ElemePrimaryAdapterConfig();
         primaryAdapterConfig.setBackgroundColor(R.color.mask15_background_color, getResources().getDrawable(white_4dp_right_radius_bg));
-        SLog.info("twColor%s",twColor);
-        primaryAdapterConfig.setTwColor(twColor);
+        SLog.info("twColor%s,%d",twColor,items.size());
+//        primaryAdapterConfig.setTwColor(twColor);
         ElemeSecondaryAdapterConfig secondaryAdapterConfig = new ElemeSecondaryAdapterConfig();
         linkage.init(items,primaryAdapterConfig,secondaryAdapterConfig);
+        linkageLoaded = true;
     }
     public void setLinkageData(EasyJSONArray zoneGoodsCategoryVoList) {
+        this.zoneGoodsCategoryVoList = zoneGoodsCategoryVoList;
+        updateView();
+    }
+    private void updateLinkage(){
         try {
             SLog.info("設置二級聯動列表數據");
-
+            items.clear();
             for (Object object : zoneGoodsCategoryVoList) {
                 EasyJSONObject categoryData = (EasyJSONObject) object;
 
@@ -423,7 +437,7 @@ public class ShoppingLinkageFragment extends BaseFragment{
                     String goodsName = goods.getSafeString("goodsName");
                     String goodsImage = goods.getSafeString("goodsImage");
                     int commonId = goods.getInt("commonId");
-                    String jingle  = goods.getSafeString("jingle");
+                    String jingle  = goods.getSafeString("goodsFullSpecs");
                     double price;
                     int appUsable = goods.getInt("appUsable");
                     if (appUsable > 0) {
@@ -440,9 +454,10 @@ public class ShoppingLinkageFragment extends BaseFragment{
                     ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
                     items.add(item1);
                 }
-                initLinkage();
 
             }
+            initLinkage();
+
 
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

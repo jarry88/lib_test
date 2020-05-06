@@ -135,10 +135,12 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                         Util.startFragment(PostDetailFragment.newInstance(postId));
                         break;
                     case "shopping":
-//                        Util.startFragment(ShoppingSessionFragment.newInstance());
+                        Util.startFragment(ShoppingSessionFragment.newInstance());
+                        break;
+                    case "shoppingZone":
                         //購物新專場
-//                        int zoneId = Integer.valueOf(webSliderItem.linkValue);
-                        Util.startFragment(ShoppingSpecialFragment.newInstance(1));
+                        int zoneId = Integer.valueOf(webSliderItem.linkValue);
+                        Util.startFragment(ShoppingSpecialFragment.newInstance(zoneId));
                         break;
                     case "wantPost":
                         MainFragment mainFragment = MainFragment.getInstance();

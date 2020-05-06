@@ -88,5 +88,6 @@ public class SLog {
 
         Log.println(Log.ASSERT, "SLog", content);
     }
+
 }
 

@@ -328,10 +328,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <!-- 輪播圖 -->
+                    <LinearLayout
+                        android:id="@+id/ll_banner_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cl_banner_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/shopping_mask"
                         >
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -353,6 +358,7 @@
                                 app:open_mz_mode="false" />
                         </RelativeLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    </LinearLayout>
                     <LinearLayout
                         android:visibility="gone"
                         android:layout_width="match_parent"
@@ -394,16 +400,7 @@
                             android:visibility="gone"
                             />
                     </LinearLayout>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/rv_single_goods_list"
-                        android:visibility="gone"/>
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/rv_single_store_list"
-                        android:visibility="gone"/>
+
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/shopping_tab_layout"
                         android:layout_width="match_parent"
@@ -420,8 +417,7 @@
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/shopping_viewpager"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:background="@color/tw_blue"
+                        android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"

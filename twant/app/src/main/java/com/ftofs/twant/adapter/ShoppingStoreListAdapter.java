@@ -30,7 +30,7 @@ public class ShoppingStoreListAdapter extends BaseQuickAdapter<StoreItem, BaseVi
 
     @Override
     protected void convert(BaseViewHolder helper, StoreItem item) {
-        SLog.info("name[%s]",item.storeName);
+//        SLog.info("name[%s]",item.storeName);
         LinearLayout goodsImageLeftContainer = helper.getView(R.id.goods_image_left_container);
         LinearLayout goodsImageMiddleContainer = helper.getView(R.id.goods_image_middle_container);
         LinearLayout goodsImageRightContainer = helper.getView(R.id.goods_image_right_container);

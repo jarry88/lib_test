@@ -23,6 +23,7 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
+import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -118,7 +119,10 @@ public class ActivityPopup extends CenterPopupView implements View.OnClickListen
             } else if ("promotion".equals(appPopupAdLinkType)) { // 打開購物專場
                 SLog.info("跳轉到購物專場");
                 Util.startFragment(ShoppingSessionFragment.newInstance());
-            } else if ("none".equals(appPopupAdLinkType)) { // 無操作
+            } else if("shoppingZone".equals(appPopupAdLinkType)) {
+                int zoneId = Integer.parseInt(appPopupAdLinkValue);
+                Util.startFragment(ShoppingSpecialFragment.newInstance(zoneId));
+            }else if ("none".equals(appPopupAdLinkType)) { // 無操作
                 SLog.info("無操作");
                 return;
             } else if ("goods".equals(appPopupAdLinkType)) {

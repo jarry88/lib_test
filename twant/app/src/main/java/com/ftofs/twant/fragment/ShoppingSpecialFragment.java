@@ -47,6 +47,7 @@ import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 
@@ -122,11 +123,9 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     NestedScrollView scrollView;
     @BindView(R.id.ll_filter_bar)
     LinearLayout llFilterBar;
+    @BindView(R.id.ll_banner_container)
+    LinearLayout llBanner;
 
-    @BindView(R.id.rv_single_goods_list)
-    RecyclerView rvGoodsList;
-    @BindView(R.id.rv_single_store_list)
-    RecyclerView rvStoreList;
 
     List<ElemeGroupedItem> storeItems = new ArrayList<>();
     @BindView(R.id.banner_view)
@@ -136,7 +135,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
     @BindView(R.id.ll_float_button_container)
     LinearLayout llFloatButtonContainer;
-    private int zoneId =1;
+    private int zoneId =20;
     private int zoneState;
     private int zoneType;
     int hasGoodsCategory;
@@ -216,8 +215,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         linkageFragment = ShoppingLinkageFragment.newInstance(this);
 
         initView(view);
-//        loadData();
-        loadTestData();
+        loadData();
+//        loadTestData();
     }
 
     private void loadTestData() {
@@ -230,6 +229,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     }
 
     private void loadData() {
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
 
         // 獲取商店首頁信息
@@ -237,11 +237,13 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         Api.getUI(path, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
                 SLog.info("responseStr[%s]",responseStr);
                 //測試數據
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
@@ -279,10 +281,12 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 
 
             EasyJSONArray appAdImageList = zoneVo.getArray("appAdImageList");
-            setBannerData(appAdImageList);
+            if (appAdImageList != null) {
+                setBannerData(appAdImageList);
+            }
             EasyJSONArray zoneGoodsVoList = zoneVo.getArray("zoneGoodsVoList");
             EasyJSONArray zoneStoreVoList = zoneVo.getArray("zoneStoreVoList");
-            SLog.info("zoneStoreVoList,[%s]",zoneStoreVoList.toString());
+//            SLog.info("zoneStoreVoList,[%s]",zoneStoreVoList.toString());
             if (zoneStoreVoList != null) {
                 SLog.info("設置商店列表數據");
                 storeListFragment.setStoreList(zoneStoreVoList);
@@ -313,7 +317,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         rlToolBar.setBackgroundColor(Color.parseColor(appColor));
         int[] colors={Color.parseColor(appColor),0xff8B3097, 0xffD14E7A};
         GradientDrawable bannerBackGround = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
-        clBannerContainer.setBackground(bannerBackGround);
+        llBanner.setBackground(bannerBackGround);
         tabLayout.setTabTextColors(Color.parseColor(appColor),Color.parseColor(StringUtil.addAlphaToColor(appColor,60)));
         tabLayout.setSelectedTabIndicatorColor(Color.parseColor(appColor));
     }
@@ -470,7 +474,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         });
     }
     private void setBannerData(EasyJSONArray discountBannerList) {
-        SLog.info("bannerListLength %d",discountBannerList.length());
+//        SLog.info("bannerListLength %d",discountBannerList.length());
         try {
             for (Object object : discountBannerList) {
                 String imageUrl = String.valueOf(object);
