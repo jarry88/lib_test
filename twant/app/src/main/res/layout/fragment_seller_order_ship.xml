@@ -135,7 +135,7 @@
                                 android:text="收貨人信息"
                                 />
                             <TextView
-                                android:id="@+id/btn_receiver_info"
+                                android:id="@+id/tv_receiver_info"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
@@ -202,6 +202,7 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/ll_logistics_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -215,6 +216,7 @@
                 android:background="@drawable/white_6dp_radius_bg">
 
                 <LinearLayout
+                    android:id="@+id/ll_ship_company_container"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:gravity="center_vertical"
@@ -245,9 +247,6 @@
                             android:textSize="15sp"
                             android:textColor="@color/tw_black"
                             android:text=""
-                            android:singleLine="true"
-                            android:inputType="numberDecimal"
-                            android:imeOptions="actionNext"
                             android:hint="請選擇快遞公司"
                             android:background="@null"
                             />
@@ -259,6 +258,7 @@
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/ll_logistics_order_sn_container"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:gravity="center_vertical"
