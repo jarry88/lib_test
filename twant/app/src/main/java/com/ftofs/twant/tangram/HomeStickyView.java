@@ -128,8 +128,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_goto_activity) {
-            gotoTestFragment();
-//            gotoActivity();
+//            gotoTestFragment();
+            gotoActivity();
         } else if (id == R.id.ll_search_box) {
             Util.startFragment(CategoryFragment.newInstance(SearchType.STORE, null));
         } else if (id == R.id.btn_category_store) {

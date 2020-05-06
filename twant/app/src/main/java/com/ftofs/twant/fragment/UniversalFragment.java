@@ -45,6 +45,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
     String memberName;
     TextView tvMemberNumber;
     RelativeLayout btnRealNameSet;
+    private TextView tvTestInfo;
 
     public static UniversalFragment newInstance() {
         Bundle args = new Bundle();
@@ -84,6 +85,11 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         btnRealNameSet.setOnClickListener(this);
         tvMemberName = view.findViewById(R.id.tv_member_name);
         tvMemberNumber = view.findViewById(R.id.tv_member_number);
+        tvTestInfo = view.findViewById(R.id.text_build);
+        tvTestInfo.setOnClickListener(v -> {
+            //測試環境可進入此測試頁面
+            Util.startFragment(ShoppingSpecialFragment.newInstance(19+(int)(Math.random()*10)%2));
+        });
         avatar =view.findViewById((R.id.img_avatar));
 //        tvMemberName.setText(User.getUserInfo(SPField.FIELD_NICKNAME,null));
         tvMemberNumber.setText(User.getUserInfo(SPField.FIELD_MOBILE_ENCRYPT,null));
@@ -95,7 +101,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         }
         //非正式環境下初始可以顯示當前環境信息
         if (!Config.PROD) {
-            view.findViewById(R.id.text_build).setVisibility(View.VISIBLE);
+            tvTestInfo.setVisibility(View.VISIBLE);
             ((TextView)view.findViewById(R.id.text_build)).setText(String.format("當前環境%d",27+Config.currEnv));
         }
         showHideRealNameButton();
