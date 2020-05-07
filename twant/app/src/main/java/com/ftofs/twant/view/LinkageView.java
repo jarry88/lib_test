@@ -37,7 +37,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.TwantLinkageSecondaryAdapter;
 import com.ftofs.twant.entity.ElemeGroupedItem;
 import com.kunminx.linkage.adapter.LinkageSecondaryAdapter;
 
@@ -97,7 +96,7 @@ public class LinkageView<T extends ElemeGroupedItem.ItemInfo> extends RelativeLa
     }
 
 
- 
+
 
 
 

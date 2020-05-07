@@ -13,6 +13,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
  */
 public class Goods implements MultiItemEntity {
 
+    public boolean showDiscount;
     private double promotionDiscountRate;
     private double batchPrice0;
 
@@ -59,7 +60,9 @@ public class Goods implements MultiItemEntity {
 
         Goods goods1=new Goods(commonId,goodsImage,goodsName,jingle,price);
         if (goods.exists("promotionDiscountRate")) {
+
             double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
+            goods1.showDiscount = true;
             double batchPrice0 =  goods.getDouble("batchPrice0");
             goods1.promotionDiscountRate = promotionDiscountRate;
             goods1.batchPrice0 = batchPrice0;
@@ -71,5 +74,13 @@ public class Goods implements MultiItemEntity {
     @Override
     public int getItemType() {
         return itemType;
+    }
+
+    public double getOriginal() {
+        return batchPrice0;
+    }
+
+    public double getDiscount() {
+        return promotionDiscountRate;
     }
 }

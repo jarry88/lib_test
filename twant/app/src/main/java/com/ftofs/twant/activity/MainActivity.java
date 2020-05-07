@@ -286,7 +286,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         };
         activityRoot.getViewTreeObserver().addOnGlobalLayoutListener(layoutListener);
 
-        TwantApplication.getInstance().updateCurrMemberInfo();
+//        TwantApplication.getInstance().updateCurrMemberInfo();
         updateDeviceToken();
 
         loadMainFragment();

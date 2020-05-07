@@ -46,6 +46,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
     TextView tvMemberNumber;
     RelativeLayout btnRealNameSet;
     private TextView tvTestInfo;
+    private int count=0;
 
     public static UniversalFragment newInstance() {
         Bundle args = new Bundle();
@@ -89,7 +90,12 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         tvTestInfo.setOnClickListener(this);
         tvTestInfo.setOnClickListener(v -> {
             //測試環境可進入此測試頁面
-            Util.startFragment(ShoppingSpecialFragment.newInstance(19+(int)(Math.random()*10)%2));
+            Util.startFragment(ShoppingSpecialFragment.newInstance(19+ count));
+            if (count > 0) {
+                count = -1;
+            } else {
+                count=1;
+            }
         });
         avatar =view.findViewById((R.id.img_avatar));
 //        tvMemberName.setText(User.getUserInfo(SPField.FIELD_NICKNAME,null));

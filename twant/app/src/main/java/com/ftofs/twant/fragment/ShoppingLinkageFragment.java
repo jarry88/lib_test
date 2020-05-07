@@ -1,7 +1,6 @@
 package com.ftofs.twant.fragment;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -26,16 +25,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.LinkageViewSecondaryAdapter;
 import com.ftofs.twant.adapter.ShopGoodsListAdapter;
+import com.ftofs.twant.adapter.StoreCategoryListAdapter;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.ElemeGroupedItem;
 import com.ftofs.twant.entity.Goods;
+import com.ftofs.twant.entity.LinkageGoodsItem;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.view.LinkageView;
 import com.ftofs.twant.widget.SlantedWidget;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.kunminx.linkage.LinkageRecyclerView;
@@ -52,10 +58,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-
-import static com.ftofs.twant.R.drawable.white_4dp_right_radius_bg;
 
 
 /**
@@ -63,9 +66,10 @@ import static com.ftofs.twant.R.drawable.white_4dp_right_radius_bg;
  *
  * @author gzp
  */
-public class ShoppingLinkageFragment extends BaseFragment implements View.OnClickListener{
+public class ShoppingLinkageFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
 
     LinkageRecyclerView linkage;
+    LinkageView linkageView;
     private RecyclerView rvSecondList;
     private RecyclerView rvPrimaryList;
     private ShoppingSpecialFragment parentFragment;
@@ -79,12 +83,76 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     private EasyJSONArray zoneGoodsCategoryVoList;
     private boolean linkageLoaded;
     private Typeface typeface;
+    private RecyclerView rvLinkageSecondList;
+    private RecyclerView rvLinkagePrimaryList;
+    private List<Goods> linkageItems=new ArrayList<>();
+    LinkageViewSecondaryAdapter secondaryAdapter;
+    private StoreCategoryListAdapter primaryAdapter;
+    private List<StoreLabel> primaryLabelList=new ArrayList<>();
+    OnSelectedListener onSelectedListener;
 
 
     public static ShoppingLinkageFragment newInstance (ShoppingSpecialFragment shoppingSpecialFragment)  {
         ShoppingLinkageFragment fragment = new ShoppingLinkageFragment();
         fragment.parentFragment = shoppingSpecialFragment;
         return fragment;
+    }
+
+
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.layout_shopping_linkage, container, false);
+        return view;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        typeface = AssetsUtil.getTypeface(_mActivity,"fonts/din_alternate_bold.ttf");
+
+        linkageView = view.findViewById(R.id.linkage_view);
+        rvLinkageSecondList = linkageView.findViewById(R.id.rv_secondary);
+        rvLinkagePrimaryList = linkageView.findViewById(R.id.rv_primary);
+
+        linkage = view.findViewById(R.id.linkage);
+        rvSecondList = linkage.findViewById(R.id.rv_secondary);
+        rvPrimaryList = linkage.findViewById(R.id.rv_primary);
+
+        rvGoodsWithoutCategory = view.findViewById(R.id.rv_shopping_good_without_category_list);
+        initAdapter();
+
+//        initLinkage();
+        initGoodsAdapter();
+
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
+        layoutParams.height = parentFragment.scrollView.getHeight() - 44;
+//        layoutParams1.height =parentFragment.scrollView.getHeight();
+        rvSecondList.setLayoutParams(layoutParams);
+//        rvPrimaryList.setLayoutParams(layoutParams1);
+
+        SLog.info("isNestedScrollingEnabled[%s]", rvSecondList.isNestedScrollingEnabled());
+
+        rvSecondList.setNestedScrollingEnabled(false);
+        rvSecondList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                SLog.info("__newState[%d]", newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    int linkageY_ = Util.getYOnScreen(linkage) + linkage.getHeight();
+                    SLog.info("linkageY_[%s]", linkageY_);
+//                    hideFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    showFloatButton();
+                }
+            }
+        });
     }
 
     @Override
@@ -98,7 +166,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     }
 
     private void updateView() {
-        linkage.setVisibility(parentFragment.hasGoodsCategory);
+        linkage.setVisibility(View.GONE);
         rvGoodsWithoutCategory.setVisibility(1 - parentFragment.hasGoodsCategory);
         if (parentFragment.hasGoodsCategory == 1) {
             if (zoneGoodsCategoryVoList != null && !linkageLoaded) {
@@ -145,81 +213,39 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
+        LinearLayoutManager linkageSecondManager = new LinearLayoutManager(_mActivity);
+        LinearLayoutManager linkagePrimaryManager = new LinearLayoutManager(_mActivity);
         rvGoodsWithoutCategory.setLayoutManager(linearLayoutManager);
         rvGoodsWithoutCategory.setAdapter(shopGoodsListAdapter);
 
+        secondaryAdapter = new LinkageViewSecondaryAdapter(_mActivity,linkageItems);
+        rvLinkageSecondList.setLayoutManager( linkageSecondManager);
+        rvLinkageSecondList.setAdapter(secondaryAdapter);
+        rvLinkageSecondList.setNestedScrollingEnabled(false);
+
+        primaryAdapter = new StoreCategoryListAdapter(_mActivity,R.layout.store_category_list_item, primaryLabelList, this);
+        rvLinkagePrimaryList.setLayoutManager( linkagePrimaryManager);
+        rvLinkagePrimaryList.setAdapter(primaryAdapter);
+        rvLinkagePrimaryList.setNestedScrollingEnabled(false);
+////
+//        shopGoodsListAdapter.setEnableLoadMore(true);
+//        shopGoodsListAdapter.setOnLoadMoreListener(() -> {
+//            SLog.info("onLoadMoreRequested");
 //
-        shopGoodsListAdapter.setEnableLoadMore(true);
-        shopGoodsListAdapter.setOnLoadMoreListener(() -> {
-            SLog.info("onLoadMoreRequested");
-
-//                if (!hasMore) {
-//                    shopGoodsListAdapter.setEnableLoadMore(false);
-//                    return;
-//                }
-//                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
-        }, rvGoodsWithoutCategory);
+////                if (!hasMore) {
+////                    shopGoodsListAdapter.setEnableLoadMore(false);
+////                    return;
+////                }
+////                loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
+//        }, rvGoodsWithoutCategory);
     }
-
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_shopping_linkage, container, false);
-        return view;
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        typeface = AssetsUtil.getTypeface(_mActivity,"fonts/din_alternate_bold.ttf");
-
-        Util.setOnClickListener(view, R.id.btn_test, this);
-
-        linkage = view.findViewById(R.id.linkage);
-        rvSecondList = linkage.findViewById(R.id.rv_secondary);
-        rvPrimaryList = linkage.findViewById(R.id.rv_primary);
-        rvGoodsWithoutCategory = view.findViewById(R.id.rv_shopping_good_without_category_list);
-        initAdapter();
-
-//        initLinkage();
-        initGoodsAdapter();
-
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
-        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
-        layoutParams.height = parentFragment.scrollView.getHeight() - 44;
-//        layoutParams1.height =parentFragment.scrollView.getHeight();
-        rvSecondList.setLayoutParams(layoutParams);
-//        rvPrimaryList.setLayoutParams(layoutParams1);
-
-        SLog.info("isNestedScrollingEnabled[%s]", rvSecondList.isNestedScrollingEnabled());
-
-        rvSecondList.setNestedScrollingEnabled(false);
-        rvSecondList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                SLog.info("__newState[%d]", newState);
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    int linkageY_ = Util.getYOnScreen(linkage) + linkage.getHeight();
-                    SLog.info("linkageY_[%s]", linkageY_);
-//                    hideFloatButton();
-                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    showFloatButton();
-                }
-            }
-        });
-    }
-
-
     public void updateGoodVoList(EasyJSONArray zoneGoodsVoList) {
         try {
             for (Object object1 : zoneGoodsVoList) {
                 EasyJSONObject goods = (EasyJSONObject) object1;
                 Goods goodsInfo = Goods.parse(goods);
                 goodsList.add(goodsInfo);
+
                 rvGoodsWithoutCategory.setVisibility(View.VISIBLE);
             }
             shopGoodsListAdapter.setNewData(goodsList);
@@ -241,6 +267,12 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
             SLog.info("here");
         }
     }
+
+    @Override
+    public void onSelected(PopupType type, int id, Object extra) {
+
+    }
+
 
     private static class ElemePrimaryAdapterConfig implements ILinkagePrimaryAdapterConfig {
 
@@ -413,16 +445,17 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     }
 
     private void initLinkage() {
-        if (items == null || items.size() == 0) {
-            return;
-        }
+//        if (items == null || items.size() == 0) {
+//            return;
+//        }
 
-        ElemePrimaryAdapterConfig primaryAdapterConfig = new ElemePrimaryAdapterConfig(getContext());
-        primaryAdapterConfig.setBackgroundColor(R.color.mask15_background_color, getResources().getDrawable(white_4dp_right_radius_bg));
-        SLog.info("twColor%s,%d", twColor, items.size());
+//        ElemePrimaryAdapterConfig primaryAdapterConfig = new ElemePrimaryAdapterConfig(getContext());
+//        primaryAdapterConfig.setBackgroundColor(R.color.mask15_background_color, getResources().getDrawable(white_4dp_right_radius_bg));
+//        SLog.info("twColor%s,%d", twColor, items.size());
 //        primaryAdapterConfig.setTwColor(twColor);
-        ElemeSecondaryAdapterConfig secondaryAdapterConfig = new ElemeSecondaryAdapterConfig(typeface,getContext());
-        linkage.init(items, primaryAdapterConfig, secondaryAdapterConfig);
+        primaryAdapter.setNewData(primaryLabelList);
+        secondaryAdapter.setNewData(linkageItems);
+//        linkage.init(items, primaryAdapterConfig, secondaryAdapterConfig);
         linkageLoaded = true;
     }
 
@@ -435,6 +468,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         try {
             SLog.info("設置二級聯動列表數據");
             items.clear();
+            primaryLabelList.clear();
             for (Object object : zoneGoodsCategoryVoList) {
                 EasyJSONObject categoryData = (EasyJSONObject) object;
 
@@ -445,6 +479,9 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
                     continue;
                 }
                 items.add(category);
+                StoreLabel storeLabel = new StoreLabel();
+                storeLabel.setStoreLabelName(groupName);
+                primaryLabelList.add(storeLabel);
                 for (Object object1 : goodsList) {
                     EasyJSONObject goods = (EasyJSONObject) object1;
                     String goodsName = goods.getSafeString("goodsName");
@@ -466,6 +503,8 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
                             StringUtil.formatPrice(getContext(), price, 0), promotionDiscountRate, batchPrice0, commonId, appUsable > 0);
                     ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
                     items.add(item1);
+
+                    linkageItems.add(Goods.parse(goods));
                 }
 
             }

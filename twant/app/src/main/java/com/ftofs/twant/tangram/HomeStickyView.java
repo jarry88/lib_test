@@ -146,7 +146,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     }
 
     private void gotoTestFragment() {
-        Util.startFragment(ShoppingSpecialFragment.newInstance(19+(int)(Math.random()*10)%2));
+        Util.startFragment(ShoppingSpecialFragment.newInstance(20));//+(int)(Math.random()*10)%2)
 
     }
 
