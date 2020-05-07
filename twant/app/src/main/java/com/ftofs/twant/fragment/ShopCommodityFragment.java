@@ -572,11 +572,28 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                                 titleGoodsPair.itemType = Constant.ITEM_TYPE_TITLE;
                                 if (!StringUtil.isEmpty(title)) {
                                     titleGoodsPair.setItemTitle(title);
-                                    title = "";
+//                                    title = "";
                                     goodsPairList.add(0, titleGoodsPair);
+//                                    goodsList.add(0, goods);
                                 }
 
                             };
+
+                        }
+                        
+                        if (goodsList != null && goodsList.size() > 0) {
+                            SLog.info("當前list Size %d,type %d,title %s",goodsList.size(),goodsList.get(0).getItemType(),title);
+
+                            if(goodsList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE&&currPage==0){
+                                Goods goods =new Goods(Constant.ITEM_TYPE_TITLE);
+                                if (!StringUtil.isEmpty(title)) {
+                                    goods.name = title;
+                                    title = "";
+                                    goodsList.add(0, goods);
+                                }
+
+                            };
+
                         }
 
                         shopGoodsGridAdapter.setNewData(goodsPairList);

@@ -38,6 +38,10 @@ public class Goods implements MultiItemEntity {
     public String jingle;
     public double price;
 
+    public Goods(int itemType) {
+        this.itemType = itemType;
+    }
+
     public static Goods parse(EasyJSONObject goods) throws Exception {
 
         String goodsName = goods.getSafeString("goodsName");
