@@ -749,7 +749,7 @@ public class TwantApplication extends Application {
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.mipmap.ic_launcher)
 //                        .setLargeIcon(BitmapFactory.decodeStream(url.openStream()))
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.shape_btn_corners_solid))
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.notification_large_icon_bg))
                         .setContentIntent(pi)
                         .setAutoCancel(true)
                         .build();

@@ -343,7 +343,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/dp_10"
-        android:textColor="@color/text_blue"
+        android:textColor="@color/tw_blue"
         android:text="當前環境："
         android:id="@+id/text_build"
         android:visibility="gone"/>

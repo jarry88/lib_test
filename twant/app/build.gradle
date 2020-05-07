@@ -222,7 +222,9 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.0.0'
     implementation 'com.kunminx.linkage:linkage-recyclerview:1.9.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
-    implementation(name: 'taifung-release-v20180615', ext: 'aar')
+
+    // implementation(name: 'taifung-release-v20180615', ext: 'aar')
+
     implementation(name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
     implementation(name: 'mzbanner-release', ext: 'aar')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
