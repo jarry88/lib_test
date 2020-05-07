@@ -580,7 +580,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             };
 
                         }
-                        
+
                         if (goodsList != null && goodsList.size() > 0) {
                             SLog.info("當前list Size %d,type %d,title %s",goodsList.size(),goodsList.get(0).getItemType(),title);
 
