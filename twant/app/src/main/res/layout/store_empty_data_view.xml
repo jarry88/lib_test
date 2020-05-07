@@ -8,9 +8,10 @@
 
     <TextView
         android:id="@+id/tv_empty_hint"
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:textSize="14sp"
         android:textColor="#FF676666">
     </TextView>
