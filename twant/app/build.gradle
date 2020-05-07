@@ -167,7 +167,7 @@ dependencies {
 
     // 商店首頁公告垂直跑馬燈
     implementation 'com.github.zrunker:ZTextView:v1.0.2'
-    implementation 'com.github.thunder413:DateTimeUtils:3.0'
+    // implementation 'com.github.thunder413:DateTimeUtils:3.0'
     implementation 'com.github.GrenderG:Toasty:1.4.2'
 
     // 仿微信軟鍵盤、表情切換

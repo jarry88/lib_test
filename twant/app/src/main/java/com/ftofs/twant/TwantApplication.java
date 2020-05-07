@@ -49,7 +49,6 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.vo.member.MemberVo;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
-import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.huawei.hms.aaid.HmsInstanceId;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -236,10 +235,6 @@ public class TwantApplication extends Application {
             SqliteUtil.imLogin();
         }
 
-
-        // 設置時間處理工具的時區
-        TimeZone tz = TimeZone.getDefault();
-        DateTimeUtils.setTimeZone(tz.getID());
 
 
         // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT

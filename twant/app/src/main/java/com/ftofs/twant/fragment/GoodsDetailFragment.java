@@ -50,6 +50,7 @@ import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
@@ -66,7 +67,6 @@ import com.ftofs.twant.widget.SpecSelectPopup;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.StoreGiftPopup;
 import com.ftofs.twant.widget.StoreVoucherPopup;
-import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.rd.PageIndicatorView;
@@ -1367,11 +1367,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         // 表明有限時折扣活動
                         String startTime = discount.getSafeString("startTime");
                         String endTime = discount.getSafeString("endTime");
-                        Date date = DateTimeUtils.formatDate(endTime);
-                        Date startDate = DateTimeUtils.formatDate(startTime);
-                        discountStartTime = (int) (startDate.getTime() / 1000);
+                        Jarbon date = Jarbon.parse(endTime);
+                        Jarbon startDate = Jarbon.parse(startTime);
+                        discountStartTime = startDate.getTimestamp();
                         SLog.info("startTime[%s],endTime[%s],discountStart[%s]", startTime, endTime, discountState);
-                        discountEndTime = (int) (date.getTime() / 1000);
+                        discountEndTime = date.getTimestamp();
                         SLog.info("discountStartTime[%d],discountEndTime[%d]", discountStartTime, discountEndTime);
                     }
 
