@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +57,7 @@ import com.ftofs.twant.widget.SlantedWidget;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
 import com.kunminx.linkage.LinkageRecyclerView;
+import com.kunminx.linkage.adapter.viewholder.LinkagePrimaryViewHolder;
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryFooterViewHolder;
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryHeaderViewHolder;
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryViewHolder;
@@ -317,6 +321,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             //商品列表
             if (hasGoodsCategory == Constant.TRUE_INT) {
                 if (zoneGoodsCategoryVoList != null) {
+
                     updateLinkage(zoneGoodsCategoryVoList);
                 }
 
@@ -427,6 +432,75 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             }
         });
 
+    }
+    private static class ElemePrimaryAdapterConfig implements ILinkagePrimaryAdapterConfig {
+
+        private Context mContext;
+        private int backgroundColor;
+        private Drawable default_drawbg;
+
+        public ElemePrimaryAdapterConfig(Context context) {
+            this.mContext = context;
+        }
+
+        public void setTwColor(int twColor) {
+            this.twColor = twColor;
+        }
+
+        private int twColor = R.color.tw_black;
+
+        @Override
+        public void setContext(Context context) {
+//            mContext = ;
+        }
+
+        public void setBackgroundColor(int color, Drawable bg) {
+            backgroundColor = color;
+            default_drawbg = bg;
+        }
+
+
+        @Override
+        public int getLayoutId() {
+            return R.layout.adapter_linkage_primary;
+        }
+
+        @Override
+        public int getGroupTitleViewId() {
+            return R.id.tv_group;
+        }
+
+        @Override
+        public int getRootViewId() {
+            return R.id.layout_group;
+        }
+
+        @Override
+        public void onBindViewHolder(LinkagePrimaryViewHolder holder, boolean selected, String title) {
+            TextView tvTitle = ((TextView) holder.mGroupTitle);
+            tvTitle.setText(title);
+            View blue = holder.mLayout.findViewById(R.id.view_border);
+            blue.setVisibility(selected ? View.VISIBLE : View.GONE);
+            if (selected) {
+                tvTitle.setBackground(default_drawbg);
+                holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
+            } else {
+                holder.mLayout.setBackgroundColor(Color.argb(26, 0, 0, 0));
+                tvTitle.setBackgroundColor(Color.argb(0, 0, 0, 0));
+            }
+            tvTitle.setTextColor(ContextCompat.getColor(mContext,
+                    selected ? R.color.tw_blue : R.color.tw_black));
+            tvTitle.setEllipsize(selected ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+            tvTitle.setFocusable(selected);
+            tvTitle.setFocusableInTouchMode(selected);
+            tvTitle.setMarqueeRepeatLimit(selected ? -1 : 0);
+        }
+
+        @Override
+        public void onItemClick(LinkagePrimaryViewHolder holder, View view, String title) {
+            //TODO
+            ToastUtil.error(mContext, title);
+        }
     }
     private static class ElemeSecondaryAdapterConfig implements ILinkageSecondaryAdapterConfig<ElemeGroupedItem.ItemInfo> {
 
@@ -565,8 +639,10 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             }
             Typeface typeface =AssetsUtil.getTypeface(_mActivity,"fonts/din_alternate_bold.ttf");
             ElemeSecondaryAdapterConfig secondaryAdapterConfig = new ElemeSecondaryAdapterConfig(typeface,getContext());
-            ILinkagePrimaryAdapterConfig primaryAdapterConfig=null;
+            ElemePrimaryAdapterConfig primaryAdapterConfig=new ElemePrimaryAdapterConfig(getContext());
             linkage.init(items, primaryAdapterConfig, secondaryAdapterConfig);
+            viewPager.setVisibility(View.GONE);
+            linkage.setVisibility(View.VISIBLE);
 
 
         } catch (Exception e) {

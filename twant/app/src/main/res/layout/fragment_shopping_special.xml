@@ -426,8 +426,8 @@
                         android:id="@+id/linkage"
                         android:visibility="gone"
                         android:layout_width="match_parent"
-                        android:layout_height="500dp"
-                        android:background="@color/tw_blue"/>
+                        android:layout_height="wrap_content"
+                        />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 
