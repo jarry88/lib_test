@@ -694,7 +694,6 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                                 GoodsPair titleItem = new GoodsPair();
                                 titleItem.itemType = Constant.ITEM_TYPE_TITLE;
                                 titleItem.setItemTitle(title);
-                                title = "";
                                 goodsPairList.add(0,titleItem);
 //                                int s = shopGoodsGridAdapter.getData().size();
                                 shopGoodsGridAdapter.notifyItemInserted(0);
@@ -702,6 +701,19 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             }
 
                         }
+                    }
+                    if (goodsList != null && goodsList.size() > 0) {
+                        if(goodsList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE){
+                            //這裏是僅僅針對初始默認情況
+                            if (currPage == 1) {
+                                Goods goods =new Goods(Constant.ITEM_TYPE_TITLE);
+                                goods.name = title;
+                                title = "";
+                                goodsList.add(0, goods);
+                                shopGoodsGridAdapter.notifyItemInserted(0);
+                                shopGoodsListAdapter.notifyItemInserted(0);
+                            }
+                        };
                     }
 
                     storeCategoryListAdapter.setNewData(shopStoreLabelList);
