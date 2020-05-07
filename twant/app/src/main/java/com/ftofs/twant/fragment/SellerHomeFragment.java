@@ -447,7 +447,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                         announcement.getInt("articleId"), title, content);
                 storeAnnouncement.createTime = Jarbon.parse(announcement.getSafeString("createTime")).getTimestampMillis();
                 storeAnnouncementList.add(storeAnnouncement);
-                announcementTextList.add(Html.fromHtml("<font color='#FFFFFF' size = '2'>" + title + "</font>"));
+                announcementTextList.add(Html.fromHtml("<font color='#2A292A' size = '2'>" + title + "</font>"));
             }
             EasyJSONArray figureList = responseObj.getSafeArray("datas.figureList");
             currGalleryImageList.clear();
