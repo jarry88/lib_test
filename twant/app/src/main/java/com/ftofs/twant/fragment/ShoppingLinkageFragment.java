@@ -113,6 +113,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         typeface = AssetsUtil.getTypeface(_mActivity,"fonts/din_alternate_bold.ttf");
 
         linkageView = view.findViewById(R.id.linkage_view);
+
         rvLinkageSecondList = linkageView.findViewById(R.id.rv_secondary);
         rvLinkagePrimaryList = linkageView.findViewById(R.id.rv_primary);
 
@@ -205,7 +206,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
     private void initAdapter() {
         goodsList = new ArrayList<>();
-        shopGoodsListAdapter = new ShopGoodsListAdapter(_mActivity, goodsList);
+        shopGoodsListAdapter = new ShopGoodsListAdapter(_mActivity, goodsList,R.layout.adapter_shopping_zone_secondary_linear);
         shopGoodsListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

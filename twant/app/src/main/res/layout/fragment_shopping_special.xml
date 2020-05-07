@@ -405,6 +405,8 @@
                         android:id="@+id/shopping_tab_layout"
                         android:layout_width="match_parent"
                         android:layout_height="44dp"
+                        android:background="@drawable/border_type_d"
+                        app:tabBackground="@color/tw_white"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tool_bar"

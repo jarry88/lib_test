@@ -120,7 +120,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private RecyclerView rvSecondList;
     private RecyclerView rvPrimaryList;
     List<ElemeGroupedItem> items = new ArrayList<>();
-
+    private int containerViewHeight;
 
 
     @OnClick(R.id.btn_goods)
@@ -171,6 +171,15 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     void back() {
         hideSoftInputPop();
     }
+
+    public boolean getScrollEnale() {
+        int Y=Util.getYOnScreen(viewPager);
+        if (Y >= Util.dip2px(_mActivity, 88)) {
+            return true;
+        }
+        return false;
+    }
+
     static class scrollStateHandler extends Handler {
         NestedScrollView scrollViewContainer;
         ShoppingSpecialFragment fragment;
@@ -243,6 +252,22 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         initLinkage();
         loadData();
 //        loadTestData();
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+        if (containerViewHeight == 0&&hasGoodsCategory==1) {
+            containerViewHeight = scrollView.getHeight();
+            SLog.info("containerViewHeight[%d]", containerViewHeight);
+
+            ViewGroup.LayoutParams layoutParams = rvSecondList.getLayoutParams();
+            LinearLayout .LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
+//            layoutParams.height = containerViewHeight-44;
+            layoutParams1.height = containerViewHeight;
+            rvSecondList.setLayoutParams(layoutParams);
+            rvPrimaryList.setLayoutParams(layoutParams1);
+        }
     }
 
     private void loadTestData() {
@@ -345,10 +370,10 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         int[] colors={Color.parseColor(appColor),0xff8B3097, 0xffD14E7A};
         GradientDrawable bannerBackGround = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
         llBanner.setBackground(bannerBackGround);
-        tabLayout.setTabTextColors(Color.parseColor(appColor),Color.parseColor(StringUtil.addAlphaToColor(appColor,60)));
+        tabLayout.setTabTextColors(Color.parseColor(StringUtil.addAlphaToColor(appColor,60)),Color.parseColor(appColor));
         tabLayout.setSelectedTabIndicatorColor(Color.parseColor(appColor));
     }
-    private void showFloatButton() {
+    public void showFloatButton() {
         if (floatButtonShown){
             return;
         }
@@ -363,7 +388,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         floatButtonShown = true;
     }
 
-    private void hideFloatButton() {
+    public void hideFloatButton() {
         if (!floatButtonShown) {
             return;
         }
@@ -412,8 +437,25 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         rvPrimaryList.setLayoutParams(layoutParams1);
 
         SLog.info("isNestedScrollingEnabled[%s]", rvSecondList.isNestedScrollingEnabled());
+        SLog.info("scrollView.getHeight() [%d]",scrollView.getHeight());
 
-        rvSecondList.setNestedScrollingEnabled(true);
+
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                int linkageY = Util.getYOnScreen(linkage);
+                int linkageY_ = linkageY + linkage.getHeight();
+                int containerViewY = Util.getYOnScreen(scrollView);
+
+                SLog.info("linkageY[%s], containerViewY[%s],linkageY_[%s]", linkageY, containerViewY,linkageY_);
+                if (linkageY <= containerViewY+Util.dip2px(_mActivity,44)) {  // 如果列表滑动到顶部，则启用嵌套滚动
+                    rvSecondList.setNestedScrollingEnabled(true);
+                } else {
+                    rvSecondList.setNestedScrollingEnabled(false);
+                }
+            }
+        });
+        rvSecondList.setNestedScrollingEnabled(false);
         rvSecondList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -726,6 +768,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         titleList.add("-");
         titleList.add("-");
         tabLayout.setOnClickListener(this);
+
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(LINKAGE_FRAGMENT)));
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(STORE_FRAGMENT)));
 
@@ -742,23 +785,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         layoutParams.height=Util.getScreenDimension(getContext()).second-Util.dip2px(_mActivity,88);
         //此處應獲取屏幕高度減標題
 
-        SLog.info("scrollView.getHeight() [%d]",scrollView.getHeight());
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);
-        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                int linkageY = Util.getYOnScreen(tabLayout);
-                int containerViewY = Util.getYOnScreen(scrollView);
-
-                SLog.info("linkageY[%s], containerViewY[%s],", linkageY, containerViewY);
-//                if (linkageY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
-//                    rvSecondList.setNestedScrollingEnabled(true);
-//                } else {
-//                    rvSecondList.setNestedScrollingEnabled(false);
-//                }
-            }
-        });
     }
     private void setBannerData(EasyJSONArray discountBannerList) {
 //        SLog.info("bannerListLength %d",discountBannerList.length());
