@@ -49,8 +49,7 @@ import com.macau.pay.sdk.MPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.umeng.analytics.pro.k;
-import com.vivebest.taifung.api.PaymentHandler;
-import com.vivebest.taifung.api.TaifungSDK;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -449,13 +448,13 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
                 case PayCardItem.PAY_TYPE_WALLET:
                     doWalletPay();
                     break;
-                case PayCardItem.PAY_TYPE_TAIFUNG:
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                        ToastUtil.error(_mActivity, "大豐銀行電子支付暫未支持Android 10");
-                        return;
-                    }
-                    doTaiFungPay();
-                    break;
+//                case PayCardItem.PAY_TYPE_TAIFUNG:
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//                        ToastUtil.error(_mActivity, "大豐銀行電子支付暫未支持Android 10");
+//                        return;
+//                    }
+//                    doTaiFungPay();
+//                    break;
                 case PayCardItem.PAY_TYPE_WEIXING:
                     doWeixinPay();
                     break;
@@ -526,85 +525,85 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         });
     }
 
-    private void doTaiFungPay() {
-        SLog.info("大豐支付");
-
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
-
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "payId", payId);
-
-        SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_TAIFUNG_PAY, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(_mActivity, e);
-            }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-
-                    if (ToastUtil.checkError(_mActivity, responseObj)) {
-                        return;
-                    }
-
-                    // 有些產品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
-                    if (responseObj.exists("datas.isPay")) {
-                        int isPay = responseObj.getInt("datas.isPay");
-                        if (isPay == 1) {
-                            // isPay為1 表示已經支付，無需請求大豐SDK
-                            PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_TAIFUNG);
-                            hideSoftInputPop();
-                            return;
-                        }
-                    }
-
-                    String uuid = responseObj.getSafeString("datas.tx_uuid");
-                    String notifyUrl = responseObj.getSafeString("datas.notify_url");
-
-                    ToastUtil.success(_mActivity, getString(R.string.text_open_pay_ui));
-                    hideSoftInputPop();
-
-                    SLog.info("uuid[%s], notifyUrl[%s]", uuid, notifyUrl);
-                    TaifungSDK.startPay(MainActivity.getInstance(), uuid, Config.TAIFUNG_PAY_MER_CUST_NO, Config.TAIFUNG_PAY_SECRET_KEY,
-                            null, Config.TAIFUNG_PAY_SERVER_URL, notifyUrl, new PaymentHandler() {
-                                @Override
-                                public void handlePaymentResult(Intent data) {
-                                    if (data != null) {
-                                        /*
-                                         * code：支付結果碼 -1：失敗、 0：取消、1：成功
-                                         * error_msg：支付結果信息
-                                         */
-                                        int code = data.getExtras().getInt("code", 0);
-                                        String errorMsg = data.getExtras().getString("result");
-                                        SLog.info("code[%d], errorMsg[%s]", code, errorMsg);
-
-                                        if (code == -1) {
-                                            ToastUtil.error(_mActivity, errorMsg);
-                                        } else if (code == 0) {
-                                            ToastUtil.info(_mActivity, errorMsg);
-                                        } else if (code == 1) {
-                                            ToastUtil.success(_mActivity, errorMsg);
-
-                                            PayUtil.onPaySuccess(true, payId, PayUtil.VENDOR_TAIFUNG);
-                                        }
-                                    }
-                                }
-                            });
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
-            }
-        });
-    }
+//    private void doTaiFungPay() {
+//        SLog.info("大豐支付");
+//
+//        String token = User.getToken();
+//        if (StringUtil.isEmpty(token)) {
+//            return;
+//        }
+//
+//        EasyJSONObject params = EasyJSONObject.generate(
+//                "token", token,
+//                "payId", payId);
+//
+//        SLog.info("params[%s]", params);
+//        Api.getUI(Api.PATH_TAIFUNG_PAY, params, new UICallback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                ToastUtil.showNetworkError(_mActivity, e);
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, String responseStr) throws IOException {
+//                try {
+//                    SLog.info("responseStr[%s]", responseStr);
+//
+//                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+//
+//                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+//                        return;
+//                    }
+//
+//                    // 有些產品抵扣優惠券后，金額變為0，就不需要走支付流程了,直接跳轉到支付成功頁面
+//                    if (responseObj.exists("datas.isPay")) {
+//                        int isPay = responseObj.getInt("datas.isPay");
+//                        if (isPay == 1) {
+//                            // isPay為1 表示已經支付，無需請求大豐SDK
+//                            PayUtil.onPaySuccess(false, payId, PayUtil.VENDOR_TAIFUNG);
+//                            hideSoftInputPop();
+//                            return;
+//                        }
+//                    }
+//
+//                    String uuid = responseObj.getSafeString("datas.tx_uuid");
+//                    String notifyUrl = responseObj.getSafeString("datas.notify_url");
+//
+//                    ToastUtil.success(_mActivity, getString(R.string.text_open_pay_ui));
+//                    hideSoftInputPop();
+//
+//                    SLog.info("uuid[%s], notifyUrl[%s]", uuid, notifyUrl);
+//                    TaifungSDK.startPay(MainActivity.getInstance(), uuid, Config.TAIFUNG_PAY_MER_CUST_NO, Config.TAIFUNG_PAY_SECRET_KEY,
+//                            null, Config.TAIFUNG_PAY_SERVER_URL, notifyUrl, new PaymentHandler() {
+//                                @Override
+//                                public void handlePaymentResult(Intent data) {
+//                                    if (data != null) {
+//                                        /*
+//                                         * code：支付結果碼 -1：失敗、 0：取消、1：成功
+//                                         * error_msg：支付結果信息
+//                                         */
+//                                        int code = data.getExtras().getInt("code", 0);
+//                                        String errorMsg = data.getExtras().getString("result");
+//                                        SLog.info("code[%d], errorMsg[%s]", code, errorMsg);
+//
+//                                        if (code == -1) {
+//                                            ToastUtil.error(_mActivity, errorMsg);
+//                                        } else if (code == 0) {
+//                                            ToastUtil.info(_mActivity, errorMsg);
+//                                        } else if (code == 1) {
+//                                            ToastUtil.success(_mActivity, errorMsg);
+//
+//                                            PayUtil.onPaySuccess(true, payId, PayUtil.VENDOR_TAIFUNG);
+//                                        }
+//                                    }
+//                                }
+//                            });
+//                } catch (Exception e) {
+//                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+//                }
+//            }
+//        });
+//    }
 
     private void doWeixinPay() {
         String token = User.getToken();

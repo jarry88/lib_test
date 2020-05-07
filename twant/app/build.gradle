@@ -19,9 +19,9 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
 
-        versionCode 123
+        versionCode 124
 
-        versionName "1.2.3.80"
+        versionName "1.2.3.81"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -233,7 +233,7 @@ dependencies {
     implementation 'com.kunminx.linkage:linkage-recyclerview:1.9.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
 
-    implementation(name: 'taifung-release-v20180615', ext: 'aar')
+    // implementation(name: 'taifung-release-v20180615', ext: 'aar')
     implementation(name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
