@@ -11,8 +11,8 @@
     <View android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:background="@drawable/white_6dp_radius_bg"
-        android:layout_marginStart="@dimen/margin12"
-        android:layout_marginEnd="@dimen/margin12"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginEnd="10dp"
         android:id="@+id/view_bg">
 
     </View>
@@ -20,7 +20,7 @@
         android:id="@+id/iv_goods_img"
         android:layout_width="85dp"
         android:layout_height="86dp"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="8dp"
         android:scaleType="fitXY"
         app:riv_corner_radius="10dp"
         app:riv_border_width="1dp"
@@ -49,9 +49,10 @@
         android:id="@+id/tv_goods_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:textColor="@color/tw_black"
         android:maxLines="1"
+        android:ellipsize="end"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintHorizontal_weight="1"
@@ -64,10 +65,11 @@
 
     <TextView
         android:id="@+id/tv_goods_comment"
+        app:layout_constraintLeft_toLeftOf="@id/tv_goods_name"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_4"
-        android:layout_marginStart="16dp"
         android:maxLines="2"
         android:ellipsize="end"
         android:text=""

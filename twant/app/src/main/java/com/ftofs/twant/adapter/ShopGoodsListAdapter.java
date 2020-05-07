@@ -2,7 +2,11 @@ package com.ftofs.twant.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -12,6 +16,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
+import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.sxu.shadowdrawable.ShadowDrawable;
@@ -29,6 +34,7 @@ import me.yokeyword.fragmentation.SupportActivity;
 public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseViewHolder> {
     Context context;
     boolean isShopping = false;
+    Typeface typeFace;
 
     public ShopGoodsListAdapter(Context context, @Nullable List<Goods> data) {
         super(data);
@@ -46,6 +52,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
         addItemType(Constant.ITEM_TYPE_NORMAL, resId);
         addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
         addItemType(Constant.ITEM_TYPE_TITLE, R.layout.shop_commodity_title);
+        this.typeFace = AssetsUtil.getTypeface(mActivity, "fonts/din_alternate_bold.ttf");
     }
 
     @Override
@@ -60,7 +67,16 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(goodsImage);
                 helper.setText(R.id.tv_goods_name, goods.name);
                 helper.setText(R.id.tv_goods_comment, goods.jingle);
-                helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context,  goods.price, 1,false));
+                TextView tvPrice = helper.getView(R.id.tv_goods_price);
+                tvPrice.setText(StringUtil.formatPrice(context,  goods.price, 1,false));
+
+                tvPrice.setTypeface(typeFace);
+//                TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
+//                tvOriginalPrice.setVisibility(View.VISIBLE);
+//                tvOriginalPrice.setText(StringUtil.formatPrice(mContext, item.info.getOriginal(), 0, true));
+//                tvOriginalPrice.setTypeface(typeFace);
+//                // 原價顯示刪除線
+//                tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             } else {
                 helper.addOnClickListener(R.id.btn_add_to_cart);
                 ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),
