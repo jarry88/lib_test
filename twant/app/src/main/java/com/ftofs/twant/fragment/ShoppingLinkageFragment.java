@@ -195,10 +195,12 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
                 int userId = User.getUserId();
                 if (id == R.id.btn_add_to_cart) {
                     if (userId > 0) {
-                        showSpecSelectPopup(commonId);
+                        parentFragment.showSpecSelectPopup(commonId);
                     } else {
                         Util.showLoginFragment();
                     }
+                }else {
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                 }
             }
         });
@@ -207,15 +209,15 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     private void initAdapter() {
         goodsList = new ArrayList<>();
         shopGoodsListAdapter = new ShopGoodsListAdapter(_mActivity, goodsList,R.layout.adapter_shopping_zone_secondary_linear);
-        shopGoodsListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Goods goods = goodsList.get(position);
-                int commonId = goods.id;
-
-                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-            }
-        });
+//        shopGoodsListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                Goods goods = goodsList.get(position);
+//                int commonId = goods.id;
+//
+//
+//            }
+//        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         LinearLayoutManager linkageSecondManager = new LinearLayoutManager(_mActivity);
         LinearLayoutManager linkagePrimaryManager = new LinearLayoutManager(_mActivity);

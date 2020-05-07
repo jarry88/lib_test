@@ -265,7 +265,9 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             LinearLayout .LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
 //            layoutParams.height = containerViewHeight-44;
             layoutParams1.height = containerViewHeight;
+            layoutParams1.weight = Util.dip2px(_mActivity,80);
             rvSecondList.setLayoutParams(layoutParams);
+
             rvPrimaryList.setLayoutParams(layoutParams1);
         }
     }
@@ -522,7 +524,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             TextView tvTitle = ((TextView) holder.mGroupTitle);
             tvTitle.setText(title);
             View blue = holder.mLayout.findViewById(R.id.view_border);
-            blue.setVisibility(selected ? View.VISIBLE : View.GONE);
+            blue.setVisibility(View.GONE);
             if (selected) {
                 tvTitle.setBackground(default_drawbg);
                 holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
@@ -531,7 +533,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 tvTitle.setBackgroundColor(Color.argb(0, 0, 0, 0));
             }
             tvTitle.setTextColor(ContextCompat.getColor(mContext,
-                    selected ? R.color.tw_blue : R.color.tw_black));
+                    selected ? R.color.tw_black : R.color.tw_black));
+            tvTitle.setTypeface(Typeface.defaultFromStyle(selected ?Typeface.BOLD:Typeface.NORMAL));
             tvTitle.setEllipsize(selected ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
             tvTitle.setFocusable(selected);
             tvTitle.setFocusableInTouchMode(selected);
@@ -541,7 +544,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         @Override
         public void onItemClick(LinkagePrimaryViewHolder holder, View view, String title) {
             //TODO
-            ToastUtil.error(mContext, title);
+//            ToastUtil.error(mContext, title);
         }
     }
     private static class ElemeSecondaryAdapterConfig implements ILinkageSecondaryAdapterConfig<ElemeGroupedItem.ItemInfo> {
@@ -597,12 +600,13 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
                 ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
                 TextView tvPrice=holder.getView(R.id.tv_goods_price);
-                TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
                 tvPrice.setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
-                if (item.info.show ) {
+                tvPrice.setTypeface(typeFace);
+
+                if (item.info.show) {
+                    TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
                     tvOriginalPrice.setVisibility(View.VISIBLE);
                     tvOriginalPrice.setText(StringUtil.formatPrice(mContext, item.info.getOriginal(), 0, true));
-                    tvPrice.setTypeface(typeFace);
                     tvOriginalPrice.setTypeface(typeFace);
                     // 原價顯示刪除線
                     tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -691,7 +695,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
-    private void showSpecSelectPopup(int commonId) {
+    public void showSpecSelectPopup(int commonId) {
         new XPopup.Builder(_mActivity)
                 // 如果不加这个，评论弹窗会移动到软键盘上面
                 .moveUpToKeyboard(false)

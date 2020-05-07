@@ -17,7 +17,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_weight="1"
         android:orientation="vertical">
         <LinearLayout
@@ -41,7 +41,7 @@
                 android:id="@+id/tv_sku_price"
                 android:layout_width="75dp"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="$129.00"
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
@@ -57,7 +57,7 @@
                 android:id="@+id/tv_goods_full_specs"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:textSize="13sp"
                 android:textColor="#929292"
@@ -68,7 +68,7 @@
                 android:id="@+id/tv_sku_count"
                 android:layout_width="75dp"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="end"
                 android:text="X 1"
                 android:textSize="13sp"
                 android:textColor="#929292"
