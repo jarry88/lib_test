@@ -422,6 +422,12 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/item_true" />
+                    <com.kunminx.linkage.LinkageRecyclerView
+                        android:id="@+id/linkage"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="500dp"
+                        android:background="@color/tw_blue"/>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 

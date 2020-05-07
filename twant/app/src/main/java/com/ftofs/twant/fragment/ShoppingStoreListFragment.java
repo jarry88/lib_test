@@ -61,6 +61,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
         super.onSupportVisible();
         SLog.info("onSupportVisible");
         if (zoneStoreVoList != null) {
+            parentFragment.viewPager.setVisibility(View.VISIBLE);
             if (storeListAdapter == null) {
                 storeListAdapter = new ShoppingStoreListAdapter(R.layout.store_view, storeItems);
             }
@@ -72,6 +73,12 @@ public class ShoppingStoreListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvStoreList = view.findViewById(R.id.rv_simple);
+        rvStoreList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
         storeListAdapter = new ShoppingStoreListAdapter(R.layout.store_view, storeItems);
         storeListAdapter.setOnItemChildClickListener((adapter, view1, position) -> {
             int id = view1.getId();

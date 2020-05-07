@@ -47,6 +47,7 @@ import com.ftofs.twant.view.TwantTabLayout;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
+import com.kunminx.linkage.LinkageRecyclerView;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -86,6 +87,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     TabLayout tabLayout;
     @BindView(R.id.shopping_viewpager)
     ViewPager viewPager;
+    @BindView(R.id.linkage)
+    LinkageRecyclerView linkage;
     private List<String> titleList;
     private List<Fragment> fragmentList= new ArrayList<>();
     private int LINKAGE_FRAGMENT=0;
@@ -368,6 +371,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     }
 
     private void initView(View view) {
+        linkage = view.findViewById(R.id.linkage);
         initBanner();
         initTabList();
     }
@@ -463,10 +467,10 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                int linkageY = Util.getYOnScreen(tabLayout);
-//                int containerViewY = Util.getYOnScreen(scrollView);
+                int linkageY = Util.getYOnScreen(tabLayout);
+                int containerViewY = Util.getYOnScreen(scrollView);
 
-//                SLog.info("linkageY[%s], containerViewY[%s],", linkageY, containerViewY);
+                SLog.info("linkageY[%s], containerViewY[%s],", linkageY, containerViewY);
 //                if (linkageY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
 //                    rvSecondList.setNestedScrollingEnabled(true);
 //                } else {

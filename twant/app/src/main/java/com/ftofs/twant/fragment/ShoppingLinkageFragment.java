@@ -63,10 +63,10 @@ import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 購物專場二級聯動子頁面
- *
+ *暂时页面内嵌套二级联动方案 后续研究
  * @author gzp
  */
-public class ShoppingLinkageFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class ShoppingLinkageFragment extends BaseFragment implements View.OnClickListener {
 
     LinkageRecyclerView linkage;
     LinkageView linkageView;
@@ -169,11 +169,14 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         linkage.setVisibility(View.GONE);
         rvGoodsWithoutCategory.setVisibility(1 - parentFragment.hasGoodsCategory);
         if (parentFragment.hasGoodsCategory == 1) {
+            parentFragment.viewPager.setVisibility(View.GONE);
+            parentFragment.linkage.setVisibility(View.VISIBLE);
             if (zoneGoodsCategoryVoList != null && !linkageLoaded) {
-                updateLinkage();
+//                updateLinkage();
             }
         } else {
             if (zoneGoodsVoList != null) {
+                parentFragment.viewPager.setVisibility(View.VISIBLE);
                 updateGoodVoList(zoneGoodsVoList);
             }
         }
@@ -223,7 +226,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         rvLinkageSecondList.setAdapter(secondaryAdapter);
         rvLinkageSecondList.setNestedScrollingEnabled(false);
 
-        primaryAdapter = new StoreCategoryListAdapter(_mActivity,R.layout.store_category_list_item, primaryLabelList, this);
+//        primaryAdapter = new StoreCategoryListAdapter(_mActivity,R.layout.store_category_list_item, primaryLabelList, this);
         rvLinkagePrimaryList.setLayoutManager( linkagePrimaryManager);
         rvLinkagePrimaryList.setAdapter(primaryAdapter);
         rvLinkagePrimaryList.setNestedScrollingEnabled(false);
@@ -268,10 +271,6 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         }
     }
 
-    @Override
-    public void onSelected(PopupType type, int id, Object extra) {
-
-    }
 
 
     private static class ElemePrimaryAdapterConfig implements ILinkagePrimaryAdapterConfig {
