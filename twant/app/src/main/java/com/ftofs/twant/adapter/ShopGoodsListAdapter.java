@@ -18,6 +18,8 @@ import com.sxu.shadowdrawable.ShadowDrawable;
 
 import java.util.List;
 
+import me.yokeyword.fragmentation.SupportActivity;
+
 
 /**
  * 商店產品Adapter
@@ -26,6 +28,7 @@ import java.util.List;
  */
 public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseViewHolder> {
     Context context;
+    boolean isShopping = false;
 
     public ShopGoodsListAdapter(Context context, @Nullable List<Goods> data) {
         super(data);
@@ -36,17 +39,38 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
         addItemType(Constant.ITEM_TYPE_TITLE, R.layout.shop_commodity_title);
     }
 
+    public ShopGoodsListAdapter(SupportActivity mActivity, List<Goods> goodsList, int resId) {
+        super(goodsList);
+        this.context = mActivity;
+        this.isShopping = true;
+        addItemType(Constant.ITEM_TYPE_NORMAL, resId);
+        addItemType(Constant.ITEM_TYPE_LOAD_END_HINT, R.layout.load_end_hint);
+        addItemType(Constant.ITEM_TYPE_TITLE, R.layout.shop_commodity_title);
+    }
+
     @Override
     protected void convert(BaseViewHolder helper, Goods goods) {
         int itemViewType = helper.getItemViewType();
         if (itemViewType == Constant.ITEM_TYPE_NORMAL) {
-            helper.addOnClickListener(R.id.btn_add_to_cart);
-            ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),
-                    Color.parseColor("#19000000"), Util.dip2px(mContext, 3), 0, 0);
-            ImageView goodsImage = helper.getView(R.id.img_goods);
-            Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(goodsImage);
-            helper.setText(R.id.tv_goods_name, goods.name);
-            helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context,  goods.price, 1,false));
+            if (isShopping) {
+                helper.addOnClickListener(R.id.btn_add_to_cart);
+                ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),
+                        Color.parseColor("#19000000"), Util.dip2px(mContext, 3), 0, 0);
+                ImageView goodsImage = helper.getView(R.id.iv_goods_img);
+                Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(goodsImage);
+                helper.setText(R.id.tv_goods_name, goods.name);
+                helper.setText(R.id.tv_goods_comment, goods.jingle);
+                helper.setText(R.id.tv_goods_price, StringUtil.formatPrice(context,  goods.price, 1,false));
+            } else {
+                helper.addOnClickListener(R.id.btn_add_to_cart);
+                ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),
+                        Color.parseColor("#19000000"), Util.dip2px(mContext, 3), 0, 0);
+                ImageView goodsImage = helper.getView(R.id.img_goods);
+                Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(goodsImage);
+                helper.setText(R.id.tv_goods_name, goods.name);
+                helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context,  goods.price, 1,false));
+            }
+
         } else if (itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT){
             helper.setText(R.id.tv_load_end_hint_content, " ");
             // 顯示即可，不用特別處理

@@ -30,6 +30,8 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
+
 /**
  * 購物專場店鋪列表子頁面
  *
@@ -75,8 +77,21 @@ public class ShoppingStoreListFragment extends BaseFragment {
         rvStoreList = view.findViewById(R.id.rv_simple);
         rvStoreList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                SLog.info("dy %d",dy);
+            }
+
+            @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    rvStoreList.setNestedScrollingEnabled(!parentFragment.getScrollEnale());
+                    parentFragment.showFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    parentFragment.hideFloatButton();
+                }
             }
         });
         storeListAdapter = new ShoppingStoreListAdapter(R.layout.store_view, storeItems);
