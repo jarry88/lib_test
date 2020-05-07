@@ -1,7 +1,9 @@
 package com.ftofs.twant.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Outline;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -12,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
@@ -45,9 +50,16 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
 import com.ftofs.twant.view.TwantTabLayout;
 import com.ftofs.twant.widget.SimpleTabButton;
+import com.ftofs.twant.widget.SlantedWidget;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
 import com.kunminx.linkage.LinkageRecyclerView;
+import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryFooterViewHolder;
+import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryHeaderViewHolder;
+import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryViewHolder;
+import com.kunminx.linkage.bean.BaseGroupedItem;
+import com.kunminx.linkage.contract.ILinkagePrimaryAdapterConfig;
+import com.kunminx.linkage.contract.ILinkageSecondaryAdapterConfig;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -56,6 +68,7 @@ import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,6 +113,10 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private ShoppingLinkageFragment linkageFragment;
     private ShoppingStoreListFragment storeListFragment;
     private Typeface typeFace;
+    private RecyclerView rvSecondList;
+    private RecyclerView rvPrimaryList;
+    List<ElemeGroupedItem> items = new ArrayList<>();
+
 
 
     @OnClick(R.id.btn_goods)
@@ -218,8 +235,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 //        });
         storeListFragment = ShoppingStoreListFragment.newInstance(this);
         linkageFragment = ShoppingLinkageFragment.newInstance(this);
-
         initView(view);
+        initLinkage();
         loadData();
 //        loadTestData();
     }
@@ -300,7 +317,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             //商品列表
             if (hasGoodsCategory == Constant.TRUE_INT) {
                 if (zoneGoodsCategoryVoList != null) {
-                    linkageFragment.setLinkageData(zoneGoodsCategoryVoList);
+                    updateLinkage(zoneGoodsCategoryVoList);
                 }
 
             } else {
@@ -372,8 +389,196 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 
     private void initView(View view) {
         linkage = view.findViewById(R.id.linkage);
+        initLinkage();
         initBanner();
         initTabList();
+    }
+
+    private void initLinkage() {
+        rvSecondList = linkage.findViewById(R.id.rv_secondary);
+        rvPrimaryList = linkage.findViewById(R.id.rv_primary);
+
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
+        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
+        layoutParams.height = Util.getScreenDimension(_mActivity).second - Util.dip2px(_mActivity,88);
+//        layoutParams1.height =parentFragment.scrollView.getHeight();
+        layoutParams1.height =layoutParams.height ;
+        rvSecondList.setLayoutParams(layoutParams);
+        rvPrimaryList.setLayoutParams(layoutParams1);
+
+        SLog.info("isNestedScrollingEnabled[%s]", rvSecondList.isNestedScrollingEnabled());
+
+        rvSecondList.setNestedScrollingEnabled(true);
+        rvSecondList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                SLog.info("__newState[%d]", newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    int linkageY_ = Util.getYOnScreen(linkage) + linkage.getHeight();
+                    SLog.info("linkageY_[%s]", linkageY_);
+//                    hideFloatButton();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+//                    showFloatButton();
+                }
+            }
+        });
+
+    }
+    private static class ElemeSecondaryAdapterConfig implements ILinkageSecondaryAdapterConfig<ElemeGroupedItem.ItemInfo> {
+
+        private final Typeface typeFace;
+        private Context mContext;
+
+        public ElemeSecondaryAdapterConfig(Typeface typeface,Context context) {
+            this.typeFace = typeface;
+            this.mContext =context;
+        }
+
+        @Override
+        public void setContext(Context context) {
+//            mContext = context;
+        }
+
+        @Override
+        public int getGridLayoutId() {
+            return 0;
+        }
+
+        @Override
+        public int getLinearLayoutId() {
+            return R.layout.adapter_shopping_zone_secondary_linear;
+        }
+
+        @Override
+        public int getHeaderLayoutId() {
+            return R.layout.adapter_linkage_secondary_header;
+        }
+
+        @Override
+        public int getFooterLayoutId() {
+            return R.layout.black_layout;
+        }
+
+        @Override
+        public int getHeaderTextViewId() {
+            return R.id.secondary_header;
+        }
+
+        @Override
+        public int getSpanCountOfGridMode() {
+            return 2;
+        }
+
+        @Override
+        public void onBindViewHolder(LinkageSecondaryViewHolder holder,
+                                     BaseGroupedItem<ElemeGroupedItem.ItemInfo> item) {
+
+            try {
+                ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
+                ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
+                TextView tvPrice=holder.getView(R.id.tv_goods_price);
+                TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
+                tvPrice.setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
+                if (item.info.show ) {
+                    tvOriginalPrice.setVisibility(View.VISIBLE);
+                    tvOriginalPrice.setText(StringUtil.formatPrice(mContext, item.info.getOriginal(), 0, true));
+                    tvPrice.setTypeface(typeFace);
+                    tvOriginalPrice.setTypeface(typeFace);
+                    // 原價顯示刪除線
+                    tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+                holder.getView(R.id.sw_price).setVisibility(item.info.show ? View.VISIBLE : View.GONE);
+                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
+                ImageView imageView = holder.getView(R.id.iv_goods_img);
+                Glide.with(mContext).load(item.info.getImgUrl()).centerCrop().into(imageView);
+                holder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
+                    //TODO
+                    Util.startFragment(GoodsDetailFragment.newInstance(item.info.commonId, 0));
+                });
+
+                holder.getView(R.id.iv_goods_add).setOnClickListener(v -> {
+                    //TODO
+                });
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(LinkageSecondaryHeaderViewHolder holder,
+                                           BaseGroupedItem<ElemeGroupedItem.ItemInfo> item) {
+
+            ((TextView) holder.getView(R.id.secondary_header)).setText(item.header);
+        }
+
+        @Override
+        public void onBindFooterViewHolder(LinkageSecondaryFooterViewHolder holder,
+                                           BaseGroupedItem<ElemeGroupedItem.ItemInfo> item) {
+
+        }
+    }
+
+
+
+    private void updateLinkage(EasyJSONArray zoneGoodsCategoryVoList) {
+        try {
+            SLog.info("設置二級聯動列表數據");
+            items.clear();
+            for (Object object : zoneGoodsCategoryVoList) {
+                EasyJSONObject categoryData = (EasyJSONObject) object;
+
+                String groupName = categoryData.getSafeString("categoryName");
+                EasyJSONArray goodsList = categoryData.getSafeArray("zoneGoodsVoList");
+                ElemeGroupedItem category = new ElemeGroupedItem(true, groupName);
+                if (goodsList == null) {
+                    continue;
+                }
+                items.add(category);
+                for (Object object1 : goodsList) {
+                    EasyJSONObject goods = (EasyJSONObject) object1;
+                    String goodsName = goods.getSafeString("goodsName");
+                    String goodsImage = goods.getSafeString("goodsImage");
+                    int commonId = goods.getInt("commonId");
+                    String jingle = goods.getSafeString("goodsFullSpecs");
+                    double price;
+                    int appUsable = goods.getInt("appUsable");
+                    if (appUsable > 0) {
+                        price = goods.getDouble("appPriceMin");
+                    } else {
+                        price = goods.getDouble("batchPrice0");
+                    }
+
+                    double batchPrice0 = goods.getDouble("batchPrice0");
+                    double promotionDiscountRate = goods.getDouble("promotionDiscountRate");
+
+                    ElemeGroupedItem.ItemInfo goodsInfo = new ElemeGroupedItem.ItemInfo(goodsName, groupName, jingle, StringUtil.normalizeImageUrl(goodsImage),
+                            StringUtil.formatPrice(getContext(), price, 0), promotionDiscountRate, batchPrice0, commonId, appUsable > 0);
+                    ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
+                    items.add(item1);
+                }
+
+            }
+            Typeface typeface =AssetsUtil.getTypeface(_mActivity,"fonts/din_alternate_bold.ttf");
+            ElemeSecondaryAdapterConfig secondaryAdapterConfig = new ElemeSecondaryAdapterConfig(typeface,getContext());
+            ILinkagePrimaryAdapterConfig primaryAdapterConfig=null;
+            linkage.init(items, primaryAdapterConfig, secondaryAdapterConfig);
+
+
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+    private void showSpecSelectPopup(int commonId) {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0, 2, null))
+                .show();
     }
 
     private void initBanner() {
