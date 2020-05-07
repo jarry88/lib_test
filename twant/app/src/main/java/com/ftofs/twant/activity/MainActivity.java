@@ -125,6 +125,8 @@ import okhttp3.Response;
 public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     long lastBackPressedTime;
 
+    AppUpdatePopup appUpdatePopup;
+
     TangramEngine engine;
 
     public MainFragment getMainFragment() {
@@ -596,9 +598,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         SLog.info("popupShownTimestamp[%s]", popupShownTimestamp);
 
         // 最近一次顯示時間超過一天，則進行檢查更新(主要用于前后臺切換時，不要重復顯示)
-        if (System.currentTimeMillis() - popupShownTimestamp > 24 * 3600 * 1000) {
-            checkUpdate(false);
-        }
+        checkUpdate(false);
+
 
         // 获取是否有网页拉起APP传过来的参数
         String launchAppParams = Hawk.get(SPField.FIELD_LAUNCH_APP_PARAMS);
@@ -706,7 +707,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                         return;
                     }
 
-                    if (!responseObj.exists("datas.version")) {
+                    if (!responseObj.exists("datas.version") && !responseObj.exists("datas.currentVersion")) {
+                        SLog.info("currentVersion");
                         // 如果服務器端沒有返回版本信息，也當作是最新版本
                         if (showResult) {
                             ToastUtil.info(MainActivity.this, getString(R.string.text_latest_version_message));
@@ -717,7 +719,15 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     // 當前版本
                     String currentVersion = BuildConfig.VERSION_NAME;
                     // 最新版本
-                    String newestVersion = responseObj.getSafeString("datas.version");
+                    String newestVersion = null;
+                    if (responseObj.exists("datas.version")) {
+                        newestVersion = responseObj.getSafeString("datas.version");
+                    }
+
+                    if (StringUtil.isEmpty(newestVersion)) {
+                        newestVersion = responseObj.getSafeString("datas.currentVersion");
+                    }
+
 
                     SLog.info("currentVersion[%s], newestVersion[%s]", currentVersion, newestVersion);
                     int result = Util.versionCompare(currentVersion, newestVersion);
@@ -734,10 +744,21 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     // 當前的版本是舊版本
                     boolean isDismissOnBackPressed = true;
                     boolean isDismissOnTouchOutside = true;
-                    boolean isForceUpdate = (responseObj.getInt("datas.isForceUpdate") != 0);
+                    boolean isForceUpdate = false;
+                    if (responseObj.exists("datas.isForceUpdate")) {
+                        isForceUpdate = (responseObj.getInt("datas.isForceUpdate") != 0);
+                    }
 
-                    String version = responseObj.getSafeString("datas.version");
-                    String versionDesc = responseObj.getSafeString("datas.remarks");
+                    String version = "";
+                    if (responseObj.exists("datas.version")) {
+                        version = responseObj.getSafeString("datas.version");
+                    }
+
+                    String versionDesc = "";
+                    if (responseObj.exists("datas.remarks")) {
+                        versionDesc = responseObj.getSafeString("datas.remarks");
+                    }
+
                     String appUrl = null;
                     if (responseObj.exists("datas.appUrl")) {
                         appUrl = responseObj.getSafeString("datas.appUrl");
@@ -745,8 +766,6 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
                     SLog.info("datas.appUrl[%s]", appUrl);
 
-
-                    // isForceUpdate = true;
                     // 如果是強制升級，點擊對話框外的區域或按下返回鍵，也不能關閉對話框
                     if (isForceUpdate) {
                         isDismissOnBackPressed = false;
@@ -760,13 +779,18 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                         return;
                     }
 
-                    new XPopup.Builder(MainActivity.this)
-                            .dismissOnBackPressed(isDismissOnBackPressed) // 按返回键是否关闭弹窗，默认为true
-                            .dismissOnTouchOutside(isDismissOnTouchOutside) // 点击外部是否关闭弹窗，默认为true
-                            // 如果不加这个，评论弹窗会移动到软键盘上面
-                            .moveUpToKeyboard(false)
-                            .asCustom(new AppUpdatePopup(MainActivity.this, version, versionDesc, isForceUpdate, appUrl))
-                            .show();
+                    if (appUpdatePopup == null) {
+                        appUpdatePopup = (AppUpdatePopup) new XPopup.Builder(MainActivity.this)
+                                .dismissOnBackPressed(isDismissOnBackPressed) // 按返回键是否关闭弹窗，默认为true
+                                .dismissOnTouchOutside(isDismissOnTouchOutside) // 点击外部是否关闭弹窗，默认为true
+                                // 如果不加这个，评论弹窗会移动到软键盘上面
+                                .moveUpToKeyboard(false)
+                                .asCustom(new AppUpdatePopup(MainActivity.this, version, versionDesc, isForceUpdate, appUrl));
+                    }
+                    SLog.info("isDismiss[%s]", appUpdatePopup.isDismiss());
+                    if (appUpdatePopup.isDismiss()) {
+                        appUpdatePopup.show();
+                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
