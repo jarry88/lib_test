@@ -7,10 +7,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.TestAdapter;
 
 public class SecondFragment extends BaseFragment {
+    RecyclerView rvList;
+    TestAdapter testAdapter;
+
     public static SecondFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -31,5 +37,17 @@ public class SecondFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        rvList = view.findViewById(R.id.rv_list);
+        rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        testAdapter = new TestAdapter();
+        rvList.setAdapter(testAdapter);
+
+        setNestedScrollingEnabled(false);
+    }
+
+
+    public void setNestedScrollingEnabled(boolean enabled) {
+        rvList.setNestedScrollingEnabled(enabled);
     }
 }

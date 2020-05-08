@@ -118,6 +118,7 @@ public class FirstFragment extends BaseFragment {
             }
         });
         itemAdapter = new ItemAdapter(itemList);
+        it
         rvList.setAdapter(itemAdapter);
 
         setNestedScrollingEnabled(false);

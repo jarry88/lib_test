@@ -5,12 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="32dp"
-        android:text="第二個頁面">
-
-    </TextView>
+        android:layout_height="match_parent">
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

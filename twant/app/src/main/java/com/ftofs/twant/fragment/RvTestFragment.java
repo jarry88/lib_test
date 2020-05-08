@@ -62,8 +62,8 @@ public class RvTestFragment extends BaseFragment {
         viewPager = view.findViewById(R.id.viewpager);
         vwAnchor = view.findViewById(R.id.vw_anchor);
 
-        titleList.add("Page1");
-        titleList.add("Page2");
+        titleList.add("商品");
+        titleList.add("店鋪");
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
 
@@ -108,8 +108,10 @@ public class RvTestFragment extends BaseFragment {
 
                 if (tabY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
                     firstFragment.setNestedScrollingEnabled(true);
+                    secondFragment.setNestedScrollingEnabled(true);
                 } else {
                     firstFragment.setNestedScrollingEnabled(false);
+                    secondFragment.setNestedScrollingEnabled(false);
                 }
             }
         });
