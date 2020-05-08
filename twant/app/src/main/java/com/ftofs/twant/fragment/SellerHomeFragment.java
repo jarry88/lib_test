@@ -393,7 +393,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             int billCount = responseObj.getInt("datas.billCount");
             tvBillCount.setText(String.valueOf(billCount));
             double ordersAmount = responseObj.getDouble("datas.ordersAmount");
-            tvTodayAmount.setText(String.valueOf(ordersAmount));
+            tvTodayAmount.setText(String.format("%.2f",ordersAmount));
             storeState = responseObj.getInt("datas.storeState");
             updateSwitchButton();
 

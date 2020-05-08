@@ -26,7 +26,7 @@
             android:lines="2"
             android:maxLines="2"
             android:ellipsize="end"
-            android:text=""
+            android:text="sdfsdfsdfsdfsd"
             android:textColor="@color/tw_black"
             />
         <LinearLayout
@@ -50,8 +50,9 @@
             <ImageView
                 android:id="@+id/cross_border_indicator"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="22dp"
                 android:layout_marginEnd="10dp"
+                android:scaleType="fitXY"
 
                 android:layout_marginStart="0dp"
                 android:src="@drawable/icon_among_city_with_text">
@@ -69,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_4"
-                android:text="5131321"
+                android:text=""
                 android:textColor="@color/tw_red"
                 android:textSize="14sp"
                 android:textStyle="normal"

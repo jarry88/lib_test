@@ -48,6 +48,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
@@ -602,6 +603,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 TextView tvPrice=holder.getView(R.id.tv_goods_price);
                 tvPrice.setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
                 tvPrice.setTypeface(typeFace);
+                UiUtil.toPriceUI(tvPrice,12);
 
                 if (item.info.show) {
                     TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
@@ -621,6 +623,11 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 });
 
                 holder.getView(R.id.iv_goods_add).setOnClickListener(v -> {
+                    new XPopup.Builder(mContext)
+                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(new SpecSelectPopup(mContext, Constant.ACTION_ADD_TO_CART, item.info.commonId, null, null, null, 1, null, null, 0, 2, null))
+                            .show();
                     //TODO
                 });
             } catch (Exception e) {

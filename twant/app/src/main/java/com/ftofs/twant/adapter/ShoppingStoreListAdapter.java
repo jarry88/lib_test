@@ -62,6 +62,7 @@ public class ShoppingStoreListAdapter extends BaseQuickAdapter<StoreItem, BaseVi
         ImageView imgStoreFigure = helper.getView(R.id.img_store_figure);
         tvStoreName.setText(item.storeName);
         tvStoreClass.setText(item.storeClass);
+//        helper.addOnClickListener()
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.storeFigureImage)).centerCrop().into(imgStoreFigure);
     }
 }

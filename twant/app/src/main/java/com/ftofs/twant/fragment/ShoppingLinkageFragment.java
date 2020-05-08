@@ -125,7 +125,6 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         initAdapter();
 
 //        initLinkage();
-        initGoodsAdapter();
 
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
         LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
@@ -185,12 +184,22 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
 
     private void initGoodsAdapter() {
+        shopGoodsListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Goods goods = goodsList.get(position);
+                SLog.info("here");
+                int commonId = goods.id;
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+            }
+        });
         shopGoodsListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
 
                 Goods goods = goodsList.get(position);
+                SLog.info("here");
                 int commonId = goods.id;
                 int userId = User.getUserId();
                 if (id == R.id.btn_add_to_cart) {
@@ -199,8 +208,6 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
                     } else {
                         Util.showLoginFragment();
                     }
-                }else {
-                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                 }
             }
         });
@@ -221,6 +228,8 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         LinearLayoutManager linkageSecondManager = new LinearLayoutManager(_mActivity);
         LinearLayoutManager linkagePrimaryManager = new LinearLayoutManager(_mActivity);
+        initGoodsAdapter();
+
         rvGoodsWithoutCategory.setLayoutManager(linearLayoutManager);
         rvGoodsWithoutCategory.setAdapter(shopGoodsListAdapter);
 

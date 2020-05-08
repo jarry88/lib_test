@@ -406,6 +406,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener, 
 
                                 if (spuCount == cartSpuVoList.length()-1&&spuCount>0) {
                                     cartSpuItem.findViewById(R.id.line).setVisibility(View.GONE);
+                                } else if (cartSpuVoList.length() == 1) {
+                                    cartSpuItem.findViewById(R.id.line).setVisibility(View.GONE);
+
                                 }
 
                                 storeStatus.spuStatusList.add(spuStatus);

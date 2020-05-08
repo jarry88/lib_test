@@ -18,6 +18,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
 import com.sxu.shadowdrawable.ShadowDrawable;
 
@@ -60,7 +61,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
         int itemViewType = helper.getItemViewType();
         if (itemViewType == Constant.ITEM_TYPE_NORMAL) {
             if (isShopping) {
-                helper.addOnClickListener(R.id.btn_add_to_cart);
+                helper.addOnClickListener(R.id.iv_goods_add);
                 ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),
                         Color.parseColor("#19000000"), Util.dip2px(mContext, 3), 0, 0);
                 ImageView goodsImage = helper.getView(R.id.iv_goods_img);
@@ -71,6 +72,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 tvPrice.setText(StringUtil.formatPrice(context,  goods.price, 1,false));
 
                 tvPrice.setTypeface(typeFace);
+                UiUtil.toPriceUI(tvPrice,12);
 //                TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
 //                tvOriginalPrice.setVisibility(View.VISIBLE);
 //                tvOriginalPrice.setText(StringUtil.formatPrice(mContext, item.info.getOriginal(), 0, true));
