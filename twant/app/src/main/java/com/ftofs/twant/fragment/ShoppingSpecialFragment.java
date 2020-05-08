@@ -172,6 +172,24 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     void back() {
         hideSoftInputPop();
     }
+    @OnClick(R.id.btn_goto_cart)
+    void gotoCart() {
+        int userId = User.getUserId();
+        if (userId > 0) {
+            Util.startFragment(CartFragment.newInstance(true));
+        } else {
+            Util.showLoginFragment();
+        }
+    }
+    @OnClick(R.id.btn_goto_top)
+    void gotoTop(){
+        scrollView.scrollTo(0,0);
+        if (linkage.getVisibility() == View.VISIBLE) {
+            linkage.scrollTo(0,0);
+            linkage.getPrimaryAdapter().setSelectedPosition(0);
+            rvSecondList.scrollToPosition(0);
+        }
+    }
 
     public boolean getScrollEnale() {
         int Y=Util.getYOnScreen(viewPager);
@@ -258,18 +276,24 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if (containerViewHeight == 0&&hasGoodsCategory==1) {
-            containerViewHeight = scrollView.getHeight();
-            SLog.info("containerViewHeight[%d]", containerViewHeight);
+        if (hasGoodsCategory==1) {
+            if (containerViewHeight == 0) {
+                containerViewHeight = scrollView.getHeight();
+                SLog.info("containerViewHeight[%d]", containerViewHeight);
 
-            ViewGroup.LayoutParams layoutParams = rvSecondList.getLayoutParams();
-            LinearLayout .LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
+                ViewGroup.LayoutParams layoutParams = rvSecondList.getLayoutParams();
+                LinearLayout .LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
 //            layoutParams.height = containerViewHeight-44;
-            layoutParams1.height = containerViewHeight;
-            layoutParams1.weight = Util.dip2px(_mActivity,80);
-            rvSecondList.setLayoutParams(layoutParams);
+                layoutParams1.height = containerViewHeight;
+                layoutParams1.weight = Util.dip2px(_mActivity,80);
+                rvSecondList.setLayoutParams(layoutParams);
 
-            rvPrimaryList.setLayoutParams(layoutParams1);
+                rvPrimaryList.setLayoutParams(layoutParams1);
+            }
+
+            if (tabLayout.getSelectedTabPosition() == 0) {
+                rvPrimaryList.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -344,6 +368,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             if (zoneStoreVoList != null) {
                 SLog.info("設置商店列表數據");
                 storeListFragment.setStoreList(zoneStoreVoList);
+            } else {
+                tabLayout.setVisibility(View.GONE);
             }
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
             //商品列表
@@ -451,7 +477,11 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 int containerViewY = Util.getYOnScreen(scrollView);
 
                 SLog.info("linkageY[%s], containerViewY[%s],linkageY_[%s]", linkageY, containerViewY,linkageY_);
-                if (linkageY <= containerViewY+Util.dip2px(_mActivity,44)) {  // 如果列表滑动到顶部，则启用嵌套滚动
+                int tabHeight = 0;
+                if (tabLayout.getVisibility() == View.VISIBLE) {
+                    tabHeight = tabLayout.getHeight();
+                }
+                if (linkageY <= containerViewY+tabHeight) {  // 如果列表滑动到顶部，则启用嵌套滚动
                     rvSecondList.setNestedScrollingEnabled(true);
                 } else {
                     rvSecondList.setNestedScrollingEnabled(false);
@@ -613,8 +643,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                     // 原價顯示刪除線
                     tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
-                holder.getView(R.id.sw_price).setVisibility(item.info.show ? View.VISIBLE : View.GONE);
-                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
+                holder.getView(R.id.sw_price).setVisibility( View.GONE);
+//                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
                 ImageView imageView = holder.getView(R.id.iv_goods_img);
                 Glide.with(mContext).load(item.info.getImgUrl()).centerCrop().into(imageView);
                 holder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
@@ -719,59 +749,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             }
         });
         bannerView.setClipToOutline(true);
-        bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
-            @Override
-            public void onPageClick(View view, int i) {
-                WebSliderItem webSliderItem = webSliderItemList.get(i);
-                String linkType = webSliderItem.linkType;
-                SLog.info("i = %d, linkType[%s]", i, linkType);
-                if (StringUtil.isEmpty(linkType)) {
-                    return;
-                }
-                switch (linkType) {
-                    case "none":
-                        // 无操作
-                        break;
-                    case "url":
-                        // 外部鏈接
-                        Util.startFragment(ExplorerFragment.newInstance(webSliderItem.linkValue, true));
-                        break;
-                    case "keyword":
-                        // 关键字
-                        String keyword = webSliderItem.linkValue;
-                        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                                EasyJSONObject.generate("keyword", keyword).toString()));
-                        break;
-                    case "goods":
-                        // 產品
-                        int commonId = Integer.parseInt(webSliderItem.linkValue);
-                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                        break;
-                    case "store":
-                        // 店铺
-                        int storeId = Integer.parseInt(webSliderItem.linkValue);
-                        Util.startFragment(ShopMainFragment.newInstance(storeId));
-                        break;
-                    case "category":
-                        // 產品搜索结果页(分类)
-                        String cat = webSliderItem.linkValue;
-                        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                                EasyJSONObject.generate("cat", cat).toString()));
-                        break;
-                    case "brandList":
-                        // 品牌列表
-                        break;
-                    case "voucherCenter":
-                        // 领券中心
-                        break;
-                    case "activityUrl":
-                        Util.startFragment(H5GameFragment.newInstance(webSliderItem.linkValue, true));
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        UiUtil.addBannerPageClick(bannerView,webSliderItemList);
     }
 
     private void initTabList() {
@@ -815,6 +793,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 bannerView.setCanLoop(false);
             } else {
                 bannerView.start();
+                bannerView.setDelayedTime(2500);
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
