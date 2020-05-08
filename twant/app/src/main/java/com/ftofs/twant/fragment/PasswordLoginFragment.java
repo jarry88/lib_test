@@ -323,7 +323,7 @@ public class PasswordLoginFragment extends BaseFragment implements
                         return;
                     }
 
-                    ToastUtil.success(_mActivity, "登錄成功");
+                    ToastUtil.success(_mActivity, "登入成功");
                     int userId = responseObj.getInt("datas.memberId");
                     User.onLoginSuccess(userId, LoginType.MOBILE, responseObj);
                     hideSoftInput();

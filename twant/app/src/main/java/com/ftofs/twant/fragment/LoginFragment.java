@@ -220,7 +220,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                             User.onLoginSuccess(userId, LoginType.WEIXIN, responseObj);
                             hideSoftInputPop();
 
-                            ToastUtil.success(_mActivity, "微信登錄成功");
+                            ToastUtil.success(_mActivity, "微信登入成功");
                         } else {
                             String accessToken = responseObj.getSafeString("datas.accessToken");
                             String openId = responseObj.getSafeString("datas.accessToken");
@@ -376,7 +376,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                         User.onLoginSuccess(userId, LoginType.FACEBOOK, responseObj);
                         hideSoftInputPop();
 
-                        ToastUtil.success(_mActivity, "Facebook登錄成功");
+                        ToastUtil.success(_mActivity, "Facebook登入成功");
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
