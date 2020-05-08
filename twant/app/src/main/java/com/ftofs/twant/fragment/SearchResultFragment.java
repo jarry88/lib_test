@@ -687,7 +687,10 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                  */
                                 boolean showDiscountLabel = appUsable == 1 && promotionState == 1 && promotionType == 1;
 
-                                String nationalFlag = StringUtil.normalizeImageUrl(goods.getSafeString("adminCountry.nationalFlag"));
+                                String nationalFlag = "";
+                                if (goods.exists("adminCountry.nationalFlag")) {
+                                    StringUtil.normalizeImageUrl(goods.getSafeString("adminCountry.nationalFlag"));
+                                }
                                 GoodsSearchItem goodsSearchItem = new GoodsSearchItem(imageSrc, storeAvatarUrl, storeId,
                                         storeName, commonId, goodsName, jingle, price, nationalFlag);
 
