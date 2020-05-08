@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.UiUtil;
 
 public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
     /**
@@ -31,6 +33,8 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
             setText(itemView, R.id.tv_left_goods_jingle, itemData.leftItem.jingle);
             setText(itemView, R.id.tv_left_price, StringUtil.formatPrice(context, itemData.leftItem.price, 0,false));
 
+            TextView leftPrice = itemView.findViewById(R.id.tv_left_goods_price);
+            UiUtil.toPriceUI(leftPrice,12);
             ImageView leftGoodsImage = itemView.findViewById(R.id.left_goods_image);
             Glide.with(context).load(itemData.leftItem.imageSrc).centerCrop().into(leftGoodsImage);
 
@@ -49,6 +53,8 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
             setText(itemView, R.id.tv_right_goods_jingle, itemData.rightItem.jingle);
             setText(itemView, R.id.tv_right_price, StringUtil.formatPrice(context, itemData.rightItem.price, 0,false));
 
+            TextView rightPrice = itemView.findViewById(R.id.tv_right_goods_price);
+            UiUtil.toPriceUI(rightPrice,12);
             ImageView rightGoodsImage = itemView.findViewById(R.id.right_goods_image);
             Glide.with(context).load(itemData.rightItem.imageSrc).centerCrop().into(rightGoodsImage);
 

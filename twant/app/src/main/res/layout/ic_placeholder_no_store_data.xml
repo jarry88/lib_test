@@ -14,6 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="暫無相應店铺搜索結果"
+        android:text="@string/rationale_ask"
         android:textSize="16sp"/>
 </LinearLayout>

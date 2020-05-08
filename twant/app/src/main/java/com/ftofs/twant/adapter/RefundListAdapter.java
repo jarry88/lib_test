@@ -34,7 +34,7 @@ public class RefundListAdapter extends BaseQuickAdapter<RefundItem, BaseViewHold
                 .setText(R.id.tv_refund_amount, StringUtil.formatPrice(mContext, item.goodsPayAmount, 1,2));
         TextView tvRefundAmount = helper.getView(R.id.tv_refund_amount);
         TextView tvPrice = helper.getView(R.id.tv_goods_price_left);
-        UiUtil.toPriceUI(tvRefundAmount,10);
+        UiUtil.toPriceUI(tvRefundAmount,12);
 
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goodsImage)).centerCrop().into(goodsImage);

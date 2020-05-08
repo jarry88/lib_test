@@ -36,4 +36,5 @@
     <color name="tw_mask_bg_color">#7f000000</color>
     <color name="scan_corner_color">#0effc2</color>
     <color name="tw_seller_gray">#B7C3C8</color>
+    <color name="tw_grey_99">#999999</color>
 </resources>
