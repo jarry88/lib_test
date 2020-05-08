@@ -1735,16 +1735,17 @@ public class Api {
                 return null;
             }
         }
-
+        SLog.info("Here");
         // 如果壓縮后，文件還是太大，則報錯
         if (file.length() > Config.UPLOAD_FILE_SIZE_LIMIT) {
+            SLog.info("Here");
             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_SHOW_TOAST,
                     new ToastData(ToastData.TYPE_ERROR, context.getString(R.string.text_upload_file_too_large)));
             return null;
         }
 
         OkHttpClient client = getOkHttpClient();
-
+        SLog.info("Here");
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
 
@@ -1755,6 +1756,8 @@ public class Api {
         RequestBody requestBody = builder.build();
 
         String url = Config.API_BASE_URL + Api.PATH_UPLOAD_FILE;
+
+        SLog.info("Here");
 
         Request request = new Request.Builder()
                 .url(url)
@@ -1773,8 +1776,9 @@ public class Api {
 
             return responseObj.getSafeString("datas.name");
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+        SLog.info("Here");
         return null;
     }
 
