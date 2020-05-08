@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RvTestFragment extends BaseFragment {
+    boolean showTab; // 是否顯示切換Tab
+
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
@@ -36,11 +38,12 @@ public class RvTestFragment extends BaseFragment {
     FirstFragment firstFragment;
     SecondFragment secondFragment;
 
-    public static RvTestFragment newInstance() {
+    public static RvTestFragment newInstance(boolean showTab) {
         Bundle args = new Bundle();
 
         RvTestFragment fragment = new RvTestFragment();
         fragment.setArguments(args);
+        fragment.showTab = showTab;
 
         return fragment;
     }
@@ -62,15 +65,21 @@ public class RvTestFragment extends BaseFragment {
         viewPager = view.findViewById(R.id.viewpager);
         vwAnchor = view.findViewById(R.id.vw_anchor);
 
-        titleList.add("商品");
-        titleList.add("店鋪");
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
+        if (!showTab) {
+            tabLayout.setVisibility(View.GONE);
+        }
 
+        titleList.add("商品");
+        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
         firstFragment = FirstFragment.newInstance();
-        secondFragment = SecondFragment.newInstance();
         fragmentList.add(firstFragment);
-        fragmentList.add(secondFragment);
+
+        if (showTab) {
+            titleList.add("店鋪");
+            tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
+            secondFragment = SecondFragment.newInstance();
+            fragmentList.add(secondFragment);
+        }
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
@@ -107,14 +116,19 @@ public class RvTestFragment extends BaseFragment {
                         viewPagerY, containerViewY, tabY, anchorViewY);
 
                 if (anchorViewY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
-                    firstFragment.setNestedScrollingEnabled(true);
-                    secondFragment.setNestedScrollingEnabled(true);
+                    setNestedScrollingEnabled(true);
                 } else {
-                    firstFragment.setNestedScrollingEnabled(false);
-                    secondFragment.setNestedScrollingEnabled(false);
+                    setNestedScrollingEnabled(false);
                 }
             }
         });
+    }
+
+    public void setNestedScrollingEnabled(boolean enabled) {
+        firstFragment.setNestedScrollingEnabled(enabled);
+        if (showTab) {
+            secondFragment.setNestedScrollingEnabled(enabled);
+        }
     }
 
     @Override
@@ -127,7 +141,12 @@ public class RvTestFragment extends BaseFragment {
             SLog.info("containerHeight[%d], tabHeight[%d]", containerHeight, tabHeight);
 
             ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
-            layoutParams.height = containerHeight - tabHeight;
+
+            if (showTab) {
+                layoutParams.height = containerHeight - tabHeight;
+            } else {
+                layoutParams.height = containerHeight;
+            }
             viewPager.setLayoutParams(layoutParams);
         }
     }
@@ -135,5 +154,12 @@ public class RvTestFragment extends BaseFragment {
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
     }
 }
