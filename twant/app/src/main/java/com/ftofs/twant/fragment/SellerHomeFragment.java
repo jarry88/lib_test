@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -368,8 +369,15 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                     return;
                 }
                 updateView(responseObj);
+                startCountDown();
             }
         });
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+        stopCountDown();
     }
 
     private void updateView(EasyJSONObject responseObj) {
@@ -526,6 +534,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             pageIndicatorView.setCount(1);
             pageIndicatorView.setVisibility(VISIBLE);
         }
+
     }
 
     private void setImageBanner() {
@@ -555,6 +564,42 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
+    }
+    private void startCountDown() {
+        if (timer == null) {
+            timer = new Timer();
+        }
+
+        if (bannerStart) {
+            return;
+        }
+        // 定时服务
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+//                SLog.info("threadId[%s]", Thread.currentThread().getId());
+
+                Message message = new Message();
+                int position = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+//                SLog.info("position [%d],sum[%d]",position,currGalleryImageList.size());
+                int size = currGalleryImageList.size();
+                if (size > 0) {
+                    currGalleryPosition = (position+1) % currGalleryImageList.size();
+                    message.arg1 = currGalleryPosition;
+                    if (countDownHandler != null) {
+                        countDownHandler.sendMessage(message);
+                    }
+                }
+            }
+        }, 500, 3000);  // 0.5秒后启动，每隔3秒运行一次
+    }
+
+    private void stopCountDown() {
+        bannerStart = false;
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 
     @Override
