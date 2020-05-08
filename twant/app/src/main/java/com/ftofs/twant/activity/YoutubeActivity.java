@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
@@ -16,7 +17,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
-public class YoutubeActivity extends AppCompatActivity {
+public class YoutubeActivity extends AppCompatActivity implements View.OnClickListener {
     WebView webView;
     boolean ignoreSslError = true;
 
@@ -93,5 +94,15 @@ public class YoutubeActivity extends AppCompatActivity {
         SLog.info("htmlContent[%s]", htmlContent);
 
         webView.loadData(htmlContent, "text/html", "utf-8");
+
+        findViewById(R.id.btn_back_round).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_back_round) {
+            finish();
+        }
     }
 }
