@@ -1,6 +1,7 @@
 package com.ftofs.twant.tangram;
 
 import android.graphics.Color;
+import android.graphics.Outline;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,32 +20,47 @@ import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.fragment.CartFragment;
 import com.ftofs.twant.fragment.FirstFragment;
 import com.ftofs.twant.fragment.SecondFragment;
 import com.ftofs.twant.fragment.ShoppingLinkageFragment;
+import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
 import com.ftofs.twant.fragment.ShoppingStoreListFragment;
+import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UiUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.view.BannerViewHolder;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.view.ViewOutlineProvider;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import com.lxj.xpopup.core.BasePopupView;
+import com.zhouwei.mzbanner.MZBannerView;
+import com.zhouwei.mzbanner.holder.MZHolderCreator;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class LinkageTestFragment extends BaseFragment implements View.OnClickListener {
+public class LinkageTestFragment extends BaseFragment implements View.OnClickListener, NestedScrollingCallback {
+    private MZBannerView bannerView;
+    List<WebSliderItem> webSliderItemList = new ArrayList<>();
+
+
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
@@ -65,6 +81,14 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
     private ShoppingLinkageFragment withoutCategoryFragment;
     private RelativeLayout rlToolBar;
     private ShoppingStoreListFragment storeListFragment;
+    private ShoppingSpecialLinkageFragment shoppingLinkageFragment;
+    private CommonFragmentPagerAdapter adapter;
+
+    boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
+    private long lastScrollingTimestamp;
+    private boolean isScrolling;
+    private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=800;
+    private LinearLayout llFloatButtonContainer;
 
     public static LinkageTestFragment newInstance(int zoneId) {
         Bundle args = new Bundle();
@@ -90,32 +114,65 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         tvZoneName = view.findViewById(R.id.tv_zone_name);
         rlToolBar = view.findViewById(R.id.tool_bar);
         Util.setOnClickListener(view,R.id.btn_back,this);
+        Util.setOnClickListener(view,R.id.btn_goto_top,this);
+        Util.setOnClickListener(view,R.id.btn_goto_cart,this);
+
+        llFloatButtonContainer=view.findViewById(R.id.ll_float_button_container);
 
         containerView = view.findViewById(R.id.container_view);
         tabLayout = view.findViewById(R.id.tab_layout);
         viewPager = view.findViewById(R.id.viewpager);
         vwAnchor = view.findViewById(R.id.vw_anchor);
 
-        titleList.add("商品");
-        titleList.add("-");
-        titleList.add("店鋪");
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(2)));
-
-
-        firstFragment = FirstFragment.newInstance();
+        shoppingLinkageFragment = ShoppingSpecialLinkageFragment.newInstance();
 //        secondFragment = SecondFragment.newInstance();
         storeListFragment =ShoppingStoreListFragment.newInstance();
         withoutCategoryFragment = ShoppingLinkageFragment.newInstance();
 
-        fragmentList.add(firstFragment);
-        fragmentList.add(storeListFragment);
-        fragmentList.add(withoutCategoryFragment);
-
+        bannerView = view.findViewById(R.id.banner_view);
+        initBanner();
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
-        CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
+//        initViewPager();
+        loadData();
+    }
+    private void initBanner() {
+        //設置banner頁圓角
+        bannerView.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), Util.dip2px(_mActivity,8));
+            }
+        });
+        bannerView.setClipToOutline(true);
+        int heightPadding = Util.getScreenDimension(_mActivity).first * 9 / 16 - Util.dip2px(_mActivity, 25);
+        bannerView.setIndicatorPadding(0,heightPadding,0,0);
+        UiUtil.addBannerPageClick(bannerView,webSliderItemList);
+    }
+    private void setBannerData(EasyJSONArray discountBannerList) {
+        SLog.info("bannerListLength %d",discountBannerList.length());
+        try {
+            for (Object object : discountBannerList) {
+                String imageUrl = String.valueOf(object);
+                WebSliderItem webSliderItem = new WebSliderItem(StringUtil.normalizeImageUrl(imageUrl), null, null, null, "[]");
+                webSliderItemList.add(webSliderItem);
+                // 设置数据
+                bannerView.setPages(webSliderItemList, (MZHolderCreator<BannerViewHolder>) () -> new BannerViewHolder(webSliderItemList));
+
+//                carouselLoaded = true;
+            }
+            if (discountBannerList.length() == 1) {
+                bannerView.setCanLoop(false);
+            } else {
+                bannerView.start();
+                bannerView.setDelayedTime(2500);
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+    private void initViewPager() {
+        adapter = new CommonFragmentPagerAdapter(getChildFragmentManager(), titleList, fragmentList);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -147,19 +204,17 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                 SLog.info("viewPagerY[%s], containerViewY[%s], tabY[%s], anchorViewY[%s]",
                         viewPagerY, containerViewY, tabY, anchorViewY);
                 boolean nestedScroll = tabY <= containerViewY;
-                  // 如果列表滑动到顶部，则启用嵌套滚动
-                if (firstFragment != null) {
-                    firstFragment.setNestedScrollingEnabled(nestedScroll);
-                }
-                    storeListFragment.setNestedScrollingEnabled(nestedScroll);
+                // 如果列表滑动到顶部，则启用嵌套滚动
+                shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
+                storeListFragment.setNestedScrollingEnabled(nestedScroll);
                 if (withoutCategoryFragment != null) {
                     withoutCategoryFragment.setNestedScroll(nestedScroll);
                 }
             }
         });
         //加載數據
-        loadData();
     }
+
     private void loadData() {
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
@@ -201,46 +256,56 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
             String zoneName = zoneVo.getSafeString("zoneName");
             tvZoneName.setText(zoneName);
             updateThemeColor(appColor);
+
+            EasyJSONArray appAdImageList = zoneVo.getArray("appAdImageList");
+            if (appAdImageList != null) {
+                setBannerData(appAdImageList);
+            }
 //
             String storeTabTitle = zoneVo.getSafeString("storeTabTitle");
             String goodsTabTitle = zoneVo.getSafeString("goodsTabTitle");
-            if (!StringUtil.isEmpty(storeTabTitle)) {
-                tabLayout.getTabAt(2).setText(storeTabTitle);
-            }
-            if (!StringUtil.isEmpty(goodsTabTitle)) {
-                tabLayout.getTabAt(0).setText(goodsTabTitle);
-                tabLayout.getTabAt(1).setText(goodsTabTitle);
-            }
 
-//
-//            EasyJSONArray appAdImageList = zoneVo.getArray("appAdImageList");
-//            if (appAdImageList != null) {
-//                setBannerData(appAdImageList);
-//            }
+
             EasyJSONArray zoneGoodsVoList = zoneVo.getArray("zoneGoodsVoList");
-            EasyJSONArray zoneStoreVoList = zoneVo.getArray("zoneStoreVoList");
-            if (zoneStoreVoList != null&&zoneStoreVoList.length()>0) {
-                SLog.info("設置商店列表數據");
-                storeListFragment.setStoreList(zoneStoreVoList);
-            } else {
-                //隱藏tab
-            }
+
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
             //商品列表
             if (hasGoodsCategory == Constant.TRUE_INT) {
+                if (!StringUtil.isEmpty(goodsTabTitle)) {
+                    titleList.add(goodsTabTitle);
+                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
+                    fragmentList.add(shoppingLinkageFragment);
 //                tabLayout.removeTabAt(1);
-
-                if (zoneGoodsCategoryVoList != null) {
-
-//                    updateLinkage(zoneGoodsCategoryVoList);
+                shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
                 }
 
 
             } else {
-                SLog.info("無類別商品標簽數據");
+                if (!StringUtil.isEmpty(goodsTabTitle)) {
+                    titleList.add(goodsTabTitle);
+                    tabLayout.addTab(tabLayout.newTab().setText(goodsTabTitle));
+
+                    fragmentList.add(withoutCategoryFragment);
+                    SLog.info("無類別商品標簽數據");
 //                tabLayout.removeTabAt(0);
-                withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
+                    withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
+                }
+
             }
+
+            EasyJSONArray zoneStoreVoList = zoneVo.getArray("zoneStoreVoList");
+            if (zoneStoreVoList != null&&zoneStoreVoList.length()>0) {
+                SLog.info("設置商店列表數據");
+                if (!StringUtil.isEmpty(storeTabTitle)) {
+                    titleList.add(storeTabTitle);
+                    tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
+                    fragmentList.add(storeListFragment);
+                    storeListFragment.setStoreList(zoneStoreVoList);
+                }
+
+            }
+         initViewPager();
+
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -289,5 +354,66 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         }
+        int userId= User.getUserId();
+        if (id == R.id.btn_goto_cart) {
+            if (userId > 0) {
+                Util.startFragment(CartFragment.newInstance(true));
+            } else {
+                Util.showLoginFragment();
+            }
+
+        } else if (id == R.id.btn_goto_top) {
+            containerView.scrollTo(0,0);
+            if (hasGoodsCategory==1) {
+                shoppingLinkageFragment.scrollToTop();
+            }
+        }
+    }
+
+    @Override
+    public void onCbStartNestedScroll() {
+        isScrolling = true;
+        lastScrollingTimestamp = System.currentTimeMillis();
+        hideFloatButton();
+    }
+
+    @Override
+    public void onCbStopNestedScroll() {
+        isScrolling = false;
+        llFloatButtonContainer.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isScrolling) {
+                    return;
+                }
+
+                showFloatButton();
+            }
+        }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY);
+    }
+    private void showFloatButton() {
+        if (floatButtonShown){
+            return;
+        }
+
+        // 防止延遲時序問題導致的空引用異常
+        if (llFloatButtonContainer == null) {
+            return;
+        }
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = true;
+    }
+
+    private void hideFloatButton() {
+        if (!floatButtonShown) {
+            return;
+        }
+
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
+        llFloatButtonContainer.setLayoutParams(layoutParams);
+        floatButtonShown = false;
     }
 }

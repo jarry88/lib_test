@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -33,9 +33,10 @@
     <!-- END OF 工具欄 -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/container_view"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/tool_bar"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,14 +48,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
             </View>
-
-            <ImageView
+            <!-- 輪播圖 -->
+            <LinearLayout
+                android:id="@+id/ll_banner_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="fitXY"
-                android:src="@drawable/search">
-            </ImageView>
+                android:layout_height="wrap_content">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_banner_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shopping_mask"
+                    >
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/margin12"
+                        android:layout_marginEnd="@dimen/margin12"
+                        android:layout_marginTop="@dimen/margin8"
+                        android:layout_marginBottom="@dimen/margin8"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintDimensionRatio="351:175">
 
+                        <com.zhouwei.mzbanner.MZBannerView
+                            android:id="@+id/banner_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:canLoop="true"
+                            app:open_mz_mode="false" />
+                    </RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -77,5 +102,34 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_float_button_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="84dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/btn_goto_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/icon_goto_cart"
+            android:visibility="visible"
+            />
+
+        <ImageView
+            android:id="@+id/btn_goto_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/icon_goto_top_grey"
+            />
+    </LinearLayout>
+
+</RelativeLayout>
 

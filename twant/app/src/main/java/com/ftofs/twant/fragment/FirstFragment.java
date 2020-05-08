@@ -22,6 +22,8 @@ import com.ftofs.twant.log.SLog;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONArray;
+
 public class FirstFragment extends BaseFragment {
     RecyclerView rvMenuList;
     MenuAdapter menuAdapter;
@@ -63,7 +65,7 @@ public class FirstFragment extends BaseFragment {
             for (int j = 0; j < itemCount; j++) {
                 itemList.add(new Item(j == 0, i, j));
             }
-            menuList.add(new Menu(i, i == 0, categoryTitlePosition));
+//            menuList.add(new Menu(i, i == 0, categoryTitlePosition));
 
             categoryTitlePosition += itemCount;
         }
@@ -143,5 +145,14 @@ public class FirstFragment extends BaseFragment {
     public void setNestedScrollingEnabled(boolean enabled) {
         rvMenuList.setNestedScrollingEnabled(enabled);
         rvList.setNestedScrollingEnabled(enabled);
+    }
+
+    public void updateView(EasyJSONArray zoneGoodsCategoryVoList) {
+        if (zoneGoodsCategoryVoList == null) {
+            return;
+        }
+        if (zoneGoodsCategoryVoList.length() == 0) {
+            return;
+        }
     }
 }

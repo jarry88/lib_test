@@ -52,6 +52,7 @@ import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
 import com.kunminx.linkage.LinkageRecyclerView;
+import com.kunminx.linkage.adapter.LinkageSecondaryAdapter;
 import com.kunminx.linkage.adapter.viewholder.LinkagePrimaryViewHolder;
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryFooterViewHolder;
 import com.kunminx.linkage.adapter.viewholder.LinkageSecondaryHeaderViewHolder;
@@ -559,32 +560,31 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 
         @Override
         public void onBindViewHolder(LinkagePrimaryViewHolder holder, boolean selected, String title) {
-            TextView tvTitle = ((TextView) holder.mGroupTitle);
+            TextView tvCategory = ((TextView) holder.mGroupTitle);
 
-            tvTitle.setText(title);
-
+            tvCategory.setText(title);
 
             View blue = holder.mLayout.findViewById(R.id.view_border);
             blue.setVisibility(View.GONE);
             if (selected) {
-                tvTitle.setTextColor(Color.parseColor("#2A292A"));
-                tvTitle.setBackgroundColor(Color.parseColor("#ffffffff"));
+                tvCategory.setTextColor(Color.parseColor("#2A292A"));
+                tvCategory.setBackgroundColor(Color.parseColor("#ffffffff"));
                 holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
             } else {
-                tvTitle.setTextColor(Color.parseColor("#999999"));
+                tvCategory.setTextColor(Color.parseColor("#999999"));
 
                 holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
-                tvTitle.setBackgroundColor(Color.argb(0, 0, 0, 0));
+                tvCategory.setBackgroundColor(Color.argb(0, 0, 0, 0));
             }
-            tvTitle.setTextColor(ContextCompat.getColor(mContext,
+            tvCategory.setTextColor(ContextCompat.getColor(mContext,
                     selected ? R.color.tw_black : R.color.tw_black));
-            tvTitle.setTypeface(Typeface.defaultFromStyle(selected ?Typeface.BOLD:Typeface.NORMAL));
+            tvCategory.setTypeface(Typeface.defaultFromStyle(selected ?Typeface.BOLD:Typeface.NORMAL));
 //            tvTitle.setEllipsize(selected ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
-            tvTitle.setMaxLines(2);
-            tvTitle.setMaxEms(8);
-            tvTitle.setEllipsize(TextUtils.TruncateAt.END);
-            tvTitle.setFocusable(selected);
-            tvTitle.setFocusableInTouchMode(selected);
+            tvCategory.setMaxLines(2);
+            tvCategory.setMaxEms(8);
+            tvCategory.setEllipsize(TextUtils.TruncateAt.END);
+            tvCategory.setFocusable(selected);
+            tvCategory.setFocusableInTouchMode(selected);
 //            tvTitle.setMarqueeRepeatLimit(selected ? -1 : 0);
         }
 
@@ -640,35 +640,35 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         }
 
         @Override
-        public void onBindViewHolder(LinkageSecondaryViewHolder holder,
+        public void onBindViewHolder(LinkageSecondaryViewHolder secondHolder,
                                      BaseGroupedItem<ElemeGroupedItem.ItemInfo> item) {
 
             try {
-                ((TextView) holder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
-                ((TextView) holder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
-                TextView tvPrice=holder.getView(R.id.tv_goods_price);
+                ((TextView) secondHolder.getView(R.id.tv_goods_name)).setText(item.info.getTitle());
+                ((TextView) secondHolder.getView(R.id.tv_goods_comment)).setText(item.info.getContent());
+                TextView tvPrice=secondHolder.getView(R.id.tv_goods_price);
                 tvPrice.setText(StringUtil.formatPrice(mContext, Double.valueOf(item.info.getCost().substring(1)), 0, true));
                 tvPrice.setTypeface(typeFace);
                 UiUtil.toPriceUI(tvPrice,12);
 
                 if (item.info.show) {
-                    TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
+                    TextView tvOriginalPrice=secondHolder.getView(R.id.tv_goods_original_price);
                     tvOriginalPrice.setVisibility(View.VISIBLE);
                     tvOriginalPrice.setText(StringUtil.formatPrice(mContext, item.info.getOriginal(), 0, true));
                     tvOriginalPrice.setTypeface(typeFace);
                     // 原價顯示刪除線
                     tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 }
-                holder.getView(R.id.sw_price).setVisibility( View.GONE);
+                secondHolder.getView(R.id.sw_price).setVisibility( View.GONE);
 //                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
-                ImageView imageView = holder.getView(R.id.img_goods_item);
+                ImageView imageView = secondHolder.getView(R.id.img_goods_item);
                 Glide.with(mContext).load(item.info.getImgUrl()).centerCrop().into(imageView);
-                holder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
+                secondHolder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
                     //TODO
                     Util.startFragment(GoodsDetailFragment.newInstance(item.info.commonId, 0));
                 });
 
-                holder.getView(R.id.iv_goods_add).setOnClickListener(v -> {
+                secondHolder.getView(R.id.iv_goods_add).setOnClickListener(v -> {
                     if (!item.info.hasStorage()) {
                         ToastUtil.error(mContext,"該產品已售罄，看看其他的吧");
                         return;
