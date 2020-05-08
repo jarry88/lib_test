@@ -185,7 +185,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                 break;
             case "url":
                 // 外部鏈接
-                Util.startFragment(ExplorerFragment.newInstance(stickyCellData.appIndexNavigationLinkValue, true));
+                String url = StringUtil.normalizeImageUrl(stickyCellData.appIndexNavigationLinkValue);
+                Util.startFragment(ExplorerFragment.newInstance(url, true));
                 break;
             case "keyword":
                 // 关键字
@@ -216,7 +217,8 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                 // 领券中心
                 break;
             case "activityUrl":
-                Util.startFragment(H5GameFragment.newInstance(stickyCellData.appIndexNavigationLinkValue, true));
+                String activityUrl = StringUtil.normalizeImageUrl(stickyCellData.appIndexNavigationLinkValue);
+                Util.startFragment(H5GameFragment.newInstance(activityUrl, true));
                 break;
             case "postId":
                 int postId = Integer.parseInt(stickyCellData.appIndexNavigationLinkValue);

@@ -16,6 +16,7 @@ public class Goods implements MultiItemEntity {
     public boolean showDiscount;
     private double promotionDiscountRate;
     private double batchPrice0;
+    private int goodsStorage=1;
 
     public Goods(int commonId, String imageUrl, String name, String jingle, double price) {
         itemType = Constant.ITEM_TYPE_NORMAL;
@@ -73,6 +74,9 @@ public class Goods implements MultiItemEntity {
             goods1.promotionDiscountRate = promotionDiscountRate;
             goods1.batchPrice0 = batchPrice0;
 //            SLog.info("%s",promotionDiscountRate);
+        }
+        if (goods.exists("goodsStorage")) {
+            goods1.goodsStorage = goods.getInt("goodsStorage");
         }
         return goods1 ;
     }

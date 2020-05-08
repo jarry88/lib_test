@@ -169,8 +169,9 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         linkage.setVisibility(View.GONE);
         rvGoodsWithoutCategory.setVisibility(parentFragment.hasGoodsCategory==1?View.GONE:View.VISIBLE);
         if (parentFragment.hasGoodsCategory == 1) {
-//            parentFragment.viewPager.setVisibility(View.GONE);
+            parentFragment.viewPager.setVisibility(View.GONE);
             parentFragment.linkage.setVisibility(View.VISIBLE);
+
             if (zoneGoodsCategoryVoList != null && !linkageLoaded) {
 //                updateLinkage();
             }
@@ -515,8 +516,9 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
                     double batchPrice0 = goods.getDouble("batchPrice0");
                     double promotionDiscountRate = goods.getDouble("promotionDiscountRate");
 
+                    int goodsStorage=goods.getInt("goodsStorage");
                     ElemeGroupedItem.ItemInfo goodsInfo = new ElemeGroupedItem.ItemInfo(goodsName, groupName, jingle, StringUtil.normalizeImageUrl(goodsImage),
-                            StringUtil.formatPrice(getContext(), price, 0), promotionDiscountRate, batchPrice0, commonId, appUsable > 0);
+                            StringUtil.formatPrice(getContext(), price, 0), promotionDiscountRate, batchPrice0, commonId, appUsable > 0,goodsStorage);
                     ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
                     items.add(item1);
 

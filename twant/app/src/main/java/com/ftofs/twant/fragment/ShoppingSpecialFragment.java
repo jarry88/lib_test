@@ -122,6 +122,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private RecyclerView rvPrimaryList;
     List<ElemeGroupedItem> items = new ArrayList<>();
     private int containerViewHeight;
+    private int tabHeight;
+    public boolean linkageShow =false;
 
 
     @OnClick(R.id.btn_goods)
@@ -276,6 +278,16 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        if (tabLayout.getVisibility()== View.VISIBLE) {
+            tabHeight = tabLayout.getHeight();
+        }else {
+            tabHeight = 0;
+        }
+        if (linkage.getVisibility() == View.VISIBLE) {
+            linkageShow = true;
+        }else {
+            linkageShow = false;
+        }
         if (hasGoodsCategory==1) {
             SLog.info("primary[%s] width [%d]", rvPrimaryList.getVisibility(),rvPrimaryList.getWidth());
 
@@ -376,12 +388,14 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
             //商品列表
             if (hasGoodsCategory == Constant.TRUE_INT) {
+                linkageShow = true;
                 if (zoneGoodsCategoryVoList != null) {
 
                     updateLinkage(zoneGoodsCategoryVoList);
                 }
 
             } else {
+                linkageShow = false;
                 SLog.info("無類別商品標簽數據");
                 linkageFragment.setGoodVoList(zoneGoodsVoList);
             }
@@ -479,33 +493,21 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 int linkageY_ = linkageY + linkage.getHeight();
                 int containerViewY = Util.getYOnScreen(scrollView);
 
-                int tabHeight = 0;
-                if (tabLayout.getVisibility() == View.VISIBLE) {
-                    tabHeight = tabLayout.getHeight();
-                }
                 // SLog.info("viewPagerY[%s],linkageY[%s], containerViewY[%s],tablayout[%s]",viewPagerY, linkageY, containerViewY,tabHeight );
 
-                if (linkage.getVisibility() != View.VISIBLE) {
-                    if (viewPagerY <= containerViewY + tabHeight) {  // 如果列表滑动到顶部，则启用嵌套滚动
-                        SLog.info("打開子頁面滾動");
-                        linkageFragment.setNestedScroll(true);
-                        storeListFragment.setNestedScroll(true);
-                    } else {
-                        SLog.info("關閉子頁面滾動");
-                        linkageFragment.setNestedScroll(false);
-                        storeListFragment.setNestedScroll(false);
-                    }
-                } else {
-                    SLog.info("viewPagerY[%s],linkageY[%s], containerViewY[%s],tablayout[%s]",viewPagerY, linkageY, containerViewY,tabHeight );
-                    if (linkageY <= containerViewY+tabHeight) {  // 如果列表滑动到顶部，则启用嵌套滚动
-                        SLog.info("打開二級聯動滾動");
-                        rvSecondList.setNestedScrollingEnabled(true);
-                    } else {
-                        SLog.info("關閉二級聯動滾動");
+                if (!linkageShow) {
+                    boolean openChildScroll=containerViewY <= containerViewY+tabHeight;
+                    // 如果列表滑动到顶部，则启用嵌套滚动
+                    SLog.info("設置子頁面滾動[%s]",openChildScroll);
+                    linkageFragment.setNestedScroll(openChildScroll);
+                    storeListFragment.setNestedScroll(openChildScroll);
 
-                        rvSecondList.setNestedScrollingEnabled(false);
-                    }
+                } else {
+                    boolean openLinkageScroll=linkageY <= containerViewY+tabHeight;
+                    SLog.info("設置二級滾動[%s]",openLinkageScroll);
+                    rvSecondList.setNestedScrollingEnabled(openLinkageScroll);
                 }
+                SLog.info("viewPagerY[%s],linkageY[%s], containerViewY[%s],tablayout[%s]",viewPagerY, linkageY, containerViewY,tabHeight );
 
             }
         });
@@ -674,6 +676,10 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 });
 
                 holder.getView(R.id.iv_goods_add).setOnClickListener(v -> {
+                    if (!item.info.hasStorage()) {
+                        ToastUtil.error(mContext,"該產品已售罄，看看其他的吧");
+                        return;
+                    }
                     new XPopup.Builder(mContext)
                             // 如果不加这个，评论弹窗会移动到软键盘上面
                             .moveUpToKeyboard(false)
@@ -734,8 +740,9 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                     double batchPrice0 = goods.getDouble("batchPrice0");
                     double promotionDiscountRate = goods.getDouble("promotionDiscountRate");
 
+                    int goodsStorage=goods.getInt("goodsStorage");
                     ElemeGroupedItem.ItemInfo goodsInfo = new ElemeGroupedItem.ItemInfo(goodsName, groupName, jingle, StringUtil.normalizeImageUrl(goodsImage),
-                            StringUtil.formatPrice(getContext(), price, 0), promotionDiscountRate, batchPrice0, commonId, appUsable > 0);
+                            StringUtil.formatPrice(getContext(), price, 0), promotionDiscountRate, batchPrice0, commonId, appUsable > 0,goodsStorage);
                     ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
                     items.add(item1);
                 }

@@ -184,7 +184,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     if (stickyCellData.activityEnable) {
                         stickyCellData.appIndexNavigationImage = responseObj.getSafeString("datas.appIndexNavigationImage");
                         stickyCellData.appIndexNavigationLinkType = responseObj.getSafeString("datas.appIndexNavigationLinkType");
-                        stickyCellData.appIndexNavigationLinkValue = StringUtil.normalizeImageUrl(responseObj.getSafeString("datas.appIndexNavigationLinkValue"));
+                        stickyCellData.appIndexNavigationLinkValue = responseObj.getSafeString("datas.appIndexNavigationLinkValue");
 
                         SLog.info("appIndexNavigationImage[%s], appIndexNavigationLinkType[%s], appIndexNavigationLinkValue[%s]",
                                 stickyCellData.appIndexNavigationImage, stickyCellData.appIndexNavigationLinkType, stickyCellData.appIndexNavigationLinkValue);

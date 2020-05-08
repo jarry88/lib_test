@@ -381,8 +381,9 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
                 double batchPrice0 = goods.getDouble("batchPrice0");
                 double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
 
+                int goodsStorage=goods.getInt("goodsStorage");
                 ElemeGroupedItem.ItemInfo goodsInfo = new ElemeGroupedItem.ItemInfo(goodsName, groupName, jingle, StringUtil.normalizeImageUrl(goodsImage),
-                        StringUtil.formatPrice(getContext(), price, 0),promotionDiscountRate,batchPrice0,commonId,appUsable > 0);
+                        StringUtil.formatPrice(getContext(), price, 0),promotionDiscountRate,batchPrice0,commonId,appUsable > 0,goodsStorage);
                 ElemeGroupedItem item1 = new ElemeGroupedItem(goodsInfo);
                 items.add(item1);
                 }

@@ -22,6 +22,7 @@ public class ElemeGroupedItem extends BaseGroupedItem<ElemeGroupedItem.ItemInfo>
         private String imgUrl;
         private String cost;
         public int commonId;
+        private int goodsStorage =1;
 
         public ItemInfo(String title, String group, String content) {
             super(title, group);
@@ -37,12 +38,13 @@ public class ElemeGroupedItem extends BaseGroupedItem<ElemeGroupedItem.ItemInfo>
             this(title, group, content, imgUrl);
             this.cost = cost;
         }
-        public ItemInfo(String title, String group, String content, String imgUrl, String cost,double discount,double original,int commonId,boolean showDiscount) {
+        public ItemInfo(String title, String group, String content, String imgUrl, String cost,double discount,double original,int commonId,boolean showDiscount,int goodsStorage) {
             this(title, group, content, imgUrl,cost);
             this.discount = discount;
             this.original = original;
             this.commonId = commonId;
             this.show = showDiscount;
+            this.goodsStorage = goodsStorage;
         }
 
         public String getContent() {
@@ -75,6 +77,10 @@ public class ElemeGroupedItem extends BaseGroupedItem<ElemeGroupedItem.ItemInfo>
 
         public double getOriginal() {
             return original;
+        }
+
+        public boolean hasStorage() {
+            return this.goodsStorage>0;
         }
     }
 

@@ -61,6 +61,8 @@ public class ShoppingStoreListFragment extends BaseFragment {
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
+        parentFragment.linkageShow = false;
+        parentFragment.linkage.setVisibility(View.GONE);
         SLog.info("onSupportVisible");
         if (zoneStoreVoList != null) {
             parentFragment.viewPager.setVisibility(View.VISIBLE);
@@ -69,7 +71,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
             }
             updateStoreList(zoneStoreVoList);
         }
-        parentFragment.linkage.setVisibility(View.GONE);
+
     }
 
     @Override
