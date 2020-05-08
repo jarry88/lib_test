@@ -14,13 +14,14 @@ import androidx.viewpager.widget.ViewPager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RvTestFragment extends BaseFragment {
+public class RvTestFragment extends BaseFragment implements View.OnClickListener {
     boolean showTab; // 是否顯示切換Tab
 
     private List<String> titleList = new ArrayList<>();
@@ -59,6 +60,8 @@ public class RvTestFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Util.setOnClickListener(view, R.id.btn_switch, this);
 
         containerView = view.findViewById(R.id.container_view);
         tabLayout = view.findViewById(R.id.tab_layout);
@@ -137,17 +140,7 @@ public class RvTestFragment extends BaseFragment {
 
         if (containerHeight == 0) {
             containerHeight = containerView.getHeight();
-            tabHeight = tabLayout.getHeight();
-            SLog.info("containerHeight[%d], tabHeight[%d]", containerHeight, tabHeight);
-
-            ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
-
-            if (showTab) {
-                layoutParams.height = containerHeight - tabHeight;
-            } else {
-                layoutParams.height = containerHeight;
-            }
-            viewPager.setLayoutParams(layoutParams);
+            setViewPagerHeight();
         }
     }
 
@@ -156,10 +149,41 @@ public class RvTestFragment extends BaseFragment {
         super.onSupportInvisible();
     }
 
+    void setViewPagerHeight() {
+        tabHeight = tabLayout.getHeight();
+        SLog.info("containerHeight[%d], tabHeight[%d]", containerHeight, tabHeight);
+
+        ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
+
+        if (showTab) {
+            layoutParams.height = containerHeight - tabHeight;
+        } else {
+            layoutParams.height = containerHeight;
+        }
+        viewPager.setLayoutParams(layoutParams);
+    }
+
     @Override
     public boolean onBackPressedSupport() {
         SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_switch) {
+            showTab = !showTab;
+            if (showTab) {
+                ToastUtil.info(_mActivity, "顯示Tab");
+                tabLayout.setVisibility(View.VISIBLE);
+            } else {
+                ToastUtil.info(_mActivity, "隱藏Tab");
+                tabLayout.setVisibility(View.GONE);
+            }
+            setViewPagerHeight();
+        }
     }
 }
