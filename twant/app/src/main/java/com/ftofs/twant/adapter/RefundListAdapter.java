@@ -28,13 +28,13 @@ public class RefundListAdapter extends BaseQuickAdapter<RefundItem, BaseViewHold
                 .setText(R.id.tv_order_status, item.orderStatus)
                 .setText(R.id.tv_goods_name, item.goodsName)
                 .setText(R.id.tv_goods_full_specs, item.goodsFullSpecs)
-                .setText(R.id.tv_goods_price_left, StringUtil.formatPrice(mContext, item.goodsPrice, 0,false))
+                .setText(R.id.tv_goods_price_left, StringUtil.formatPrice(mContext, item.goodsPrice, 0,2))
                 .setText(R.id.tv_buy_num, mContext.getString(R.string.times_sign) + " " + item.buyNum)
                 .setText(R.id.tv_add_time, item.addTime)
-                .setText(R.id.tv_refund_amount, StringUtil.formatPrice(mContext, item.goodsPayAmount, 1,false));
+                .setText(R.id.tv_refund_amount, StringUtil.formatPrice(mContext, item.goodsPayAmount, 1,2));
         TextView tvRefundAmount = helper.getView(R.id.tv_refund_amount);
         TextView tvPrice = helper.getView(R.id.tv_goods_price_left);
-        UiUtil.toPriceUI(tvRefundAmount,9);
+        UiUtil.toPriceUI(tvRefundAmount,10);
 
         ImageView goodsImage = helper.getView(R.id.goods_image);
         Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goodsImage)).centerCrop().into(goodsImage);

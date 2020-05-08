@@ -47,8 +47,8 @@ public class OrderItemListAdapter extends ViewGroupAdapter<OrderItem> {
         setText(itemView, R.id.tv_order_status, itemData.ordersStateName);
         setText(itemView, R.id.tv_sku_count, skuCountText);
         TextView orderAmount = itemView.findViewById(R.id.tv_orders_amount);
-        orderAmount.setText(StringUtil.formatPrice(context, itemData.ordersAmount, 1));
-        UiUtil.toPriceUI(orderAmount,9);
+        orderAmount.setText(StringUtil.formatPrice(context, itemData.ordersAmount, 1,2));
+        UiUtil.toPriceUI(orderAmount,12);
 //        UiUtil.toPriceUI(((TextView)itemView.findViewById(R.id.tv_orders_amount)));
 
         if (itemData.showMemberCancel) {

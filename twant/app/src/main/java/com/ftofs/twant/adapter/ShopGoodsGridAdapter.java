@@ -3,6 +3,7 @@ package com.ftofs.twant.adapter;
 import android.content.Context;
 import androidx.annotation.Nullable;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -12,6 +13,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.UiUtil;
 
 import java.util.List;
 
@@ -42,8 +44,9 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 ImageView goodsImage = helper.getView(R.id.img_left_goods);
                 Glide.with(context).load(leftGoods.imageUrl).centerCrop().into(goodsImage);
                 helper.setText(R.id.tv_left_goods_name, leftGoods.name);
-                helper.setText(R.id.tv_left_goods_price, StringUtil.formatPrice(context,  leftGoods.price, 1,false));
-
+                TextView leftPrice=helper.getView(R.id.tv_left_goods_price);
+                leftPrice.setText(StringUtil.formatPrice(context,  leftGoods.price, 1,false));
+                UiUtil.toPriceUI(leftPrice,12);
                 helper.addOnClickListener(R.id.img_left_goods, R.id.btn_add_to_cart_left);
             }
             if (goodsPair.rightGoods != null) {
@@ -51,7 +54,9 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
                 ImageView goodsImage = helper.getView(R.id.img_right_goods);
                 Glide.with(context).load(rightGoods.imageUrl).centerCrop().into(goodsImage);
                 helper.setText(R.id.tv_right_goods_name, rightGoods.name);
-                helper.setText(R.id.tv_right_goods_price, StringUtil.formatPrice(context, rightGoods.price, 1,false));
+                TextView rightPrice = helper.getView(R.id.tv_right_goods_price);
+                rightPrice.setText( StringUtil.formatPrice(context, rightGoods.price, 1,false));
+                UiUtil.toPriceUI(rightPrice,12);
 
                 helper.setGone(R.id.img_right_goods, true)
                         .setVisible(R.id.ll_right_goods_container, true);

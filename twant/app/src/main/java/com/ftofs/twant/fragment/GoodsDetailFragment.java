@@ -1796,7 +1796,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         rlDiscountInfoContainer.setVisibility(showDiscountInfo?VISIBLE:GONE);
         if (showDiscountInfo) {
             tvGoodsPriceFinal.setText(StringUtil.formatPrice(_mActivity, goodsInfo.price, 1));
-            UiUtil.toPriceUI(tvGoodsPrice,0);
+            UiUtil.toPriceUI(tvGoodsPrice,1);
             tvGoodsPriceOriginal.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
 
             startCountDown();

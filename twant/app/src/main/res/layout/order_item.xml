@@ -89,8 +89,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="9dp"
             android:layout_gravity="center_vertical"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:textColor="@color/tw_red"
+            android:textStyle="bold"
             android:text="$ 329.00"
             />
     </LinearLayout>

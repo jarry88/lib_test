@@ -35,7 +35,7 @@ public class OrderSkuItemListAdapter extends ViewGroupAdapter<OrderSkuItem> {
         TextView tvGoodsName = itemView.findViewById(R.id.tv_goods_name);
         tvGoodsName.setText(itemData.goodsName);
         TextView tvSkuPrice = itemView.findViewById(R.id.tv_sku_price);
-        tvSkuPrice.setText(StringUtil.formatPrice(context, itemData.goodsPrice, 0));
+        tvSkuPrice.setText(StringUtil.formatPrice(context, itemData.goodsPrice, 0,2));
         UiUtil.toPriceUI(tvSkuPrice,9);
         TextView tvGoodsFullSpecs = itemView.findViewById(R.id.tv_goods_full_specs);
         tvGoodsFullSpecs.setText(itemData.goodsFullSpecs);

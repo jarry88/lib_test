@@ -21,6 +21,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.HwLoadingView;
 
@@ -85,6 +86,7 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
         holder.tvGoodsName.setText(item.goodsName);
         holder.tvGoodsJingle.setText(item.jingle);
         holder.tvGoodsPrice.setText(StringUtil.formatPrice(context, item.price, 1,false));
+        UiUtil.toPriceUI(holder.tvGoodsPrice,12);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
