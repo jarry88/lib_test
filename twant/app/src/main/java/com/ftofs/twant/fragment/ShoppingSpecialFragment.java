@@ -473,7 +473,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         rvSecondList = linkage.findViewById(R.id.rv_secondary);
         rvPrimaryList = linkage.findViewById(R.id.rv_primary);
         rvSecondList.setBackgroundColor(getResources().getColor(R.color.tw_white));
-//        rvPrimaryList.setBackgroundColor(Color.parseColor("#fff3f3f3"));
+        rvPrimaryList.setBackgroundColor(Color.parseColor("#fff3f3f3"));
 
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
         LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
@@ -578,18 +578,21 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         @Override
         public void onBindViewHolder(LinkagePrimaryViewHolder holder, boolean selected, String title) {
             TextView tvTitle = ((TextView) holder.mGroupTitle);
+
+            tvTitle.setText(title);
             tvTitle.setMaxLines(2);
             tvTitle.setMaxEms(9);
             tvTitle.setEllipsize(TextUtils.TruncateAt.END);
-            tvTitle.setText(title);
+            tvTitle.setHorizontalScrollBarEnabled(false);
+            tvTitle.setScroller(null);
             View blue = holder.mLayout.findViewById(R.id.view_border);
             blue.setVisibility(View.GONE);
             if (selected) {
                 tvTitle.setTextColor(Color.parseColor("#2A292A"));
-                tvTitle.setBackground(default_drawbg);
+                tvTitle.setBackgroundColor(Color.parseColor("#ffffffff"));
                 holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
             } else {
-                tvTitle.setTextColor(Color.parseColor("#999999"));
+                tvTitle.setTextColor(Color.parseColor("#fffff3f3"));
 
                 holder.mLayout.setBackgroundColor(Color.argb(26, 0, 0, 0));
                 tvTitle.setBackgroundColor(Color.argb(0, 0, 0, 0));

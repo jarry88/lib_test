@@ -54,9 +54,9 @@ public class UiUtil {
     }
 
     public static void addBannerPageClick(MZBannerView bannerView, List<WebSliderItem> webSliderItemList) {
-        if (StringUtil.isArrayEmpty(webSliderItemList)) {
-            return;
-        }
+//        if (StringUtil.isArrayEmpty(webSliderItemList)) {
+//            return;
+//        }
         bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {

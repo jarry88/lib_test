@@ -22,7 +22,6 @@
         android:layout_height="86dp"
         android:layout_marginStart="8dp"
         android:scaleType="fitXY"
-        app:riv_corner_radius="10dp"
         app:riv_border_width="1dp"
         app:riv_border_color="#F1F1F1"
         app:layout_constraintBottom_toBottomOf="parent"
