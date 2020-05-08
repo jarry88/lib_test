@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.fragment.RvTestFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.fragment.SellerOrderListFragment;
 import com.ftofs.twant.util.User;
@@ -52,9 +53,7 @@ public class LogoView extends LinearLayout implements ITangramViewLifeCycle {
             @Override
             public void onClick(View v) {
                 if (Config.DEVELOPER_MODE) {
-                    String token = User.getToken();
-                    SLog.info("token[%s]", token);
-                    // Util.startFragment(SellerOrderListFragment.newInstance());
+                    Util.startFragment(RvTestFragment.newInstance());
                 }
             }
         });
