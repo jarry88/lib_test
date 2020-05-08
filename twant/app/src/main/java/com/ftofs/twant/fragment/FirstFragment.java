@@ -36,6 +36,9 @@ public class FirstFragment extends BaseFragment {
             17, 3, 11, 9, 5, 12, 6, 13, 15, 9, 19, 6, 19, 16, 19, 15, 11, 4, 16, 12
     };
 
+    // 最近一次分類滑動的時間
+    long lastScrollingCategoryTime = 0;
+
     public static FirstFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -102,19 +105,17 @@ public class FirstFragment extends BaseFragment {
 
                 SLog.info("onScrollStateChanged, newState[%d]", newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    LinearLayoutManager layoutManager = (LinearLayoutManager) rvList.getLayoutManager();
-                    int position = layoutManager.findFirstCompletelyVisibleItemPosition();
-                    Item item = itemList.get(position);
-
-                    selectCategory(item.category);
+                    // 最後一次要強制選擇
+                    selectScrollingCategory(true);
                 }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 SLog.info("onScrolled, dx[%d], dy[%d]", dx, dy);
+
+                selectScrollingCategory(false);
             }
         });
         itemAdapter = new ItemAdapter(itemList);
@@ -134,6 +135,26 @@ public class FirstFragment extends BaseFragment {
         rvList.setAdapter(itemAdapter);
 
         setNestedScrollingEnabled(false);
+    }
+
+    /**
+     * 選擇正在滑動的分類
+     * @param force  是否強制。如果強制，就會忽略時間間隔
+     */
+    private void selectScrollingCategory(boolean force) {
+        long now = System.currentTimeMillis();
+
+        // 防止調用太頻繁
+        if (!force && (now - lastScrollingCategoryTime) < 40) { // 40毫秒內忽略
+            return;
+        }
+        lastScrollingCategoryTime = now;
+
+        LinearLayoutManager layoutManager = (LinearLayoutManager) rvList.getLayoutManager();
+        int position = layoutManager.findFirstVisibleItemPosition();
+        Item item = itemList.get(position);
+
+        selectCategory(item.category);
     }
 
     /**
