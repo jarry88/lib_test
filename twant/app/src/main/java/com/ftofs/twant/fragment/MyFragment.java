@@ -557,7 +557,11 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
                 try {
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
                     int isSeller = responseObj.getInt("datas.isSeller");
                     showSeller = isSeller == Constant.TRUE_INT;
                     if (!showSeller) {

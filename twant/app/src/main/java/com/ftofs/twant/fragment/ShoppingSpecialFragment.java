@@ -382,7 +382,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 SLog.info("設置商店列表數據");
                 storeListFragment.setStoreList(zoneStoreVoList);
             } else {
-                tabLayout.setVisibility(View.INVISIBLE);
+                tabLayout.setVisibility(View.GONE);
+                tabHeight=0;
             }
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
             //商品列表
@@ -475,11 +476,11 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         rvPrimaryList.setBackgroundColor(Color.parseColor("#fff3f3f3"));
 
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
+        layoutParams.height = Util.getScreenDimension(_mActivity).second - Util.dip2px(_mActivity,44)-tabHeight;
+//        rvSecondList.setLayoutParams(layoutParams);
         LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
-        layoutParams.height = Util.getScreenDimension(_mActivity).second - Util.dip2px(_mActivity,88);
 //        layoutParams1.height =parentFragment.scrollView.getHeight();
         layoutParams1.height =layoutParams.height ;
-        rvSecondList.setLayoutParams(layoutParams);
         rvPrimaryList.setLayoutParams(layoutParams1);
 
         SLog.info("isNestedScrollingEnabled[%s]", rvSecondList.isNestedScrollingEnabled());
@@ -507,29 +508,32 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                     boolean openLinkageScroll=linkageY <= containerViewY+tabHeight;
                     SLog.info("設置二級滾動[%s]",openLinkageScroll);
                     rvSecondList.setNestedScrollingEnabled(openLinkageScroll);
+                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
+                    layoutParams.height = Util.getScreenDimension(_mActivity).second -tabHeight;
+                    rvSecondList.setLayoutParams(layoutParams);
                 }
                 SLog.info("viewPagerY[%s],linkageY[%s], containerViewY[%s],tablayout[%s]",viewPagerY, linkageY, containerViewY,tabHeight );
 
             }
         });
         rvSecondList.setNestedScrollingEnabled(false);
-        rvSecondList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                SLog.info("__newState[%d]", newState);
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    int linkageY_ = Util.getYOnScreen(linkage) + linkage.getHeight();
-                    SLog.info("linkageY_[%s]", linkageY_);
-//                    hideFloatButton();
-                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-//                    showFloatButton();
-                }
-            }
-        });
+//        rvSecondList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//
+//                SLog.info("__newState[%d]", newState);
+//                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+//                    int linkageY_ = Util.getYOnScreen(linkage) + linkage.getHeight();
+//                    SLog.info("linkageY_[%s],height", linkageY_,linkage.getHeight());
+////                    hideFloatButton();
+//                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+//
+//                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+////                    showFloatButton();
+//                }
+//            }
+//        });
 
     }
     private static class ElemePrimaryAdapterConfig implements ILinkagePrimaryAdapterConfig {
@@ -579,11 +583,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             TextView tvTitle = ((TextView) holder.mGroupTitle);
 
             tvTitle.setText(title);
-            tvTitle.setMaxLines(2);
-            tvTitle.setMaxEms(9);
-            tvTitle.setEllipsize(TextUtils.TruncateAt.END);
-            tvTitle.setHorizontalScrollBarEnabled(false);
-            tvTitle.setScroller(null);
+
+
             View blue = holder.mLayout.findViewById(R.id.view_border);
             blue.setVisibility(View.GONE);
             if (selected) {
@@ -591,7 +592,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 tvTitle.setBackgroundColor(Color.parseColor("#ffffffff"));
                 holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
             } else {
-                tvTitle.setTextColor(Color.parseColor("#fffff3f3"));
+                tvTitle.setTextColor(Color.parseColor("#999999"));
 
                 holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
                 tvTitle.setBackgroundColor(Color.argb(0, 0, 0, 0));
@@ -599,10 +600,13 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             tvTitle.setTextColor(ContextCompat.getColor(mContext,
                     selected ? R.color.tw_black : R.color.tw_black));
             tvTitle.setTypeface(Typeface.defaultFromStyle(selected ?Typeface.BOLD:Typeface.NORMAL));
-            tvTitle.setEllipsize(selected ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+//            tvTitle.setEllipsize(selected ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
+            tvTitle.setMaxLines(2);
+            tvTitle.setMaxEms(8);
+            tvTitle.setEllipsize(TextUtils.TruncateAt.END);
             tvTitle.setFocusable(selected);
             tvTitle.setFocusableInTouchMode(selected);
-            tvTitle.setMarqueeRepeatLimit(selected ? -1 : 0);
+//            tvTitle.setMarqueeRepeatLimit(selected ? -1 : 0);
         }
 
         @Override
