@@ -41,7 +41,7 @@ public class TotalStatus extends BaseStatus {
      * @return
      */
     public Pair<Double, Integer> getTotalData() {
-        double totalPrice = 0f;
+        double totalPrice = 0;
         int totalCount = 0;
         for (StoreStatus storeStatus : storeStatusList) {
             for (SpuStatus spuStatus : storeStatus.spuStatusList) {
@@ -63,7 +63,7 @@ public class TotalStatus extends BaseStatus {
      * @return
      */
     public Pair<Double, Integer> getTotalDataNew() {
-        double totalPrice = 0f;
+        double totalPrice = 0;
         int totalCount = 0;
         for (StoreStatus storeStatus : storeStatusList) {
             for (SpuStatus spuStatus : storeStatus.spuStatusList) {

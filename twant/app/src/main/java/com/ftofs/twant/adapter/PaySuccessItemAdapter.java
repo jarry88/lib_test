@@ -76,7 +76,7 @@ public class PaySuccessItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
             }
 
             // 顯示訂單金額
-            double totalOrderAmount = Hawk.get(SPField.FIELD_TOTAL_ORDER_AMOUNT, 0f);
+            double totalOrderAmount = Hawk.get(SPField.FIELD_TOTAL_ORDER_AMOUNT, 0d);
             helper.setText(R.id.tv_order_total_amount, "$" + StringUtil.formatFloat(totalOrderAmount));
         } else if (item instanceof PaySuccessStoreInfoItem) {
             helper.addOnClickListener(R.id.btn_shop_map);
