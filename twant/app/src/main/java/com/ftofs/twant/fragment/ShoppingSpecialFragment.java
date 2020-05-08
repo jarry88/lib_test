@@ -496,7 +496,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 // SLog.info("viewPagerY[%s],linkageY[%s], containerViewY[%s],tablayout[%s]",viewPagerY, linkageY, containerViewY,tabHeight );
 
                 if (!linkageShow) {
-                    boolean openChildScroll=containerViewY <= containerViewY+tabHeight;
+                    boolean openChildScroll=viewPagerY <= containerViewY+tabHeight;
                     // 如果列表滑动到顶部，则启用嵌套滚动
                     SLog.info("設置子頁面滾動[%s]",openChildScroll);
                     linkageFragment.setNestedScroll(openChildScroll);

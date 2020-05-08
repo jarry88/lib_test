@@ -151,5 +151,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
 
     public void setNestedScroll(boolean b) {
         rvStoreList.setNestedScrollingEnabled(b);
+        SLog.info("設置店鋪列表頁面滾動[%s]",b);
+
     }
 }
