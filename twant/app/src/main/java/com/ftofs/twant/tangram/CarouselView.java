@@ -33,6 +33,7 @@ import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
 import com.ftofs.twant.widget.RoundedDataImageView;
@@ -78,78 +79,8 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
         View contentView = LayoutInflater.from(context).inflate(R.layout.tangram_layout_home_carousel_view, this, false);
         bannerView = contentView.findViewById(R.id.banner_view);
 
+        UiUtil.addBannerPageClick(bannerView,webSliderItemList);
 
-        bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
-            @Override
-            public void onPageClick(View view, int i) {
-                WebSliderItem webSliderItem = webSliderItemList.get(i);
-                String linkType = webSliderItem.linkType;
-                SLog.info("i = %d, linkType[%s]", i, linkType);
-
-                switch (linkType) {
-                    case "none":
-                        // 无操作
-                        break;
-                    case "url":
-                        // 外部鏈接
-                        Util.startFragment(ExplorerFragment.newInstance(webSliderItem.linkValue, true));
-                        break;
-                    case "keyword":
-                        // 关键字
-                        String keyword = webSliderItem.linkValue;
-                        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                                EasyJSONObject.generate("keyword", keyword).toString()));
-                        break;
-                    case "goods":
-                        // 產品
-                        int commonId = Integer.valueOf(webSliderItem.linkValue);
-                        Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
-                        break;
-                    case "store":
-                        // 店铺
-                        int storeId = Integer.valueOf(webSliderItem.linkValue);
-                        Util.startFragment(ShopMainFragment.newInstance(storeId));
-                        break;
-                    case "category":
-                        // 產品搜索结果页(分类)
-                        String cat = webSliderItem.linkValue;
-                        Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
-                                EasyJSONObject.generate("cat", cat).toString()));
-                        break;
-                    case "brandList":
-                        // 品牌列表
-                        break;
-                    case "voucherCenter":
-                        // 领券中心
-                        break;
-                    case "activityUrl":
-                        Util.startFragment(H5GameFragment.newInstance(webSliderItem.linkValue, true));
-                        break;
-                    case "postId":
-                        int postId = Integer.valueOf(webSliderItem.linkValue);
-                        Util.startFragment(PostDetailFragment.newInstance(postId));
-                        break;
-                    case "shopping":
-                        Util.startFragment(ShoppingSessionFragment.newInstance());
-                        break;
-                    case "shoppingZone":
-                        //購物新專場
-                        int zoneId = Integer.valueOf(webSliderItem.linkValue);
-                        Util.startFragment(ShoppingSpecialFragment.newInstance(zoneId));
-                        break;
-                    case "wantPost":
-                        MainFragment mainFragment = MainFragment.getInstance();
-                        if (mainFragment == null) {
-                            ToastUtil.error(TwantApplication.getInstance(), "MainFragment為空");
-                            return;
-                        }
-                        mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
         loadCarousel();
 
 
@@ -224,7 +155,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                     params.setMarginStart(Util.dip2px(getContext(),10));
                     linearLayout.setLayoutParams(params);
                     bannerView.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT);
-                    bannerView.setIndicatorPadding(Util.dip2px(getContext(),50),Util.dip2px(getContext(),220),0,0);
+//                    bannerView.setIndicatorPadding(Util.dip2px(getContext(),50),Util.dip2px(getContext(),220),0,0);
 
                     bannerView.start();
                     bannerView.setDelayedTime(2500);

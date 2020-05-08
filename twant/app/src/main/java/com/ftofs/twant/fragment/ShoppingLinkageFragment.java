@@ -202,7 +202,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
                 SLog.info("here");
                 int commonId = goods.id;
                 int userId = User.getUserId();
-                if (id == R.id.btn_add_to_cart) {
+                if (id == R.id.iv_goods_add) {
                     if (userId > 0) {
                         parentFragment.showSpecSelectPopup(commonId);
                     } else {
