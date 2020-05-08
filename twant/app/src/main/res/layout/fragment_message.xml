@@ -327,5 +327,7 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
+        android:background="#F3F3F3"
+
         android:layout_height="45dp"/>
 </LinearLayout>
