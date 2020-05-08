@@ -14,13 +14,16 @@ import androidx.viewpager.widget.ViewPager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RvTestFragment extends BaseFragment {
+public class RvTestFragment extends BaseFragment implements View.OnClickListener {
+    boolean showTab; // 是否顯示切換Tab
+
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
@@ -36,11 +39,12 @@ public class RvTestFragment extends BaseFragment {
     FirstFragment firstFragment;
     SecondFragment secondFragment;
 
-    public static RvTestFragment newInstance() {
+    public static RvTestFragment newInstance(boolean showTab) {
         Bundle args = new Bundle();
 
         RvTestFragment fragment = new RvTestFragment();
         fragment.setArguments(args);
+        fragment.showTab = showTab;
 
         return fragment;
     }
@@ -57,20 +61,28 @@ public class RvTestFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Util.setOnClickListener(view, R.id.btn_switch, this);
+
         containerView = view.findViewById(R.id.container_view);
         tabLayout = view.findViewById(R.id.tab_layout);
         viewPager = view.findViewById(R.id.viewpager);
         vwAnchor = view.findViewById(R.id.vw_anchor);
 
-        titleList.add("商品");
-        titleList.add("店鋪");
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
-        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
+        if (!showTab) {
+            tabLayout.setVisibility(View.GONE);
+        }
 
+        titleList.add("商品");
+        tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
         firstFragment = FirstFragment.newInstance();
-        secondFragment = SecondFragment.newInstance();
         fragmentList.add(firstFragment);
-        fragmentList.add(secondFragment);
+
+        if (showTab) {
+            titleList.add("店鋪");
+            tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
+            secondFragment = SecondFragment.newInstance();
+            fragmentList.add(secondFragment);
+        }
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
@@ -106,15 +118,20 @@ public class RvTestFragment extends BaseFragment {
                 SLog.info("viewPagerY[%s], containerViewY[%s], tabY[%s], anchorViewY[%s]",
                         viewPagerY, containerViewY, tabY, anchorViewY);
 
-                if (tabY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
-                    firstFragment.setNestedScrollingEnabled(true);
-                    secondFragment.setNestedScrollingEnabled(true);
+                if (anchorViewY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
+                    setNestedScrollingEnabled(true);
                 } else {
-                    firstFragment.setNestedScrollingEnabled(false);
-                    secondFragment.setNestedScrollingEnabled(false);
+                    setNestedScrollingEnabled(false);
                 }
             }
         });
+    }
+
+    public void setNestedScrollingEnabled(boolean enabled) {
+        firstFragment.setNestedScrollingEnabled(enabled);
+        if (showTab) {
+            secondFragment.setNestedScrollingEnabled(enabled);
+        }
     }
 
     @Override
@@ -123,17 +140,50 @@ public class RvTestFragment extends BaseFragment {
 
         if (containerHeight == 0) {
             containerHeight = containerView.getHeight();
-            tabHeight = tabLayout.getHeight();
-            SLog.info("containerHeight[%d], tabHeight[%d]", containerHeight, tabHeight);
-
-            ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
-            layoutParams.height = containerHeight - tabHeight;
-            viewPager.setLayoutParams(layoutParams);
+            setViewPagerHeight();
         }
     }
 
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
+    }
+
+    void setViewPagerHeight() {
+        tabHeight = tabLayout.getHeight();
+        SLog.info("containerHeight[%d], tabHeight[%d]", containerHeight, tabHeight);
+
+        ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
+
+        if (showTab) {
+            layoutParams.height = containerHeight - tabHeight;
+        } else {
+            layoutParams.height = containerHeight;
+        }
+        viewPager.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_switch) {
+            showTab = !showTab;
+            if (showTab) {
+                ToastUtil.info(_mActivity, "顯示Tab");
+                tabLayout.setVisibility(View.VISIBLE);
+            } else {
+                ToastUtil.info(_mActivity, "隱藏Tab");
+                tabLayout.setVisibility(View.GONE);
+            }
+            setViewPagerHeight();
+        }
     }
 }

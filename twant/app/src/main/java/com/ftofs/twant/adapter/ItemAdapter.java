@@ -31,6 +31,7 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BaseViewHolder;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.lxj.xpopup.XPopup;
+import com.ftofs.twant.interfaces.OnItemClickListener;
 
 import java.util.List;
 
@@ -42,7 +43,15 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private Typeface typeFace;
 
+
+    OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     static class ViewHolder extends BaseViewHolder {
+        TextView tvId;
 
         public ViewHolder(View view) {
             super(view);
@@ -138,6 +147,15 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
 
+        }
+
+        if (onItemClickListener != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onClick(position, holder.itemView);
+                }
+            });
         }
     }
 

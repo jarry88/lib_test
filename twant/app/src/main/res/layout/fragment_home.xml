@@ -52,4 +52,17 @@
         android:visibility="gone">
 
     </Button>
+    <Button
+        android:id="@+id/btn_show_tab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="顯示Tab">
+    </Button>
+    <Button
+        android:id="@+id/btn_not_show_tab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="不顯示Tab">
+    </Button>
 </RelativeLayout>

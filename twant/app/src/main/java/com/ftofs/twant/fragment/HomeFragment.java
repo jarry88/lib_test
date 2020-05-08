@@ -90,6 +90,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         Util.setOnClickListener(view, R.id.btn_goto_top, this);
         Util.setOnClickListener(view, R.id.btn_publish_want_post, this);
 
+        Util.setOnClickListener(view, R.id.btn_show_tab, this);
+        Util.setOnClickListener(view, R.id.btn_not_show_tab, this);
+
+
         tangramEngine = ((MainActivity) _mActivity).getTangramEngine();
         rvList = view.findViewById(R.id.rv_list);
 
@@ -296,6 +300,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
             Util.startFragment(LabFragment.newInstance());
+        } else if (id == R.id.btn_show_tab) {
+            Util.startFragment(RvTestFragment.newInstance(true));
+        } else if (id == R.id.btn_not_show_tab) {
+            Util.startFragment(RvTestFragment.newInstance(false));
         }
     }
 
