@@ -157,9 +157,9 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                     bannerView.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT);
                     int heightPadding = Util.getScreenDimension(getContext()).first * 9 / 16 - Util.dip2px(getContext(), 12);
                     bannerView.setIndicatorPadding(0,heightPadding,0,0);
+                    bannerView.setDelayedTime(2500);
 
                     bannerView.start();
-                    bannerView.setDelayedTime(2500);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

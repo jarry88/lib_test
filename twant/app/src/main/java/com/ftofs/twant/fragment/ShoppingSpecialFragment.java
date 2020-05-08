@@ -473,7 +473,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         rvSecondList = linkage.findViewById(R.id.rv_secondary);
         rvPrimaryList = linkage.findViewById(R.id.rv_primary);
         rvSecondList.setBackgroundColor(getResources().getColor(R.color.tw_white));
-        rvPrimaryList.setBackgroundColor(Color.parseColor("#fff3f3f3"));
+//        rvPrimaryList.setBackgroundColor(Color.parseColor("#fff3f3f3"));
 
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) rvSecondList.getLayoutParams();
         LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
@@ -578,6 +578,9 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         @Override
         public void onBindViewHolder(LinkagePrimaryViewHolder holder, boolean selected, String title) {
             TextView tvTitle = ((TextView) holder.mGroupTitle);
+            tvTitle.setMaxLines(2);
+            tvTitle.setMaxEms(9);
+            tvTitle.setEllipsize(TextUtils.TruncateAt.END);
             tvTitle.setText(title);
             View blue = holder.mLayout.findViewById(R.id.view_border);
             blue.setVisibility(View.GONE);
@@ -782,6 +785,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             }
         });
         bannerView.setClipToOutline(true);
+        int heightPadding = Util.getScreenDimension(_mActivity).first * 9 / 16 - Util.dip2px(_mActivity, 16);
+        bannerView.setIndicatorPadding(0,heightPadding,0,0);
         UiUtil.addBannerPageClick(bannerView,webSliderItemList);
     }
 

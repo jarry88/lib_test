@@ -83,12 +83,12 @@ public class UiUtil {
                         break;
                     case "goods":
                         // 產品
-                        int commonId = Integer.valueOf(webSliderItem.linkValue);
+                        int commonId = Integer.parseInt(webSliderItem.linkValue);
                         Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
                         break;
                     case "store":
                         // 店铺
-                        int storeId = Integer.valueOf(webSliderItem.linkValue);
+                        int storeId = Integer.parseInt(webSliderItem.linkValue);
                         Util.startFragment(ShopMainFragment.newInstance(storeId));
                         break;
                     case "category":
@@ -107,7 +107,7 @@ public class UiUtil {
                         Util.startFragment(H5GameFragment.newInstance(webSliderItem.linkValue, true));
                         break;
                     case "postId":
-                        int postId = Integer.valueOf(webSliderItem.linkValue);
+                        int postId = Integer.parseInt(webSliderItem.linkValue);
                         Util.startFragment(PostDetailFragment.newInstance(postId));
                         break;
                     case "shopping":
@@ -115,7 +115,7 @@ public class UiUtil {
                         break;
                     case "shoppingZone":
                         //購物新專場
-                        int zoneId = Integer.valueOf(webSliderItem.linkValue);
+                        int zoneId = Integer.parseInt(webSliderItem.linkValue);
                         Util.startFragment(ShoppingSpecialFragment.newInstance(zoneId));
                         break;
                     case "wantPost":
