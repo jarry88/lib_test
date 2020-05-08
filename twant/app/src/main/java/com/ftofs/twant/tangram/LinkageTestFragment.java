@@ -145,7 +145,7 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
             }
         });
         bannerView.setClipToOutline(true);
-        int heightPadding = Util.getScreenDimension(_mActivity).first * 9 / 16 - Util.dip2px(_mActivity, 25);
+        int heightPadding = Util.getScreenDimension(_mActivity).first * 9 / 16 - Util.dip2px(_mActivity, 40);
         bannerView.setIndicatorPadding(0,heightPadding,0,0);
         UiUtil.addBannerPageClick(bannerView,webSliderItemList);
     }
