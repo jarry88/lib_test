@@ -16,6 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ShopGoodsListAdapter;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.LinkageTestFragment;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
@@ -33,7 +34,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
  */
 public class ShoppingLinkageFragment extends BaseFragment implements View.OnClickListener {
 
-    private ShoppingSpecialFragment parentFragment;
+    private LinkageTestFragment parentFragment;
     private RecyclerView rvGoodsWithoutCategory;
 
     private ShopGoodsListAdapter shopGoodsListAdapter;
@@ -42,7 +43,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
     public static ShoppingLinkageFragment newInstance (ShoppingSpecialFragment shoppingSpecialFragment)  {
         ShoppingLinkageFragment fragment = new ShoppingLinkageFragment();
-        fragment.parentFragment = shoppingSpecialFragment;
+        fragment.parentFragment = null;
         return fragment;
     }
 
@@ -72,6 +73,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         rvGoodsWithoutCategory.setLayoutManager(linearLayoutManager);
         rvGoodsWithoutCategory.setAdapter(shopGoodsListAdapter);
         rvGoodsWithoutCategory.setNestedScrollingEnabled(false);
+        addOnNestedScroll();
 
         SLog.info("%s",rvGoodsWithoutCategory==null);
     }
@@ -86,7 +88,6 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
     private void updateView() {
         if (zoneGoodsVoList != null) {
-            parentFragment.viewPager.setVisibility(View.VISIBLE);
             updateGoodVoList(zoneGoodsVoList);
         }
     }
@@ -161,6 +162,25 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     }
 
 
+    public void addOnNestedScroll() {
+        rvGoodsWithoutCategory.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
 
+                    parentFragment.onCbStartNestedScroll();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
 
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    parentFragment.onCbStopNestedScroll();
+
+                }
+            }
+        });
+    }
+
+    public void setNestedScroll(LinkageTestFragment linkageTestFragment) {
+        this.parentFragment = linkageTestFragment;
+    }
 }

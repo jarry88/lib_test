@@ -19,6 +19,7 @@ import com.ftofs.twant.entity.ElemeGroupedItem;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.LinkageTestFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.umeng.commonsdk.debug.E;
@@ -39,7 +40,7 @@ import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
  */
 public class ShoppingStoreListFragment extends BaseFragment {
 
-    private ShoppingSpecialFragment parentFragment;
+    private LinkageTestFragment parentFragment;
     private RecyclerView rvStoreList;
     ShoppingStoreListAdapter storeListAdapter;
     List<StoreItem> storeItems=new ArrayList<>();
@@ -51,7 +52,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
     }
     public static ShoppingStoreListFragment newInstance(ShoppingSpecialFragment shoppingSpecialFragment) {
         ShoppingStoreListFragment fragment = new ShoppingStoreListFragment();
-        fragment.parentFragment = shoppingSpecialFragment;
+        fragment.parentFragment = null;
         return fragment;
     }
 
@@ -135,5 +136,27 @@ public class ShoppingStoreListFragment extends BaseFragment {
         rvStoreList.setNestedScrollingEnabled(b);
         SLog.info("設置店鋪列表頁面滾動[%s]",b);
 
+    }
+
+    public void addOnNestedScroll() {
+        rvStoreList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+
+                    parentFragment.onCbStartNestedScroll();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    parentFragment.onCbStopNestedScroll();
+
+                }
+            }
+        });
+    }
+
+    public void setOnNestedScroll(LinkageTestFragment linkageTestFragment) {
+        this.parentFragment = linkageTestFragment;
     }
 }

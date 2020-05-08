@@ -22,6 +22,7 @@ import com.ftofs.twant.entity.Item;
 import com.ftofs.twant.entity.Menu;
 import com.ftofs.twant.interfaces.OnItemClickListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.LinkageTestFragment;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 
@@ -50,6 +51,7 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
     private List<Goods> items = new ArrayList<>();
     private boolean dataLoaded;
     private EasyJSONArray dataList;
+    private LinkageTestFragment parentFragment;
 
     public static ShoppingSpecialLinkageFragment newInstance() {
         Bundle args = new Bundle();
@@ -120,6 +122,13 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
                     Item item = itemList.get(position);
 
                     selectCategory(item.category);
+                    parentFragment.onCbStopNestedScroll();
+                }
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+
+                    parentFragment.onCbStartNestedScroll();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
                 }
             }
 
@@ -192,6 +201,8 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
                     itemList.add(new Item(false, i, j,Goods.parse(goods)));
                 }
                 menuList.add(new Menu(groupName, i == 0, categoryTitlePosition));
+                categoryTitlePosition++;
+
                 categoryTitlePosition += goodsList.length();
                 i++;
             }
@@ -240,5 +251,27 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
     }
 
     private void setSelectedPosition(int i) {
+    }
+
+    public void addOnNestedScroll() {
+        rvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+
+                    parentFragment.onCbStartNestedScroll();
+                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
+
+                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    parentFragment.onCbStopNestedScroll();
+
+                }
+            }
+        });
+    }
+
+    public void setNestedScroll(LinkageTestFragment linkageTestFragment) {
+        this.parentFragment = linkageTestFragment;
     }
 }

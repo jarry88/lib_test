@@ -1,5 +1,6 @@
 package com.ftofs.twant.tangram;
 
+import android.app.Notification;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.GradientDrawable;
@@ -36,6 +37,7 @@ import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
+import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
@@ -43,11 +45,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.view.ViewOutlineProvider;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
@@ -87,8 +91,10 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     private long lastScrollingTimestamp;
     private boolean isScrolling;
-    private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=800;
+    private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=100;
     private LinearLayout llFloatButtonContainer;
+    private boolean showTab=true;
+    private LinearLayout llBanner;
 
     public static LinkageTestFragment newInstance(int zoneId) {
         Bundle args = new Bundle();
@@ -113,6 +119,7 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         super.onViewCreated(view, savedInstanceState);
         tvZoneName = view.findViewById(R.id.tv_zone_name);
         rlToolBar = view.findViewById(R.id.tool_bar);
+        llBanner = view.findViewById(R.id.ll_banner_container);
         Util.setOnClickListener(view,R.id.btn_back,this);
         Util.setOnClickListener(view,R.id.btn_goto_top,this);
         Util.setOnClickListener(view,R.id.btn_goto_cart,this);
@@ -145,7 +152,7 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
             }
         });
         bannerView.setClipToOutline(true);
-        int heightPadding = Util.getScreenDimension(_mActivity).first * 9 / 16 - Util.dip2px(_mActivity, 40);
+        int heightPadding = Util.getScreenDimension(_mActivity).first * 9 / 16 - Util.dip2px(_mActivity, 45);
         bannerView.setIndicatorPadding(0,heightPadding,0,0);
         UiUtil.addBannerPageClick(bannerView,webSliderItemList);
     }
@@ -205,9 +212,12 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                         viewPagerY, containerViewY, tabY, anchorViewY);
                 boolean nestedScroll = tabY <= containerViewY;
                 // 如果列表滑动到顶部，则启用嵌套滚动
+
                 shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
-                storeListFragment.setNestedScrollingEnabled(nestedScroll);
-                if (withoutCategoryFragment != null) {
+                if (showTab) {
+                    storeListFragment.setNestedScrollingEnabled(nestedScroll);
+                }
+                if (hasGoodsCategory!=1&&withoutCategoryFragment != null) {
                     withoutCategoryFragment.setNestedScroll(nestedScroll);
                 }
             }
@@ -277,8 +287,9 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                     fragmentList.add(shoppingLinkageFragment);
 //                tabLayout.removeTabAt(1);
                 shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
+                    shoppingLinkageFragment.setNestedScroll(this);
                 }
-
+                withoutCategoryFragment=null;
 
             } else {
                 if (!StringUtil.isEmpty(goodsTabTitle)) {
@@ -289,20 +300,25 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                     SLog.info("無類別商品標簽數據");
 //                tabLayout.removeTabAt(0);
                     withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
+                    withoutCategoryFragment.setNestedScroll(this);
                 }
 
             }
 
             EasyJSONArray zoneStoreVoList = zoneVo.getArray("zoneStoreVoList");
-            if (zoneStoreVoList != null&&zoneStoreVoList.length()>0) {
+            if (zoneStoreVoList != null && zoneStoreVoList.length() > 0) {
                 SLog.info("設置商店列表數據");
                 if (!StringUtil.isEmpty(storeTabTitle)) {
                     titleList.add(storeTabTitle);
                     tabLayout.addTab(tabLayout.newTab().setText(storeTabTitle));
                     fragmentList.add(storeListFragment);
+                    storeListFragment.setOnNestedScroll(this);
                     storeListFragment.setStoreList(zoneStoreVoList);
                 }
 
+            } else {
+                tabLayout.setVisibility(View.GONE);
+                setViewPagerHeight();
             }
          initViewPager();
 
@@ -311,13 +327,28 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         }
 
     }
+    void setViewPagerHeight() {
+        showTab = false;
+        tabHeight = tabLayout.getHeight();
+        SLog.info("containerHeight[%d], tabHeight[%d]", containerHeight, tabHeight);
+
+        ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
+
+        if (showTab) {
+            layoutParams.height = containerHeight - tabHeight;
+        } else {
+            layoutParams.height = containerHeight;
+        }
+        viewPager.setLayoutParams(layoutParams);
+    }
+
 
     private void updateThemeColor(String appColor) {
         if ("#FFFFFF".equals(appColor)) {
             tvZoneName.setTextColor(getResources().getColor(R.color.tw_black));
         }
         rlToolBar.setBackgroundColor(Color.parseColor(appColor));
-//        llBanner.setBackground(bannerBackGround);
+        llBanner.setBackgroundColor(Color.parseColor(appColor));
         tabLayout.setTabTextColors(Color.parseColor(StringUtil.addAlphaToColor(appColor,60)),Color.parseColor(appColor));
         tabLayout.setSelectedTabIndicatorColor(Color.parseColor(appColor));
     }
@@ -370,8 +401,17 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    public void showSpecSelectPopup(int commonId) {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0, 2, null))
+                .show();
+    }
+
     @Override
     public void onCbStartNestedScroll() {
+        SLog.info("onCbStartNestedScroll");
         isScrolling = true;
         lastScrollingTimestamp = System.currentTimeMillis();
         hideFloatButton();
@@ -379,6 +419,7 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onCbStopNestedScroll() {
+        SLog.info("onCbStopNestedScroll");
         isScrolling = false;
         llFloatButtonContainer.postDelayed(new Runnable() {
             @Override
@@ -400,9 +441,16 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         if (llFloatButtonContainer == null) {
             return;
         }
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
-        llFloatButtonContainer.setLayoutParams(layoutParams);
+//        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
+//        layoutParams.rightMargin = Util.dip2px(_mActivity, 0);
+//        llFloatButtonContainer.setLayoutParams(layoutParams);
+//        floatButtonShown = true;
+        TranslateAnimation translateAnimation = new TranslateAnimation(100, 0, 0, 0);
+        translateAnimation.setDuration(400);
+        translateAnimation.setFillAfter(true);
+        llFloatButtonContainer.setAnimation(translateAnimation);
+        llFloatButtonContainer.startAnimation(translateAnimation);
+        SLog.info("執行顯示");
         floatButtonShown = true;
     }
 
@@ -410,10 +458,15 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         if (!floatButtonShown) {
             return;
         }
-
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) llFloatButtonContainer.getLayoutParams();
-        layoutParams.rightMargin = Util.dip2px(_mActivity,  -30.25f);
-        llFloatButtonContainer.setLayoutParams(layoutParams);
         floatButtonShown = false;
+        llFloatButtonContainer.postDelayed(() -> {
+                    TranslateAnimation translateAnimation = new TranslateAnimation(0, 100, 0, 0);
+                    translateAnimation.setDuration(400);
+                    translateAnimation.setFillAfter(true);
+            llFloatButtonContainer.setAnimation(translateAnimation);
+            llFloatButtonContainer.startAnimation(translateAnimation);
+                    SLog.info("執行隱藏");
+                }, FLOAT_BUTTON_SCROLLING_EFFECT_DELAY
+        );
     }
 }

@@ -62,7 +62,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         if (selected) {
             tvCategory.setTextColor(Color.parseColor("#2A292A"));
 //            tvCategory.setBackgroundColor(Color.parseColor("#ffffffff"));
-            holder.rootView.setBackgroundColor(Color.argb(0, 0, 0, 0));
+            holder.rootView.setBackgroundColor(Color.parseColor("#ffffffff"));
 
         } else {
             tvCategory.setTextColor(Color.parseColor("#999999"));

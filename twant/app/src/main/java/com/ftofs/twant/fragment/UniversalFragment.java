@@ -24,6 +24,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.LinkageTestFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -90,12 +91,8 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         tvTestInfo.setOnClickListener(this);
         tvTestInfo.setOnClickListener(v -> {
             //測試環境可進入此測試頁面
-            Util.startFragment(ShoppingSpecialFragment.newInstance(19+ count));
-            if (count > 0) {
-                count = -1;
-            } else {
-                count=1;
-            }
+            Util.startFragment(LinkageTestFragment.newInstance(19));
+
         });
         avatar =view.findViewById((R.id.img_avatar));
 //        tvMemberName.setText(User.getUserInfo(SPField.FIELD_NICKNAME,null));

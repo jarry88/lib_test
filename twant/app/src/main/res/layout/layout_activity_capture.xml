@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="18sp"
-            android:text="@string/text_scan_qr_code"
+            android:text="掃描二維碼"
             android:textColor="@color/tw_black"
             />
 
