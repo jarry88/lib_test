@@ -122,7 +122,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private RecyclerView rvPrimaryList;
     List<ElemeGroupedItem> items = new ArrayList<>();
     private int containerViewHeight;
-    private int tabHeight;
+    private int tabHeight = 0;
     public boolean linkageShow =false;
 
 
@@ -278,10 +278,9 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        if (tabLayout.getVisibility()== View.VISIBLE) {
+        if (tabHeight == 0) {
             tabHeight = tabLayout.getHeight();
-        }else {
-            tabHeight = 0;
+            SLog.info("tabHeight[%d]", tabHeight);
         }
         if (linkage.getVisibility() == View.VISIBLE) {
             linkageShow = true;
