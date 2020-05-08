@@ -431,7 +431,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
                 }
                 holder.getView(R.id.sw_price).setVisibility(item.info.show ? View.VISIBLE : View.GONE);
                 ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
-                ImageView imageView = holder.getView(R.id.iv_goods_img);
+                ImageView imageView = holder.getView(R.id.img_goods_item);
                 Glide.with(mContext).load(item.info.getImgUrl()).centerCrop().into(imageView);
                 holder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
                     //TODO

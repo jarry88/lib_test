@@ -470,6 +470,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
 
                     genderIndex = id;
                     tvGender.setText(genderTextMap[genderIndex]);
+                    Hawk.put(SPField.FIELD_GENDER, id);
                 }
             });
         }

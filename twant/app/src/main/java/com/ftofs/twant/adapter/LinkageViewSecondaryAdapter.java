@@ -56,7 +56,7 @@ public class LinkageViewSecondaryAdapter extends BaseMultiItemQuickAdapter<Goods
             }
             helper.getView(R.id.sw_price).setVisibility(item.showDiscount ? View.VISIBLE : View.GONE);
             ((SlantedWidget) helper.getView(R.id.sw_price)).setDiscountInfo(mContext, item.getDiscount(), item.getOriginal());
-            ImageView imageView = helper.getView(R.id.iv_goods_img);
+            ImageView imageView = helper.getView(R.id.img_goods_item);
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.imageUrl)).centerCrop().into(imageView);
             helper.getView(R.id.iv_goods_item).setOnClickListener(v -> {
                 //TODO
