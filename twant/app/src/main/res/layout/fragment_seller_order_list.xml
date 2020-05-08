@@ -33,7 +33,8 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="41.5dp"
             android:layout_marginRight="41.5dp"
-            android:background="@drawable/seller_order_list_search_box_bg">
+            android:background="@drawable/seller_order_list_search_box_bg"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -55,6 +56,16 @@
 
             </EditText>
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:text="訂單列表"
+            android:textColor="@color/tw_black"
+            />
     </RelativeLayout>
 
     <!-- Tab欄 -->
