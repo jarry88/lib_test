@@ -801,8 +801,8 @@
     <string name="text_complain_talk_count">投訴對話中</string>
     <string name="text_goods_offline_and_pass_count">倉庫中已審核</string>
     <string name="text_goods_common_ban_count">被禁售的商品</string>
-    <string name="text_orders_wait_send">代發貨訂單</string>
+    <string name="text_orders_wait_send">待發貨訂單</string>
     <string name="text_discount_goods_count">促銷中的商品</string>
-    <string name="text_orders_wait_pay_count">代收款訂單</string>
+    <string name="text_orders_wait_pay_count">待收款訂單</string>
     <string name="text_return_waiting_good">退貨中</string>
 </resources>
