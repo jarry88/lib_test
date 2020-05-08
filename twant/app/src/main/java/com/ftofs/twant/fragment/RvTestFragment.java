@@ -106,7 +106,7 @@ public class RvTestFragment extends BaseFragment {
                 SLog.info("viewPagerY[%s], containerViewY[%s], tabY[%s], anchorViewY[%s]",
                         viewPagerY, containerViewY, tabY, anchorViewY);
 
-                if (tabY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
+                if (anchorViewY <= containerViewY) {  // 如果列表滑动到顶部，则启用嵌套滚动
                     firstFragment.setNestedScrollingEnabled(true);
                     secondFragment.setNestedScrollingEnabled(true);
                 } else {

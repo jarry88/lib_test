@@ -118,7 +118,19 @@ public class FirstFragment extends BaseFragment {
             }
         });
         itemAdapter = new ItemAdapter(itemList);
-        it
+        itemAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(int position, View view) {
+                Item item = itemList.get(position);
+                String itemDesc;
+                if (item.isCategoryTitle) {
+                    itemDesc = "分類_" + item.category;
+                } else {
+                    itemDesc = "分類_" + item.category + "_項目_" + item.id;
+                }
+                SLog.info("點擊了:" + itemDesc);
+            }
+        });
         rvList.setAdapter(itemAdapter);
 
         setNestedScrollingEnabled(false);

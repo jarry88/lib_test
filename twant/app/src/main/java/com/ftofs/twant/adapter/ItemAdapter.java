@@ -10,12 +10,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.Item;
+import com.ftofs.twant.interfaces.OnItemClickListener;
 
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     private List<Item> mItemList;
+
+    OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvId;
@@ -47,6 +54,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         } else {
             holder.tvId.setText("分類_" + item.category + "_項目_" + item.id);
             holder.tvId.setTextSize(15);
+        }
+
+        if (onItemClickListener != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClickListener.onClick(position, holder.itemView);
+                }
+            });
         }
     }
 

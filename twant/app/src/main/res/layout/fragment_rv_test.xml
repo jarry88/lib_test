@@ -11,12 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <!-- 錨點 -->
-        <View
-            android:id="@+id/vw_anchor"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-        </View>
 
         <ImageView
             android:layout_width="match_parent"
@@ -25,6 +19,12 @@
             android:src="@drawable/search">
         </ImageView>
 
+        <!-- 錨點 -->
+        <View
+            android:id="@+id/vw_anchor"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+        </View>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
