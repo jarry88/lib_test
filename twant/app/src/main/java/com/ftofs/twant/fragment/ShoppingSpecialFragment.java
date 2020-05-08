@@ -593,7 +593,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             } else {
                 tvTitle.setTextColor(Color.parseColor("#fffff3f3"));
 
-                holder.mLayout.setBackgroundColor(Color.argb(26, 0, 0, 0));
+                holder.mLayout.setBackgroundColor(Color.argb(0, 0, 0, 0));
                 tvTitle.setBackgroundColor(Color.argb(0, 0, 0, 0));
             }
             tvTitle.setTextColor(ContextCompat.getColor(mContext,
@@ -678,7 +678,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 }
                 holder.getView(R.id.sw_price).setVisibility( View.GONE);
 //                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
-                ImageView imageView = holder.getView(R.id.iv_goods_img);
+                ImageView imageView = holder.getView(R.id.img_goods_item);
                 Glide.with(mContext).load(item.info.getImgUrl()).centerCrop().into(imageView);
                 holder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
                     //TODO
