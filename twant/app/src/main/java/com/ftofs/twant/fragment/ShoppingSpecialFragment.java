@@ -476,7 +476,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 int linkageY_ = linkageY + linkage.getHeight();
                 int containerViewY = Util.getYOnScreen(scrollView);
 
-                SLog.info("linkageY[%s], containerViewY[%s],linkageY_[%s]", linkageY, containerViewY,linkageY_);
+                SLog.info("linkageY[%s], containerViewY[%s],tablayout[%s]", linkageY, containerViewY,tabLayout.getVisibility() );
                 int tabHeight = 0;
                 if (tabLayout.getVisibility() == View.VISIBLE) {
                     tabHeight = tabLayout.getHeight();

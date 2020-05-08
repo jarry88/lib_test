@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="44dp"
+        android:background="#F3F3F3"
+
         android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
