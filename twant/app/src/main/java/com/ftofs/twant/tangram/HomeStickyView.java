@@ -230,7 +230,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             case "shoppingZone":
                 //購物新專場
                 int zoneId = Integer.parseInt(stickyCellData.appIndexNavigationLinkValue);
-                Util.startFragment(ShoppingSpecialFragment.newInstance(zoneId));
+                Util.startFragment(LinkageTestFragment.newInstance(zoneId));
                 break;
             case "wantPost":
                 MainFragment mainFragment = MainFragment.getInstance();

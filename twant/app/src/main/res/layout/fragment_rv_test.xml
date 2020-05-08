@@ -35,6 +35,8 @@
             app:tabSelectedTextColor="@color/tw_blue"
             app:tabTextColor="@color/tw_black"
             android:background="@drawable/border_type_d"
+            app:tabIndicatorFullWidth="false"
+
             />
 
         <androidx.viewpager.widget.ViewPager

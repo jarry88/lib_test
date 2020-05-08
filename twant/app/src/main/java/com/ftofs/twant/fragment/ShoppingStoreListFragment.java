@@ -45,6 +45,10 @@ public class ShoppingStoreListFragment extends BaseFragment {
     List<StoreItem> storeItems=new ArrayList<>();
     private EasyJSONArray zoneStoreVoList;
 
+    public static ShoppingStoreListFragment newInstance() {
+        ShoppingStoreListFragment fragment = new ShoppingStoreListFragment();
+        return fragment;
+    }
     public static ShoppingStoreListFragment newInstance(ShoppingSpecialFragment shoppingSpecialFragment) {
         ShoppingStoreListFragment fragment = new ShoppingStoreListFragment();
         fragment.parentFragment = shoppingSpecialFragment;
@@ -61,11 +65,8 @@ public class ShoppingStoreListFragment extends BaseFragment {
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-        parentFragment.linkageShow = false;
-        parentFragment.linkage.setVisibility(View.GONE);
         SLog.info("onSupportVisible");
         if (zoneStoreVoList != null) {
-            parentFragment.viewPager.setVisibility(View.VISIBLE);
             if (storeListAdapter == null) {
                 storeListAdapter = new ShoppingStoreListAdapter(R.layout.store_view, storeItems);
             }
@@ -78,25 +79,6 @@ public class ShoppingStoreListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvStoreList = view.findViewById(R.id.rv_simple);
-        rvStoreList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                SLog.info("dy %d",dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    rvStoreList.setNestedScrollingEnabled(!parentFragment.getScrollEnale());
-                    parentFragment.showFloatButton();
-                } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
-
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    parentFragment.hideFloatButton();
-                }
-            }
-        });
         storeListAdapter = new ShoppingStoreListAdapter(R.layout.store_view, storeItems);
         storeListAdapter.setOnItemChildClickListener((adapter, view1, position) -> {
             int id = view1.getId();
@@ -126,7 +108,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
     }
     private void updateStoreList(EasyJSONArray zoneStoreVoList) {
         storeItems.clear();
-        SLog.info(" ");
+        SLog.info(" updateStoreList");
         try {
             for (Object object : zoneStoreVoList) {
                 EasyJSONObject store = (EasyJSONObject) object;
@@ -149,7 +131,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
 
     }
 
-    public void setNestedScroll(boolean b) {
+    public void setNestedScrollingEnabled(boolean b) {
         rvStoreList.setNestedScrollingEnabled(b);
         SLog.info("設置店鋪列表頁面滾動[%s]",b);
 

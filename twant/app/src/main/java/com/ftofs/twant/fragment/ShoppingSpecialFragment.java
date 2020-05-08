@@ -32,16 +32,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
-import com.ftofs.twant.adapter.ShopGoodsListAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.ElemeGroupedItem;
-import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
@@ -52,9 +48,7 @@ import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
-import com.ftofs.twant.view.TwantTabLayout;
 import com.ftofs.twant.widget.SimpleTabButton;
-import com.ftofs.twant.widget.SlantedWidget;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.google.android.material.tabs.TabLayout;
 import com.kunminx.linkage.LinkageRecyclerView;
@@ -73,14 +67,12 @@ import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -93,10 +85,6 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     private Unbinder unbinder;
     @BindView(R.id.tv_zone_name)
     TextView tvZoneName;
-    @BindView(R.id.stb_goods_tab_title)
-    SimpleTabButton stbGoodsTabTitle;
-    @BindView(R.id.stb_store_tab_title)
-    SimpleTabButton stbStoreTabTitle;
     @BindView(R.id.btn_goods)
     SimpleTabButton stbTagGoods;
     @BindView(R.id.btn_store)
@@ -130,16 +118,9 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     void showGoodsListInfo() {
         SLog.info("showGoodsListInfo");
     }
-    @OnClick(R.id.stb_goods_tab_title)
-    void showGoodsListInfo1() {
-        SLog.info("showGoodsListInfo1");
-    }@OnClick(R.id.btn_store)
+    @OnClick(R.id.btn_store)
     void showStoresListInfo() {
         SLog.info("showStoresListInfo");
-    }
-    @OnClick(R.id.stb_store_tab_title)
-    void showStoresListInfo1() {
-        SLog.info("showStoresListInfo1");
     }
     @BindView(R.id.tool_bar)
     RelativeLayout rlToolBar;
@@ -362,11 +343,9 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             updateAppColor(appColor);
 
             String storeTabTitle = zoneVo.getSafeString("storeTabTitle");
-            stbStoreTabTitle.setText(storeTabTitle);
             stbTagStore.setText(storeTabTitle);
             String goodsTabTitle = zoneVo.getSafeString("goodsTabTitle");
             stbTagGoods.setText(goodsTabTitle);
-            stbGoodsTabTitle.setText(goodsTabTitle);
             tabLayout.getTabAt(LINKAGE_FRAGMENT).setText(goodsTabTitle);
             tabLayout.getTabAt(1).setText(storeTabTitle);
 
@@ -502,7 +481,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                     // 如果列表滑动到顶部，则启用嵌套滚动
                     SLog.info("設置子頁面滾動[%s]",openChildScroll);
                     linkageFragment.setNestedScroll(openChildScroll);
-                    storeListFragment.setNestedScroll(openChildScroll);
+                    storeListFragment.setNestedScrollingEnabled(openChildScroll);
 
                 } else {
                     boolean openLinkageScroll=linkageY <= containerViewY+tabHeight;

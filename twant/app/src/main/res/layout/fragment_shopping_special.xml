@@ -28,42 +28,6 @@
                 android:id="@+id/tv_zone_name"
                 android:textColor="@color/tw_white"
                 android:text=""/>
-            <LinearLayout
-                android:id="@+id/ll_tab_button_container"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-                <com.ftofs.twant.widget.SimpleTabButton
-                    android:id="@+id/stb_goods_tab_title"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-
-                    android:layout_weight="1"
-                    android:textSize="18sp"
-                    app:stb_text=""
-                    app:stb_stroke_width="2dp"
-                    app:stb_use_cap="true"
-                    app:stb_horizontal_padding="5dp"
-                    app:stb_unselected_color="@color/tw_dark_grey">
-                </com.ftofs.twant.widget.SimpleTabButton>
-                <com.ftofs.twant.widget.SimpleTabButton
-                    android:id="@+id/stb_store_tab_title"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="12dp"
-                    android:textSize="18sp"
-                    app:stb_text=""
-                    app:stb_stroke_width="2dp"
-                    app:stb_use_cap="true"
-                    app:stb_horizontal_padding="5dp"
-                    app:stb_unselected_color="@color/tw_dark_grey">
-                </com.ftofs.twant.widget.SimpleTabButton>
-            </LinearLayout>
         </RelativeLayout>
         <!-- END OF 工具欄 -->
         <!-- 篩選欄 -->

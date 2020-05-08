@@ -20,6 +20,7 @@ import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.LinkageTestFragment;
 import com.ftofs.twant.view.BannerViewHolder;
 import com.zhouwei.mzbanner.MZBannerView;
 
@@ -116,7 +117,7 @@ public class UiUtil {
                     case "shoppingZone":
                         //購物新專場
                         int zoneId = Integer.parseInt(webSliderItem.linkValue);
-                        Util.startFragment(ShoppingSpecialFragment.newInstance(zoneId));
+                        Util.startFragment(LinkageTestFragment.newInstance(zoneId));
                         break;
                     case "wantPost":
                         MainFragment mainFragment = MainFragment.getInstance();
