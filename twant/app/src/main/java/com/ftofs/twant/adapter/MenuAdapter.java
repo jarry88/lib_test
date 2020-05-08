@@ -18,6 +18,8 @@ import java.util.List;
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     private List<Menu> mMenuList;
 
+    public int lastSelectedPosition = 0; // 最近一次選中的菜單的Position
+
     OnItemClickListener onItemClickListener;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

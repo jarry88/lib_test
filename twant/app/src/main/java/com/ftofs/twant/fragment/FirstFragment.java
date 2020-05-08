@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -77,6 +78,16 @@ public class FirstFragment extends BaseFragment {
                 Menu menu = menuList.get(position);
                 SLog.info("category[%d]", menu.category);
                 ((LinearLayoutManager)rvList.getLayoutManager()).scrollToPositionWithOffset(menu.categoryTitlePosition, 0);
+
+                // 取消上一個的選中狀態
+                Menu lastMenu = menuList.get(menuAdapter.lastSelectedPosition);
+                lastMenu.isSelected = false;
+                menuAdapter.notifyItemChanged(menuAdapter.lastSelectedPosition);
+
+                // 設置當前Menu的選中狀態
+                menu.isSelected = true;
+                menuAdapter.notifyItemChanged(position);
+                menuAdapter.lastSelectedPosition = position;
             }
         });
         rvMenuList.setAdapter(menuAdapter);
@@ -84,10 +95,49 @@ public class FirstFragment extends BaseFragment {
 
         rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        rvList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                SLog.info("onScrollStateChanged, newState[%d]", newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) rvList.getLayoutManager();
+                    int position = layoutManager.findFirstCompletelyVisibleItemPosition();
+                    Item item = itemList.get(position);
+
+                    selectCategory(item.category);
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                SLog.info("onScrolled, dx[%d], dy[%d]", dx, dy);
+            }
+        });
         itemAdapter = new ItemAdapter(itemList);
         rvList.setAdapter(itemAdapter);
 
         setNestedScrollingEnabled(false);
+    }
+
+    /**
+     * 選擇分類
+     * @param category
+     */
+    private void selectCategory(int category) {
+        // 取消上一個的選中狀態
+        Menu lastMenu = menuList.get(menuAdapter.lastSelectedPosition);
+        lastMenu.isSelected = false;
+        menuAdapter.notifyItemChanged(menuAdapter.lastSelectedPosition);
+
+        Menu menu = menuList.get(category);
+        // 設置當前Menu的選中狀態
+        menu.isSelected = true;
+        menuAdapter.notifyItemChanged(category);
+        menuAdapter.lastSelectedPosition = category;
     }
 
     public void setNestedScrollingEnabled(boolean enabled) {
