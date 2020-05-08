@@ -572,7 +572,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="6dp"
             android:src="@drawable/icon_goto_cart"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
         <ImageView

@@ -66,7 +66,9 @@ public class Goods implements MultiItemEntity {
         if (goods.exists("promotionDiscountRate")) {
 
             double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
-            goods1.showDiscount = true;
+            if (appUsable > 0) {
+                goods1.showDiscount = true;
+            }
             double batchPrice0 =  goods.getDouble("batchPrice0");
             goods1.promotionDiscountRate = promotionDiscountRate;
             goods1.batchPrice0 = batchPrice0;

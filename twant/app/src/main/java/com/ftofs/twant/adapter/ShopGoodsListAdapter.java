@@ -73,12 +73,15 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
 
                 tvPrice.setTypeface(typeFace);
                 UiUtil.toPriceUI(tvPrice,12);
-//                TextView tvOriginalPrice=holder.getView(R.id.tv_goods_original_price);
-//                tvOriginalPrice.setVisibility(View.VISIBLE);
-//                tvOriginalPrice.setText(StringUtil.formatPrice(mContext, item.info.getOriginal(), 0, true));
-//                tvOriginalPrice.setTypeface(typeFace);
-//                // 原價顯示刪除線
-//                tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                if (goods.showDiscount) {
+                    TextView tvOriginalPrice=helper.getView(R.id.tv_goods_original_price);
+                    tvOriginalPrice.setVisibility(View.VISIBLE);
+                    tvOriginalPrice.setText(StringUtil.formatPrice(mContext,goods.getOriginal(), 0, true));
+                    tvOriginalPrice.setTypeface(typeFace);
+                // 原價顯示刪除線
+                    tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                }
+//
             } else {
                 helper.addOnClickListener(R.id.btn_add_to_cart);
                 ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),

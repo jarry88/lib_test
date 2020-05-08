@@ -116,7 +116,7 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:scaleType="fitXY"
-        android:src="@drawable/icon_add_blue"
+        android:src="@drawable/icon_blue_add"
         android:layout_marginEnd="@dimen/margin12"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

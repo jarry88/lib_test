@@ -527,11 +527,4 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         }
     }
 
-    private void showSpecSelectPopup(int commonId) {
-        new XPopup.Builder(_mActivity)
-                // 如果不加这个，评论弹窗会移动到软键盘上面
-                .moveUpToKeyboard(false)
-                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0, 2, null))
-                .show();
-    }
 }
