@@ -90,7 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="gone">
                 <RelativeLayout
                     android:id="@+id/btn_sort_goods_general"
                     android:layout_width="0dp"
@@ -218,7 +219,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:orientation="horizontal"
-                android:background="@drawable/border_type_d">
+                android:background="@drawable/border_type_d"
+                android:visibility="gone">
                 <RelativeLayout
                     android:id="@+id/btn_follow"
                     android:layout_width="0dp"
