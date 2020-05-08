@@ -54,12 +54,18 @@ public class UiUtil {
     }
 
     public static void addBannerPageClick(MZBannerView bannerView, List<WebSliderItem> webSliderItemList) {
+        if (StringUtil.isArrayEmpty(webSliderItemList)) {
+            return;
+        }
         bannerView.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int i) {
                 WebSliderItem webSliderItem = webSliderItemList.get(i);
                 String linkType = webSliderItem.linkType;
                 SLog.info("i = %d, linkType[%s]", i, linkType);
+                if (StringUtil.isEmpty(linkType)) {
+                    return;
+                }
 
                 switch (linkType) {
                     case "none":

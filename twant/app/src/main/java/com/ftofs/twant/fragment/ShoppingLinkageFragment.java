@@ -167,9 +167,9 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
     private void updateView() {
         linkage.setVisibility(View.GONE);
-        rvGoodsWithoutCategory.setVisibility(1 - parentFragment.hasGoodsCategory);
+        rvGoodsWithoutCategory.setVisibility(parentFragment.hasGoodsCategory==1?View.GONE:View.VISIBLE);
         if (parentFragment.hasGoodsCategory == 1) {
-            parentFragment.viewPager.setVisibility(View.GONE);
+//            parentFragment.viewPager.setVisibility(View.GONE);
             parentFragment.linkage.setVisibility(View.VISIBLE);
             if (zoneGoodsCategoryVoList != null && !linkageLoaded) {
 //                updateLinkage();
@@ -232,6 +232,8 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
         rvGoodsWithoutCategory.setLayoutManager(linearLayoutManager);
         rvGoodsWithoutCategory.setAdapter(shopGoodsListAdapter);
+        rvGoodsWithoutCategory.setNestedScrollingEnabled(false);
+
 
         secondaryAdapter = new LinkageViewSecondaryAdapter(_mActivity,linkageItems);
         rvLinkageSecondList.setLayoutManager( linkageSecondManager);
@@ -283,6 +285,9 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         }
     }
 
+    public void setNestedScroll(boolean b) {
+        rvGoodsWithoutCategory.setNestedScrollingEnabled(b);
+    }
 
 
     private static class ElemePrimaryAdapterConfig implements ILinkagePrimaryAdapterConfig {

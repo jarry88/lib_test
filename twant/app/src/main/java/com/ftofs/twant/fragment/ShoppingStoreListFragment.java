@@ -69,6 +69,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
             }
             updateStoreList(zoneStoreVoList);
         }
+        parentFragment.linkage.setVisibility(View.GONE);
     }
 
     @Override
@@ -144,5 +145,9 @@ public class ShoppingStoreListFragment extends BaseFragment {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
+    }
+
+    public void setNestedScroll(boolean b) {
+        rvStoreList.setNestedScrollingEnabled(b);
     }
 }

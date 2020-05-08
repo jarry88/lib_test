@@ -277,15 +277,17 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     public void onSupportVisible() {
         super.onSupportVisible();
         if (hasGoodsCategory==1) {
+            SLog.info("primary[%s] width [%d]", rvPrimaryList.getVisibility(),rvPrimaryList.getWidth());
+
             if (containerViewHeight == 0) {
                 containerViewHeight = scrollView.getHeight();
                 SLog.info("containerViewHeight[%d]", containerViewHeight);
 
                 ViewGroup.LayoutParams layoutParams = rvSecondList.getLayoutParams();
                 LinearLayout .LayoutParams layoutParams1 = (LinearLayout.LayoutParams) rvPrimaryList.getLayoutParams();
-//            layoutParams.height = containerViewHeight-44;
+            layoutParams.height = containerViewHeight-tabLayout.getHeight();
                 layoutParams1.height = containerViewHeight;
-                layoutParams1.weight = Util.dip2px(_mActivity,80);
+//                layoutParams1.weight = Util.dip2px(_mActivity,80);
                 rvSecondList.setLayoutParams(layoutParams);
 
                 rvPrimaryList.setLayoutParams(layoutParams1);
@@ -369,7 +371,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                 SLog.info("設置商店列表數據");
                 storeListFragment.setStoreList(zoneStoreVoList);
             } else {
-                tabLayout.setVisibility(View.GONE);
+                tabLayout.setVisibility(View.INVISIBLE);
             }
             EasyJSONArray zoneGoodsCategoryVoList = zoneVo.getArray("zoneGoodsCategoryVoList");
             //商品列表
@@ -473,19 +475,38 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 int linkageY = Util.getYOnScreen(linkage);
+                int viewPagerY = Util.getYOnScreen(viewPager);
                 int linkageY_ = linkageY + linkage.getHeight();
                 int containerViewY = Util.getYOnScreen(scrollView);
 
-                SLog.info("linkageY[%s], containerViewY[%s],tablayout[%s]", linkageY, containerViewY,tabLayout.getVisibility() );
                 int tabHeight = 0;
                 if (tabLayout.getVisibility() == View.VISIBLE) {
                     tabHeight = tabLayout.getHeight();
                 }
-                if (linkageY <= containerViewY+tabHeight) {  // 如果列表滑动到顶部，则启用嵌套滚动
-                    rvSecondList.setNestedScrollingEnabled(true);
+                // SLog.info("viewPagerY[%s],linkageY[%s], containerViewY[%s],tablayout[%s]",viewPagerY, linkageY, containerViewY,tabHeight );
+
+                if (linkage.getVisibility() != View.VISIBLE) {
+                    if (viewPagerY <= containerViewY + tabHeight) {  // 如果列表滑动到顶部，则启用嵌套滚动
+                        SLog.info("打開子頁面滾動");
+                        linkageFragment.setNestedScroll(true);
+                        storeListFragment.setNestedScroll(true);
+                    } else {
+                        SLog.info("關閉子頁面滾動");
+                        linkageFragment.setNestedScroll(false);
+                        storeListFragment.setNestedScroll(false);
+                    }
                 } else {
-                    rvSecondList.setNestedScrollingEnabled(false);
+                    SLog.info("viewPagerY[%s],linkageY[%s], containerViewY[%s],tablayout[%s]",viewPagerY, linkageY, containerViewY,tabHeight );
+                    if (linkageY <= containerViewY+tabHeight) {  // 如果列表滑动到顶部，则启用嵌套滚动
+                        SLog.info("打開二級聯動滾動");
+                        rvSecondList.setNestedScrollingEnabled(true);
+                    } else {
+                        SLog.info("關閉二級聯動滾動");
+
+                        rvSecondList.setNestedScrollingEnabled(false);
+                    }
                 }
+
             }
         });
         rvSecondList.setNestedScrollingEnabled(false);
