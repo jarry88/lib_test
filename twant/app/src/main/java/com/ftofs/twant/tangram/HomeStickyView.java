@@ -13,17 +13,24 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.fragment.CategoryFragment;
 import com.ftofs.twant.fragment.CircleFragment;
+import com.ftofs.twant.fragment.ExplorerFragment;
+import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.H5GameFragment;
+import com.ftofs.twant.fragment.MainFragment;
+import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
+import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
@@ -161,12 +168,78 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
 
         StickyCellData stickyCellData = (StickyCellData) data;
 
-        SLog.info("appIndexNavigationLinkType[%s]", stickyCellData.appIndexNavigationLinkType);
-        if ("activity".equals(stickyCellData.appIndexNavigationLinkType)) { // 活動主頁
-            Util.startFragment(H5GameFragment.newInstance(stickyCellData.appIndexNavigationLinkValue, ""));
-        } else if ("promotion".equals(stickyCellData.appIndexNavigationLinkType)) { // 購物專場
-            SLog.info("跳轉到購物專場");
-            Util.startFragment(ShoppingSessionFragment.newInstance());
+        SLog.info("data [%s],appIndexNavigationLinkType[%s]", data.toString(),stickyCellData.appIndexNavigationLinkType);
+//        if ("activity".equals(stickyCellData.appIndexNavigationLinkType)) { // 活動主頁
+//            Util.startFragment(H5GameFragment.newInstance(stickyCellData.appIndexNavigationLinkValue, ""));
+//        } else if ("promotion".equals(stickyCellData.appIndexNavigationLinkType)) { // 購物專場
+//            SLog.info("跳轉到購物專場");
+//            Util.startFragment(ShoppingSessionFragment.newInstance());
+//        }
+        String linkType = stickyCellData.appIndexNavigationLinkType;
+        switch (linkType) {
+            case "none":
+                // 无操作
+                break;
+            case "promotion":
+                Util.startFragment(ShoppingSessionFragment.newInstance());
+                break;
+            case "url":
+                // 外部鏈接
+                Util.startFragment(ExplorerFragment.newInstance(stickyCellData.appIndexNavigationLinkValue, true));
+                break;
+            case "keyword":
+                // 关键字
+                String keyword = stickyCellData.appIndexNavigationLinkValue;
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        EasyJSONObject.generate("keyword", keyword).toString()));
+                break;
+            case "goods":
+                // 產品
+                int commonId = Integer.parseInt(stickyCellData.appIndexNavigationLinkValue);
+                Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                break;
+            case "store":
+                // 店铺
+                int storeId = Integer.parseInt(stickyCellData.appIndexNavigationLinkValue);
+                Util.startFragment(ShopMainFragment.newInstance(storeId));
+                break;
+            case "category":
+                // 產品搜索结果页(分类)
+                String cat = stickyCellData.appIndexNavigationLinkValue;
+                Util.startFragment(SearchResultFragment.newInstance(SearchType.GOODS.name(),
+                        EasyJSONObject.generate("cat", cat).toString()));
+                break;
+            case "brandList":
+                // 品牌列表
+                break;
+            case "voucherCenter":
+                // 领券中心
+                break;
+            case "activityUrl":
+                Util.startFragment(H5GameFragment.newInstance(stickyCellData.appIndexNavigationLinkValue, true));
+                break;
+            case "postId":
+                int postId = Integer.parseInt(stickyCellData.appIndexNavigationLinkValue);
+                Util.startFragment(PostDetailFragment.newInstance(postId));
+                break;
+            case "shopping":
+                Util.startFragment(ShoppingSessionFragment.newInstance());
+                break;
+            case "shoppingZone":
+                //購物新專場
+                int zoneId = Integer.parseInt(stickyCellData.appIndexNavigationLinkValue);
+                Util.startFragment(ShoppingSpecialFragment.newInstance(zoneId));
+                break;
+            case "wantPost":
+                MainFragment mainFragment = MainFragment.getInstance();
+                if (mainFragment == null) {
+                    ToastUtil.error(TwantApplication.getInstance(), "MainFragment為空");
+                    return;
+                }
+                mainFragment.showHideFragment(MainFragment.CIRCLE_FRAGMENT);
+                break;
+            default:
+                break;
         }
     }
 }
