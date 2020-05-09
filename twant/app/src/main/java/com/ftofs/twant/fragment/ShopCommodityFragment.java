@@ -53,6 +53,9 @@ import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
+import me.everything.android.ui.overscroll.IOverScrollDecor;
+import me.everything.android.ui.overscroll.IOverScrollStateListener;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import okhttp3.Call;
 
 /**
@@ -142,6 +145,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setRefreshing(false);
+        // Vertical
+
         Bundle args = getArguments();
         isStandalone = args.getBoolean("isStandalone");
         String paramsStr = args.getString("paramsStr");
@@ -231,6 +236,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         simpleTabManager.add(view.findViewById(R.id.btn_order_price));
 
         rvGoodsList = view.findViewById(R.id.rv_goods_list);
+//        OverScrollDecoratorHelper.setUpOverScroll(rvGoodsList, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+
         imgPriceOrderIndicator = view.findViewById(R.id.img_price_order_indicator);
 
         layoutManager = new CustomerLinearLayoutManager(_mActivity);//防止原生閃退
@@ -243,40 +250,31 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 super.onScrolled(recyclerView, dx, dy);
                 // 大于0表示正在向上滑动，小于等于0表示停止或向下滑动
                 isSlidingUpward = dy > 0;
-                SLog.info("向上 %s",isSlidingUpward);
-
-                //得到当前显示的最后一个item的view
-                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount()-1);
-                //得到lastChildView的bottom坐标值
-                int lastChildBottom = lastChildView.getBottom();
-                //得到Recyclerview的底部坐标减去底部padding值，也就是显示内容最底部的坐标
-                int recyclerBottom =  recyclerView.getBottom()-recyclerView.getPaddingBottom();
-                //通过这个lastChildView得到这个view当前的position值
-                int lastPosition  = recyclerView.getLayoutManager().getPosition(lastChildView);
-
-                //判断lastChildView的bottom值跟recyclerBottom
-                //判断lastPosition是不是最后一个position
-                //如果两个条件都满足则说明是真正的滑动到了底部
-                if(lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount()-1 ){
-                    // Toast.makeText(_mActivity, "滑动到底了", Toast.LENGTH_SHORT).show();
+                if (isSlidingUpward != dy > 0) {
+                    isSlidingUpward = !isSlidingUpward;
+                    SLog.info("向上 %s",isSlidingUpward);
+                }
+                if(isRecyclerBottom(recyclerView)){
                     SLog.info("滑动到底了^________________^");
                     if (!hasMore && goodsList.size() > 0) {
 
                     }
                 }
+
+
             }
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                if (parentFragment == null) {
+                    return;
+                }
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (parentFragment != null) {
                         parentFragment.onCbStopNestedScroll();
-                    }
                 } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    if (parentFragment != null) {
                         parentFragment.onCbStartNestedScroll();
-                    }
+
                 }
             }
         });
@@ -447,6 +445,26 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
         btnChangeViewStyle = view.findViewById(R.id.btn_change_view_style);
         btnChangeViewStyle.setOnClickListener(this);
+    }
+
+    private boolean isRecyclerBottom(RecyclerView recyclerView) {
+        //得到当前显示的最后一个item的view
+        View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount()-1);
+        //得到lastChildView的bottom坐标值
+        int lastChildBottom = lastChildView.getBottom();
+        //得到Recyclerview的底部坐标减去底部padding值，也就是显示内容最底部的坐标
+        int recyclerBottom =  recyclerView.getBottom()-recyclerView.getPaddingBottom();
+        //通过这个lastChildView得到这个view当前的position值
+        int lastPosition  = recyclerView.getLayoutManager().getPosition(lastChildView);
+
+        //判断lastChildView的bottom值跟recyclerBottom
+        //判断lastPosition是不是最后一个position
+        //如果两个条件都满足则说明是真正的滑动到了底部
+        if(lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount()-1 ){
+            // Toast.makeText(_mActivity, "滑动到底了", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
     }
 
     private void categoryOnItemClick(int position) {

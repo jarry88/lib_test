@@ -1098,8 +1098,9 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
                     promotionDiscountRate = (float) goodsDetail.getDouble("promotionDiscountRate");
                     tvPromotionDiscountRate.setText("限時" + promotionDiscountRate + "折");
-
-                    String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(responseObj.getSafeString("datas.goodsCountry.nationalFlag"));
+                    EasyJSONObject goodsCountry =responseObj.getObject("datas.goodsCountry");
+                    SLog.info(goodsCountry.toString());
+                    String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(goodsCountry.getSafeString("nationalFlag"));
                     Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
 
                     tvGoodsCountryName.setText(responseObj.getSafeString("datas.goodsCountry.countryCn"));

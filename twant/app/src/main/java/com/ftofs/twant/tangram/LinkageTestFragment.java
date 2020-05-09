@@ -210,9 +210,12 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                 int tabY = Util.getYOnScreen(tabLayout);
                 int anchorViewY = Util.getYOnScreen(vwAnchor);
 
-                SLog.info("viewPagerY[%s], containerViewY[%s], tabY[%s], anchorViewY[%s]",
-                        viewPagerY, containerViewY, tabY, anchorViewY);
                 boolean nestedScroll = tabY <= containerViewY;
+                if (!showTab) {
+                    nestedScroll = viewPagerY <= containerViewY;
+                }
+                SLog.info("nestedScroll[%s],viewPagerY[%s], containerViewY[%s], tabY[%s], anchorViewY[%s]",nestedScroll,
+                        viewPagerY, containerViewY, tabY, anchorViewY);
                 // 如果列表滑动到顶部，则启用嵌套滚动
 
 
