@@ -226,7 +226,8 @@
                     android:layout_height="wrap_content"
                     android:text="U_465789321"
                     android:textColor="@color/tw_black"
-                    android:textSize="13sp">
+                    android:textSize="13sp"
+                    android:singleLine="true">
 
                 </TextView>
 

@@ -98,6 +98,8 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                             .moveUpToKeyboard(false)
                             .asCustom(new BuyerInfoPopup(_mActivity, _mActivity, sellerOrderItem.ordersId, sellerOrderItem.buyerMemberName))
                             .show();
+                } else if (id == R.id.btn_ship) {
+                    Util.startFragment(SellerOrderShipFragment.newInstance(sellerOrderItem.ordersId, sellerOrderItem.ordersSnText));
                 }
             }
         });
@@ -108,13 +110,7 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                 Util.startFragment(SellerOrderDetailFragment.newInstance(item.ordersId));
             }
         });
-        sellerOrderAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                SellerOrderItem item = sellerOrderItemList.get(position);
-                Util.startFragment(SellerOrderShipFragment.newInstance(item.ordersId, item.ordersSnText));
-            }
-        });
+
         sellerOrderAdapter.setEnableLoadMore(true);
         sellerOrderAdapter.setOnLoadMoreListener(this, rvList);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
