@@ -264,6 +264,7 @@
                                         />
                                 </LinearLayout>
                                 <LinearLayout
+                                    android:id="@+id/ll_seller_order_send"
                                     android:visibility="visible"
 
                                     android:layout_marginStart="12dp"

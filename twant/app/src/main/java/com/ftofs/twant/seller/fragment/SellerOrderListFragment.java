@@ -32,14 +32,19 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
 
     ViewPager viewPager;
 
-    int currTab = Constant.ORDER_STATUS_ALL;
+    int currTab;
     public static final int TAB_COUNT = Constant.ORDER_STATUS_CANCELLED + 1;
 
     public static SellerOrderListFragment newInstance() {
+        return newInstance(Constant.ORDER_STATUS_ALL);
+    }
+
+    public static SellerOrderListFragment newInstance(int tab) {
         Bundle args = new Bundle();
 
         SellerOrderListFragment fragment = new SellerOrderListFragment();
         fragment.setArguments(args);
+        fragment.currTab = tab;
 
         return fragment;
     }
@@ -106,6 +111,15 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
 
         viewPager = view.findViewById(R.id.vp_page_list);
         viewPager.setOffscreenPageLimit(TAB_COUNT - 1);
+
+        if (currTab != Constant.ORDER_STATUS_ALL) { // 如果不是默認的Tab, 選中對應的Tab
+            viewPager.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tabManager.performClick(currTab);
+                }
+            }, 500);
+        }
 
         List<String> titleList = new ArrayList<>();
         titleList.add("全部");
