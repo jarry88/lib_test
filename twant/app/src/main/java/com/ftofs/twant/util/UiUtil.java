@@ -30,8 +30,8 @@ import cn.snailpad.easyjson.EasyJSONObject;
 
 public class UiUtil {
 
-    public static void toPriceUI(TextView leftTextView,int firstSize) {
-        toPriceUI(leftTextView,firstSize,0,1);
+    public static void toPriceUI(TextView textView,int firstSize) {
+        toPriceUI(textView,firstSize,0,1);
     }
     public static void toPriceUI(TextView leftTextView,int firstSize,int start,int end) {
         if (leftTextView == null) {
