@@ -401,7 +401,10 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
             }
         } else if (id == R.id.image_view) {
             if (!StringUtil.isEmpty(commentImageUrl)) {
-                start(ImageViewerFragment.newInstance(commentImageUrl));
+                // start(ImageViewerFragment.newInstance(commentImageUrl));
+                List<String> contentImageList = new ArrayList<>();
+                contentImageList.add(StringUtil.normalizeImageUrl(commentImageUrl));
+                start(ImageFragment.newInstance(0, contentImageList));
             }
         } else if (id == R.id.img_commenter_avatar) {
             if (!User.isLogin()) {
@@ -529,7 +532,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                 }
             });
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -565,7 +568,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
                     updateThumbState();
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });

@@ -45,7 +45,9 @@ import com.sxu.shadowdrawable.ShadowDrawable;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -112,6 +114,11 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
     // 想要貼裏面的店鋪Id
     int storeId = 0;
     LinearLayout llPostStoreContainer;
+
+    // 评论的RecyclerView与图片索引的映射关系
+    Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
+    // 圖片列表
+    List<String> imageList = new ArrayList<>();
 
     public static PostDetailFragment newInstance(int postId) {
         Bundle args = new Bundle();
@@ -200,6 +207,11 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                     switchThumbState(position);
                 } else if (id == R.id.btn_make_true) {
                     commentMakeTrue(commentItem.commentId);
+                } else if (id == R.id.image_view) {
+                    Integer imageIndex = rvPositionToImageIndexMap.get(position);
+                    if (imageIndex != null) {
+                        start(ImageFragment.newInstance(imageIndex, imageList));
+                    }
                 }
             }
         });
@@ -745,6 +757,9 @@ public class PostDetailFragment extends BaseFragment implements View.OnClickList
                                 for (Object object2 : images) {
                                     EasyJSONObject image = (EasyJSONObject) object2;
                                     item.imageUrl = image.getSafeString("imageUrl");
+
+                                    rvPositionToImageIndexMap.put(commentItemList.size(), imageList.size());
+                                    imageList.add(StringUtil.normalizeImageUrl(item.imageUrl));
                                 }
                             }
                         }
