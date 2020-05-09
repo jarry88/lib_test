@@ -29,7 +29,7 @@
     <string name="text_birthday">生日</string>
     <string name="text_age">年齡</string>
     <string name="text_marriage">婚姻</string>
-    <string name="text_location">所在地区</string>
+    <string name="text_location">所在地區</string>
     <string name="text_advisory_service">咨詢客服</string>
     <string name="text_dial">撥打電話</string>
     <string name="text_not_set">未設置</string>
@@ -805,4 +805,5 @@
     <string name="text_discount_goods_count">促銷中的商品</string>
     <string name="text_orders_wait_pay_count">待收款訂單</string>
     <string name="text_return_waiting_good">退貨中</string>
+    <string name="text_real_name">真實姓名</string>
 </resources>
