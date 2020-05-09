@@ -624,7 +624,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 for (TextView button : selSpecButtonList) {
                     SpecButtonData currData = (SpecButtonData) button.getTag();
                     setButtonSelected(button, false);
-                    currData.isSelected = true;
+                    currData.isSelected = false;
                 }
 
                 // 設置當前按鈕的選中狀態
@@ -635,6 +635,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                     setButtonSelected(button, true);
 
                     SpecButtonData currData = (SpecButtonData) button.getTag();
+                    currData.isSelected = true;
 
                     // 如果是開始的選中狀態，記錄一下
                     selSpecButtonList.set(currData.position, button);

@@ -11,4 +11,8 @@
     <dimen name="emoji_icon_height">32dp</dimen>
 
     <dimen name="length_15dp">15dp</dimen>
+
+
+    <!-- Sku瀏覽規格描述項控件的寬度 -->
+    <dimen name="sku_spec_item_width">210dp</dimen>
 </resources>
