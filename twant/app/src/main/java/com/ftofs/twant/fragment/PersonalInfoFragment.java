@@ -113,6 +113,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
 
     int action; // 打開相冊的操作
     private String SAMPLE_CROPPED_IMAGE_NAME ="sample_cropped";
+    private String trueName;
 
     public static PersonalInfoFragment newInstance() {
         Bundle args = new Bundle();
@@ -345,8 +346,11 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     tvName.setText(memberInfo.getSafeString("nickName"));
 
                     TextView tvNickname = view.findViewById(R.id.tv_nickname);
+                    TextView tvRealName = view.findViewById(R.id.tv_real_name);
                     nickname = memberInfo.getSafeString("nickName");
+                    trueName = memberInfo.getSafeString("trueName");
                     tvNickname.setText(nickname);
+                    tvRealName.setText(trueName);
 
                     int gender = memberInfo.getInt("memberSex");
                     genderIndex = gender;
