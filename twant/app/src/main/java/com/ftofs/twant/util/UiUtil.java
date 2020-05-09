@@ -37,9 +37,14 @@ public class UiUtil {
         if (leftTextView == null) {
             return;
         }
+        String string = leftTextView.getText().toString();
+        if (StringUtil.isEmpty(string)) {
+            return;
+        }
         if (firstSize == 0) {
             firstSize = 11;
         }
+        SLog.info(string);
         SpannableStringBuilder spannable = new SpannableStringBuilder(leftTextView.getText().toString());
 //        //设置字体颜色为红色
 //        ForegroundColorSpan good_red = new ForegroundColorSpan(getResources().getColor(R.color.goods_red));
