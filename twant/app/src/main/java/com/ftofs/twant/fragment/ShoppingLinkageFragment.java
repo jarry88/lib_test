@@ -203,7 +203,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
     public void setNestedScrollingEnabled(boolean nestedScroll) {
         if (rvGoodsWithoutCategory != null) {
-            rvGoodsWithoutCategory.setNestedScrollingEnabled(b);
+            rvGoodsWithoutCategory.setNestedScrollingEnabled(nestedScroll);
         }
     }
 }

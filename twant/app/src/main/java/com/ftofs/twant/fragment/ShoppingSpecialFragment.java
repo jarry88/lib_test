@@ -481,7 +481,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
                     boolean openChildScroll=viewPagerY <= containerViewY+tabHeight;
                     // 如果列表滑动到顶部，则启用嵌套滚动
                     SLog.info("設置子頁面滾動[%s]",openChildScroll);
-                    linkageFragment.setNestedScroll(openChildScroll);
+                    linkageFragment.setNestedScrollingEnabled(openChildScroll);
                     storeListFragment.setNestedScrollingEnabled(openChildScroll);
 
                 } else {
