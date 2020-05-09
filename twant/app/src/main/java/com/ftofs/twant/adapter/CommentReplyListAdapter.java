@@ -15,12 +15,15 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.entity.CommentItem;
 import com.ftofs.twant.entity.CommentReplyItem;
+import com.ftofs.twant.fragment.CommentDetailFragment;
 import com.ftofs.twant.fragment.ImageViewerFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SquareGridLayout;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 說說回覆列表Adapter
@@ -29,6 +32,7 @@ import com.ftofs.twant.widget.SquareGridLayout;
 public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> implements SimpleCallback {
     Context context;
     int twBlue;
+    SimpleCallback simpleCallback;
 
     /**
      * 構造方法
@@ -37,10 +41,11 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
      * @param container    容器
      * @param itemLayoutId itemView的布局Id
      */
-    public CommentReplyListAdapter(Context context, ViewGroup container, int itemLayoutId) {
+    public CommentReplyListAdapter(Context context, ViewGroup container, int itemLayoutId, SimpleCallback simpleCallback) {
         super(context, container, itemLayoutId);
 
         this.context = context;
+        this.simpleCallback = simpleCallback;
         twBlue = context.getResources().getColor(R.color.tw_blue, null);
         addClickableChildrenId(R.id.img_avatar, R.id.btn_reply_comment, R.id.btn_thumb);
     }
@@ -98,7 +103,13 @@ public class CommentReplyListAdapter extends ViewGroupAdapter<CommentReplyItem> 
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Util.startFragment(ImageViewerFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                        // Util.startFragment(ImageViewerFragment.newInstance(StringUtil.normalizeImageUrl(imageUrl)));
+                        if (simpleCallback != null) {
+                            simpleCallback.onSimpleCall(EasyJSONObject.generate(
+                                    "action", CommentDetailFragment.ACTION_VIEW_IMAGE,
+                                    "position", position
+                            ));
+                        }
                     }
                 });
 
