@@ -36,7 +36,7 @@ public class PostCommentListAdapter extends ViewGroupAdapter<CommentItem> implem
 
         this.context = context;
         twBlue = context.getResources().getColor(R.color.tw_blue, null);
-        addClickableChildrenId(R.id.btn_reply, R.id.btn_thumb, R.id.img_commenter_avatar, R.id.btn_make_true);
+        addClickableChildrenId(R.id.image_view, R.id.btn_reply, R.id.btn_thumb, R.id.img_commenter_avatar, R.id.btn_make_true);
     }
 
     @Override
