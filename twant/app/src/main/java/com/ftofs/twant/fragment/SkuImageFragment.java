@@ -147,7 +147,7 @@ public class SkuImageFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                SLog.info("onScrolled, dx[%d], dy[%d]", dx, dy);
+                // SLog.info("onScrolled, dx[%d], dy[%d]", dx, dy);
                 rvSkuSpecList.scrollBy((int) (dx * ratio), 0);
             }
         });
