@@ -264,7 +264,7 @@
                                         />
                                 </LinearLayout>
                                 <LinearLayout
-                                    android:visibility="gone"
+                                    android:visibility="visible"
 
                                     android:layout_marginStart="12dp"
                                     android:layout_marginEnd="@dimen/margin12"

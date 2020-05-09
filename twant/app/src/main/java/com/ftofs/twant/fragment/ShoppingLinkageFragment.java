@@ -169,7 +169,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
             SLog.info("here");
         }
     }
-    
+
 
 
     public void addOnNestedScroll() {
