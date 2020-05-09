@@ -198,6 +198,11 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         Util.startFragment(SellerOrderListFragment.newInstance());
     }
 
+    @OnClick(R.id.ll_seller_order_send)
+    void gotoSellerOrderSend() {
+        Util.startFragment(SellerOrderListFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED));
+    }
+
     @BindView(R.id.tv_goods_common_onsale_count)
     TextView tvOnSaleCount;
 
