@@ -238,6 +238,9 @@ dependencies {
 
     //集成華爲推送
     implementation 'com.huawei.hms:push:4.0.0.300'
+
+    //recycleView庫
+    implementation 'me.everything:overscroll-decor-android:1.0.4'
 }
 repositories {
     mavenCentral()

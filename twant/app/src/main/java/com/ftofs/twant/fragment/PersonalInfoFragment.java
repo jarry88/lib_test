@@ -350,7 +350,7 @@ public class PersonalInfoFragment extends BaseFragment implements View.OnClickLi
                     nickname = memberInfo.getSafeString("nickName");
                     trueName = memberInfo.getSafeString("trueName");
                     tvNickname.setText(nickname);
-                    tvRealName.setText(trueName);
+                    tvRealName.setText(StringUtil.isEmpty(trueName)?"未設置":trueName);
 
                     int gender = memberInfo.getInt("memberSex");
                     genderIndex = gender;
