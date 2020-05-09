@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
@@ -32,6 +33,7 @@ import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.entity.VideoItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -57,7 +59,7 @@ import okhttp3.Call;
  * 商店產品Fragment
  * @author zwm
  */
-public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class ShopCommodityFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener, SwipeRefreshLayout.OnRefreshListener {
     public static final int ANIM_COUNT = 2;
     ShopMainFragment parentFragment;
 
@@ -103,6 +105,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     public static final int VIEW_STYLE_GRID = 1;  // 以網格形式查看
     int currentViewStyle = VIEW_STYLE_GRID;
     private String title;
+    private boolean isSlidingUpward;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView rvCategoryList;
 
     /**
      * 新建一個實例
@@ -134,7 +139,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         parentFragment = (ShopMainFragment) getParentFragment();
-
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setRefreshing(false);
         Bundle args = getArguments();
         isStandalone = args.getBoolean("isStandalone");
         String paramsStr = args.getString("paramsStr");
@@ -228,7 +235,37 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
         layoutManager = new CustomerLinearLayoutManager(_mActivity);//防止原生閃退
         rvGoodsList.setLayoutManager(layoutManager);
+
         rvGoodsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                // 大于0表示正在向上滑动，小于等于0表示停止或向下滑动
+                isSlidingUpward = dy > 0;
+                SLog.info("向上 %s",isSlidingUpward);
+
+                //得到当前显示的最后一个item的view
+                View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount()-1);
+                //得到lastChildView的bottom坐标值
+                int lastChildBottom = lastChildView.getBottom();
+                //得到Recyclerview的底部坐标减去底部padding值，也就是显示内容最底部的坐标
+                int recyclerBottom =  recyclerView.getBottom()-recyclerView.getPaddingBottom();
+                //通过这个lastChildView得到这个view当前的position值
+                int lastPosition  = recyclerView.getLayoutManager().getPosition(lastChildView);
+
+                //判断lastChildView的bottom值跟recyclerBottom
+                //判断lastPosition是不是最后一个position
+                //如果两个条件都满足则说明是真正的滑动到了底部
+                if(lastChildBottom == recyclerBottom && lastPosition == recyclerView.getLayoutManager().getItemCount()-1 ){
+                    // Toast.makeText(_mActivity, "滑动到底了", Toast.LENGTH_SHORT).show();
+                    SLog.info("滑动到底了^________________^");
+                    if (!hasMore && goodsList.size() > 0) {
+
+                    }
+                }
+            }
+
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -330,6 +367,8 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
                 if (!hasMore) {
                     shopGoodsListAdapter.setEnableLoadMore(false);
+//                    storeCategoryListAdapter.performCilckNext();
+//                    rvGoodsList.getChildAt(storeCategoryListAdapter.getPrevSelectedItemIndex()).performClick();
                     return;
                 }
                 loadStoreGoods(paramsOriginal, mExtra, currPage + 1);
@@ -391,31 +430,14 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         });
         rvVideoList.setAdapter(videoListAdapter);
 
-        RecyclerView rvCategoryList = view.findViewById(R.id.rv_category_list);
+        rvCategoryList = view.findViewById(R.id.rv_category_list);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(_mActivity));
         storeCategoryListAdapter = new StoreCategoryListAdapter(_mActivity, R.layout.store_category_list_item, shopStoreLabelList, this);
         storeCategoryListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                int prevSelectedItemIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+                categoryOnItemClick(position);
 
-                SLog.info("prevSelectedItemIndex[%d]", prevSelectedItemIndex);
-                if (prevSelectedItemIndex != -1) {
-                    StoreLabel prevSelectedItem = shopStoreLabelList.get(prevSelectedItemIndex);
-                    // 設置為收合狀態
-                    prevSelectedItem.setIsFold(1);
-
-                    prevSelectedItem.setIsFold(Constant.TRUE_INT);  // 設置為收合狀態
-                    storeCategoryListAdapter.notifyItemChanged(prevSelectedItemIndex);
-                }
-
-                StoreLabel storeLabel = shopStoreLabelList.get(position);
-                storeLabel.setIsFold(Constant.FALSE_INT);  // 設置為展開狀態
-                storeCategoryListAdapter.notifyItemChanged(position);
-
-                storeCategoryListAdapter.setPrevSelectedItemIndex(position);
-                title =String.format("%s(%d)",storeLabel.getStoreLabelName(),storeLabel.getGoodsCount());
-                loadCategoryGoods(storeLabel.getStoreLabelId());
             }
         });
         rvCategoryList.setAdapter(storeCategoryListAdapter);
@@ -425,6 +447,28 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
         btnChangeViewStyle = view.findViewById(R.id.btn_change_view_style);
         btnChangeViewStyle.setOnClickListener(this);
+    }
+
+    private void categoryOnItemClick(int position) {
+        int prevSelectedItemIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+
+        SLog.info("prevSelectedItemIndex[%d]", prevSelectedItemIndex);
+        if (prevSelectedItemIndex != -1) {
+            StoreLabel prevSelectedItem = shopStoreLabelList.get(prevSelectedItemIndex);
+            // 設置為收合狀態
+            prevSelectedItem.setIsFold(1);
+
+            prevSelectedItem.setIsFold(Constant.TRUE_INT);  // 設置為收合狀態
+            storeCategoryListAdapter.notifyItemChanged(prevSelectedItemIndex);
+        }
+
+        StoreLabel storeLabel = shopStoreLabelList.get(position);
+        storeLabel.setIsFold(Constant.FALSE_INT);  // 設置為展開狀態
+        storeCategoryListAdapter.notifyItemChanged(position);
+
+        storeCategoryListAdapter.setPrevSelectedItemIndex(position);
+        title =String.format("%s(%d)",storeLabel.getStoreLabelName(),storeLabel.getGoodsCount());
+        loadCategoryGoods(storeLabel.getStoreLabelId());
     }
 
     private void clearAdapter() {
@@ -595,6 +639,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                             };
 
                         }
+                        swipeRefreshLayout.setRefreshing(false);
 
                         shopGoodsGridAdapter.setNewData(goodsPairList);
                         shopGoodsGridAdapter.loadMoreComplete();
@@ -867,6 +912,20 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 .moveUpToKeyboard(false)
                 .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0,2, null))
                 .show();
+    }
+
+    @Override
+    public void onRefresh() {
+        SLog.info("onRefresh");
+        int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+        if (preIndex > 0) {
+            categoryOnItemClick(preIndex - 1);
+            currPage = 0;
+        } else {
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }
     }
 }
 

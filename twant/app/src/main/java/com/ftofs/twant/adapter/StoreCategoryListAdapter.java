@@ -32,6 +32,8 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
 
     int prevSelectedItemIndex = 0;  // 上一次選中的菜單item的索引,一開始默認選中【全部】
     int prevSelectedSubItemIndex = -1;  // 上一次選中的二級菜單item的索引
+    private int selectedItemIndex =0; //當前選中的菜單item的索引
+    private int selectedSubItemIndex =-1; //當前選中的二級菜單item的索引
 
     public StoreCategoryListAdapter(Context context, int layoutResId, @Nullable List<StoreLabel> data, OnSelectedListener onSelectedListener) {
         super(layoutResId, data);
@@ -169,6 +171,23 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
      */
     public int getPrevSelectedItemIndex() {
         return prevSelectedItemIndex;
+    }
+    /**
+     * 獲取當前選中的菜單item的索引
+     * @return
+     */
+    public int getSelectedItemIndex() {
+        return selectedItemIndex;
+    }
+
+    /**
+     * 點擊下一個item
+     * @return
+     */
+    public void performCilckNext() {
+        if (getPrevSelectedItemIndex()+1 >= getItemCount()) {
+            return;
+        }
     }
 }
 

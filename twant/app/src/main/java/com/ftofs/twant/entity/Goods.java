@@ -56,24 +56,24 @@ public class Goods implements MultiItemEntity {
         } else {
             jingle=goods.getSafeString("goodsFullSpecs");
         }
-        double price;
+        double price,batchPrice0;
+        batchPrice0=goods.getDouble("batchPrice0");
         int appUsable = goods.getInt("appUsable");
         if (appUsable > 0) {
             price =  goods.getDouble("appPriceMin");
         } else {
-            price =  goods.getDouble("batchPrice0");
+            price =  batchPrice0;
         }
 
         Goods goods1=new Goods(commonId,goodsImage,goodsName,jingle,price);
-        if (goods.exists("promotionDiscountRate")) {
-
-            double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
-            if (appUsable > 0) {
-                goods1.showDiscount = true;
-            }
-            double batchPrice0 =  goods.getDouble("batchPrice0");
-            goods1.promotionDiscountRate = promotionDiscountRate;
+        if (appUsable > 0) {
+            goods1.showDiscount = true;
             goods1.batchPrice0 = batchPrice0;
+
+        }
+        if (goods.exists("promotionDiscountRate")) {
+            double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");
+            goods1.promotionDiscountRate = promotionDiscountRate;
 //            SLog.info("%s",promotionDiscountRate);
         }
         if (goods.exists("goodsStorage")) {

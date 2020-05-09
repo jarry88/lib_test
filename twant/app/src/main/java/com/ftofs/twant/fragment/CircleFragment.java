@@ -429,16 +429,17 @@ public class CircleFragment extends BaseFragment implements View.OnClickListener
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
                 searchPostParams.follow=0;
-                adapter.loadMoreFail();
-                if (page == 1) {
+                if (loadingPopup != null) {
                     loadingPopup.dismiss();
                 }
+                adapter.loadMoreFail();
+
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 SLog.info("responseStr[%s]", responseStr);
-                if (page == 1) {
+                if (loadingPopup != null) {
                     loadingPopup.dismiss();
                 }
                 try {

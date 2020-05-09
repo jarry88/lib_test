@@ -17,6 +17,8 @@ import com.ftofs.twant.adapter.ShopGoodsListAdapter;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.LinkageTestFragment;
+import com.ftofs.twant.tangram.SloganView;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 
@@ -40,6 +42,8 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     private ShopGoodsListAdapter shopGoodsListAdapter;
     private List<Goods> goodsList;
     private EasyJSONArray zoneGoodsVoList;
+    private boolean initView;
+    private boolean dataLoaded;
 
     public static ShoppingLinkageFragment newInstance (ShoppingSpecialFragment shoppingSpecialFragment)  {
         ShoppingLinkageFragment fragment = new ShoppingLinkageFragment();
@@ -76,6 +80,8 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         addOnNestedScroll();
 
         SLog.info("%s",rvGoodsWithoutCategory==null);
+        initView = true;
+        updateView();
     }
 
     @Override
@@ -87,7 +93,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     }
 
     private void updateView() {
-        if (zoneGoodsVoList != null) {
+        if (initView&&!dataLoaded) {
             updateGoodVoList(zoneGoodsVoList);
         }
     }
@@ -98,6 +104,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Goods goods = goodsList.get(position);
+
                 SLog.info("here");
                 int commonId = goods.id;
                 Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
@@ -109,11 +116,20 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
                 int id = view.getId();
 
                 Goods goods = goodsList.get(position);
-                SLog.info("here");
+
                 int commonId = goods.id;
                 int userId = User.getUserId();
                 if (id == R.id.iv_goods_add) {
                     if (userId > 0) {
+                        if (goods.hasGoodsStorage()) {
+                            ToastUtil.error(_mActivity,"該產品已售罄，看看其他的吧");
+                            return;
+                        }
+                        if (goods.goodsStatus == 0) {
+                            ToastUtil.error(_mActivity,"商品已下架");
+                            return;
+
+                        }
                         parentFragment.showSpecSelectPopup(commonId);
                     } else {
                         Util.showLoginFragment();
@@ -126,14 +142,14 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
     public void updateGoodVoList(EasyJSONArray zoneGoodsVoList) {
         try {
+            goodsList.clear();
             for (Object object1 : zoneGoodsVoList) {
                 EasyJSONObject goods = (EasyJSONObject) object1;
                 Goods goodsInfo = Goods.parse(goods);
                 goodsList.add(goodsInfo);
-
-                rvGoodsWithoutCategory.setVisibility(View.VISIBLE);
             }
             shopGoodsListAdapter.setNewData(goodsList);
+            dataLoaded=true;
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -142,6 +158,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
     public void setGoodVoList(EasyJSONArray zoneGoodsVoList) {
         this.zoneGoodsVoList = zoneGoodsVoList;
         updateView();
+
     }
 
     @Override
@@ -152,14 +169,7 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
             SLog.info("here");
         }
     }
-
-    public void setNestedScroll(boolean b) {
-        SLog.info("setNestedScroll %s",rvGoodsWithoutCategory==null);
-
-        if (rvGoodsWithoutCategory != null) {
-            rvGoodsWithoutCategory.setNestedScrollingEnabled(b);
-        }
-    }
+    
 
 
     public void addOnNestedScroll() {
@@ -168,7 +178,6 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-
                     parentFragment.onCbStartNestedScroll();
                 } else if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
 
@@ -182,5 +191,19 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
     public void setNestedScroll(LinkageTestFragment linkageTestFragment) {
         this.parentFragment = linkageTestFragment;
+    }
+
+    public void scrollToTop() {
+        SLog.info("rvGoodsWithoutCategory %s",rvGoodsWithoutCategory!=null);
+        if (rvGoodsWithoutCategory != null) {
+            rvGoodsWithoutCategory.scrollToPosition(0);
+            rvGoodsWithoutCategory.setNestedScrollingEnabled(false);
+        }
+    }
+
+    public void setNestedScrollingEnabled(boolean nestedScroll) {
+        if (rvGoodsWithoutCategory != null) {
+            rvGoodsWithoutCategory.setNestedScrollingEnabled(b);
+        }
     }
 }

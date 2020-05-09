@@ -131,8 +131,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="@dimen/toolbar_margin_left"
-                android:layout_marginRight="@dimen/toolbar_margin_right"
+                android:layout_marginStart="@dimen/toolbar_margin_left"
+                android:layout_marginEnd="@dimen/toolbar_margin_right"
                 android:background="#FFE6E6E6">
             </View>
             <RelativeLayout
@@ -141,7 +141,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:layout_centerVertical="true"
                     android:text="身份證號碼"
                     android:textSize="14sp"

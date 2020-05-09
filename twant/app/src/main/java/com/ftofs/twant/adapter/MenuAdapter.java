@@ -73,7 +73,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         tvCategory.setTypeface(Typeface.defaultFromStyle(selected ?Typeface.BOLD:Typeface.NORMAL));
 //            tvTitle.setEllipsize(selected ? TextUtils.TruncateAt.MARQUEE : TextUtils.TruncateAt.END);
         tvCategory.setMaxLines(2);
-//        tvCategory.setMaxEms(8);
+        tvCategory.setMaxEms(4);
         tvCategory.setEllipsize(TextUtils.TruncateAt.END);
         tvCategory.setFocusable(selected);
         tvCategory.setFocusableInTouchMode(selected);

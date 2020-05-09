@@ -31,7 +31,17 @@ public class ShoppingStoreListAdapter extends BaseQuickAdapter<StoreItem, BaseVi
     @Override
     protected void convert(BaseViewHolder helper, StoreItem item) {
 //        SLog.info("name[%s]",item.storeName);
+
         helper.addOnClickListener(R.id.goods_image_left_container, R.id.goods_image_middle_container, R.id.goods_image_right_container);
+
+        ImageView imgStoreAvatar = helper.getView(R.id.img_store_avatar);
+
+        String storeAvatarUrl =StringUtil.normalizeImageUrl(item.storeAvatar);
+        if ("https://192.168.5.29/public/img/default_store_avatar.png".equals(storeAvatarUrl)) {
+            Glide.with(mContext).load(R.drawable.default_store_avatar).into(imgStoreAvatar);
+        } else {
+            Glide.with(mContext).load(storeAvatarUrl).into(imgStoreAvatar);
+        }
         LinearLayout goodsImageLeftContainer = helper.getView(R.id.goods_image_left_container);
         LinearLayout goodsImageMiddleContainer = helper.getView(R.id.goods_image_middle_container);
         LinearLayout goodsImageRightContainer = helper.getView(R.id.goods_image_right_container);
@@ -47,11 +57,11 @@ public class ShoppingStoreListAdapter extends BaseQuickAdapter<StoreItem, BaseVi
             String imageSrc = StringUtil.normalizeImageUrl(item.goodsList.get(i).imageUrl, "?x-oss-process=image/resize,w_300");
 
             if (i == 0) {
-                goodsImageLeftContainer.setVisibility(View.VISIBLE);
-                Glide.with(mContext).load(imageSrc).centerCrop().into(goodsImageLeft);
-            } else if (i == 1) {
                 goodsImageMiddleContainer.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(imageSrc).centerCrop().into(goodsImageMiddle);
+            } else if (i == 1) {
+                goodsImageLeftContainer.setVisibility(View.VISIBLE);
+                Glide.with(mContext).load(imageSrc).centerCrop().into(goodsImageLeft);
             } else if (i == 2) {
                 goodsImageRightContainer.setVisibility(View.VISIBLE);
                 Glide.with(mContext).load(imageSrc).centerCrop().into(goodsImageRight);

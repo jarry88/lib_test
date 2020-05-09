@@ -20,6 +20,7 @@ import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.sxu.shadowdrawable.ShadowDrawable;
 
 import java.util.List;
@@ -64,7 +65,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 helper.addOnClickListener(R.id.iv_goods_add);
                 ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),
                         Color.parseColor("#19000000"), Util.dip2px(mContext, 3), 0, 0);
-                ImageView goodsImage = helper.getView(R.id.iv_goods_img);
+                RoundedImageView goodsImage = helper.getView(R.id.img_goods_item);
                 Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(goodsImage);
                 helper.setText(R.id.tv_goods_name, goods.name);
                 helper.setText(R.id.tv_goods_comment, goods.jingle);

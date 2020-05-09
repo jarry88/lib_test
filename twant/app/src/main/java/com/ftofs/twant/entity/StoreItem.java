@@ -16,6 +16,7 @@ public class StoreItem implements MultiItemEntity {
     public String storeName;
     public String storeClass;
     public String storeFigureImage;
+    public String storeAvatar;
 
     public List<Goods> goodsList;
 

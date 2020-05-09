@@ -80,14 +80,14 @@ public class ShoppingStoreListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvStoreList = view.findViewById(R.id.rv_simple);
-        storeListAdapter = new ShoppingStoreListAdapter(R.layout.store_view, storeItems);
+        storeListAdapter = new ShoppingStoreListAdapter(R.layout.shopping_store_view, storeItems);
         storeListAdapter.setOnItemChildClickListener((adapter, view1, position) -> {
             int id = view1.getId();
             if (id == R.id.goods_image_left_container || id == R.id.goods_image_middle_container || id == R.id.goods_image_right_container) {
                 int commonId;
-                if (id == R.id.goods_image_left_container) {
+                if (id == R.id.goods_image_middle_container) {
                     commonId = storeItems.get(position).goodsList.get(0).id;
-                } else if (id == R.id.goods_image_middle_container) {
+                } else if (id == R.id.goods_image_left_container) {
                     commonId = storeItems.get(position).goodsList.get(1).id;
                 } else {
                     commonId = storeItems.get(position).goodsList.get(2).id;
@@ -101,6 +101,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         rvStoreList.setLayoutManager(linearLayoutManager);
+        addOnNestedScroll();
         rvStoreList.setAdapter(storeListAdapter);
     }
 
@@ -115,6 +116,7 @@ public class ShoppingStoreListFragment extends BaseFragment {
                 EasyJSONObject store = (EasyJSONObject) object;
                 StoreItem storeItem =new StoreItem();
                 storeItem.storeFigureImage=store.getSafeString("storeFigureImage");
+                storeItem.storeAvatar=store.getSafeString("storeAvatar");
                 storeItem.storeName=store.getSafeString("storeName");
                 storeItem.storeId=store.getInt("storeId");
                 storeItem.storeClass = store.getSafeString("className");
@@ -133,12 +135,15 @@ public class ShoppingStoreListFragment extends BaseFragment {
     }
 
     public void setNestedScrollingEnabled(boolean b) {
-        rvStoreList.setNestedScrollingEnabled(b);
-        SLog.info("設置店鋪列表頁面滾動[%s]",b);
+        if (rvStoreList != null) {
+            rvStoreList.setNestedScrollingEnabled(b);
+            SLog.info("設置店鋪列表頁面滾動[%s]",b);
+        }
 
     }
 
     public void addOnNestedScroll() {
+        rvStoreList.setNestedScrollingEnabled(false);
         rvStoreList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -158,5 +163,12 @@ public class ShoppingStoreListFragment extends BaseFragment {
 
     public void setOnNestedScroll(LinkageTestFragment linkageTestFragment) {
         this.parentFragment = linkageTestFragment;
+    }
+
+    public void scrollToTop() {
+        if (rvStoreList != null) {
+            rvStoreList.scrollToPosition(0);
+            rvStoreList.setNestedScrollingEnabled(false);
+        }
     }
 }

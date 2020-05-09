@@ -216,7 +216,7 @@
                     android:gravity="center_vertical"
                     android:paddingTop="8dp"
                     android:singleLine="true"
-                    android:text="客厅装饰fdgdfg dfgfgsdfdsfsdfsdfsdfsdfsdfsdf"
+                    android:text="客厅装饰fdgdfg dfsdf"
                     android:textColor="@color/tw_black"
                     android:textSize="14sp" />
 

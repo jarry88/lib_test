@@ -164,6 +164,9 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
     }
 
     public void setNestedScrollingEnabled(boolean enabled) {
+        if (rvMenuList == null||rvList==null) {
+            return;
+        }
         rvMenuList.setNestedScrollingEnabled(enabled);
         rvList.setNestedScrollingEnabled(enabled);
     }
@@ -245,12 +248,17 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
     }
 
     public void scrollToTop() {
-        rvList.scrollTo(0,0);
-        rvMenuList.scrollTo(0,0);
-        setSelectedPosition(0);
+        if (rvMenuList != null&&rvMenuList!=null) {
+            rvList.scrollToPosition(0);
+            rvMenuList.scrollToPosition(0);
+            setSelectedPosition(0);
+            setNestedScrollingEnabled(false);
+        }
+
     }
 
     private void setSelectedPosition(int i) {
+        rvMenuList.getChildAt(i).performClick();
     }
 
     public void addOnNestedScroll() {

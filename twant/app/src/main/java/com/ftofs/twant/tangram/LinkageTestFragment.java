@@ -20,6 +20,7 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.BaseFragment;
@@ -31,6 +32,7 @@ import com.ftofs.twant.fragment.ShoppingSpecialLinkageFragment;
 import com.ftofs.twant.fragment.ShoppingStoreListFragment;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.UiUtil;
@@ -91,7 +93,7 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
     boolean floatButtonShown = true;  // 浮動按鈕是否有顯示
     private long lastScrollingTimestamp;
     private boolean isScrolling;
-    private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=100;
+    private long FLOAT_BUTTON_SCROLLING_EFFECT_DELAY=75;
     private LinearLayout llFloatButtonContainer;
     private boolean showTab=true;
     private LinearLayout llBanner;
@@ -213,12 +215,20 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                 boolean nestedScroll = tabY <= containerViewY;
                 // 如果列表滑动到顶部，则启用嵌套滚动
 
-                shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
-                if (showTab) {
-                    storeListFragment.setNestedScrollingEnabled(nestedScroll);
+
+                storeListFragment.setNestedScrollingEnabled(nestedScroll);
+                if (hasGoodsCategory==1) {
+                    shoppingLinkageFragment.setNestedScrollingEnabled(nestedScroll);
+                }else {
+                    withoutCategoryFragment.setNestedScrollingEnabled(nestedScroll);
                 }
-                if (hasGoodsCategory!=1&&withoutCategoryFragment != null) {
-                    withoutCategoryFragment.setNestedScroll(nestedScroll);
+
+                if (!nestedScroll) {
+                    if (oldScrollY > scrollY) {
+                        onCbStartNestedScroll();
+                    } else {
+                        onCbStopNestedScroll();
+                    }
                 }
             }
         });
@@ -226,6 +236,12 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void loadData() {
+        if (zoneId < 0 && Config.DEVELOPER_MODE) {
+            String str = AssetsUtil.loadText(_mActivity, "tangram/test.json");
+            EasyJSONObject responseObj = EasyJSONObject.parse(str);
+            updateView(responseObj);
+            return;
+        }
         final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
 
 
@@ -242,11 +258,14 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
             public void onResponse(Call call, String responseStr) throws IOException {
                 loadingPopup.dismiss();
                 SLog.info("responseStr[%s]",responseStr);
+
                 //測試數據
                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                    pop();
                     return;
                 }
+
                 updateView(responseObj);
             }
         });
@@ -289,7 +308,6 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                 shoppingLinkageFragment.setDataList(zoneGoodsCategoryVoList);
                     shoppingLinkageFragment.setNestedScroll(this);
                 }
-                withoutCategoryFragment=null;
 
             } else {
                 if (!StringUtil.isEmpty(goodsTabTitle)) {
@@ -299,13 +317,13 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                     fragmentList.add(withoutCategoryFragment);
                     SLog.info("無類別商品標簽數據");
 //                tabLayout.removeTabAt(0);
-                    withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
                     withoutCategoryFragment.setNestedScroll(this);
+                    withoutCategoryFragment.setGoodVoList(zoneGoodsVoList);
                 }
 
             }
 
-            EasyJSONArray zoneStoreVoList = zoneVo.getArray("zoneStoreVoList");
+            EasyJSONArray zoneStoreVoList = zoneVo.getSafeArray("zoneStoreVoList");
             if (zoneStoreVoList != null && zoneStoreVoList.length() > 0) {
                 SLog.info("設置商店列表數據");
                 if (!StringUtil.isEmpty(storeTabTitle)) {
@@ -316,11 +334,16 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                     storeListFragment.setStoreList(zoneStoreVoList);
                 }
 
-            } else {
+            }
+
+            initViewPager();
+
+            if (tabLayout.getTabCount() <= 1) {
                 tabLayout.setVisibility(View.GONE);
+                showTab = false;
+
                 setViewPagerHeight();
             }
-         initViewPager();
 
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -328,7 +351,6 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
 
     }
     void setViewPagerHeight() {
-        showTab = false;
         tabHeight = tabLayout.getHeight();
         SLog.info("containerHeight[%d], tabHeight[%d]", containerHeight, tabHeight);
 
@@ -366,6 +388,7 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
             layoutParams.height = containerHeight - tabHeight;
             viewPager.setLayoutParams(layoutParams);
         }
+        onCbStopNestedScroll();
     }
 
     @Override
@@ -395,9 +418,12 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
 
         } else if (id == R.id.btn_goto_top) {
             containerView.scrollTo(0,0);
-            if (hasGoodsCategory==1) {
+            if (hasGoodsCategory == 1) {
                 shoppingLinkageFragment.scrollToTop();
+            } else if(withoutCategoryFragment!=null){
+                withoutCategoryFragment.scrollToTop();
             }
+            storeListFragment.scrollToTop();
         }
     }
 
@@ -446,7 +472,7 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
 //        llFloatButtonContainer.setLayoutParams(layoutParams);
 //        floatButtonShown = true;
         TranslateAnimation translateAnimation = new TranslateAnimation(100, 0, 0, 0);
-        translateAnimation.setDuration(400);
+        translateAnimation.setDuration(250);
         translateAnimation.setFillAfter(true);
         llFloatButtonContainer.setAnimation(translateAnimation);
         llFloatButtonContainer.startAnimation(translateAnimation);

@@ -620,10 +620,14 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                     EasyJSONArray serviceStaffList = responseObj.getSafeArray("datas.serviceStaffList");
                     customerList.clear();
                     if (serviceStaffList == null || serviceStaffList.length() == 0) {
-                        btnCustomer.setOnClickListener(v ->
-                                ToastUtil.error(context,"當前店鋪未設置客服"));
-                        btnCustomerMenu.getMenuIconView().setOnClickListener(v ->
-                                ToastUtil.error(context,"當前店鋪未設置客服"));
+                        if (btnCustomer != null) {
+                            btnCustomer.setOnClickListener(v ->
+                                    ToastUtil.error(context,"當前店鋪未設置客服"));
+                        }
+                        if (btnCustomerMenu != null) {
+                            btnCustomerMenu.getMenuIconView().setOnClickListener(v ->
+                                    ToastUtil.error(context,"當前店鋪未設置客服"));
+                        }
                         return;
                     }
                     customerCount = serviceStaffList.length();

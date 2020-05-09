@@ -91,7 +91,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         tvTestInfo.setOnClickListener(this);
         tvTestInfo.setOnClickListener(v -> {
             //測試環境可進入此測試頁面
-            Util.startFragment(LinkageTestFragment.newInstance(19));
+            Util.startFragment(LinkageTestFragment.newInstance(21));
 
         });
         avatar =view.findViewById((R.id.img_avatar));

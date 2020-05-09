@@ -13,6 +13,7 @@
             android:id="@+id/goods_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:gravity="center_vertical"
             app:riv_corner_radius="1dp"
             app:riv_border_width="1dp"
             app:riv_border_color="@color/tw_bright_grey"
@@ -59,6 +60,7 @@
                 <TextView
                     android:id="@+id/tv_goods_full_specs"
                     android:layout_width="0dp"
+                    android:gravity="center_vertical"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
