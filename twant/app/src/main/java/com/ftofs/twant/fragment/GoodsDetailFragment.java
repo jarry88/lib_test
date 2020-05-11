@@ -1099,11 +1099,12 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     promotionDiscountRate = (float) goodsDetail.getDouble("promotionDiscountRate");
                     tvPromotionDiscountRate.setText("限時" + promotionDiscountRate + "折");
                     EasyJSONObject goodsCountry =responseObj.getObject("datas.goodsCountry");
-                    SLog.info(goodsCountry.toString());
-                    String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(goodsCountry.getSafeString("nationalFlag"));
-                    Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
+                    if (goodsCountry != null) {
+                        String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(goodsCountry.getSafeString("nationalFlag"));
+                        Glide.with(GoodsDetailFragment.this).load(goodsNationalFlagUrl).into(imgGoodsNationalFlag);
+                        tvGoodsCountryName.setText(goodsCountry.getSafeString("countryCn"));
+                    }
 
-                    tvGoodsCountryName.setText(responseObj.getSafeString("datas.goodsCountry.countryCn"));
 
                     if (responseObj.exists("datas.address.areaInfo")) {
                         String areaInfo = responseObj.getSafeString("datas.address.areaInfo");

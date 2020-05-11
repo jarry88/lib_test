@@ -111,6 +111,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     private boolean isSlidingUpward;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView rvCategoryList;
+    private int lastVisibleItemPosition;
+    private int firstVisibleItemPosition;
+    private boolean categoryToNext;
 
     /**
      * 新建一個實例
@@ -249,24 +252,52 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 // 大于0表示正在向上滑动，小于等于0表示停止或向下滑动
-                isSlidingUpward = dy > 0;
-                if (isSlidingUpward != dy > 0) {
-                    isSlidingUpward = !isSlidingUpward;
-                    SLog.info("向上 %s",isSlidingUpward);
-                }
-                if(isRecyclerBottom(recyclerView)){
-                    SLog.info("滑动到底了^________________^");
-                    if (!hasMore && goodsList.size() > 0) {
+                if (layoutManager instanceof LinearLayoutManager) {
+                    //得到当前界面，最后一个子视图对应的position
+                    lastVisibleItemPosition = layoutManager
+                            .findLastVisibleItemPosition();
 
-                    }
+                    //得到当前界面，第一个子视图的position
+                    firstVisibleItemPosition = layoutManager
+                            .findFirstVisibleItemPosition();
                 }
-
 
             }
 
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+
+                //得到当前界面可见数据的大小
+                int visibleItemCount = layoutManager.getChildCount();
+
+                //得到RecyclerView对应所有数据的大小
+                int totalItemCount = layoutManager.getItemCount();
+
+                //判断条件可按实际需要调整
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && visibleItemCount > 0) {
+
+                    //最后视图对应的position等于总数-1时，说明上一次滑动结束时，触底了
+                    if (lastVisibleItemPosition == totalItemCount - 1){
+                        //按需进行业务
+                        int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+                        if (preIndex < storeCategoryListAdapter.getItemCount()-1) {
+                            if (!categoryToNext) {
+                                if (!storeCategoryListAdapter.hasNextSubItem(true)) {
+                                    categoryToNext = true;
+                                    categoryOnItemClick(preIndex+1);
+                                }
+                            }
+                        }
+
+                        //第一个视图的position等于0，说明上一次滑动结束时，触顶了
+                    } else if (firstVisibleItemPosition == 0) {
+//                        ToastUtil.success(_mActivity,"触顶了");
+
+                    }
+                }
+
                 if (parentFragment == null) {
                     return;
                 }
@@ -448,6 +479,9 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     }
 
     private boolean isRecyclerBottom(RecyclerView recyclerView) {
+        if (recyclerView == null) {
+            return false;
+        }
         //得到当前显示的最后一个item的view
         View lastChildView = recyclerView.getLayoutManager().getChildAt(recyclerView.getLayoutManager().getChildCount()-1);
         //得到lastChildView的bottom坐标值
@@ -561,6 +595,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                 @Override
                 public void onResponse(Call call, String responseStr) throws IOException {
                     loadingPopup.dismiss();
+                    categoryToNext = false;
                     SLog.info("responseStr[%s]", responseStr);
                     try {
                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
@@ -935,13 +970,16 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onRefresh() {
         SLog.info("onRefresh");
-        int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
-        if (preIndex > 0) {
-            categoryOnItemClick(preIndex - 1);
-            currPage = 0;
-        } else {
-            if (swipeRefreshLayout.isRefreshing()) {
-                swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setRefreshing(false);
+        if (!storeCategoryListAdapter.hasNextSubItem(false)) {
+            int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+            if (preIndex > 0) {
+                categoryOnItemClick(preIndex - 1);
+                currPage = 0;
+            } else {
+                if (swipeRefreshLayout.isRefreshing()) {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         }
     }
