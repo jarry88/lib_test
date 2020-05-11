@@ -714,9 +714,11 @@
     </ScrollView>
 
     <RelativeLayout
+        android:id="@+id/rl_bottom_bar_container"
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:background="@drawable/border_type_e">
+        android:background="@drawable/border_type_e"
+        android:visibility="gone">
         <TextView
             android:id="@+id/btn_ship"
             android:layout_width="141dp"
