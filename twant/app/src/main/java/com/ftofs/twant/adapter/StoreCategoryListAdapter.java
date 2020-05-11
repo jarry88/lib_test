@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -136,34 +137,40 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
     }
 
     private void performNext(BaseViewHolder helper,StoreLabel item,int finalI) {
-        StoreLabel storeLabel = item.getStoreLabelList().get(finalI);
+        try {
+            StoreLabel storeLabel = item.getStoreLabelList().get(finalI);
 
-        storeLabel.setIsFold(Constant.FALSE_INT);
-
-        SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
-        // 上一次選中的二級菜單取消選中
-        if (prevSelectedSubItemIndex != -1) {
-            SLog.info("prevSelectedSubItemIndex[%d]", prevSelectedSubItemIndex);
-//            StoreLabel prevSelectedSubItem = item.getStoreLabelList().get(prevSelectedSubItemIndex);
-//            prevSelectedSubItem.setIsFold(Constant.TRUE_INT);
             storeLabel.setIsFold(Constant.FALSE_INT);
 
             SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
             // 上一次選中的二級菜單取消選中
             if (prevSelectedSubItemIndex != -1) {
                 SLog.info("prevSelectedSubItemIndex[%d]", prevSelectedSubItemIndex);
-                StoreLabel prevSelectedSubItem = item.getStoreLabelList().get(prevSelectedSubItemIndex);
-                prevSelectedSubItem.setIsFold(Constant.TRUE_INT);
+//            StoreLabel prevSelectedSubItem = item.getStoreLabelList().get(prevSelectedSubItemIndex);
+//            prevSelectedSubItem.setIsFold(Constant.TRUE_INT);
+                storeLabel.setIsFold(Constant.FALSE_INT);
+
+                SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
+                // 上一次選中的二級菜單取消選中
+                if (prevSelectedSubItemIndex != -1) {
+                    SLog.info("prevSelectedSubItemIndex[%d]", prevSelectedSubItemIndex);
+                    StoreLabel prevSelectedSubItem = item.getStoreLabelList().get(prevSelectedSubItemIndex);
+                    prevSelectedSubItem.setIsFold(Constant.TRUE_INT);
+                }
+
+//            SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
+//            prevSelectedSubItemIndex = finalI;
+//            onSelectedListener.onSelected(PopupType.DEFAULT, helper.getAdapterPosition(), storeLabel);
             }
 
             SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
             prevSelectedSubItemIndex = finalI;
             onSelectedListener.onSelected(PopupType.DEFAULT, helper.getAdapterPosition(), storeLabel);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
         }
 
-        SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
-        prevSelectedSubItemIndex = finalI;
-        onSelectedListener.onSelected(PopupType.DEFAULT, helper.getAdapterPosition(), storeLabel);
     }
 
 

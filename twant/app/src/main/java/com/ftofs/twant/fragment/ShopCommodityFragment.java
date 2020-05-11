@@ -290,12 +290,13 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     //最后视图对应的position等于总数-1时，说明上一次滑动结束时，触底了
                     if (lastVisibleItemPosition == totalItemCount - 1){
                         //按需进行业务
-                        if (storeCategoryListAdapter.getSelectedItemCount() < visibleItemCount) {
-                            SLog.info("分不清");
+//                        if (storeCategoryListAdapter.getSelectedItemCount() < visibleItemCount) {
+//                            SLog.info("分不清");
+                        SLog.info("isUp,[%s]",isUp);
                             if (isUp) {
                                 return;
                             }
-                        }
+//                        }
 
                         int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
                         SLog.info("触底了 %s",categoryToNext);
