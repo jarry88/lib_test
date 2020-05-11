@@ -14,5 +14,5 @@
 
 
     <!-- Sku瀏覽規格描述項控件的寬度 -->
-    <dimen name="sku_spec_item_width">210dp</dimen>
+    <dimen name="sku_spec_item_width">280dp</dimen>
 </resources>
