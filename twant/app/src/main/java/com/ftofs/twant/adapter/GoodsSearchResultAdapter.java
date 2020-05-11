@@ -185,8 +185,9 @@ public class GoodsSearchResultAdapter extends BaseMultiItemQuickAdapter<GoodsSea
             if (now > doubleElevenTimestamp) {
                 helper.setGone(R.id.btn_play_game, true);
             }
-        }else if(itemType==Constant.ITEM_TYPE_NO_DATA){
-        } else {
+        } else if(itemType==Constant.ITEM_TYPE_NO_DATA){
+        } else { // 最后那项发表想要的提示
+            SLog.info("here");
             helper.addOnClickListener(R.id.icon_publish_want_post);
 
             // 顯示即可，不用特別處理

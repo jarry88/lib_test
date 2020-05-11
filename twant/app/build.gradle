@@ -21,7 +21,7 @@ android {
 
         versionCode 128
 
-        versionName "1.2.3.91"
+        versionName "1.2.3.90"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
