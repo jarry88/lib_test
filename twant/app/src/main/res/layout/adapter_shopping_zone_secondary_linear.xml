@@ -29,7 +29,7 @@
             android:id="@+id/img_goods_item"
             android:layout_width="86dp"
             android:layout_height="86dp"
-            android:padding="1dp"
+            android:padding="0.5dp"
             android:background="@color/tw_grey_F3F3"
             android:scaleType="fitXY"/>
 
@@ -62,7 +62,7 @@
         android:maxLines="2"
         android:ellipsize="end"
         android:textSize="14sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@+id/iv_goods_img"
         app:layout_constraintTop_toTopOf="@+id/iv_goods_img"

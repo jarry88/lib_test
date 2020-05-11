@@ -52,7 +52,7 @@
             android:textSize="12sp"
             android:paddingStart="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
-            android:textColor="@color/tw_black"
+            android:textColor="@color/tw_white"
             android:shadowColor="@color/tw_blue"
             app:kswThumbMargin="@dimen/dp_4"
             app:kswBackColor="@color/switch_button_background_color"
@@ -230,7 +230,7 @@
                             android:paddingTop="@dimen/margin12"
                             android:paddingBottom="12dp"
                             android:orientation="vertical"
-                            android:background="@drawable/border_type_d">
+                           >
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -572,19 +572,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="@dimen/margin8">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:text="@string/text_seller_orders_info"
-                            android:paddingStart="16dp"
-                            android:paddingEnd="16dp"
-                            android:paddingTop="@dimen/margin8"
-                            android:paddingBottom="@dimen/margin8"
-                            android:id="@+id/btn_orders_info"
-                            android:textColor="@color/tw_black"
-                            android:background="@drawable/grey_20dp_bg"/>
                         <TextView
                             android:id="@+id/btn_goods_info"
                             android:layout_width="wrap_content"
@@ -598,6 +585,19 @@
                             android:text="@string/text_seller_goods_info"
                             android:textColor="@color/tw_white"
                             android:textSize="12sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="@string/text_seller_orders_info"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingTop="@dimen/margin8"
+                            android:paddingBottom="@dimen/margin8"
+                            android:id="@+id/btn_orders_info"
+                            android:textColor="@color/tw_black"
+                            android:background="@drawable/grey_20dp_bg"/>
+
                     </LinearLayout>
                     <LinearLayout
                         android:id="@+id/ll_container_goods_info"
