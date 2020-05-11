@@ -57,6 +57,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         Menu menu = mMenuList.get(position);
         TextView tvCategory =holder.tvCategory;
         holder.tvCategory.setText(menu.categoryName);
+        holder.tvCategory.setTextSize(12);
 //        holder.tvCategory.setTextColor(menu.isSelected ? Color.RED : Color.BLACK);
         boolean selected = menu.isSelected;
         if (selected) {

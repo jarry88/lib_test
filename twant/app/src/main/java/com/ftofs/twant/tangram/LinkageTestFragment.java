@@ -269,7 +269,8 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                 tabSelect.setText(tab.getText());
                 SLog.info("設置加粗%s",tabSelect.getText());
             } catch (Exception e) {
-                e.printStackTrace();
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
             }
 
         } else {
@@ -283,7 +284,8 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
                 tabSelect.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                 tabSelect.setText(tab.getText());
             } catch (Exception e) {
-                e.printStackTrace();
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
             }
         }
     }
@@ -336,6 +338,7 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
             //調試階段試色
             String zoneName = zoneVo.getSafeString("zoneName");
             tvZoneName.setText(zoneName);
+            tvZoneName.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             updateThemeColor(appColor);
 
             EasyJSONArray appAdImageList = zoneVo.getArray("appAdImageList");
