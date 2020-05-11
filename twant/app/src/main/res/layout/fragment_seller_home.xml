@@ -719,7 +719,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_goods_offline_and_pass_count"
                                     />
                             </LinearLayout>
