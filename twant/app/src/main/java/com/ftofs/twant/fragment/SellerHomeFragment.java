@@ -1,19 +1,16 @@
 package com.ftofs.twant.fragment;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceControl;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,25 +18,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alipay.android.app.IAlixPay;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsGalleryAdapter;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.fragment.SellerOrderListFragment;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.kyleduo.switchbutton.SwitchButton;
+import com.lxj.xpopup.XPopup;
 import com.rd.PageIndicatorView;
 
 import java.io.IOException;
@@ -55,15 +50,11 @@ import butterknife.Unbinder;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONBase;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.yokeyword.fragmentation.ISupportFragment;
 import okhttp3.Call;
 
 import static android.view.View.VISIBLE;
-import static com.ftofs.twant.fragment.ShopHomeFragment.NOTICE_FRAGMENT;
 
 /**
  * @author gzp
@@ -90,8 +81,8 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     @BindView(R.id.tv_seller_member_name)
     TextView tvMemberNickName;
     private AutoVerticalScrollTextViewUtil verticalScrollUtil;
-    private ArrayList<CharSequence> announcementTextList;
     private List<StoreAnnouncement> storeAnnouncementList;
+    private ArrayList<CharSequence> announcementTextList=new ArrayList<>();
     @BindView(R.id.ll_shop_announcement_container)
     LinearLayout llShopAnnouncementContainer;
     @BindView(R.id.tv_orders_wait_pay_count)
@@ -129,6 +120,15 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         if (!StringUtil.isEmpty(videoId)) {
             Util.playYoutubeVideo(_mActivity, videoId);
         }
+    }
+    @OnClick(R.id.ll_shop_announcement_container)
+    void showPopup(){
+        SLog.info("click");
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new StoreAnnouncementPopup(_mActivity, storeAnnouncementList))
+                .show();
     }
     private String storeVideoUrl;
 
@@ -223,6 +223,9 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         super.onDestroyView();
         if (unbinder != null) {
             unbinder.unbind();
+        }
+        if(verticalScrollUtil != null) {
+            verticalScrollUtil.stop();
         }
     }
     private List<String> currGalleryImageList=new ArrayList<>();
@@ -330,30 +333,6 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         } else if(storeAnnouncementList.size()==1){
             llShopAnnouncementContainer.findViewById(R.id.img_notice_more).setVisibility(View.GONE);
         }
-
-//        LinearLayout llContainer;
-//        if (StringUtil.isArrayEmpty(storeAnnouncementList)) {
-//            llContainer = getView().findViewById(R.id.ll_container);
-//            View announcementBlackItemView = LayoutInflater.from(_mActivity).inflate(R.layout.store_black_announcement_item, llContainer, false);
-//            llContainer.addView(announcementBlackItemView);
-//        }
-//        for (StoreAnnouncement announcement : storeAnnouncementList) {
-//            View announcementItemView = LayoutInflater.from(_mActivity).inflate(R.layout.store_announcement_item, llContainer, false);
-//            TextView tvAnnouncementTitle = announcementItemView.findViewById(R.id.tv_announcement_title);
-//            tvAnnouncementTitle.setText(announcement.title);
-//            TextView tvAnnouncementTime = announcementItemView.findViewById(R.id.tv_announcement_time);
-//            tvAnnouncementTime.setText(Time.fromMillisUnixtime(announcement.createTime,"Y-m-d H:i:s"));
-//
-//            tvAnnouncementTitle.setOnClickListener(v -> {
-//                SLog.info("onClick, announcement.id[%d], announcement.title[%s], announcement.content[%s]",
-//                        announcement.id, announcement.title, announcement.content);
-//                // Util.startFragment(StoreAnnouncementDetailFragment.newInstance(announcement));
-//                String url = Config.WEB_BASE_URL + "/store/announcement/" + announcement.id;
-//                Util.startFragment(H5GameFragment.newInstance(url, announcement.title));
-//            });
-//
-//            llContainer.addView(announcementItemView)
-
     }
 
     private void loadSellerData() {
@@ -455,6 +434,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             int discountGoogsCount = responseObj.getInt("datas.discountGoogsCount");
             tvDiscountGoogsCount.setText(String.valueOf(discountGoogsCount));
             EasyJSONArray storeNoticeList = responseObj.getSafeArray("datas.storeNoticeList");
+            announcementTextList.clear();
             for (Object object : storeNoticeList) {
                 EasyJSONObject announcement = (EasyJSONObject) object;
                 String title = announcement.getSafeString("title");
@@ -465,6 +445,10 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                 storeAnnouncementList.add(storeAnnouncement);
                 announcementTextList.add(Html.fromHtml("<font color='#2A292A' size = '2'>" + title + "</font>"));
             }
+            SLog.info("%d",announcementTextList.size());
+            initView();
+
+
             EasyJSONArray figureList = responseObj.getSafeArray("datas.figureList");
             currGalleryImageList.clear();
             for (Object object : figureList) {
@@ -479,7 +463,6 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                     btnPlay.setVisibility(VISIBLE);
                 }
             }
-            initView();
             updateBanner(false);
             updateNoticeView();
         } catch (Exception e) {
@@ -500,7 +483,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     private void updateSwitchButton() {
         SLog.info("設置顔色%s",storeState==1?"白":"黑");
         swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black));
-        swBusinessState.setThumbColorRes(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black);
+        swBusinessState.setThumbColorRes(R.color.tw_white);
 
     }
 
