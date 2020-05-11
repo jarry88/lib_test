@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ShopGoodsGridAdapter;
 import com.ftofs.twant.adapter.ShopGoodsListAdapter;
@@ -27,6 +29,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.GoodsPair;
@@ -72,6 +75,12 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     ShopGoodsListAdapter shopGoodsListAdapter;
     ShopGoodsGridAdapter shopGoodsGridAdapter;
     LinearLayoutManager layoutManager;
+
+
+
+    float lastX = 0;
+    float lastY = 0;
+    boolean isUp;
 
 
     StoreCategoryListAdapter storeCategoryListAdapter;
@@ -281,13 +290,26 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     //最后视图对应的position等于总数-1时，说明上一次滑动结束时，触底了
                     if (lastVisibleItemPosition == totalItemCount - 1){
                         //按需进行业务
+//                        if (storeCategoryListAdapter.getSelectedItemCount() < visibleItemCount) {
+//                            SLog.info("分不清");
+                        SLog.info("isUp,[%s]",isUp);
+                            if (isUp) {
+                                return;
+                            }
+//                        }
+
                         int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
-                        if (preIndex < storeCategoryListAdapter.getItemCount()-1) {
-                            if (!categoryToNext) {
-                                if (!storeCategoryListAdapter.hasNextSubItem(true)) {
+                        SLog.info("触底了 %s",categoryToNext);
+                        if (!categoryToNext) {
+                            if (!storeCategoryListAdapter.hasNextSubItem(true)) {
+                                if (preIndex < storeCategoryListAdapter.getItemCount()-1) {
+
                                     categoryToNext = true;
-                                    categoryOnItemClick(preIndex+1);
+                                categoryOnItemClick(preIndex+1);
                                 }
+
+                            }else {
+                                categoryOnSubItemClick(true);
                             }
                         }
 
@@ -405,6 +427,33 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
         }, rvGoodsList);
 
         rvGoodsList.setAdapter(shopGoodsGridAdapter);
+        rvGoodsList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                int action = e.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+                    lastX = e.getRawX();
+                    lastY = e.getRawY();
+                } else if (action == MotionEvent.ACTION_UP) {
+                    float x = e.getX();
+                    float y = e.getY();
+                    float deltaY = y - lastY;
+                    isUp = deltaY > 0;
+                    SLog.info("isUp[%s]", isUp);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
         if (paramsOriginal.exists("sort")) {
             String sort = null;
@@ -502,9 +551,10 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     }
 
     private void categoryOnItemClick(int position) {
+//        SLog.bt();
         int prevSelectedItemIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
 
-        SLog.info("prevSelectedItemIndex[%d]", prevSelectedItemIndex);
+        SLog.info("prevSelectedItemIndex[%d],postion [%d]", prevSelectedItemIndex,position);
         if (prevSelectedItemIndex != -1) {
             StoreLabel prevSelectedItem = shopStoreLabelList.get(prevSelectedItemIndex);
             // 設置為收合狀態
@@ -786,6 +836,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     shopStoreLabelList.get(0).setGoodsCount(goodsCountTotal);  // 添加【全部產品】的項數
                     title = String.format("%s(%d)", shopStoreLabelList.get(0).getStoreLabelName(), goodsCountTotal);
                     if (goodsPairList != null && goodsPairList.size() > 0) {
+
                         if (goodsPairList.get(0).getItemType() != Constant.ITEM_TYPE_TITLE) {
                             //這裏是僅僅針對初始默認情況
                             if (currPage == 1) {
@@ -971,8 +1022,11 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     public void onRefresh() {
         SLog.info("onRefresh");
         swipeRefreshLayout.setRefreshing(false);
-        if (!storeCategoryListAdapter.hasNextSubItem(false)) {
+        boolean orientationToDown = false;
+        if (!storeCategoryListAdapter.hasNextSubItem(orientationToDown)) {
             int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+            SLog.info("prevSelectedItemIndex[%d]", preIndex);
+
             if (preIndex > 0) {
                 categoryOnItemClick(preIndex - 1);
                 currPage = 0;
@@ -981,7 +1035,25 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }
+        } else {
+            categoryOnSubItemClick(orientationToDown);
         }
+    }
+
+    private void categoryOnSubItemClick(boolean down) {
+        int preIndex = storeCategoryListAdapter.getPrevSelectedItemIndex();
+        BaseViewHolder holder=(BaseViewHolder)rvCategoryList.findViewHolderForAdapterPosition(preIndex);
+        LinearLayout llSubCategoryList = holder.getView(R.id.ll_sub_ategory_list);
+        int subIndex=storeCategoryListAdapter.getPrevSelectedSubItemIndex()+(down?1:-1);
+        SLog.info("SubIndex %d", subIndex);
+        try {
+            categoryToNext=false;
+            llSubCategoryList.getChildAt(subIndex).performClick();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
+        }
+
     }
 }
 
