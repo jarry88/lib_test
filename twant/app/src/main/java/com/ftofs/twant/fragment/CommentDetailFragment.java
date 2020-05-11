@@ -48,9 +48,12 @@ import com.ftofs.twant.widget.SmoothInputLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -58,9 +61,15 @@ import okhttp3.Call;
  * 評論詳情Fragment
  * @author zwm
  */
-public class CommentDetailFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener {
+public class CommentDetailFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, SimpleCallback {
     CommentItem commentItem;
     private boolean popLogined=false;
+
+    public static final int ACTION_VIEW_IMAGE = 1;
+
+    // 评论的RecyclerView与图片索引的映射关系
+    Map<Integer, Integer> rvPositionToImageIndexMap = new HashMap<>();
+    List<String> imageList = new ArrayList<>();
 
     @Override
     public void onSupportVisible() {
@@ -68,6 +77,24 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         if (!User.isLogin()) {
 
             popLogined=false;
+        }
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        EasyJSONObject dataObj = (EasyJSONObject) data;
+
+        try {
+            int action = dataObj.getInt("action");
+            int position = dataObj.getInt("position");
+            if (action == ACTION_VIEW_IMAGE) {
+                Integer imageIndex = rvPositionToImageIndexMap.get(position);
+                if (imageIndex != null) {
+                    Util.startFragment(ImageFragment.newInstance(imageIndex, imageList));
+                }
+            }
+        } catch (EasyJSONException e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
@@ -156,7 +183,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
         setReplyContentHint(commentItem.nickname);
 
         LinearLayout llReplyContainer = view.findViewById(R.id.ll_reply_container);
-        commentReplyListAdapter = new CommentReplyListAdapter(_mActivity, llReplyContainer, R.layout.comment_reply_item);
+        commentReplyListAdapter = new CommentReplyListAdapter(_mActivity, llReplyContainer, R.layout.comment_reply_item, this);
         commentReplyListAdapter.setChildClickListener(new ViewGroupAdapter.OnItemClickListener() {
             @Override
             public void onClick(ViewGroupAdapter adapter, View view, int position) {
@@ -236,7 +263,7 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
 
                     commentReplyListAdapter.notifyItemChanged(position);
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -507,10 +534,17 @@ public class CommentDetailFragment extends BaseFragment implements View.OnClickL
                                 item.content = "";
                             }
                             EasyJSONArray images = reply.getSafeArray("images");
+                            String imageUrl = "";  // 目前只支持1張圖片
                             for (Object object2 : images) {
                                 EasyJSONObject image = (EasyJSONObject) object2;
-                                item.imageList.add(image.getSafeString("imageUrl"));
+                                imageUrl = image.getSafeString("imageUrl");
+                                item.imageList.add(imageUrl);
                             }
+                            if (!StringUtil.isEmpty(imageUrl)) {
+                                rvPositionToImageIndexMap.put(commentReplyItemList.size(), imageList.size());
+                                imageList.add(StringUtil.normalizeImageUrl(imageUrl));
+                            }
+
 
                             item.commentLike = reply.getInt("commentLike");
                             item.isLike = reply.getInt("isLike");
