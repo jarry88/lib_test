@@ -1,5 +1,7 @@
 package com.ftofs.twant.constant;
 
+import com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider;
+
 /**
  * 常量定義
  * @author zwm
@@ -312,5 +314,6 @@ public class Constant {
     public static final int FALSE_INT = 0;
     public static final String MSG_NOTIFY_HXID ="hId" ;
 
-
+    // public static final int SKU_SELECTED_FONT_SIZE = 14;
+    // public static final int SKU_UNSELECTED_FONT_SIZE = 14;
 }

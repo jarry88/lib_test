@@ -15,8 +15,7 @@
         android:textSize="14sp"
         android:textColor="@android:color/white"
         android:lines="2"
-        android:maxLines="2"
-        android:ellipsize="end">
+        android:ellipsize="none">
     </TextView>
 </LinearLayout>
 

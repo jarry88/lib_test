@@ -357,6 +357,25 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     showFloatButton();
+
+                    LinearLayoutManager manager = (LinearLayoutManager) rvSearchResultList.getLayoutManager();
+
+                    if (manager == null) {
+                        return;
+                    }
+
+                    if (searchType == SearchType.GOODS) {
+                        SLog.info("here");
+                        int lastPosition = manager.findLastCompletelyVisibleItemPosition();
+                        if (0 <= lastPosition && lastPosition < goodsItemPairList.size()) {
+                            GoodsSearchItemPair goodsSearchItemPair = goodsItemPairList.get(lastPosition);
+                            if (goodsSearchItemPair.itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT) {
+                                SLog.info("here");
+                                goodsSearchItemPair.animShowStatus = Constant.ANIM_SHOWING;
+                                mGoodsAdapter.notifyItemChanged(lastPosition);
+                            }
+                        }
+                    }
                 }
 
                 if (!hasMore && !rvSearchResultList.canScrollVertically(1)) {
@@ -502,7 +521,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 Util.setButtonStatus(_mActivity, btnPrevPage, false);
             }
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         if (mGoodsAdapter != null) {

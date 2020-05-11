@@ -18,6 +18,7 @@ import com.ftofs.twant.adapter.SkuImageListAdapter;
 import com.ftofs.twant.adapter.SkuSpecListAdapter;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.SkuGalleryItem;
+import com.ftofs.twant.entity.SkuSpecViewItem;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -40,7 +41,7 @@ public class SkuImageFragment extends BaseFragment implements View.OnClickListen
     SkuImageListAdapter skuImageListAdapter;
 
     SkuSpecListAdapter skuSpecListAdapter;
-    List<String> skuSpecList = new ArrayList<>();
+    List<SkuSpecViewItem> skuSpecList = new ArrayList<>();
 
 
     TextView tvPrice;
@@ -98,18 +99,23 @@ public class SkuImageFragment extends BaseFragment implements View.OnClickListen
         Util.setOnClickListener(view, R.id.rl_container, this);
 
 
-        skuSpecList.add(""); // 在最前面加個空串
+        skuSpecList.add(new SkuSpecViewItem("", SkuSpecViewItem.STATUS_LEFT)); // 在最前面加個空串
         for (int i = 0; i < skuGalleryItemList.size(); i++) {
             SkuGalleryItem item = skuGalleryItemList.get(i);
             goodsIdToRvPositionMap.put(item.goodsId, i);
 
-            skuSpecList.add(item.goodsSpecString);
+            if (i == 1) {
+                skuSpecList.add(new SkuSpecViewItem(item.goodsSpecString, SkuSpecViewItem.STATUS_RIGHT));
+            } else {
+                skuSpecList.add(new SkuSpecViewItem(item.goodsSpecString, SkuSpecViewItem.STATUS_CENTER));
+            }
+
 
             if (initGoodsId == item.goodsId) {
                 currPosition = i;
             }
         }
-        skuSpecList.add(""); // 在最後面加個空串
+        skuSpecList.add(new SkuSpecViewItem("", SkuSpecViewItem.STATUS_LEFT)); // 在最後面加個空串
 
         rvImageList = view.findViewById(R.id.rv_image_list);
 
@@ -164,6 +170,38 @@ public class SkuImageFragment extends BaseFragment implements View.OnClickListen
         rvSkuSpecList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
         skuSpecListAdapter = new SkuSpecListAdapter(R.layout.sku_spec_item, skuSpecList);
         rvSkuSpecList.setAdapter(skuSpecListAdapter);
+        rvSkuSpecList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) rvSkuSpecList.getLayoutManager();
+                    if (layoutManager == null) {
+                        return;
+                    }
+                    int firstPosition = layoutManager.findFirstVisibleItemPosition();
+                    int lastPosition = layoutManager.findLastVisibleItemPosition();
+
+                    SLog.info("firstPosition[%d], lastPosition[%d]", firstPosition, lastPosition);
+
+                    if (firstPosition + 2 != lastPosition) {
+                        SLog.info("Error!位置數據無效");
+                        return;
+                    }
+
+                    skuSpecList.get(firstPosition).status = SkuSpecViewItem.STATUS_LEFT;
+                    skuSpecList.get(firstPosition + 1).status = SkuSpecViewItem.STATUS_CENTER;
+                    skuSpecList.get(lastPosition).status = SkuSpecViewItem.STATUS_RIGHT;
+
+                    skuSpecListAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
 
         updateInfoView();
         snapToPosition(currPosition + 1);  // 規格列表滑動到指定position
