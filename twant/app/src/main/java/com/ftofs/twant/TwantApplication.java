@@ -807,9 +807,12 @@ public class TwantApplication extends Application {
     }
 
     private String getAppName(int pID) {
-        String processName = null;
+        String processName = "";
         ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
         List l = am.getRunningAppProcesses();
+        if (l == null) {
+            return "";
+        }
         Iterator i = l.iterator();
         PackageManager pm = this.getPackageManager();
         while (i.hasNext()) {
