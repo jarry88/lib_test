@@ -128,13 +128,17 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
 
             @Override
             public void onPageSelected(int position) {
-                 SLog.info( "page %d" ,position);
-                Editable editable1 = ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.getText();
-                Editable editable = ((PasswordLoginFragment) fragmentList.get(0)).etMobile.getText();
-                if (position == 1) {
-                    ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.setText(editable);
-                } else {
-                    ((PasswordLoginFragment) fragmentList.get(0)).etMobile.setText(editable1);
+                SLog.info( "page %d" ,position);
+                try {
+                    Editable editable1 = ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.getText();
+                    Editable editable = ((PasswordLoginFragment) fragmentList.get(0)).etMobile.getText();
+                    if (position == 1) {
+                        ((DynamicCodeLoginFragment) fragmentList.get(1)).etMobile.setText(editable);
+                    } else {
+                        ((PasswordLoginFragment) fragmentList.get(0)).etMobile.setText(editable1);
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
 
@@ -228,7 +232,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                             start(BindMobileFragment.newInstance(accessToken, openId));
                         }
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
