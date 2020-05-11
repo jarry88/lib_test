@@ -466,7 +466,6 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             }
             EasyJSONArray figureList = responseObj.getSafeArray("datas.figureList");
             currGalleryImageList.clear();
-
             for (Object object : figureList) {
                 if (!Util.isJsonNull(object)) {
                     currGalleryImageList.add(String.valueOf(object));
@@ -498,7 +497,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     }
 
     private void updateSwitchButton() {
-        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.TRUE_INT?R.color.tw_white:R.color.tw_black));
+//        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.TRUE_INT?R.color.tw_white:R.color.tw_black));
 
 
     }
