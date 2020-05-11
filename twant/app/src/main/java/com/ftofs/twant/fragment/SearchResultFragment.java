@@ -375,6 +375,17 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 mGoodsAdapter.notifyItemChanged(lastPosition);
                             }
                         }
+                    } else if (searchType == SearchType.STORE) {
+                        SLog.info("here");
+                        int lastPosition = manager.findLastCompletelyVisibleItemPosition();
+                        if (0 <= lastPosition && lastPosition < storeItemList.size()) {
+                            StoreSearchItem storeSearchItem = storeItemList.get(lastPosition);
+                            if (storeSearchItem.itemType == Constant.ITEM_TYPE_LOAD_END_HINT) {
+                                SLog.info("here");
+                                storeSearchItem.animShowStatus = Constant.ANIM_SHOWING;
+                                mStoreAdapter.notifyItemChanged(lastPosition);
+                            }
+                        }
                     }
                 }
 
