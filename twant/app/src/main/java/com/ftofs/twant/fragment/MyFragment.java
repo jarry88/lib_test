@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -110,6 +111,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
     int currPage=1;
     boolean hasMore=true;
 
+    RelativeLayout rlFollowMeList;
+
     /**
      * 拍照的圖片文件
      */
@@ -186,6 +189,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
         imgPersonalBackground = view.findViewById(R.id.img_personal_background);
         imgPersonalBackground.setOnClickListener(this);
 
+        rlFollowMeList = view.findViewById(R.id.rl_follow_me_list);
         QuickClickButton btnQuickClick = view.findViewById(R.id.btn_quick_click);
         btnQuickClick.setOnQuickClickListener(new QuickClickButton.OnQuickClickListener() {
             @Override
@@ -480,7 +484,7 @@ public class MyFragment extends BaseFragment implements View.OnClickListener, On
                         followMeList.add(item);
                     }
                         if (followMeList.isEmpty()) {
-                            rvFollowMeList.setVisibility(View.GONE);
+                            rlFollowMeList.setVisibility(View.GONE);
                         } else {
                             rvFollowMeList.setVisibility(View.VISIBLE);
                             followMeAvatarAdapter.setNewData(followMeList);

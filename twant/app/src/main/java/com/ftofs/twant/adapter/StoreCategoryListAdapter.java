@@ -20,6 +20,7 @@ import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.Util;
 
 import java.util.List;
@@ -107,20 +108,7 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
                         @Override
                         public void onClick(View v) {
                             SLog.info("onClick");
-
-                            storeLabel.setIsFold(Constant.FALSE_INT);
-
-                            SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
-                            // 上一次選中的二級菜單取消選中
-                            if (prevSelectedSubItemIndex != -1) {
-                                SLog.info("prevSelectedSubItemIndex[%d]", prevSelectedSubItemIndex);
-                                StoreLabel prevSelectedSubItem = item.getStoreLabelList().get(prevSelectedSubItemIndex);
-                                prevSelectedSubItem.setIsFold(Constant.TRUE_INT);
-                            }
-
-                            SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
-                            prevSelectedSubItemIndex = finalI;
-                            onSelectedListener.onSelected(PopupType.DEFAULT, helper.getAdapterPosition(), storeLabel);
+                           performNext(helper,item,finalI);
                         }
                     });
 
@@ -147,6 +135,37 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
         }
     }
 
+    private void performNext(BaseViewHolder helper,StoreLabel item,int finalI) {
+        StoreLabel storeLabel = item.getStoreLabelList().get(finalI);
+
+        storeLabel.setIsFold(Constant.FALSE_INT);
+
+        SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
+        // 上一次選中的二級菜單取消選中
+        if (prevSelectedSubItemIndex != -1) {
+            SLog.info("prevSelectedSubItemIndex[%d]", prevSelectedSubItemIndex);
+//            StoreLabel prevSelectedSubItem = item.getStoreLabelList().get(prevSelectedSubItemIndex);
+//            prevSelectedSubItem.setIsFold(Constant.TRUE_INT);
+            storeLabel.setIsFold(Constant.FALSE_INT);
+
+            SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
+            // 上一次選中的二級菜單取消選中
+            if (prevSelectedSubItemIndex != -1) {
+                SLog.info("prevSelectedSubItemIndex[%d]", prevSelectedSubItemIndex);
+                StoreLabel prevSelectedSubItem = item.getStoreLabelList().get(prevSelectedSubItemIndex);
+                prevSelectedSubItem.setIsFold(Constant.TRUE_INT);
+            }
+
+            SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
+            prevSelectedSubItemIndex = finalI;
+            onSelectedListener.onSelected(PopupType.DEFAULT, helper.getAdapterPosition(), storeLabel);
+        }
+
+        SLog.info("prevSelectedSubItemIndex[%d], finalI[%d]", prevSelectedSubItemIndex, finalI);
+        prevSelectedSubItemIndex = finalI;
+        onSelectedListener.onSelected(PopupType.DEFAULT, helper.getAdapterPosition(), storeLabel);
+    }
+
 
     /**
      * 設置上一次選中的菜單item的索引
@@ -171,6 +190,12 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
      */
     public int getPrevSelectedItemIndex() {
         return prevSelectedItemIndex;
+    } /**
+     * 獲取上一次選中的菜單item的索引
+     * @return
+     */
+    public int getPrevSelectedSubItemIndex() {
+        return prevSelectedSubItemIndex;
     }
     /**
      * 獲取當前選中的菜單item的索引
@@ -196,10 +221,16 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
                     }
                     return prevSelectedSubItemIndex < subItemList.size() - 1;
                 } else {
+                    SLog.info("prevSelectedSubItemIndex %d",prevSelectedSubItemIndex);
                     return prevSelectedSubItemIndex > 0;
                 }
             }
         return false;
+    }
+
+
+    public int getSelectedItemCount() {
+        return getData().get(prevSelectedItemIndex).getStoreLabelList().size();
     }
 }
 

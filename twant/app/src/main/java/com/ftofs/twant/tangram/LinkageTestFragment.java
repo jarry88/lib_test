@@ -3,6 +3,7 @@ package com.ftofs.twant.tangram;
 import android.app.Notification;
 import android.graphics.Color;
 import android.graphics.Outline;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -201,6 +202,24 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                //选中加粗
+                updateTabTextView(tab ,true);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                updateTabTextView(tab ,false);
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         containerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -237,7 +256,37 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
         });
         //加載數據
     }
+    private void updateTabTextView(TabLayout.Tab tab, boolean isSelect) {
+        if (isSelect) {
+            try {
+                java.lang.reflect.Field fieldView= tab.getClass().getDeclaredField("mView");
+                fieldView.setAccessible(true);
+                View view= (View) fieldView.get(tab);
+                java.lang.reflect.Field fieldTxt= view.getClass().getDeclaredField("mTextView");
+                fieldTxt.setAccessible(true);
+                TextView tabSelect= (TextView) fieldTxt.get(view);
+                tabSelect.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                tabSelect.setText(tab.getText());
+                SLog.info("設置加粗%s",tabSelect.getText());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+        } else {
+            try {
+                java.lang.reflect.Field fieldView= tab.getClass().getDeclaredField("mView");
+                fieldView.setAccessible(true);
+                View view= (View) fieldView.get(tab);
+                java.lang.reflect.Field fieldTxt= view.getClass().getDeclaredField("mTextView");
+                fieldTxt.setAccessible(true);
+                TextView tabSelect= (TextView) fieldTxt.get(view);
+                tabSelect.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                tabSelect.setText(tab.getText());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private void loadData() {
         if (zoneId < 0 && Config.DEVELOPER_MODE) {
             String str = AssetsUtil.loadText(_mActivity, "tangram/test.json");

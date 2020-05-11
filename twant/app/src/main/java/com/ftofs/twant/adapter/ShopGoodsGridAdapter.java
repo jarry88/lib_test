@@ -68,7 +68,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
             }
         }
         else if (itemViewType == Constant.ITEM_TYPE_LOAD_END_HINT){ // 加載完成的提示，顯示即可，不用特別處理
-            helper.setText(R.id.tv_load_end_hint_content, "aba ");
+            helper.setText(R.id.tv_load_end_hint_content, " ");
         } else if (itemViewType == Constant.ITEM_TYPE_TITLE) {
             helper.setText(R.id.item_title, goodsPair.getItemTitle());
         }
