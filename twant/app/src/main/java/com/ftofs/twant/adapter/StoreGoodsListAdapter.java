@@ -33,7 +33,7 @@ public class StoreGoodsListAdapter extends ViewGroupAdapter<StoreGoodsPair> {
             setText(itemView, R.id.tv_left_goods_jingle, itemData.leftItem.jingle);
             setText(itemView, R.id.tv_left_price, StringUtil.formatPrice(context, itemData.leftItem.price, 0,false));
 
-            TextView leftPrice = itemView.findViewById(R.id.tv_left_goods_price);
+            TextView leftPrice = itemView.findViewById(R.id.tv_left_price);
             UiUtil.toPriceUI(leftPrice,12);
             ImageView leftGoodsImage = itemView.findViewById(R.id.left_goods_image);
             Glide.with(context).load(itemData.leftItem.imageSrc).centerCrop().into(leftGoodsImage);

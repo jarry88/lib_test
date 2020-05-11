@@ -181,13 +181,25 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
     }
 
     /**
-     * 點擊下一個item
+     * 檢查有下一subitem或者上一個
+     *
      * @return
      */
-    public void performCilckNext() {
-        if (getPrevSelectedItemIndex()+1 >= getItemCount()) {
-            return;
-        }
+    public boolean hasNextSubItem(boolean down) {
+            List<StoreLabel> dataList = getData();
+
+            List<StoreLabel> subItemList = dataList.get(prevSelectedItemIndex).getStoreLabelList();
+            if (subItemList != null) {
+                if (down) {
+                    if (prevSelectedSubItemIndex == -1) {
+                        return 0<subItemList.size() - 1;
+                    }
+                    return prevSelectedSubItemIndex < subItemList.size() - 1;
+                } else {
+                    return prevSelectedSubItemIndex > 0;
+                }
+            }
+        return false;
     }
 }
 
