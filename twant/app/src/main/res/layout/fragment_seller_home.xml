@@ -246,8 +246,8 @@
                                     android:orientation="vertical">
                                     <ImageView
                                         android:id="@+id/iv_seller_order"
-                                        android:layout_width="28dp"
-                                        android:layout_height="28dp"
+                                        android:layout_width="35dp"
+                                        android:layout_height="35dp"
                                         android:layout_gravity="center_horizontal"
                                         android:textColor="@color/tw_black"
                                         android:src="@drawable/icon_seller_order"
@@ -275,8 +275,8 @@
                                     android:orientation="vertical">
                                     <ImageView
                                         android:id="@+id/iv_seller_send"
-                                        android:layout_width="28dp"
-                                        android:layout_height="28dp"
+                                        android:layout_width="35dp"
+                                        android:layout_height="35dp"
                                         android:layout_gravity="center_horizontal"
                                         android:textColor="@color/tw_black"
                                         android:src="@drawable/icon_seller_send"
@@ -425,8 +425,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
+                                    android:alpha="0.6"
                                     android:textSize="12sp"
-                                    android:textColor="@color/tw_white"
+                                    android:textColor="#99ffffff"
                                     android:text="@string/text_today_view_count"
                                     />
                             </LinearLayout>
@@ -450,7 +451,8 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="@color/tw_white"
+                                    android:textColor="#99ffffff"
+
                                     android:text="@string/text_today_amount"
                                     />
                             </LinearLayout>
@@ -474,7 +476,8 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="@color/tw_white"
+                                    android:textColor="#99ffffff"
+
                                     android:text="@string/text_today_order_count"
                                     />
                             </LinearLayout>
@@ -505,7 +508,8 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="@color/tw_white"
+                                    android:textColor="#99ffffff"
+
                                     android:text="@string/text_orders_wait_send_count"
                                     />
                             </LinearLayout>
@@ -529,7 +533,8 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="@color/tw_white"
+                                    android:textColor="#99ffffff"
+
                                     android:text="@string/text_message_count"
                                     />
                             </LinearLayout>
@@ -553,7 +558,8 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="@color/tw_white"
+                                    android:textColor="#99ffffff"
+
                                     android:text="@string/text_new_comment_count"
                                     />
                             </LinearLayout>
@@ -566,19 +572,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="@dimen/margin8">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:text="@string/text_seller_goods_info"
-                            android:paddingStart="16dp"
-                            android:paddingEnd="16dp"
-                            android:paddingTop="@dimen/margin8"
-                            android:paddingBottom="@dimen/margin8"
-                            android:id="@+id/btn_goods_info"
-                            android:textColor="@color/tw_white"
-                            android:layout_marginEnd="@dimen/margin8"
-                            android:background="@drawable/blue_20dp_bg"/>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -631,6 +625,20 @@
                                     android:textColor="#333333"
                                     android:text="@string/text_goods_common_onsale_count"
                                     />
+
+                                <TextView
+                                    android:id="@+id/btn_goods_info"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="@dimen/margin8"
+                                    android:background="@drawable/blue_20dp_bg"
+                                    android:paddingStart="16dp"
+                                    android:paddingTop="@dimen/margin8"
+                                    android:paddingEnd="16dp"
+                                    android:paddingBottom="@dimen/margin8"
+                                    android:text="@string/text_seller_goods_info"
+                                    android:textColor="@color/tw_white"
+                                    android:textSize="12sp" />
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -652,7 +660,8 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
+
                                     android:text="@string/text_goods_common_wait_count"
                                     />
                             </LinearLayout>
@@ -675,7 +684,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:textSize="12sp"
                                     android:text="@string/text_goods_common_fail_count"
                                     />
@@ -734,7 +743,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_goods_common_ban_count"
                                     />
                             </LinearLayout>
@@ -758,7 +767,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_discount_goods_count"
                                     />
                             </LinearLayout>
@@ -792,7 +801,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_goods_stock_alarm_count"
                                     />
                             </LinearLayout>
@@ -817,7 +826,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_goods_stock_online_alarm_count"
                                     />
                             </LinearLayout>
@@ -865,7 +874,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="99"
                                     android:text="@string/text_orders_wait_pay_count"
                                     />
                             </LinearLayout>
@@ -890,7 +899,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_orders_wait_send"
                                     />
                             </LinearLayout>
@@ -914,7 +923,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_return_waiting_count"
                                     />
                             </LinearLayout>
@@ -948,7 +957,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_return_waiting_good"
                                     />
                             </LinearLayout>
@@ -972,7 +981,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_bill_count"
                                     />
                             </LinearLayout>
@@ -996,7 +1005,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_complain_access_count"
                                     />
                             </LinearLayout>
@@ -1028,7 +1037,7 @@
                                     android:layout_marginTop="4dp"
                                     android:layout_gravity="center_horizontal"
                                     android:textSize="12sp"
-                                    android:textColor="#333333"
+                                    android:textColor="#99333333"
                                     android:text="@string/text_complain_talk_count"
                                     />
                             </LinearLayout>

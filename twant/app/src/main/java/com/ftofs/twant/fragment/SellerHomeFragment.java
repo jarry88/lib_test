@@ -395,6 +395,8 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                 int messageCount = responseObj.getInt("datas.messageCount");
                 tvMessageCount.setText(String.valueOf(messageCount));
             }
+            String storeSignature = responseObj.getSafeString("datas.storeSignature");
+            tvStoreSignature.setText(storeSignature);
             String memberAvatar = responseObj.getSafeString("datas.memberAvatar");
             if (!StringUtil.isEmpty(memberAvatar)) {
                 Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(memberAvatar)).centerCrop().into(imgSellerAvatar);
@@ -496,9 +498,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     }
 
     private void updateSwitchButton() {
-        boolean enable = storeState == Constant.TRUE_INT;
-        swBusinessState.setChecked(enable);
-        swBusinessState.setTextColor(getResources().getColor(enable?R.color.tw_white:R.color.tw_black));
+        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.TRUE_INT?R.color.tw_white:R.color.tw_black));
 
 
     }
