@@ -126,7 +126,7 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
         titleList.add("待付款");
         titleList.add("待發貨");
         titleList.add("已發貨");
-        titleList.add("完成");
+        titleList.add("已完成");
         titleList.add("已取消");
 
 
