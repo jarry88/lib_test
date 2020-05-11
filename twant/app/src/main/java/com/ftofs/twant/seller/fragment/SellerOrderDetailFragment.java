@@ -54,6 +54,8 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
     String buyerNickname;
     String buyerMemberName;
 
+    View rlBottomBarContainer;
+
     List<SellerOrderDetailGoodsItem> sellerOrderDetailGoodsItemList = new ArrayList<>();
 
     public static SellerOrderDetailFragment newInstance(int orderId) {
@@ -86,6 +88,8 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
         Util.setOnClickListener(view, R.id.btn_copy_order_sn, this);
         Util.setOnClickListener(view, R.id.btn_chat_with_user, this);
         Util.setOnClickListener(view, R.id.btn_ship, this);
+
+        rlBottomBarContainer = view.findViewById(R.id.rl_bottom_bar_container);
 
         loadData();
     }
@@ -202,6 +206,9 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
 
                     ((TextView) contentView.findViewById(R.id.tv_ship_name)).setText(ordersVo.getSafeString("shipName"));
                     ((TextView) contentView.findViewById(R.id.tv_ship_sn)).setText(ordersVo.getSafeString("shipSn"));
+
+                    int showStoreSend = ordersVo.getInt("showStoreSend");
+                    rlBottomBarContainer.setVisibility(showStoreSend == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
