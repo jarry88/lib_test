@@ -302,6 +302,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                     try {
                         ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
                         storeState = setStoreState;
+                        updateSwitchButton();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
@@ -497,8 +498,9 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     }
 
     private void updateSwitchButton() {
-//        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.TRUE_INT?R.color.tw_white:R.color.tw_black));
-
+        SLog.info("設置顔色%s",storeState==1?"白":"黑");
+        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black));
+        swBusinessState.setThumbColorRes(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black);
 
     }
 
