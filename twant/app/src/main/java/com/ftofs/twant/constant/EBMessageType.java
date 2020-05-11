@@ -124,7 +124,11 @@ public enum EBMessageType {
      * 通知欄信息跳轉
      */
     MESSAGE_NOTIFICATION_INTENT,
-    ;
+
+    /**
+     * 【賣家】刷新訂單列表
+     */
+    MESSAGE_SELLER_RELOAD_ORDER_LIST,
 }
 
 

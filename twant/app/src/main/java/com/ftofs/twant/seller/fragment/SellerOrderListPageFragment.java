@@ -16,6 +16,8 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerOrderAdapter;
@@ -28,6 +30,10 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.lxj.xpopup.XPopup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,6 +86,7 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EventBus.getDefault().register(this);
         rvList = view.findViewById(R.id.rv_list);
 
 
@@ -116,6 +123,11 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         rvList.setAdapter(sellerOrderAdapter);
 
+        loadData(currPage + 1);
+    }
+
+    private void reloadData() {
+        currPage = 0;
         loadData(currPage + 1);
     }
 
@@ -208,6 +220,26 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                 }
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEBMessage(EBMessage message) {
+        SLog.info("HERE");
+        if (message.messageType == EBMessageType.MESSAGE_SELLER_RELOAD_ORDER_LIST) {
+            SLog.info("HERE");
+            if (tab == Constant.ORDER_STATUS_TO_BE_SHIPPED || tab == Constant.ORDER_STATUS_TO_BE_RECEIVED) {
+                SLog.info("HERE");
+                reloadData();
+            }
+        }
+
     }
 
     @Override

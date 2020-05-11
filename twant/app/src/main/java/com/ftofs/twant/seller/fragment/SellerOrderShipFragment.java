@@ -16,8 +16,10 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.ShipCompany;
+import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -301,6 +303,7 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                         }
 
                         ToastUtil.success(_mActivity, "訂單發貨成功");
+                        EBMessage.postMessage(EBMessageType.MESSAGE_SELLER_RELOAD_ORDER_LIST, null);
                         pop();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
