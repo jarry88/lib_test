@@ -242,6 +242,8 @@ dependencies {
     //recycleView庫
     implementation 'me.everything:overscroll-decor-android:1.0.4'
 
+    //圖片異步加載
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }
 repositories {
     mavenCentral()

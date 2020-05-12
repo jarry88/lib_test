@@ -59,8 +59,8 @@
             android:id="@+id/btn_message_menu"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginRight="7dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginEnd="7dp"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             app:icon_width="15dp"
             app:icon_height="15dp"
@@ -71,8 +71,8 @@
             android:id="@+id/btn_message_search"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginRight="7dp"
-            android:layout_toLeftOf="@id/btn_message_menu"
+            android:layout_marginEnd="7dp"
+            android:layout_toStartOf="@id/btn_message_menu"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_shop_search">
         </com.ftofs.twant.widget.ScaledButton>
@@ -327,7 +327,7 @@
     </LinearLayout>
     <View
         android:layout_width="match_parent"
-        android:background="#F3F3F3"
+        android:background="#00ffffff"
 
         android:layout_height="45dp"/>
 </LinearLayout>
