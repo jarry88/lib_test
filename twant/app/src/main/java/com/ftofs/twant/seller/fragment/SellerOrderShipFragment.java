@@ -69,6 +69,8 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
     String receiverPhone;
     String receiverAddress;
 
+    EditText etLogisticsSn;
+
     EditText etPackageCount;
     EditText etPackageWeight;
     EditText etPackageLength;
@@ -112,6 +114,8 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        etLogisticsSn = view.findViewById(R.id.et_logistics_sn);
+
         etPackageCount = view.findViewById(R.id.et_package_count);
         etPackageWeight = view.findViewById(R.id.et_package_weight);
         etPackageLength = view.findViewById(R.id.et_package_length);
@@ -143,6 +147,8 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
         shipWayList.add(new ListPopupItem(SHIP_WAY_SEND_WANT, "想送物流(自營物流)", null));
         shipWayList.add(new ListPopupItem(SHIP_WAY_THIRD_PARTY, "第三方物流", null));
         shipWayList.add(new ListPopupItem(SHIP_WAY_NO, "不使用物流", null));
+
+        selectShipWay(SHIP_WAY_SEND_WANT);
 
         loadLogisticsCompany();
     }
@@ -201,6 +207,10 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                     });
 
                     tvReceiverInfo.setText(receiverInfo);
+
+                    if (shipCompanyList.size() > 0) { // 初始化
+                        selectShipCompany(0);
+                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -254,6 +264,15 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
             }
             double packageHeight = Double.parseDouble(packageHeightStr);
 
+            String logisticsSn = "";
+            if (shipWayIndex == SHIP_WAY_THIRD_PARTY) {
+                logisticsSn = etLogisticsSn.getText().toString().trim();
+                if (StringUtil.isEmpty(logisticsSn)) {
+                    ToastUtil.error(_mActivity, "請輸入快遞單號");
+                    return;
+                }
+            }
+
 
             EasyJSONObject params = EasyJSONObject.generate(
                     "areaId1", receiverAreaId1,
@@ -276,6 +295,17 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                             "cargoLong", packageLength
                     )
             );
+
+            if (shipWayIndex == SHIP_WAY_SEND_WANT) {
+                params.set("shipCode", "TW");
+            } else if (shipWayIndex == SHIP_WAY_THIRD_PARTY) {
+                if (shipCompanyList.size() <= shipCompanyIndex) {
+                    return;
+                }
+                String shipCode = shipCompanyList.get(shipCompanyIndex).getShipCode();
+                params.set("shipCode", shipCode);
+                params.set("shipSn", logisticsSn);
+            }
 
             String json = params.toString();
             String path = Api.PATH_SELLER_ORDER_SHIP + Api.makeQueryString(EasyJSONObject.generate("token", token));
@@ -367,23 +397,31 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
         SLog.info("type[%s], id[%s]", type, id);
 
         if (type == PopupType.SELECT_SELLER_LOGISTICS_WAY) {
-            if (id == SHIP_WAY_SEND_WANT) {
-                llShipCompanyContainer.setVisibility(View.GONE);
-                llLogisticsOrderSnContainer.setVisibility(View.GONE);
-                llLogisticsContainer.setVisibility(View.VISIBLE);
-            } else if (id == SHIP_WAY_THIRD_PARTY) {
-                llShipCompanyContainer.setVisibility(View.VISIBLE);
-                llLogisticsOrderSnContainer.setVisibility(View.VISIBLE);
-                llLogisticsContainer.setVisibility(View.VISIBLE);
-            } else { // 不使用物流
-                llLogisticsContainer.setVisibility(View.GONE);
-            }
-            shipWayIndex = id;
-            tvLogisticsWay.setText(shipWayList.get(shipWayIndex).title);
+            selectShipWay(id);
         } else if (type == PopupType.SELECT_SELLER_LOGISTICS_COMPANY) {
-            shipCompanyIndex = id;
-            tvLogisticsCompany.setText(shipCompanyList.get(shipCompanyIndex).getShipName());
+            selectShipCompany(id);
         }
+    }
+
+    private void selectShipWay(int index) {
+        if (index == SHIP_WAY_SEND_WANT) {
+            llShipCompanyContainer.setVisibility(View.GONE);
+            llLogisticsOrderSnContainer.setVisibility(View.GONE);
+            llLogisticsContainer.setVisibility(View.VISIBLE);
+        } else if (index == SHIP_WAY_THIRD_PARTY) {
+            llShipCompanyContainer.setVisibility(View.VISIBLE);
+            llLogisticsOrderSnContainer.setVisibility(View.VISIBLE);
+            llLogisticsContainer.setVisibility(View.VISIBLE);
+        } else { // 不使用物流
+            llLogisticsContainer.setVisibility(View.GONE);
+        }
+        shipWayIndex = index;
+        tvLogisticsWay.setText(shipWayList.get(shipWayIndex).title);
+    }
+
+    private void selectShipCompany(int index) {
+        shipCompanyIndex = index;
+        tvLogisticsCompany.setText(shipCompanyList.get(shipCompanyIndex).getShipName());
     }
 }
 
