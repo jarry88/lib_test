@@ -69,7 +69,6 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
 
     ImageView iconActivityEntrance;
     private NotificationManager mNotificationManager;
-
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -107,6 +106,7 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         } else {
             etToken.setText(token);
         }
+
 
         etUrl = view.findViewById(R.id.et_url);
         etUrl.addTextChangedListener(new TextWatcher() {

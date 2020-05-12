@@ -59,7 +59,6 @@ public class ProcessProgressIndicator extends ViewGroup {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(lineWidth);
 
-        setBackgroundColor(getResources().getColor(R.color.tw_red, null));
     }
 
     @Override

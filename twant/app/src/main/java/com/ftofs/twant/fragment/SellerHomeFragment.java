@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -494,7 +495,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     private void updateSwitchButton() {
         SLog.info("設置顔色%s",storeState==1?"白":"黑");
-        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black));
+        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
         swBusinessState.setThumbColorRes(R.color.tw_white);
 
     }

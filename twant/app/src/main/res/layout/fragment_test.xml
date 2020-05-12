@@ -121,6 +121,18 @@
                 android:gravity="top"
                 android:lines="3"
                 android:background="@drawable/border_type_a"
+                android:visibility="gone"
+                />
+            <ImageView
+                android:id="@+id/img_token"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="svg"
+                android:padding="5dp"
+                android:gravity="top"
+                android:lines="3"
+                android:background="@drawable/border_type_a"
                 />
         </LinearLayout>
 
