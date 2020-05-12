@@ -90,7 +90,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             //每家商店小計金額
             double realFreightAmount = item.freightAmount;
             //
-            if (payWayIndex == 1) {  // 如果是門店自提，則不算運費
+            if (payWayIndex == Constant.PAY_WAY_FETCH) {  // 如果是門店自提，則不算運費
                 realFreightAmount = 0;
             }
             // float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
