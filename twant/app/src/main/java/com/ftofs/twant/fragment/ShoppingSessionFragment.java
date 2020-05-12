@@ -338,6 +338,8 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
 
             carouselLoaded = true;
         }
+            int heightPadding = Util.getScreenDimension(_mActivity).first * 9 / 25- Util.dip2px(_mActivity, 16);
+            bannerView.setIndicatorPadding(0,heightPadding,0,0);
             if (discountBannerList.length() == 1) {
                 bannerView.setCanLoop(false);
             } else {
