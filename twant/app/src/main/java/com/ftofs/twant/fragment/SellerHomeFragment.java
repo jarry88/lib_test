@@ -469,7 +469,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             }
             if (responseObj.exists("datas.storeVideo")) {
                 storeVideo = responseObj.getSafeString("datas.storeVideo");
-                if (storeVideo.contains("youtube.com") || storeVideo.contains("youtu.be")) {
+                if (storeVideo.contains("youtube.com/watch") || storeVideo.contains("youtu.be")) {
                     storeVideoUrl = storeVideo;
                     btnPlay.setVisibility(VISIBLE);
                 }
