@@ -1194,6 +1194,8 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 summaryItem.payWayIndex = payWay;
                 SLog.info("paymentTypeCode[%s], position[%d]", summaryItem.paymentTypeCode, confirmOrderItemList.size() - 1);
                 adapter.notifyItemChanged(confirmOrderItemList.size() - 1);
+
+                updateFreightTotalAmount();
             }
         }
     }
