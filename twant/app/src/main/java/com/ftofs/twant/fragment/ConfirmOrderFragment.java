@@ -648,8 +648,16 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                             }
                         } else {
-                            Util.startFragment(PaySuccessFragment.newInstance(0));
+                            int payId = 0;
+                            try {
+                                payId = responseObj.getInt("datas.payId");
+                            } catch (Exception e) {
+                                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                            }
+                            SLog.info("payId[%d]", payId);
                             pop();
+                            Util.startFragment(PaySuccessFragment.newInstance(payId));
+
                             ToastUtil.success(_mActivity, "提交訂單成功");
 
                             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_GOODS_DETAIL, null);
