@@ -440,13 +440,14 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             int discountGoogsCount = responseObj.getInt("datas.discountGoogsCount");
             tvDiscountGoogsCount.setText(String.valueOf(discountGoogsCount));
             EasyJSONArray storeNoticeList = responseObj.getSafeArray("datas.storeNoticeList");
+
             announcementTextList.clear();
+            storeAnnouncementList.clear();
             for (Object object : storeNoticeList) {
                 EasyJSONObject announcement = (EasyJSONObject) object;
                 String title = announcement.getSafeString("title");
                 String content = announcement.getSafeString("content");
-                StoreAnnouncement storeAnnouncement = new StoreAnnouncement(
-                        announcement.getInt("articleId"), title, content);
+                StoreAnnouncement storeAnnouncement = new StoreAnnouncement(announcement.getInt("articleId"), title, content);
                 storeAnnouncement.createTime = Jarbon.parse(announcement.getSafeString("createTime")).getTimestampMillis();
                 storeAnnouncementList.add(storeAnnouncement);
                 announcementTextList.add(Html.fromHtml("<font color='#2A292A' size = '2'>" + title + "</font>"));
@@ -456,7 +457,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                 textView.setText(Html.fromHtml("<font color='#2A292A' size = '2'>" + title + "</font>"));
                 viewFlipper.addView(textView);
             }
-            SLog.info("%d",announcementTextList.size());
+            SLog.info("%d",storeAnnouncementList.size());
             initView();
 
 
