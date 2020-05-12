@@ -213,6 +213,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 .addOnClickListener(R.id.btn_select_platform_coupon);  // 使用平台券;
             SLog.info("item.platformCouponCount[%d]", item.platformCouponCount);
 
+            SLog.info("item.paymentTypeCode[%s]", item.paymentTypeCode);
             helper.setText(R.id.tv_pay_way, paymentTypeCodeToPayWayDesc(item.paymentTypeCode));
             if (item.platformCouponCount > 0) {
                 helper.setText(R.id.tv_platform_coupon, item.platformCouponStatus);

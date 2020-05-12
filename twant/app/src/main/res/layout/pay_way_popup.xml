@@ -18,7 +18,7 @@
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textColor="@color/tw_black"
-            android:text="送貨方式"
+            android:text="交易方式"
             />
 
         <com.ftofs.twant.widget.ScaledButton
@@ -34,7 +34,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
-        android:layout_height="180dp">
+        android:layout_height="220dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 

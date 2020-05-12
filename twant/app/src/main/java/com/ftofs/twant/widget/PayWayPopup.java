@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
-import com.ftofs.twant.adapter.ListPopupAdapter;
+import com.ftofs.twant.adapter.PayWayAdapter;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.entity.PayWayItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
+import com.ftofs.twant.log.SLog;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
@@ -20,20 +22,20 @@ import java.util.List;
  * 支付方式選擇彈窗
  * @author zwm
  */
-public class PayWayPopup extends BottomPopupView implements View.OnClickListener, OnSelectedListener {
+public class PayWayPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
 
-    ListPopupAdapter adapter;
+    PayWayAdapter adapter;
     int selectedIndex; // 選中的index
     OnSelectedListener onSelectedListener;
-    List<ListPopupItem> payWayItemList;
+    List<PayWayItem> payWayItemList;
 
     /**
      * 列表彈框的構造方法
      * @param context
      * @param onSelectedListener
      */
-    public PayWayPopup(@NonNull Context context, List<ListPopupItem> payWayItemList, int selectedIndex, OnSelectedListener onSelectedListener) {
+    public PayWayPopup(@NonNull Context context, List<PayWayItem> payWayItemList, int selectedIndex, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
@@ -56,11 +58,32 @@ public class PayWayPopup extends BottomPopupView implements View.OnClickListener
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
         findViewById(R.id.btn_ok).setOnClickListener(this);
 
-
         RecyclerView rvList = findViewById(R.id.rv_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        rvList.setLayoutManager(layoutManager);
-        adapter = new ListPopupAdapter(context, PopupType.PAY_WAY, this, payWayItemList, selectedIndex, false, true);
+        rvList.setLayoutManager(new LinearLayoutManager(context));
+        adapter = new PayWayAdapter(context, R.layout.payway_item_layout, payWayItemList);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SLog.info("position[%d], selectedIndex[%d]", position, selectedIndex);
+                if (selectedIndex == position) {
+                    // 重覆選中
+                    return;
+                }
+                SLog.info("here");
+                // 取消前一個選中狀態
+                PayWayItem prevItem = payWayItemList.get(selectedIndex);
+                prevItem.isSelected = false;
+                adapter.notifyItemChanged(selectedIndex);
+                SLog.info("here");
+
+                // 設置當前的選中狀態
+                selectedIndex = position;
+                PayWayItem currItem = payWayItemList.get(selectedIndex);
+                currItem.isSelected = true;
+                SLog.info("here");
+                adapter.notifyItemChanged(selectedIndex);
+            }
+        });
         rvList.setAdapter(adapter);
     }
 
@@ -89,17 +112,11 @@ public class PayWayPopup extends BottomPopupView implements View.OnClickListener
             dismiss();
         } else if (id == R.id.btn_ok) {
             if (onSelectedListener != null) {
-                onSelectedListener.onSelected(PopupType.PAY_WAY, selectedIndex, null);
+                int selectedPayWay = payWayItemList.get(selectedIndex).payWay;
+                SLog.info("selectedPayWay[%d]", selectedPayWay);
+                onSelectedListener.onSelected(PopupType.PAY_WAY, selectedIndex, selectedPayWay);
                 dismiss();
             }
-        }
-    }
-
-    @Override
-    public void onSelected(PopupType type, int id, Object extra) {
-        if (type == PopupType.PAY_WAY) {
-            selectedIndex = id;
-            adapter.notifyDataSetChanged();
         }
     }
 }
