@@ -241,6 +241,7 @@ dependencies {
 
     //recycleView庫
     implementation 'me.everything:overscroll-decor-android:1.0.4'
+
 }
 repositories {
     mavenCentral()

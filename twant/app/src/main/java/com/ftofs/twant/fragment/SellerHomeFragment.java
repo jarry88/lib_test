@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,6 +73,8 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     @BindView(R.id.tv_orders_wait_send)
     TextView tvOrderWaitSendInfoCount;
 
+    @BindView(R.id.vf_vertical_scroll)
+    ViewFlipper viewFlipper;
 
     @BindView(R.id.tv_refund_waiting_count)
     TextView tvRefundWaitingCount;
@@ -278,6 +282,8 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         announcementTextList = new ArrayList<>();
         timer = new Timer();
         setImageBanner();
+
+
         swBusinessState.setText("  營業  ", " 休息  ");
         swBusinessState.setOnClickListener(v -> {
             String token = User.getToken();
@@ -444,6 +450,11 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                 storeAnnouncement.createTime = Jarbon.parse(announcement.getSafeString("createTime")).getTimestampMillis();
                 storeAnnouncementList.add(storeAnnouncement);
                 announcementTextList.add(Html.fromHtml("<font color='#2A292A' size = '2'>" + title + "</font>"));
+                TextView textView = new TextView(_mActivity);
+                textView.setSingleLine();
+                textView.setEllipsize(TextUtils.TruncateAt.END);
+                textView.setText(Html.fromHtml("<font color='#2A292A' size = '2'>" + title + "</font>"));
+                viewFlipper.addView(textView);
             }
             SLog.info("%d",announcementTextList.size());
             initView();

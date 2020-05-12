@@ -64,7 +64,6 @@
     </RelativeLayout>
     <androidx.core.widget.NestedScrollView
         android:id="@+id/container_view"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -197,7 +196,6 @@
                             android:textSize="18sp"
                             android:textColor="@color/tw_black"
                             android:singleLine="true"
-                            android:text="-"
                             />
                         <TextView
                             android:id="@+id/tv_store_signature"
@@ -377,11 +375,20 @@
 
                         <cc.ibooker.ztextviewlib.AutoVerticalScrollTextView
                             android:id="@+id/tv_vertical_scroll"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+                            android:visibility="gone"
                             />
+                        <ViewFlipper
+                            android:id="@+id/vf_vertical_scroll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:autoStart="true"
+                            android:flipInterval="3000"
+                            android:inAnimation="@anim/anim_come_in"
+                            android:outAnimation="@anim/anim_get_out"/>
 
                         <ImageView
                             android:id="@+id/img_notice_more"

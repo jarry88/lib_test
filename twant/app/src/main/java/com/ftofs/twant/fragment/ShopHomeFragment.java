@@ -334,7 +334,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         btnShopMap = view.findViewById(R.id.btn_shop_map);
         btnShopMap.setOnClickListener(this);
 
-        Util.setOnClickListener(view, R.id.rl_shop_comment_container, this);
+//        Util.setOnClickListener(view, R.id.rl_shop_comment_container, this);
         Util.setOnClickListener(view, R.id.btn_show_all_store_friends, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_menu, this);
@@ -1071,9 +1071,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             case R.id.ll_uo_share_container:
                 pullShare();
                 break;
-            case R.id.rl_shop_comment_container:
-                Util.startFragment(CommentListFragment.newInstance(storeId, Constant.COMMENT_CHANNEL_STORE));
-                break;
+
             case R.id.container_view:
                     SLog.info("scroll view");
                     parentFragment.onCbStopNestedScroll();
