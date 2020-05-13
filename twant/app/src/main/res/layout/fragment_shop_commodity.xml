@@ -165,7 +165,10 @@
                 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                     android:id="@+id/swipe_refresh_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingBottom="56dp"
+                    android:background="@color/tw_grey_F3F3"
+                    >
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_goods_list"
                         android:layout_width="match_parent"
