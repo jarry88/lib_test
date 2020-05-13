@@ -90,7 +90,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
             //每家商店小計金額
             double realFreightAmount = item.freightAmount;
             //
-            if (payWayIndex == 1) {  // 如果是門店自提，則不算運費
+            if (payWayIndex == Constant.PAY_WAY_FETCH) {  // 如果是門店自提，則不算運費
                 realFreightAmount = 0;
             }
             // float finalPayAmount = item.buyItemAmount + realFreightAmount - item.discountAmount;
@@ -213,6 +213,7 @@ public class ConfirmOrderStoreAdapter extends BaseMultiItemQuickAdapter<MultiIte
                 .addOnClickListener(R.id.btn_select_platform_coupon);  // 使用平台券;
             SLog.info("item.platformCouponCount[%d]", item.platformCouponCount);
 
+            SLog.info("item.paymentTypeCode[%s]", item.paymentTypeCode);
             helper.setText(R.id.tv_pay_way, paymentTypeCodeToPayWayDesc(item.paymentTypeCode));
             if (item.platformCouponCount > 0) {
                 helper.setText(R.id.tv_platform_coupon, item.platformCouponStatus);

@@ -10,6 +10,7 @@ public class PaySuccessSummaryItem implements MultiItemEntity {
     public String mpayActivityDesc;
     public double totalAmount;
     public int storeCouponCount;  // 收到的店铺券数量
+    public boolean isCashOnDelivery; // 是否是貨到付款
 
     @Override
     public int getItemType() {
