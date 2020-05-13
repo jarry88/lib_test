@@ -755,7 +755,7 @@
 
     <string name="text_goods_take_off">該產品已下架或售完，可以看看店內其它產品</string>
     <string name="text_goto_enc">查看名片</string>
-    <string name="text_goto_member_info">查看資料</string>
+    <string name="text_goto_member_info">個人資料</string>
     <string name="text_report">舉報</string>
     <string name="text_short_want">想要</string>
     <string name="agree_server">請先同意服務協議</string>

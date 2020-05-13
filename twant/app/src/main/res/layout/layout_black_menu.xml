@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/toolbar_margin_left"
     android:paddingEnd="@dimen/toolbar_margin_right"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <LinearLayout
         android:id="@+id/btn_item_1"
@@ -61,11 +62,10 @@
                 android:id="@+id/tv_item_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="9dp"
-                android:textColor="#fff"
-                android:textSize="16sp"
+                android:layout_marginStart="9dp"
                 android:text=""
-                />
+                android:textColor="#fff"
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
