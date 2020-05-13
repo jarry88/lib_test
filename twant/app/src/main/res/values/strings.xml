@@ -285,6 +285,7 @@
     <string name="text_present_voucher_desc">滿%d元，送%d元商店券</string>
 
     <string name="text_pay_success">訂單支付成功</string>
+    <string name="text_order_commit_success">訂單提交成功</string>
     <string name="text_view_order">查看訂單</string>
     <string name="text_goto_home">返回首頁</string>
     <string name="text_want_pay_wallet">想付錢包</string>

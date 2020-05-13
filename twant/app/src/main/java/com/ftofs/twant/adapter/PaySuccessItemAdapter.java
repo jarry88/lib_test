@@ -16,6 +16,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.PaySuccessStoreInfoItem;
 import com.ftofs.twant.entity.PaySuccessSummaryItem;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.orhanobut.hawk.Hawk;
@@ -57,6 +58,12 @@ public class PaySuccessItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
             helper.addOnClickListener(R.id.btn_view_order, R.id.btn_goto_home);
 
             PaySuccessSummaryItem paySuccessSummaryItem = (PaySuccessSummaryItem) item;
+            SLog.info("paySuccessSummaryItem.isCashOnDelivery[%s]", paySuccessSummaryItem.isCashOnDelivery);
+            if (paySuccessSummaryItem.isCashOnDelivery) {
+                helper.setText(R.id.tv_pay_status_desc, mContext.getString(R.string.text_order_commit_success));
+            } else {
+                helper.setText(R.id.tv_pay_status_desc, mContext.getString(R.string.text_pay_success));
+            }
 
             TextView tvPaySuccessMPayActivityIndicator = helper.getView(R.id.tv_pay_success_mpay_activity_indicator);
             if (paySuccessSummaryItem.isMPayActivity) {

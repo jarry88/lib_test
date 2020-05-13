@@ -45,14 +45,20 @@ import okhttp3.Call;
  */
 public class PaySuccessFragment extends BaseFragment implements View.OnClickListener {
     int payId;
+    boolean isCashOnDelivery; // 是否是貨到付款
 
     RecyclerView rvList;
     PaySuccessItemAdapter adapter;
     List<MultiItemEntity> dataList = new ArrayList<>();
     public static PaySuccessFragment newInstance(int payId) {
+        return newInstance(payId, false);
+    }
+
+    public static PaySuccessFragment newInstance(int payId, boolean isCashOnDelivery) {
         Bundle args = new Bundle();
 
         args.putInt("payId", payId);
+        args.putBoolean("isCashOnDelivery", isCashOnDelivery);
         PaySuccessFragment fragment = new PaySuccessFragment();
         fragment.setArguments(args);
 
@@ -72,7 +78,9 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
 
         Bundle args = getArguments();
 
-        payId = args.getInt("payId");
+        payId = args.getInt("payId", 0);
+        isCashOnDelivery = args.getBoolean("isCashOnDelivery", false);
+        SLog.info("isCashOnDelivery[%s]", isCashOnDelivery);
 
         Util.setOnClickListener(view, R.id.btn_goto_home, this);
         Util.setOnClickListener(view, R.id.btn_view_order, this);
@@ -170,6 +178,8 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
                     }
 
                     PaySuccessSummaryItem paySuccessSummaryItem = new PaySuccessSummaryItem();
+                    paySuccessSummaryItem.isCashOnDelivery = isCashOnDelivery;
+
                     int couponPrice = 0;
                     SLog.info("HERE");
                     if (responseObj.exists("datas.couponPrice") && !Util.isJsonNull(responseObj.get("datas.couponPrice"))) {

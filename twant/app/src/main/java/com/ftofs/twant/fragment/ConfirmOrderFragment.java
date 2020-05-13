@@ -28,6 +28,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ConfirmOrderSkuItem;
@@ -61,6 +62,7 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -656,9 +658,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             }
                             SLog.info("payId[%d]", payId);
                             pop();
-                            Util.startFragment(PaySuccessFragment.newInstance(payId));
+                            Util.startFragment(PaySuccessFragment.newInstance(payId, true));
 
-                            ToastUtil.success(_mActivity, "提交訂單成功");
+                            ToastUtil.success(_mActivity, "訂單提交成功");
 
                             EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_GOODS_DETAIL, null);
                         }
@@ -1448,7 +1450,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             template=getResources().getString(R.string.text_confirm_order_total_with_tax_item_count);
         }
         tvItemCount.setText(String.format(template, totalItemCount));
-        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,summaryItem.calcTotalPrice(),0,2));
+        double totalPrice = summaryItem.calcTotalPrice();
+        tvTotalPrice.setText(StringUtil.formatPrice(_mActivity,totalPrice,0,2));
+        Hawk.put(SPField.FIELD_TOTAL_ORDER_AMOUNT, totalPrice);
 
 
         // 更新每家商店的優惠額
