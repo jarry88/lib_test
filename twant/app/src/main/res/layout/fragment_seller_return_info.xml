@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout   
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- 獨立頁面時的工具欄 -->
+    <!-- 頂部搜索的工具欄 -->
     <RelativeLayout
         android:id="@+id/tool_bar_standalone"
         android:layout_width="match_parent"
@@ -63,4 +65,19 @@
                 />
         </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        app:tabIndicatorColor="@color/tw_blue"
+        app:tabMode="fixed"
+        app:tabIndicatorFullWidth="false"
+        app:tabSelectedTextColor="@color/tw_blue"
+        app:tabTextColor="@color/tw_black"/>
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/vp_page_list"
+        />
+
+</LinearLayout>
