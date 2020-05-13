@@ -178,17 +178,20 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             if (showCard) {
                 count++;
             }
-            findViewById(R.id.btn_item_2).setVisibility(storeId>0?VISIBLE:INVISIBLE);
             findViewById(R.id.btn_item_4).setVisibility(showCard?VISIBLE:INVISIBLE);
             View btnItem3 = findViewById(R.id.btn_item_3);
+            View btnItem2 = findViewById(R.id.btn_item_2);
+            btnItem2.setVisibility(storeId>0?VISIBLE:INVISIBLE);
             ViewGroup.MarginLayoutParams layoutParams = (MarginLayoutParams) btnItem3.getLayoutParams();
+            if (storeId > 0) {
+                layoutParams = (MarginLayoutParams) btnItem2.getLayoutParams();
+            }
             if (count > 2) {
-                layoutParams.topMargin = Util.dip2px(context, 60);
 
             } else if (count == 2) {
                 layoutParams.topMargin = Util.dip2px(context, 15);
             } else {
-                layoutParams.topMargin = Util.dip2px(context, 30);
+                layoutParams.topMargin = Util.dip2px(context, 15);
             }
             findViewById(R.id.btn_item_2).setOnClickListener(this);
 
