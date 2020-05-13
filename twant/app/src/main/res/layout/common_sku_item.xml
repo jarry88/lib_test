@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="$129.00"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textColor="@color/tw_black"
                 />
         </LinearLayout>
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:text="X 1"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textColor="#929292"
                 />
         </LinearLayout>
