@@ -42,7 +42,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
             if (goodsPair.leftGoods != null) {
                 Goods leftGoods = goodsPair.leftGoods;
                 ImageView goodsImage = helper.getView(R.id.img_left_goods);
-                Glide.with(context).load(leftGoods.imageUrl).centerCrop().into(goodsImage);
+                Glide.with(context).load(leftGoods.imageUrl).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_left_goods_name, leftGoods.name);
                 TextView leftPrice=helper.getView(R.id.tv_left_goods_price);
                 leftPrice.setText(StringUtil.formatPrice(context,  leftGoods.price, 1,false));
@@ -52,7 +52,7 @@ public class ShopGoodsGridAdapter extends BaseMultiItemQuickAdapter<GoodsPair, B
             if (goodsPair.rightGoods != null) {
                 Goods rightGoods = goodsPair.rightGoods;
                 ImageView goodsImage = helper.getView(R.id.img_right_goods);
-                Glide.with(context).load(rightGoods.imageUrl).centerCrop().into(goodsImage);
+                Glide.with(context).load(rightGoods.imageUrl).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_right_goods_name, rightGoods.name);
                 TextView rightPrice = helper.getView(R.id.tv_right_goods_price);
                 rightPrice.setText( StringUtil.formatPrice(context, rightGoods.price, 1,false));

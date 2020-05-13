@@ -66,7 +66,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),
                         Color.parseColor("#19000000"), Util.dip2px(mContext, 3), 0, 0);
                 RoundedImageView goodsImage = helper.getView(R.id.img_goods_item);
-                Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(goodsImage);
+                Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_goods_name, goods.name);
                 helper.setText(R.id.tv_goods_comment, goods.jingle);
                 TextView tvPrice = helper.getView(R.id.tv_goods_price);
@@ -88,7 +88,7 @@ public class ShopGoodsListAdapter extends BaseMultiItemQuickAdapter<Goods, BaseV
                 ShadowDrawable.setShadowDrawable(helper.itemView, Color.parseColor("#FFFFFF"), Util.dip2px(mContext, 3),
                         Color.parseColor("#19000000"), Util.dip2px(mContext, 3), 0, 0);
                 ImageView goodsImage = helper.getView(R.id.img_goods);
-                Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).centerCrop().into(goodsImage);
+                Glide.with(context).load(StringUtil.normalizeImageUrl(goods.imageUrl)).fitCenter().into(goodsImage);
                 helper.setText(R.id.tv_goods_name, goods.name);
                 helper.setText(R.id.tv_goods_price_left, StringUtil.formatPrice(context,  goods.price, 1,false));
             }

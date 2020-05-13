@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="2.5dp"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:background="@color/tw_white"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
