@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,21 +15,16 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ItemAdapter;
 import com.ftofs.twant.adapter.MenuAdapter;
 import com.ftofs.twant.constant.Constant;
-import com.ftofs.twant.entity.ElemeGroupedItem;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.Item;
 import com.ftofs.twant.entity.Menu;
 import com.ftofs.twant.interfaces.OnItemClickListener;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.LinkageTestFragment;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.AssetsUtil;
-import com.ftofs.twant.util.StringUtil;
-
-import org.litepal.util.Const;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -51,7 +45,7 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
     private List<Goods> items = new ArrayList<>();
     private boolean dataLoaded;
     private EasyJSONArray dataList;
-    private LinkageTestFragment parentFragment;
+    private NewShoppingSpecialFragment parentFragment;
 
     public static ShoppingSpecialLinkageFragment newInstance() {
         Bundle args = new Bundle();
@@ -279,7 +273,7 @@ public class ShoppingSpecialLinkageFragment extends BaseFragment {
         });
     }
 
-    public void setNestedScroll(LinkageTestFragment linkageTestFragment) {
-        this.parentFragment = linkageTestFragment;
+    public void setNestedScroll(NewShoppingSpecialFragment newShoppingSpecialFragment) {
+        this.parentFragment = newShoppingSpecialFragment;
     }
 }

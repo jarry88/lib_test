@@ -253,8 +253,8 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         linkageFragment = ShoppingLinkageFragment.newInstance(this);
         initView(view);
         initLinkage();
-        loadData();
-//        loadTestData();
+//        loadData();
+        loadTestData();
     }
 
     @Override
@@ -298,7 +298,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         if (ToastUtil.checkError(_mActivity, responseObj)) {
             return;
         }
-        updateView(responseObj);
+//        updateView(responseObj);
     }
 
     private void loadData() {

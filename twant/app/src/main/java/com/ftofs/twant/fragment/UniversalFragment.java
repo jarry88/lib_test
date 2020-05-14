@@ -1,6 +1,5 @@
 package com.ftofs.twant.fragment;
 
-import android.app.Notification;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +23,7 @@ import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.LinkageTestFragment;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -32,7 +31,6 @@ import com.ftofs.twant.util.Util;
 
 import java.io.IOException;
 
-import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -91,7 +89,7 @@ public class UniversalFragment extends BaseFragment implements View.OnClickListe
         tvTestInfo.setOnClickListener(this);
         tvTestInfo.setOnClickListener(v -> {
             //測試環境可進入此測試頁面
-            Util.startFragment(LinkageTestFragment.newInstance(21));
+            Util.startFragment(NewShoppingSpecialFragment.newInstance(21));
 
         });
         avatar =view.findViewById((R.id.img_avatar));

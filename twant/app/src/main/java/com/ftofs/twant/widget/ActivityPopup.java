@@ -24,9 +24,8 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
-import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.LinkageTestFragment;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -124,7 +123,7 @@ public class ActivityPopup extends CenterPopupView implements View.OnClickListen
                     Util.startFragment(ShoppingSessionFragment.newInstance());
                 } else if("shoppingZone".equals(appPopupAdLinkType)) {
                     int zoneId = Integer.parseInt(appPopupAdLinkValue);
-                    Util.startFragment(LinkageTestFragment.newInstance(zoneId));
+                    Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId));
                 }else if ("none".equals(appPopupAdLinkType)) { // 無操作
                     SLog.info("無操作");
                     return;

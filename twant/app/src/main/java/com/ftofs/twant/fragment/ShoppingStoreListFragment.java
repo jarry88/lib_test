@@ -8,30 +8,22 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ShoppingStoreListAdapter;
-import com.ftofs.twant.entity.ElemeGroupedItem;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.LinkageTestFragment;
-import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.Util;
-import com.umeng.commonsdk.debug.E;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-
-import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
 
 /**
  * 購物專場店鋪列表子頁面
@@ -40,7 +32,7 @@ import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
  */
 public class ShoppingStoreListFragment extends BaseFragment {
 
-    private LinkageTestFragment parentFragment;
+    private NewShoppingSpecialFragment parentFragment;
     private RecyclerView rvStoreList;
     ShoppingStoreListAdapter storeListAdapter;
     List<StoreItem> storeItems=new ArrayList<>();
@@ -161,8 +153,8 @@ public class ShoppingStoreListFragment extends BaseFragment {
         });
     }
 
-    public void setOnNestedScroll(LinkageTestFragment linkageTestFragment) {
-        this.parentFragment = linkageTestFragment;
+    public void setOnNestedScroll(NewShoppingSpecialFragment newShoppingSpecialFragment) {
+        this.parentFragment = newShoppingSpecialFragment;
     }
 
     public void scrollToTop() {

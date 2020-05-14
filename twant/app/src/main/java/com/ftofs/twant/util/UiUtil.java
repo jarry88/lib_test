@@ -3,7 +3,6 @@ package com.ftofs.twant.util;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,10 +17,8 @@ import com.ftofs.twant.fragment.PostDetailFragment;
 import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
-import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.LinkageTestFragment;
-import com.ftofs.twant.view.BannerViewHolder;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.zhouwei.mzbanner.MZBannerView;
 
 import java.util.List;
@@ -122,7 +119,7 @@ public class UiUtil {
                     case "shoppingZone":
                         //購物新專場
                         int zoneId = Integer.parseInt(webSliderItem.linkValue);
-                        Util.startFragment(LinkageTestFragment.newInstance(zoneId));
+                        Util.startFragment(NewShoppingSpecialFragment.newInstance(zoneId));
                         break;
                     case "wantPost":
                         MainFragment mainFragment = MainFragment.getInstance();

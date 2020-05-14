@@ -16,8 +16,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.ShopGoodsListAdapter;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.tangram.LinkageTestFragment;
-import com.ftofs.twant.tangram.SloganView;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -36,7 +35,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
  */
 public class ShoppingLinkageFragment extends BaseFragment implements View.OnClickListener {
 
-    private LinkageTestFragment parentFragment;
+    private NewShoppingSpecialFragment parentFragment;
     private RecyclerView rvGoodsWithoutCategory;
 
     private ShopGoodsListAdapter shopGoodsListAdapter;
@@ -189,8 +188,8 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
         });
     }
 
-    public void setNestedScroll(LinkageTestFragment linkageTestFragment) {
-        this.parentFragment = linkageTestFragment;
+    public void setNestedScroll(NewShoppingSpecialFragment newShoppingSpecialFragment) {
+        this.parentFragment = newShoppingSpecialFragment;
     }
 
     public void scrollToTop() {

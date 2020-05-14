@@ -1,10 +1,8 @@
 package com.ftofs.twant.tangram;
 
-import android.app.Notification;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +16,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
-import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -63,7 +60,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class LinkageTestFragment extends BaseFragment implements View.OnClickListener, NestedScrollingCallback {
+public class NewShoppingSpecialFragment extends BaseFragment implements View.OnClickListener, NestedScrollingCallback {
     private MZBannerView bannerView;
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
 
@@ -99,10 +96,10 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
     private boolean showTab=true;
     private LinearLayout llBanner;
 
-    public static LinkageTestFragment newInstance(int zoneId) {
+    public static NewShoppingSpecialFragment newInstance(int zoneId) {
         Bundle args = new Bundle();
 
-        LinkageTestFragment fragment = new LinkageTestFragment();
+        NewShoppingSpecialFragment fragment = new NewShoppingSpecialFragment();
         fragment.zoneId = zoneId;
         fragment.setArguments(args);
 
@@ -173,6 +170,12 @@ public class LinkageTestFragment extends BaseFragment implements View.OnClickLis
             }
             if (discountBannerList.length() == 1) {
                 bannerView.setCanLoop(false);
+                bannerView.getViewPager().setOnScrollChangeListener(null);
+                bannerView.getViewPager().setNestedScrollingEnabled(false);
+                bannerView.setCanLoop(false);
+                bannerView.setNestedScrollingEnabled(false);
+                bannerView.setHorizontalFadingEdgeEnabled(false);
+                bannerView.setHorizontalScrollBarEnabled(false);
             } else {
                 bannerView.start();
                 bannerView.setDelayedTime(2500);
