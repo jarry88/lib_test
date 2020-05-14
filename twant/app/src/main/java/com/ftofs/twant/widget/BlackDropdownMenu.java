@@ -138,7 +138,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_add_friend);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_add_friend);
         }else if (type == TYPE_CHAT) {
-            ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_goto_seller);
+            ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_goto_member_info);
             ((TextView) findViewById(R.id.tv_item_2)).setText(R.string.text_store_enc);
             ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_goto_member_info);
             ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_goto_member_info);
@@ -171,22 +171,26 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ChatFragment chatFragment = (ChatFragment) baseFragment;
             int storeId = chatFragment.getStoreId();
             boolean showCard = chatFragment.getCard();
+            findViewById(R.id.btn_item_4).setVisibility(showCard?VISIBLE:GONE);
+            View btnItem3 = findViewById(R.id.btn_item_3);
+            View btnItem2 = findViewById(R.id.btn_item_2);
             int count = 1;
             if (storeId > 0) {
                 count++;
             }
             if (showCard) {
                 count++;
+            }else {
+                btnItem3.setBackgroundColor(R.color.tw_white);
             }
-            findViewById(R.id.btn_item_4).setVisibility(showCard?VISIBLE:INVISIBLE);
-            View btnItem3 = findViewById(R.id.btn_item_3);
-            View btnItem2 = findViewById(R.id.btn_item_2);
-            btnItem2.setVisibility(storeId>0?VISIBLE:INVISIBLE);
+
+            btnItem2.setVisibility(storeId>0?VISIBLE:GONE);
             ViewGroup.MarginLayoutParams layoutParams = (MarginLayoutParams) btnItem3.getLayoutParams();
             if (storeId > 0) {
                 layoutParams = (MarginLayoutParams) btnItem2.getLayoutParams();
             }
             if (count > 2) {
+                layoutParams.topMargin = Util.dip2px(context, 15);
 
             } else if (count == 2) {
                 layoutParams.topMargin = Util.dip2px(context, 15);
