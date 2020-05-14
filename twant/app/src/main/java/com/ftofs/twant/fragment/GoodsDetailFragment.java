@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -1242,7 +1243,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             imageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    SLog.info("imageUrl[%s]", imageUrl);
+                                    SLog.info("imageUrl[%s],v[%s]", imageUrl,v instanceof DataImageView);
                                     int currImageIndex = (int) ((DataImageView) v).getCustomData();
                                     Util.startFragment(ImageFragment.newInstance(currImageIndex, goodsDetailImageList));
                                 }
