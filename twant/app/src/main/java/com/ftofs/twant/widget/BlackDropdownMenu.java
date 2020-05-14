@@ -1,6 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,7 +139,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_add_friend);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_add_friend);
         }else if (type == TYPE_CHAT) {
-            ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_goto_member_info);
+            ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.svg_store_info_svg);
             ((TextView) findViewById(R.id.tv_item_2)).setText(R.string.text_store_enc);
             ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_goto_member_info);
             ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_goto_member_info);
@@ -181,7 +182,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             if (showCard) {
                 count++;
             }else {
-                btnItem3.setBackgroundColor(R.color.tw_white);
+                btnItem3.setBackgroundColor(getResources().getColor(R.color.tw_no_color));
             }
 
             btnItem2.setVisibility(storeId>0?VISIBLE:GONE);
@@ -190,12 +191,13 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 layoutParams = (MarginLayoutParams) btnItem2.getLayoutParams();
             }
             if (count > 2) {
-                layoutParams.topMargin = Util.dip2px(context, 15);
+                layoutParams.topMargin = Util.dip2px(context, 30);
 
             } else if (count == 2) {
                 layoutParams.topMargin = Util.dip2px(context, 15);
-            } else {
+            }else {
                 layoutParams.topMargin = Util.dip2px(context, 15);
+
             }
             findViewById(R.id.btn_item_2).setOnClickListener(this);
 
@@ -223,9 +225,9 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     // 如果要自定义弹窗的背景，不要给布局设置背景图片，重写这个方法返回一个Drawable即可
     @Override
     protected Drawable getPopupBackground() {
-        if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT||type==TYPE_CHAT) {
+        if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT) {
             return getResources().getDrawable(R.drawable.black_menu_bg_small, null);
-        } else if(type==TYPE_POST_DETAIL){
+        } else if(type==TYPE_POST_DETAIL||type==TYPE_CHAT){
             return getResources().getDrawable(R.drawable.black_menu_bg_mini, null);
         } else{
             return getResources().getDrawable(R.drawable.black_menu_bg, null);

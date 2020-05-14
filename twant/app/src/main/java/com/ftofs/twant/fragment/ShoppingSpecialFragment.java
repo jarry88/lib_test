@@ -352,6 +352,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
 
 
             EasyJSONArray appAdImageList = zoneVo.getArray("appAdImageList");
+
             if (appAdImageList != null) {
                 setBannerData(appAdImageList);
             }
@@ -801,19 +802,27 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
         tabLayout.setTabsFromPagerAdapter(adapter);
     }
     private void setBannerData(EasyJSONArray discountBannerList) {
-//        SLog.info("bannerListLength %d",discountBannerList.length());
+        ToastUtil.success(_mActivity,"設置banner數據" );
+        SLog.info("bannerListLength %d",discountBannerList.length());
+
         try {
             for (Object object : discountBannerList) {
                 String imageUrl = String.valueOf(object);
                 WebSliderItem webSliderItem = new WebSliderItem(StringUtil.normalizeImageUrl(imageUrl), null, null, null, "[]");
                 webSliderItemList.add(webSliderItem);
                 // 设置数据
-                bannerView.setPages(webSliderItemList, (MZHolderCreator<BannerViewHolder>) () -> new BannerViewHolder(webSliderItemList));
+//                bannerView.setPages(webSliderItemList, (MZHolderCreator<BannerViewHolder>) () -> new BannerViewHolder(webSliderItemList));
 
 //                carouselLoaded = true;
             }
             if (discountBannerList.length() == 1) {
+                SLog.info("here0");
+                bannerView.getViewPager().setOnScrollChangeListener(null);
+                bannerView.getViewPager().setNestedScrollingEnabled(false);
                 bannerView.setCanLoop(false);
+                bannerView.setNestedScrollingEnabled(false);
+                bannerView.setHorizontalFadingEdgeEnabled(false);
+                bannerView.setHorizontalScrollBarEnabled(false);
             } else {
                 bannerView.start();
                 bannerView.setDelayedTime(2500);
