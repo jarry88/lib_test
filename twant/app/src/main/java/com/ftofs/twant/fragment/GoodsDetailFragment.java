@@ -50,6 +50,7 @@ import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
@@ -524,6 +525,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_goto_cart, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_customer_service, this);
         Util.setOnClickListener(view, R.id.btn_comment, this);
+        Util.setOnClickListener(view, R.id.tv_goods_name, this);
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
@@ -653,6 +655,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_back_round:
             case R.id.btn_back:
                 hideSoftInputPop();
+                break;
+            case R.id.tv_goods_name:
+                ClipboardUtils.copyText(_mActivity, goodsName);
+                ToastUtil.success(_mActivity, "該商品名稱已複製");
                 break;
             case R.id.btn_search_round:
             case R.id.btn_search:
