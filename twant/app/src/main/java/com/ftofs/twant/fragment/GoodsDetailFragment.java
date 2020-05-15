@@ -1252,7 +1252,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             DataImageView imageView = new DataImageView(_mActivity);
                             imageView.setCustomData(imageIndex);
                             imageView.setAdjustViewBounds(true);
-                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
                             imageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -1263,7 +1263,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             });
                             // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
                             // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
-                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).apply(RequestOptions.bitmapTransform(new RoundedCorners(30))).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
+                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).apply(RequestOptions.bitmapTransform(new RoundedCorners(50))).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
                             llGoodsDetailImageContainer.addView(imageView);
 
                             goodsDetailImageList.add(StringUtil.normalizeImageUrl(imageUrl));

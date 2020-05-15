@@ -42,4 +42,6 @@ public class DataImageView extends androidx.appcompat.widget.AppCompatImageView 
         this.customData = customData;
     }
 
+
 }
+
