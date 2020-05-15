@@ -244,6 +244,8 @@ dependencies {
 
     //圖片異步加載
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
+    implementation 'com.github.donkingliang:ImageSelector:1.7.0'
 }
 repositories {
     mavenCentral()

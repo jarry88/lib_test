@@ -139,4 +139,9 @@ public enum RequestCode {
      * 添加/編輯實名信息
      */
     REAL_NAME_INFO,
+
+    /**
+     * 選擇多張圖片
+     */
+    SELECT_MULTI_IMAGE,
 }

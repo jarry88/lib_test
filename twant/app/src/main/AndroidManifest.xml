@@ -177,6 +177,23 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoDisplay" />
 
+
+        <!-- 選擇多張圖片的選擇器用到下面3個Activity -->
+        <activity android:name="com.donkingliang.imageselector.ImageSelectorActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+
+        <activity android:name="com.donkingliang.imageselector.PreviewActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+
+
+        <activity
+            android:name="com.donkingliang.imageselector.ClipImageActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="@string/umeng_app_key" />

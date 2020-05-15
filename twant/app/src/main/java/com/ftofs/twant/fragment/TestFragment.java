@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.bumptech.glide.Glide;
+import com.donkingliang.imageselector.utils.ImageSelector;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -29,6 +30,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
@@ -44,7 +46,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -216,26 +221,15 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         int id = view.getId();
         String url;
         if (id == R.id.btn_test) {
-
-            Api.getUI("https://test.snailpad.cn/gzp/testlog.php", null, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(_mActivity, e);
-                }
-
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    SLog.info("responseStr[%s]", responseStr);
-
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                    try {
-                        String message = responseObj.getSafeString("data.message");
-                        ToastUtil.success(_mActivity, message);
-                    } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                    }
-                }
-            });
+            SLog.info("onClick()");
+            ArrayList<String> selected = new ArrayList<>();
+            //限数量的多选(比如最多9张)
+            ImageSelector.builder()
+                    .useCamera(true) // 设置是否使用拍照
+                    .setSingle(false)  //设置是否单选
+                    .setMaxSelectCount(9) // 图片的最大选择数量，小于等于0时，不限数量。
+                    .setSelected(selected) // 把已选的图片传入默认选中。
+                    .start(this, RequestCode.SELECT_MULTI_IMAGE.ordinal()); // 打开相册
         } else if (id == R.id.btn_test2) {
             Util.popToMainFragment(_mActivity);
         } else if (id == R.id.test_im) {
@@ -320,6 +314,37 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
                 .setAutoCancel(true)
                 .build();
         mNotificationManager.notify(100, notification);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        SLog.info("onActivityResult......................");
+
+        if (requestCode == RequestCode.SELECT_MULTI_IMAGE.ordinal() && data != null) {
+            //获取选择器返回的数据
+            ArrayList<String> images = data.getStringArrayListExtra(
+                    ImageSelector.SELECT_RESULT);
+
+            if (images == null) {
+                return;
+            }
+
+            SLog.info("images.size[%d]", images.size());
+            for (String item : images) {
+                File file = new File(item);
+
+                SLog.info("item[%s], size[%d]", item, file.length());
+            }
+
+            /**
+             * 是否是来自于相机拍照的图片，
+             * 只有本次调用相机拍出来的照片，返回时才为true。
+             * 当为true时，图片返回的结果有且只有一张图片。
+             */
+            boolean isCameraImage = data.getBooleanExtra(ImageSelector.IS_CAMERA_IMAGE, false);
+            SLog.info("isCameraImage[%s]", isCameraImage);
+        }
     }
 
     @Override
