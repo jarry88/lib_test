@@ -408,7 +408,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     private void broadcastNestedScrollingEnabled(boolean enable) {
         for (int i = 0; i < fragments.size(); i++) {
-            ((ScrollableBaseFragment) fragments.get(i)).setScrollable(enable);
+            ScrollableBaseFragment fragment = (ScrollableBaseFragment) fragments.get(i);
+            if (fragment != null) {
+                fragment.setScrollable(enable);
+            }
         }
     }
 
