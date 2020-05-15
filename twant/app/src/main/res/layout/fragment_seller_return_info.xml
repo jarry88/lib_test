@@ -73,11 +73,19 @@
         app:tabMode="fixed"
         app:tabIndicatorFullWidth="false"
         app:tabSelectedTextColor="@color/tw_blue"
-        app:tabTextColor="@color/tw_black"/>
+        app:tabTextColor="@color/tw_black"
+        />
     <androidx.viewpager.widget.ViewPager
+        android:background="@color/tw_blue"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/vp_page_list"
-        />
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/tw_red"
+            android:id="@+id/s"/>
+    </androidx.viewpager.widget.ViewPager>
 
 </LinearLayout>

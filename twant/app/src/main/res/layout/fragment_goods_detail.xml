@@ -554,6 +554,7 @@
                     <!-- 分隔條0 -->
                     <View
                         android:id="@+id/vw_separator_0"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         app:layout_constraintLeft_toLeftOf="parent"

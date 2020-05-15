@@ -269,6 +269,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private int limitBuy;
     private int tariffEnable =Constant.FALSE_INT;
     private ImageView iconTariff;
+    private View vwSeparator0;
 
 
     static class scrollStateHandler extends Handler {
@@ -496,6 +497,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         btnShowConform = view.findViewById(R.id.btn_show_conform);
         btnShowConform.setOnClickListener(this);
+        vwSeparator0 = view.findViewById(R.id.vw_separator_0);
+
         tvConformHint = view.findViewById(R.id.tv_conform_hint);
         tvGiftHint = view.findViewById(R.id.tv_gift_hint);
 
@@ -1416,6 +1419,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             first = false;
                         }
                         btnShowConform.setVisibility(VISIBLE);
+                        vwSeparator0.setVisibility(View.VISIBLE);
                     }
 
                     // 初始化默認選擇
@@ -1763,6 +1767,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             btnShowConformVisibility = GONE;
         }
         btnShowConform.setVisibility(btnShowConformVisibility);
+        vwSeparator0.setVisibility(btnShowConformVisibility);
 
         SLog.info("goodsInfo.specValueIds[%s]", goodsInfo.specValueIds);
         selSpecValueIdList = StringUtil.specValueIdsToList(goodsInfo.specValueIds);

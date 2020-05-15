@@ -26,6 +26,7 @@ public class SimpleViewPagerAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return false;
+        return view==object;
     }
+
 }
