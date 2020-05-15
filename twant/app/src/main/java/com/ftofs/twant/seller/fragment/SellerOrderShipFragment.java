@@ -3,6 +3,7 @@ package com.ftofs.twant.seller.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,8 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
     public static final int SHIP_WAY_SEND_WANT = 0;
     public static final int SHIP_WAY_THIRD_PARTY = 1;
     public static final int SHIP_WAY_NO = 2;
+
+    AddrItem addrItem;
 
     List<ListPopupItem> shipWayList = new ArrayList<>();
 
@@ -184,6 +187,9 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                     }
 
                     EasyJSONObject ordersBaseVo = responseObj.getObject("datas.ordersBaseVo");
+
+                    addrItem = getAddrItem(ordersBaseVo);
+
                     receiverAreaId1 = ordersBaseVo.getInt("receiverAreaId1");
                     receiverAreaId2 = ordersBaseVo.getInt("receiverAreaId2");
                     receiverAreaId3 = ordersBaseVo.getInt("receiverAreaId3");
@@ -394,7 +400,7 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                             PopupType.SELECT_SELLER_LOGISTICS_COMPANY, itemList, shipCompanyIndex, this))
                     .show();
         } else if (id == R.id.btn_edit_receiver_info) {
-            startForResult(SellerEditReceiverInfoFragment.newInstance(Constant.ACTION_EDIT, null), RequestCode.SELLER_EDIT_RECEIVER_INFO.ordinal());
+            startForResult(SellerEditReceiverInfoFragment.newInstance(Constant.ACTION_EDIT, addrItem), RequestCode.SELLER_EDIT_RECEIVER_INFO.ordinal());
         }
     }
 
@@ -428,6 +434,42 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
     private void selectShipCompany(int index) {
         shipCompanyIndex = index;
         tvLogisticsCompany.setText(shipCompanyList.get(shipCompanyIndex).getShipName());
+    }
+
+    /**
+     * 從訂單信息中獲取地址信息
+     * @return
+     */
+    private AddrItem getAddrItem(EasyJSONObject easyJSONObject) {
+        try {
+            String realName = easyJSONObject.getSafeString("receiverName");
+            int areaId = 0;
+            List<Integer> areaIdList = new ArrayList<>();
+
+            for (int i = 1; i <= 4; i++) {
+                int areaIdListItem = easyJSONObject.getInt("receiverAreaId" + i);
+                areaIdList.add(areaIdListItem);
+                if (areaIdListItem != 0) {
+                    areaId = areaIdListItem;
+                }
+            }
+            String areaInfo = easyJSONObject.getSafeString("receiverAreaInfo");
+            String address = easyJSONObject.getSafeString("receiverAddress");
+            String receiverPhone = easyJSONObject.getSafeString("receiverPhone");
+
+            Pair<String, String> phonePair = StringUtil.splitMobilePhone(receiverPhone);
+            String mobileAreaCode = phonePair.first;
+            String mobPhone = phonePair.second;
+
+            AddrItem addrItem = new AddrItem(0, realName, areaIdList, areaId, areaInfo,
+                    address, mobileAreaCode, mobPhone, 0);
+            SLog.info("addrItem[%s]", addrItem.toString());
+
+            return addrItem;
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+        return null;
     }
 }
 

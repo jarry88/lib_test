@@ -26,7 +26,6 @@ import com.ftofs.twant.domain.Area;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
-import com.ftofs.twant.fragment.AddAddressFragment;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -65,14 +64,14 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
     private int DETAIL_ADDRESS_MAXLENTH=80;
     private int REAL_NAME_MAXLENTH=50;
 
-    public static AddAddressFragment newInstance(int action, AddrItem addrItem) {
+    public static SellerEditReceiverInfoFragment newInstance(int action, AddrItem addrItem) {
         Bundle args = new Bundle();
 
         args.putInt("action", action);
         if (addrItem != null) {
             args.putParcelable("addrItem", addrItem);
         }
-        AddAddressFragment fragment = new AddAddressFragment();
+        SellerEditReceiverInfoFragment fragment = new SellerEditReceiverInfoFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -354,7 +353,7 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
 
                         if (action == Constant.ACTION_ADD) {
                             Bundle bundle = new Bundle();
-                            bundle.putString("from", AddAddressFragment.class.getName());
+                            bundle.putString("from", SellerEditReceiverInfoFragment.class.getName());
                             int addressId = responseObj.getInt("datas.addressId");
                             AddrItem addrItem = new AddrItem(addressId, realName, null, finalAreaId, areaInfo,
                                     detailAddress, "", mobile, 0);
