@@ -27,6 +27,9 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsGalleryAdapter;
@@ -72,6 +75,7 @@ import com.ftofs.twant.widget.StoreVoucherPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.rd.PageIndicatorView;
+import com.tencent.mapsdk.raster.model.Circle;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -1259,7 +1263,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             });
                             // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
                             // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
-                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
+                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).apply(RequestOptions.bitmapTransform(new RoundedCorners(30))).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
                             llGoodsDetailImageContainer.addView(imageView);
 
                             goodsDetailImageList.add(StringUtil.normalizeImageUrl(imageUrl));

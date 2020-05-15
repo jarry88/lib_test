@@ -20,6 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class DataImageView extends androidx.appcompat.widget.AppCompatImageView {
     Object customData;
+    private boolean isCircle;
 
     public DataImageView(Context context) {
         super(context);

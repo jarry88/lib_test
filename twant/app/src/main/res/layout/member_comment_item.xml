@@ -78,7 +78,9 @@
                         android:id="@+id/img_author_avatar"
                         android:layout_width="27dp"
                         android:layout_height="27dp"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true"
+                        app:civ_border_width="0.5dp"
+                        app:civ_border_color="@color/tw_light_grey_EDED"/>
                     <TextView
                         android:id="@+id/tv_post_author_name"
                         android:layout_width="wrap_content"

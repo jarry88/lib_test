@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="8dp"
     android:orientation="horizontal"
     android:gravity="center_vertical">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_avatar"
         android:layout_width="39dp"
-        android:layout_height="39dp">
+        android:layout_height="39dp"
+        app:civ_border_color="@color/tw_light_grey_EDED"
+        app:civ_border_width="0.5dp">
     </de.hdodenhof.circleimageview.CircleImageView>
 </LinearLayout>
