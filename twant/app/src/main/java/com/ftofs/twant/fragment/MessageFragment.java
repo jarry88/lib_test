@@ -404,6 +404,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
                 chatConversationList.add(0,platformCustomer);
             }
+            chatConversationList.add(null);
             updateConversationInfo();
             displayUnreadCount();
 
@@ -734,6 +735,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             loadData();
         }
         for (ChatConversation chatConversation : chatConversationList) {
+            if (chatConversation == null) {
+                continue;
+            }
             SLog.info("unread[%d]", chatConversation.unreadCount);
         }
         displayUnreadCount();

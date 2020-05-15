@@ -410,7 +410,7 @@
                             android:layout_marginStart="5dp"
                             android:src="@drawable/grey_default_avatar"
                             app:civ_border_color="#BBB"
-                            app:civ_border_width="1dp" />
+                            app:civ_border_width="0dp" />
 
                         <TextView
                             android:layout_width="wrap_content"

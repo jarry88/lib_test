@@ -18,7 +18,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 為了應對setTag()操作時， 與Glide的衝突
  * @author zwm
  */
-public class DataImageView extends CircleImageView {
+public class DataImageView extends androidx.appcompat.widget.AppCompatImageView {
     Object customData;
 
     public DataImageView(Context context) {

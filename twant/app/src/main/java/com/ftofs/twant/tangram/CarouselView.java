@@ -1,5 +1,6 @@
 package com.ftofs.twant.tangram;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -9,39 +10,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
-import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.SearchType;
-import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.WebSliderItem;
-import com.ftofs.twant.fragment.ExplorerFragment;
-import com.ftofs.twant.fragment.GoodsDetailFragment;
-import com.ftofs.twant.fragment.H5GameFragment;
-import com.ftofs.twant.fragment.MainFragment;
-import com.ftofs.twant.fragment.PostDetailFragment;
-import com.ftofs.twant.fragment.SearchResultFragment;
-import com.ftofs.twant.fragment.ShopMainFragment;
-import com.ftofs.twant.fragment.ShoppingSessionFragment;
-import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BannerViewHolder;
-import com.ftofs.twant.widget.RoundedDataImageView;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
-import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,6 +56,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
         init();
     }
 
+    @SuppressLint("ResourceType")
     private void init() {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
@@ -80,6 +65,17 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
         bannerView = contentView.findViewById(R.id.banner_view);
 
         UiUtil.addBannerPageClick(bannerView,webSliderItemList);
+
+
+        bannerView.setIndicatorRes(R.layout.indicator_normal,R.layout.indicator_selected);
+        int padding = Util.dip2px(getContext(), 10);
+        LinearLayout linearLayout = bannerView.getIndicatorContainer();
+        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+            SLog.info("第%d個",i);
+            ImageView imageView = (ImageView) linearLayout.getChildAt(i);
+            LinearLayout.LayoutParams layoutParams = (LayoutParams) imageView.getLayoutParams();
+            imageView.setPadding(padding, 0, padding, 0);
+        }
 
         loadCarousel();
 
@@ -157,6 +153,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                     bannerView.setIndicatorAlign(MZBannerView.IndicatorAlign.LEFT);
                     int heightPadding = Util.getScreenDimension(getContext()).first * 9 / 16 - Util.dip2px(getContext(), 12);
                     bannerView.setIndicatorPadding(0,heightPadding,0,0);
+                    bannerView.mPadding = Util.dip2px(getContext(),8);
                     bannerView.setDelayedTime(2500);
 
                     bannerView.start();
