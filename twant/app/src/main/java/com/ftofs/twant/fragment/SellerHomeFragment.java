@@ -195,7 +195,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     @OnClick(R.id.btn_goto_seller_refund)
     void gotoSellerRefund() {
-//        Util.startFragment(SellerRefundFragment.newInstance());
+        Util.startFragment(SellerRefundFragment.newInstance());
         return;//暫時屏蔽該功能
     }
     @OnClick(R.id.ll_order_list_container)

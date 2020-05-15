@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -269,6 +270,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private int limitBuy;
     private int tariffEnable =Constant.FALSE_INT;
     private ImageView iconTariff;
+    private View vwSeparator0;
 
 
     static class scrollStateHandler extends Handler {
@@ -496,6 +498,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         btnShowConform = view.findViewById(R.id.btn_show_conform);
         btnShowConform.setOnClickListener(this);
+        vwSeparator0 = view.findViewById(R.id.vw_separator_0);
+
         tvConformHint = view.findViewById(R.id.tv_conform_hint);
         tvGiftHint = view.findViewById(R.id.tv_gift_hint);
 
@@ -1248,7 +1252,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             imageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    SLog.info("imageUrl[%s]", imageUrl);
+                                    SLog.info("imageUrl[%s],v[%s]", imageUrl,v instanceof DataImageView);
                                     int currImageIndex = (int) ((DataImageView) v).getCustomData();
                                     Util.startFragment(ImageFragment.newInstance(currImageIndex, goodsDetailImageList));
                                 }
@@ -1421,6 +1425,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             first = false;
                         }
                         btnShowConform.setVisibility(VISIBLE);
+                        vwSeparator0.setVisibility(View.VISIBLE);
                     }
 
                     // 初始化默認選擇
@@ -1768,6 +1773,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             btnShowConformVisibility = GONE;
         }
         btnShowConform.setVisibility(btnShowConformVisibility);
+        vwSeparator0.setVisibility(btnShowConformVisibility);
 
         SLog.info("goodsInfo.specValueIds[%s]", goodsInfo.specValueIds);
         selSpecValueIdList = StringUtil.specValueIdsToList(goodsInfo.specValueIds);

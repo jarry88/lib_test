@@ -1285,6 +1285,13 @@ public class Api {
      */
     public static final String PATH_SELLER_ORDER_DETAIL = "/member/seller/orders/info";
 
+     /**
+     * 【商家】鏟平交易信息
+     * 兼退款訂單信息/refundId
+     * 兼退貨訂單信息/refundId
+     */
+    public static final String PATH_SELLER_RETURN_ORDER_DETAIL = "/member/seller/return/orders/info";
+
 
     /**
      * 【商家】訂單買家信息

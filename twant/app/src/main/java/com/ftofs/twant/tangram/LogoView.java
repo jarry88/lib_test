@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.config.Config;
+import com.ftofs.twant.fragment.SellerRefundFragment;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
@@ -46,7 +47,8 @@ public class LogoView extends LinearLayout implements ITangramViewLifeCycle {
             @Override
             public void onClick(View v) {
                 if (Config.DEVELOPER_MODE) {
-                    Util.startFragment(NewShoppingSpecialFragment.newInstance(-1));
+
+                    Util.startFragment(SellerRefundFragment.newInstance());
                 }
             }
         });
