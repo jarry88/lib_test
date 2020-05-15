@@ -16,9 +16,12 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.domain.ShipCompany;
+import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
@@ -137,6 +140,7 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_commit, this);
+        Util.setOnClickListener(view, R.id.btn_edit_receiver_info, this);
 
         Util.setOnClickListener(view, R.id.btn_select_logistics_way, this);
         Util.setOnClickListener(view, R.id.btn_select_logistics_company, this);
@@ -389,6 +393,8 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                     .asCustom(new ListPopup(_mActivity, "選擇快遞公司",
                             PopupType.SELECT_SELLER_LOGISTICS_COMPANY, itemList, shipCompanyIndex, this))
                     .show();
+        } else if (id == R.id.btn_edit_receiver_info) {
+            startForResult(SellerEditReceiverInfoFragment.newInstance(Constant.ACTION_EDIT, null), RequestCode.SELLER_EDIT_RECEIVER_INFO.ordinal());
         }
     }
 
