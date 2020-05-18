@@ -407,9 +407,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
                 chatConversationList.add(0,platformCustomer);
             }
-            chatConversationList.add(null);
             updateConversationInfo();
             displayUnreadCount();
+            chatConversationList.add(null);
 
             adapter.setNewData(chatConversationList);
 
@@ -792,7 +792,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             int storeId = conversation.getInt("storeId");
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
-                                if (chatConversation.friendInfo != null) {
+                                if (chatConversation!=null&&chatConversation.friendInfo != null) {
                                     if (chatConversation.friendInfo.memberName.equals(memberName)) {
                                         has = true;
                                         break;
