@@ -788,11 +788,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         EasyJSONObject responseObj =EasyJSONObject.parse(responseStr);
 
                        try{
-                           hasCard = responseObj.getInt("isExchangeCard")==Constant.TRUE_INT;
-                           showMenu();
+                           if (responseObj.exists("datas.isExchangeCard")) {
+                               hasCard = responseObj.getInt("datas.isExchangeCard")==Constant.TRUE_INT;
+                           }
                        }catch (Exception e) {
-                          SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                        }
+                        showMenu();
                     }
                 });
 
