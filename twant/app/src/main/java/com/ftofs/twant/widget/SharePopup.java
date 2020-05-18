@@ -35,6 +35,8 @@ import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.lxj.xpopup.util.XPopupUtils;
 
+import org.urllib.Urls;
+
 import java.io.File;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -159,7 +161,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
                 @Override
                 public Object doWork() {
-                    String filename = PathUtil.getFilename(coverUrl);
+                    String filename = Urls.parse(coverUrl).path().filename();
                     String ext = PathUtil.getExtension(filename, true);
                     SLog.info("coverUrl[%s], filename[%s]", coverUrl, filename);
                     File file = FileUtil.getCacheFile(context, filename);
@@ -241,6 +243,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 
         if (shareInfo.htmlCover == null) {
             SLog.info("Error!shareInfo.htmlCover is null");
+            return;
         } else {
             SLog.info("bitmapByteCount[%d]", shareInfo.htmlCover.getByteCount());
         }
