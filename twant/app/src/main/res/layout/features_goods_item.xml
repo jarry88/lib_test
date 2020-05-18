@@ -48,6 +48,7 @@
                     app:riv_border_width="1dp"
                     />
                 <com.ftofs.twant.widget.SlantedWidget
+                    android:id="@+id/sw_price"
                     android:visibility="gone"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
