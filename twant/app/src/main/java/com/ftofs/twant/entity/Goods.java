@@ -48,8 +48,13 @@ public class Goods implements MultiItemEntity {
     public static Goods parse(EasyJSONObject goods) throws Exception {
 
         String goodsName = goods.getSafeString("goodsName");
+        String goodsImage="";
+        if (goods.exists("goodsImage")) {
 
-        String goodsImage = goods.getSafeString("goodsImage");
+            goodsImage = goods.getSafeString("goodsImage");
+        } else if(goods.exists("imageSrc")){
+            goodsImage = goods.getSafeString("imageSrc");
+        }
         int commonId = goods.getInt("commonId");
         String jingle = "";
         if (goods.exists("jingle")) {

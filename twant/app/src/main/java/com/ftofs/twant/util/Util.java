@@ -258,15 +258,15 @@ public class Util {
      */
     public static double getSpuPrice(EasyJSONObject goods) {
         double price = 0;
-        try {
+        try{
             int appUsable = goods.getInt("appUsable");
             if (appUsable > 0) {
                 price = goods.getDouble("appPrice0");
             } else {
                 price = goods.getDouble("batchPrice2");
             }
-        } catch (Exception e) {
-
+        }catch (Exception e) {
+           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         return price;
     }

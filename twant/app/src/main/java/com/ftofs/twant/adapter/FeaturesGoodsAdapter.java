@@ -72,6 +72,9 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
 
     @Override
     public void onBindViewHolder(FeaturesGoodsAdapter.ViewHolder holder, int position) {
+        if (StringUtil.isArrayEmpty(storeGoodsItemList)) {
+            return;
+        }
         position = position % storeGoodsItemList.size();
         Goods item = storeGoodsItemList.get(position);
 
