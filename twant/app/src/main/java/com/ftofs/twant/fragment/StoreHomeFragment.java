@@ -31,6 +31,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.LockableNestedScrollView;
+import com.tencent.bugly.Bugly;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -346,6 +347,9 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
 
     @Override
     public void setScrollable(boolean scrollable) {
+        if (llContainer == null) {
+            return;
+        }
         llContainer.setScrollable(scrollable);
     }
 
