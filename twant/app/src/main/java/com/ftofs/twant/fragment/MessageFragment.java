@@ -201,6 +201,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ChatConversation chatConversation = chatConversationList.get(position);
+                if (chatConversation == null) {
+                    return;
+                }
                 if (!isPlatformCustomer&&position == 0) {
                     SLog.info("點擊了平台客服");
                     Util.startFragment(newInstance(true,true));

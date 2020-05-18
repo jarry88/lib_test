@@ -46,7 +46,7 @@ public class Goods implements MultiItemEntity {
     }
 
     public static Goods parse(EasyJSONObject goods) throws Exception {
-
+        SLog.info("goods[%s]",goods.toString());
         String goodsName = goods.getSafeString("goodsName");
         String goodsImage="";
         if (goods.exists("goodsImage")) {
