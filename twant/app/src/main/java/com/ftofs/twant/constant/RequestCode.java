@@ -144,4 +144,9 @@ public enum RequestCode {
      * 選擇多張圖片
      */
     SELECT_MULTI_IMAGE,
+
+    /**
+     * 【賣家】編輯收貨人信息
+     */
+    SELLER_EDIT_RECEIVER_INFO,
 }
