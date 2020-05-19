@@ -10,7 +10,7 @@
         android:id="@+id/tool_bar_standalone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@android:color/white">
+        android:background="@color/tw_light_grey_EDED">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"
@@ -65,27 +65,29 @@
                 />
         </RelativeLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="vertical">
+    </LinearLayout>
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
+        android:background="@color/tw_white"
         android:layout_width="match_parent"
         android:layout_height="44dp"
+        android:layout_marginTop="2dp"
         app:tabIndicatorColor="@color/tw_blue"
         app:tabMode="fixed"
         app:tabIndicatorFullWidth="false"
         app:tabSelectedTextColor="@color/tw_blue"
         app:tabTextColor="@color/tw_black"
+        app:tabIndicator="@drawable/seller_refund_indicator"
         />
     <androidx.viewpager.widget.ViewPager
-        android:background="@color/tw_blue"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/vp_page_list"
-        >
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="@color/tw_red"
-            android:id="@+id/s"/>
-    </androidx.viewpager.widget.ViewPager>
+        android:id="@+id/vp_page_list" />
 
 </LinearLayout>
