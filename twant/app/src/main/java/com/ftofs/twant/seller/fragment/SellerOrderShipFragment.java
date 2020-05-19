@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
@@ -212,11 +213,7 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                         shipCompanyList.add(shipCompany);
                     }
 
-                    String receiverInfo = StringUtil.implode(" " , new String[] {
-                            receiverName, receiverPhone, receiverAreaInfo, receiverAddress
-                    });
-
-                    tvReceiverInfo.setText(receiverInfo);
+                    tvReceiverInfo.setText(getReceiverInfo());
 
                     if (shipCompanyList.size() > 0) { // 初始化
                         selectShipCompany(0);
@@ -226,6 +223,18 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                 }
             }
         });
+    }
+
+    private String getReceiverInfo() {
+        if (addrItem == null) {
+            return "";
+        }
+
+        String receiverInfo = StringUtil.implode(" " , new String[] {
+                addrItem.realName, (addrItem.mobileAreaCode + addrItem.mobPhone), addrItem.areaInfo, addrItem.address
+        });
+
+        return receiverInfo;
     }
 
     private void commitOrderShip() {
@@ -285,15 +294,15 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
 
 
             EasyJSONObject params = EasyJSONObject.generate(
-                    "areaId1", receiverAreaId1,
-                    "areaId2", receiverAreaId2,
-                    "areaId3", receiverAreaId3,
-                    "areaId4", receiverAreaId4,
-                    "areaInfo", receiverAreaInfo,
+                    "areaId1", addrItem.areaIdList.get(0),
+                    "areaId2", addrItem.areaIdList.get(1),
+                    "areaId3", addrItem.areaIdList.get(2),
+                    "areaId4", addrItem.areaIdList.get(3),
+                    "areaInfo", addrItem.areaInfo,
                     "ordersId", orderId,
-                    "receiverName", receiverName,
-                    "receiverPhone", receiverPhone,
-                    "receiverAddress", receiverAddress,
+                    "receiverName", addrItem.realName,
+                    "receiverPhone", (addrItem.mobileAreaCode + addrItem.mobPhone),
+                    "receiverAddress", addrItem.address,
                     "shipNote", etShipRemark.getText().toString().trim(),
                     "cargoName", etPackageDesc.getText().toString().trim(),
                     "explain", etShipDesc.getText().toString().trim(),
@@ -470,6 +479,70 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         return null;
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
+
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (requestCode == RequestCode.SELLER_EDIT_RECEIVER_INFO.ordinal()) {
+            String addrItemJSON = data.getString("addrItemJSON");
+            SLog.info("addrItemJSON[%s]", addrItemJSON);
+            /*
+            {
+	"realName": "1234567789012345677891234567789077891234567789",
+	"address": "123456778901234567789123",
+	"mobPhone": "008613812345678",
+	"areaId1": 19,
+	"areaId2": 292,
+	"areaId3": 3066,
+	"areaId4": 0,
+	"areaId": 0,
+	"areaInfo": "广东 珠海市 香洲区"
+}
+
+    int receiverAreaId1;
+    int receiverAreaId2;
+    int receiverAreaId3;
+    int receiverAreaId4;
+    String receiverAreaInfo;
+    String receiverName;
+    String receiverPhone;
+    String receiverAddress;
+             */
+
+            EasyJSONObject addrItemObj = EasyJSONObject.parse(addrItemJSON);
+            try {
+                for (int i = 0; i < 4; i++) {
+                    String key = "areaId" + (i + 1);
+                    if (addrItemObj.exists(key)) {
+                        addrItem.areaIdList.set(i, addrItemObj.getInt(key));
+                    } else {
+                        addrItem.areaIdList.set(i, 0);
+                    }
+                }
+                addrItem.areaId = addrItemObj.getInt("areaId");
+                addrItem.areaInfo = addrItemObj.getSafeString("areaInfo");
+
+                String fullMobile = addrItemObj.getSafeString("mobPhone");
+                Pair<String, String> mobilePair = StringUtil.splitMobilePhone(fullMobile);
+                addrItem.mobileAreaCode = mobilePair.first;
+                addrItem.mobPhone = mobilePair.second;
+                addrItem.realName = addrItemObj.getSafeString("realName");
+                addrItem.address = addrItemObj.getSafeString("address");
+
+                SLog.info("addrItem[%s]", addrItem.toString());
+                tvReceiverInfo.setText(getReceiverInfo());
+            } catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+
+        }
     }
 }
 

@@ -46,6 +46,10 @@ import java.util.List;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
+/**
+ * 【賣家】編輯收貨人信息
+ * @author zwm
+ */
 public class SellerEditReceiverInfoFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     int mobileZoneIndex = 0;
     List<MobileZone> mobileZoneList = new ArrayList<>();
@@ -57,8 +61,6 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
     EditText etMobile;
     TextView tvArea;
     EditText etDetailAddress;
-    ScaledButton mSbDefaultAddr;
-    int mIsDefaultAddr;
 
     int action;  // 標記是編輯還是添加
     private int DETAIL_ADDRESS_MAXLENTH=80;
@@ -92,8 +94,6 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
         action = bundle.getInt("action");
         if (action == Constant.ACTION_EDIT) {
             addrItem = bundle.getParcelable("addrItem");
-
-            mIsDefaultAddr = addrItem.isDefault;
         }
 
         tvMobileZone = view.findViewById(R.id.tv_mobile_zone);
@@ -170,14 +170,8 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
                 }
             }
         });
-        mSbDefaultAddr = view.findViewById(R.id.sb_default_addr);
-        mSbDefaultAddr.setOnClickListener(this);
 
-        TextView tvFragmentTitle = view.findViewById(R.id.tv_fragment_title);
         if (action == Constant.ACTION_EDIT) {
-            // 地址編輯
-            tvFragmentTitle.setText(R.string.text_edit_address);
-
             etReceiverName.setText(addrItem.realName);
             etMobile.setText(addrItem.mobPhone);
             tvArea.setText(addrItem.areaInfo);
@@ -187,13 +181,6 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
                 area.setAreaId(areaId);
                 areaList.add(area);
             }
-
-            if (mIsDefaultAddr == 1) {
-                mSbDefaultAddr.setIconResource(R.drawable.icon_checked);
-            }
-        } else {
-            // 地址添加
-            tvFragmentTitle.setText(R.string.text_add_address);
         }
 
         Util.setOnClickListener(view, R.id.btn_back, this);
@@ -234,14 +221,6 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
                     .moveUpToKeyboard(false)
                     .asCustom(new AreaPopup(_mActivity, PopupType.AREA, this))
                     .show();
-        } else if (id == R.id.sb_default_addr) {
-            if (mIsDefaultAddr == 1) {
-                mSbDefaultAddr.setIconResource(R.drawable.icon_cart_item_unchecked);
-            } else {
-                mSbDefaultAddr.setIconResource(R.drawable.icon_checked);
-            }
-            mIsDefaultAddr = 1 - mIsDefaultAddr;
-            SLog.info("mIsDefaultAddr[%d]", mIsDefaultAddr);
         } else if (id == R.id.btn_clear_detail_address) {
             etDetailAddress.setText("");
         } else if (id == R.id.btn_clear_name) {
@@ -252,12 +231,6 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
     }
 
     private void saveAddress() {
-
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
-
         // 收集信息
         try {
             final String realName = etReceiverName.getText().toString().trim();
@@ -305,73 +278,35 @@ public class SellerEditReceiverInfoFragment extends BaseFragment implements View
 
             String fullMobile = mobileZone.areaCode + "" + mobile;
             EasyJSONObject params = EasyJSONObject.generate(
-                    "token", token,
                     "realName", realName,
                     "address", detailAddress,
-                    "mobPhone", fullMobile,
-                    "isDefault", mIsDefaultAddr);
+                    "mobPhone", fullMobile);
 
             int areaId = 0;
+            int finalAreaId = 0;
             int i = 1;
             for (Area area : areaList) {
                 areaId = area.getAreaId();
                 params.set("areaId" + i, areaId);
+
+                if (areaId != 0) {
+                    finalAreaId = areaId;
+                }
                 i++;
             }
 
-
             // 最后一層areaId
-            params.set("areaId", areaId);
-            final int finalAreaId = areaId;
+            params.set("areaId", finalAreaId);
             final String areaInfo = tvArea.getText().toString();
             params.set("areaInfo", areaInfo);
 
-            String path;
-            if (action == Constant.ACTION_EDIT) {
-                params.set("addressId", addrItem.addressId);
-                path = Api.PATH_EDIT_ADDRESS;
-            } else {
-                path = Api.PATH_ADD_ADDRESS;
-            }
-
             SLog.info("params[%s]", params.toString());
-            Api.postUI(path, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(_mActivity, e);
-                }
 
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    try {
-                        SLog.info("responseStr[%s]", responseStr);
-                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+            Bundle bundle = new Bundle();
+            bundle.putString("addrItemJSON", params.toString());
+            setFragmentResult(RESULT_OK, bundle);
 
-                        if (ToastUtil.checkError(_mActivity, responseObj)) {
-                            return;
-                        }
-
-                        if (action == Constant.ACTION_ADD) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString("from", SellerEditReceiverInfoFragment.class.getName());
-                            int addressId = responseObj.getInt("datas.addressId");
-                            AddrItem addrItem = new AddrItem(addressId, realName, null, finalAreaId, areaInfo,
-                                    detailAddress, "", mobile, 0);
-                            SLog.info("addrItem: %s", addrItem);
-                            bundle.putParcelable("addrItem", addrItem);
-                            setFragmentResult(RESULT_OK, bundle);
-
-                            ToastUtil.success(_mActivity, "地址添加成功");
-                        } else {
-                            ToastUtil.success(_mActivity, "地址編輯成功");
-                        }
-
-                        hideSoftInputPop();
-                    } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                    }
-                }
-            });
+            hideSoftInputPop();
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
