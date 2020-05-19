@@ -469,6 +469,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     EasyJSONArray adminStaffList = responseObj.getSafeArray("datas.adminStaffList");
+                    totalIMUnreadCount = 0;
                     chatConversationList.clear();
                     SLog.info("responseStr11");
 
