@@ -4,10 +4,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.UtteranceProgressListener;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +30,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.seller.entity.SellerOrderRefundItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -52,6 +57,20 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
     ViewPager viewPager;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
+
+    @BindView(R.id.et_keyword)
+    EditText editText;
+    @OnClick(R.id.btn_clear_all)
+    void clearSearchText() {
+        editText.setText("");
+    }
+
+    @BindView(R.id.btn_clear_all)
+    ImageView btnClear;
+    @OnClick(R.id.btn_back)
+    void back() {
+        hideSoftInputPop();
+    }
     private List<View> mViews;
     private PagerAdapter mPagerAdapter;
     private SellerReturnAdapter sellerReturnAdapter;
@@ -59,6 +78,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
     private SellerReturnAdapter sellerRefundAdapter;
     private List<SellerOrderRefundItem> refundItemList;
     private boolean hasMore;
+
     private int currPage;
 
 
@@ -67,11 +87,6 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-    @OnClick(R.id.btn_back)
-    void back() {
-        hideSoftInputPop();
     }
 
     @Override
@@ -95,6 +110,21 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                btnClear.setVisibility(StringUtil.isEmpty(s.toString())?View.GONE:View.VISIBLE);
+            }
+        });
         initTabView(view);
         initView(view);
 
@@ -192,8 +222,8 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
 
         tabRefund.setCustomView(tabRefundView);
         tabReTurn.setCustomView(R.layout.tab_red_count_item);
-        tabRefund.setText(getResources().getString(R.string.text_refund_tab));
-        tabReTurn.setText(getResources().getString(R.string.text_refund_return_tab));
+        ((TextView)(tabRefund.getCustomView().findViewById(R.id.text1))).setText(getResources().getString(R.string.text_refund_tab));
+        ((TextView)(tabReTurn.getCustomView().findViewById(R.id.text1))).setText(getResources().getString(R.string.text_refund_return_tab));
         tabLayout.setTabTextColors(Color.parseColor("#00B0FF"),Color.parseColor("#2A292A"));
         tabLayout.addTab(tabRefund);
         tabLayout.addTab(tabReTurn);
@@ -204,12 +234,12 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
                 currPage = 0;
                 loadData(currPage+1);
                 viewPager.setCurrentItem(tab.getPosition());
-                ((TextView)(tab.getCustomView().findViewById(R.id.tv_tab_name))).setTextColor(getResources().getColor(R.color.tw_blue));
+                ((TextView)(tab.getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_blue));
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                ((TextView)(tab.getCustomView().findViewById(R.id.tv_tab_name))).setTextColor(getResources().getColor(R.color.tw_black));
+                ((TextView)(tab.getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_black));
 
             }
 
@@ -231,13 +261,29 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id =view.getId();
-                ToastUtil.success(_mActivity,"sdfasdf");
                 if (id == R.id.btn_seller_refund_state) {
-                    Util.startFragment(BlackTestFragment.newInstance());
+//                    Util.startFragment(BlackTestFragment.newInstance());
+                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+
                 } else if (id == R.id.tv_refund_goods) {
                     ToastUtil.success(_mActivity,"商品彈窗");
                 } else if (id == R.id.tv_orders_sn) {
-                    Util.startFragment(BlackTestFragment.newInstance());
+                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+                }
+            }
+        });
+        sellerReturnAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id =view.getId();
+                if (id == R.id.btn_seller_refund_state) {
+//                    Util.startFragment(BlackTestFragment.newInstance());
+                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+
+                } else if (id == R.id.tv_refund_goods) {
+                    ToastUtil.success(_mActivity,"商品彈窗");
+                } else if (id == R.id.tv_orders_sn) {
+                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
                 }
             }
         });
@@ -272,8 +318,8 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
                 tabLayout.setScrollPosition(position, 0f, true);
                 currPage = 0;
                 loadData(currPage+1);
-                ((TextView)(tabLayout.getTabAt(position).getCustomView().findViewById(R.id.tv_tab_name))).setTextColor(getResources().getColor(R.color.tw_blue));
-                ((TextView)(tabLayout.getTabAt(1-position).getCustomView().findViewById(R.id.tv_tab_name))).setTextColor(getResources().getColor(R.color.tw_black));
+                ((TextView)(tabLayout.getTabAt(position).getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_blue));
+                ((TextView)(tabLayout.getTabAt(1-position).getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_black));
             }
 
             @Override

@@ -31,7 +31,7 @@ public class SellerReturnAdapter extends BaseQuickAdapter<SellerOrderRefundItem,
         helper.setText(R.id.tv_orders_sn, item.getOrdersSnText())
                 .setText(R.id.tv_apply_time, item.getAddTime())
                 .setText(R.id.tv_buyer, item.getNickName()+"("+item.getMemberName()+")")
-                .setText(R.id.tv_refund_goods, item.getGoodsCount()+"件")
+                .setText(R.id.tv_refund_goods, String.valueOf(item.getGoodsCount())+"件")
                 .setText(R.id.tv_refund_amount, StringUtil.formatPrice(mContext, item.getRefundAmount(), 0))
                 .setText(R.id.tv_refund_sn, item.getRefundSnText())
                 .setText(R.id.tv_refund_state, item.refundStateText)
