@@ -44,7 +44,12 @@ public class SellerOrderRefundItem {
     private int sellerState;
     private int adminState;
     private int refundState;
-    private int showSellerHandle;
+    private int showSellerHandle;//顯示商家處理按鈕 0查看 1處理 2收貨
+    public String sellerStateText="-";
+    public String adminStateText="-";
+    public String refundStateText="-";
+    public String showSellerHandleText="-";
+    private double refundAmount;
 
     public static SellerOrderRefundItem parse(EasyJSONObject jsonObject) throws Exception {
         SellerOrderRefundItem item = new SellerOrderRefundItem();
@@ -65,8 +70,52 @@ public class SellerOrderRefundItem {
         item.setReturnMemberAutoCancel(jsonObject.getInt("returnMemberAutoCancel"));
         item.setMemberName(jsonObject.getSafeString("memberName"));
         item.setNickName(jsonObject.getSafeString("nickName"));
+        if (jsonObject.exists("refundAmount")) {
+            item.setRefundAmount(jsonObject.getDouble("refundAmount"));
+        }
 
+        item.stateToText();
         return item;
+    }
+
+    private void setRefundAmount(double refundAmount) {
+        this.refundAmount = refundAmount;
+    }
+
+    private void stateToText() {
+        if (sellerState == 1) {
+            sellerStateText = "待審核";
+        } else if (sellerState == 2) {
+            sellerStateText = "同意";
+        } else if (sellerState == 3) {
+            sellerStateText = "不同意";
+        }
+
+        if (adminState == 1) {
+            adminStateText = "待審核";
+        } else if (adminState == 2) {
+            adminStateText = "同意";
+        } else if (adminState == 3) {
+            adminStateText = "不同意";
+        }
+
+        if (refundState == 1) {
+            refundStateText = "处理中";
+        } else if (refundState == 2) {
+            refundStateText = "待管理员处理";
+        } else if (refundState == 3) {
+            refundStateText = "已完成";
+        } else if (refundState == 4) {
+            refundStateText = "會員取消";
+        }
+
+        if (showSellerHandle == 1) {
+            showSellerHandleText = "處理";
+        } else if (showSellerHandle == 0) {
+            showSellerHandleText = "查看";
+        } else if (showSellerHandle == 2) {
+            showSellerHandleText = "收貨";
+        }
     }
 
     public long getRefundSn() {
@@ -211,5 +260,9 @@ public class SellerOrderRefundItem {
 
     public void setShowSellerHandle(int showSellerHandle) {
         this.showSellerHandle = showSellerHandle;
+    }
+
+    public double getRefundAmount() {
+        return refundAmount;
     }
 }

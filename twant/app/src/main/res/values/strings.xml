@@ -807,4 +807,6 @@
     <string name="text_return_waiting_good">退貨中</string>
     <string name="text_real_name">真實姓名</string>
     <string name="text_refund_return_tab">退貨退款</string>
+    <string name="text_refund_goods">退款商品</string>
+    <string name="text_apply_time">申請時間</string>
 </resources>
