@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.SearchHistoryItem;
 import com.ftofs.twant.entity.SearchPostParams;
@@ -127,7 +128,7 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
             SearchHistoryUtil.clearSearchHistory(searchType.ordinal());
 
             if (callback != null) {
-                EasyJSONObject data = EasyJSONObject.generate("action", "clear_all_history");
+                EasyJSONObject data = EasyJSONObject.generate("action", CustomAction.CUSTOM_ACTION_CLEAR_ALL_HISTORY);
                 callback.onSimpleCall(data.toString());
             }
 
