@@ -2,9 +2,13 @@ package com.ftofs.twant.seller.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,9 +18,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.SearchHistoryUtil;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
@@ -37,6 +44,8 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
 
     int currTab;
     public static final int TAB_COUNT = 2;
+
+    EditText etKeyword;
 
     public static SellerGoodsListFragment newInstance() {
         return newInstance(TAB_GOODS_IN_SALE);
@@ -65,6 +74,26 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+
+        etKeyword = view.findViewById(R.id.et_keyword);
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String keyword = textView.getText().toString().trim();
+                    SellerGoodsListPageFragment sellerGoodsListPageFragment = (SellerGoodsListPageFragment) fragmentList.get(currTab);
+                    if (sellerGoodsListPageFragment != null) {
+                        sellerGoodsListPageFragment.setKeyword(keyword);
+                    }
+
+                    hideSoftInput();
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         tabButtons = new SimpleTabButton[TAB_COUNT];
 

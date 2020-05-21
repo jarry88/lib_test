@@ -47,6 +47,8 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
     int currPage = 0; // 当前加载到第几页
     boolean hasMore;
 
+    String keyword;  // 商品搜索關鍵詞
+
     public static SellerGoodsListPageFragment newInstance(int currTab, SimpleCallback simpleCallback) {
         Bundle args = new Bundle();
 
@@ -147,6 +149,11 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
         });
     }
 
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+        reloadData();
+    }
+
     public void reloadData() {
         currPage = 0;
         loadData(currPage + 1);
@@ -167,6 +174,10 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "page", page);
+
+            if (!StringUtil.isEmpty(keyword)) {
+                params.set("goodsName", keyword);
+            }
 
             int goodsState;  // 查詢哪種狀態的商品
             if (currTab == SellerGoodsListFragment.TAB_GOODS_IN_SALE) {
