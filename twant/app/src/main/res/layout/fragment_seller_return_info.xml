@@ -10,7 +10,7 @@
         android:id="@+id/tool_bar_standalone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@color/tw_light_grey_EDED">
+        android:background="@drawable/border_type_d">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"
@@ -66,17 +66,11 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_container"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:orientation="vertical">
-    </LinearLayout>
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
-        android:background="@color/tw_white"
+        android:background="@drawable/border_type_d"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="@dimen/toolbar_height"
         android:layout_marginTop="2dp"
         app:tabIndicatorColor="@color/tw_blue"
         app:tabMode="fixed"
@@ -88,6 +82,7 @@
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/vp_page_list" />
+        android:id="@+id/vp_page_list"
+        android:background="@color/tw_light_grey_EDED"/>
 
 </LinearLayout>

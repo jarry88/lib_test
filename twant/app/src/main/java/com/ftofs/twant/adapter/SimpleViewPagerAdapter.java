@@ -33,11 +33,10 @@ public class SimpleViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        if (mViews != null) {
-
+        if (mViews == null) {
             return 0;
         } else {
-            return mViews.size()+1;
+            return mViews.size();
         }
     }
 
@@ -50,46 +49,21 @@ public class SimpleViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ViewGroup testPager = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.black_layout, container, false);
+        View view = mViews.get(position);
+        if (view.getParent() == null) {
+//            container.removeView(view);
+        }else{
+            ((ViewGroup) view.getParent()).removeView(view);}
+        container.addView(view);
 
-        if (position == 0) {
-            RecyclerView rvList = new RecyclerView(mContext);
-            TestAdapter testAdapter = new TestAdapter();
-            rvList.setAdapter(testAdapter);
-            rvList.setLayoutManager(new LinearLayoutManager(mContext));
-            rvList.setBackgroundColor(Color.parseColor("#FFFFAA"));
-
-            testPager.addView(rvList, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        } else {
-            TextView textView = new TextView(mContext);
-            textView.setText("Hello");
-            textView.setGravity(Gravity.CENTER);
-            textView.setTextSize(24);
-
-            testPager.addView(textView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        }
-
-
-        container.addView(testPager);
-        return testPager;
-//        Context context;
-//        Context context;
-//        TextView textView = new TextView(getContext());
-//        textView.setText("ss");
-//        container.addView(textView);
-//        if (position == 1) {
-////                    textView.setText("2w");
-////                    RecyclerView recyclerView= new RecyclerView(container.getContext());
-////                    recyclerView.setBackgroundColor(Color.BLUE);
-////                    recyclerView.getLayoutParams().height = 500;
-//            return recyclerReturnView;
-//        }
-//        return textView;
+        return view;
 
     }
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View)object);
+//        container.removeAllViews();
     }
 
 }

@@ -24,7 +24,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * Fragment公共基類
  * @author zwm
  */
-public class BaseFragment extends SupportFragment {
+public abstract class BaseFragment extends SupportFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -105,4 +105,5 @@ public class BaseFragment extends SupportFragment {
             mainFragment.selectedFragmentIndex = selectedFragmentIndex;
         }
     }
+
 }
