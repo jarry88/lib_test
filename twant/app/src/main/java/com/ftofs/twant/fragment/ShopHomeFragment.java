@@ -630,7 +630,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         // 店鋪形象視頻
                         if (storeInfo.exists("videoUrl")) {
                             String videoUrl = storeInfo.getSafeString("videoUrl");
-                            if (videoUrl.contains("youtube.com/watch") || videoUrl.contains("youtu.be")) {
+                            if (StringUtil.isYoutubeUrl(videoUrl)) {
                                 storeVideoUrl = videoUrl;
                                 btnPlay.setVisibility(VISIBLE);
                             }

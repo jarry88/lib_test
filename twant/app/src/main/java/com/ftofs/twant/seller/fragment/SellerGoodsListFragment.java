@@ -13,17 +13,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.constant.CustomAction;
-import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.util.SearchHistoryUtil;
-import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;

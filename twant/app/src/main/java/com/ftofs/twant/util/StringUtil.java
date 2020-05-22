@@ -324,6 +324,20 @@ public class StringUtil {
     }
 
     /**
+     * 判斷是否為Youtube的Url
+     * @param url
+     * @return
+     */
+    public static boolean isYoutubeUrl(String url) {
+        if (url == null) {
+            return false;
+        }
+
+        return url.contains("youtube.com/watch") || url.contains("youtu.be");
+    }
+
+
+    /**
      * 二代身份証正則校驗合規性
      * 校驗規則：
      * 校验位的计算:

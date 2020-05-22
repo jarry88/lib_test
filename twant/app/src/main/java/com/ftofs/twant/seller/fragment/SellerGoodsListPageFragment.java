@@ -87,7 +87,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                 } else if (id == R.id.btn_more) {
                     SLog.info("查看更多");
                 } else if (id == R.id.ll_swipe_content) {
-                    Util.startFragment(GoodsDetailFragment.newInstance(item.commonId, 0));
+                    Util.startFragment(SellerGoodsDetailFragment.newInstance(item.commonId, item.imageName));
                 }
             }
         });
