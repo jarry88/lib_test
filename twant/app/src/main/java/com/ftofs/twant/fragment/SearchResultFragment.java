@@ -967,7 +967,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                                 if (store.exists("videoUrl")) {
                                     String videoUrl = store.getSafeString("videoUrl");
                                     SLog.info("videoUrl[%s]", videoUrl);
-                                    if (videoUrl.contains("youtube.com") || videoUrl.contains("youtu.be")) {
+                                    if (videoUrl.contains("youtube.com/watch") || videoUrl.contains("youtu.be")) {
                                         storeVideoUrl = videoUrl;
                                     }
                                 }

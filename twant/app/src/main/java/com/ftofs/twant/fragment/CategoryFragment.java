@@ -27,6 +27,7 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.adapter.SearchHistoryItemAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.SearchHistoryItem;
 import com.ftofs.twant.entity.SearchPostParams;
@@ -521,7 +522,7 @@ public class CategoryFragment extends BaseFragment implements View.OnClickListen
         EasyJSONObject dataObj = EasyJSONObject.parse(dataStr);
         try {
             String action = dataObj.getSafeString("action");
-            if ("clear_all_history".equals(action)) {
+            if (CustomAction.CUSTOM_ACTION_CLEAR_ALL_HISTORY.equals(action)) {
                 loadSearchHistoryData();
             }
         } catch (Exception e) {

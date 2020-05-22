@@ -39,8 +39,8 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
     public double calcTotalPrice() {
         // 總金額 + 總運費 - 商店折扣 - 平臺折扣
         double result = totalAmount - storeDiscount - platformDiscount+totalTaxAmount;
-        //1是門店自提現在
-        if (payWayIndex != 1) { // 不是門店自提才加上運費
+        //2是門店自提現在
+        if (payWayIndex != Constant.PAY_WAY_FETCH) { // 不是門店自提才加上運費
             result += totalFreight;
         }
         return result;

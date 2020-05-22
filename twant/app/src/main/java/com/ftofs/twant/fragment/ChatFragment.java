@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.donkingliang.imageselector.utils.ImageSelector;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
@@ -782,7 +783,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                         .show();
                 break;
             case R.id.btn_send_image:
-                openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal());
+                // openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal());
+                ImageSelector.builder()
+                        .useCamera(true) // 设置是否使用拍照
+                        .setSingle(false)  //设置是否单选
+                        .setMaxSelectCount(3) // 最多发送3张图片
+                        .start(this, RequestCode.SELECT_MULTI_IMAGE.ordinal()); // 打开相册
                 break;
             case R.id.btn_capture_image:
                 PermissionUtil.actionWithPermission(_mActivity, new String[] {
@@ -1486,6 +1492,28 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
                 sendImageMessage(absolutePath);
             }
+        } else if (requestCode == RequestCode.SELECT_MULTI_IMAGE.ordinal()) {
+            // 获取选择器返回的数据
+            ArrayList<String> images = data.getStringArrayListExtra(ImageSelector.SELECT_RESULT);
+            if (images == null) {
+                return;
+            }
+
+            SLog.info("images.size[%d]", images.size());
+            for (String item : images) {
+                File file = new File(item);
+
+                SLog.info("item[%s], size[%d]", item, file.length());
+                sendImageMessage(item);
+            }
+
+            /**
+             * 是否是来自于相机拍照的图片，
+             * 只有本次调用相机拍出来的照片，返回时才为true。
+             * 当为true时，图片返回的结果有且只有一张图片。
+             */
+            boolean isCameraImage = data.getBooleanExtra(ImageSelector.IS_CAMERA_IMAGE, false);
+            SLog.info("isCameraImage[%s]", isCameraImage);
         }
     }
 

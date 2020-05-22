@@ -1332,6 +1332,22 @@ public class Api {
 
 
     /**
+     * 【商家】商品列表
+     */
+    public static final String PATH_SELLER_GOODS_LIST = "/member/seller/goods/list";
+
+    /**
+     * 【商家】批量上架商品
+     */
+    public static final String PATH_SELLER_GOODS_BATCH_ON_SHELF = "/member/seller/goods/putaway";
+
+    /**
+     * 【商家】批量下架商品
+     */
+    public static final String PATH_SELLER_GOODS_BATCH_OFF_SHELF = "/member/seller/goods/soldout";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

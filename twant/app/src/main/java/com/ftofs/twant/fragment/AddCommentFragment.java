@@ -282,7 +282,7 @@ public class AddCommentFragment extends BaseFragment implements View.OnClickList
                 params.set("relatePostId", bindId);
             }
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         SLog.info("params[%s]", params.toString());
 

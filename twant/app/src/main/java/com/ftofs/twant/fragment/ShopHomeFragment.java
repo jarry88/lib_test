@@ -408,7 +408,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
     private void broadcastNestedScrollingEnabled(boolean enable) {
         for (int i = 0; i < fragments.size(); i++) {
-            ((ScrollableBaseFragment) fragments.get(i)).setScrollable(enable);
+            ScrollableBaseFragment fragment = (ScrollableBaseFragment) fragments.get(i);
+            if (fragment != null) {
+                fragment.setScrollable(enable);
+            }
         }
     }
 
@@ -627,7 +630,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         // 店鋪形象視頻
                         if (storeInfo.exists("videoUrl")) {
                             String videoUrl = storeInfo.getSafeString("videoUrl");
-                            if (videoUrl.contains("youtube.com") || videoUrl.contains("youtu.be")) {
+                            if (videoUrl.contains("youtube.com/watch") || videoUrl.contains("youtu.be")) {
                                 storeVideoUrl = videoUrl;
                                 btnPlay.setVisibility(VISIBLE);
                             }

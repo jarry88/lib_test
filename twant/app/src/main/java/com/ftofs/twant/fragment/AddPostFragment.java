@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.donkingliang.imageselector.utils.ImageSelector;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.EmojiPageAdapter;
@@ -89,6 +90,9 @@ public class AddPostFragment extends BaseFragment implements
     public static final int POST_CATEGORY_INDEX_GOODS = 0;
     public static final int POST_CATEGORY_INDEX_STORE = 1;
     public static final int POST_CATEGORY_INDEX_SUGGEST = 2;
+
+    // 最多能添加9張圖片
+    public static final int MAX_IMAGE_COUNT = 9;
 
     boolean fromWeb;
     View currentDragView;
@@ -377,7 +381,18 @@ public class AddPostFragment extends BaseFragment implements
         } else if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_add_post_content_image) {
-            openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+            // openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal()); // 打开相册
+
+            int currImageCount = postContentImageContainer.getChildCount();
+            if (btnAddPostContentImage.getVisibility() == View.VISIBLE) { // 如果添加圖片按鈕在顯示，還要減1才是真實圖片數
+                currImageCount--;
+            }
+
+            ImageSelector.builder()
+                    .useCamera(true) // 设置是否使用拍照
+                    .setSingle(false)  //设置是否单选
+                    .setMaxSelectCount(MAX_IMAGE_COUNT - currImageCount) // 图片的最大选择数量，小于等于0时，不限数量。
+                    .start(this, RequestCode.SELECT_MULTI_IMAGE.ordinal()); // 打开相册
         } else if (id == R.id.btn_select_post_category) {
             List<ListPopupItem> itemList = new ArrayList<>();
             for (int i = 0; i < postCategoryName.size(); i++) {
@@ -425,6 +440,92 @@ public class AddPostFragment extends BaseFragment implements
         return true;
     }
 
+    /**
+     * 添加選中的照片
+     */
+    private void addSelectedImage(String absolutePath) {
+        final View itemView = LayoutInflater.from(_mActivity).inflate(R.layout.post_content_image_widget, postContentImageContainer, false);
+        ImageView postImage = itemView.findViewById(R.id.post_image);
+        Glide.with(_mActivity).load(absolutePath).centerCrop().into(postImage);
+        itemView.setTag(R.id.data_absolute_path, absolutePath);
+
+        itemView.setOnLongClickListener(v -> {
+            View.DragShadowBuilder builder = new View.DragShadowBuilder(v);
+            ClipData clipData = ClipData.newPlainText("Stub", ""); // 防止拖放到EditText上，editText取剪貼板數據時崩潰
+            v.startDrag(clipData, builder, v, View.DRAG_FLAG_OPAQUE);//第三个参数是传入一个关于这个view信息的任意对象（getLocalState），它即你需要在拖拽监听中的调用event.getLocalState()获取到这个对象来操作用的(比如传入一个RecyclerView中的position)。如果不需要这个对象，传null
+            SLog.info("startDrag");
+            v.setVisibility(View.INVISIBLE);
+            currentDragView = v;
+
+            Vibrator vibrator = (Vibrator) _mActivity.getSystemService(Service.VIBRATOR_SERVICE);   //获取系统震动服务
+            if (vibrator != null) {
+                vibrator.vibrate(70);   //震动70毫秒
+            }
+
+            return true;
+        });
+
+        itemView.setOnDragListener(((v, event) -> {
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_ENTERED:// 拖拽进入
+                    View dragView = (View) event.getLocalState();
+                    //之前讲到的v.startDrag(null, builder, null, 0);第三个参数如果传入一个int 类型的值，在这里便可以 通过(int) event.getLocalState()取出来。如果传的是null，上面这行代码就去掉好了
+                    SLog.info("v[%s]", v.toString());
+                    int childIndex = (int) v.getTag(R.id.data_index);
+                    int dragViewIndex = (int) dragView.getTag(R.id.data_index);
+                    SLog.info("DragEvent.ACTION_DRAG_ENTERED, child[%s], v[%s]", childIndex, dragViewIndex);
+                    Util.exchangeChild(postContentImageContainer, childIndex, dragViewIndex);
+                    updateIndexTagData();
+                    break;
+                case DragEvent.ACTION_DRAG_EXITED: // 拖拽退出
+                    dragView = (View) event.getLocalState();
+                    SLog.info("DragEvent.ACTION_DRAG_EXITED, child[%s], v[%s]", v.getTag(R.id.data_index), dragView.getTag(R.id.data_index));
+                    break;
+                case DragEvent.ACTION_DROP:
+                    dragView = (View) event.getLocalState();
+                    SLog.info("DragEvent.ACTION_DROP, child[%s], v[%s]", v.getTag(R.id.data_index), dragView.getTag(R.id.data_index));
+                    currentDragView.setVisibility(View.VISIBLE);
+                    updateIndexTagData();
+                    break;
+                        /*
+                    case DragEvent.ACTION_DRAG_ENDED: //拖拽停止
+                        //your operation
+                        currentDragView.setVisibility(View.VISIBLE);
+                        SLog.info("DragEvent.ACTION_DRAG_ENDED");
+                        updateIndexTagData();
+                        break;
+
+                         */
+                default:
+                    break;
+            }
+            return true;
+        }));
+
+        ScaledButton btnRemoveImage = itemView.findViewById(R.id.btn_remove_image);
+        btnRemoveImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postContentImageContainer.removeView(itemView);
+                updateIndexTagData();
+                btnAddPostContentImage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        int childCount = postContentImageContainer.getChildCount();
+        if (childCount > 0) {
+            postContentImageContainer.addView(itemView, childCount - 1);
+            childCount++;
+        }
+
+        // 最多添加9張圖片
+        if (childCount >= (MAX_IMAGE_COUNT + 1)) {
+            btnAddPostContentImage.setVisibility(View.GONE);
+        }
+
+        updateIndexTagData();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -441,86 +542,29 @@ public class AddPostFragment extends BaseFragment implements
             String absolutePath = FileUtil.getRealFilePath(getActivity(), uri);  // 相册文件的源路径
             SLog.info("absolutePath[%s]", absolutePath);
 
-            final View itemView = LayoutInflater.from(_mActivity).inflate(R.layout.post_content_image_widget, postContentImageContainer, false);
-            ImageView postImage = itemView.findViewById(R.id.post_image);
-            Glide.with(_mActivity).load(absolutePath).centerCrop().into(postImage);
-            itemView.setTag(R.id.data_absolute_path, absolutePath);
-
-            itemView.setOnLongClickListener(v -> {
-                View.DragShadowBuilder builder = new View.DragShadowBuilder(v);
-                ClipData clipData = ClipData.newPlainText("Stub", ""); // 防止拖放到EditText上，editText取剪貼板數據時崩潰
-                v.startDrag(clipData, builder, v, View.DRAG_FLAG_OPAQUE);//第三个参数是传入一个关于这个view信息的任意对象（getLocalState），它即你需要在拖拽监听中的调用event.getLocalState()获取到这个对象来操作用的(比如传入一个RecyclerView中的position)。如果不需要这个对象，传null
-                SLog.info("startDrag");
-                v.setVisibility(View.INVISIBLE);
-                currentDragView = v;
-
-                Vibrator vibrator = (Vibrator) _mActivity.getSystemService(Service.VIBRATOR_SERVICE);   //获取系统震动服务
-                if (vibrator != null) {
-                    vibrator.vibrate(70);   //震动70毫秒
-                }
-
-                return true;
-            });
-
-            itemView.setOnDragListener(((v, event) -> {
-                switch (event.getAction()) {
-                    case DragEvent.ACTION_DRAG_ENTERED:// 拖拽进入
-                        View dragView = (View) event.getLocalState();
-                        //之前讲到的v.startDrag(null, builder, null, 0);第三个参数如果传入一个int 类型的值，在这里便可以 通过(int) event.getLocalState()取出来。如果传的是null，上面这行代码就去掉好了
-                        SLog.info("v[%s]", v.toString());
-                        int childIndex = (int) v.getTag(R.id.data_index);
-                        int dragViewIndex = (int) dragView.getTag(R.id.data_index);
-                        SLog.info("DragEvent.ACTION_DRAG_ENTERED, child[%s], v[%s]", childIndex, dragViewIndex);
-                        Util.exchangeChild(postContentImageContainer, childIndex, dragViewIndex);
-                        updateIndexTagData();
-                        break;
-                    case DragEvent.ACTION_DRAG_EXITED: // 拖拽退出
-                        dragView = (View) event.getLocalState();
-                        SLog.info("DragEvent.ACTION_DRAG_EXITED, child[%s], v[%s]", v.getTag(R.id.data_index), dragView.getTag(R.id.data_index));
-                        break;
-                    case DragEvent.ACTION_DROP:
-                        dragView = (View) event.getLocalState();
-                        SLog.info("DragEvent.ACTION_DROP, child[%s], v[%s]", v.getTag(R.id.data_index), dragView.getTag(R.id.data_index));
-                        currentDragView.setVisibility(View.VISIBLE);
-                        updateIndexTagData();
-                        break;
-                        /*
-                    case DragEvent.ACTION_DRAG_ENDED: //拖拽停止
-                        //your operation
-                        currentDragView.setVisibility(View.VISIBLE);
-                        SLog.info("DragEvent.ACTION_DRAG_ENDED");
-                        updateIndexTagData();
-                        break;
-
-                         */
-                    default:
-                        break;
-                }
-                return true;
-            }));
-
-            ScaledButton btnRemoveImage = itemView.findViewById(R.id.btn_remove_image);
-            btnRemoveImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    postContentImageContainer.removeView(itemView);
-                    updateIndexTagData();
-                    btnAddPostContentImage.setVisibility(View.VISIBLE);
-                }
-            });
-
-            int childCount = postContentImageContainer.getChildCount();
-            if (childCount > 0) {
-                postContentImageContainer.addView(itemView, childCount - 1);
-                childCount++;
+            addSelectedImage(absolutePath);
+        } else if (requestCode == RequestCode.SELECT_MULTI_IMAGE.ordinal()) {
+            // 获取选择器返回的数据
+            ArrayList<String> images = data.getStringArrayListExtra(ImageSelector.SELECT_RESULT);
+            if (images == null) {
+                return;
             }
 
-            // 最多添加9張圖片
-            if (childCount >= 10) {
-                btnAddPostContentImage.setVisibility(View.GONE);
+            SLog.info("images.size[%d]", images.size());
+            for (String item : images) {
+                File file = new File(item);
+
+                SLog.info("item[%s], size[%d]", item, file.length());
+                addSelectedImage(item);
             }
 
-            updateIndexTagData();
+            /**
+             * 是否是来自于相机拍照的图片，
+             * 只有本次调用相机拍出来的照片，返回时才为true。
+             * 当为true时，图片返回的结果有且只有一张图片。
+             */
+            boolean isCameraImage = data.getBooleanExtra(ImageSelector.IS_CAMERA_IMAGE, false);
+            SLog.info("isCameraImage[%s]", isCameraImage);
         }
     }
 

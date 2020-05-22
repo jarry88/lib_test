@@ -231,11 +231,8 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEBMessage(EBMessage message) {
-        SLog.info("HERE");
         if (message.messageType == EBMessageType.MESSAGE_SELLER_RELOAD_ORDER_LIST) {
-            SLog.info("HERE");
             if (tab == Constant.ORDER_STATUS_TO_BE_SHIPPED || tab == Constant.ORDER_STATUS_TO_BE_RECEIVED) {
-                SLog.info("HERE");
                 reloadData();
             }
         }

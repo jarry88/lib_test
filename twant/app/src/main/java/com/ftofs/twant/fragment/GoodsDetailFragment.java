@@ -1353,6 +1353,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.unitName = goodsInfoVo.getSafeString("unitName");
                         goodsInfo.goodsName = goodsName;
                         goodsInfo.promotionType =goodsInfoVo.getInt("promotionType");
+                        goodsInfo.appUsable =goodsInfoVo.getInt("appUsable");
 
                         goodsInfoMap.put(goodsId, goodsInfo);
 
@@ -1518,17 +1519,22 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         if (goodsInfo.promotionType == Constant.FALSE_INT) {
             discountState = NO_DISCOUNT;
         } else {
-            float time = System.currentTimeMillis() / 1000 - discountStartTime;
-            if (time < 0) {
-                discountState = BEFORE_DISCOUNT;
+            if (goodsInfo.appUsable == 1) {
+                discountState = IN_DISCOUNT;  //匹配後端字段邏輯
             } else {
-                time = System.currentTimeMillis() / 1000 - discountEndTime;
+                float time = System.currentTimeMillis() / 1000 - discountStartTime;
                 if (time < 0) {
-                    discountState = IN_DISCOUNT;
+                    discountState = BEFORE_DISCOUNT;
                 } else {
-                    discountState = OUT_DISCOUNT;
+                    time = System.currentTimeMillis() / 1000 - discountEndTime;
+                    if (time < 0) {
+                        discountState = IN_DISCOUNT;
+                    } else {
+                        discountState = OUT_DISCOUNT;
+                    }
                 }
             }
+
         }
         SLog.info("discountState[%d],goodsInfo.promotionType[%d]",discountState,goodsInfo.promotionType);
     }

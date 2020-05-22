@@ -316,4 +316,6 @@ public class Constant {
 
     // public static final int SKU_SELECTED_FONT_SIZE = 14;
     // public static final int SKU_UNSELECTED_FONT_SIZE = 14;
+
+    public static final int DISTRICT_ID_MACAO = 45056;
 }

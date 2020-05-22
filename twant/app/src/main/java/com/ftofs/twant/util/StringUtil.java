@@ -14,6 +14,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
+import android.util.Pair;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
@@ -820,4 +821,25 @@ public class StringUtil {
         return false;
     }
 
+    /**
+     * 拆分帶區號的手機號
+     * @param fullMobile
+     * @return
+     */
+    public static Pair<String, String> splitMobilePhone(String fullMobile) {
+        String areaCode = Constant.AREA_CODE_MACAO; // 區號
+        String mobile = "";
+
+        String[] areaCodeArr = new String[] {Constant.AREA_CODE_MACAO, Constant.AREA_CODE_HONGKONG, Constant.AREA_CODE_MAINLAND};
+
+        for (String prefix : areaCodeArr) {
+            if (fullMobile.startsWith(prefix)) {
+                areaCode = prefix;
+                mobile = fullMobile.substring(prefix.length());
+                break;
+            }
+        }
+
+        return new Pair<>(areaCode, mobile);
+    }
 }

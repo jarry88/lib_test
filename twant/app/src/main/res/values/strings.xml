@@ -285,6 +285,7 @@
     <string name="text_present_voucher_desc">滿%d元，送%d元商店券</string>
 
     <string name="text_pay_success">訂單支付成功</string>
+    <string name="text_order_commit_success">訂單提交成功</string>
     <string name="text_view_order">查看訂單</string>
     <string name="text_goto_home">返回首頁</string>
     <string name="text_want_pay_wallet">想付錢包</string>
@@ -809,4 +810,7 @@
     <string name="text_refund_return_tab">退貨退款</string>
     <string name="text_refund_goods">退款商品</string>
     <string name="text_apply_time">申請時間</string>
+
+    <!-- 用u标签添加下划线 -->
+    <string name="text_sku_goods_list"><u>SKU商品列表</u></string>
 </resources>

@@ -139,4 +139,14 @@ public enum RequestCode {
      * 添加/編輯實名信息
      */
     REAL_NAME_INFO,
+
+    /**
+     * 選擇多張圖片
+     */
+    SELECT_MULTI_IMAGE,
+
+    /**
+     * 【賣家】編輯收貨人信息
+     */
+    SELLER_EDIT_RECEIVER_INFO,
 }

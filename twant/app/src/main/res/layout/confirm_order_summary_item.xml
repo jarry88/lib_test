@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="送貨方式"
+            android:text="交易方式"
             android:textSize="14sp"
             android:textColor="@color/tw_black"
             />
