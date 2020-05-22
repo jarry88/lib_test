@@ -30,6 +30,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.seller.entity.SellerOrderRefundItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.SellerRefundDetailFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -262,13 +263,14 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id =view.getId();
                 if (id == R.id.btn_seller_refund_state) {
-//                    Util.startFragment(BlackTestFragment.newInstance());
-                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+                    Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getRefundSn()));
+//                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
 
                 } else if (id == R.id.tv_refund_goods) {
                     ToastUtil.success(_mActivity,"商品彈窗");
                 } else if (id == R.id.tv_orders_sn) {
-                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+                Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getOrdersId()));
+
                 }
             }
         });
