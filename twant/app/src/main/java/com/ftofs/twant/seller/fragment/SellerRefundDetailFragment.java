@@ -30,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.ISupportFragment;
 import okhttp3.Call;
@@ -42,13 +43,13 @@ public class SellerRefundDetailFragment extends BaseFragment {
     private int ordersId;
     private boolean sellerAgree;
     private int currentStep=0;
-    private long refundSn;
+    private int refundId;
 
-    public static SellerRefundDetailFragment newInstance(long ordersId) {
+    public static SellerRefundDetailFragment newInstance(int refundId) {
         SellerRefundDetailFragment fragment = new SellerRefundDetailFragment();
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
-        fragment.refundSn = ordersId;
+        fragment.refundId = refundId;
         return fragment;
     }
     @OnClick(R.id.btn_back)
@@ -126,18 +127,15 @@ public class SellerRefundDetailFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        List<String> progressList = new ArrayList<>();
-        progressList.add("買家\n申請退款");
-        progressList.add("商家處理\n退款申請");
-        progressList.add("平臺審核\n退款完成");
-        indicator.setData(progressList,currentStep);
+
         loadDate();
     }
 
     private void loadDate() {
-        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(),"refundId",refundSn);
+        refundId = 690;
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(),"refundId",refundId);
           SLog.info("params[%s]", params);
-          String path =Api.PATH_SELLER_REFUND_INFO+"/"+refundSn;
+          String path =Api.PATH_SELLER_REFUND_INFO+"/"+refundId;
              Api.getUI(path, params, new UICallback() {
                  @Override
                  public void onFailure(Call call, IOException e) {
@@ -150,13 +148,27 @@ public class SellerRefundDetailFragment extends BaseFragment {
                          SLog.info("responseStr[%s]", responseStr);
 
                          EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                         if (ToastUtil.checkError(_mActivity, responseObj)) {
-                             return;
-                         }
+//                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+//                             return;
+//                         }
+                         EasyJSONObject refundInfo = responseObj.getObject("datas.refundInfo");
+                         updateView(refundInfo);
                      } catch (Exception e) {
                          SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                      }
                  }
              });
+    }
+
+    private void updateView(EasyJSONObject refundInfo) throws Exception {
+        List<String> progressList = new ArrayList<>();
+        progressList.add("買家\n申請退款");
+        progressList.add("商家處理\n退款申請");
+        progressList.add("平臺審核\n退款完成");
+        indicator.setData(progressList,currentStep);
+        currentStep = refundInfo.getInt("refundState");
+        tvRefundState.setText( refundInfo.getSafeString("refundStateTextForSelf"));
+        tvRefundReason.setText(refundInfo.getSafeString("reasonInfo"));
+        tvBuyer.setText(refundInfo.getSafeString("memberName"));
     }
 }

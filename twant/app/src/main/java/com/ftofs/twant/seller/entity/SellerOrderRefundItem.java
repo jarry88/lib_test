@@ -50,6 +50,7 @@ public class SellerOrderRefundItem {
     public String refundStateText="-";
     public String showSellerHandleText="-";
     private double refundAmount;
+    private int refundId;
 
     public static SellerOrderRefundItem parse(EasyJSONObject jsonObject) throws Exception {
         SellerOrderRefundItem item = new SellerOrderRefundItem();
@@ -73,6 +74,9 @@ public class SellerOrderRefundItem {
         if (jsonObject.exists("refundAmount")) {
             item.setRefundAmount(jsonObject.getDouble("refundAmount"));
         }
+        if (jsonObject.exists("refundId")) {
+            item.refundId = jsonObject.getInt("refundId");
+        }
 
         item.stateToText();
         return item;
@@ -82,6 +86,9 @@ public class SellerOrderRefundItem {
         this.refundAmount = refundAmount;
     }
 
+    public int getRefundId() {
+        return refundId;
+    }
     private void stateToText() {
         if (sellerState == 1) {
             sellerStateText = "待審核";
