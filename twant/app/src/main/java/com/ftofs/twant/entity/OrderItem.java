@@ -41,4 +41,11 @@ public class OrderItem {
     public List<GiftItem> giftItemList;
 
 
+    public static OrderItem parse(EasyJSONObject orderGood) throws Exception{
+//        OrderItem item = new OrderItem(
+//                orderGood.getInt("orderId"),
+//                orderGood.getSafeString("storeName"),
+//                orderGood.getSafeString());
+        return null;
+    }
 }

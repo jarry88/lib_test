@@ -57,8 +57,10 @@ public class SellerOrderRefundItem {
         item.setAddTime(jsonObject.getSafeString("addTime"));
         item.setRefundSn(jsonObject.getLong("refundSn"));
         item.setRefundSnText(jsonObject.getSafeString("refundSnText"));
+//        item.setRefundSnText(jsonObject.getSafeString("refundSnStr"));
         item.setOrdersSn(jsonObject.getLong("ordersSn"));
         item.setOrdersSnText(jsonObject.getSafeString("ordersSnText"));
+//        item.setOrdersSnText(jsonObject.getSafeString("ordersSnStr"));
         item.setReturnType(jsonObject.getInt("returnType"));
         item.setRefundType(jsonObject.getInt("refundType"));
         item.setOrdersId(jsonObject.getInt("ordersId"));

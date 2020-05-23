@@ -27,17 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="18sp"
-            android:text="退款詳情"
+            android:text="產品相關交易信息"
             android:textColor="@color/tw_black"
-            />
-        <com.ftofs.twant.widget.ScaledButton
-            android:id="@+id/btn_menu"
-            android:layout_width="31dp"
-            android:layout_height="31dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/margin12"
-            app:icon_src="@drawable/icon_store_goods_view_style_grid"
             />
     </RelativeLayout>
 
@@ -49,23 +40,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <com.ftofs.twant.widget.ProcessProgressIndicator
-                android:id="@+id/progress_indicator"
+           <androidx.recyclerview.widget.RecyclerView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:id="@+id/rv_refund_relative_goods_list"/>
+            <LinearLayout
+                android:id="@+id/ll_order_list_container"
                 android:layout_width="match_parent"
-                android:layout_height="115dp"
-                android:paddingTop="36dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp">
-
-            </com.ftofs.twant.widget.ProcessProgressIndicator>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="買家退款申請"
-                android:layout_marginStart="@dimen/margin12"
-                android:textColor="@color/tw_black"
-                android:layout_marginTop="@dimen/margin12"
-                android:textSize="14sp"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,19 +71,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="退款狀態："
+                        android:text="訂單總額："
                         android:textSize="12sp"
                         android:textColor="@color/grgray"
 
                         />
 
                     <TextView
-                        android:id="@+id/tv_refund_state"
+                        android:id="@+id/tv_refund_all_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textSize="12sp"
-                        android:textColor="@color/grgray"
+                        android:textColor="@color/tw_black"
 
                         />
                 </LinearLayout>
@@ -135,19 +119,19 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="退款編號："
+                            android:text="運費："
                             android:textSize="12sp"
                             android:textColor="@color/grgray"
 
                             />
 
                         <TextView
-                            android:id="@+id/tv_refund_sn"
+                            android:id="@+id/tv_refund_freight"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
                             android:textSize="14sp"
-                            android:textColor="@color/tw_blue"
+                            android:textColor="@color/tw_black"
                             />
                     </LinearLayout>
                     <LinearLayout
@@ -164,19 +148,19 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="申請人（買家）："
+                            android:text="訂單編號："
                             android:textSize="12sp"
                             android:textColor="@color/grgray"
                             />
 
                         <TextView
-                            android:id="@+id/tv_buyer"
+                            android:id="@+id/tv_order_sn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text=""
                             android:textSize="12sp"
                             android:singleLine="true"
-                            android:textColor="@color/grgray"
+                            android:textColor="@color/tw_blue"
                             />
                     </LinearLayout>
                 </RelativeLayout>
@@ -191,14 +175,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="退款原因："
+                        android:text="支付方式："
                         android:textSize="12sp"
                         android:textColor="@color/grgray"
 
                         />
 
                     <TextView
-                        android:id="@+id/tv_refund_reason"
+                        android:id="@+id/tv_repaymentfund_"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
@@ -219,14 +203,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="退款金額："
+                        android:text="下單時間："
                         android:textSize="12sp"
                         android:textColor="@color/grgray"
 
                         />
 
                     <TextView
-                        android:id="@+id/tv_refund_amount"
+                        android:id="@+id/tv_refund_pay_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
@@ -245,19 +229,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="退款説明："
+                        android:text="物流單號："
                         android:textSize="12sp"
                         android:textColor="@color/grgray"
 
                         />
 
                     <TextView
-                        android:id="@+id/tv_refund_describe"
+                        android:id="@+id/tv_refund_send_sn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textSize="12sp"
-                        android:textColor="#FF6565"
+                        android:textColor="@color/tw_black"
                         />
                 </LinearLayout>
                 <LinearLayout
@@ -272,27 +256,67 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="憑證上傳："
+                        android:text="收貨人："
                         android:textSize="12sp"
                         android:textColor="@color/grgray"
 
                         />
                     <TextView
-                        android:id="@+id/tv_refund_certificate"
+                        android:id="@+id/tv_receiver_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textSize="12sp"
-                        android:textColor="#FF6565"
                         />
-                    <com.ftofs.twant.widget.SquareGridLayout
-                        android:id="@+id/refund_content_image_container"
-                        android:layout_width="match_parent"
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"            android:paddingBottom="@dimen/dp_4"
+
+
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/toolbar_margin_left"
-                        android:layout_marginRight="@dimen/toolbar_margin_left"
-                        app:sgl_column_count="3">
-                    </com.ftofs.twant.widget.SquareGridLayout>
+                        android:layout_centerVertical="true"
+                        android:text="收貨地址："
+                        android:textSize="12sp"
+                        android:textColor="@color/grgray"
+
+                        />
+                    <TextView
+                        android:id="@+id/tv_receiver_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="12sp"
+                        />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"            android:paddingBottom="@dimen/dp_4"
+
+
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="聯係電話："
+                        android:textSize="12sp"
+                        android:textColor="@color/grgray"
+
+                        />
+                    <TextView
+                        android:id="@+id/tv_receiver_mobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="12sp"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
@@ -389,7 +413,6 @@
                         android:text="備注信息：" />
                 </LinearLayout>
                 <EditText
-                    android:id="@+id/et_refund_seller_note"
                     android:layout_marginTop="@dimen/dp_4"
                     android:background="@drawable/real_name_edit_bg"
                     android:layout_width="match_parent"
@@ -442,83 +465,6 @@
                         />
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:visibility="gone"
-                        android:id="@+id/btn_seller_refund_state"
-                        android:layout_marginEnd="@dimen/dp_4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="查看"
-                        android:textColor="@color/tw_white"
-                        android:layout_alignParentEnd="true"
-                        android:paddingStart="@dimen/margin12"
-                        android:paddingEnd="@dimen/margin12"
-                        android:paddingTop="@dimen/dp_4"
-                        android:paddingBottom="@dimen/dp_4"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/blue_20dp_bg"/>
-
-
-                </RelativeLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="@dimen/dp_4"
-
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="商家備注信息："
-                        android:textSize="12sp"
-                        android:textColor="@color/grgray"
-
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_seller_reason"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="12sp"
-                        android:textColor="@color/tw_blue"
-                        />
-                </LinearLayout>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@id/btn_return"
-                    android:text="返回列表"
-                    android:layout_margin="@dimen/margin12"
-                    android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-
-                    android:paddingEnd="@dimen/margin12"
-                    android:background="@drawable/white_20dp_radius_bg"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@id/btn_commit"
-                    android:layout_margin="@dimen/margin12"
-                    android:text="確認提交"
-                    android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-                    android:paddingEnd="@dimen/margin12"
-                    android:background="@drawable/blue_20dp_bg"/>
-
             </LinearLayout>
 
             <!-- 底部Padding -->
@@ -526,6 +472,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 />
+        </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

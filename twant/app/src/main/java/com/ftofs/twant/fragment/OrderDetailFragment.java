@@ -77,7 +77,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     String storeName;
     String paySnStr;
     int payId;
-    float ordersAmount = -1;
+    double ordersAmount = -1;
 
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
@@ -674,11 +674,11 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                         default:
                             break;
                     }
-                    float freightAmount = (float) ordersVo.getDouble("freightAmount");
-                    float itemAmount=(float) ordersVo.getDouble("itemAmount");
-                    float storeDiscountAmount=(float)ordersVo.getDouble("storeDiscountAmount");
-                    float counponAmount=(float)ordersVo.getDouble("couponAmount");
-                    ordersAmount = (float) ordersVo.getDouble("ordersAmount");
+                    double freightAmount = ordersVo.getDouble("freightAmount");
+                    double itemAmount= ordersVo.getDouble("itemAmount");
+                    double storeDiscountAmount=ordersVo.getDouble("storeDiscountAmount");
+                    double counponAmount=ordersVo.getDouble("couponAmount");
+                    ordersAmount = ordersVo.getDouble("ordersAmount");
                     String shipTime = ordersVo.getSafeString("shipTime");
                     String finishTime=ordersVo.getSafeString("finishTime");
                     if (StringUtil.isEmpty(finishTime)) {

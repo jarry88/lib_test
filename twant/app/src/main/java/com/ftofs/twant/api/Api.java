@@ -1291,6 +1291,10 @@ public class Api {
      * 兼退貨訂單信息/refundId
      */
     public static final String PATH_SELLER_RETURN_ORDER_DETAIL = "/member/seller/return/orders/info";
+    /**
+     * 【商家】退款處理
+     */
+    public static final String PATH_SELLER_REFUND_HANDLE ="/member/seller/refund/handle";
 
     /**
      * 【商家】
