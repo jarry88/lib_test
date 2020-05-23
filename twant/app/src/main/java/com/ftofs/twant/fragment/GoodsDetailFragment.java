@@ -126,7 +126,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     String goodsVideoId;  // 產品視頻Id
     String detailVideoId; // 介紹視頻Id
 
-    float promotionDiscountRate;
+    double promotionDiscountRate;
     TextView tvPromotionDiscountRate;
 
     /**
@@ -1096,8 +1096,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     //針對用戶id限購 可以购买0，提示限購-1
                     setGoodsStatus(status);
 
-                    promotionDiscountRate = (float) goodsDetail.getDouble("promotionDiscountRate");
-                    tvPromotionDiscountRate.setText("限時" + promotionDiscountRate + "折");
+                    promotionDiscountRate = goodsDetail.getDouble("promotionDiscountRate");
+                    StringBuffer discountDes = new StringBuffer("限時");
+                    discountDes.append(String.format("%.2f", promotionDiscountRate)).append("折");
+                    tvPromotionDiscountRate.setText(discountDes.toString());
                     EasyJSONObject goodsCountry =responseObj.getObject("datas.goodsCountry");
                     if (goodsCountry != null) {
                         String goodsNationalFlagUrl = StringUtil.normalizeImageUrl(goodsCountry.getSafeString("nationalFlag"));

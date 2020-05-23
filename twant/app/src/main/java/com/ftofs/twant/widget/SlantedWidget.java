@@ -14,6 +14,8 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 
+import java.text.DecimalFormat;
+
 /**
  * 打折標簽
  * @author zwm
@@ -54,8 +56,10 @@ public class SlantedWidget extends RelativeLayout {
 
 
     public void setDiscountInfo(Context context, double discount, double originalPrice) {
-
-        tvDiscount.setText(String.valueOf(discount));
+        Object[] args;
+        DecimalFormat decimalFormat = new DecimalFormat("###################.##");
+//        String discountText =String.format("%.2f", discount);
+        tvDiscount.setText(decimalFormat.format(discount));
         tvOriginalPrice.setText(StringUtil.formatPrice(context, originalPrice, 1,false));
     }
 }
