@@ -18,6 +18,7 @@ import com.ftofs.twant.fragment.SellerRefundFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ProcessProgressIndicator;
 import com.ftofs.twant.widget.ScaledButton;
 import com.github.piasy.biv.indicator.ProgressIndicator;
@@ -64,6 +65,9 @@ public class SellerRefundDetailFragment extends BaseFragment {
     @OnClick(R.id.btn_commit)
     void commitForm(){
         collectFormInfo();
+    }@OnClick(R.id.btn_menu)
+    void toOrderInfo(){
+        Util.startFragment(SellerOrderInfoFragment.newInstance(refundId));
     }
 
     @BindView(R.id.btn_check_ok)
@@ -162,13 +166,14 @@ public class SellerRefundDetailFragment extends BaseFragment {
 
     private void updateView(EasyJSONObject refundInfo) throws Exception {
         List<String> progressList = new ArrayList<>();
-        progressList.add("買家\n申請退款");
+        progressList.add(" 買家\n申請退款");
         progressList.add("商家處理\n退款申請");
         progressList.add("平臺審核\n退款完成");
+        indicator.setTheme();
         indicator.setData(progressList,currentStep);
-        currentStep = refundInfo.getInt("refundState");
-        tvRefundState.setText( refundInfo.getSafeString("refundStateTextForSelf"));
-        tvRefundReason.setText(refundInfo.getSafeString("reasonInfo"));
-        tvBuyer.setText(refundInfo.getSafeString("memberName"));
+//        currentStep = refundInfo.getInt("refundState");
+//        tvRefundState.setText( refundInfo.getSafeString("refundStateTextForSelf"));
+//        tvRefundReason.setText(refundInfo.getSafeString("reasonInfo"));
+//        tvBuyer.setText(refundInfo.getSafeString("memberName"));
     }
 }
