@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
@@ -52,14 +53,23 @@ public class SellerRefundDetailFragment extends BaseFragment {
     private boolean sellerAgree;
     private int currentStep=0;
     private int refundId;
+    private int FragmentType=Constant.SELLER_REFUND;
 
     public static SellerRefundDetailFragment newInstance(int refundId) {
+
+        return newInstance(refundId,Constant.SELLER_REFUND);
+    }
+
+    public static SellerRefundDetailFragment newInstance(int refundId, int sellerRefund) {
         SellerRefundDetailFragment fragment = new SellerRefundDetailFragment();
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
         fragment.refundId = refundId;
+        fragment.FragmentType = sellerRefund;
         return fragment;
+
     }
+
     @OnClick(R.id.btn_back)
     void back() {
         hideSoftInputPop();
@@ -203,7 +213,8 @@ public class SellerRefundDetailFragment extends BaseFragment {
     private void loadDate() {
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(),"refundId",refundId);
           SLog.info("params[%s]", params);
-          String path =Api.PATH_SELLER_REFUND_INFO+"/"+refundId;
+        String path = FragmentType == Constant.SELLER_REFUND ? Api.PATH_SELLER_REFUND_INFO : Api.PATH_SELLER_RETURN_INFO;
+          path=path+"/"+refundId;
              Api.getUI(path, params, new UICallback() {
                  @Override
                  public void onFailure(Call call, IOException e) {

@@ -279,8 +279,9 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id =view.getId();
                 if (id == R.id.btn_seller_refund_state) {
-//                    Util.startFragment(BlackTestFragment.newInstance());
-                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+                    Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getRefundId(),0));
+
+
 
                 } else if (id == R.id.tv_refund_goods) {
                     ToastUtil.success(_mActivity,"商品彈窗");
