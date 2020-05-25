@@ -81,6 +81,7 @@ public class ScaledButton extends RelativeLayout {
 
     public void setText(String string) {
         textView.setText(string);
+        textView.setVisibility(VISIBLE);
     }
 }
 

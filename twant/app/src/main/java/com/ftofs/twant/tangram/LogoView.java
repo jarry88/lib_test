@@ -51,7 +51,7 @@ public class LogoView extends LinearLayout implements ITangramViewLifeCycle {
             @Override
             public void onClick(View v) {
                 if (Config.DEVELOPER_MODE) {
-                    Util.startFragment(AddGoodsFragment.newInstance());
+                    Util.startFragment(SellerRefundFragment.newInstance());
                 }
             }
         });

@@ -279,7 +279,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id =view.getId();
                 if (id == R.id.btn_seller_refund_state) {
-                    Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getRefundId(),0));
+                    Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getRefundId(),0));//0是指非refund類型
 
 
 
