@@ -37,82 +37,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="商品名稱：" />
+                        android:text="計量單位：" />
                 </LinearLayout>
-                <EditText
-                    android:id="@+id/et_add_good_name"
-                    android:layout_marginTop="@dimen/dp_4"
-                    android:background="@drawable/real_name_edit_bg"
-                    android:layout_width="match_parent"
-                    android:gravity="top"
-                    android:hint="請輸入商品名稱"
-                    android:layout_height="100dp"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
-                    android:text="*"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="商品分類：" />
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="選擇" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
-                    android:text="*"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="商品賣點：" />
-            </LinearLayout>
-            <EditText
-                android:id="@+id/et_add_good_description"
-                android:hint="請輸入對產品的賣點描述："
-                android:layout_marginTop="@dimen/dp_4"
-                android:background="@drawable/real_name_edit_bg"
-                android:layout_width="match_parent"
-                android:gravity="top"
-                android:layout_height="150dp"/>
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
-                    android:text="*"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="商品品牌："
-                    />
 
             </LinearLayout>
 
             <Spinner
-                android:id="@+id/sp_add_good_logo"
+                android:id="@+id/sp_add_good_unit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="選擇"
@@ -130,24 +61,40 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="選擇品牌所在地："
+                    android:text="銷售模式："
                     />
 
             </LinearLayout>
-            <Spinner
-                android:id="@+id/sp_add_good_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/sb_retail" />
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/sb_across" />
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/sb_virtual" />
+
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center">
                 <TextView
-                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@id/btn_return"
-                    android:text="返回列表"
+                    android:id="@+id/btn_basic_prev"
+                    android:text="上一步"
                     android:layout_margin="@dimen/margin12"
                     android:padding="@dimen/dp_4"
                     android:paddingStart="@dimen/margin12"
@@ -157,9 +104,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/btn_primary_next"
+                    android:id="@+id/btn_basic_next"
                     android:layout_margin="@dimen/margin12"
-                    android:text="下一步，交易信息"
+                    android:text="下一步，規格與圖片"
                     android:textColor="@color/tw_white"
                     android:padding="@dimen/dp_4"
                     android:paddingStart="@dimen/margin12"
