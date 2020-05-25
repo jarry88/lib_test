@@ -10,13 +10,13 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.lxj.xpopup.core.BottomPopupView;
-import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
 import java.io.IOException;
@@ -108,7 +108,11 @@ public class SellerOperationPopup extends BottomPopupView implements View.OnClic
                         }
 
                         ToastUtil.success(context, goodsStatus == Constant.GOODS_STATUS_ON_SHELF ? "下架成功" : "上架成功");
-                        simpleCallback.onSimpleCall(null);
+                        simpleCallback.onSimpleCall(EasyJSONObject.generate(
+                                "action", CustomAction.CUSTOM_ACTION_SELLER_SWITCH_GOODS_SHELF_STATUS
+                        ));
+
+                        dismiss();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
@@ -142,7 +146,7 @@ public class SellerOperationPopup extends BottomPopupView implements View.OnClic
                         }
 
                         ToastUtil.success(context, "複製成功");
-                        simpleCallback.onSimpleCall(null);
+                        dismiss();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
@@ -151,35 +155,13 @@ public class SellerOperationPopup extends BottomPopupView implements View.OnClic
         } else if (id == R.id.btn_delete) {
             SLog.info("刪除");
 
-            EasyJSONObject params = EasyJSONObject.generate(
-                    "token", token,
-                    "commonId", commonId
-            );
+            if (simpleCallback != null) {
+                simpleCallback.onSimpleCall(EasyJSONObject.generate(
+                        "action", CustomAction.CUSTOM_ACTION_SELLER_DELETE_GOODS,
+                        "commonId", commonId));
+            }
 
-            SLog.info("url[%s], params[%s]", Api.PATH_SELLER_DELETE_GOODS, params);
-            Api.postUI(Api.PATH_SELLER_DELETE_GOODS, params, new UICallback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    ToastUtil.showNetworkError(context, e);
-                }
-
-                @Override
-                public void onResponse(Call call, String responseStr) throws IOException {
-                    try {
-                        SLog.info("responseStr[%s]", responseStr);
-                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-
-                        if (ToastUtil.checkError(context, responseObj)) {
-                            return;
-                        }
-
-                        ToastUtil.success(context, "刪除成功");
-                        simpleCallback.onSimpleCall(null);
-                    } catch (Exception e) {
-                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                    }
-                }
-            });
+            dismiss();
         }
     }
 }

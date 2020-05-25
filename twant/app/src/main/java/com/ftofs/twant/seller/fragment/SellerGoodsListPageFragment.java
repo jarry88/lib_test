@@ -18,6 +18,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.entity.SellerGoodsItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerGoodsAdapter;
@@ -27,7 +28,9 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.SharePopup;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -244,6 +247,49 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
     }
 
 
+    private void deleteGoods(int commonId) {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "commonId", commonId
+        );
+
+        SLog.info("url[%s], params[%s]", Api.PATH_SELLER_DELETE_GOODS, params);
+        Api.postUI(Api.PATH_SELLER_DELETE_GOODS, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    ToastUtil.success(_mActivity, "刪除成功");
+
+                    if (simpleCallback != null) {
+                        simpleCallback.onSimpleCall(EasyJSONObject.generate(
+                                "action", CustomAction.CUSTOM_ACTION_RELOAD_DATA
+                        ));
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
+
+
 
     @Override
     public void onClick(View v) {
@@ -263,6 +309,43 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
 
     @Override
     public void onSimpleCall(Object data) {
+        EasyJSONObject dataObj = (EasyJSONObject) data;
+        try {
+            String action = dataObj.getSafeString("action");
+            if (CustomAction.CUSTOM_ACTION_SELLER_DELETE_GOODS.equals(action)) {
+                int commonId = dataObj.getInt("commonId");
+                new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                        .setPopupCallback(new XPopupCallback() {
+                            @Override
+                            public void onShow() {
+                            }
+                            @Override
+                            public void onDismiss() {
+                            }
+                        }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎？", null, new OnConfirmCallback() {
+                    @Override
+                    public void onYes() {
+                        SLog.info("onYes");
+                        deleteGoods(commonId);
+                    }
 
+                    @Override
+                    public void onNo() {
+                        SLog.info("onNo");
+                    }
+                })).show();
+            } else if (CustomAction.CUSTOM_ACTION_SELLER_SWITCH_GOODS_SHELF_STATUS.equals(action)) {
+                if (simpleCallback != null) {
+                    simpleCallback.onSimpleCall(EasyJSONObject.generate(
+                            "action", CustomAction.CUSTOM_ACTION_RELOAD_DATA
+                    ));
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 }
