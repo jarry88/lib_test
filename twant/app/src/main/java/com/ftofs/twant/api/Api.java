@@ -1300,6 +1300,7 @@ public class Api {
      * 【商家】
      * 退款訂單列表
      */
+
     public static final String PATH_SELLER_REFUND_LIST = "/member/seller/refund/list";
     /**
      * 【商家】
@@ -1308,6 +1309,16 @@ public class Api {
      */
     public static final String PATH_SELLER_REFUND_INFO = "/member/seller/refund/info";
     public static final String PATH_SELLER_RETURN_INFO = "/member/seller/return/info";
+    /**
+     * 【商家】
+     * 退貨處理
+     */
+    public static final String PATH_SELLER_RETURN_HANDLE = "/member/seller/return/handle";
+    /**
+     * 【商家】
+     * 退貨收貨
+     */
+    public static final String PATH_SELLER_RETURN_RECEIVE_SAVE = "/member/seller/return/receivesave";
     /**
      * 【商家】
      * 商品發佈頁

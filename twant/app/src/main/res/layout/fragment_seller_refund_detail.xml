@@ -241,7 +241,7 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textSize="12sp"
-                        android:textColor="#FF6565"
+                        android:textColor="@color/tw_black"
                         />
                 </LinearLayout>
                 <LinearLayout
@@ -543,7 +543,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/ll_admin_container"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

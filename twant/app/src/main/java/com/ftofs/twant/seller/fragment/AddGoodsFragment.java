@@ -3,6 +3,7 @@ package com.ftofs.twant.seller.fragment;
 import android.database.DataSetObserver;
 import android.location.Address;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,19 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SimpleViewPagerAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.SimpleTabManager;
 
 import org.litepal.util.LitePalLog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +37,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
+import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.ISupportFragment;
+import okhttp3.Call;
 import permissions.dispatcher.OnNeverAskAgain;
 
 public class AddGoodsFragment extends BaseFragment implements View.OnClickListener {
     private Unbinder unbinder;
     private SimpleViewPagerAdapter mPagerAdapter;
     private List<View> mViews =new ArrayList<>();
+//    1是0否允許發佈跨城購商品
+    private int allowTariff;
+//    允許添加的最大規格數量
+    private int specMax;
+    private List<String> unitList=new ArrayList<>();
 
     public static AddGoodsFragment newInstance() {
         return new AddGoodsFragment();
@@ -209,7 +225,41 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadDate() {
+         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+          SLog.info("params[%s]", params);
+          Api.getUI(Api.PATH_SELLER_GOODS_PUBLISH_PAGE, params, new UICallback() {
+             @Override
+             public void onFailure(Call call, IOException e) {
+                 ToastUtil.showNetworkError(_mActivity, e);
+             }
 
+             @Override
+             public void onResponse(Call call, String responseStr) throws IOException {
+                 try {
+                     SLog.info("responseStr[%s]", responseStr);
+
+                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                     EasyJSONObject data = responseObj.getObject("datas");
+                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                         return;
+                     }
+                     updateView(data);
+                 } catch (Exception e) {
+                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                 }
+             }
+          });
+    }
+
+    private void updateView (EasyJSONObject data) throws Exception {
+        allowTariff = data.getInt("allowTariff");
+        specMax = data.getInt("specMax");
+        EasyJSONArray unitList = data.getArray("unitList");
+        if (unitList != null) {
+            for (Object object : unitList) {
+                this.unitList.add(object.toString());
+            }
+        }
     }
 
     @Override

@@ -252,6 +252,11 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
 
     }
 
+    @Override
+    public void onSupportVisible() {
+        
+    }
+
     private void initView(View view) {
         mViews = new ArrayList<>();
         returnItemList = new ArrayList<>();
@@ -263,8 +268,9 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id =view.getId();
                 if (id == R.id.btn_seller_refund_state) {
-                    Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getRefundId()));
-//                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+                    SellerOrderRefundItem item = refundItemList.get(position);
+                    handleRefundItem(item);
+                   
 
                 } else if (id == R.id.tv_refund_goods) {
                     ToastUtil.success(_mActivity,"商品彈窗");
@@ -280,7 +286,6 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
                 int id =view.getId();
                 if (id == R.id.btn_seller_refund_state) {
                     Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getRefundId(),0));//0是指非refund類型
-
 
 
                 } else if (id == R.id.tv_refund_goods) {
@@ -332,6 +337,38 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
         });
         viewPager.setAdapter(mPagerAdapter);
     }
+
+    private void handleRefundItem(SellerOrderRefundItem item) {
+        if (item.getShowSellerHandle() == SellerOrderRefundItem.RECEIVE_GOOD_HANDLE) {
+             EasyJSONObject params =EasyJSONObject.generate("token", User.getToken(),"refundId",item.getRefundId());
+              SLog.info("params[%s]", params);
+              Api.postUI(Api.PATH_SELLER_RETURN_RECEIVE_SAVE, params, new UICallback() {
+                 @Override
+                 public void onFailure(Call call, IOException e) {
+                     ToastUtil.showNetworkError(_mActivity, e);
+                 }
+             
+                 @Override
+                 public void onResponse(Call call, String responseStr) throws IOException {
+                     try {
+                         SLog.info("responseStr[%s]", responseStr);
+             
+                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                         if (ToastUtil.checkError(_mActivity, responseObj)) {
+                             return;
+                         }
+                         ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+
+                     } catch (Exception e) {
+                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                     }
+                 }
+              });
+        }
+        Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId()));
+//                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+    }
+
     @Override
     public void onLoadMoreRequested() {
         SLog.info("onLoadMoreRequested");

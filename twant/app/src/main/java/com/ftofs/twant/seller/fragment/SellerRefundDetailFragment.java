@@ -58,6 +58,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
     private int currentStep=0;
     private int refundId;
     private int FragmentType=Constant.SELLER_REFUND;
+    private int showStoreHandel;//1是0否可處理
     @BindView(R.id.ll_admin_container)
     LinearLayout llAdiminContainer;
     @BindView(R.id.tv_admin_handle_state)
@@ -78,7 +79,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
         btnReturnWithoutGood.setChecked(false);
     }
     @OnClick(R.id.btn_return_without_good)
-    void setReturn() {
+    void setReturnNo() {
         returnType = 1;
         btnReturnGood.setChecked(false);
         btnReturnWithoutGood.setChecked(true);
@@ -194,8 +195,9 @@ public class SellerRefundDetailFragment extends BaseFragment {
                 e.printStackTrace();
             }
         }
+        String path =FragmentType==Constant.SELLER_REFUND?Api.PATH_SELLER_REFUND_HANDLE:Api.PATH_SELLER_RETURN_HANDLE;
           SLog.info("params[%s]", params);
-             Api.postUI(Api.PATH_SELLER_REFUND_HANDLE, params, new UICallback() {
+             Api.postUI(path, params, new UICallback() {
                  @Override
                  public void onFailure(Call call, IOException e) {
                      ToastUtil.showNetworkError(_mActivity, e);
@@ -213,13 +215,16 @@ public class SellerRefundDetailFragment extends BaseFragment {
                                  return;
                              }
                              ToastUtil.success(_mActivity, responseObj.getSafeString("datas.success"));
-                         } else {
-
                          }
                          llSellerHandleContainer.setVisibility(View.GONE);
                          llSellerHandleInfo.setVisibility(View.VISIBLE);
                          tvSellerHandleState.setText(sellerAgree?"同意":"不同意");
                          tvSellerReason.setText(sellerMessage);
+                         llAdiminContainer.setVisibility(View.VISIBLE);
+                         tvAdminState.setText("待審核");
+                         llButtonContainer.setVisibility(View.GONE);
+                         currentStep++;
+                         updateIndicator();
                      } catch (Exception e) {
                          SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                      }
@@ -252,6 +257,8 @@ public class SellerRefundDetailFragment extends BaseFragment {
         btnReturnGood.setButtonCheckedBlue();
         btnReturnWithoutGood.setButtonCheckedBlue();
         llReturnGoodContainer.setVisibility(FragmentType == Constant.SELLER_REFUND?View.GONE:View.VISIBLE );
+        btnReturnGood.performClick();
+        btnOk.performClick();
         loadDate();
     }
 
@@ -285,19 +292,21 @@ public class SellerRefundDetailFragment extends BaseFragment {
     }
 
     private void updateView(EasyJSONObject refundInfo) throws Exception {
-        List<String> progressList = new ArrayList<>();
-        progressList.add("    買家\n申請退款");//1 處理中
-        progressList.add("商家處理\n退款申請");//2、帶管理員處理
-        progressList.add("平臺審核\n退款完成");//3、已完成
-//        currentStep = refundInfo.getInt("refundState");
-        currentStep = 1;
-        indicator.setData(progressList,currentStep-1);
+        currentStep = refundInfo.getInt("refundState");
+
+        updateIndicator();
+        showStoreHandel = refundInfo.getInt("showStoreHandel");
+        if (Config.DEVELOPER_MODE) {
+            currentStep = 3;
+            showStoreHandel = 0;
+        }
+
         refundId = refundInfo.getInt("refundId");
         tvRefundSn.setText(String.valueOf(refundInfo.getLong("refundSn")));
         tvRefundAmount.setText(StringUtil.formatPrice(_mActivity,refundInfo.getDouble("refundAmount"),1));
         tvRefundAmount.setTextColor(Color.RED);
         tvRefundState.setText( refundInfo.getSafeString("refundStateTextForSelf"));
-        tvRefundReason.setText(refundInfo.getSafeString("refundInfo"));
+        tvRefundReason.setText(refundInfo.getSafeString("reasonInfo"));
         tvRefundDescribe.setText(refundInfo.getSafeString("buyerMessage"));
         tvBuyer.setText(refundInfo.getSafeString("memberName"));
         tvSellerHandleState.setText(refundInfo.getSafeString("sellerStateText"));
@@ -307,23 +316,31 @@ public class SellerRefundDetailFragment extends BaseFragment {
             String[] imageList=picJson.split(",");
             for (String object : imageList) {
                 View imageItem =LayoutInflater.from(_mActivity).inflate(R.layout.post_content_image_widget, refundContentImageContainer, false);
+                imageItem.findViewById(R.id.btn_remove_image).setVisibility(View.GONE);
                 Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(object)).into((ImageView) imageItem.findViewById(R.id.post_image));
                 refundContentImageContainer.addView(imageItem);
             }
         }
 
-        if (currentStep == 1) {
+        if (showStoreHandel == 1) {
             llSellerHandleContainer.setVisibility(View.VISIBLE);
             llSellerHandleInfo.setVisibility(View.GONE);
         } else {
-
             tvSellerHandleState.setText(refundInfo.getSafeString("sellerStateText"));
             tvSellerReason.setText(refundInfo.getSafeString("sellerMessage"));
             llButtonContainer.setVisibility(View.GONE);
-            if (currentStep == 3) {
+//            if (currentStep == 3) {
                 llAdiminContainer.setVisibility(View.VISIBLE);
                 tvAdminState.setText("adminStateText");
-            }
+//            }
         }
+    }
+
+    private void updateIndicator() {
+        List<String> progressList = new ArrayList<>();
+        progressList.add("    買家\n申請退款");//1 處理中
+        progressList.add("商家處理\n退款申請");//2、帶管理員處理
+        progressList.add("平臺審核\n退款完成");//3、已完成
+        indicator.setData(progressList,currentStep-1);
     }
 }

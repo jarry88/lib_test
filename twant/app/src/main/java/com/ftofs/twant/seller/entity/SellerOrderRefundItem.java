@@ -1,11 +1,14 @@
 package com.ftofs.twant.seller.entity;
 
+import com.ftofs.twant.util.Util;
+
 import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * @author gzp
  */
 public class SellerOrderRefundItem {
+    public static final int RECEIVE_GOOD_HANDLE = 2;
     /**
      * refundSn : 416145966902114
      * refundSnText : 416145966902114
@@ -54,6 +57,8 @@ public class SellerOrderRefundItem {
 
     public static SellerOrderRefundItem parse(EasyJSONObject jsonObject) throws Exception {
         SellerOrderRefundItem item = new SellerOrderRefundItem();
+        item.setShowSellerHandle(jsonObject.getInt("showSellerHandle"));
+        item.setShowSellerHandle(Util.random(3));
         item.setAddTime(jsonObject.getSafeString("addTime"));
         item.setRefundSn(jsonObject.getLong("refundSn"));
         item.setRefundSnText(jsonObject.getSafeString("refundSnText"));
@@ -69,7 +74,7 @@ public class SellerOrderRefundItem {
         item.setSellerState(jsonObject.getInt("sellerState"));
         item.setAdminState(jsonObject.getInt("adminState"));
         item.setRefundState(jsonObject.getInt("refundState"));
-        item.setRefundMemberCancel(jsonObject.getInt("refundMemberCancel"));
+        item.setRefundMemberCancel(jsonObject.getInt("refundMemberCancel"));//會員取消 0否1是
         item.setReturnMemberAutoCancel(jsonObject.getInt("returnMemberAutoCancel"));
         item.setMemberName(jsonObject.getSafeString("memberName"));
         item.setNickName(jsonObject.getSafeString("nickName"));
