@@ -1337,6 +1337,9 @@ public class Util {
             }).preload();
     }
 
+    public static int random(int i) {
+        return ((int)Math.random())*i*3%i;
+    }
 }
 
 

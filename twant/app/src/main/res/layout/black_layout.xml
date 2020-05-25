@@ -7,4 +7,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tw_light_grey"
+        android:id="@+id/view_pager" />
 </RelativeLayout>

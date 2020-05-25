@@ -1,5 +1,6 @@
 package com.ftofs.twant.fragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,6 +29,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.AddGoodsFragment;
 import com.ftofs.twant.seller.fragment.SellerOrderListFragment;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
@@ -72,6 +74,11 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     TextView tvOrderWaitSendCount;
     @BindView(R.id.tv_orders_wait_send)
     TextView tvOrderWaitSendInfoCount;
+
+    @OnClick(R.id.ll_add_goods)
+    void goAddGoods() {
+        Util.startFragment(AddGoodsFragment.newInstance());
+    }
 
     @BindView(R.id.vf_vertical_scroll)
     ViewFlipper viewFlipper;
@@ -194,7 +201,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     @OnClick(R.id.btn_goto_seller_refund)
     void gotoSellerRefund() {
-//        Util.startFragment(SellerRefundFragment.newInstance());
+        Util.startFragment(SellerRefundFragment.newInstance());
         return;//暫時屏蔽該功能
     }
     @OnClick(R.id.ll_order_list_container)
@@ -494,7 +501,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     private void updateSwitchButton() {
         SLog.info("設置顔色%s",storeState==1?"白":"黑");
-        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black));
+        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
         swBusinessState.setThumbColorRes(R.color.tw_white);
 
     }

@@ -9,34 +9,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="9dp"
-        android:paddingBottom="9dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
         android:background="@drawable/border_type_d"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="12dp"
+        android:paddingTop="9dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="9dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="訂單編號："
                     android:textColor="@color/tw_black"
-                    android:textSize="12sp">
-                </TextView>
+                    android:textSize="12sp"></TextView>
+
                 <TextView
                     android:id="@+id/tv_orders_sn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5950000000681700"
                     android:textColor="@color/tw_black"
-                    android:textSize="12sp">
-                </TextView>
+                    android:textSize="12sp"></TextView>
             </LinearLayout>
 
             <TextView
@@ -46,8 +48,7 @@
                 android:layout_alignParentRight="true"
                 android:text="待付款"
                 android:textColor="#FF6565"
-                android:textSize="12sp">
-            </TextView>
+                android:textSize="12sp"></TextView>
         </RelativeLayout>
 
         <LinearLayout
@@ -55,21 +56,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="下單時間："
                 android:textColor="@color/tw_black"
-                android:textSize="12sp">
-            </TextView>
+                android:textSize="12sp"></TextView>
+
             <TextView
                 android:id="@+id/tv_create_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2020-04-09 18:56:57"
                 android:textColor="@color/tw_black"
-                android:textSize="12sp">
-            </TextView>
+                android:textSize="12sp"></TextView>
         </LinearLayout>
 
         <LinearLayout
@@ -77,21 +78,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="来源："
                 android:textColor="@color/tw_black"
-                android:textSize="12sp">
-            </TextView>
+                android:textSize="12sp"></TextView>
+
             <TextView
                 android:id="@+id/tv_from"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PC"
                 android:textColor="@color/tw_black"
-                android:textSize="12sp">
-            </TextView>
+                android:textSize="12sp"></TextView>
         </LinearLayout>
 
         <LinearLayout
@@ -99,13 +100,14 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="買家："
                 android:textColor="@color/tw_black"
-                android:textSize="12sp">
-            </TextView>
+                android:textSize="12sp"></TextView>
+
             <TextView
                 android:id="@+id/tv_buyer"
                 android:layout_width="wrap_content"
@@ -114,8 +116,7 @@
                 android:paddingBottom="4dp"
                 android:text="卡西諾(u_xxxxxxxx123)"
                 android:textColor="@color/tw_blue"
-                android:textSize="12sp">
-            </TextView>
+                android:textSize="12sp"></TextView>
         </LinearLayout>
     </LinearLayout>
 

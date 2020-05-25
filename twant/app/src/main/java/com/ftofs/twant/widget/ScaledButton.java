@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.ftofs.twant.R;
 
@@ -17,6 +18,10 @@ import com.ftofs.twant.R;
 public class ScaledButton extends RelativeLayout {
     boolean isChecked;
     ImageView buttonIcon;
+    private int uncheckedResId =R.drawable.icon_unchecked;
+    private int checkedResId =R.drawable.icon_cart_item_checked;
+    private TextView textView;
+
     public ScaledButton(Context context) {
         this(context, null);
     }
@@ -30,6 +35,7 @@ public class ScaledButton extends RelativeLayout {
 
         LayoutInflater.from(context).inflate(R.layout.scaled_button, this);
         buttonIcon = findViewById(R.id.button_icon);
+        textView = findViewById(R.id.sb_text);
 
         TypedArray array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ScaledButton, defStyleAttr, 0);
         Drawable drawable = array.getDrawable(R.styleable.ScaledButton_icon_src);
@@ -63,12 +69,19 @@ public class ScaledButton extends RelativeLayout {
     public void setChecked(boolean checked) {
         isChecked = checked;
         if (isChecked) {
-            this.setIconResource(R.drawable.icon_cart_item_checked);
+            this.setIconResource(checkedResId);
         } else {
-            this.setIconResource(R.drawable.icon_cart_item_unchecked);
+            this.setIconResource(uncheckedResId);
         }
     }
 
+    public void setButtonCheckedBlue() {
+        this.checkedResId = R.drawable.icon_checked;
+    }
 
+    public void setText(String string) {
+        textView.setText(string);
+        textView.setVisibility(VISIBLE);
+    }
 }
 

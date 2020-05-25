@@ -1285,6 +1285,55 @@ public class Api {
      */
     public static final String PATH_SELLER_ORDER_DETAIL = "/member/seller/orders/info";
 
+     /**
+     * 【商家】鏟平交易信息
+     * 兼退款訂單信息/refundId
+     * 兼退貨訂單信息/refundId
+     */
+    public static final String PATH_SELLER_RETURN_ORDER_DETAIL = "/member/seller/return/orders/info";
+    /**
+     * 【商家】退款處理
+     */
+    public static final String PATH_SELLER_REFUND_HANDLE ="/member/seller/refund/handle";
+
+    /**
+     * 【商家】
+     * 退款訂單列表
+     */
+
+    public static final String PATH_SELLER_REFUND_LIST = "/member/seller/refund/list";
+    /**
+     * 【商家】
+     * 退款訂單詳情
+     * 退貨詳情
+     */
+    public static final String PATH_SELLER_REFUND_INFO = "/member/seller/refund/info";
+    public static final String PATH_SELLER_RETURN_INFO = "/member/seller/return/info";
+    /**
+     * 【商家】
+     * 退貨處理
+     */
+    public static final String PATH_SELLER_RETURN_HANDLE = "/member/seller/return/handle";
+    /**
+     * 【商家】
+     * 退貨收貨
+     */
+    public static final String PATH_SELLER_RETURN_RECEIVE_SAVE = "/member/seller/return/receivesave";
+    /**
+     * 【商家】
+     * 商品發佈頁
+     */
+    public static final String PATH_SELLER_GOODS_PUBLISH_PAGE = "/member/seller/goods/publish/page";
+    /**
+     * 【商家】
+     * 退款訂單信息(產品交易信息)
+     */
+    public static final String PATH_SELLER_ORDERS_INFO = "/member/seller/orders/info";
+    /**
+     * 【商家】
+     * 退貨訂單列表
+     */
+    public static String PATH_SELLER_RETURN_LIST="/member/seller/return/list";
 
     /**
      * 【商家】訂單買家信息

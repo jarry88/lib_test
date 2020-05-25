@@ -34,6 +34,9 @@ public class ProcessProgressIndicator extends ViewGroup {
 
     // 指示圖標頂部的外邊距
     int iconMarginTop;
+    private boolean upToDown =true;
+    private int finishResId=R.drawable.icon_refund_finished;
+    private int unfinishResId=R.drawable.icon_refund_unfinished;
 
     public ProcessProgressIndicator(Context context) {
         this(context, null);
@@ -58,8 +61,8 @@ public class ProcessProgressIndicator extends ViewGroup {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(lineWidth);
+        setBackgroundColor(getResources().getColor(R.color.tw_red));
 
-        setBackgroundColor(getResources().getColor(R.color.tw_red, null));
     }
 
     @Override
@@ -121,7 +124,11 @@ public class ProcessProgressIndicator extends ViewGroup {
             // 布局TextView
             if (childView instanceof TextView) {
                 textViewLeft = left;
-                textViewTop = paddingTop;
+                if (upToDown) {
+                    textViewTop = paddingTop;
+                } else {
+                    textViewTop =2*paddingTop;
+                }
                 textViewRight = textViewLeft + childWidth;
                 textViewBottom = textViewTop + childHeight;
 
@@ -130,8 +137,14 @@ public class ProcessProgressIndicator extends ViewGroup {
                 childView.layout(textViewLeft, textViewTop, textViewRight, textViewBottom);
                 left += childWidth + gapWidth;
             } else if (childView instanceof ImageView) { // 布局ImageView
-                int imageViewLeft = textViewLeft + (textViewWidth - childWidth) / 2;
-                int imageViewTop = textViewBottom + iconMarginTop;
+                int imageViewTop;
+                int imageViewLeft;
+                imageViewLeft = textViewLeft + (textViewWidth - childWidth) / 2;
+                if (upToDown) {
+                    imageViewTop = textViewBottom + iconMarginTop;
+                } else {
+                    imageViewTop = paddingTop;
+                }
                 int imageViewRight = imageViewLeft + childWidth;
                 int imageViewBottom = imageViewTop + childHeight;
                 childView.layout(imageViewLeft, imageViewTop, imageViewRight, imageViewBottom);
@@ -243,20 +256,30 @@ public class ProcessProgressIndicator extends ViewGroup {
             }
 
             LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            addView(textView, layoutParams);
 
             ImageView imageView = new ImageView(context);
             // 不同的進度用不同的圖標
             if (count <= currentStep) {
-                imageView.setImageResource(R.drawable.icon_refund_finished);
+                imageView.setImageResource(finishResId);
             } else {
-                imageView.setImageResource(R.drawable.icon_refund_unfinished);
+                imageView.setImageResource(unfinishResId);
             }
 
+
+            addView(textView, layoutParams);
             layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             addView(imageView, layoutParams);
 
+
             count++;
         }
+    }
+
+    public void setTheme() {
+        setBackgroundColor(getResources().getColor(R.color.tw_blue));
+        colorUnfinished = Color.parseColor("#99ffffff");
+        finishResId = R.drawable.svg_seller_finish;
+        unfinishResId = R.drawable.svg_seller_unfinish;
+        upToDown=false;
     }
 }

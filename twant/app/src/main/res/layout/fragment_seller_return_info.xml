@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout   
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <!-- 獨立頁面時的工具欄 -->
+    <!-- 頂部搜索的工具欄 -->
     <RelativeLayout
         android:id="@+id/tool_bar_standalone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@android:color/white">
+        android:background="@drawable/border_type_d">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"
@@ -38,19 +40,20 @@
                 android:id="@+id/btn_clear_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_clear_all_circle"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/margin12"
+                android:visibility="gone"
                 />
             <com.ftofs.twant.widget.TouchEditText
                 android:id="@+id/et_keyword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/icon_search"
-                android:layout_toLeftOf="@id/btn_clear_all"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@id/icon_search"
+                android:layout_toStartOf="@id/btn_clear_all"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_centerVertical="true"
                 android:textSize="14sp"
                 android:textColor="@color/tw_black"
@@ -63,4 +66,24 @@
                 />
         </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:background="@drawable/border_type_d"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_marginTop="2dp"
+        app:tabIndicatorColor="@color/tw_blue"
+        app:tabMode="fixed"
+        app:tabIndicatorFullWidth="false"
+        app:tabSelectedTextColor="@color/tw_blue"
+        app:tabTextColor="@color/tw_black"
+        app:tabIndicator="@drawable/seller_refund_indicator"
+        />
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/vp_page_list"
+        android:background="@color/tw_light_grey_EDED"/>
+
+</LinearLayout>

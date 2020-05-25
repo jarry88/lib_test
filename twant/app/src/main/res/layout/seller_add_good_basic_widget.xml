@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_seller_handle_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/white_6dp_radius_bg"
+            android:paddingBottom="@dimen/margin12"
+            android:paddingTop="@dimen/margin12"
+            android:paddingStart="@dimen/margin12"
+            android:paddingEnd="@dimen/margin12"
+            android:visibility="visible">
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_4"
+                android:id="@+id/ll_widget_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_red"
+                        android:text="*"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="計量單位：" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/sp_add_good_unit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="選擇"
+                android:tooltipText="sdf" />
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_red"
+                    android:text="*"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="銷售模式："
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/sb_retail" />
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/sb_across" />
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/sb_virtual" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_basic_prev"
+                    android:text="上一步"
+                    android:layout_margin="@dimen/margin12"
+                    android:padding="@dimen/dp_4"
+                    android:paddingStart="@dimen/margin12"
+
+                    android:paddingEnd="@dimen/margin12"
+                    android:background="@drawable/white_20dp_radius_bg"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_basic_next"
+                    android:layout_margin="@dimen/margin12"
+                    android:text="下一步，規格與圖片"
+                    android:textColor="@color/tw_white"
+                    android:padding="@dimen/dp_4"
+                    android:paddingStart="@dimen/margin12"
+                    android:paddingEnd="@dimen/margin12"
+                    android:background="@drawable/blue_20dp_bg"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -22,11 +23,13 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Item;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
+import com.ftofs.twant.fragment.LoginFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.UiUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.BaseViewHolder;
 import com.ftofs.twant.widget.SpecSelectPopup;
@@ -135,6 +138,10 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         ToastUtil.error(mContext,"商品已下架");
                         return;
 
+                    }
+                    if (User.getUserId() <= 0) {
+                        Util.showLoginFragment();
+                        return;
                     }
                     new XPopup.Builder(mContext)
                             // 如果不加这个，评论弹窗会移动到软键盘上面

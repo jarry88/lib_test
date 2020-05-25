@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_seller_handle_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/white_6dp_radius_bg"
+            android:paddingBottom="@dimen/margin12"
+            android:paddingTop="@dimen/margin12"
+            android:paddingStart="@dimen/margin12"
+            android:paddingEnd="@dimen/margin12"
+            android:visibility="visible">
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_4"
+                android:id="@+id/ll_widget_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_red"
+                        android:text="*"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="商品名稱：" />
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/et_add_good_name"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:background="@drawable/real_name_edit_bg"
+                    android:layout_width="match_parent"
+                    android:gravity="top"
+                    android:hint="請輸入商品名稱"
+                    android:layout_height="100dp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_red"
+                    android:text="*"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品分類：" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="選擇" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_red"
+                    android:text="*"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品賣點：" />
+            </LinearLayout>
+            <EditText
+                android:id="@+id/et_add_good_description"
+                android:hint="請輸入對產品的賣點描述："
+                android:layout_marginTop="@dimen/dp_4"
+                android:background="@drawable/real_name_edit_bg"
+                android:layout_width="match_parent"
+                android:gravity="top"
+                android:layout_height="150dp"/>
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_red"
+                    android:text="*"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="商品品牌："
+                    />
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/sp_add_good_logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="選擇"
+                android:tooltipText="sdf" />
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_red"
+                    android:text="*"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="選擇品牌所在地："
+                    />
+
+            </LinearLayout>
+            <Spinner
+                android:id="@+id/sp_add_good_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@id/btn_return"
+                    android:text="返回列表"
+                    android:layout_margin="@dimen/margin12"
+                    android:padding="@dimen/dp_4"
+                    android:paddingStart="@dimen/margin12"
+
+                    android:paddingEnd="@dimen/margin12"
+                    android:background="@drawable/white_20dp_radius_bg"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_primary_next"
+                    android:layout_margin="@dimen/margin12"
+                    android:text="下一步，交易信息"
+                    android:textColor="@color/tw_white"
+                    android:padding="@dimen/dp_4"
+                    android:paddingStart="@dimen/margin12"
+                    android:paddingEnd="@dimen/margin12"
+                    android:background="@drawable/blue_20dp_bg"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -4,6 +4,8 @@ import com.ftofs.twant.constant.Constant;
 
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+
 public class OrderItem {
     public OrderItem(int orderId, String storeName, String ordersStateName, double freightAmount,
                      double ordersAmount, boolean showMemberCancel, boolean showMemberBuyAgain,
@@ -37,4 +39,13 @@ public class OrderItem {
     public boolean showMemberReceive;
     public List<OrderSkuItem> orderSkuItemList;
     public List<GiftItem> giftItemList;
+
+
+    public static OrderItem parse(EasyJSONObject orderGood) throws Exception{
+//        OrderItem item = new OrderItem(
+//                orderGood.getInt("orderId"),
+//                orderGood.getSafeString("storeName"),
+//                orderGood.getSafeString());
+        return null;
+    }
 }
