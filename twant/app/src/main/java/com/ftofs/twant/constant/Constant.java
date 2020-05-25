@@ -318,4 +318,11 @@ public class Constant {
     // public static final int SKU_UNSELECTED_FONT_SIZE = 14;
 
     public static final int DISTRICT_ID_MACAO = 45056;
+
+
+    /**
+     * 商品狀態
+     */
+    public static final int GOODS_STATUS_OFF_SHELF = 0;  // 下架
+    public static final int GOODS_STATUS_ON_SHELF = 1;   // 在售(即上架)
 }

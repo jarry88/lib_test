@@ -70,6 +70,7 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+        Util.setOnClickListener(view, R.id.btn_publish_goods, this);
 
         etKeyword = view.findViewById(R.id.et_keyword);
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -157,6 +158,8 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_filter) {
+
+        } else if (id == R.id.btn_publish_goods) {
 
         }
     }

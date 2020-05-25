@@ -1326,9 +1326,20 @@ public class Api {
     public static final String PATH_SELLER_GOODS_BATCH_OFF_SHELF = "/member/seller/goods/soldout";
 
     /**
-     * 商家】商品詳情
+     * 【商家】商品詳情
      */
     public static final String PATH_SELLER_GOODS_DETAIL = "/member/seller/goods";
+
+    /**
+     * 【商家】刪除商品
+     */
+    public static final String PATH_SELLER_DELETE_GOODS = "/member/seller/goods/delete";
+
+    /**
+     * 【商家】複製商品
+     */
+    public static final String PATH_SELLER_COPY_GOODS = "/member/seller/goods/copy";
+
 
 
     /**

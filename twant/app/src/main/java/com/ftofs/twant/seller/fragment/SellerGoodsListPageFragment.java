@@ -18,14 +18,16 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.entity.SellerGoodsItem;
 import com.ftofs.twant.fragment.BaseFragment;
-import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerGoodsAdapter;
+import com.ftofs.twant.seller.widget.SellerOperationPopup;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SharePopup;
+import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 public class SellerGoodsListPageFragment extends BaseFragment implements View.OnClickListener,
-        BaseQuickAdapter.RequestLoadMoreListener {
+        BaseQuickAdapter.RequestLoadMoreListener, SimpleCallback {
     int currTab;
     SimpleCallback simpleCallback;
 
@@ -86,6 +88,11 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                     SLog.info("SKU商品列表");
                 } else if (id == R.id.btn_more) {
                     SLog.info("查看更多");
+                    new XPopup.Builder(_mActivity)
+                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(new SellerOperationPopup(_mActivity, item.commonId, item.goodsState, SellerGoodsListPageFragment.this))
+                            .show();
                 } else if (id == R.id.ll_swipe_content) {
                     Util.startFragment(SellerGoodsDetailFragment.newInstance(item.commonId, item.imageName));
                 }
@@ -252,5 +259,10 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
             return;
         }
         loadData(currPage + 1);
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+
     }
 }

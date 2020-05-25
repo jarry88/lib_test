@@ -56,7 +56,3 @@ public class SellerGoodsAdapter extends BaseQuickAdapter<SellerGoodsItem, BaseVi
             .setTextColor(R.id.tv_switch_status_desc, status == SellerGoodsListFragment.TAB_GOODS_IN_SALE ? twRed : twBlue);
     }
 }
-
-
-
-
