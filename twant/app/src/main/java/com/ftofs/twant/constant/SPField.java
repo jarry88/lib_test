@@ -130,7 +130,7 @@ public class SPField {
     public static final String FIELD_TOTAL_ORDER_AMOUNT = "total_order_amount";
 
     // 服务器配置的版本号，主要用于应用商店审核
-    public static final String FIELD_CURR_VERSION_SHOW_ACTIVITY_INDEX = "curr_version_show_activity_index";
+    // public static final String FIELD_CURR_VERSION_SHOW_ACTIVITY_INDEX = "curr_version_show_activity_index";
 
     /**
      * 活动弹窗状态(当前版本的APP才弹出）

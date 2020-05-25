@@ -218,38 +218,6 @@ public class SplashActivity extends BaseActivity {
 
         EasyJSONObject params = EasyJSONObject.generate("version", "1.0.0.0");
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_CHECK_UPDATE, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(SplashActivity.this, e);
-            }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-
-                    if (ToastUtil.checkError(SplashActivity.this, responseObj)) {
-                        return;
-                    }
-                    String remoteVersion =  responseObj.getSafeString("datas.version");
-                    if (responseObj.exists("datas.currentVersion")) {
-                        remoteVersion = responseObj.getSafeString("datas.currentVersion");
-                    }
-                    // 如果当前版本号比服务器版本号高，则不显示
-                    if (Util.versionCompare(BuildConfig.VERSION_NAME, remoteVersion) == 1) {
-                        Hawk.put(SPField.FIELD_CURR_VERSION_SHOW_ACTIVITY_INDEX, false);
-                    } else {
-                        Hawk.put(SPField.FIELD_CURR_VERSION_SHOW_ACTIVITY_INDEX, true);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    SLog.info("Error!%s", e.getMessage());
-                }
-
-            }
-        });
     }
 
     @Override
