@@ -29,6 +29,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.AddGoodsFragment;
 import com.ftofs.twant.seller.fragment.SellerOrderListFragment;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
@@ -73,6 +74,11 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     TextView tvOrderWaitSendCount;
     @BindView(R.id.tv_orders_wait_send)
     TextView tvOrderWaitSendInfoCount;
+
+    @OnClick(R.id.ll_add_goods)
+    void goAddGoods() {
+        Util.startFragment(AddGoodsFragment.newInstance());
+    }
 
     @BindView(R.id.vf_vertical_scroll)
     ViewFlipper viewFlipper;

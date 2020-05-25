@@ -14,6 +14,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.fragment.BlackTestFragment;
 import com.ftofs.twant.fragment.SellerRefundFragment;
 import com.ftofs.twant.fragment.TestFragment;
+import com.ftofs.twant.seller.fragment.AddGoodsFragment;
 import com.ftofs.twant.seller.fragment.SellerGoodsListFragment;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
@@ -50,7 +51,7 @@ public class LogoView extends LinearLayout implements ITangramViewLifeCycle {
             @Override
             public void onClick(View v) {
                 if (Config.DEVELOPER_MODE) {
-                    Util.startFragment(SellerRefundFragment.newInstance());
+                    Util.startFragment(AddGoodsFragment.newInstance());
                 }
             }
         });

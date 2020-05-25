@@ -1310,6 +1310,11 @@ public class Api {
     public static final String PATH_SELLER_RETURN_INFO = "/member/seller/return/info";
     /**
      * 【商家】
+     * 商品發佈頁
+     */
+    public static final String PATH_SELLER_GOODS_PUBLISH_PAGE = "/member/seller/goods/publish/page";
+    /**
+     * 【商家】
      * 退款訂單信息(產品交易信息)
      */
     public static final String PATH_SELLER_ORDERS_INFO = "/member/seller/orders/info";

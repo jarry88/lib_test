@@ -48,7 +48,7 @@ public class SimpleViewPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        ViewGroup testPager = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.black_layout, container, false);
+        ViewGroup testPager = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.seller_add_good_primary_widget, container, false);
         View view = mViews.get(position);
         if (view.getParent() == null) {
 //            container.removeView(view);
