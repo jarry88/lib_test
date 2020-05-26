@@ -30,7 +30,9 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.seller.entity.SellerOrderRefundItem;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.SellerOrderInfoFragment;
 import com.ftofs.twant.seller.fragment.SellerRefundDetailFragment;
+import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -128,11 +130,10 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
         });
         initTabView(view);
         initView(view);
-
-        loadData(currPage+1);
     }
 
     private void loadData(int page) {
+        SLog.bt();
          EasyJSONObject params =EasyJSONObject.generate("token", User.getToken(),"page",page);
           SLog.info("params[%s]", params);
                  Api.getUI(tabLayout.getSelectedTabPosition()==0?Api.PATH_SELLER_REFUND_LIST:Api.PATH_SELLER_RETURN_LIST, params, new UICallback() {
@@ -196,10 +197,10 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             returnItemList.clear();
         }
         for (Object object : returnList) {
-            EasyJSONObject item = (EasyJSONObject) object;
-            SellerOrderRefundItem orderItem = SellerOrderRefundItem.parse(item);
-            returnItemList.add(orderItem);
+            returnItemList.add(SellerOrderRefundItem.parse((EasyJSONObject) object));
+            SLog.info(" handle [%s]", returnItemList.get(0).getShowSellerHandle());
         }
+
         sellerReturnAdapter.setNewData(returnItemList);
         EasyJSONObject pageEntity = responseObj.getObject("datas.pageEntity");
 
@@ -254,7 +255,9 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
 
     @Override
     public void onSupportVisible() {
-        
+        currPage=0;
+        loadData(currPage+1);
+
     }
 
     private void initView(View view) {
@@ -267,16 +270,14 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id =view.getId();
+                SellerOrderRefundItem item = refundItemList.get(position);
+                SLog.info(item.toString());
                 if (id == R.id.btn_seller_refund_state) {
-                    SellerOrderRefundItem item = refundItemList.get(position);
                     handleRefundItem(item);
-                   
-
                 } else if (id == R.id.tv_refund_goods) {
-                    ToastUtil.success(_mActivity,"商品彈窗");
+                    Util.startFragment(SellerOrderInfoFragment.newInstance(item.getRefundId(),false));
                 } else if (id == R.id.tv_orders_sn) {
-                Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getOrdersId()));
-
+                    Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId()));
                 }
             }
         });
@@ -284,14 +285,15 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id =view.getId();
+                SellerOrderRefundItem item = returnItemList.get(position);
+
                 if (id == R.id.btn_seller_refund_state) {
-                    Util.startFragment(SellerRefundDetailFragment.newInstance(refundItemList.get(position).getRefundId(),0));//0是指非refund類型
-
-
+                    handleRefundItem(item);//0是指非refund類型
                 } else if (id == R.id.tv_refund_goods) {
-                    ToastUtil.success(_mActivity,"商品彈窗");
+                    Util.startFragment(SellerOrderInfoFragment.newInstance(item.getRefundId(),true));
+
                 } else if (id == R.id.tv_orders_sn) {
-                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
+                    Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId(),0));
                 }
             }
         });
@@ -324,8 +326,6 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
             @Override
             public void onPageSelected(int position) {
                 tabLayout.setScrollPosition(position, 0f, true);
-                currPage = 0;
-                loadData(currPage+1);
                 ((TextView)(tabLayout.getTabAt(position).getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_blue));
                 ((TextView)(tabLayout.getTabAt(1-position).getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_black));
             }
@@ -339,33 +339,40 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
     }
 
     private void handleRefundItem(SellerOrderRefundItem item) {
+        SLog.info("handle%s,sn[%s]",item.getShowSellerHandle(),item.toString());
         if (item.getShowSellerHandle() == SellerOrderRefundItem.RECEIVE_GOOD_HANDLE) {
-             EasyJSONObject params =EasyJSONObject.generate("token", User.getToken(),"refundId",item.getRefundId());
-              SLog.info("params[%s]", params);
-              Api.postUI(Api.PATH_SELLER_RETURN_RECEIVE_SAVE, params, new UICallback() {
-                 @Override
-                 public void onFailure(Call call, IOException e) {
-                     ToastUtil.showNetworkError(_mActivity, e);
-                 }
-             
-                 @Override
-                 public void onResponse(Call call, String responseStr) throws IOException {
-                     try {
-                         SLog.info("responseStr[%s]", responseStr);
-             
-                         EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                         if (ToastUtil.checkError(_mActivity, responseObj)) {
-                             return;
-                         }
-                         ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+            EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "refundId", item.getRefundId());
+            SLog.info("params[%s]", params);
+            Api.postUI(Api.PATH_SELLER_RETURN_RECEIVE_SAVE, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
 
-                     } catch (Exception e) {
-                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                     }
-                 }
-              });
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+                        ToastUtil.success(_mActivity, responseObj.getSafeString("datas.success"));
+
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        } else {
+            if (viewPager.getCurrentItem() == 0) {
+
+                Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId()));
+            } else {
+                Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId(),0));
+            }
         }
-        Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId()));
 //                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");
     }
 

@@ -1,5 +1,8 @@
 package com.ftofs.twant.seller.entity;
 
+import androidx.annotation.NonNull;
+
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -9,6 +12,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
  */
 public class SellerOrderRefundItem {
     public static final int RECEIVE_GOOD_HANDLE = 2;
+    public static final int REFUND_HANDLE = 1;
     /**
      * refundSn : 416145966902114
      * refundSnText : 416145966902114
@@ -58,7 +62,8 @@ public class SellerOrderRefundItem {
     public static SellerOrderRefundItem parse(EasyJSONObject jsonObject) throws Exception {
         SellerOrderRefundItem item = new SellerOrderRefundItem();
         item.setShowSellerHandle(jsonObject.getInt("showSellerHandle"));
-        item.setShowSellerHandle(Util.random(3));
+//        item.setShowSellerHandle(2);
+        SLog.info("handle %s",item.showSellerHandle);
         item.setAddTime(jsonObject.getSafeString("addTime"));
         item.setRefundSn(jsonObject.getLong("refundSn"));
         item.setRefundSnText(jsonObject.getSafeString("refundSnText"));
@@ -278,5 +283,11 @@ public class SellerOrderRefundItem {
 
     public double getRefundAmount() {
         return refundAmount;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("handle [%s],id[%s] [%s]",showSellerHandle,refundSnText,ordersSnText);
     }
 }

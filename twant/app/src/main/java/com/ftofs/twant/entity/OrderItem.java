@@ -1,6 +1,7 @@
 package com.ftofs.twant.entity;
 
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.log.SLog;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class OrderItem {
 
 
     public static OrderItem parse(EasyJSONObject orderGood) throws Exception{
+        SLog.info(orderGood.toString());
 //        OrderItem item = new OrderItem(
 //                orderGood.getInt("orderId"),
 //                orderGood.getSafeString("storeName"),

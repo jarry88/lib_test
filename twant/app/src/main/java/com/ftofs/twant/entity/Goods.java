@@ -18,6 +18,7 @@ public class Goods implements MultiItemEntity {
     private double batchPrice0;
     private int goodsStorage=1;
     public int goodsStatus=1;
+    public int buyNum;
 
     public Goods(int commonId, String imageUrl, String name, String jingle, double price) {
         itemType = Constant.ITEM_TYPE_NORMAL;
@@ -56,20 +57,31 @@ public class Goods implements MultiItemEntity {
         } else {
             jingle=goods.getSafeString("goodsFullSpecs");
         }
-        double price,batchPrice0;
-        batchPrice0=goods.getDouble("batchPrice0");
-        int appUsable = goods.getInt("appUsable");
-        if (appUsable > 0) {
-            price =  goods.getDouble("appPriceMin");
-        } else {
-            price =  batchPrice0;
+        double price=0,batchPrice0=0;
+        int appUsable=0;
+        if (goods.exists("batchPrice0")) {
+            batchPrice0=goods.getDouble("batchPrice0");
         }
+        if (goods.exists("appUsable")) {
+            appUsable = goods.getInt("appUsable");
+            if (appUsable > 0) {
+                price =  goods.getDouble("appPriceMin");
+            } else {
+                price =  batchPrice0;
+            }
+        } else if (goods.exists("goodsPrice")) {
+            price = goods.getDouble("goodsPrice");
+        }
+
 
         Goods goods1=new Goods(commonId,goodsImage,goodsName,jingle,price);
         if (appUsable > 0) {
             goods1.showDiscount = true;
             goods1.batchPrice0 = batchPrice0;
 
+        }
+        if (goods.exists("buyNum")) {
+            goods1.buyNum = goods.getInt("buyNum");
         }
         if (goods.exists("promotionDiscountRate")) {
             double promotionDiscountRate =  goods.getDouble("promotionDiscountRate");

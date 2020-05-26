@@ -1309,6 +1309,11 @@ public class Api {
      */
     public static final String PATH_SELLER_REFUND_INFO = "/member/seller/refund/info";
     public static final String PATH_SELLER_RETURN_INFO = "/member/seller/return/info";
+    /*
+    退貨訂單信息(產品交易信息)
+     */
+    public static final String PATH_SELLER_REFUND_ORDERS_INFO = "/member/seller/refund/orders/info";
+    public static final String PATH_SELLER_RETURN_ORDERS_INFO = "/member/seller/return/orders/info";
     /**
      * 【商家】
      * 退貨處理

@@ -116,7 +116,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
     }
     @OnClick(R.id.btn_menu)
     void toOrderInfo(){
-        Util.startFragment(SellerOrderInfoFragment.newInstance(refundId));
+        Util.startFragment(SellerOrderInfoFragment.newInstance(refundId,FragmentType!=Constant.SELLER_REFUND));
     }
 
     @BindView(R.id.btn_check_ok)
@@ -209,13 +209,13 @@ public class SellerRefundDetailFragment extends BaseFragment {
                          SLog.info("responseStr[%s]", responseStr);
          
                          EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                         if (!Config.DEVELOPER_MODE) {
+//                         if (!Config.DEVELOPER_MODE) {
 
                              if (ToastUtil.checkError(_mActivity, responseObj)) {
                                  return;
                              }
                              ToastUtil.success(_mActivity, responseObj.getSafeString("datas.success"));
-                         }
+//                         }
                          llSellerHandleContainer.setVisibility(View.GONE);
                          llSellerHandleInfo.setVisibility(View.VISIBLE);
                          tvSellerHandleState.setText(sellerAgree?"同意":"不同意");
@@ -277,7 +277,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
                  public void onResponse(Call call, String responseStr) throws IOException {
                      try {
                          SLog.info("responseStr[%s]", responseStr);
-                         responseStr= AssetsUtil.loadText(_mActivity,"tangram/test.json");
+//                         responseStr= AssetsUtil.loadText(_mActivity,"tangram/test.json");
                          EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                          if (ToastUtil.checkError(_mActivity, responseObj)) {
                              return;
@@ -296,11 +296,10 @@ public class SellerRefundDetailFragment extends BaseFragment {
 
         updateIndicator();
         showStoreHandel = refundInfo.getInt("showStoreHandel");
-        if (Config.DEVELOPER_MODE) {
-            currentStep = 3;
-            showStoreHandel = 0;
-        }
-
+//        if (Config.DEVELOPER_MODE) {
+//            currentStep = 3;
+//            showStoreHandel = 1;
+//        }
         refundId = refundInfo.getInt("refundId");
         tvRefundSn.setText(String.valueOf(refundInfo.getLong("refundSn")));
         tvRefundAmount.setText(StringUtil.formatPrice(_mActivity,refundInfo.getDouble("refundAmount"),1));
@@ -334,6 +333,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
                 tvAdminState.setText("adminStateText");
 //            }
         }
+        updateIndicator();
     }
 
     private void updateIndicator() {

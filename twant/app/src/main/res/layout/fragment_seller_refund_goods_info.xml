@@ -16,7 +16,7 @@
             android:id="@+id/btn_back"
             android:layout_width="31dp"
             android:layout_height="31dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_back"
             />
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="18sp"
-            android:text="產品相關交易信息"
+            android:text="相關產品交易信息"
             android:textColor="@color/tw_black"
             />
     </RelativeLayout>
@@ -41,6 +41,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
            <androidx.recyclerview.widget.RecyclerView
+               android:layout_marginStart="@dimen/margin12"
+               android:layout_marginEnd="@dimen/margin12"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:id="@+id/rv_refund_relative_goods_list"/>
@@ -167,6 +169,22 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/rl_tax_container"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="稅費:"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_tax_amount" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingStart="4dp"
                     android:paddingEnd="4dp"
                     android:paddingBottom="@dimen/dp_4"
@@ -182,7 +200,7 @@
                         />
 
                     <TextView
-                        android:id="@+id/tv_repaymentfund_"
+                        android:id="@+id/tv_refund_payment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
@@ -293,13 +311,15 @@
                         android:text=""
                         android:textSize="12sp"
                         />
+
+
+            </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"            android:paddingBottom="@dimen/dp_4"
-
-
+                    android:layout_marginEnd="4dp"
+                    android:paddingBottom="@dimen/dp_4"
                     >
                     <TextView
                         android:layout_width="wrap_content"
@@ -318,15 +338,6 @@
                         android:textSize="12sp"
                         />
                 </LinearLayout>
-
-            </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="商家處理意見"
-                android:layout_marginStart="@dimen/margin12"
-                android:textColor="@color/tw_black"
-                android:textSize="14sp"/>
             <LinearLayout
                 android:id="@+id/ll_seller_handle_container"
                 android:layout_width="match_parent"
@@ -426,47 +437,6 @@
                     android:textColor="@color/tw_red"
                     android:text="只能提交一次，請認真選擇。\n同意並經過平臺確認後將金額原路返回給買家。\n不同意時買家可以向平臺投訴或再次申請。"/>
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/ll_seller_refund_info_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/toolbar_margin_left"
-                android:paddingEnd="@dimen/toolbar_margin_right"
-                android:background="@drawable/white_6dp_radius_bg"
-                android:layout_margin="@dimen/margin12"
-                android:paddingTop="@dimen/margin12"
-                android:paddingBottom="@dimen/margin12"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp"
-                    android:paddingBottom="@dimen/dp_4"
-
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="商家處理狀態："
-                        android:textSize="12sp"
-                        android:textColor="@color/grgray"
-
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_seller_handle_state"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textSize="12sp"
-                        android:textColor="@color/grgray"
-
-                        />
-                </LinearLayout>
-
-            </LinearLayout>
-
             <!-- 底部Padding -->
             <View
                 android:layout_width="match_parent"

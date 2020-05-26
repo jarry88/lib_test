@@ -1510,6 +1510,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     } else {
                         iconTariff.setVisibility(View.INVISIBLE);
                     }
+//                    loadCouponList();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -1668,7 +1669,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
 
         if (!isDataValid) {
-            loadCouponList();
+//            loadCouponList();
             loadGoodsDetail();
         }
     }
