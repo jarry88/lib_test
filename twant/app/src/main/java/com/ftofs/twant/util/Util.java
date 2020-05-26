@@ -1337,8 +1337,25 @@ public class Util {
             }).preload();
     }
 
+
     public static int random(int i) {
-        return ((int)Math.random())*i*3%i;
+        return ((int) Math.random()) * i * 3 % i;
+    }
+
+
+    /**
+     * 數學上的Sign方法
+     * @param val
+     * @return
+     */
+    public static int sign(int val) {
+        if (val > 0) {
+            return 1;
+        } else if (val == 0) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }
 
