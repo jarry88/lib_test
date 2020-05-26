@@ -161,4 +161,24 @@ public enum PopupType {
      * 【賣家】選擇物流公司
      */
     SELECT_SELLER_LOGISTICS_COMPANY,
+
+    /**
+     * 【賣家】選擇訂單類型
+     */
+    SELECT_ORDER_TYPE,
+
+    /**
+     * 【賣家】選擇訂單類型
+     */
+    SELECT_ORDER_SOURCE,
+
+    /**
+     * 選擇開始日期
+     */
+    SELECT_BEGIN_DATE,
+
+    /**
+     * 選擇結束日期
+     */
+    SELECT_END_DATE,
 }
