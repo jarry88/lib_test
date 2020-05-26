@@ -1337,6 +1337,20 @@ public class Util {
             }).preload();
     }
 
+    /**
+     * 數學上的Sign方法
+     * @param val
+     * @return
+     */
+    public static int sign(int val) {
+        if (val > 0) {
+            return 1;
+        } else if (val == 0) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
 }
 
 

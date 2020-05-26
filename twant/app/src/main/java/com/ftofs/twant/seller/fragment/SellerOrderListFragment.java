@@ -15,7 +15,9 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.CouponListFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.widget.SellerOrderFilterDrawerPopupView;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
@@ -27,11 +29,13 @@ import com.lxj.xpopup.enums.PopupPosition;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+
 /**
  * 商家訂單列表頁面
  * @author zwm
  */
-public class SellerOrderListFragment extends BaseFragment implements View.OnClickListener {
+public class SellerOrderListFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     SimpleTabButton[] tabButtons;
 
     ViewPager viewPager;
@@ -40,6 +44,7 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
     public static final int TAB_COUNT = Constant.ORDER_STATUS_CANCELLED + 1;
 
     SellerOrderFilterDrawerPopupView sellerOrderFilterDrawerPopupView;
+    List<Fragment> fragmentList;
 
     public static SellerOrderListFragment newInstance() {
         return newInstance(Constant.ORDER_STATUS_ALL);
@@ -114,8 +119,7 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
         tabManager.add(view.findViewById(R.id.tab_to_be_received));
         tabManager.add(view.findViewById(R.id.tab_finished));
         tabManager.add(view.findViewById(R.id.tab_cancelled));
-
-
+        
         viewPager = view.findViewById(R.id.vp_page_list);
         viewPager.setOffscreenPageLimit(TAB_COUNT - 1);
 
@@ -136,8 +140,7 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
         titleList.add("已完成");
         titleList.add("已取消");
 
-
-        List<Fragment> fragmentList = new ArrayList<>();
+        fragmentList = new ArrayList<>();
         fragmentList.add(SellerOrderListPageFragment.newInstance(Constant.ORDER_STATUS_ALL));
         fragmentList.add(SellerOrderListPageFragment.newInstance(Constant.ORDER_STATUS_TO_BE_PAID));
         fragmentList.add(SellerOrderListPageFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED));
@@ -176,9 +179,16 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
                     .popupPosition(PopupPosition.Right)
                     //启用状态栏阴影
                     .hasStatusBarShadow(true)
-                    .asCustom(new SellerOrderFilterDrawerPopupView(_mActivity));
+                    .asCustom(new SellerOrderFilterDrawerPopupView(_mActivity, this));
         }
         sellerOrderFilterDrawerPopupView.show();
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        SellerOrderFilterParams filterParams = (SellerOrderFilterParams) data;
+        SLog.info("filterParams[%s]", filterParams.toString());
+        ((SellerOrderListPageFragment) fragmentList.get(currTab)).reloadDataWithFilter(filterParams);
     }
 }
 

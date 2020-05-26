@@ -21,16 +21,17 @@ import com.lxj.xpopup.util.XPopupUtils;
  */
 public class CalendarPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
+    PopupType popupType;
+    TwDate twDate;
 
     CalendarView calendarView;
     OnSelectedListener onSelectedListener;
 
-    TwDate twDate;
-
-    public CalendarPopup(@NonNull Context context, TwDate twDate, OnSelectedListener onSelectedListener) {
+    public CalendarPopup(@NonNull Context context, PopupType popupType, TwDate twDate, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
+        this.popupType = popupType;
         this.twDate = twDate;
         this.onSelectedListener = onSelectedListener;
     }
@@ -51,7 +52,7 @@ public class CalendarPopup extends BottomPopupView implements View.OnClickListen
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 CalendarPopup.this.twDate.year = year;
-                CalendarPopup.this.twDate.month= month;
+                CalendarPopup.this.twDate.month = month + 1; // month的取值範圍為[0-11]，所以要加1
                 CalendarPopup.this.twDate.day = dayOfMonth;
             }
         });
@@ -82,7 +83,7 @@ public class CalendarPopup extends BottomPopupView implements View.OnClickListen
 
         if (id == R.id.btn_ok) {
             if (onSelectedListener != null) {
-                onSelectedListener.onSelected(PopupType.SELECT_DATE, 0, twDate);
+                onSelectedListener.onSelected(popupType, 0, twDate);
             }
             dismiss();
         }

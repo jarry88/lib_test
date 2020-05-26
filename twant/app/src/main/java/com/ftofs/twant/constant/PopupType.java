@@ -173,7 +173,12 @@ public enum PopupType {
     SELECT_ORDER_SOURCE,
 
     /**
-     * 選擇日期
+     * 選擇開始日期
      */
-    SELECT_DATE,
+    SELECT_BEGIN_DATE,
+
+    /**
+     * 選擇結束日期
+     */
+    SELECT_END_DATE,
 }
