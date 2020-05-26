@@ -3,15 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="20dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
     android:orientation="vertical">
+    <View
+        android:id="@+id/img_cover_bg1"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="#E6E6E6"
+        android:layout_marginStart="@dimen/margin12"
+        android:layout_marginEnd="@dimen/margin12"
+        />
+    <View
+        android:id="@+id/img_cover_bg2"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="#CFCFCF"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp"
+        />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="14dp">
+        >
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/img_cover"
             android:layout_width="0dp"
@@ -21,7 +36,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="16:9"
-            app:riv_corner_radius="3dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -30,15 +44,16 @@
         android:layout_height="11dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
+        android:visibility="gone"
         />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="31dp"
         android:paddingLeft="13dp"
         android:paddingRight="13dp"
-        android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:paddingTop="1dp"
         android:background="@drawable/new_arrivals_pane_bg">
         <TextView
             android:id="@+id/tv_shop_parent_name"
@@ -47,22 +62,24 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
-            android:textSize="13sp"
-            android:textColor="@color/tw_black"
+            android:textSize="14sp"
+            android:text="1"
+            android:textColor="#525556"
+            android:layout_marginEnd="@dimen/margin8"
             />
         <LinearLayout
             android:id="@+id/tv_category_name_english"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/tv_shop_parent_name"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_shop_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/tw_red"
-                android:textSize="10sp"
+                android:textColor="#525556"
+                android:textSize="12sp"
                 />
             <TextView
                 android:visibility="gone"
