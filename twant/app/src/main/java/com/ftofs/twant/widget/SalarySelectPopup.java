@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -21,7 +23,6 @@ import com.lxj.xpopup.core.BottomPopupView;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
 
 public class SalarySelectPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
@@ -33,7 +34,7 @@ public class SalarySelectPopup extends BottomPopupView implements View.OnClickLi
 
     FrameLayout flSalaryPickerContainer;
 
-    public SalarySelectPopup(@Nullable Context context, PopupType popupType, List<ListPopupItem> hrSalaryTypeList,List<ListPopupItem> hrSalaryRangeList, OnSelectedListener onSelectedListener) {
+    public SalarySelectPopup(@Nullable Context context, PopupType popupType, List<ListPopupItem> hrSalaryTypeList, List<ListPopupItem> hrSalaryRangeList, OnSelectedListener onSelectedListener) {
         super(context);
         this.context = context;
         this.popupType = popupType;

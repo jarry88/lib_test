@@ -247,6 +247,19 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    } /**
+     * 加載頂部購物專場數據
+     */
+    private void loadShopping() {
+        String json = AssetsUtil.loadText(_mActivity, "tangram/home.json");
+        // SLog.info("json[%s]", json);
+
+        try {
+            JSONArray data = new JSONArray(json);
+            tangramEngine.setData(data);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 
     private void showPopupAd() {

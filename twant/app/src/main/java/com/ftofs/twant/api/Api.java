@@ -1309,8 +1309,8 @@ public class Api {
      */
     public static final String PATH_SELLER_REFUND_INFO = "/member/seller/refund/info";
     public static final String PATH_SELLER_RETURN_INFO = "/member/seller/return/info";
-    /*
-    退貨訂單信息(產品交易信息)
+    /**
+    *退貨訂單信息(產品交易信息)
      */
     public static final String PATH_SELLER_REFUND_ORDERS_INFO = "/member/seller/refund/orders/info";
     public static final String PATH_SELLER_RETURN_ORDERS_INFO = "/member/seller/return/orders/info";
@@ -1329,6 +1329,11 @@ public class Api {
      * 商品發佈頁
      */
     public static final String PATH_SELLER_GOODS_PUBLISH_PAGE = "/member/seller/goods/publish/page";
+    /**
+     * 【商家】
+     * 商品發佈頁 保存
+     */
+    public static final String PATH_SELLER_GOODS_PUBLISH_SAVE = "/member/seller/goods/publish/save";
     /**
      * 【商家】
      * 退款訂單信息(產品交易信息)

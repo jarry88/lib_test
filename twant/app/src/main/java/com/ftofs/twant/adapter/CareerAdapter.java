@@ -9,7 +9,7 @@ import com.ftofs.twant.entity.CareerItem;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class CareerAdapter extends BaseQuickAdapter <CareerItem, BaseViewHolder> {
     public boolean editable =true;

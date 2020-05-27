@@ -10,7 +10,7 @@ import com.kyleduo.switchbutton.SwitchButton;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class ContactMeAdapter extends BaseQuickAdapter<JobInfoItem, BaseViewHolder> {
     public ContactMeAdapter(int layoutResId,@Nullable List<JobInfoItem> data){

@@ -11,7 +11,7 @@ import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * @author gzp

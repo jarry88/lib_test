@@ -11,7 +11,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
-import javax.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 

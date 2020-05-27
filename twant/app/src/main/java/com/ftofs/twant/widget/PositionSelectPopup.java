@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.Position;
-import com.ftofs.twant.entity.SpecButtonData;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -22,7 +22,6 @@ import com.nex3z.flowlayout.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
 
 public class PositionSelectPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
@@ -32,7 +31,7 @@ public class PositionSelectPopup extends BottomPopupView implements View.OnClick
     List<ListPopupItem> keywordList;
     OnSelectedListener onSelectedListener;
 
-    public PositionSelectPopup(@Nullable Context context, String currKeyword, List<ListPopupItem> keywordList,OnSelectedListener onSelectedListener){
+    public PositionSelectPopup(@Nullable Context context, String currKeyword, List<ListPopupItem> keywordList, OnSelectedListener onSelectedListener){
         super(context);
         this.context = context;
         this.currKeyword =currKeyword;

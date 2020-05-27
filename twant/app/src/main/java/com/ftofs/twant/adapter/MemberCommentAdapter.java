@@ -12,7 +12,7 @@ import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class MemberCommentAdapter extends BaseQuickAdapter<CommentItem, BaseViewHolder> {
     public MemberCommentAdapter(int layoutResId, @Nullable List<CommentItem> data){

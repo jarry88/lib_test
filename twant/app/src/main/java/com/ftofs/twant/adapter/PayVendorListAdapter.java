@@ -1,9 +1,5 @@
 package com.ftofs.twant.adapter;
 
-import android.content.Context;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -16,12 +12,10 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.PayCardItem;
 import com.ftofs.twant.util.StringUtil;
-import com.ftofs.twant.util.Util;
-import com.libra.Utils;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class PayVendorListAdapter extends BaseQuickAdapter<PayCardItem, BaseViewHolder> {
 
