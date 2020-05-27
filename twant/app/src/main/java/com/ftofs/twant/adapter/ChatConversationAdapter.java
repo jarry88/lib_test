@@ -1,5 +1,6 @@
 package com.ftofs.twant.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,9 +13,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ChatConversation;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ChatUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.Util;
 
 import java.util.List;
 
@@ -40,6 +43,14 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
 
     @Override
     protected void convert(BaseViewHolder helper, ChatConversation chatConversation) {
+        LinearLayout linearLayout = helper.getView(R.id.ll_message_item_container);
+        if (chatConversation != null) {
+            linearLayout.getLayoutParams().height = Util.dip2px(mContext,80);
+        } else {
+            linearLayout.getLayoutParams().height = Util.dip2px(mContext, 30);
+            linearLayout.setVisibility(View.INVISIBLE);
+            return;
+        }
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
         String avatarUrl = chatConversation.friendInfo.avatarUrl;
         if (StringUtil.isEmpty(avatarUrl)) {
@@ -98,23 +109,25 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         }
 
         LinearLayout llMessageItemContainer = helper.getView(R.id.ll_message_item_container);
-
+        llMessageItemContainer.setVisibility(View.VISIBLE);
         int itemCount = getItemCount();
         int position = helper.getAdapterPosition();
-        if (position == itemCount - 1) {
+        if (position == itemCount - 2) {
             llMessageItemContainer.setBackground(null);
         }
-        else if(position==0&&chatConversation.isPlatformCustomer){
-            //3797平台客服置頂新增淺灰底色
-            helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_light_grey_EDED));
-        }else {
+        else if(chatConversation.isPlatformCustomer){
+            SLog.info("客服類型item");
+            if (position == 0) {
+
+                helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_light_grey_EDED));
+            } else {
+                llMessageItemContainer.setVisibility(View.INVISIBLE);
+            }
+        }
+        else {
             helper.getView(R.id.ll_message_container_background).setBackgroundColor(mContext.getColor(R.color.tw_white));
             llMessageItemContainer.setBackgroundResource(R.drawable.border_type_d);
         }
-        if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
-
-        }
     }
-
 
 }

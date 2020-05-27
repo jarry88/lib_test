@@ -19,6 +19,7 @@ public class Goods implements MultiItemEntity {
     private int goodsStorage=1;
     public int goodsStatus=1;
     public int buyNum;
+    private int appUsabe;
 
     public Goods(int commonId, String imageUrl, String name, String jingle, double price) {
         itemType = Constant.ITEM_TYPE_NORMAL;
@@ -46,10 +47,15 @@ public class Goods implements MultiItemEntity {
     }
 
     public static Goods parse(EasyJSONObject goods) throws Exception {
-
+        SLog.info("goods[%s]",goods.toString());
         String goodsName = goods.getSafeString("goodsName");
+        String goodsImage="";
+        if (goods.exists("goodsImage")) {
 
-        String goodsImage = goods.getSafeString("goodsImage");
+            goodsImage = goods.getSafeString("goodsImage");
+        } else if(goods.exists("imageSrc")){
+            goodsImage = goods.getSafeString("imageSrc");
+        }
         int commonId = goods.getInt("commonId");
         String jingle = "";
         if (goods.exists("jingle")) {
@@ -78,6 +84,7 @@ public class Goods implements MultiItemEntity {
         if (appUsable > 0) {
             goods1.showDiscount = true;
             goods1.batchPrice0 = batchPrice0;
+            goods1.appUsabe = appUsable;
 
         }
         if (goods.exists("buyNum")) {

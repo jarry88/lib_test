@@ -60,6 +60,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AmapPopup;
+import com.ftofs.twant.widget.DataCircleImageView;
 import com.ftofs.twant.widget.DataImageView;
 import com.ftofs.twant.widget.ImagePopup;
 import com.ftofs.twant.widget.InStorePersonPopup;
@@ -649,7 +650,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         try {
             SLog.info("__setStoreSnsInfo[%s]", snsArray);
             // 添加一个显示店铺二维码的按钮
-            DataImageView snsImage = new DataImageView(_mActivity);
+            DataCircleImageView snsImage = new DataCircleImageView(_mActivity);
             snsImage.setOnClickListener(this);
             snsImage.setId(R.id.btn_show_store_qr_code);
             snsImage.setCustomData(EasyJSONObject.generate("socialName", "takewant", "socialForm", 0));
@@ -662,7 +663,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 EasyJSONObject snsObject = (EasyJSONObject) object;
                 String snsImageUrl = StringUtil.normalizeImageUrl(snsObject.getSafeString("socialLogoChecked"));
 
-                snsImage = new DataImageView(_mActivity);
+                snsImage = new DataCircleImageView(_mActivity);
                 snsImage.setOnClickListener(this);
                 snsImage.setCustomData(snsObject);
 

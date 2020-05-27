@@ -201,6 +201,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 ChatConversation chatConversation = chatConversationList.get(position);
+                if (chatConversation == null) {
+                    return;
+                }
                 if (!isPlatformCustomer&&position == 0) {
                     SLog.info("點擊了平台客服");
                     Util.startFragment(newInstance(true,true));
@@ -406,6 +409,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             }
             updateConversationInfo();
             displayUnreadCount();
+            chatConversationList.add(null);
 
             adapter.setNewData(chatConversationList);
 
@@ -735,6 +739,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             loadData();
         }
         for (ChatConversation chatConversation : chatConversationList) {
+            if (chatConversation == null) {
+                continue;
+            }
             SLog.info("unread[%d]", chatConversation.unreadCount);
         }
         displayUnreadCount();
@@ -786,7 +793,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             int storeId = conversation.getInt("storeId");
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
-                                if (chatConversation.friendInfo != null) {
+                                if (chatConversation!=null&&chatConversation.friendInfo != null) {
                                     if (chatConversation.friendInfo.memberName.equals(memberName)) {
                                         has = true;
                                         break;

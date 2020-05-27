@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -773,14 +774,31 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 hideSoftInputPop();
                 break;
             case R.id.btn_menu:
-                new XPopup.Builder(_mActivity)
-                        .offsetX(-Util.dip2px(_mActivity, 11))
-                        .offsetY(-Util.dip2px(_mActivity, 8))
-//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
-                        .hasShadowBg(false) // 去掉半透明背景
-                        .atView(view)
-                        .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_CHAT))
-                        .show();
+                if (User.getUserId() <= 0) {
+                    break;
+                }
+                Api.getUI(Api.PATH_IM_IS_EXCHANGED_CARD, EasyJSONObject.generate("token", User.getToken(), "fromName", yourMemberName), new UICallback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        ToastUtil.showNetworkError(_mActivity, e);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, String responseStr) throws IOException {
+                        SLog.info("responseStr[%s]",responseStr);
+                        EasyJSONObject responseObj =EasyJSONObject.parse(responseStr);
+
+                       try{
+                           if (responseObj.exists("datas.isExchangeCard")) {
+                               hasCard = responseObj.getInt("datas.isExchangeCard")==Constant.TRUE_INT;
+                           }
+                       }catch (Exception e) {
+                           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                       }
+                        showMenu();
+                    }
+                });
+
                 break;
             case R.id.btn_send_image:
                 // openSystemAlbumIntent(RequestCode.OPEN_ALBUM.ordinal());
@@ -909,6 +927,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             default:
                 break;
         }
+    }
+
+    private void showMenu() {
+        new XPopup.Builder(_mActivity)
+                .offsetX(-Util.dip2px(_mActivity, 11))
+                .offsetY(-Util.dip2px(_mActivity, 8))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                .hasShadowBg(false) // 去掉半透明背景
+                .atView(getView())
+                .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_CHAT))
+                .show();
     }
 
     private void initChatUI(View contentView) {

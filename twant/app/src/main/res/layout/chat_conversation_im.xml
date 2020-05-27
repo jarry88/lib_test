@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/ll_message_container_background"
+<LinearLayout android:id="@+id/ll_message_container_background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:id="@+id/ll_message_item_container"
         android:background="@drawable/border_type_d"
@@ -13,7 +12,8 @@
         android:layout_height="80dp"
         android:layout_marginStart="@dimen/toolbar_margin_left"
         android:layout_marginEnd="@dimen/toolbar_margin_right"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:visibility="invisible">
         <RelativeLayout
             android:layout_width="52dp"
             android:layout_height="50dp">
@@ -23,6 +23,9 @@
                 android:layout_width="48dp"
                 android:layout_height="50dp"
                 android:src="@drawable/icon_default_avatar"
+                app:civ_border_width="0.5dp"
+                app:civ_border_color="@color/tw_light_grey_EDED"
+
                 />
             <TextView
                 android:id="@+id/tv_unread_count"

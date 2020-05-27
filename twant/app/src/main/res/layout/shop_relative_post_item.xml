@@ -63,6 +63,8 @@
                         android:layout_height="18dp"
                         android:src="@drawable/avatar_female"
                         android:visibility="visible"
+                        app:civ_border_width="0.5dp"
+                        app:civ_border_color="@color/tw_light_grey_EDED"
                         />
 
                     <TextView

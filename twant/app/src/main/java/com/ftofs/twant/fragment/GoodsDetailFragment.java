@@ -27,6 +27,9 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.GoodsGalleryAdapter;
@@ -51,6 +54,7 @@ import com.ftofs.twant.entity.StoreFriendsItem;
 import com.ftofs.twant.entity.StoreVoucher;
 import com.ftofs.twant.entity.TimeInfo;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Time;
@@ -71,6 +75,7 @@ import com.ftofs.twant.widget.StoreVoucherPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.rd.PageIndicatorView;
+import com.tencent.mapsdk.raster.model.Circle;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -528,6 +533,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_goto_cart, this);
         Util.setOnClickListener(view, R.id.btn_bottom_bar_customer_service, this);
         Util.setOnClickListener(view, R.id.btn_comment, this);
+        Util.setOnClickListener(view, R.id.tv_goods_name, this);
 
         RecyclerView rvStoreFriendsList = view.findViewById(R.id.rv_store_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false);
@@ -657,6 +663,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             case R.id.btn_back_round:
             case R.id.btn_back:
                 hideSoftInputPop();
+                break;
+            case R.id.tv_goods_name:
+                ClipboardUtils.copyText(_mActivity, goodsName);
+                ToastUtil.success(_mActivity, "該商品名稱已複製");
                 break;
             case R.id.btn_search_round:
             case R.id.btn_search:
@@ -1244,7 +1254,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             DataImageView imageView = new DataImageView(_mActivity);
                             imageView.setCustomData(imageIndex);
                             imageView.setAdjustViewBounds(true);
-                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
                             imageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -1255,7 +1265,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             });
                             // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
                             // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
-                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
+                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).apply(RequestOptions.bitmapTransform(new RoundedCorners(50))).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
                             llGoodsDetailImageContainer.addView(imageView);
 
                             goodsDetailImageList.add(StringUtil.normalizeImageUrl(imageUrl));

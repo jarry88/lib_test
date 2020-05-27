@@ -1,6 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,22 +139,20 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_add_friend);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_add_friend);
         }else if (type == TYPE_CHAT) {
-            ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_enc_mini);
-            int storeId = ((ChatFragment) baseFragment).getStoreId();
-            if (storeId > 0) {
-                ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_store_enc);
-            } else {
-                ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_goto_enc);
-            }
-            ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_goto_member_info);
-            ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_goto_member_info);
+            ((ImageView) findViewById(R.id.icon_item_2)).setImageResource(R.drawable.icon_goto_store_info);
+            ((TextView) findViewById(R.id.tv_item_2)).setText(R.string.text_store_enc);
+            ((ImageView) findViewById(R.id.icon_item_3)).setImageResource(R.drawable.icon_goto_member_info);
+            ((TextView) findViewById(R.id.tv_item_3)).setText(R.string.text_goto_member_info);
+            ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_enc_mini);
+            ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_goto_enc);
+
         } else if (type == TYPE_POST_DETAIL) {
             ((ImageView) findViewById(R.id.icon_item_4)).setImageResource(R.drawable.icon_report);
             ((TextView) findViewById(R.id.tv_item_4)).setText(R.string.text_report);
         }
 
         // 在這里可以做一些findViewById等查找控件，進行自定義操作
-        if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT||type==TYPE_CHAT||type==TYPE_POST_DETAIL) {
+        if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT||type==TYPE_POST_DETAIL) {
             // 只有2項，不需要對前2項設置事件處理
             findViewById(R.id.btn_item_1).setVisibility(GONE);
             findViewById(R.id.btn_item_2).setVisibility(GONE);
@@ -168,7 +167,41 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 layoutParams.topMargin = Util.dip2px(context, 15);
             }
             //暫時只做店鋪
-        }else if(type==TYPE_STORE){
+        }else if(type==TYPE_CHAT){
+            findViewById(R.id.btn_item_1).setVisibility(View.GONE);
+            ChatFragment chatFragment = (ChatFragment) baseFragment;
+            int storeId = chatFragment.getStoreId();
+            boolean showCard = chatFragment.getCard();
+            findViewById(R.id.btn_item_4).setVisibility(showCard?VISIBLE:GONE);
+            View btnItem3 = findViewById(R.id.btn_item_3);
+            View btnItem2 = findViewById(R.id.btn_item_2);
+            int count = 1;
+            if (storeId > 0) {
+                count++;
+            }
+            if (showCard) {
+                count++;
+            }else {
+                btnItem3.setBackgroundColor(getResources().getColor(R.color.tw_no_color));
+            }
+
+            btnItem2.setVisibility(storeId>0?VISIBLE:GONE);
+            ViewGroup.MarginLayoutParams layoutParams = (MarginLayoutParams) btnItem3.getLayoutParams();
+            if (storeId > 0) {
+                layoutParams = (MarginLayoutParams) btnItem2.getLayoutParams();
+            }
+            if (count > 2) {
+                layoutParams.topMargin = Util.dip2px(context, 30);
+
+            } else if (count == 2) {
+                layoutParams.topMargin = Util.dip2px(context, 15);
+            }else {
+                layoutParams.topMargin = Util.dip2px(context, 15);
+
+            }
+            findViewById(R.id.btn_item_2).setOnClickListener(this);
+
+        } else if(type==TYPE_STORE){
             View btnItem5 = findViewById(R.id.btn_item_5);
             View btnItem4 = findViewById(R.id.btn_item_4);
             btnItem4.setBackgroundResource(R.drawable.black_dropdown_menu_separator);
@@ -192,9 +225,9 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
     // 如果要自定义弹窗的背景，不要给布局设置背景图片，重写这个方法返回一个Drawable即可
     @Override
     protected Drawable getPopupBackground() {
-        if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT||type==TYPE_CHAT) {
+        if (type == TYPE_HOME_AND_MY || type == TYPE_CONTACT) {
             return getResources().getDrawable(R.drawable.black_menu_bg_small, null);
-        } else if(type==TYPE_POST_DETAIL){
+        } else if(type==TYPE_POST_DETAIL||type==TYPE_CHAT){
             return getResources().getDrawable(R.drawable.black_menu_bg_mini, null);
         } else{
             return getResources().getDrawable(R.drawable.black_menu_bg, null);
@@ -269,6 +302,14 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 // 購物袋
                 baseFragment.start(CartFragment.newInstance(true));
                 break;
+            case TYPE_CHAT:
+                int storeId = ((ChatFragment) baseFragment).getStoreId();
+                new XPopup.Builder(context)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new StoreCardPopup(context, storeId))
+                        .show();
+                break;
             default:
                 break;
         }
@@ -303,24 +344,10 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 baseFragment.startCaptureActivity();
                 break;
             case TYPE_CHAT:
-                // 查看名片
+                // 查看資料 個人信息頁
                 ChatFragment chatFragment = (ChatFragment) baseFragment;
-                int storeId = chatFragment.getStoreId();
-                if (storeId > 0) {
-                    new XPopup.Builder(context)
-                            // 如果不加这个，评论弹窗会移动到软键盘上面
-                            .moveUpToKeyboard(false)
-                            .asCustom(new StoreCardPopup(context, chatFragment.getStoreId()))
-                            .show();
-                } else {
-                    if (chatFragment.getCard()) {
-                        Util.startFragment(ENameCardFragment.newInstance(chatFragment.getYourMemberName()));
-                    } else {
-                        ToastUtil.error(getContext(),"未收到對方名片");
-                    }
-                }
 
-
+                Util.startFragment(MemberInfoFragment.newInstance(chatFragment.getYourMemberName()));
 
                 break;
 
@@ -354,10 +381,9 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
                 Util.startFragment(AddFriendFragment.newInstance());
                 break;
             case TYPE_CHAT:
-                // 訪問專頁
                 ChatFragment chatFragment = (ChatFragment) baseFragment;
-
-                Util.startFragment(MemberInfoFragment.newInstance(chatFragment.getYourMemberName()));
+                //顯示電子名片
+                Util.startFragment(ENameCardFragment.newInstance(chatFragment.getYourMemberName()));
 
                 break;
             case TYPE_POST_DETAIL:

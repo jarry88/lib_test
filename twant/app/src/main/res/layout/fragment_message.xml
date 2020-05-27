@@ -312,6 +312,7 @@
 
     <!-- 消息列表 -->
     <LinearLayout
+        android:layout_marginBottom="@dimen/dp_10"
         android:id="@+id/ll_message_list_container"
         android:layout_width="match_parent"
         android:layout_weight="1"
@@ -325,9 +326,5 @@
             android:background="@android:color/white">
         </com.ftofs.twant.widget.MaxHeightRecyclerView>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:background="#00ffffff"
 
-        android:layout_height="45dp"/>
 </LinearLayout>

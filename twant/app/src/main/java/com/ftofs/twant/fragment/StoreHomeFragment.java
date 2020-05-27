@@ -24,6 +24,7 @@ import com.ftofs.twant.adapter.FeaturesGoodsAdapter;
 import com.ftofs.twant.adapter.StoreGoodsListAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.entity.StoreGoodsPair;
 import com.ftofs.twant.entity.TimeInfo;
@@ -107,22 +108,17 @@ public class StoreHomeFragment extends ScrollableBaseFragment implements View.On
 
     public void setGoodsListDate(EasyJSONArray featuresGoodsVoList) {
         //顯示鎮店之寶
-        List<StoreGoodsItem> storeGoodsItemList = new ArrayList<>();
+        List<Goods> storeGoodsItemList = new ArrayList<>();
         for (Object object : featuresGoodsVoList) {
             EasyJSONObject featuresGoodsVo = (EasyJSONObject) object;
-            StoreGoodsItem storeGoodsItem = new StoreGoodsItem();
 
             try {
-                storeGoodsItem.commonId = featuresGoodsVo.getInt("commonId");
-                storeGoodsItem.imageSrc = featuresGoodsVo.getSafeString("imageSrc");
-                storeGoodsItem.goodsName = featuresGoodsVo.getSafeString("goodsName");
-                storeGoodsItem.jingle = featuresGoodsVo.getSafeString("jingle");
-                storeGoodsItem.price = Util.getSpuPrice(featuresGoodsVo);
+                Goods storeGoodsItem = Goods.parse(featuresGoodsVo);
+                storeGoodsItemList.add(storeGoodsItem);
             } catch (Exception e) {
                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
 
-            storeGoodsItemList.add(storeGoodsItem);
         }
         rlFeaturesGoodsContainer.setVisibility(View.VISIBLE);
         featuresGoodsAdapter = new FeaturesGoodsAdapter(_mActivity, storeGoodsItemList);

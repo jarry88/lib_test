@@ -18,12 +18,14 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.StoreGoodsItem;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.HwLoadingView;
+import com.ftofs.twant.widget.SlantedWidget;
 
 import java.util.List;
 
@@ -33,7 +35,7 @@ import java.util.List;
  */
 public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAdapter.ViewHolder> {
     Context context;
-    private List<StoreGoodsItem> storeGoodsItemList;
+    private List<Goods> storeGoodsItemList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView goodsImage;
@@ -41,6 +43,7 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
         TextView tvGoodsJingle;
         TextView tvGoodsPrice;
         HwLoadingView loadingView;
+        SlantedWidget swPrice;
 
         public ViewHolder(View view) {
             super(view);
@@ -50,10 +53,11 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
             tvGoodsJingle = view.findViewById(R.id.tv_goods_jingle);
             tvGoodsPrice = view.findViewById(R.id.tv_goods_price_left);
             loadingView = view.findViewById(R.id.loading_view);
+            swPrice = view.findViewById(R.id.sw_price);
         }
     }
 
-    public FeaturesGoodsAdapter(Context context, List<StoreGoodsItem> storeGoodsItemList) {
+    public FeaturesGoodsAdapter(Context context, List<Goods> storeGoodsItemList) {
         this.context = context;
         this.storeGoodsItemList = storeGoodsItemList;
     }
@@ -68,10 +72,13 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
 
     @Override
     public void onBindViewHolder(FeaturesGoodsAdapter.ViewHolder holder, int position) {
+        if (StringUtil.isArrayEmpty(storeGoodsItemList)) {
+            return;
+        }
         position = position % storeGoodsItemList.size();
-        StoreGoodsItem item = storeGoodsItemList.get(position);
+        Goods item = storeGoodsItemList.get(position);
 
-        Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageSrc)).listener(new RequestListener<Drawable>() {
+        Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageUrl)).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;
@@ -83,15 +90,20 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
                 return false;
             }
         }).centerCrop().into(holder.goodsImage);
-        holder.tvGoodsName.setText(item.goodsName);
+        holder.tvGoodsName.setText(item.name);
         holder.tvGoodsJingle.setText(item.jingle);
         holder.tvGoodsPrice.setText(StringUtil.formatPrice(context, item.price, 1,false));
         UiUtil.toPriceUI(holder.tvGoodsPrice,12);
 
+        if (item.showDiscount) {
+            holder.swPrice.setDiscountInfo(context,item.getDiscount(),item.getOriginal());
+            holder.swPrice.setVisibility(View.VISIBLE);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Util.startFragment(GoodsDetailFragment.newInstance(item.commonId, 0));
+                Util.startFragment(GoodsDetailFragment.newInstance(item.id, 0));
             }
         });
     }

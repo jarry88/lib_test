@@ -663,7 +663,14 @@ public class Api {
      * IM發送消息
      */
     public static final String PATH_IM_SEND_MESSAGE = "/member/im/message/send";
+    /**
+     * 查詢im信息
+     */
     public static final String PATH_IM_INFO = "/member/im/info";
+    /**
+     * 查詢對方是否發送過名片
+     */
+    public static final String PATH_IM_IS_EXCHANGED_CARD = "/member/im/isExchangedCard";
 
     /**
      * 購買：門店自提

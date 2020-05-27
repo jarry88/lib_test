@@ -62,6 +62,8 @@
                 android:layout_width="93dp"
                 android:layout_height="93dp"
                 android:layout_marginTop="16dp"
+                app:civ_border_width="0.5dp"
+                app:civ_border_color="@color/tw_light_grey_EDED"
                 />
             <TextView
                 android:id="@+id/tv_nickname"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
@@ -21,7 +21,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_weight="1"
         android:orientation="vertical">
         <TextView
@@ -44,7 +44,7 @@
                 android:id="@+id/ll_thumb_data_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -58,8 +58,8 @@
                     android:id="@+id/tv_thumb_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="23"
+                    android:layout_marginStart="4dp"
+                    android:text=""
                     android:textColor="#666"
                     android:textSize="14sp"
                     />
@@ -68,10 +68,10 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@id/ll_thumb_data_container"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/ll_thumb_data_container"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -79,18 +79,20 @@
                     android:layout_width="27dp"
                     android:layout_height="27dp"
                     android:src="@drawable/avatar_female"
+                    app:civ_border_width="0.5dp"
+                    app:civ_border_color="@color/tw_light_grey_EDED"
                     />
 
                 <TextView
                     android:id="@+id/tv_author_nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:singleLine="true"
                     android:ellipsize="end"
                     android:textSize="13sp"
                     android:textColor="@color/tw_black"
-                    android:text="說走就走"
+                    android:text=""
                     />
             </LinearLayout>
         </RelativeLayout>
