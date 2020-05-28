@@ -434,6 +434,8 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
             llLogisticsOrderSnContainer.setVisibility(View.VISIBLE);
             llLogisticsContainer.setVisibility(View.VISIBLE);
         } else { // 不使用物流
+            llShipCompanyContainer.setVisibility(View.GONE);
+            llLogisticsOrderSnContainer.setVisibility(View.GONE);
             llLogisticsContainer.setVisibility(View.GONE);
         }
         shipWayIndex = index;

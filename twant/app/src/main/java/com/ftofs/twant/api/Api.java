@@ -670,7 +670,7 @@ public class Api {
     /**
      * 查詢對方是否發送過名片
      */
-    public static final String PATH_IM_IS_EXCHANGED_CARD = "/member/im/isExchangedCard";
+    public static final String PATH_IM_IS_EXCHANGE_CARD = "/member/im/isExchangeCard";
 
     /**
      * 購買：門店自提

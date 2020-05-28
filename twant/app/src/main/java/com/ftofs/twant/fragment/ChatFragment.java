@@ -777,7 +777,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 if (User.getUserId() <= 0) {
                     break;
                 }
-                Api.getUI(Api.PATH_IM_IS_EXCHANGED_CARD, EasyJSONObject.generate("token", User.getToken(), "fromName", yourMemberName), new UICallback() {
+
+                EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "fromName", yourMemberName);
+                SLog.info("params[%s]", params);
+                Api.getUI(Api.PATH_IM_IS_EXCHANGE_CARD, params, new UICallback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         ToastUtil.showNetworkError(_mActivity, e);
