@@ -497,16 +497,41 @@ public class Util {
      * @param activity
      */
     public static void gotoGooglePlay(Activity activity) {
-        SLog.info("PackageName[%s]", activity.getPackageName());
+        String packageName = activity.getPackageName();
+        SLog.info("packageName[%s]", packageName);
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("market://details?id=" + activity.getPackageName()));
+            intent.setData(Uri.parse("market://details?id=" + packageName));
             intent.setPackage("com.android.vending"); //这里对应的是谷歌商店，跳转别的商店改成对应的即可  (如果不設置package，會調用默認的應用商店，例如 應用寶等？？？)
             if (intent.resolveActivity(activity.getPackageManager()) != null) {
                 activity.startActivity(intent);
             } else {//没有应用市场，通过浏览器跳转到Google Play
                 Intent intent2 = new Intent(Intent.ACTION_VIEW);
-                intent2.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + activity.getPackageName()));
+                intent2.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+                if (intent2.resolveActivity(activity.getPackageManager()) != null) {
+                    activity.startActivity(intent2);
+                } else {
+                    //没有Google Play 也没有浏览器
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
+    // 跳轉到應用寶
+    public static void gotoQqDownloader(Activity activity) {
+        String packageName = activity.getPackageName();
+        SLog.info("packageName[%s]", packageName);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=" + packageName));
+            intent.setPackage("com.tencent.android.qqdownloader");
+            if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                activity.startActivity(intent);
+            } else {//没有应用市场，通过浏览器跳转到應用寶
+                Intent intent2 = new Intent(Intent.ACTION_VIEW);
+                intent2.setData(Uri.parse("https://a.app.qq.com/o/simple.jsp?pkgname=" + packageName));
                 if (intent2.resolveActivity(activity.getPackageManager()) != null) {
                     activity.startActivity(intent2);
                 } else {

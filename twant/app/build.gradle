@@ -39,6 +39,9 @@ android {
         // 官網渠道
         official {
         }
+        // 應用寶渠道
+        tencent {
+        }
     }
     buildTypes {
         release {
