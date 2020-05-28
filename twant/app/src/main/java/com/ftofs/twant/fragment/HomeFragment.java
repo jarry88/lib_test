@@ -17,10 +17,10 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
+import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ApiUtil;
@@ -29,6 +29,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ActivityPopup;
+import com.google.gson.JsonObject;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.orhanobut.hawk.Hawk;
@@ -41,8 +42,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -109,7 +113,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                SLog.info("newState[%d]", newState);
+//                SLog.info("newState[%d]", newState);
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     hideFloatButton();
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -138,7 +142,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
      * 加載輪播圖片
      */
     private void loadCarousel() {
-        Api.getUI(Api.PATH_HOME_CAROUSEL, null, new UICallback() {
+        Api.getUI(Api.PATH_HOME_INDEX, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
@@ -164,12 +168,23 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     JSONArray cells = new JSONArray();
 
                     JSONObject obj = new JSONObject();
+                    JSONObject objSlogan = new JSONObject();
                     obj.put("type", TangramCellType.STICKY_CELL);
+                    objSlogan.put("type", TangramCellType.SLOGAN_CELL);
                     StickyCellData stickyCellData = new StickyCellData();
                     // 店鋪、商品、想要帖三類數據
                     stickyCellData.goodsCommonCount = responseObj.getInt("datas.goodsCommonCount");;
                     stickyCellData.storeCount = responseObj.getInt("datas.storeCount");
                     stickyCellData.wantPostCount = responseObj.getInt("datas.wantPostCount");
+                    EasyJSONArray shoppingZoneList = responseObj.getArray("datas.shoppingZoneList");
+                    SLog.info(shoppingZoneList.toString());
+                    if (!Util.isJsonNull(shoppingZoneList)) {
+                        stickyCellData.zoneItemList=new ArrayList<>();
+                        for (Object object : shoppingZoneList) {
+                            EasyJSONObject zone = (EasyJSONObject) object;
+                            stickyCellData.zoneItemList.add(ShoppingZoneItem.parse(zone)) ;
+                        }
+                    }
 
                     // 導航欄
                     // 获取活动入口按钮信息
@@ -187,10 +202,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                     }
 
                     obj.put("data", stickyCellData);
+                    objSlogan.put("data", stickyCellData);
                     cells.put(obj);
+                    JSONArray cells3=new JSONArray();
+                    cells3.put(objSlogan);
                     List<BaseCell> cs = tangramEngine.parseComponent(cells);
                     card.setCells(cs);
+                    card.setCells(cs);
+                    cardList.get(3).setCells(tangramEngine.parseComponent(cells3));
+                    cardList.get(3).notifyDataChange();
                     card.notifyDataChange();
+//                    cardList.get(2).notifyDataChange();
                     // END OF 获取StickyView
 
 

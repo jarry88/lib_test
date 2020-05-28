@@ -1,6 +1,5 @@
 package com.ftofs.twant.activity;
 
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -15,7 +14,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
+
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +39,7 @@ import com.ftofs.twant.entity.AliPayResult;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.Location;
+import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.entity.ToastData;
 import com.ftofs.twant.entity.WantedPostItem;

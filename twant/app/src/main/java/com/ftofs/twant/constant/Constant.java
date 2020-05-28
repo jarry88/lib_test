@@ -325,5 +325,6 @@ public class Constant {
      */
     public static final int GOODS_STATUS_OFF_SHELF = 0;  // 下架
     public static final int GOODS_STATUS_ON_SHELF = 1;   // 在售(即上架)
-    public static int SELLER_REFUND=10;
+    public static int SELLER_REFUND=1;//退款
+    public static int SELLER_RETURN=2;//退貨
 }

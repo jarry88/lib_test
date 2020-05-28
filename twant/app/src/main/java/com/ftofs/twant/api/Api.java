@@ -129,7 +129,7 @@ public class Api {
     /**
      * 首頁輪播圖
      */
-    public static final String PATH_HOME_CAROUSEL = "/app/home/index";
+    public static final String PATH_HOME_INDEX = "/app/home/index";
 
 
     /**

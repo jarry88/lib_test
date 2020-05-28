@@ -99,6 +99,7 @@ public class User {
         Hawk.delete(SPField.FIELD_MEMBER_BIO);
 
         Hawk.delete(SPField.FIELD_USER_DATA);
+        Hawk.delete(SPField.SELLER_ADD_GUIDE_HIDE);
     }
 
     public static <T> T getUserInfo(String field, T defaultValue) {
