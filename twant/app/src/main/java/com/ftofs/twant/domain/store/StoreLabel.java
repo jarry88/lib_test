@@ -1,7 +1,13 @@
 package com.ftofs.twant.domain.store;
 
+import com.ftofs.twant.constant.Constant;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
 
 public class StoreLabel implements Serializable {
     /**
@@ -53,6 +59,16 @@ public class StoreLabel implements Serializable {
      * 子集实体
      */
     private List<StoreLabel> storeLabelList;
+
+    public static StoreLabel parse(EasyJSONObject label)throws Exception {
+        StoreLabel storeLabel = new StoreLabel();
+        storeLabel.setIsFold(label.getInt("isFold"));
+        storeLabel.setStoreLabelId(label.getInt("storeLabelId"));
+        storeLabel.setImage(label.getSafeString("image"));
+        storeLabel.setImageSrc(label.getSafeString("imageSrc"));
+        storeLabel.parseStoreLabelList(label.getArray("storeLabelList"));
+        return storeLabel;
+    }
 
     public int getStoreLabelId() {
         return storeLabelId;
@@ -146,5 +162,23 @@ public class StoreLabel implements Serializable {
                 ", image='" + image + '\'' +
                 ", storeLabelList=" + storeLabelList +
                 '}';
+    }
+
+    public void parseStoreLabelList(EasyJSONArray storeLabelList)throws Exception {
+        if (storeLabelList != null && storeLabelList.length() > 0) {
+            List<StoreLabel> storeLabels = new ArrayList<>();
+            for (Object object2 : storeLabelList) {
+                EasyJSONObject easyJSONObject2 = (EasyJSONObject) object2;
+                StoreLabel storeLabel2 = new StoreLabel();
+                storeLabel2.setStoreLabelId(easyJSONObject2.getInt("storeLabelId"));
+                storeLabel2.setStoreLabelName(easyJSONObject2.getSafeString("storeLabelName"));
+                storeLabel2.setParentId(easyJSONObject2.getInt("parentId"));
+                storeLabel2.setStoreId(easyJSONObject2.getInt("storeId"));
+                storeLabel2.setIsFold(Constant.TRUE_INT);
+
+                storeLabels.add(storeLabel2);
+            }
+            setStoreLabelList(storeLabels);
+        }
     }
 }

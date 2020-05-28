@@ -808,21 +808,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         storeLabel.setIsFold(Constant.TRUE_INT);
 
                         EasyJSONArray storeLabelList = easyJSONObject.getSafeArray("storeLabelList");
-                        if (storeLabelList != null && storeLabelList.length() > 0) {
-                            List<StoreLabel> storeLabels = new ArrayList<>();
-                            for (Object object2 : storeLabelList) {
-                                EasyJSONObject easyJSONObject2 = (EasyJSONObject) object2;
-                                StoreLabel storeLabel2 = new StoreLabel();
-                                storeLabel2.setStoreLabelId(easyJSONObject2.getInt("storeLabelId"));
-                                storeLabel2.setStoreLabelName(easyJSONObject2.getSafeString("storeLabelName"));
-                                storeLabel2.setParentId(easyJSONObject2.getInt("parentId"));
-                                storeLabel2.setStoreId(easyJSONObject2.getInt("storeId"));
-                                storeLabel2.setIsFold(Constant.TRUE_INT);
-
-                                storeLabels.add(storeLabel2);
-                            }
-
-                            storeLabel.setStoreLabelList(storeLabels);
+                            storeLabel.parseStoreLabelList(storeLabelList);
                         }
 
                         if (storeLabel.getStoreLabelList() == null) { // 保證不為null
@@ -831,7 +817,6 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
 
 //                        goodsCountTotal += goodsCount;
                         shopStoreLabelList.add(storeLabel);
-                    }
                     goodsCountTotal = responseObj.getInt("datas.storeGoodsCount");
                     shopStoreLabelList.get(0).setGoodsCount(goodsCountTotal);  // 添加【全部產品】的項數
                     title = String.format("%s(%d)", shopStoreLabelList.get(0).getStoreLabelName(), goodsCountTotal);
