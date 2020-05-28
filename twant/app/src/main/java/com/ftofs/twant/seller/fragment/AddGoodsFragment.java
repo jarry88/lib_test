@@ -1,14 +1,11 @@
 package com.ftofs.twant.seller.fragment;
 
-import android.database.DataSetObserver;
-import android.location.Address;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,15 +16,14 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SimpleViewPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ScaledButton;
-import com.ftofs.twant.widget.SimpleTabManager;
-
-import org.litepal.util.LitePalLog;
+import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,11 +34,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
-import me.yokeyword.fragmentation.ISupportFragment;
 import okhttp3.Call;
-import permissions.dispatcher.OnNeverAskAgain;
 
 public class AddGoodsFragment extends BaseFragment implements View.OnClickListener {
     private Unbinder unbinder;
@@ -58,6 +51,10 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         return new AddGoodsFragment();
     }
 
+    @OnClick(R.id.btn_publish)
+    void publish() {
+       hideAddGuide();
+    }
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.sb_check_notice)
@@ -71,6 +68,12 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
     @OnClick(R.id.rl_guide_container)
     void hideGuide(){
+        hideAddGuide();
+
+    }
+
+    private void hideAddGuide() {
+        Hawk.put(SPField.SELLER_ADD_GUIDE_HIDE, sbNotice.isChecked());
         getView().findViewById(R.id.rl_guide_container).setVisibility(View.GONE);
         getView().findViewById(R.id.vp_seller_good_add).setVisibility(View.VISIBLE);
         vpAddGood.setCurrentItem(0);
@@ -79,7 +82,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     @OnClick(R.id.sb_check_notice)
     void checkNotice() {
         sbNotice.setChecked(!sbNotice.isChecked());
-        sbNotice.setIconResource(sbNotice.isChecked()?R.drawable.icon_checked:R.drawable.icon_cart_item_unchecked);
     }
     @Nullable
     @Override
@@ -98,6 +100,11 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initView() {
+        sbNotice.setButtonCheckedBlue();
+        sbNotice.setChecked(Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false));
+        if (sbNotice.isChecked()) {
+            hideAddGuide();
+        }
         sbNotice.setIconResource(R.drawable.icon_cart_item_unchecked);
         sbNotice.setChecked(false);
         mViews.add(primaryView());
@@ -241,6 +248,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                      EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                      EasyJSONObject data = responseObj.getObject("datas");
                      if (ToastUtil.checkError(_mActivity, responseObj)) {
+                         hideSoftInput();
                          return;
                      }
                      updateView(data);

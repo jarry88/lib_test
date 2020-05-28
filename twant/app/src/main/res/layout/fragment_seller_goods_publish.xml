@@ -17,7 +17,7 @@
         android:id="@+id/rl_guide_container">
         <TextView
             android:id="@+id/tv_notice"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPurple"
             android:textSize="16sp"
@@ -25,19 +25,39 @@
             android:text="產品信息比較多\n建議在電腦完成"/>
         <LinearLayout
             android:layout_below="@id/tv_notice"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/margin12">
 
-            <com.ftofs.twant.widget.ScaledButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sb_check_notice" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="不再提示"/>
+                android:text="立即發佈"
+                android:id="@+id/btn_publish"
+                android:textColor="@color/colorPurple"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/purple_5dp_bg"
+                android:textSize="16sp"/>
+            <LinearLayout
+                android:layout_below="@id/tv_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sb_check_notice" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="不再提示"/>
+
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
     <androidx.viewpager.widget.ViewPager
