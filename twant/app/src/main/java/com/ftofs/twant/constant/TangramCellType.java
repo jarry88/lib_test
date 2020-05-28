@@ -6,4 +6,5 @@ public class TangramCellType {
     public static final String CAROUSEL_CELL = "CarouselCell";
     public static final String SLOGAN_CELL = "SloganCell";
     public static final String STORE_ITEM_CELL = "StoreItemCell";
+    public static final String SHOPPING_ZONE_CELL = "ShoppingZoneCell";
 }

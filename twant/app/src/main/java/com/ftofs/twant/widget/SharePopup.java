@@ -33,8 +33,6 @@ import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.lxj.xpopup.util.XPopupUtils;
 
-import java.io.File;
-
 import cn.snailpad.easyjson.EasyJSONObject;
 
 

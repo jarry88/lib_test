@@ -103,7 +103,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
      */
     private void loadCarousel() {
         SLog.info("___loadCarousel");
-        Api.getUI(Api.PATH_HOME_CAROUSEL, null, new UICallback() {
+        Api.getUI(Api.PATH_HOME_INDEX, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(getContext(), e);

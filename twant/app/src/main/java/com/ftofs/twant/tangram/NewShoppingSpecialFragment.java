@@ -236,8 +236,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
                 if (!showTab) {
                     nestedScroll = viewPagerY <= containerViewY;
                 }
-                SLog.info("nestedScroll[%s],viewPagerY[%s], containerViewY[%s], tabY[%s], anchorViewY[%s]",nestedScroll,
-                        viewPagerY, containerViewY, tabY, anchorViewY);
+//                SLog.info("nestedScroll[%s],viewPagerY[%s], containerViewY[%s], tabY[%s], anchorViewY[%s]",nestedScroll,
+//                        viewPagerY, containerViewY, tabY, anchorViewY);
                 // 如果列表滑动到顶部，则启用嵌套滚动
 
 
@@ -495,7 +495,7 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 
     @Override
     public void onCbStartNestedScroll() {
-        SLog.info("onCbStartNestedScroll");
+//        SLog.info("onCbStartNestedScroll");
         isScrolling = true;
         lastScrollingTimestamp = System.currentTimeMillis();
         hideFloatButton();

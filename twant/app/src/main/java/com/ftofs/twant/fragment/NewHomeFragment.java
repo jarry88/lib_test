@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
@@ -37,7 +36,6 @@ import com.tmall.wireless.tangram.TangramEngine;
 import com.tmall.wireless.tangram.core.adapter.GroupBasicAdapter;
 import com.tmall.wireless.tangram.dataparser.concrete.Card;
 import com.tmall.wireless.tangram.structure.BaseCell;
-import com.tmall.wireless.tangram.support.SimpleClickSupport;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -139,7 +137,7 @@ public class NewHomeFragment extends BaseFragment implements View.OnClickListene
      * 加載輪播圖片
      */
     private void loadCarousel() {
-        Api.getUI(Api.PATH_HOME_CAROUSEL, null, new UICallback() {
+        Api.getUI(Api.PATH_HOME_INDEX, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);

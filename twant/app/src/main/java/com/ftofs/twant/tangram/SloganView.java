@@ -4,18 +4,29 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.entity.ShoppingZoneItem;
+import com.ftofs.twant.entity.StickyCellData;
+import com.ftofs.twant.fragment.ShoppingSpecialFragment;
+import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
+
+import java.util.List;
 
 public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
     Context context;
@@ -24,6 +35,12 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
 
     public static final int ANIM_COUNT = 4;
     ObjectAnimator[] animatorArr = new ObjectAnimator[ANIM_COUNT];
+    private ConstraintLayout clFirst;
+    private ConstraintLayout clSecondLine;
+    private ConstraintLayout clFirstLine;
+    private LinearLayout llContainer;
+    private LinearLayout llFirstLine;
+    private LinearLayout llSecondLine;
 
     public SloganView(Context context) {
         this(context, null);
@@ -47,7 +64,12 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
 
         View contentView = LayoutInflater.from(context).inflate(R.layout.tangram_layout_home_slogan_view, this, false);
         vwSloganHighLighter = contentView.findViewById(R.id.vw_slogan_highlighter);
-
+        llContainer =contentView.findViewById(R.id.ll_shopping_container);
+        clFirst = contentView.findViewById(R.id.cl_single_container);
+        clFirstLine = contentView.findViewById(R.id.cl_first_line);
+        llFirstLine = contentView.findViewById(R.id.ll_zone_first);
+        llSecondLine = contentView.findViewById(R.id.ll_zone_second);
+        clSecondLine = contentView.findViewById(R.id.cl_second_line);
         addView(contentView);
     }
 
@@ -58,6 +80,68 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
 
     @Override
     public void postBindView(BaseCell cell) {
+        Object data = cell.optParam("data");
+        SLog.info("stickyCellData{%s}",data);
+        if (data != null) {
+            StickyCellData stickyCellData = (StickyCellData) data;
+            int size = stickyCellData.zoneItemList.size();
+            ImageView singleImage =clFirst.findViewById(R.id.img_zone_single);
+            ImageView firstImage =llFirstLine.findViewById(R.id.img_zone_first);
+            ImageView secondImage =llFirstLine.findViewById(R.id.img_zone_second);
+            ImageView thirdImage =llSecondLine.findViewById(R.id.img_zone_third);
+            ImageView fourthImage =llSecondLine.findViewById(R.id.img_zone_fourth);
+            try{
+                if (size == 1||size==3||size==5) {
+
+                    clSecondLine.setVisibility(View.GONE);
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(0).appLogo)).centerCrop().into(singleImage);
+                    singleImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(0).zoneId)));
+
+                    clFirstLine.setVisibility(View.GONE);
+                    if (size == 3||size==5) {
+                        clFirstLine.setVisibility(View.VISIBLE);
+                        Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(1).appLogo)).centerCrop().into(firstImage);
+                        firstImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(1).zoneId)));
+                        secondImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(2).zoneId)));
+                        Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(2).appLogo)).centerCrop().into(secondImage);
+                    }
+                    if (size == 5) {
+                        clSecondLine.setVisibility(View.VISIBLE);
+                        Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(3).appLogo)).centerCrop().into(thirdImage);
+                        thirdImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(3).zoneId)));
+                        fourthImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(4).zoneId)));
+                        Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(4).appLogo)).centerCrop().into(fourthImage);
+                    }
+                } if(size==2||size==4) {
+                    clFirst.setVisibility(View.GONE);
+                    clSecondLine.setVisibility(View.GONE);
+                    if (size == 4) {
+                        clSecondLine.setVisibility(View.VISIBLE);
+                        Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(2).appLogo)).centerCrop().into(thirdImage);
+                        thirdImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(2).zoneId)));
+                        Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(3).appLogo)).centerCrop().into(fourthImage);
+                        fourthImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(3).zoneId)));
+                    }
+                    clFirstLine.setVisibility(View.VISIBLE);
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(0).appLogo)).centerCrop().into(firstImage);
+                    firstImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(0).zoneId)));
+                    Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(1).appLogo)).centerCrop().into(secondImage);
+                    secondImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(1).zoneId)));
+                }else {
+                    llContainer.setVisibility(GONE);
+                }
+            }catch (Exception e) {
+               SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+
+            for (ShoppingZoneItem item : stickyCellData.zoneItemList) {
+                SLog.info(item.toString());
+            }
+            llContainer.setVisibility(VISIBLE);
+
+        }else {
+            llContainer.setVisibility(View.GONE);
+        }
         // SLog.info("ANII_postBindView, animInitialized[%s]", animInitialized);
         if (animInitialized) {
             return;

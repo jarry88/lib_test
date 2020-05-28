@@ -49,6 +49,7 @@ import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
 /**
+ * 訂單退貨退款詳情頁
  * @author gzp
  */
 public class SellerRefundDetailFragment extends BaseFragment {
@@ -57,7 +58,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
     private boolean sellerAgree;
     private int currentStep=0;
     private int refundId;
-    private int FragmentType=Constant.SELLER_REFUND;
+    private int FragmentType=Constant.SELLER_REFUND;//Constant.SELLER_REFUND表示refund 其它表示return
     private int showStoreHandel;//1是0否可處理
     @BindView(R.id.ll_admin_container)
     LinearLayout llAdiminContainer;
