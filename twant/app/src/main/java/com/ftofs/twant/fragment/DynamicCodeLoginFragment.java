@@ -24,8 +24,10 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.R;
@@ -44,6 +46,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -229,12 +232,21 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
                 ToastUtil.error(_mActivity, getString(R.string.weixin_not_installed_hint));
                 return;
             }
+
+            if (Config.PROD) {
+                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.WECHAT_LOGIN);
+            }
+
             ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_LOGIN);
         } else if (id == R.id.img_check) {
             checkButtonState =!checkButtonState;
             Glide.with(_mActivity).load(checkButtonState?R.drawable.icon_checked:R.drawable.icon_unchecked).centerCrop().into(imgClick);
 
         } else if (id == R.id.btn_facebook_login) {
+            if (Config.PROD) {
+                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.FACEBOOK_LOGIN);
+            }
+
             ((LoginFragment) commonCallback).facebookLogin();
         } else if (id == R.id.btn_get_sms_code) {
             if (!canSendSMS) {
@@ -311,6 +323,9 @@ public class DynamicCodeLoginFragment extends BaseFragment implements
         } else if (id == R.id.btn_login) {
             if (!loginButtonEnable) {
                 return;
+            }
+            if (Config.PROD) {
+                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.LOGIN);
             }
             doLogin();
         } else if (id == R.id.btn_mobile_zone) {

@@ -29,6 +29,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.LoginType;
+import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
@@ -37,6 +38,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
 import com.lxj.xpopup.XPopup;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -103,6 +105,10 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         Util.setOnClickListener(view, R.id.btn_test, this);
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_register, this);
+
+        if (Config.PROD) {
+            MobclickAgent.onPageStart(UmengAnalyticsPageName.LOGIN);
+        }
 
         tabLayout = view.findViewById(R.id.login_tab_layout);
         ViewPager viewPager = view.findViewById(R.id.login_viewpager);
@@ -185,6 +191,9 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
+        if (Config.PROD) {
+            MobclickAgent.onPageEnd(UmengAnalyticsPageName.LOGIN);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

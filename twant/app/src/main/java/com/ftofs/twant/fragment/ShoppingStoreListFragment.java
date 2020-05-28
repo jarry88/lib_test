@@ -12,14 +12,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ShoppingStoreListAdapter;
+import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.StoreItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.Util;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -89,7 +94,13 @@ public class ShoppingStoreListFragment extends BaseFragment {
             }
         });
         storeListAdapter.setOnItemClickListener((adapter, view1, position)->{
-            Util.startFragment(ShopMainFragment.newInstance(storeItems.get(position).storeId));
+            int storeId = storeItems.get(position).storeId;
+            if (Config.PROD) {
+                HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                analyticsDataMap.put("storeId", storeId);
+                MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_STORE, analyticsDataMap);
+            }
+            Util.startFragment(ShopMainFragment.newInstance(storeId));
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         rvStoreList.setLayoutManager(linearLayoutManager);

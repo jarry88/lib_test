@@ -16,16 +16,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.ResponseCode;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 
@@ -192,6 +196,10 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_register) {
+            if (Config.PROD) {
+                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.REGISTER);
+            }
+
             String fullMobile = areaCode + "," + mobile;
             String smsCode =etSmsCode.getText().toString().trim();
             String password = etPassword.getText().toString();
@@ -259,6 +267,10 @@ public class RegisterConfirmFragment extends BaseFragment implements View.OnClic
                         Util.getMemberToken(_mActivity);
 
                         ToastUtil.success(_mActivity, "注冊成功");
+
+                        if (Config.PROD) {
+                            MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.REGISTER_SUCCESS);
+                        }
 
                         // 注冊成功，跳到主頁面
                         popTo(MainFragment.class, false);

@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.OrderDetailGoodsAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
@@ -28,6 +29,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.OrderOperation;
 import com.ftofs.twant.constant.OrderState;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.EvaluationGoodsItem;
 import com.ftofs.twant.entity.GoodsInfo;
@@ -46,6 +48,7 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -165,6 +168,12 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     public void buyAgain(View v) {
         SLog.info("添加到購物袋%d",ordersId);
         for (OrderDetailGoodsItem goodsItem:orderDetailGoodsItemList){
+            if (Config.PROD) {
+                HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                analyticsDataMap.put("commonId", goodsItem.commonId);
+                MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
+            }
+
             Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> {ToastUtil.success(_mActivity, "添加購物袋成功");
                 Util.startFragment(CartFragment.newInstance(true));});
         }

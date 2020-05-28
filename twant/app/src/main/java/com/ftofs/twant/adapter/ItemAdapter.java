@@ -20,7 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.Item;
 import com.ftofs.twant.fragment.GoodsDetailFragment;
 import com.ftofs.twant.fragment.LoginFragment;
@@ -35,7 +38,9 @@ import com.ftofs.twant.view.BaseViewHolder;
 import com.ftofs.twant.widget.SpecSelectPopup;
 import com.lxj.xpopup.XPopup;
 import com.ftofs.twant.interfaces.OnItemClickListener;
+import com.umeng.analytics.MobclickAgent;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -125,7 +130,11 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ImageView imageView = secondHolder.getView(R.id.img_goods_item);
                 Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goods.imageUrl)).placeholder(R.drawable.goods_image_bg).centerCrop().into(imageView);
                 secondHolder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
-                    //TODO
+                    if (Config.PROD) {
+                        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                        analyticsDataMap.put("commonId", item.goods.id);
+                        MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_GOODS, analyticsDataMap);
+                    }
                     Util.startFragment(GoodsDetailFragment.newInstance(item.goods.id, 0));
                 });
 

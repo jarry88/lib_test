@@ -13,15 +13,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.ShopGoodsListAdapter;
+import com.ftofs.twant.config.Config;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -106,6 +111,11 @@ public class ShoppingLinkageFragment extends BaseFragment implements View.OnClic
 
                 SLog.info("here");
                 int commonId = goods.id;
+                if (Config.PROD) {
+                    HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                    analyticsDataMap.put("commonId", commonId);
+                    MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_GOODS, analyticsDataMap);
+                }
                 Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
             }
         });

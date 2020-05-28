@@ -24,10 +24,12 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.ResponseCode;
 import com.ftofs.twant.constant.Sms;
+import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -38,6 +40,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -119,6 +122,9 @@ public class ResetPasswordFragment extends BaseFragment implements
             trueNoticeLoge.setVisibility(View.VISIBLE);
             view.findViewById(R.id.rl_tos_container).setVisibility(View.VISIBLE);
 
+            if (Config.PROD) {
+                MobclickAgent.onPageStart(UmengAnalyticsPageName.REGISTER);
+            }
         } else if (usage == Constant.USAGE_RESET_PASSWORD) {
             tvFragmentTitle.setText(R.string.reset_password_fragment_title);
         } else if (usage == Constant.USAGE_SET_PAYMENT_PASSWORD) {
@@ -171,6 +177,16 @@ public class ResetPasswordFragment extends BaseFragment implements
         getMobileZoneList();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (usage == Constant.USAGE_USER_REGISTER) {
+            if (Config.PROD) {
+                MobclickAgent.onPageEnd(UmengAnalyticsPageName.REGISTER);
+            }
+        }
+    }
 
     @Override
     public void onClick(View v) {

@@ -32,13 +32,17 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.GoodsGalleryAdapter;
 import com.ftofs.twant.adapter.StoreFriendsAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
+import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.AddrItem;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
@@ -76,6 +80,7 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.rd.PageIndicatorView;
 import com.tencent.mapsdk.raster.model.Circle;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -547,6 +552,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         pageIndicatorView = view.findViewById(R.id.pageIndicatorView);
         setImageBanner(rvGalleryImageList);
+
+        if (Config.PROD) {
+            MobclickAgent.onPageStart(UmengAnalyticsPageName.GOODS);
+
+            HashMap<String, Object> analyticsDataMap = new HashMap<>();
+            analyticsDataMap.put("commonId", commonId);
+            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS, analyticsDataMap);
+        }
     }
 
     private void setImageBanner(RecyclerView rvGalleryImageList) {
@@ -1578,6 +1591,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         }
         SLog.info("onDestroyView");
         EventBus.getDefault().unregister(this);
+
+        if (Config.PROD) {
+            MobclickAgent.onPageEnd(UmengAnalyticsPageName.GOODS);
+        }
     }
 
     @Override

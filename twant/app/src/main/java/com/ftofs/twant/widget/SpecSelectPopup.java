@@ -14,11 +14,14 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GiftItem;
 import com.ftofs.twant.entity.GoodsInfo;
@@ -38,6 +41,7 @@ import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 import com.nex3z.flowlayout.FlowLayout;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -437,6 +441,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * 直接購買
      */
     private void buy() {
+        if (Config.PROD) {
+            HashMap<String, Object> analyticsDataMap = new HashMap<>();
+            analyticsDataMap.put("commonId", commonId);
+            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_BUY, analyticsDataMap);
+        }
+
         dismiss();
 
         // 當前選中的goodsId
@@ -487,6 +497,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         } else if (id == R.id.btn_ok&&goodsInfo != null) {
             if (goodsInfo.getFinalStorage() > 0) {
                 if (action == Constant.ACTION_ADD_TO_CART) {
+                    if (Config.PROD) {
+                        HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                        analyticsDataMap.put("commonId", goodsInfo.commonId);
+                        MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
+                    }
+
                     addToCart();
                 } if (action == Constant.ACTION_BUY) {
                     SLog.info("購買商品 limitBuy %d",limitBuy);

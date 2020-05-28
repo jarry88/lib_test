@@ -29,6 +29,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.PayCardItem;
 import com.ftofs.twant.interfaces.CommonCallback;
@@ -48,6 +49,7 @@ import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.macau.pay.sdk.MPaySdk;
 import com.orhanobut.hawk.Hawk;
 import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.analytics.pro.k;
 
 
@@ -160,6 +162,10 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
         Bundle args = getArguments();
         user_zone =StringUtil.parseZone();
         payId = args.getInt("payId");
+        if (Config.PROD) {
+            MobclickAgent.onPageStart(UmengAnalyticsPageName.SELECT_PAYMENT);
+        }
+
         payAmount = args.getDouble("payAmount");
         walletBalance = args.getDouble("walletBalance");
 
@@ -208,6 +214,15 @@ public class PayVendorFragment extends BaseFragment implements View.OnClickListe
 
         getWalletBalance();
         loadMPayActivityStatus();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (Config.PROD) {
+            MobclickAgent.onPageEnd(UmengAnalyticsPageName.SELECT_PAYMENT);
+        }
     }
 
     private void initPayCardList() {

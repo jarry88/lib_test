@@ -2,11 +2,15 @@ package com.ftofs.twant.util;
 
 
 
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.fragment.PaySuccessFragment;
 import com.ftofs.twant.log.SLog;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 
@@ -43,6 +47,10 @@ public class PayUtil {
     public static void onPaySuccess(boolean notifyServer, boolean startPaySuccessFragment, int payId, int vendor) {
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_DETAIL, null);
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_RELOAD_DATA_ORDER_LIST, null);
+
+        if (Config.PROD) {
+            MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.PAY_SUCCESS);
+        }
 
         if (startPaySuccessFragment) {
             Util.startFragment(PaySuccessFragment.newInstance(payId));

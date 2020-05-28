@@ -19,10 +19,14 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
+import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.CustomerServiceStaff;
 import com.ftofs.twant.entity.StoreNavigationItem;
 import com.ftofs.twant.interfaces.NestedScrollingCallback;
@@ -45,9 +49,11 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.tabs.TabLayout;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -158,6 +164,15 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
 
         Bundle args = getArguments();
         storeId = args.getInt("shopId");
+
+        if (Config.PROD) {
+            MobclickAgent.onPageStart(UmengAnalyticsPageName.STORE);
+
+            HashMap<String, Object> analyticsDataMap = new HashMap<>();
+            analyticsDataMap.put("storeId", storeId);
+            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.STORE, analyticsDataMap);
+        }
+
         llFloatButtonContainer = view.findViewById(R.id.ll_float_button_container);
         llFloatButtonList = view.findViewById(R.id.btn_customer_list);
         Util.setOnClickListener(view,R.id.btn_comment,this);
@@ -247,11 +262,20 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
                         storeNavigationItemList.add(item);
                     }
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
         setStoreNavigationItem();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (Config.PROD) {
+            MobclickAgent.onPageEnd(UmengAnalyticsPageName.STORE);
+        }
     }
 
     private void initCustomerList(View view) {

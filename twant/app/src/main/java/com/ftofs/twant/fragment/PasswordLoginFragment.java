@@ -30,6 +30,7 @@ import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.LoginType;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.interfaces.CommonCallback;
@@ -42,6 +43,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -207,14 +209,28 @@ public class PasswordLoginFragment extends BaseFragment implements
             if (!loginButtonEnable) {
                 return;
             }
+
+            if (Config.PROD) {
+                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.LOGIN);
+            }
+
             doLogin();
         } else if (id == R.id.btn_wechat_login) {
             if (!TwantApplication.wxApi.isWXAppInstalled()) { // 未安裝微信
                 ToastUtil.error(_mActivity, getString(R.string.weixin_not_installed_hint));
                 return;
             }
+
+            if (Config.PROD) {
+                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.WECHAT_LOGIN);
+            }
+
             ((MainActivity) _mActivity).doWeixinLogin(Constant.WEIXIN_AUTH_USAGE_LOGIN);
         } else if (id == R.id.btn_facebook_login) {
+            if (Config.PROD) {
+                MobclickAgent.onEvent(TwantApplication.getInstance(), UmengAnalyticsActionName.FACEBOOK_LOGIN);
+            }
+
             ((LoginFragment) commonCallback).facebookLogin();
         } else if (id == R.id.btn_refresh_captcha) {
             refreshCaptcha();

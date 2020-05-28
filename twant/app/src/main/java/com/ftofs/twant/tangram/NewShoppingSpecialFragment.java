@@ -15,11 +15,14 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.TwantApplication;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.UmengAnalyticsActionName;
+import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.WebSliderItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.fragment.CartFragment;
@@ -42,6 +45,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.view.ViewOutlineProvider;
@@ -53,6 +57,7 @@ import android.widget.TextView;
 
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.umeng.analytics.MobclickAgent;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 
@@ -117,6 +122,16 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (Config.PROD) {
+            MobclickAgent.onPageStart(UmengAnalyticsPageName.ACTIVITY_ZONE);
+
+            HashMap<String, Object> analyticsDataMap = new HashMap<>();
+            analyticsDataMap.put("zoneId", zoneId);
+            MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.ACTIVITY_ZONE, analyticsDataMap);
+        }
+
+
         tvZoneName = view.findViewById(R.id.tv_zone_name);
         rlToolBar = view.findViewById(R.id.tool_bar);
         llBanner = view.findViewById(R.id.ll_banner_container);
@@ -143,6 +158,16 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
 //        initViewPager();
         loadData();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (Config.PROD) {
+            MobclickAgent.onPageEnd(UmengAnalyticsPageName.ACTIVITY_ZONE);
+        }
+    }
+
     private void initBanner() {
         //設置banner頁圓角
         bannerView.setOutlineProvider(new ViewOutlineProvider() {
@@ -156,6 +181,8 @@ public class NewShoppingSpecialFragment extends BaseFragment implements View.OnC
         bannerView.setIndicatorPadding(0,heightPadding,0,0);
         UiUtil.addBannerPageClick(bannerView,webSliderItemList);
     }
+
+
     private void setBannerData(EasyJSONArray discountBannerList) {
         SLog.info("bannerListLength %d",discountBannerList.length());
         try {
