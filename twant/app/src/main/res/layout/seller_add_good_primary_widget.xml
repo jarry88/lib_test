@@ -67,6 +67,7 @@
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/sp_goods_category"
                     android:autofillHints="選擇" />
 
             </LinearLayout>

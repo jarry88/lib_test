@@ -1336,6 +1336,17 @@ public class Api {
      * 商品發佈頁
      */
     public static final String PATH_SELLER_GOODS_PUBLISH_PAGE = "/member/seller/goods/publish/page";
+
+    /**
+     * 【商家】
+     * 查詢商品分類綁定的品牌列表
+     */
+    public static final String PATH_SELLER_QUERY_BIND_BRANDS = "/member/seller/query/bind/brands";
+    /**
+     * 【商家】
+     * 查詢所有品牌所在地
+     */
+    public static final String PATH_SELLER_QUERY_COUNTRY_ALL = "/member/seller/query/country/all";
     /**
      * 【商家】
      * 商品發佈頁 保存
