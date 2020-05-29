@@ -1,6 +1,5 @@
 package com.ftofs.twant.seller.fragment;
 
-import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,9 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +25,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
@@ -43,17 +44,23 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-import static com.umeng.analytics.pro.k.a.i;
-
 public class AddGoodsFragment extends BaseFragment implements View.OnClickListener {
     private Unbinder unbinder;
     private SimpleViewPagerAdapter mPagerAdapter;
-    private List<View> mViews =new ArrayList<>();
-//    1是0否允許發佈跨城購商品
+    private List<View> mViews = new ArrayList<>();
+    //    1是0否允許發佈跨城購商品
     private int allowTariff;
-//    允許添加的最大規格數量
+    //    允許添加的最大規格數量
     private int specMax;
-    private List<String> unitList=new ArrayList<>();
+    private List<String> unitList = new ArrayList<>();
+    //準備要提交的商品信息json
+    private EasyJSONObject publishGoodsInfo;
+    private final int PRIMARY_INDEX=0;//基本信息頁
+    private final int BASIC_INDEX=1;//交易信息頁
+    private final int SPEC_INDEX=2;//規格與圖片頁
+    private final int DETAIL_INDEX=3;//詳細信息頁
+    private final int FREIGHT_INDEX=4;//物流信息頁
+    private final int OTHERS_INDEX=5;//其他信息頁
 
     public static AddGoodsFragment newInstance() {
         return new AddGoodsFragment();
@@ -61,8 +68,9 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     @OnClick(R.id.btn_publish)
     void publish() {
-       hideAddGuide();
+        hideAddGuide();
     }
+
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.sb_check_notice)
@@ -74,8 +82,9 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     void back() {
         hideSoftInputPop();
     }
+
     @OnClick(R.id.rl_guide_container)
-    void hideGuide(){
+    void hideGuide() {
         hideAddGuide();
 
     }
@@ -91,6 +100,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     void checkNotice() {
         sbNotice.setChecked(!sbNotice.isChecked());
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -108,6 +118,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initView() {
+        publishGoodsInfo = new EasyJSONObject();
         sbNotice.setButtonCheckedBlue();
         sbNotice.setChecked(Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false));
         if (sbNotice.isChecked()) {
@@ -121,7 +132,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         mViews.add(detailView());
         mViews.add(freightView());
         mViews.add(othersView());
-        mPagerAdapter = new SimpleViewPagerAdapter(_mActivity,mViews);
+        mPagerAdapter = new SimpleViewPagerAdapter(_mActivity, mViews);
         vpAddGood.setAdapter(mPagerAdapter);
         vpAddGood.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -144,13 +155,13 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     private void setTitle(int position) {
         switch (position) {
-            case 0:
+            case PRIMARY_INDEX:
                 tvTitle.setText("基本信息");
                 break;
-            case 1:
+            case BASIC_INDEX:
                 tvTitle.setText("交易信息");
                 break;
-            case 2:
+            case SPEC_INDEX:
                 tvTitle.setText("規格與圖片");
                 break;
             case 3:
@@ -168,9 +179,9 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private View othersView() {
-        View view =LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_others_widget, vpAddGood, false);
-        Util.setOnClickListener(view,R.id.btn_others_prev,this);
-        Util.setOnClickListener(view,R.id.btn_others_next,this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_others_widget, vpAddGood, false);
+        Util.setOnClickListener(view, R.id.btn_others_prev, this);
+        Util.setOnClickListener(view, R.id.btn_publish_goods, this);
         ScaledButton sbInstancePublish = view.findViewById(R.id.sb_instance_publish);
         ScaledButton sbAddHub = view.findViewById(R.id.sb_add_hub);
         sbInstancePublish.setButtonCheckedBlue();
@@ -181,33 +192,33 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private View freightView() {
-        View view =LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_freight_widget, vpAddGood, false);
-        Util.setOnClickListener(view,R.id.btn_freight_prev,this);
-        Util.setOnClickListener(view,R.id.btn_freight_next,this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_freight_widget, vpAddGood, false);
+        Util.setOnClickListener(view, R.id.btn_freight_prev, this);
+        Util.setOnClickListener(view, R.id.btn_freight_next, this);
         return view;
     }
     // 初始化 详情描述
 
     private View detailView() {
-        View view =LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_detail_widget, vpAddGood, false);
-        Util.setOnClickListener(view,R.id.btn_detail_next,this);
-        Util.setOnClickListener(view,R.id.btn_detail_prev,this);
-        Util.setOnClickListener(view,R.id.btn_add_address,this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_detail_widget, vpAddGood, false);
+        Util.setOnClickListener(view, R.id.btn_detail_next, this);
+        Util.setOnClickListener(view, R.id.btn_detail_prev, this);
+        Util.setOnClickListener(view, R.id.btn_add_address, this);
         return view;
     }
 //    初始化 规格与图片页
 
     private View specView() {
-        View view =LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_spec_widget, vpAddGood, false);
-        Util.setOnClickListener(view,R.id.btn_spec_next,this);
-        Util.setOnClickListener(view,R.id.btn_spec_prev,this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_spec_widget, vpAddGood, false);
+        Util.setOnClickListener(view, R.id.btn_spec_next, this);
+        Util.setOnClickListener(view, R.id.btn_spec_prev, this);
         return view;
     }
 
     private View basicView() {
-        View view =LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_basic_widget, vpAddGood, false);
-        Util.setOnClickListener(view,R.id.btn_basic_next,this);
-        Util.setOnClickListener(view,R.id.btn_basic_prev,this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_basic_widget, vpAddGood, false);
+        Util.setOnClickListener(view, R.id.btn_basic_next, this);
+        Util.setOnClickListener(view, R.id.btn_basic_prev, this);
         ScaledButton sbRetail = view.findViewById(R.id.sb_retail);
         ScaledButton sbVirtual = view.findViewById(R.id.sb_virtual);
         ScaledButton sbAcross = view.findViewById(R.id.sb_across);
@@ -219,10 +230,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     private View primaryView() {
 
-        View view =LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_primary_widget, vpAddGood, false);
-        Util.setOnClickListener(view,R.id.btn_primary_next,this);
-
-
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_primary_widget, vpAddGood, false);
+        Util.setOnClickListener(view, R.id.btn_primary_next, this);
         return view;
     }
 
@@ -235,36 +244,36 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadDate() {
-         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
-          SLog.info("params[%s]", params);
-          Api.getUI(Api.PATH_SELLER_GOODS_PUBLISH_PAGE, params, new UICallback() {
-             @Override
-             public void onFailure(Call call, IOException e) {
-                 ToastUtil.showNetworkError(_mActivity, e);
-             }
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_SELLER_GOODS_PUBLISH_PAGE, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
 
-             @RequiresApi(api = Build.VERSION_CODES.N)
-             @Override
-             public void onResponse(Call call, String responseStr) throws IOException {
-                 try {
-                     SLog.info("responseStr[%s]", responseStr);
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
 
-                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                     EasyJSONObject data = responseObj.getObject("datas");
-                     if (ToastUtil.checkError(_mActivity, responseObj)) {
-                         hideSoftInput();
-                         return;
-                     }
-                     updateView(data);
-                 } catch (Exception e) {
-                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                 }
-             }
-          });
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    EasyJSONObject data = responseObj.getObject("datas");
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        hideSoftInput();
+                        return;
+                    }
+                    updateView(data);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void updateView (EasyJSONObject data) throws Exception {
+    private void updateView(EasyJSONObject data) throws Exception {
         allowTariff = data.getInt("allowTariff");//1是0否允許發佈跨城購商品
         specMax = data.getInt("specMax");//允許添加的最大規格數量
         int specValueMax = data.getInt("specValueMax");//允許添加的最大規格數量值
@@ -273,11 +282,17 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         EasyJSONArray countryList = data.getArray("countyrList");//品牌所在地列表
         EasyJSONArray freightTemplateList = data.getArray("freightTemplateList");//物流模板列表
         EasyJSONArray specList = data.getArray("specList");//規格列表
+        if (unitList != null) {
+            for (Object object : unitList) {
+                this.unitList.add(object.toString());
+            }
+        }
         updatePrimaryView(data);
         updateSpecView(data);
         updateDetailView(data);
 
     }
+
     //    更新商品详情页数据
     private void updateDetailView(EasyJSONObject data) {
 
@@ -293,16 +308,13 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private void updatePrimaryView(EasyJSONObject data) throws Exception {
         EasyJSONArray unitList = data.getArray("unitList");//計量單位列表
         EasyJSONArray storeLabelList = data.getArray("storeLabelList");//店内分類列表
-        List<StoreLabel> labelList=new ArrayList<>();
-        for(Object storelabel:storeLabelList){
-            labelList.add(StoreLabel.parse((EasyJSONObject)storelabel));
+        List<StoreLabel> labelList = new ArrayList<>();
+        for (Object storelabel : storeLabelList) {
+            labelList.add(StoreLabel.parse((EasyJSONObject) storelabel));
+            SLog.info(labelList.get(0).getStoreLabelName());
         }
-        if (unitList != null) {
-            for (Object object : unitList) {
-                this.unitList.add(object.toString());
-            }
-        }
-        View view=mViews.get(0);
+
+        View view = mViews.get(0);
 
         Spinner spGoodLogo = view.findViewById(R.id.sp_add_good_logo);
         Spinner spGoodCategory = view.findViewById(R.id.sp_goods_category);
@@ -310,9 +322,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         List<String> listLogo = new ArrayList<>();
         List<String> listLocation = new ArrayList<>();
 //        String[] spinnerItems = new String[labelList.size()];
-        String[] spinnerItems = {"20","415","ed"};
-        int i = 0;
-        labelList.forEach(storeLabel -> spinnerItems[i]=storeLabel.getStoreLabelName());
+        List<String> spinnerItems = new ArrayList<>();
+        labelList.forEach((storeLabel) -> spinnerItems.add(storeLabel.getStoreLabelName()));
         //自定义选择填充后的字体样式
         //只能是textview样式，否则报错：ArrayAdapter requires the resource ID to be a TextView
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(_mActivity,
@@ -331,54 +342,57 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id){
+        switch (id) {
             case R.id.btn_primary_next:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()+1);
+                if (!savePrimaryInfo()) {
+                    break;
+                }
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 1);
                 break;
             case R.id.btn_basic_next:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()+1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 1);
 
                 break;
             case R.id.btn_basic_prev:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()-1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
 
                 break;
             case R.id.btn_spec_next:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()+1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 1);
 
                 break;
             case R.id.btn_spec_prev:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()-1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
 
                 break;
             case R.id.btn_add_address:
                 ToastUtil.success(_mActivity, "添加商品描述");
                 break;
             case R.id.btn_detail_next:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()+1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 1);
 
                 tvTitle.setText("詳情描述");
                 break;
             case R.id.btn_detail_prev:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()-1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
 
                 tvTitle.setText("規格與圖片");
                 break;
             case R.id.btn_freight_next:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()+1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 1);
 
                 tvTitle.setText("物流信息");
                 break;
             case R.id.btn_freight_prev:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()-1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
 
                 tvTitle.setText("詳情描述");
                 break;
-            case R.id.btn_others_next:
+            case R.id.btn_publish_goods:
                 commitGoodsInfo();
                 break;
             case R.id.btn_others_prev:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem()-1);
+                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
                 tvTitle.setText("物流信息");
                 break;
             default:
@@ -387,7 +401,46 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    private void commitGoodsInfo() {
+    private boolean savePrimaryInfo() {
+        View primaryView = mViews.get(PRIMARY_INDEX);
+        EditText etName=primaryView.findViewById(R.id.et_add_good_name);
+        String goodsName =etName.getText().toString();
+        if (StringUtil.isEmpty(goodsName)) {
+            ToastUtil.error(_mActivity,"請填寫商品名稱");
+            return false;
+        }
 
+
+        return true;
+    }
+
+//    收集表單信息，驗證信息符合要求后提交
+
+    private void commitGoodsInfo() {
+        savePublishGoodsInfo();
+    }
+
+    private void savePublishGoodsInfo() {
+          Api.postUI(Api.PATH_SELLER_GOODS_PUBLISH_SAVE, publishGoodsInfo, new UICallback() {
+             @Override
+             public void onFailure(Call call, IOException e) {
+                 ToastUtil.showNetworkError(_mActivity, e);
+             }
+
+             @Override
+             public void onResponse(Call call, String responseStr) throws IOException {
+                 try {
+                     SLog.info("responseStr[%s]", responseStr);
+
+                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                         return;
+                     }
+                     ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+                 } catch (Exception e) {
+                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                 }
+             }
+          });
     }
 }

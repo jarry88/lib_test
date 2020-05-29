@@ -67,6 +67,7 @@ public class StoreLabel implements Serializable {
         storeLabel.setImage(label.getSafeString("image"));
         storeLabel.setImageSrc(label.getSafeString("imageSrc"));
         storeLabel.parseStoreLabelList(label.getArray("storeLabelList"));
+        storeLabel.setStoreLabelName(label.getSafeString("storeLabelName"));
         return storeLabel;
     }
 

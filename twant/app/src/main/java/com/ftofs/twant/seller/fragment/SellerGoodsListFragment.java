@@ -160,7 +160,7 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
         } else if (id == R.id.btn_filter) {
 
         } else if (id == R.id.btn_publish_goods) {
-
+            Util.startFragment(AddGoodsFragment.newInstance());
         }
     }
 
