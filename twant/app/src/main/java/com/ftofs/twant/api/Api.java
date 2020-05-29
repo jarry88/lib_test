@@ -1349,6 +1349,11 @@ public class Api {
     public static final String PATH_SELLER_QUERY_COUNTRY_ALL = "/member/seller/query/country/all";
     /**
      * 【商家】
+     * 查詢所有品牌所在地
+     */
+    public static final String PATH_SELLER_GOODS_CATEGORY = "/member/seller/goods/category";
+    /**
+     * 【商家】
      * 商品發佈頁 保存
      */
     public static final String PATH_SELLER_GOODS_PUBLISH_SAVE = "/member/seller/goods/publish/save";
