@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,15 +20,21 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SimpleViewPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.UiUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.ScaledButton;
+import com.lxj.xpopup.XPopup;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
@@ -44,7 +49,7 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class AddGoodsFragment extends BaseFragment implements View.OnClickListener {
+public class AddGoodsFragment extends BaseFragment implements View.OnClickListener , OnSelectedListener {
     private Unbinder unbinder;
     private SimpleViewPagerAdapter mPagerAdapter;
     private List<View> mViews = new ArrayList<>();
@@ -61,6 +66,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private final int DETAIL_INDEX=3;//詳細信息頁
     private final int FREIGHT_INDEX=4;//物流信息頁
     private final int OTHERS_INDEX=5;//其他信息頁
+    private List<StoreLabel> labelList;
 
     public static AddGoodsFragment newInstance() {
         return new AddGoodsFragment();
@@ -232,6 +238,16 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_primary_widget, vpAddGood, false);
         Util.setOnClickListener(view, R.id.btn_primary_next, this);
+        TextView btnGoodCategory =view.findViewById(R.id.btn_select_category_id);
+        btnGoodCategory.setOnClickListener(v -> {
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new StoreLabelPopup(_mActivity, PopupType.STORE_LABEL, labelList,this))
+                    .show();
+        });
+//        btnGoodCategory.setBackground(UiUtil.tvButtonBackGround());
+
         return view;
     }
 
@@ -308,7 +324,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private void updatePrimaryView(EasyJSONObject data) throws Exception {
         EasyJSONArray unitList = data.getArray("unitList");//計量單位列表
         EasyJSONArray storeLabelList = data.getArray("storeLabelList");//店内分類列表
-        List<StoreLabel> labelList = new ArrayList<>();
+        labelList = new ArrayList<>();
         for (Object storelabel : storeLabelList) {
             labelList.add(StoreLabel.parse((EasyJSONObject) storelabel));
             SLog.info(labelList.get(0).getStoreLabelName());
@@ -318,6 +334,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
         Spinner spGoodLogo = view.findViewById(R.id.sp_add_good_logo);
         Spinner spGoodCategory = view.findViewById(R.id.sp_goods_category);
+        TextView btnGoodCategory = view.findViewById(R.id.btn_select_category_id);
         Spinner spGoodLocation = view.findViewById(R.id.sp_add_good_location);
         List<String> listLogo = new ArrayList<>();
         List<String> listLocation = new ArrayList<>();
@@ -431,7 +448,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
              public void onResponse(Call call, String responseStr) throws IOException {
                  try {
                      SLog.info("responseStr[%s]", responseStr);
-
                      EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                      if (ToastUtil.checkError(_mActivity, responseObj)) {
                          return;
@@ -442,5 +458,12 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                  }
              }
           });
+    }
+
+    @Override
+    public void onSelected(PopupType type, int id, Object extra) {
+        SLog.info("type[%s], id[%d], extra[%s]", type, id, extra);
+        if (type == PopupType.STORE_LABEL) {
+        }
     }
 }

@@ -258,7 +258,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
         } else if (!showlist&&id == R.id.btn_test) {
             if (tabClickCount > 5) {
                 showlist = true;
-                String[] data = {"取消","prod/線上" , "29", "28","驗收/F1","日誌開關","test"};
+                String[] data = {"取消","prod/線上" , "29", "229", "28","驗收/F1","日誌開關","test"};
                 XPopup.Builder builder = new XPopup.Builder(_mActivity);
                 builder.dismissOnTouchOutside(false);
                 builder.asCenterList("切換環境:", data, (position, text) -> {
@@ -272,20 +272,23 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                     } else if (position == 2) {
                         Config.changeEnvironment(Config.ENV_29);
                         exit();
-                    }else if(position==3){
+                    } else if (position == 3) {
+                        Config.changeEnvironment(Config.ENV_229);
+                        exit();
+                    }else if(position==4){
                         Config.changeEnvironment(Config.ENV_28);
                         exit();
-                    } else if(position==4){
+                    } else if(position==5){
                         Config.changeEnvironment(Config.ENV_F1);
                         exit();
-                    } else if (position == 5) {
+                    } else if (position == 6) {
                         if (Config.SLOGENABLE) {
                             ToastUtil.success(getContext(), "日誌輸出已開啟");
                         } else {
                             ToastUtil.success(getContext(), "打開日誌輸出");
                             Config.SLOGENABLE = true;
                         }
-                    } else if (position == 5) {
+                    } else if (position == 7) {
                         Util.startFragment(TestFragment.newInstance());
                     }else {
                         Util.startFragment(DebugFragment.newInstance());

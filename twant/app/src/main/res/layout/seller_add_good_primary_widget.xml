@@ -33,11 +33,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/tw_red"
-                        android:text="*"/>
+                        android:text=""/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="商品名稱：" />
+                        android:text="商品名稱：" 
+                        android:textSize="16sp"/>
                 </LinearLayout>
                 <EditText
                     android:id="@+id/et_add_good_name"
@@ -46,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:gravity="top"
                     android:hint="請輸入商品名稱"
+                    android:textSize="14sp"
                     android:layout_height="100dp"/>
 
             </LinearLayout>
@@ -58,18 +60,41 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tw_red"
-                    android:text="*"/>
+                    android:text=""/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="商品分類：" />
+                    android:text="商品分類："
+                    android:textSize="16sp"/>
 
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/sp_goods_category"
-                    android:autofillHints="選擇" />
+                    android:autofillHints="選擇"
+                    android:visibility="gone"/>
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_category_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_black"
+                    android:text="請選擇商品分類"
+                    android:layout_marginEnd="@dimen/margin12"/>
+                <TextView
+                    android:id="@+id/btn_select_category_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_white"
+                    android:text="@string/text_select"
+                    android:background="@drawable/grey_5dp_bg"
+
+                    android:textSize="12sp"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="@dimen/dp_4"
@@ -80,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tw_red"
-                    android:text="*"/>
+                    android:text=""/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -89,6 +114,7 @@
             <EditText
                 android:id="@+id/et_add_good_description"
                 android:hint="請輸入對產品的賣點描述："
+                android:textSize="14sp"
                 android:layout_marginTop="@dimen/dp_4"
                 android:background="@drawable/real_name_edit_bg"
                 android:layout_width="match_parent"

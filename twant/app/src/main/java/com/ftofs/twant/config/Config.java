@@ -30,6 +30,8 @@ public class Config {
      * Android 鍵盤最小的高度（單位dp）
      */
     public static final int KEYBOARD_MIN_HEIGHT = 150;
+    public static final int ENV_229 = 6;
+
 
 
     public static  boolean PROD = true;//true不能進入調試頁面，false，可以進入調試頁面切換環境
@@ -105,7 +107,7 @@ public class Config {
     public static void changeEnvironment(int env) {
         currEnv=env;
         Hawk.put(SPField.FIELD_CURRENT_ENV, currEnv);
-        if (env == ENV_28 || env == ENV_29) {
+        if (env == ENV_28 || env==ENV_229|| env == ENV_29) {
             PROD=false;
             DEVELOPER_MODE = true;
             USE_28 = env == ENV_28;
@@ -127,7 +129,7 @@ public class Config {
 
 
         BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29/api")
+                (USE_28 ? "http://192.168.5.28" : env==ENV_29?"https://192.168.5.29/api":"https://192.168.5.229/api")
                 : (USE_F2 ? "https://www.twant.com" : "https://www.twant.com");
 //        BASE_URL = DEVELOPER_MODE ?
 //                (USE_28 ? "http://192.168.5.28" : "http://120.196.113.116:8001/api")
@@ -137,14 +139,14 @@ public class Config {
                 : "https://img.twant.com";
 
         API_BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28/api" : "https://192.168.5.29/api")
+                (USE_28 ? "http://192.168.5.28/api" : env==ENV_29?"https://192.168.5.29/api":"https://192.168.5.229/api")
                 : (USE_F2 ? (USE_F1?"https://f1.twant.com/api":"https://f2.twant.com/api") : "https://www.twant.com/api");
 //        API_BASE_URL = DEVELOPER_MODE ?
 //               (USE_28 ? "http://192.168.5.28/api" : "http://120.196.113.116:8001/api")
 //                : (USE_F2 ? "https://f2.twant.com/api" : "https://www.twant.com/api");
 
         WEB_BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28/web" : "https://192.168.5.29/web")
+                (USE_28 ? "http://192.168.5.28/web" : env==ENV_29?"https://192.168.5.29/web":"https://192.168.5.229/web")
                 : (USE_F2 ? "https://www.twant.com/web" : "https://www.twant.com/web");
 
 

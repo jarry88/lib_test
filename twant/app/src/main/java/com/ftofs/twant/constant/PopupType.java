@@ -181,4 +181,9 @@ public enum PopupType {
      * 選擇結束日期
      */
     SELECT_END_DATE,
+    /**
+     * 選擇店内分類
+     */
+    STORE_LABEL ,
+    ;
 }

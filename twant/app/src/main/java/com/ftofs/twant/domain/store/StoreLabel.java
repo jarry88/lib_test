@@ -59,6 +59,7 @@ public class StoreLabel implements Serializable {
      * 子集实体
      */
     private List<StoreLabel> storeLabelList;
+    private int depth =1;
 
     public static StoreLabel parse(EasyJSONObject label)throws Exception {
         StoreLabel storeLabel = new StoreLabel();
@@ -181,5 +182,9 @@ public class StoreLabel implements Serializable {
             }
             setStoreLabelList(storeLabels);
         }
+    }
+
+    public int getAreaDeep() {
+        return depth;
     }
 }

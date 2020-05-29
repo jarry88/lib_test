@@ -95,10 +95,9 @@ public class FeaturesGoodsAdapter  extends RecyclerView.Adapter<FeaturesGoodsAda
         holder.tvGoodsPrice.setText(StringUtil.formatPrice(context, item.price, 1,false));
         UiUtil.toPriceUI(holder.tvGoodsPrice,12);
 
-        if (item.showDiscount) {
-            holder.swPrice.setDiscountInfo(context,item.getDiscount(),item.getOriginal());
-            holder.swPrice.setVisibility(View.VISIBLE);
-        }
+        holder.swPrice.setVisibility(item.showDiscount?View.VISIBLE:View.GONE);
+        holder.swPrice.setDiscountInfo(context, item.getDiscount(), item.getOriginal());
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

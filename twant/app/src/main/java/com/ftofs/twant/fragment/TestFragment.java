@@ -280,6 +280,12 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
             Config.changeEnvironment(Config.ENV_29);
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
+        }  else if (id == R.id.tv_229) {
+            User.logout();
+            ToastUtil.success(_mActivity, "切換至229");
+            Config.changeEnvironment(Config.ENV_229);
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
         } else if (id == R.id.tv_prod) {
             User.logout();
             ToastUtil.success(_mActivity, "切換至prod");
