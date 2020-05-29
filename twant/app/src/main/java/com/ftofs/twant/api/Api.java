@@ -1422,6 +1422,16 @@ public class Api {
      */
     public static final String PATH_SELLER_COPY_GOODS = "/member/seller/goods/copy";
 
+    /**
+     * 优惠券口令解析
+     */
+    public static final String PATH_PARSE_COUPON_WORD = "/app/command/crack";
+
+    /**
+     * 口令領取優惠券
+     */
+    public static final String PATH_RECEIVE_WORD_COUPON = "/member/app/command/receive";
+
 
 
     /**
