@@ -328,4 +328,8 @@ public class Constant {
     public static final int GOODS_STATUS_ON_SHELF = 1;   // 在售(即上架)
     public static int SELLER_REFUND=1;//退款
     public static int SELLER_RETURN=2;//退貨
+
+
+    public static final String WORD_COUPON_TYPE_STORE = "voucher";   // 店鋪口令優惠券
+    public static final String WORD_COUPON_TYPE_PLATFORM = "coupon";  // 平臺口令優惠券
 }
