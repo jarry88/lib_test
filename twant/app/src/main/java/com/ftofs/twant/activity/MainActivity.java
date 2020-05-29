@@ -1,6 +1,7 @@
 package com.ftofs.twant.activity;
 
 import android.annotation.SuppressLint;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -64,6 +65,7 @@ import com.ftofs.twant.tangram.TangramClickSupport;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.task.TencentLocationTask;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.FileUtil;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PayUtil;
@@ -74,7 +76,9 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.view.DragFloatActionButton;
+import com.ftofs.twant.widget.ActivityPopup;
 import com.ftofs.twant.widget.AppUpdatePopup;
+import com.ftofs.twant.widget.CouponWordDialog;
 import com.ftofs.twant.widget.TwConfirmPopup;
 import com.huawei.hms.aaid.HmsInstanceId;
 import com.hyphenate.chat.EMClient;
@@ -149,6 +153,10 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
      * App升級文件的路徑
      */
     private String updateApkPath;
+
+    ClipboardManager mClipboardManager;
+    ClipboardManager.OnPrimaryClipChangedListener mOnPrimaryClipChangedListener;
+    CouponWordDialog couponWordDialog;
 
     // TODO: 2019/8/19 處理HandlerLeak
     @SuppressLint("HandlerLeak")
@@ -316,6 +324,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         setFloatActionMenuOnClick();
         SLog.info("oncreate方法处调用");
         replyIntent();
+
+        // 註冊檢測剪貼板事件
+        registerClipEvents();
     }
 
     private void updateDeviceToken() {
@@ -632,6 +643,16 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         if (!isLocationValid) { // 如果定位数据无效，请求重新定位
             TencentLocationTask.doLocation(this);
         }
+
+        // 切換到前臺時，檢測剪貼板中是否有優惠券
+        CharSequence clipboardContent = ClipboardUtils.getText(this);
+        if (clipboardContent != null) {
+            String word = StringUtil.getCouponWord(clipboardContent.toString());
+
+            if (word != null) {
+                parseCouponWord(word);
+            }
+        }
     }
 
     private void doLaunchApp(String launchAppParams) {
@@ -807,6 +828,11 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         // 退出的时候销毁 engine
         engine.destroy();
+
+        // 注销剪贴板监听，避免内存泄漏。
+        if (mClipboardManager != null && mOnPrimaryClipChangedListener != null) {
+            mClipboardManager.removePrimaryClipChangedListener(mOnPrimaryClipChangedListener);
+        }
     }
 
     public static MainActivity getInstance() {
@@ -1072,5 +1098,85 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
     public boolean getMessageFragmentsActivity() {
         return messageFragmentsActivity;
+    }
+
+
+    /**
+     * 注册剪切板复制、剪切事件监听
+     */
+    private void registerClipEvents() {
+        mClipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        mOnPrimaryClipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
+            @Override
+            public void onPrimaryClipChanged() {
+                if (mClipboardManager.hasPrimaryClip()
+                        && mClipboardManager.getPrimaryClip().getItemCount() > 0) {
+                    // 获取复制、剪切的文本内容
+                    CharSequence content =
+                            mClipboardManager.getPrimaryClip().getItemAt(0).getText();
+                    SLog.info("复制、剪切的内容为：" + content);
+
+                    String word = StringUtil.getCouponWord(content.toString());
+
+                    if (word != null) {
+                        parseCouponWord(word);
+                    }
+                }
+            }
+        };
+        mClipboardManager.addPrimaryClipChangedListener(mOnPrimaryClipChangedListener);
+    }
+
+    private void parseCouponWord(String word) {
+        if (StringUtil.isEmpty(word)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate("command", word);
+        SLog.info("params%s",params);
+        Api.postUI(Api.PATH_PARSE_COUPON_WORD, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(MainActivity.this, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try{
+                    SLog.info("responseStr",responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.isError(responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONObject couponData = responseObj.getSafeObject("datas");
+                    showCouponWordDialog(word, couponData);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
+
+    /**
+     * 顯示優惠券口令對話框
+     * @param word 口令
+     * @param extraData 附加數據
+     */
+    private void showCouponWordDialog(String word, EasyJSONObject extraData) {
+        if (couponWordDialog == null) {
+            couponWordDialog = (CouponWordDialog) new XPopup.Builder(MainActivity.this)
+                    .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
+                    .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new CouponWordDialog(MainActivity.this));
+        }
+
+        if (couponWordDialog.isShow()) {
+            return;
+        }
+
+        couponWordDialog.setData(word, extraData);
     }
 }

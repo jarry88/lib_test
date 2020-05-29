@@ -856,4 +856,28 @@ public class StringUtil {
 
         return new Pair<>(areaCode, mobile);
     }
+
+    /**
+     * 从字符串中获取优惠券口令
+     * @param str
+     * @return  如果匹配，返回口令；如果不匹配，返回null
+     */
+    public static String getCouponWord(String str) {
+        Pattern pattern = Pattern.compile("\\$.+\\$");
+        String word = null;
+        Matcher matcher = pattern.matcher(str);
+        if (matcher.find()) {
+            word = matcher.group(0);
+
+            if (word == null) {
+                return null;
+            }
+
+            word = word.substring(1, word.length() - 1) // 去掉前後的$符
+                    .trim(); // 去掉前後空格
+        }
+        SLog.info("word[%s]", word);
+
+        return word;
+    }
 }
