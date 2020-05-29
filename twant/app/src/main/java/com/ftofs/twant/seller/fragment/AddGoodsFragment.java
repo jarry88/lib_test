@@ -26,6 +26,7 @@ import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -67,6 +68,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private final int FREIGHT_INDEX=4;//物流信息頁
     private final int OTHERS_INDEX=5;//其他信息頁
     private List<StoreLabel> labelList;
+
+    List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();
 
     public static AddGoodsFragment newInstance() {
         return new AddGoodsFragment();
@@ -218,6 +221,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         View view = LayoutInflater.from(getContext()).inflate(R.layout.seller_add_good_spec_widget, vpAddGood, false);
         Util.setOnClickListener(view, R.id.btn_spec_next, this);
         Util.setOnClickListener(view, R.id.btn_spec_prev, this);
+        Util.setOnClickListener(view, R.id.btn_add_spec, this);
         return view;
     }
 
@@ -297,7 +301,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         EasyJSONArray formatTopList = data.getArray("formatTopList");//頂部關聯版式列表
         EasyJSONArray countryList = data.getArray("countyrList");//品牌所在地列表
         EasyJSONArray freightTemplateList = data.getArray("freightTemplateList");//物流模板列表
-        EasyJSONArray specList = data.getArray("specList");//規格列表
+        EasyJSONArray specListArr = data.getArray("specList");//規格列表
         if (unitList != null) {
             for (Object object : unitList) {
                 this.unitList.add(object.toString());
@@ -307,6 +311,10 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         updateSpecView(data);
         updateDetailView(data);
 
+        // 處理規格列表
+        for (Object object : specListArr) {
+
+        }
     }
 
     //    更新商品详情页数据
