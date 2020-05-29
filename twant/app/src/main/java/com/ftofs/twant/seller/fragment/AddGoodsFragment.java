@@ -22,6 +22,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SPField;
+import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -46,6 +47,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -67,6 +69,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private final int FREIGHT_INDEX=4;//物流信息頁
     private final int OTHERS_INDEX=5;//其他信息頁
     private List<StoreLabel> labelList;
+    private int categoryId =-1;
 
     public static AddGoodsFragment newInstance() {
         return new AddGoodsFragment();
@@ -243,7 +246,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
-                    .asCustom(new StoreLabelPopup(_mActivity, PopupType.STORE_LABEL, labelList,this))
+                    .asCustom(new StoreLabelPopup(_mActivity, PopupType.STORE_LABEL,this))
                     .show();
         });
 //        btnGoodCategory.setBackground(UiUtil.tvButtonBackGround());
@@ -426,7 +429,23 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             ToastUtil.error(_mActivity,"請填寫商品名稱");
             return false;
         }
-
+        if (categoryId < 0) {
+            ToastUtil.error(_mActivity,"請選擇商品分類");
+            return false;
+        }
+        EditText etJingle=primaryView.findViewById(R.id.et_add_good_description);
+        String jingle =etJingle.getText().toString();
+        if (StringUtil.isEmpty(jingle)) {
+            ToastUtil.error(_mActivity,"請填寫商品賣點");
+            return false;
+        }
+        try {
+            publishGoodsInfo.set("goodsName", goodsName);
+            publishGoodsInfo.set("categoryId", categoryId);
+            publishGoodsInfo.set("jingle", jingle);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
 
         return true;
     }
@@ -464,6 +483,18 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("type[%s], id[%d], extra[%s]", type, id, extra);
         if (type == PopupType.STORE_LABEL) {
+            List<Category> selectCategoryList =(List<Category>)extra;
+            Category categoryLast = new Category();
+            StringBuilder selectCategoryName=new StringBuilder();
+            for (Category category : selectCategoryList) {
+                categoryLast = category;
+                 selectCategoryName.append(category.getCategoryName()).append( " -- ");
+            }
+            if (!StringUtil.isEmpty(selectCategoryName.toString())) {
+                selectCategoryName.deleteCharAt(selectCategoryName.length() - 4);
+                ((TextView)(mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_category_id))).setText(selectCategoryName.toString());
+                categoryId = categoryLast.getCategoryId();
+            }
         }
     }
 }

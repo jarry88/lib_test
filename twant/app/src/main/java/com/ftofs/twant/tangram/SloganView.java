@@ -91,6 +91,9 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
             ImageView thirdImage =llSecondLine.findViewById(R.id.img_zone_third);
             ImageView fourthImage =llSecondLine.findViewById(R.id.img_zone_fourth);
             try{
+                if (size >= 5) {
+                    size = 4;
+                }
                 if (size == 1||size==3||size==5) {
 
                     clSecondLine.setVisibility(View.GONE);

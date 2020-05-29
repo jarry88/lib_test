@@ -1,6 +1,7 @@
 package com.ftofs.twant.seller.widget;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -12,18 +13,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.AreaPopupAdapter;
+import com.ftofs.twant.adapter.StoreLabelPopupAdapter;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AreaItemView;
 import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 public class StoreLabelPopup extends BottomPopupView implements View.OnClickListener {
     private final OnSelectedListener onSelectedListener;
@@ -32,17 +44,24 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
         PopupType popupType;
 
         List<StoreLabel> labelList;
-        List<StoreLabel> selectedAreaList = new ArrayList<>();
+        List<Category> selectedAreaList = new ArrayList<>();
         List<AreaItemView> areaItemViewList = new ArrayList<>();
+    List<Category> firstCategoryList =new ArrayList<>();
+    List<Category> secondCategoryList =new ArrayList<>();
+    List<Category> thirdCategoryList =new ArrayList<>();
+    List<ArrayList<Category>> categoryData=new ArrayList<>();
     private LinearLayout llStoreLabelContainer;
-    private AreaPopupAdapter adapter;
+    private StoreLabelPopupAdapter adapter;
 
-    public StoreLabelPopup(@NonNull Context context, PopupType popupType, List<StoreLabel> labelList, OnSelectedListener onSelectedListener) {
+    private int categoryId;
+    private int depth;
+    private StoreLabel categoryName;
+
+    public StoreLabelPopup(@NonNull Context context, PopupType popupType, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
         this.popupType = popupType;
-        this.labelList = labelList;
         this.onSelectedListener = onSelectedListener;
         twBlack = getResources().getColor(R.color.tw_black, null);
     }
@@ -53,7 +72,9 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
     @Override
     protected void onCreate() {
         super.onCreate();
-
+        categoryData.add((ArrayList<Category>) firstCategoryList);
+        categoryData.add((ArrayList<Category>) secondCategoryList);
+        categoryData.add((ArrayList<Category>) thirdCategoryList);
         llStoreLabelContainer = findViewById(R.id.ll_area_container);
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
 
@@ -61,34 +82,34 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
         RecyclerView rvList = findViewById(R.id.rv_area_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rvList.setLayoutManager(layoutManager);
-        adapter = new AreaPopupAdapter(R.layout.area_popup_item, labelList);
+        adapter = new StoreLabelPopupAdapter(R.layout.area_popup_item, firstCategoryList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("position[%d]", position);
-                if (position >= labelList.size()) {
+                if (position >= firstCategoryList.size()) {
                     return;
                 }
 
                 AreaItemView areaItemView = new AreaItemView(getContext());
-                StoreLabel area = labelList.get(position);
+                Category category = firstCategoryList.get(position);
 
-                int depth = area.getAreaDeep();
-                if (selectedAreaList.size() >= depth) {
-                    SLog.info("已经是最后一级, SIZE[%d], DEPTH[%d]", labelList.size(), depth);
-                    setSelectLabelId();
+                int depth = category.getDeep();
+                if (depth>=3) {
+                    SLog.info("已经是最后一级, SIZE[%d], DEPTH[%d]", selectedAreaList.size(), depth);
+                    setSelectLabelId(category);
                     return;
                 }
-                selectedAreaList.add(area);
+                selectedAreaList.add(category);
 
                 // 將之前的AreaItemView取消高亮
-                for (AreaItemView itemView : areaItemViewList) {
-                    // itemView.setStatus(Constant.STATUS_UNSELECTED);
-                }
-                areaItemView.setText(area.getStoreLabelName());
+//                for (AreaItemView itemView : areaItemViewList) {
+//                     itemView.setStatus(Constant.STATUS_UNSELECTED);
+//                }
+                areaItemView.setText(category.getCategoryName());
                 areaItemView.setStatus(Constant.STATUS_SELECTED);
-                areaItemView.setDepth(depth);
-                areaItemView.setAreaId(area.getStoreLabelId());
+                areaItemView.setDepth(category.getDeep());
+                areaItemView.setAreaId(category.getCategoryId());
                 areaItemView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -113,11 +134,11 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                         int parentIndex = index - 1;
                         if (parentIndex == -1) {
 
-loadLabelData(0);
+                            loadLabelData(0);
                         } else {
-                            StoreLabel parentArea = selectedAreaList.get(parentIndex);
+                            Category parentArea = selectedAreaList.get(parentIndex);
 
-loadLabelData(parentArea.getStoreLabelId());
+                            loadLabelData(parentArea.getCategoryId());
                         }
                     }
                 });
@@ -128,19 +149,56 @@ loadLabelData(parentArea.getStoreLabelId());
                 llStoreLabelContainer.addView(areaItemView, layoutParams);
 
 
-loadLabelData(area.getStoreLabelId());
+                loadLabelData(category.getCategoryId());
             }
         });
 
         rvList.setAdapter(adapter);
 
-loadLabelData(0);
+        loadLabelData(0);
     }
 
-    private void setSelectLabelId() {
+    private void setSelectLabelId(Category category) {
+        if (selectedAreaList.size() >= category.getDeep()) {
+            selectedAreaList.set(category.getDeep(), category);
+        } else {
+            selectedAreaList.add(category);
+        }
+        onSelectedListener.onSelected(PopupType.STORE_LABEL,categoryId,selectedAreaList);
     }
 
-    private void loadLabelData(int storeLabelId) {
+    private void loadLabelData(int categoryId) {
+         EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
+          SLog.info("params[%s]", params);
+          Api.getUI(Api.PATH_SELLER_GOODS_CATEGORY+String.format("/%d",categoryId), params, new UICallback() {
+             @Override
+             public void onFailure(Call call, IOException e) {
+                 ToastUtil.showNetworkError(context, e);
+             }
+
+             @Override
+             public void onResponse(Call call, String responseStr) throws IOException {
+                 try {
+                     SLog.info("responseStr[%s]", responseStr);
+
+                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                     if (ToastUtil.checkError(context, responseObj)) {
+                         return;
+                     }
+
+                     EasyJSONArray categoryList = responseObj.getSafeArray("datas.categoryList");
+                     categoryData.get(depth).clear();
+                     for (Object object : categoryList) {
+                         categoryData.get(depth).add(Category.parse((EasyJSONObject) object));
+                     }
+                     if (depth == 0) {
+                         adapter.setNewData(categoryData.get(0));
+                     }
+                 } catch (Exception e) {
+                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                 }
+             }
+          });
 
     }
 

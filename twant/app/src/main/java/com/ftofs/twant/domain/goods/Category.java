@@ -2,6 +2,8 @@ package com.ftofs.twant.domain.goods;
 
 import java.io.Serializable;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+
 public class Category implements Serializable {
     /**
      * 產品分类编号
@@ -37,6 +39,14 @@ public class Category implements Serializable {
      * 移动端分类图片Url
      */
     private String appImageUrl;
+
+    public static Category parse(EasyJSONObject category) throws Exception{
+        Category item = new Category();
+        item.categoryId = category.getInt("categoryId");
+        item.deep = category.getInt("deep");//1,2,3
+        item.categoryName = category.getSafeString("categoryName");
+        return item;
+    }
 
     public int getCategoryId() {
         return categoryId;
