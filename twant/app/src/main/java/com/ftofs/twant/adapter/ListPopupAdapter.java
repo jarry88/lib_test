@@ -121,7 +121,7 @@ public class ListPopupAdapter extends RecyclerView.Adapter<ListPopupAdapter.View
             @Override
             public void onClick(View v) {
                 index = i;
-                onSelectedListener.onSelected(type, i, null);
+                onSelectedListener.onSelected(type, i, itemList.get(i).data);
             }
         });
     }

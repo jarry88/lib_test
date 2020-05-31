@@ -26,24 +26,48 @@
                 >
 
                 <TextView
+                    android:layout_marginTop="@dimen/margin8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="商品發佈："
+                    android:textColor="@color/tw_black"
                     android:layout_marginEnd="@dimen/margin12"/>
                 <LinearLayout
+                    android:id="@+id/ll_instance_publish"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
-                    <com.ftofs.twant.widget.ScaledButton
+                    <LinearLayout
+                        android:gravity="center_vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/sb_instance_publish" />
+                        android:layout_height="wrap_content">
+                        <com.ftofs.twant.widget.ScaledButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:id="@+id/sb_instance_publish"
+                            app:icon_src="@drawable/icon_image_un_select"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="立即發佈"/>
+                    </LinearLayout>
 
-                    <com.ftofs.twant.widget.ScaledButton
+                    <LinearLayout
+                        android:id="@+id/ll_add_hub"
+                        android:gravity="center_vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/sb_add_hub" />
+                        android:layout_height="wrap_content">
+                        <com.ftofs.twant.widget.ScaledButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            app:icon_src="@drawable/icon_image_un_select"
+                            android:id="@+id/sb_add_hub" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="放入倉庫"/>
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
@@ -64,6 +88,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="參加促銷活動"
+                    android:textColor="@color/tw_black"
+
                     android:layout_marginEnd="@dimen/margin12"/>
                 <com.kyleduo.switchbutton.SwitchButton
                     android:layout_width="wrap_content"
@@ -85,9 +111,8 @@
                     android:text="上一步"
                     android:layout_margin="@dimen/margin12"
                     android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-
-                    android:paddingEnd="@dimen/margin12"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
                     android:background="@drawable/white_20dp_radius_bg"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -97,8 +122,8 @@
                     android:text="立即發佈"
                     android:textColor="@color/tw_white"
                     android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-                    android:paddingEnd="@dimen/margin12"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
                     android:background="@drawable/blue_20dp_bg"/>
 
             </LinearLayout>

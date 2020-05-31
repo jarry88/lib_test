@@ -22,9 +22,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="vertical"
                 >
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_red"
+                    android:text="*"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -32,13 +36,32 @@
 
 
             </LinearLayout>
-
-            <Spinner
-                android:id="@+id/sp_add_good_unit"
+            <LinearLayout
+                android:layout_marginTop="@dimen/dp_4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="選擇"
-                android:tooltipText="sdf" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginEnd="@dimen/margin12"
+                    android:singleLine="true"
+                    android:id="@+id/tv_select_store_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_black"
+                    android:textSize="12sp"
+
+                    android:hint="請選擇店内分類" />
+                <TextView
+
+                    android:id="@+id/btn_select_store_category_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tw_white"
+                    android:text="@string/text_select"
+                    android:background="@drawable/grey_5dp_bg"
+
+                    android:textSize="12sp"
+                    />
+            </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="@dimen/dp_4"
                 android:layout_width="wrap_content"
@@ -56,12 +79,74 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:background="@drawable/personal_profile_edit_text_bg" />
+                android:background="@drawable/seller_edit_text_bg"
+                android:id="@+id/et_goods_video_url"
+                android:layout_marginTop="@dimen/dp_4"
+                android:hint="只支持youtube視頻鏈接"
+                android:textSize="12sp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_4"
+                android:textSize="12sp"
                 android:text="例如：https://www.youtube.com/watch?v=TH_oZ2cyDK0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_4"
+                android:text="關聯版式：" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:text="頂部版式：" />
+
+                    <TextView
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:layout_width="120dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/spinner_border_bg"
+                        android:id="@+id/tv_format_top"
+                        android:text="請選擇"
+                        android:inputType="numberDecimal"/>
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:text="底部版式：" />
+
+                    <TextView
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:layout_width="120dp"
+                        android:layout_height="32dp"
+                        android:text="請選擇"
+
+                        android:background="@drawable/spinner_border_bg"
+                        android:id="@+id/tv_format_bottom"
+                        android:inputType="numberDecimal"/>
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,11 +156,11 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_add_app_description"
                     android:layout_margin="@dimen/margin12"
-                    android:text="添加商品段描述"
+                    android:text="添加移動端商品描述"
                     android:textColor="@color/tw_white"
                     android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-                    android:paddingEnd="@dimen/margin12"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
                     android:background="@drawable/gren_5dp_bg"/>
 
             </LinearLayout>
@@ -90,9 +175,8 @@
                     android:text="上一步"
                     android:layout_margin="@dimen/margin12"
                     android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-
-                    android:paddingEnd="@dimen/margin12"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
                     android:background="@drawable/white_20dp_radius_bg"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,15 +186,11 @@
                     android:text="下一步，商品詳情"
                     android:textColor="@color/tw_white"
                     android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-                    android:paddingEnd="@dimen/margin12"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
                     android:background="@drawable/blue_20dp_bg"/>
 
             </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="關聯版式：" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

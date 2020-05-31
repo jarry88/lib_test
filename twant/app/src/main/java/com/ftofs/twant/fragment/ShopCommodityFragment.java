@@ -808,7 +808,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         storeLabel.setIsFold(Constant.TRUE_INT);
 
                         EasyJSONArray storeLabelList = easyJSONObject.getSafeArray("storeLabelList");
-                            storeLabel.parseStoreLabelList(storeLabelList);
+                            storeLabel.parseStoreLabelList(storeLabelList,1);
                         }
 
                         if (storeLabel.getStoreLabelList() == null) { // 保證不為null

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
@@ -71,22 +73,56 @@
             <LinearLayout
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_height="wrap_content">
+                    <com.ftofs.twant.widget.ScaledButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon_src="@drawable/icon_image_un_select"
 
-                <com.ftofs.twant.widget.ScaledButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                        android:id="@+id/sb_retail" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="零售型"/>
+                </LinearLayout>
+                <LinearLayout
+
+                    android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:id="@+id/sb_retail" />
-                <com.ftofs.twant.widget.ScaledButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:gravity="center"
+
+                    android:layout_height="wrap_content">
+                    <com.ftofs.twant.widget.ScaledButton
+                        app:icon_src="@drawable/icon_image_un_select"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sb_across" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="跨城型"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:id="@+id/sb_across" />
-                <com.ftofs.twant.widget.ScaledButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/sb_virtual" />
+                    android:gravity="center"
+                    android:layout_height="wrap_content">
+                    <com.ftofs.twant.widget.ScaledButton
+                        app:icon_src="@drawable/icon_image_un_select"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sb_virtual" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="虛擬型"/>
+                </LinearLayout>
 
             </LinearLayout>
             <LinearLayout

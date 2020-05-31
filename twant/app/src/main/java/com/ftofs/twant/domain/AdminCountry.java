@@ -37,6 +37,7 @@ public class AdminCountry {
         EasyJSONObject item = (EasyJSONObject) o;
         AdminCountry adminCountry = new AdminCountry();
         adminCountry.countryId = item.getInt("countryId");
+        adminCountry.countryCn = item.getSafeString("countryCn");
         adminCountry.countryContinents = item.getSafeString("countryContinents");
         return adminCountry;
     }

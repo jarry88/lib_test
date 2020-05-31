@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
@@ -8,7 +10,7 @@
         <LinearLayout
             android:id="@+id/ll_seller_handle_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@drawable/white_6dp_radius_bg"
             android:paddingBottom="@dimen/margin12"
@@ -32,51 +34,133 @@
 
 
             </LinearLayout>
-
-            <Spinner
-                android:id="@+id/sp_add_good_unit"
+            <LinearLayout
+                android:padding="@dimen/dp_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="選擇"
-                android:tooltipText="sdf" />
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top">
+                android:gravity="center_vertical">
+
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    app:icon_src="@drawable/icon_image_un_select"
+                    android:id="@+id/sb_freight_solid" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="介紹説明鏈接："
-                    />
+                    android:layout_marginStart="@dimen/margin12"
+                    android:text="使用固定運費" />
 
+                <com.ftofs.twant.widget.FixedEditText
+                    android:layout_width="120dp"
+                    android:paddingStart="@dimen/dp_4"
+                    android:layout_height="match_parent"
+                    android:singleLine="true"
+                    android:textSize="13sp"
+                    android:hint="0"
+                    android:background="@drawable/seller_edit_text_bg"
+                    android:layout_marginStart="@dimen/margin8"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/et_add_fixed_freight" />
             </LinearLayout>
+            <LinearLayout
+                android:padding="@dimen/dp_4"
 
-            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:background="@drawable/personal_profile_edit_text_bg" />
+                android:gravity="center_vertical">
+
+                <com.ftofs.twant.widget.ScaledButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    app:icon_src="@drawable/icon_image_un_select"
+                    android:id="@+id/sb_freight_temple" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin12"
+                    android:text="使用物流規則" />
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:singleLine="true"
+                    android:hint="請選擇物流規則"
+                    android:background="@drawable/spinner_border_bg"
+                    android:layout_marginStart="@dimen/margin8"
+                    android:id="@+id/tv_add_freight_rule" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="例如：https://www.youtube.com/watch?v=TH_oZ2cyDK0" />
+                android:text="商品的物流參數：" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btn_add_app_description"
-                    android:layout_margin="@dimen/margin12"
-                    android:text="添加商品段描述"
-                    android:textColor="@color/tw_white"
-                    android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-                    android:paddingEnd="@dimen/margin12"
-                    android:background="@drawable/gren_5dp_bg"/>
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:text="重量：" />
+
+                    <EditText
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:layout_width="120dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/seller_edit_text_bg"
+                        android:id="@+id/et_freight_weight"
+                        android:inputType="numberDecimal"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:text="kg" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:text="體積：" />
+
+                    <EditText
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:layout_marginEnd="@dimen/dp_4"
+                        android:layout_width="120dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/seller_edit_text_bg"
+                        android:id="@+id/et_freight_v"
+                        android:inputType="numberDecimal"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:text="m3"
+                        />
+                </LinearLayout>
 
             </LinearLayout>
             <LinearLayout
@@ -90,9 +174,8 @@
                     android:text="上一步"
                     android:layout_margin="@dimen/margin12"
                     android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-
-                    android:paddingEnd="@dimen/margin12"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
                     android:background="@drawable/white_20dp_radius_bg"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,15 +185,11 @@
                     android:text="下一步，商品詳情"
                     android:textColor="@color/tw_white"
                     android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-                    android:paddingEnd="@dimen/margin12"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
                     android:background="@drawable/blue_20dp_bg"/>
 
             </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="商品的物流參數：" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

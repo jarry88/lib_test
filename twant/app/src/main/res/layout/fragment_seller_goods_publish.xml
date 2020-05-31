@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,36 +10,46 @@
         android:id="@+id/rl_title_container"
         bind:tvTitle="基本信息"
         bind:showMenuView="false" />
-    <RelativeLayout
+    <LinearLayout
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:id="@+id/rl_guide_container">
-        <TextView
-            android:id="@+id/tv_notice"
+        android:id="@+id/rl_guide_container"
+        android:orientation="vertical">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPurple"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:text="產品信息比較多\n建議在電腦完成"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center">
+            <TextView
+                android:layout_marginTop="24dp"
+                android:id="@+id/tv_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="產品信息比較多\n建議在電腦端完成"
+                android:textColor="@color/colorPurple"
+                android:textSize="24sp" />
+        </RelativeLayout>
+
         <LinearLayout
+            android:layout_weight="0.6"
             android:layout_below="@id/tv_notice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/margin12">
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="立即發佈"
+                android:text="開始發佈"
                 android:id="@+id/btn_publish"
                 android:textColor="@color/colorPurple"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
                 android:gravity="center_horizontal"
                 android:background="@drawable/purple_5dp_bg"
                 android:textSize="16sp"/>
@@ -51,15 +62,17 @@
                 <com.ftofs.twant.widget.ScaledButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/sb_check_notice" />
+                    android:id="@+id/sb_check_notice"
+                    app:icon_src="@drawable/icon_image_un_select"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/tw_black"
                     android:text="不再提示"/>
 
             </LinearLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"

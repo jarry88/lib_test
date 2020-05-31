@@ -35,7 +35,6 @@ public class ScaledButton extends RelativeLayout {
 
         LayoutInflater.from(context).inflate(R.layout.scaled_button, this);
         buttonIcon = findViewById(R.id.button_icon);
-        textView = findViewById(R.id.sb_text);
 
         TypedArray array = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ScaledButton, defStyleAttr, 0);
         Drawable drawable = array.getDrawable(R.styleable.ScaledButton_icon_src);
@@ -80,8 +79,8 @@ public class ScaledButton extends RelativeLayout {
     }
 
     public void setText(String string) {
-        textView.setText(string);
-        textView.setVisibility(VISIBLE);
+//        textView.setText(string);
+//        textView.setVisibility(VISIBLE);
     }
 }
 
