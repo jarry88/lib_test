@@ -16,79 +16,60 @@
             android:paddingStart="@dimen/margin12"
             android:paddingEnd="@dimen/margin12"
             android:visibility="visible">
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:id="@+id/ll_widget_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="top">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/tw_red"
-                        android:text="*"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="計量單位：" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <Spinner
-                android:id="@+id/sp_add_good_unit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="選擇"
-                android:tooltipText="sdf" />
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="top">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
-                    android:text="*"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="銷售模式："
-                    />
+                android:text="1、選擇商品規格：">
 
-            </LinearLayout>
+            </TextView>
+            <TextView
+                android:id="@+id/btn_add_spec"
+                android:layout_width="120dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="添加規格"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:background="@color/tw_blue">
+            </TextView>
+
             <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent">
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="商品視頻鏈接：">
+                </TextView>
+                <EditText
+                    android:id="@+id/et_goods_video_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:singleLine="true"
+                    android:background="@drawable/spec_item_unselected_bg"
+                    android:hint="只支持youtube視頻鏈接">
 
-                <com.ftofs.twant.widget.ScaledButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/sb_retail" />
-                <com.ftofs.twant.widget.ScaledButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/sb_across" />
-                <com.ftofs.twant.widget.ScaledButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/sb_virtual" />
+                </EditText>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="例如：https://www.youtube.com/watch?v=sv0CE-Vo00g">
+                </TextView>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="center">
                 <TextView
                     android:layout_width="wrap_content"
