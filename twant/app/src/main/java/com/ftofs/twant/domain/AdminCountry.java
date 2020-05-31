@@ -1,5 +1,7 @@
 package com.ftofs.twant.domain;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+
 public class AdminCountry {
     /**
      * 編號
@@ -30,6 +32,14 @@ public class AdminCountry {
      * 排序
      */
     private int countrySort = 0;
+
+    public static AdminCountry parase(Object o) throws Exception{
+        EasyJSONObject item = (EasyJSONObject) o;
+        AdminCountry adminCountry = new AdminCountry();
+        adminCountry.countryId = item.getInt("countryId");
+        adminCountry.countryContinents = item.getSafeString("countryContinents");
+        return adminCountry;
+    }
 
     public int getCountryId() {
         return countryId;

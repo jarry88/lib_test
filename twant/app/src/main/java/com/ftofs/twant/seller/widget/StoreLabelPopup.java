@@ -160,7 +160,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
 
     private void setSelectLabelId(Category category) {
         if (selectedAreaList.size() >= category.getDeep()) {
-            selectedAreaList.set(category.getDeep(), category);
+            selectedAreaList.set(category.getDeep()-1, category);
         } else {
             selectedAreaList.add(category);
         }
@@ -225,6 +225,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
 
         switch (id) {
             case R.id.btn_dismiss:
+                onSelectedListener.onSelected(PopupType.DEFAULT,categoryId,null);
                 dismiss();
                 break;
             default:

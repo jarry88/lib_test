@@ -42,10 +42,13 @@
 
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/sp_add_good_unit"
+            <TextView
+                android:id="@+id/tv_add_good_unit"
+                android:hint="請選擇計量單位"
+                android:textColor="@color/tw_black"
+                android:background="@drawable/spinner_border_bg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="26dp"
                 android:autofillHints="選擇"
                 android:tooltipText="sdf" />
             <LinearLayout

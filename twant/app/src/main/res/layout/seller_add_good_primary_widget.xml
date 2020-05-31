@@ -46,9 +46,11 @@
                     android:background="@drawable/real_name_edit_bg"
                     android:layout_width="match_parent"
                     android:gravity="top"
+                    android:lines="3"
                     android:hint="請輸入商品名稱"
                     android:textSize="14sp"
-                    android:layout_height="100dp"/>
+                    android:layout_height="wrap_content"
+                    />
 
             </LinearLayout>
             <LinearLayout
@@ -77,7 +79,8 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_4">
                 <TextView
                     android:id="@+id/tv_category_id"
                     android:layout_width="wrap_content"
@@ -109,10 +112,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="商品賣點：" />
             </LinearLayout>
             <EditText
                 android:id="@+id/et_add_good_description"
+                android:layout_marginBottom="@dimen/dp_4"
                 android:hint="請輸入對產品的賣點描述："
                 android:textSize="14sp"
                 android:layout_marginTop="@dimen/dp_4"
@@ -129,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tw_red"
-                    android:text="*"/>
+                    android:text=""/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -140,12 +145,14 @@
 
             <Spinner
                 android:id="@+id/sp_add_good_logo"
+                android:background="@drawable/spinner_border_bg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="26dp"
                 android:autofillHints="選擇"
-                android:tooltipText="sdf" />
+                />
             <LinearLayout
                 android:layout_marginTop="@dimen/dp_4"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="top">
@@ -153,7 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tw_red"
-                    android:text="*"/>
+                    android:text=""/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -164,7 +171,8 @@
             <Spinner
                 android:id="@+id/sp_add_good_location"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:background="@drawable/spinner_border_bg"
+                android:layout_height="26dp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
