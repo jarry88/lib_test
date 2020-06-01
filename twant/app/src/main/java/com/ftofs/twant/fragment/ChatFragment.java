@@ -777,30 +777,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 if (User.getUserId() <= 0) {
                     break;
                 }
-
-                EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "fromName", yourMemberName);
-                SLog.info("params[%s]", params);
-                Api.getUI(Api.PATH_IM_IS_EXCHANGE_CARD, params, new UICallback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        ToastUtil.showNetworkError(_mActivity, e);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, String responseStr) throws IOException {
-                        SLog.info("responseStr[%s]",responseStr);
-                        EasyJSONObject responseObj =EasyJSONObject.parse(responseStr);
-
-                       try{
-                           if (responseObj.exists("datas.isExchangeCard")) {
-                               hasCard = responseObj.getInt("datas.isExchangeCard")==Constant.TRUE_INT;
-                           }
-                       }catch (Exception e) {
-                           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                       }
-                        showMenu();
-                    }
-                });
+                showMenu();
+//                updateExchangeCard();
 
                 break;
             case R.id.btn_send_image:
@@ -932,6 +910,33 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
+    private void updateExchangeCard() {
+
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "fromName", yourMemberName);
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_IM_IS_EXCHANGE_CARD, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                SLog.info("responseStr[%s]",responseStr);
+                EasyJSONObject responseObj =EasyJSONObject.parse(responseStr);
+
+                try{
+                    if (responseObj.exists("datas.isExchangeCard")) {
+                        hasCard = responseObj.getInt("datas.isExchangeCard")==Constant.TRUE_INT;
+                    }
+                }catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+                showMenu();
+            }
+        });
+    }
+
     private void showMenu() {
         new XPopup.Builder(_mActivity)
                 .offsetX(-Util.dip2px(_mActivity, 11))
@@ -939,7 +944,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 //                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
                 .hasShadowBg(false) // 去掉半透明背景
                 .atView(getView())
-                .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_CHAT))
+                .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_MESSAGE))
                 .show();
     }
 

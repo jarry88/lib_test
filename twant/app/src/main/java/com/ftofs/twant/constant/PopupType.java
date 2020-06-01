@@ -196,7 +196,41 @@ public enum PopupType {
      * 選擇商品單位
      */
     GOODS_UNITY,
+
+    /**
+     * 選擇發佈商品品牌所在地
+     */
     GOODS_LOCATION,
-    GOODS_LOGO, GOODS_FREIGHT_RULE, STORE_CATEGORY,
+
+    /**
+     * 選擇發佈商品品牌
+     */
+    GOODS_LOGO,
+
+    /**
+     * 選擇發佈商品運費規則
+     */
+    GOODS_FREIGHT_RULE,
+
+    /**
+     * 選擇發佈商品店内分類
+     */
+    STORE_CATEGORY,
+
+
+    /**
+     * 選擇發佈商品底部樣式
+     */
+    SELLER_FORMAT_BOTTOM,
+
+    /**
+     * 選擇發佈商品頂部樣式
+     */
+    SELLER_FORMAT_TOP,
+
+    /**
+     * 退款退貨列表頁篩選
+     */
+    SELLER_REFUND_FILTER,
 
 }

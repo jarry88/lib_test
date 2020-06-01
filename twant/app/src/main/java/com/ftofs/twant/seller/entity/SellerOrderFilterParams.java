@@ -18,6 +18,8 @@ public class SellerOrderFilterParams {
     public TwDate endDate;
     public String orderType;
     public String orderSource;
+    public String refundSN;
+    public String searchType;//搜索類型搜索類型 all所有 waiting待處理 agree同意 disagree不同意
 
     @NonNull
     @Override

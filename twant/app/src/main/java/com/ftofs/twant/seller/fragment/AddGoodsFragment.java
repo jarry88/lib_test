@@ -5,10 +5,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.domain.AdminCountry;
+import com.ftofs.twant.domain.Format;
 import com.ftofs.twant.domain.goods.Brand;
 import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.store.StoreLabel;
@@ -33,6 +36,7 @@ import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
+import com.ftofs.twant.seller.widget.NoScrollViewPager;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
@@ -47,8 +51,11 @@ import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
 import com.orhanobut.hawk.Hawk;
 
+import org.json.JSONArray;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +96,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     // 未選中的規格組Id與規格組信息的映射關係
     Map<Integer, SellerSpecMapItem> sellerSpecMap = new HashMap<>();
+
     // 已選中的規格組Id與規格組信息的映射關係
     Map<Integer, SellerSpecMapItem> sellerSelectedSpecMap = new HashMap<>();
 
@@ -114,7 +122,17 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private SwitchButton sbJoinActivity;
     private int storeLabelId =-1;
 
+    @BindView(R.id.ll_detail_body)
+    LinearLayout llDetailBody;
+    @BindView(R.id.rl_detail_body)
+    RelativeLayout rlDetailBody;
+    private int formatBottomIndex;
+    private int formatTopIndex;
+    private int formatBottom =-1;
+    private int formatTop=-1;
+
     public static AddGoodsFragment newInstance() {
+
         return new AddGoodsFragment();
     }
 
@@ -123,13 +141,16 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         hideAddGuide();
     }
 
+    @OnClick(R.id.btn_detail_save)
+    void save() {
+        ToastUtil.success(_mActivity,String.valueOf(llDetailBody.getChildCount()));
+    }
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.sb_check_notice)
     ScaledButton sbNotice;
     @BindView(R.id.vp_seller_good_add)
-    ViewPager vpAddGood;
-
+    NoScrollViewPager vpAddGood;
     @OnClick(R.id.btn_back)
     void back() {
         hideSoftInputPop();
@@ -308,6 +329,13 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         Util.setOnClickListener(view, R.id.btn_detail_next, this);
         Util.setOnClickListener(view, R.id.btn_detail_prev, this);
         Util.setOnClickListener(view, R.id.btn_select_store_category_id, this);
+        TextView tvAddGoodsBody =view.findViewById(R.id.btn_add_app_description);
+        TextView tvFormatTop =view.findViewById(R.id.tv_format_top);
+        TextView tvFormatBottom =view.findViewById(R.id.tv_format_top);
+        tvAddGoodsBody.setOnClickListener(v -> {
+            rlDetailBody.setVisibility(View.VISIBLE);
+        });
+
         return view;
     }
 //    初始化 规格与图片页
@@ -415,6 +443,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         EditText etName =view.findViewById(R.id.et_add_good_name);
         etName.setOnClickListener(v -> showSoftInput(view));
         btnGoodCategory.setOnClickListener(v -> {
+            hideSoftInput();
             new XPopup.Builder(_mActivity)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
@@ -570,7 +599,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 item.id = ((EasyJSONObject) object).getInt("id");
                 item.title = ((EasyJSONObject) object).getSafeString("name");
                 item.data = item.title;
-                SLog.info(item.title);
                 unitList.add(item);
             }
         }
@@ -587,7 +615,44 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             TextView tvSelect=mViews.get(DETAIL_INDEX).findViewById(R.id.btn_select_store_category_id);
             tvSelect.setOnClickListener(v ->{
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
-                        new StoreLabelPopup(_mActivity, PopupType.STORE_CATEGORY, list, this)
+                        new StoreLabelPopup(_mActivity, PopupType.STORE_CATEGORY, list, AddGoodsFragment.this)
+                ).show();
+            });
+        }
+
+        EasyJSONArray formatBottomList = data.getArray("formatBottomList");
+
+        if (formatBottomList != null) {
+            List<ListPopupItem> list = new ArrayList<>();
+            for (Object o : formatBottomList) {
+                Format format = Format.parse(((EasyJSONObject) o));
+                ListPopupItem item = new ListPopupItem(format.getFormatId(),format.getFormatName(),format);
+                list.add(item);
+            }
+            TextView tvBottom=mViews.get(DETAIL_INDEX).findViewById(R.id.tv_format_bottom);
+            OnSelectedListener listener = this;
+            tvBottom.setOnClickListener(v ->{
+                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
+                        new ListPopup(_mActivity,"底部版式", PopupType.SELLER_FORMAT_BOTTOM, list, formatBottomIndex, this)
+                ).show();
+            });
+        }
+        EasyJSONArray formatTopList = data.getArray("formatTopList");
+
+
+        if (formatTopList != null) {
+            List<ListPopupItem> list = new ArrayList<>();
+            for (Object o : formatTopList) {
+                Format format = Format.parse(((EasyJSONObject) o));
+                ListPopupItem item = new ListPopupItem(format.getFormatId(),format.getFormatName(),format);
+
+                list.add(item);
+            }
+            TextView tvFormatTop=mViews.get(DETAIL_INDEX).findViewById(R.id.tv_format_top);
+            OnSelectedListener listener = this;
+            tvFormatTop.setOnClickListener(v ->{
+                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
+                        new ListPopup(_mActivity, "頂部版式",PopupType.SELLER_FORMAT_TOP, list,formatTopIndex,listener)
                 ).show();
             });
         }
@@ -626,9 +691,12 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 }
                 break;
             case R.id.tv_add_good_location:
+                hideSoftInput();
+
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌所在地", PopupType.GOODS_LOCATION, spinnerLogoCountryItems, countryIndex, this)).show();
                 break;
             case R.id.tv_add_good_logo:
+                hideSoftInput();
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌", PopupType.GOODS_LOGO, spinnerLogoItems, logoIndex, this)).show();
                 break;
             case R.id.btn_basic_next:
@@ -734,6 +802,12 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         try{
             publishGoodsInfo.set("storeLabelId", storeLabelId);
             publishGoodsInfo.set("detailVideo", detailVideo);
+            if (formatBottom >= 0) {
+                publishGoodsInfo.set("formatBottom", formatBottom);
+            }
+            if (formatTop >= 0) {
+                publishGoodsInfo.set("formatTop", formatTop);
+            }
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -915,80 +989,98 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
                 updateSelectedSpecView();
             } else if (type == PopupType.STORE_LABEL) {
-                List<Category> selectCategoryList =(List<Category>)extra;
+                List<Category> selectCategoryList = (List<Category>) extra;
                 Category categoryLast = new Category();
-                StringBuilder selectCategoryName=new StringBuilder();
+                StringBuilder selectCategoryName = new StringBuilder();
                 for (Category category : selectCategoryList) {
                     categoryLast = category;
-                    selectCategoryName.append(category.getCategoryName()).append( " -- ");
+                    selectCategoryName.append(category.getCategoryName()).append(" -- ");
                 }
                 if (!StringUtil.isEmpty(selectCategoryName.toString())) {
-                    selectCategoryName.delete(selectCategoryName.length() - 4,selectCategoryName.length()-1);
-                    ((TextView)(mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_category_id))).setText(selectCategoryName.toString());
+                    selectCategoryName.delete(selectCategoryName.length() - 4, selectCategoryName.length() - 1);
+                    ((TextView) (mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_category_id))).setText(selectCategoryName.toString());
                     categoryId = categoryLast.getCategoryId();
                 }
-            } else if(type==PopupType.GOODS_UNITY){
+                updateLogoInfo();
+            } else if (type == PopupType.GOODS_UNITY) {
                 TextView tvUnit = mViews.get(BASIC_INDEX).findViewById(R.id.tv_add_good_unit);
                 unityIndex = id;
                 unitName = extra.toString();
                 tvUnit.setText(unitName);
-            } else if(type==PopupType.GOODS_LOCATION){
+            } else if (type == PopupType.GOODS_LOCATION) {
                 TextView tvLocation = mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_add_good_location);
                 countryIndex = id;
                 AdminCountry item = (AdminCountry) extra;
-                goodsCountry= item.getCountryId();
+                goodsCountry = item.getCountryId();
                 tvLocation.setText(item.getCountryCn());
 
-            }else if(type==PopupType.GOODS_LOGO){
+            } else if (type == PopupType.GOODS_LOGO) {
                 TextView tvLogo = mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_add_good_logo);
                 logoIndex = id;
                 Brand item = (Brand) extra;
                 brandId = item.getBrandId();
                 tvLogo.setText(item.getBrandName());
 
-            } else if(type ==PopupType.GOODS_FREIGHT_RULE){
+            } else if (type == PopupType.GOODS_FREIGHT_RULE) {
                 TextView tvRule = mViews.get(FREIGHT_INDEX).findViewById(R.id.tv_add_freight_rule);
                 freightRuleIndex = id;
                 tvRule.setText(extra.toString());
-            } else if(type == PopupType.DEFAULT){
-                Spinner spinnerLogo = mViews.get(PRIMARY_INDEX).findViewById(R.id.sp_add_good_logo);
-                EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "categoryId", categoryId);
-                SLog.info("params[%s]", params);
-                Api.getUI(Api.PATH_SELLER_QUERY_BIND_BRANDS, params, new UICallback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        ToastUtil.showNetworkError(_mActivity, e);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, String responseStr) throws IOException {
-                        try {
-                            SLog.info("responseStr[%s]", responseStr);
-
-                            EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                            if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                return;
-                            }
-                            EasyJSONArray brandList = responseObj.getArray("datas.brandList");
-                            spinnerLogoItems.clear();
-                            for (Object object : brandList) {
-                                Brand item = Brand.parase((EasyJSONObject) object);
-                                spinnerLogoItems.add(new ListPopupItem(item.getBrandId(),item.getBrandName(),item));
-                            }
-
-                        } catch (Exception e) {
-                            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                        }
-                    }
-                });
+            } else if (type == PopupType.SELLER_FORMAT_TOP) {
+                TextView tvFormatTop = mViews.get(DETAIL_INDEX).findViewById(R.id.tv_format_top);
+                tvFormatTop.setText(((Format) extra).getFormatName());
+                formatTopIndex = id;
+                formatTop = ((Format) extra).getFormatId();
+            } else if (type == PopupType.SELLER_FORMAT_BOTTOM) {
+                TextView tvFormatBottom = mViews.get(DETAIL_INDEX).findViewById(R.id.tv_format_bottom);
+                tvFormatBottom.setText(((Format) extra).getFormatName());
+                formatBottomIndex = id;
+                formatBottom = ((Format) extra).getFormatId();
+            } else if (type == PopupType.DEFAULT) {
+                updateLogoInfo();
 //        String[] spinnerItems = new String[labelList.size()];
                 //自定义选择填充后的字体样式
                 //只能是textview样式，否则报错：ArrayAdapter requires the resource ID to be a TextView
-
-
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+
+    private void updateLogoInfo() {
+        TextView tvLogo = mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_add_good_logo);
+        tvLogo.setText("");
+        logoIndex = 0;
+        brandId = -1;
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "categoryId", categoryId);
+        SLog.info("params[%s]", params);
+        Api.getUI(Api.PATH_SELLER_QUERY_BIND_BRANDS, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+                    EasyJSONArray brandList = responseObj.getArray("datas.brandList");
+                    spinnerLogoItems.clear();
+                    for (Object object : brandList) {
+                        Brand item = Brand.parase((EasyJSONObject) object);
+                        spinnerLogoItems.add(new ListPopupItem(item.getBrandId(),item.getBrandName(),item));
+                    }
+
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 }
