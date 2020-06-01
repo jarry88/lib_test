@@ -226,7 +226,11 @@ public enum PopupType {
     /**
      * 選擇發佈商品頂部樣式
      */
-    SELLER_FORMAT_TOP;
-    GOODS_LOGO, GOODS_FREIGHT_RULE, STORE_CATEGORY,
+    SELLER_FORMAT_TOP,
+
+    /**
+     * 退款退貨列表頁篩選
+     */
+    SELLER_REFUND_FILTER,
 
 }

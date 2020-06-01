@@ -250,13 +250,27 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                 }
             }
         }
-        ToastUtil.success(context,list.get(0).getStoreLabelName());
-        categoryData.get(depth).clear();
-        for (StoreLabel label : list) {
-            Category category = new Category();
-            category.setCategoryId(label.getStoreLabelId());
-            category.setCategoryName(label.getStoreLabelName());
-            categoryData.get(depth).add(category);
+        boolean isEnd=false;
+        if (list != null) {
+            categoryData.get(depth).clear();
+
+            for (StoreLabel label : list) {
+                Category category = new Category();
+                category.setCategoryId(label.getStoreLabelId());
+                category.setCategoryName(label.getStoreLabelName());
+                categoryData.get(depth).add(category);
+            }
+        }else {
+            isEnd = true;
+        }
+
+        if (categoryData.get(depth).size() == 0) {
+            isEnd = true;
+        }
+        if (isEnd) {
+            SLog.info("已經到最後了");
+            setSelectLabelId(currCategory);
+            dismiss();
         }
 
         if (depth == 0) {

@@ -28,17 +28,23 @@ import com.ftofs.twant.adapter.SellerReturnAdapter;
 import com.ftofs.twant.adapter.SimpleViewPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.entity.SellerOrderRefundItem;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.fragment.SellerOrderInfoFragment;
+import com.ftofs.twant.seller.fragment.SellerOrderListPageFragment;
 import com.ftofs.twant.seller.fragment.SellerRefundDetailFragment;
+import com.ftofs.twant.seller.widget.SellerOrderFilterDrawerPopupView;
 import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
-
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.enums.PopupPosition;
+import com.ftofs.twant.constant.PopupType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,21 +61,27 @@ import okhttp3.Call;
  * 商家退单列表页
  * @author gzp
  */
-public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapter.RequestLoadMoreListener {
+public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapter.RequestLoadMoreListener, SimpleCallback {
     @BindView(R.id.vp_page_list)
     ViewPager viewPager;
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
+    private SellerOrderFilterDrawerPopupView sellerOrderFilterDrawerPopupView;
 
-    @BindView(R.id.et_keyword)
-    EditText editText;
-    @OnClick(R.id.btn_clear_all)
-    void clearSearchText() {
-        editText.setText("");
+    @OnClick(R.id.btn_filter)
+    void showSearchOrderInfo() {
+
+        if (sellerOrderFilterDrawerPopupView == null) {
+            sellerOrderFilterDrawerPopupView = (SellerOrderFilterDrawerPopupView) new XPopup.Builder(_mActivity)
+                    //右边
+                    .popupPosition(PopupPosition.Right)
+                    //启用状态栏阴影
+                    .hasStatusBarShadow(true)
+                    .asCustom(new SellerOrderFilterDrawerPopupView(_mActivity, PopupType.SELLER_REFUND_FILTER,this));
+        }
+        sellerOrderFilterDrawerPopupView.show();
     }
 
-    @BindView(R.id.btn_clear_all)
-    ImageView btnClear;
     @OnClick(R.id.btn_back)
     void back() {
         hideSoftInputPop();
@@ -83,6 +95,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
     private boolean hasMore;
 
     private int currPage;
+    SellerOrderFilterParams filterParams; // 搜索過濾參數
 
 
     public static SellerRefundFragment newInstance() {
@@ -113,57 +126,69 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                btnClear.setVisibility(StringUtil.isEmpty(s.toString())?View.GONE:View.VISIBLE);
-            }
-        });
         initTabView(view);
         initView(view);
     }
 
     private void loadData(int page) {
-        SLog.bt();
-         EasyJSONObject params =EasyJSONObject.generate("token", User.getToken(),"page",page);
-          SLog.info("params[%s]", params);
-                 Api.getUI(tabLayout.getSelectedTabPosition()==0?Api.PATH_SELLER_REFUND_LIST:Api.PATH_SELLER_RETURN_LIST, params, new UICallback() {
-                     @Override
-                     public void onFailure(Call call, IOException e) {
-                         ToastUtil.showNetworkError(_mActivity, e);
-                     }
 
-                     @Override
-                     public void onResponse(Call call, String responseStr) throws IOException {
-                         try {
-                             SLog.info("responseStr[%s]", responseStr);
-                             SLog.info("tabLayout.getSelectedTabPosition()[%s]", tabLayout.getSelectedTabPosition());
+        try{
+            EasyJSONObject params =EasyJSONObject.generate("token", User.getToken(),"page",page);
+            if (filterParams != null) {
+                if (!StringUtil.isEmpty(filterParams.buyerNickname)) {
+                    params.set("searchName", filterParams.buyerNickname);
+                }
 
-                             EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-                             if (ToastUtil.checkError(_mActivity, responseObj)) {
-                                 return;
-                             }
-                             if (tabLayout.getSelectedTabPosition() == 0) {
+                if (!StringUtil.isEmpty(filterParams.goodsName)) {
+                    params.set("goodsName", filterParams.goodsName);
+                }
 
-                                 updateRefundView(responseObj);
-                             } else {
-                                 updateReturnView(responseObj);
-                             }
-                             currPage++;
-                         } catch (Exception e) {
-                             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                         }
-                     }
-                 });
+                if (!StringUtil.isEmpty(filterParams.orderSN)) {
+                    params.set("ordersSn", filterParams.orderSN);
+                }
+                if (!StringUtil.isEmpty(filterParams.refundSN)) {
+                    params.set("refundSN", filterParams.refundSN);
+                }
+
+                params.set("createTimeStart", filterParams.beginDate.toString());
+                params.set("addTimeStart", filterParams.beginDate.toString());
+                params.set("createTimeEnd", filterParams.endDate.toString());
+                params.set("addTimeEnd", filterParams.endDate.toString());
+                params.set("searchType", filterParams.searchType);
+
+            }
+            String url=tabLayout.getSelectedTabPosition()==0?Api.PATH_SELLER_REFUND_LIST:Api.PATH_SELLER_RETURN_LIST;
+            SLog.info("url[%s], params[%s]", url, params.toString());
+
+            Api.getUI(url, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+                        if (tabLayout.getSelectedTabPosition() == 0) {
+
+                            updateRefundView(responseObj);
+                        } else {
+                            updateReturnView(responseObj);
+                        }
+                        currPage++;
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
+        }catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 
     private void updateRefundView(EasyJSONObject responseObj) throws Exception {
@@ -233,8 +258,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                currPage = 0;
-                loadData(currPage+1);
+                reloadDataWithFilter(null);
                 viewPager.setCurrentItem(tab.getPosition());
                 ((TextView)(tab.getCustomView().findViewById(R.id.text1))).setTextColor(getResources().getColor(R.color.tw_blue));
             }
@@ -389,4 +413,19 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
         loadData(currPage+1);
     }
 
+    @Override
+    public void onSimpleCall(Object data) {
+
+        SellerOrderFilterParams filterParams = (SellerOrderFilterParams) data;
+        SLog.info("filterParams[%s]", filterParams.toString());
+        reloadDataWithFilter(filterParams);
+    }
+
+    private void reloadDataWithFilter(SellerOrderFilterParams filterParams) {
+
+        this.filterParams = filterParams;
+
+        currPage = 0;
+        loadData(currPage + 1);
+    }
 }

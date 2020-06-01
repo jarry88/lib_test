@@ -45,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:id="@+id/ll_buyer_phone_container"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
@@ -64,6 +65,33 @@
                     android:textSize="14sp"
                     android:textColor="@color/tw_black"
                     android:hint="請輸入買家手機號">
+                </EditText>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:id="@+id/ll_refund_number"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="退款(貨)單號"
+                    android:textColor="@color/tw_text_dark"
+                    android:textSize="14sp">
+                </TextView>
+
+                <EditText
+                    android:id="@+id/et_refund_sn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:background="@drawable/seller_order_filter_item_bg"
+                    android:textSize="14sp"
+                    android:textColor="@color/tw_black"
+                    android:hint="請輸入完整退款(貨)單號">
                 </EditText>
             </LinearLayout>
             <LinearLayout
@@ -120,7 +148,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/ll_receiver_phone">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -145,7 +174,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/ll_receiver_address">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -247,7 +277,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/ll_order_type">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -287,7 +318,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:id="@+id/ll_order_source">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -312,6 +344,48 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="所有"
+                        android:textColor="@color/tw_black">
+
+                    </TextView>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_drop_down_black_24dp">
+
+                    </ImageView>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:id="@+id/ll_refund_search_type"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="處理類型"
+                    android:textColor="@color/tw_text_dark"
+                    android:textSize="14sp">
+                </TextView>
+
+                <LinearLayout
+                    android:id="@+id/btn_select_search_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/seller_order_filter_item_bg">
+                    <TextView
+                        android:id="@+id/tv_search_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="全部"
                         android:textColor="@color/tw_black">
 
                     </TextView>

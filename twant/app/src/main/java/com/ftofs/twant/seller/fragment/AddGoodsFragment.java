@@ -653,9 +653,12 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 }
                 break;
             case R.id.tv_add_good_location:
+                hideSoftInput();
+
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌所在地", PopupType.GOODS_LOCATION, spinnerLogoCountryItems, countryIndex, this)).show();
                 break;
             case R.id.tv_add_good_logo:
+                hideSoftInput();
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌", PopupType.GOODS_LOGO, spinnerLogoItems, logoIndex, this)).show();
                 break;
             case R.id.btn_basic_next:

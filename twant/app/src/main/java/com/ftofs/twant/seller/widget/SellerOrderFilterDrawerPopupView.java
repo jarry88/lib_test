@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.HttpHelper;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -24,12 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements View.OnClickListener, OnSelectedListener {
+    private PopupType type;
     Context context;
     SimpleCallback simpleCallback;
 
     EditText etBuyerNickname;
     EditText etBuyerMobile;
     EditText etOrderSN;
+    EditText etRefundSN;
     EditText etGoodsName;
     EditText etReceiverMobile;
     EditText etReceiverAddress;
@@ -38,6 +41,7 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
     TextView tvEndDate;
     TextView tvOrderType;
     TextView tvOrderSource;
+    TextView tvSearchType;
 
     private int orderTypeSelectedIndex = 0;
     List<ListPopupItem> orderTypeList;
@@ -46,10 +50,20 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
 
     TwDate beginDate;
     TwDate endDate;
+    private int refundSearchTypeSelectedIndex=0;
+    List<ListPopupItem> refundSearchTypeList;
+    public String searchType="all";
 
     public SellerOrderFilterDrawerPopupView(@NonNull Context context, SimpleCallback simpleCallback) {
         super(context);
 
+        this.context = context;
+        this.simpleCallback = simpleCallback;
+    }
+
+    public SellerOrderFilterDrawerPopupView(@NonNull Context context,PopupType type, SimpleCallback simpleCallback) {
+        super(context);
+        this.type = type;
         this.context = context;
         this.simpleCallback = simpleCallback;
     }
@@ -74,17 +88,25 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
         orderSourceList.add(new ListPopupItem(1, "PC", null));
         orderSourceList.add(new ListPopupItem(2, "門店", null));
 
+        refundSearchTypeList = new ArrayList<>();
+        refundSearchTypeList.add(new ListPopupItem(0, "全部", "all"));
+        refundSearchTypeList.add(new ListPopupItem(1, "待處理", "waiting"));
+        refundSearchTypeList.add(new ListPopupItem(2, "同意", "agree"));
+        refundSearchTypeList.add(new ListPopupItem(3, "不同意", "disagree"));
+
         findViewById(R.id.ll_popup_content_view).setOnClickListener(this);
         findViewById(R.id.btn_select_order_type).setOnClickListener(this);
         findViewById(R.id.btn_select_order_source).setOnClickListener(this);
         findViewById(R.id.btn_select_begin_date).setOnClickListener(this);
         findViewById(R.id.btn_select_end_date).setOnClickListener(this);
+        findViewById(R.id.btn_select_search_type).setOnClickListener(this);
         findViewById(R.id.btn_reset).setOnClickListener(this);
         findViewById(R.id.btn_ok).setOnClickListener(this);
 
         etBuyerNickname = findViewById(R.id.et_buyer_nickname);
         etBuyerMobile = findViewById(R.id.et_buyer_mobile);
         etOrderSN = findViewById(R.id.et_order_sn);
+        etRefundSN = findViewById(R.id.et_refund_sn);
         etGoodsName = findViewById(R.id.et_goods_name);
         etReceiverMobile = findViewById(R.id.et_receiver_mobile);
         etReceiverAddress = findViewById(R.id.et_receiver_address);
@@ -93,10 +115,20 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
         tvEndDate = findViewById(R.id.tv_end_date);
         tvOrderType = findViewById(R.id.tv_order_type);
         tvOrderSource = findViewById(R.id.tv_order_source);
+        tvSearchType = findViewById(R.id.tv_search_type);
 
         //通过设置topMargin，可以让Drawer弹窗进行局部阴影展示
 //        ViewGroup.MarginLayoutParams params = (MarginLayoutParams) getPopupContentView().getLayoutParams();
 //        params.topMargin = 450;
+        if (PopupType.SELLER_REFUND_FILTER == type) {
+            findViewById(R.id.ll_buyer_phone_container).setVisibility(View.GONE);
+            findViewById(R.id.ll_refund_number).setVisibility(View.VISIBLE);
+            findViewById(R.id.ll_receiver_phone).setVisibility(View.GONE);
+            findViewById(R.id.ll_receiver_address).setVisibility(View.GONE);
+            findViewById(R.id.ll_order_type).setVisibility(View.GONE);
+            findViewById(R.id.ll_order_source).setVisibility(View.GONE);
+            findViewById(R.id.ll_refund_search_type).setVisibility(View.VISIBLE);
+        }
         reset();
     }
 
@@ -115,9 +147,11 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
         etBuyerNickname.setText("");
         etBuyerMobile.setText("");
         etOrderSN.setText("");
+        etRefundSN.setText("");
         etGoodsName.setText("");
         etReceiverMobile.setText("");
         etReceiverAddress.setText("");
+
 
         Jarbon now = new Jarbon();
 
@@ -136,6 +170,9 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
 
         orderSourceSelectedIndex = 0;
         tvOrderSource.setText(orderSourceList.get(orderSourceSelectedIndex).title);
+
+        refundSearchTypeSelectedIndex = 0;
+        tvOrderSource.setText(refundSearchTypeList.get(refundSearchTypeSelectedIndex).title);
     }
 
     @Override
@@ -155,6 +192,13 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
                     .moveUpToKeyboard(false)
                     .asCustom(new ListPopup(context, "訂單來源",
                             PopupType.SELECT_ORDER_SOURCE, orderSourceList, orderSourceSelectedIndex, this))
+                    .show();
+        } else if (id == R.id.btn_select_search_type) {
+            new XPopup.Builder(context)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new ListPopup(context, "搜索類型",
+                            PopupType.SELLER_REFUND_FILTER, refundSearchTypeList, refundSearchTypeSelectedIndex, this))
                     .show();
         } else if (id == R.id.btn_select_begin_date || id == R.id.btn_select_end_date) {
             new XPopup.Builder(context)
@@ -176,6 +220,7 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
             filterParams.buyerNickname = etBuyerNickname.getText().toString().trim();
             filterParams.buyerMobile = etBuyerMobile.getText().toString().trim();
             filterParams.orderSN = etOrderSN.getText().toString().trim();
+            filterParams.refundSN = etRefundSN.getText().toString().trim();
             filterParams.goodsName = etGoodsName.getText().toString().trim();
             filterParams.receiverMobile = etReceiverMobile.getText().toString().trim();
             filterParams.receiverAddress = etReceiverAddress.getText().toString().trim();
@@ -183,6 +228,7 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
             filterParams.endDate = endDate;
             filterParams.orderType = getOrderTypeDesc();
             filterParams.orderSource = getOrderSourceDesc();
+            filterParams.searchType = searchType;
 
             if (simpleCallback != null) {
                 simpleCallback.onSimpleCall(filterParams);
@@ -200,6 +246,10 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
         } else if (type == PopupType.SELECT_ORDER_SOURCE) {
             orderSourceSelectedIndex = id;
             tvOrderSource.setText(orderSourceList.get(orderSourceSelectedIndex).title);
+        }else if (type == PopupType.SELLER_REFUND_FILTER) {
+            refundSearchTypeSelectedIndex = id;
+            tvSearchType.setText(refundSearchTypeList.get(refundSearchTypeSelectedIndex).title);
+            searchType = extra.toString();
         } else if (type == PopupType.SELECT_BEGIN_DATE) {
             beginDate = (TwDate) extra;
             tvBeginDate.setText(beginDate.toString());
