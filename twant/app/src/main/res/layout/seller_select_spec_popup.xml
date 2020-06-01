@@ -41,6 +41,17 @@
         android:gravity="center_vertical"
         android:background="@drawable/border_type_d">
 
+
+        <TextView
+            android:id="@+id/tv_current_spec_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/toolbar_margin_left"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="@color/tw_blue"
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,14 +74,17 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_area_list"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="300dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/border_type_d">
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
         android:id="@+id/btn_ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_margin="15dp"
         android:textColor="@android:color/white"
         android:text="@string/ok"
         android:textSize="14sp"
