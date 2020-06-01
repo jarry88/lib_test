@@ -185,5 +185,9 @@ public enum PopupType {
      * 選擇店内分類
      */
     STORE_LABEL ,
-    ;
+
+    /**
+     * 【賣家】選擇規格
+     */
+    SELLER_SELECT_SPEC,
 }
