@@ -58,6 +58,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
     private int categoryId;
     private int depth;
     private StoreLabel categoryName;
+    private Category currCategory;
 
     public StoreLabelPopup(@NonNull Context context, PopupType popupType, OnSelectedListener onSelectedListener) {
         super(context);
@@ -104,25 +105,25 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                 }
 
                 AreaItemView areaItemView = new AreaItemView(getContext());
-                Category category = firstCategoryList.get(position);
+                currCategory = firstCategoryList.get(position);
 
 
-                int depth = category.getDeep();
-                if (depth>=selectedAreaList.size()) {
+                int depth = currCategory.getDeep();
+                if (depth>=3) {
                     SLog.info("已经是最后一级, SIZE[%d], DEPTH[%d]", selectedAreaList.size(), depth);
-                    setSelectLabelId(category);
+                    setSelectLabelId(currCategory);
                     dismiss();
                     return;
                 }
-                selectedAreaList.add(category);
+                selectedAreaList.add(currCategory);
                 // 將之前的AreaItemView取消高亮
 //                for (AreaItemView itemView : areaItemViewList) {
 //                     itemView.setStatus(Constant.STATUS_UNSELECTED);
 //                }
-                areaItemView.setText(category.getCategoryName());
+                areaItemView.setText(currCategory.getCategoryName());
                 areaItemView.setStatus(Constant.STATUS_SELECTED);
-                areaItemView.setDepth(category.getDeep());
-                areaItemView.setAreaId(category.getCategoryId());
+                areaItemView.setDepth(currCategory.getDeep());
+                areaItemView.setAreaId(currCategory.getCategoryId());
                 areaItemView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -162,7 +163,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                 llStoreLabelContainer.addView(areaItemView, layoutParams);
 
 
-                loadLabelData(category.getCategoryId());
+                loadLabelData(currCategory.getCategoryId());
             }
         });
 
@@ -204,6 +205,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                      }
 
                      EasyJSONArray categoryList = responseObj.getSafeArray("datas.categoryList");
+                     boolean isEnd = false;
                      if (categoryList != null) {
                          categoryData.get(depth).clear();
                          for (Object object : categoryList) {
@@ -213,6 +215,16 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                          if (depth == 0) {
                              adapter.setNewData(categoryData.get(0));
                          }
+                     } else {
+                         isEnd = true;
+                     }
+                     if (categoryData.get(depth).size() == 0) {
+                         isEnd = true;
+                     }
+                     if (isEnd) {
+                         SLog.info("已經到最後了");
+                         setSelectLabelId(currCategory);
+                         dismiss();
                      }
                  } catch (Exception e) {
                      SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -227,15 +239,18 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
             return;
         }
         List<StoreLabel> list =new ArrayList<>();
-        if (depth == 0) {
+
+        if (categoryId == 0) {
             list = dataList;
         } else {
             for (StoreLabel label : dataList) {
                 if (label.getStoreLabelId() == categoryId) {
                     list = label.getStoreLabelList();
+                    break;
                 }
             }
         }
+        ToastUtil.success(context,list.get(0).getStoreLabelName());
         categoryData.get(depth).clear();
         for (StoreLabel label : list) {
             Category category = new Category();
