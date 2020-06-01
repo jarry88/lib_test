@@ -82,5 +82,10 @@ public class ScaledButton extends RelativeLayout {
 //        textView.setText(string);
 //        textView.setVisibility(VISIBLE);
     }
+
+    public void setButtonCheckedSquare() {
+        this.checkedResId = R.drawable.icon_blue_square_checked;
+        this.uncheckedResId = R.drawable.icon_black_square;
+    }
 }
 

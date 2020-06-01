@@ -142,10 +142,10 @@
                         android:id="@+id/icon_price_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/tv_text_price"
-                        android:layout_marginLeft="5dp"
+                        android:layout_toEndOf="@id/tv_text_price"
+                        android:layout_marginStart="5dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_price_sort_asc"
+                        android:src="@drawable/icon_unfold_good_filter"
                         android:visibility="gone"
                         />
                 </RelativeLayout>
@@ -167,53 +167,13 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/tv_text_filter"
-                        android:layout_marginLeft="3dp"
+                        android:layout_toEndOf="@id/tv_text_filter"
+                        android:layout_marginStart="3dp"
                         android:layout_centerVertical="true"
                         android:src="@drawable/icon_filter"
                         />
                 </RelativeLayout>
             </LinearLayout>
-            <!--
-            <LinearLayout
-                android:id="@+id/ll_store_filter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/border_type_d"
-                android:padding="10dp">
-                <TextView
-                    android:id="@+id/btn_store_search_order_general"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/tw_blue"
-                    android:textSize="16sp"
-                    android:text="@string/store_tab_title_general"
-                    />
-                <TextView
-                    android:id="@+id/btn_store_search_order_store_open"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/tw_black"
-                    android:textSize="16sp"
-                    android:text="@string/store_tab_title_store_open"
-                    />
-                <TextView
-                    android:id="@+id/btn_store_search_order_follow"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/tw_black"
-                    android:textSize="16sp"
-                    android:text="@string/store_tab_title_follow"
-                    />
-            </LinearLayout>
-            -->
             <LinearLayout
                 android:id="@+id/ll_store_filter"
                 android:layout_width="match_parent"
@@ -233,7 +193,7 @@
                         android:layout_centerInParent="true"
                         android:text="關注"
                         android:textColor="@color/tw_black"
-                        android:textSize="16sp"
+                        android:textSize="12sp"
                         />
                 </RelativeLayout>
                 <RelativeLayout
@@ -251,10 +211,9 @@
                             android:id="@+id/tv_sort"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
                             android:text="綜合"
                             android:textColor="@color/tw_black"
-                            android:textSize="16sp"
+                            android:textSize="12sp"
                             />
 
                         <ImageView
@@ -262,7 +221,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="3.5dp"
-                            android:src="@drawable/icon_store_filter_expand_black"
+                            android:src="@drawable/icon_filter_black_expand"
                             />
                     </LinearLayout>
                 </RelativeLayout>
@@ -283,7 +242,7 @@
                             android:layout_height="wrap_content"
                             android:text="所在地"
                             android:textColor="@color/tw_black"
-                            android:textSize="16sp"
+                            android:textSize="12sp"
                             />
 
                         <ImageView
@@ -291,7 +250,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="3.5dp"
-                            android:src="@drawable/icon_store_filter_expand_black"
+                            android:src="@drawable/icon_filter_black_expand"
                             />
                     </LinearLayout>
                 </RelativeLayout>
@@ -313,20 +272,21 @@
                             android:layout_centerInParent="true"
                             android:text="商圈"
                             android:textColor="@color/tw_black"
-                            android:textSize="16sp"
+                            android:textSize="12sp"
                             />
 
                         <ImageView
                             android:id="@+id/icon_biz_circle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="3.5dp"
-                            android:src="@drawable/icon_store_filter_expand_black"
+                            android:layout_marginStart="3.5dp"
+                            android:src="@drawable/icon_filter_black_expand"
                             />
                     </LinearLayout>
                 </RelativeLayout>
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/btn_recruitment"
+                    android:gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
@@ -337,9 +297,16 @@
                         android:layout_centerInParent="true"
                         android:text="招聘"
                         android:textColor="@color/tw_black"
-                        android:textSize="16sp"
+                        android:textSize="12sp"
                         />
-                </RelativeLayout>
+
+                    <com.ftofs.twant.widget.ScaledButton
+                        android:layout_marginStart="3.5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon_src="@drawable/icon_black_square"
+                        android:id="@+id/sb_recruitment"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
