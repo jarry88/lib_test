@@ -1,6 +1,7 @@
 package com.ftofs.twant.seller.widget;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,11 +47,17 @@ public class SellerSelectSpecPopup extends BottomPopupView implements View.OnCli
 
     // 規格組名稱的List
     List<SellerSpecItem> sellerSpecItemList;
+    // 當前的規格值列表
+    List<SellerSpecItem> sellerSpecValueItemList;
+
     // 規格組Id與規格值列表的映射
     Map<Integer, List<SellerSpecItem>> sellerSpecValueMap;
     int type = SellerSpecItem.TYPE_SPEC;
 
     int specId; // 當前選中的SpecId
+    String specName; // 當前選中的規格組名稱
+
+    TextView tvCurrentSpecName;
 
     OnSelectedListener onSelectedListener;
     SellerSpecAdapter adapter;
@@ -86,6 +93,7 @@ public class SellerSelectSpecPopup extends BottomPopupView implements View.OnCli
         btnOk.setOnClickListener(this);
         btnOk.setVisibility(INVISIBLE);
 
+        tvCurrentSpecName = findViewById(R.id.tv_current_spec_name);
         llAreaContainer = findViewById(R.id.ll_area_container);
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
 
@@ -101,16 +109,24 @@ public class SellerSelectSpecPopup extends BottomPopupView implements View.OnCli
                 if (type == SellerSpecItem.TYPE_SPEC) { // 選擇規格組
                     SellerSpecItem sellerSpecItem = sellerSpecItemList.get(position);
                     specId = sellerSpecItem.id;
+                    specName = sellerSpecItem.name;
 
-                    List<SellerSpecItem> sellerSpecItems = sellerSpecValueMap.get(specId);
-                    adapter.setNewData(sellerSpecItems);
+                    tvCurrentSpecName.setText(specName);
+                    tvCurrentSpecName.setVisibility(VISIBLE);
+
+                    SLog.info("specId[%d]", specId);
+                    sellerSpecValueItemList = sellerSpecValueMap.get(specId);
+                    SLog.info("sellerSpecValueItemList[%d]", sellerSpecValueItemList.size());
+                    adapter.setNewData(sellerSpecValueItemList);
 
                     type = SellerSpecItem.TYPE_SPEC_VALUE;
 
                     btnOk.setVisibility(VISIBLE);
                 } else { // 選擇規格值
-                    SellerSpecItem sellerSpecItem = sellerSpecItemList.get(position);
+                    SellerSpecItem sellerSpecItem = sellerSpecValueItemList.get(position);
                     sellerSpecItem.selected = !sellerSpecItem.selected;
+
+                    adapter.notifyItemChanged(position);
                 }
             }
         });
@@ -147,7 +163,7 @@ public class SellerSelectSpecPopup extends BottomPopupView implements View.OnCli
                 break;
             case R.id.btn_ok:
                 if (onSelectedListener != null) {
-                    List<Integer> specValueIdList = new ArrayList<>();
+                    EasyJSONArray specValueIdList = EasyJSONArray.generate();
                     List<SellerSpecItem> sellerSpecItems = sellerSpecValueMap.get(specId);
                     if (sellerSpecItems == null) {
                         return;
@@ -155,17 +171,24 @@ public class SellerSelectSpecPopup extends BottomPopupView implements View.OnCli
 
                     for (SellerSpecItem item : sellerSpecItems) {
                         if (item.selected) {
-                            specValueIdList.add(item.id);
+                            specValueIdList.append(item.id);
                         }
+                    }
+
+                    if (specValueIdList.length() < 1) {
+                        ToastUtil.error(context, String.format("請選擇【%s】值", specName));
+                        return;
                     }
 
                     EasyJSONObject dataObj = EasyJSONObject.generate(
                             "specId", specId,
-                            specValueIdList, specValueIdList
+                            "specValueIdList", specValueIdList
                     );
                     SLog.info("dataObj[%s]", dataObj.toString());
 
                     onSelectedListener.onSelected(PopupType.SELLER_SELECT_SPEC, 0, dataObj);
+
+                    dismiss();
                 }
                 break;
             default:
