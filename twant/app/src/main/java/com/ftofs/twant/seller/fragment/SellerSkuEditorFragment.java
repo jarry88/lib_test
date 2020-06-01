@@ -1,8 +1,6 @@
 package com.ftofs.twant.seller.fragment;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,24 +13,24 @@ import androidx.viewpager.widget.ViewPager;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.fragment.BaseFragment;
-import com.ftofs.twant.fragment.DynamicCodeLoginFragment;
-import com.ftofs.twant.fragment.PasswordLoginFragment;
-import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener {
+    List<SellerSpecItem> sellerSpecItemList;
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
 
-    public static SellerSkuEditorFragment newInstance() {
+    public static SellerSkuEditorFragment newInstance(List<SellerSpecItem> sellerSpecItemList) {
         Bundle args = new Bundle();
 
         SellerSkuEditorFragment fragment = new SellerSkuEditorFragment();
         fragment.setArguments(args);
+        fragment.sellerSpecItemList = sellerSpecItemList;
 
         return fragment;
     }
@@ -59,7 +57,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
 
 
         fragmentList.add(SellerSkuGoodsListFragment.newInstance());
-        fragmentList.add(SellerSkuImageListFragment.newInstance(null));
+        fragmentList.add(SellerSkuImageListFragment.newInstance(sellerSpecItemList));
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
@@ -83,7 +81,6 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabsFromPagerAdapter(adapter);
-
     }
 
 
@@ -91,5 +88,8 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
     public void onClick(View v) {
         int id = v.getId();
 
+        if (id == R.id.btn_back) {
+            hideSoftInputPop();
+        }
     }
 }
