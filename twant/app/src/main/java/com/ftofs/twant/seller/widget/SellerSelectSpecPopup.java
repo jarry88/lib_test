@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,8 +19,11 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.Area;
+import com.ftofs.twant.domain.store.Seller;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.adapter.SellerSpecAdapter;
+import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -31,6 +35,7 @@ import com.lxj.xpopup.util.XPopupUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -38,113 +43,79 @@ import okhttp3.Call;
 
 public class SellerSelectSpecPopup extends BottomPopupView implements View.OnClickListener {
     Context context;
-    PopupType popupType;
 
-    List<Area> areaList = new ArrayList<>();
-    List<Area> selectedAreaList = new ArrayList<>();
-    List<AreaItemView> areaItemViewList = new ArrayList<>();
+    // 規格組名稱的List
+    List<SellerSpecItem> sellerSpecItemList;
+    // 規格組Id與規格值列表的映射
+    Map<Integer, List<SellerSpecItem>> sellerSpecValueMap;
+    int type = SellerSpecItem.TYPE_SPEC;
+
+    int specId; // 當前選中的SpecId
 
     OnSelectedListener onSelectedListener;
-    AreaPopupAdapter adapter;
+    SellerSpecAdapter adapter;
     int twBlack;
 
     LinearLayout llAreaContainer;
 
-    public SellerSelectSpecPopup(@NonNull Context context, PopupType popupType, OnSelectedListener onSelectedListener) {
+    TextView btnOk;
+
+    public SellerSelectSpecPopup(@NonNull Context context, List<SellerSpecItem> sellerSpecItemList,
+                                 Map<Integer, List<SellerSpecItem>> sellerSpecValueMap, OnSelectedListener onSelectedListener) {
         super(context);
 
         this.context = context;
-        this.popupType = popupType;
+        this.sellerSpecItemList = sellerSpecItemList;
+        this.sellerSpecValueMap = sellerSpecValueMap;
+        SLog.info("sellerSpecItemList.size[%d], sellerSpecValueMap.size[%d]", sellerSpecItemList.size(), sellerSpecValueMap.size());
+
         this.onSelectedListener = onSelectedListener;
         twBlack = getResources().getColor(R.color.tw_black, null);
     }
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.area_popup;
+        return R.layout.seller_select_spec_popup;
     }
 
     @Override
     protected void onCreate() {
         super.onCreate();
 
+        btnOk = findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(this);
+        btnOk.setVisibility(INVISIBLE);
+
         llAreaContainer = findViewById(R.id.ll_area_container);
         findViewById(R.id.btn_dismiss).setOnClickListener(this);
-
 
         RecyclerView rvList = findViewById(R.id.rv_area_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         rvList.setLayoutManager(layoutManager);
-        adapter = new AreaPopupAdapter(R.layout.area_popup_item, areaList);
+        adapter = new SellerSpecAdapter(context, R.layout.seller_spec_item, sellerSpecItemList);
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SLog.info("position[%d]", position);
-                if (position >= areaList.size()) {
-                    return;
+
+                if (type == SellerSpecItem.TYPE_SPEC) { // 選擇規格組
+                    SellerSpecItem sellerSpecItem = sellerSpecItemList.get(position);
+                    specId = sellerSpecItem.id;
+
+                    List<SellerSpecItem> sellerSpecItems = sellerSpecValueMap.get(specId);
+                    adapter.setNewData(sellerSpecItems);
+
+                    type = SellerSpecItem.TYPE_SPEC_VALUE;
+
+                    btnOk.setVisibility(VISIBLE);
+                } else { // 選擇規格值
+                    SellerSpecItem sellerSpecItem = sellerSpecItemList.get(position);
+                    sellerSpecItem.selected = !sellerSpecItem.selected;
                 }
-
-                AreaItemView areaItemView = new AreaItemView(getContext());
-                Area area = areaList.get(position);
-
-                int depth = area.getAreaDeep();
-                if (selectedAreaList.size() >= depth) {
-                    SLog.info("已经是最后一级, SIZE[%d], DEPTH[%d]", areaList.size(), depth);
-                    setAddress();
-                    return;
-                }
-                selectedAreaList.add(area);
-
-                // 將之前的AreaItemView取消高亮
-                for (AreaItemView itemView : areaItemViewList) {
-                    // itemView.setStatus(Constant.STATUS_UNSELECTED);
-                }
-                areaItemView.setText(area.getAreaName());
-                areaItemView.setStatus(Constant.STATUS_SELECTED);
-                areaItemView.setDepth(depth);
-                areaItemView.setAreaId(area.getAreaId());
-                areaItemView.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // 如果點擊自己，將自己和后面的數據出隊列，重新加載上一級的地址列表
-                        AreaItemView itemView = (AreaItemView) v;
-                        int depth = itemView.getDepth();
-                        SLog.info("depth[%d]", depth);
-                        int index = depth - 1;  // 點擊到的item的索引，從0開始
-                        for (int i = selectedAreaList.size() - 1; i >= index ; i--) {
-                            selectedAreaList.remove(i);
-                        }
-
-                        for (int i = areaItemViewList.size() - 1; i >= index ; i--) {
-                            areaItemViewList.remove(i);
-                        }
-
-                        int childCount = llAreaContainer.getChildCount();
-                        if (childCount - index > 0) {
-                            llAreaContainer.removeViews(index, childCount - index);
-                        }
-
-                        int parentIndex = index - 1;
-                        if (parentIndex == -1) {
-                            loadAreaData(0);
-                        } else {
-                            Area parentArea = selectedAreaList.get(parentIndex);
-                            loadAreaData(parentArea.getAreaId());
-                        }
-                    }
-                });
-                areaItemViewList.add(areaItemView);
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(0, 0, Util.dip2px(getContext(), 15), 0);
-                llAreaContainer.addView(areaItemView, layoutParams);
-
-                loadAreaData(area.getAreaId());
             }
         });
 
         rvList.setAdapter(adapter);
-        loadAreaData(0);
     }
 
     //完全可见执行
@@ -159,6 +130,8 @@ public class SellerSelectSpecPopup extends BottomPopupView implements View.OnCli
         SLog.info("onDismiss");
     }
 
+
+
     @Override
     protected int getMaxHeight() {
         return (int) (XPopupUtils.getWindowHeight(getContext())*.85f);
@@ -172,133 +145,32 @@ public class SellerSelectSpecPopup extends BottomPopupView implements View.OnCli
             case R.id.btn_dismiss:
                 dismiss();
                 break;
-            default:
-                break;
-        }
-    }
-
-    private void setAddress() {
-        if (popupType == PopupType.MEMBER_ADDRESS) {
-            setMemberAddress();
-        } else {
-            onSelectedListener.onSelected(popupType, 0, selectedAreaList);
-            dismiss();
-        }
-    }
-
-    private void setMemberAddress() {
-        String token = User.getToken();
-        if (StringUtil.isEmpty(token)) {
-            return;
-        }
-
-        if (selectedAreaList.size() < 2) {
-            ToastUtil.error(context, "請選擇區域");
-            return;
-        }
-
-        /*
-        token String 当前登录令牌
-addressProvinceId int 省级id
-addressCityId int 市级id
-addressAreaId int 区级 id
-addressAreaInfo String 地区全名
-         */
-        int addressProvinceId = selectedAreaList.get(0).getAreaId();
-        int addressCityId = selectedAreaList.get(1).getAreaId();
-        int addressAreaId = 0;
-        if (selectedAreaList.size() > 2) {
-            addressAreaId = selectedAreaList.get(2).getAreaId();
-        }
-
-        String addressAreaInfoTmp = selectedAreaList.get(0).getAreaName() + " " + selectedAreaList.get(1).getAreaName();
-        if (selectedAreaList.size() > 2) {
-            addressAreaInfoTmp += " " + selectedAreaList.get(2).getAreaName();
-        }
-        final String addressAreaInfo = addressAreaInfoTmp;
-
-        EasyJSONObject params = EasyJSONObject.generate(
-                "token", token,
-                "addressProvinceId", addressProvinceId,
-                "addressCityId", addressCityId,
-                "addressAreaId", addressAreaId,
-                "addressAreaInfo", addressAreaInfo);
-
-        SLog.info("params[%s]", params.toString());
-
-        Api.postUI(Api.PATH_SET_MEMBER_ADDRESS, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(context, e);
-            }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                try {
-                    SLog.info("responseStr[%s]", responseStr);
-                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-
-                    if (ToastUtil.checkError(context, responseObj)) {
+            case R.id.btn_ok:
+                if (onSelectedListener != null) {
+                    List<Integer> specValueIdList = new ArrayList<>();
+                    List<SellerSpecItem> sellerSpecItems = sellerSpecValueMap.get(specId);
+                    if (sellerSpecItems == null) {
                         return;
                     }
 
-                    ToastUtil.success(context, "保存成功");
-                    onSelectedListener.onSelected(popupType, 0, addressAreaInfo);
-                    dismiss();
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
-            }
-        });
-    }
-
-    private void loadAreaData(int areaId) {
-        SLog.info("loadAreaData, areaId[%d]", areaId);
-        EasyJSONObject params = EasyJSONObject.generate(
-                "areaId", areaId);
-        Api.getUI(Api.PATH_AREA_LIST, params, new UICallback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                ToastUtil.showNetworkError(context, e);
-            }
-
-            @Override
-            public void onResponse(Call call, String responseStr) throws IOException {
-                SLog.info("responseStr[%s]", responseStr);
-                EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
-
-
-
-                try {
-                    if (ToastUtil.isError(responseObj)) {
-                        int code = responseObj.getInt("code");
-                        String error = responseObj.getSafeString("datas.error");
-                        if (code == 400 && "无下级".equals(error)) {
-                            setAddress();
+                    for (SellerSpecItem item : sellerSpecItems) {
+                        if (item.selected) {
+                            specValueIdList.add(item.id);
                         }
                     }
 
-                    EasyJSONArray easyJSONArray = responseObj.getSafeArray("datas.areaList");
-                    areaList.clear();
-                    for (Object object : easyJSONArray) {
-                        // {"areaId":36,"areaName":"北京市","areaParentId":1,"areaDeep":2,"areaRegion":null,"areaCode":"110100"}
-                        EasyJSONObject easyJSONObject = (EasyJSONObject) object;
-                        Area area = new Area();
-                        area.setAreaId(easyJSONObject.getInt("areaId"));
-                        area.setAreaName(easyJSONObject.getSafeString("areaName"));
-                        area.setAreaParentId(easyJSONObject.getInt("areaParentId"));
-                        area.setAreaDeep(easyJSONObject.getInt("areaDeep"));
-                        area.setAreaRegion(easyJSONObject.getSafeString("areaRegion"));
-                        area.setAreaCode(easyJSONObject.getSafeString("areaCode"));
-                        areaList.add(area);
-                    }
+                    EasyJSONObject dataObj = EasyJSONObject.generate(
+                            "specId", specId,
+                            specValueIdList, specValueIdList
+                    );
+                    SLog.info("dataObj[%s]", dataObj.toString());
 
-                    adapter.setNewData(areaList);
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    onSelectedListener.onSelected(PopupType.SELLER_SELECT_SPEC, 0, dataObj);
                 }
-            }
-        });
+                break;
+            default:
+                break;
+        }
     }
 }
 

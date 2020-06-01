@@ -39,16 +39,20 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.widget.NoScrollViewPager;
+import com.ftofs.twant.seller.entity.SellerSpecMapItem;
+import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.AreaPopup;
 import com.ftofs.twant.widget.FixedEditText;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.ScaledButton;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 import com.umeng.commonsdk.debug.E;
 
@@ -57,7 +61,9 @@ import org.json.JSONArray;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,6 +99,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     List<ListPopupItem> spinnerLogoCountryItems = new ArrayList<>();
     private int brandId =-1;
 
+    Map<Integer, SellerSpecMapItem> sellerSpecMap = new HashMap<>();
     List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();
     JSONArray goodsMobileBodyVoList =new JSONArray();
     private int unityIndex;
@@ -498,12 +505,38 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         EasyJSONArray freightTemplateList = data.getArray("freightTemplateList");//物流模板列表
         EasyJSONArray specListArr = data.getArray("specList");//規格列表
 
+        // 處理規格列表
+        for (Object object : specListArr) {
+            EasyJSONObject spec = (EasyJSONObject) object;
+            int specId = spec.getInt("specId");
+
+            SellerSpecMapItem sellerSpecMapItem = new SellerSpecMapItem();
+            sellerSpecMapItem.specId = specId;
+            sellerSpecMapItem.specName = spec.getSafeString("specName");
+
+            EasyJSONArray specValueList = spec.getSafeArray("specValueList");
+            for (Object object2 : specValueList) {
+                EasyJSONObject specValue = (EasyJSONObject) object2;
+
+                SellerSpecItem sellerSpecItem = new SellerSpecItem();
+                sellerSpecItem.id = specValue.getInt("specValueId");
+                sellerSpecItem.name = specValue.getSafeString("specValueName");
+
+                sellerSpecMapItem.sellerSpecItemList.add(sellerSpecItem);
+            }
+
+            sellerSpecMap.put(specId, sellerSpecMapItem);
+        }
+
         updatePrimaryView(data);
         updateBasicView(data);
         updateSpecView(data);
         updateDetailView(data);
         updateFreightView(data);
     }
+
+
+
 
     private void updateFreightView(EasyJSONObject data)throws Exception {
         EasyJSONArray freightTemplateList = data.getArray("freightTemplateList");
@@ -684,6 +717,29 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_others_prev:
                 vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
+                break;
+            case R.id.btn_add_spec:
+                List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();
+                Map<Integer, List<SellerSpecItem>> sellerSpecValueMap = new HashMap<>();
+
+                for (Map.Entry<Integer, SellerSpecMapItem> entry : sellerSpecMap.entrySet()) {
+                    if (entry.getValue().selected) {
+                        continue;
+                    }
+
+                    SellerSpecItem sellerSpecItem = new SellerSpecItem();
+                    sellerSpecItem.id = entry.getKey();
+                    sellerSpecItem.name = entry.getValue().specName;
+
+                    sellerSpecItemList.add(sellerSpecItem);
+                    sellerSpecValueMap.put(entry.getKey(), entry.getValue().sellerSpecItemList);
+                }
+
+                new XPopup.Builder(_mActivity)
+                        // 如果不加这个，评论弹窗会移动到软键盘上面
+                        .moveUpToKeyboard(false)
+                        .asCustom(new SellerSelectSpecPopup(_mActivity, sellerSpecItemList, sellerSpecValueMap, this))
+                        .show();
                 break;
             default:
                 break;

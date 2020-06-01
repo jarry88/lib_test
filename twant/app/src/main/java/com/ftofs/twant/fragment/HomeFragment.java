@@ -23,6 +23,7 @@ import com.ftofs.twant.constant.TangramCellType;
 import com.ftofs.twant.entity.ShoppingZoneItem;
 import com.ftofs.twant.entity.StickyCellData;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.AddGoodsFragment;
 import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -326,7 +327,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            Util.startFragment(LabFragment.newInstance());
+            Util.startFragment(AddGoodsFragment.newInstance());
         }
     }
 

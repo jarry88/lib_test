@@ -74,6 +74,9 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
 
     ImageView iconActivityEntrance;
     private NotificationManager mNotificationManager;
+
+    ImageView imgTest;
+
     public static TestFragment newInstance() {
         Bundle args = new Bundle();
 
@@ -158,6 +161,14 @@ public class TestFragment extends BaseFragment implements View.OnClickListener {
         iconActivityEntrance = view.findViewById(R.id.icon_activity_entrance);
         Glide.with(_mActivity).load("https://gfile.oss-cn-hangzhou.aliyuncs.com/takewant/7d78744d5d1dffc96022bba47123b0a8.png")
                 .into(iconActivityEntrance);
+
+        imgTest = view.findViewById(R.id.img_test);
+        String url = "https://gfile.oss-cn-hangzhou.aliyuncs.com/img/0159525979bab9a8012193a329c12d.jpg";
+        url = "https://gfile.oss-cn-hangzhou.aliyuncs.com/img/0159525979bab9a8012193a329c12d.jpg";
+        // url = "https://img.twant.com/image/90/18/901806d394a2f133a2d5d897f04c9d7a.jpg";
+        url = "https://gfile.oss-cn-hangzhou.aliyuncs.com/img/v2-e2aa8d9c5237173c11954db9cc8b9c5b_1200x500.jpg";
+        Glide.with(_mActivity).load(url)
+                .into(imgTest);
     }
 
     @Override
