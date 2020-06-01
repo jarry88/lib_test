@@ -30,6 +30,7 @@ import com.ftofs.twant.fragment.PersonalInfoFragment;
 import com.ftofs.twant.fragment.ShopCustomerServiceFragment;
 import com.ftofs.twant.fragment.ShopHomeFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.XPopup;
@@ -200,6 +201,7 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
 
             }
             findViewById(R.id.btn_item_2).setOnClickListener(this);
+            ToastUtil.success(context,"sss");
 
         } else if(type==TYPE_STORE){
             View btnItem5 = findViewById(R.id.btn_item_5);

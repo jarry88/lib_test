@@ -29,7 +29,6 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.StoreAnnouncement;
 import com.ftofs.twant.log.SLog;
-import com.ftofs.twant.seller.fragment.AddGoodsFragment;
 import com.ftofs.twant.seller.fragment.SellerGoodsListFragment;
 import com.ftofs.twant.seller.fragment.SellerOrderListFragment;
 import com.ftofs.twant.util.Jarbon;
@@ -37,6 +36,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.view.CustomRecyclerView;
 import com.ftofs.twant.widget.StoreAnnouncementPopup;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
@@ -226,7 +226,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     @BindView(R.id.pageIndicatorView)
     PageIndicatorView pageIndicatorView;
     @BindView(R.id.rv_gallery_image_list)
-    RecyclerView rvGalleryImageList;
+    CustomRecyclerView rvGalleryImageList;
     public static SellerHomeFragment newInstance() {
 
         SellerHomeFragment fragment = new SellerHomeFragment();
@@ -592,10 +592,10 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             @Override
             public void run() {
 //                SLog.info("threadId[%s]", Thread.currentThread().getId());
-
+            try{
                 Message message = new Message();
                 int position = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-//                SLog.info("position [%d],sum[%d]",position,currGalleryImageList.size());
+                SLog.info("position [%d],sum[%d]",position,currGalleryImageList.size());
                 int size = currGalleryImageList.size();
                 if (size > 0) {
                     currGalleryPosition = (position+1) % currGalleryImageList.size();
@@ -604,6 +604,9 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                         countDownHandler.sendMessage(message);
                     }
                 }
+            }catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
             }
         }, 500, 3000);  // 0.5秒后启动，每隔3秒运行一次
     }
