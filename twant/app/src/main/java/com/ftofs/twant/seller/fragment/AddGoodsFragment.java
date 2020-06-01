@@ -347,6 +347,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         Util.setOnClickListener(view, R.id.btn_add_spec, this);
 
         llSelectedSpecContainer = view.findViewById(R.id.ll_selected_spec_container);
+        view.findViewById(R.id.btn_view_sku_detail).setOnClickListener(this);
         return view;
     }
 
@@ -373,6 +374,13 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.MarginLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.topMargin = Util.dip2px(_mActivity, 8);
             llSelectedSpecContainer.addView(textView, layoutParams);
+
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 
@@ -725,6 +733,9 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
 
                 break;
+            case R.id.btn_view_sku_detail:
+                start(SellerSkuEditorFragment.newInstance());
+                break;
             case R.id.btn_add_address:
                 ToastUtil.success(_mActivity, "添加商品描述");
                 break;
@@ -939,7 +950,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
-        SLog.info("paramas[%s]",publishGoodsInfo.toString());
+        SLog.info("params[%s]",publishGoodsInfo.toString());
           Api.postUI(Api.PATH_SELLER_GOODS_PUBLISH_SAVE, publishGoodsInfo, new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
