@@ -19,6 +19,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.domain.goods.Category;
+import com.ftofs.twant.domain.store.Store;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -40,6 +41,7 @@ import okhttp3.Call;
 public class StoreLabelPopup extends BottomPopupView implements View.OnClickListener {
     private final OnSelectedListener onSelectedListener;
     private final int twBlack;
+    private  List<StoreLabel> dataList;
     Context context;
         PopupType popupType;
 
@@ -63,6 +65,16 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
         this.context = context;
         this.popupType = popupType;
         this.onSelectedListener = onSelectedListener;
+        twBlack = getResources().getColor(R.color.tw_black, null);
+    }
+
+    public StoreLabelPopup(@NonNull Context context, PopupType popupType, List<StoreLabel> dataList,OnSelectedListener onSelectedListener) {
+        super(context);
+
+        this.context = context;
+        this.popupType = popupType;
+        this.onSelectedListener = onSelectedListener;
+        this.dataList = dataList;
         twBlack = getResources().getColor(R.color.tw_black, null);
     }
     @Override
@@ -94,14 +106,15 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                 AreaItemView areaItemView = new AreaItemView(getContext());
                 Category category = firstCategoryList.get(position);
 
+
                 int depth = category.getDeep();
-                if (depth>=3) {
+                if (depth>=selectedAreaList.size()) {
                     SLog.info("已经是最后一级, SIZE[%d], DEPTH[%d]", selectedAreaList.size(), depth);
                     setSelectLabelId(category);
+                    dismiss();
                     return;
                 }
                 selectedAreaList.add(category);
-
                 // 將之前的AreaItemView取消高亮
 //                for (AreaItemView itemView : areaItemViewList) {
 //                     itemView.setStatus(Constant.STATUS_UNSELECTED);
@@ -160,7 +173,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
 
     private void setSelectLabelId(Category category) {
         if (selectedAreaList.size() >= category.getDeep()) {
-            selectedAreaList.set(category.getDeep(), category);
+            selectedAreaList.set(category.getDeep()-1, category);
         } else {
             selectedAreaList.add(category);
         }
@@ -168,6 +181,10 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
     }
 
     private void loadLabelData(int categoryId) {
+        if (popupType == PopupType.STORE_CATEGORY) {
+            loadLocalData(categoryId);
+            return;
+        }
          EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
           SLog.info("params[%s]", params);
           Api.getUI(Api.PATH_SELLER_GOODS_CATEGORY+String.format("/%d",categoryId), params, new UICallback() {
@@ -187,12 +204,15 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                      }
 
                      EasyJSONArray categoryList = responseObj.getSafeArray("datas.categoryList");
-                     categoryData.get(depth).clear();
-                     for (Object object : categoryList) {
-                         categoryData.get(depth).add(Category.parse((EasyJSONObject) object));
-                     }
-                     if (depth == 0) {
-                         adapter.setNewData(categoryData.get(0));
+                     if (categoryList != null) {
+                         categoryData.get(depth).clear();
+                         for (Object object : categoryList) {
+                             categoryData.get(depth).add(Category.parse((EasyJSONObject) object));
+                         }
+
+                         if (depth == 0) {
+                             adapter.setNewData(categoryData.get(0));
+                         }
                      }
                  } catch (Exception e) {
                      SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -200,6 +220,33 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
              }
           });
 
+    }
+
+    private void loadLocalData(int categoryId) {
+        if (dataList == null) {
+            return;
+        }
+        List<StoreLabel> list =new ArrayList<>();
+        if (depth == 0) {
+            list = dataList;
+        } else {
+            for (StoreLabel label : dataList) {
+                if (label.getStoreLabelId() == categoryId) {
+                    list = label.getStoreLabelList();
+                }
+            }
+        }
+        categoryData.get(depth).clear();
+        for (StoreLabel label : list) {
+            Category category = new Category();
+            category.setCategoryId(label.getStoreLabelId());
+            category.setCategoryName(label.getStoreLabelName());
+            categoryData.get(depth).add(category);
+        }
+
+        if (depth == 0) {
+            adapter.setNewData(categoryData.get(0));
+        }
     }
 
     //完全可见执行
@@ -225,6 +272,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
 
         switch (id) {
             case R.id.btn_dismiss:
+                onSelectedListener.onSelected(PopupType.DEFAULT,categoryId,null);
                 dismiss();
                 break;
             default:

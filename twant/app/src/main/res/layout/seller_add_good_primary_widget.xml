@@ -5,27 +5,132 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/ll_seller_handle_container"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/white_6dp_radius_bg"
-            android:paddingBottom="@dimen/margin12"
-            android:paddingTop="@dimen/margin12"
-            android:paddingStart="@dimen/margin12"
-            android:paddingEnd="@dimen/margin12"
-            android:visibility="visible">
+            android:layout_height="match_parent">
+
             <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:id="@+id/ll_widget_container"
+                android:id="@+id/ll_seller_handle_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:orientation="vertical"
-                >
-
+                android:background="@drawable/white_6dp_radius_bg"
+                android:paddingBottom="@dimen/margin12"
+                android:paddingTop="@dimen/margin12"
+                android:paddingStart="@dimen/margin12"
+                android:paddingEnd="@dimen/margin12"
+                android:visibility="visible">
                 <LinearLayout
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:id="@+id/ll_widget_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="top">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/tw_red"
+                            android:text="*"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="商品名稱："
+                            android:textSize="16sp"/>
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_add_good_name"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:background="@drawable/seller_edit_text_bg"
+                        android:layout_width="match_parent"
+                        android:gravity="top"
+                        android:lines="3"
+                        android:hint="請輸入商品名稱"
+                        android:textSize="14sp"
+                        android:layout_height="wrap_content"
+                        />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_red"
+                        android:text="*"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="商品分類："
+                        android:textSize="16sp"/>
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sp_goods_category"
+                        android:autofillHints="選擇"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_4">
+                    <TextView
+                        android:id="@+id/tv_category_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:text="請選擇商品分類"
+                        android:layout_marginEnd="@dimen/margin12"/>
+                    <TextView
+                        android:id="@+id/btn_select_category_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_white"
+                        android:text="@string/text_select"
+                        android:background="@drawable/grey_5dp_bg"
+
+                        android:textSize="12sp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_red"
+                        android:text="*"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="商品賣點：" />
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/et_add_good_description"
+                    android:layout_marginBottom="@dimen/dp_4"
+                    android:hint="請輸入對產品的賣點描述："
+                    android:textSize="14sp"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:background="@drawable/seller_edit_text_bg"
+                    android:layout_width="match_parent"
+                    android:gravity="top"
+                    android:layout_height="150dp"/>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/dp_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="top">
@@ -37,163 +142,80 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="商品名稱：" 
-                        android:textSize="16sp"/>
-                </LinearLayout>
-                <EditText
-                    android:id="@+id/et_add_good_name"
-                    android:layout_marginTop="@dimen/dp_4"
-                    android:background="@drawable/real_name_edit_bg"
-                    android:layout_width="match_parent"
-                    android:gravity="top"
-                    android:hint="請輸入商品名稱"
-                    android:textSize="14sp"
-                    android:layout_height="100dp"/>
+                        android:text="商品品牌："
+                        />
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
-                    android:text=""/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="商品分類："
-                    android:textSize="16sp"/>
+                </LinearLayout>
 
                 <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/sp_goods_category"
+                    android:id="@+id/sp_add_good_logo"
+                    android:background="@drawable/spinner_border_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
                     android:autofillHints="選擇"
-                    android:visibility="gone"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_category_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_black"
-                    android:text="請選擇商品分類"
-                    android:layout_marginEnd="@dimen/margin12"/>
-                <TextView
-                    android:id="@+id/btn_select_category_id"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_white"
-                    android:text="@string/text_select"
-                    android:background="@drawable/grey_5dp_bg"
-
-                    android:textSize="12sp"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
-                    android:text=""/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="商品賣點：" />
-            </LinearLayout>
-            <EditText
-                android:id="@+id/et_add_good_description"
-                android:hint="請輸入對產品的賣點描述："
-                android:textSize="14sp"
-                android:layout_marginTop="@dimen/dp_4"
-                android:background="@drawable/real_name_edit_bg"
-                android:layout_width="match_parent"
-                android:gravity="top"
-                android:layout_height="150dp"/>
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
-                    android:text="*"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="商品品牌："
-                    />
-
-            </LinearLayout>
-
-            <Spinner
-                android:id="@+id/sp_add_good_logo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="選擇"
-                android:tooltipText="sdf" />
-            <LinearLayout
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="top">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/tw_red"
-                    android:text="*"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="選擇品牌所在地："
-                    />
-
-            </LinearLayout>
-            <Spinner
-                android:id="@+id/sp_add_good_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-                <TextView
                     android:visibility="gone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@id/btn_return"
-                    android:text="返回列表"
-                    android:layout_margin="@dimen/margin12"
-                    android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-
-                    android:paddingEnd="@dimen/margin12"
-                    android:background="@drawable/white_20dp_radius_bg"/>
+                    />
                 <TextView
+                    android:id="@+id/tv_add_good_logo"
+                    android:background="@drawable/spinner_border_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:hint="請選擇品牌"
+                    />
+                <LinearLayout
+                    android:layout_marginTop="@dimen/dp_4"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/btn_primary_next"
-                    android:layout_margin="@dimen/margin12"
-                    android:text="下一步，交易信息"
-                    android:textColor="@color/tw_white"
-                    android:padding="@dimen/dp_4"
-                    android:paddingStart="@dimen/margin12"
-                    android:paddingEnd="@dimen/margin12"
-                    android:background="@drawable/blue_20dp_bg"/>
+                    android:gravity="top">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_red"
+                        android:text="*"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="選擇品牌所在地："
+                        />
 
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_add_good_location"
+                    android:layout_width="match_parent"
+                    android:hint="請選擇品牌所在地"
+                    android:background="@drawable/spinner_border_bg"
+                    android:layout_height="26dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    <TextView
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@id/btn_return"
+                        android:text="返回列表"
+                        android:layout_margin="@dimen/margin12"
+                        android:padding="@dimen/dp_4"
+                        android:paddingStart="@dimen/margin12"
+
+                        android:paddingEnd="@dimen/margin12"
+                        android:background="@drawable/white_20dp_radius_bg"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_primary_next"
+                        android:layout_margin="@dimen/margin12"
+                        android:text="下一步，交易信息"
+                        android:textColor="@color/tw_white"
+                        android:padding="@dimen/dp_4"
+                        android:paddingStart="24dp"
+                        android:paddingEnd="24dp"
+                        android:background="@drawable/blue_20dp_bg"/>
+
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 </LinearLayout>

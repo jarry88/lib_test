@@ -67,7 +67,7 @@ public class StoreLabel implements Serializable {
         storeLabel.setStoreLabelId(label.getInt("storeLabelId"));
         storeLabel.setImage(label.getSafeString("image"));
         storeLabel.setImageSrc(label.getSafeString("imageSrc"));
-        storeLabel.parseStoreLabelList(label.getArray("storeLabelList"));
+        storeLabel.parseStoreLabelList(label.getArray("storeLabelList"),storeLabel.depth+1);
         storeLabel.setStoreLabelName(label.getSafeString("storeLabelName"));
         return storeLabel;
     }
@@ -166,7 +166,7 @@ public class StoreLabel implements Serializable {
                 '}';
     }
 
-    public void parseStoreLabelList(EasyJSONArray storeLabelList)throws Exception {
+    public void parseStoreLabelList(EasyJSONArray storeLabelList,int depth)throws Exception {
         if (storeLabelList != null && storeLabelList.length() > 0) {
             List<StoreLabel> storeLabels = new ArrayList<>();
             for (Object object2 : storeLabelList) {
@@ -176,6 +176,7 @@ public class StoreLabel implements Serializable {
                 storeLabel2.setStoreLabelName(easyJSONObject2.getSafeString("storeLabelName"));
                 storeLabel2.setParentId(easyJSONObject2.getInt("parentId"));
                 storeLabel2.setStoreId(easyJSONObject2.getInt("storeId"));
+                storeLabel2.depth = depth;
                 storeLabel2.setIsFold(Constant.TRUE_INT);
 
                 storeLabels.add(storeLabel2);

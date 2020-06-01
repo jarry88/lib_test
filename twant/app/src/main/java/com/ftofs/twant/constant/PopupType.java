@@ -186,8 +186,17 @@ public enum PopupType {
      */
     STORE_LABEL ,
 
+
     /**
      * 【賣家】選擇規格
      */
     SELLER_SELECT_SPEC,
+
+    /**
+     * 選擇商品單位
+     */
+    GOODS_UNITY,
+    GOODS_LOCATION,
+    GOODS_LOGO, GOODS_FREIGHT_RULE, STORE_CATEGORY,
+
 }

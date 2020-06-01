@@ -2,6 +2,8 @@ package com.ftofs.twant.domain.goods;
 
 import java.io.Serializable;
 
+import cn.snailpad.easyjson.EasyJSONObject;
+
 public class Brand implements Serializable {
     /**
      * 品牌编号
@@ -61,6 +63,13 @@ public class Brand implements Serializable {
      * 1图片，0文字
      */
     private int showType;
+
+    public static Brand parase(EasyJSONObject object) throws Exception{
+        Brand brand = new Brand();
+        brand.brandId = object.getInt("brandId");
+        brand.brandName = object.getSafeString("brandName");
+        return brand;
+    }
 
     public int getBrandId() {
         return brandId;
