@@ -777,8 +777,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 if (User.getUserId() <= 0) {
                     break;
                 }
-                showMenu();
-//                updateExchangeCard();
+                updateExchangeCard(view);
 
                 break;
             case R.id.btn_send_image:
@@ -910,7 +909,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         }
     }
 
-    private void updateExchangeCard() {
+    private void updateExchangeCard(View v) {
 
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "fromName", yourMemberName);
         SLog.info("params[%s]", params);
@@ -932,20 +931,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
-                showMenu();
+
+                new XPopup.Builder(_mActivity)
+                        .offsetX(-Util.dip2px(_mActivity, 11))
+                        .offsetY(-Util.dip2px(_mActivity, 8))
+//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
+                        .hasShadowBg(false) // 去掉半透明背景
+                        .atView(v)
+                        .asCustom(new BlackDropdownMenu(_mActivity, ChatFragment.this, BlackDropdownMenu.TYPE_CHAT))
+                        .show();
             }
         });
-    }
-
-    private void showMenu() {
-        new XPopup.Builder(_mActivity)
-                .offsetX(-Util.dip2px(_mActivity, 11))
-                .offsetY(-Util.dip2px(_mActivity, 8))
-//                        .popupPosition(PopupPosition.Right) //手动指定位置，有可能被遮盖
-                .hasShadowBg(false) // 去掉半透明背景
-                .atView(getView())
-                .asCustom(new BlackDropdownMenu(_mActivity, this, BlackDropdownMenu.TYPE_MESSAGE))
-                .show();
     }
 
     private void initChatUI(View contentView) {

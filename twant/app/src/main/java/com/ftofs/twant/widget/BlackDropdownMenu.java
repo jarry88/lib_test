@@ -170,6 +170,9 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
             //暫時只做店鋪
         }else if(type==TYPE_CHAT){
             findViewById(R.id.btn_item_1).setVisibility(View.GONE);
+            if (baseFragment == null) {
+                return;
+            }
             ChatFragment chatFragment = (ChatFragment) baseFragment;
             int storeId = chatFragment.getStoreId();
             boolean showCard = chatFragment.getCard();
@@ -201,7 +204,6 @@ public class BlackDropdownMenu extends AttachPopupView implements View.OnClickLi
 
             }
             findViewById(R.id.btn_item_2).setOnClickListener(this);
-            ToastUtil.success(context,"sss");
 
         } else if(type==TYPE_STORE){
             View btnItem5 = findViewById(R.id.btn_item_5);
