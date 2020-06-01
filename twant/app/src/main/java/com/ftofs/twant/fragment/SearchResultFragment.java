@@ -58,6 +58,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.GoodsFilterDrawerPopupView;
+import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.StoreFilterPopup;
 import com.hyphenate.chat.EMConversation;
 import com.lxj.xpopup.XPopup;
@@ -131,6 +132,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
     TextView tvFollow;
     boolean hrStatus;
     TextView tvRecruitment;
+    ScaledButton sbRecruitment;
 
     TextView tvSort;
     ImageView iconSort;
@@ -434,6 +436,8 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         }
         tvFollow = view.findViewById(R.id.tv_follow);
         tvRecruitment = view.findViewById(R.id.tv_recruitment);
+        sbRecruitment = view.findViewById(R.id.sb_recruitment);
+        sbRecruitment.setButtonCheckedSquare();
         tvSort = view.findViewById(R.id.tv_sort);
         iconSort = view.findViewById(R.id.icon_sort);
         tvLocation = view.findViewById(R.id.tv_location);
@@ -1181,6 +1185,7 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.btn_recruitment:
                 hrStatus = !hrStatus;
+                sbRecruitment.setChecked(hrStatus);
                 if (hrStatus) {
                     tvRecruitment.setTextColor(twBlue);
                 } else {
@@ -1228,15 +1233,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             if (currSelId == R.id.btn_sort) {
                                 btnSort.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
                                 tvSort.setTextColor(twBlue);
-                                iconSort.setImageResource(R.drawable.icon_store_filter_expand_blue);
+                                iconSort.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
                             } else if (currSelId == R.id.btn_location) {
                                 btnLocation.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
                                 tvLocation.setTextColor(twBlue);
-                                iconLocation.setImageResource(R.drawable.icon_store_filter_expand_blue);
+                                iconLocation.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
                             } else if (currSelId == R.id.btn_biz_circle) {
                                 btnBizCircle.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
                                 tvBizCircle.setTextColor(twBlue);
-                                iconBizCircle.setImageResource(R.drawable.icon_store_filter_expand_blue);
+                                iconBizCircle.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
                             }
                         }
                         @Override
@@ -1245,15 +1250,15 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                             btnSort.setBackground(null);
                             tvSort.setTextColor(twBlack);
-                            iconSort.setImageResource(R.drawable.icon_store_filter_expand_black);
+                            iconSort.setImageResource(R.drawable.icon_filter_black_expand);
 
                             btnLocation.setBackground(null);
                             tvLocation.setTextColor(twBlack);
-                            iconLocation.setImageResource(R.drawable.icon_store_filter_expand_black);
+                            iconLocation.setImageResource(R.drawable.icon_filter_black_expand);
 
                             btnBizCircle.setBackground(null);
                             tvBizCircle.setTextColor(twBlack);
-                            iconBizCircle.setImageResource(R.drawable.icon_store_filter_expand_black);
+                            iconBizCircle.setImageResource(R.drawable.icon_filter_black_expand);
                         }
                     })
                     .asCustom(new StoreFilterPopup(_mActivity, popupType, generalItemSelectedId,
@@ -1287,9 +1292,9 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
         // 如果現在是用價格排序，則顯示價格升序、降序圖標
         if (goodsSortButtonIndex == GOODS_SEARCH_SORT_PRICE) {
             if (sortPriceAsc) {
-                iconPriceOrder.setImageResource(R.drawable.icon_price_sort_asc);
+                iconPriceOrder.setImageResource(R.drawable.icon_unfold_good_filter);
             } else {
-                iconPriceOrder.setImageResource(R.drawable.icon_price_sort_desc);
+                iconPriceOrder.setImageResource(R.drawable.icon_blue_unfold_good_filter);
             }
             iconPriceOrder.setVisibility(View.VISIBLE);
         }
@@ -1339,16 +1344,16 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                 if (type == PopupType.STORE_FILTER_LOCATION) {
                     tvLocation.setTextColor(twBlue);
-                    iconLocation.setImageResource(R.drawable.icon_store_filter_expand_blue);
+                    iconLocation.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
 
                     tvBizCircle.setTextColor(twBlack);
-                    iconBizCircle.setImageResource(R.drawable.icon_store_filter_expand_black);
+                    iconBizCircle.setImageResource(R.drawable.icon_filter_black_expand);
                 } else {
                     tvLocation.setTextColor(twBlack);
-                    iconLocation.setImageResource(R.drawable.icon_store_filter_expand_black);
+                    iconLocation.setImageResource(R.drawable.icon_filter_black_expand);
 
                     tvBizCircle.setTextColor(twBlue);
-                    iconBizCircle.setImageResource(R.drawable.icon_store_filter_expand_blue);
+                    iconBizCircle.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
                 }
 
                 currPage = 0;
