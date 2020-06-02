@@ -51,7 +51,7 @@
                         android:layout_width="match_parent"
                         android:gravity="top"
                         android:lines="3"
-                        android:hint="請輸入商品名稱"
+                        android:hint="請輸入商品名稱，產品標題名稱長度至少3個字符，最長50個漢字。"
                         android:textSize="14sp"
                         android:layout_height="wrap_content"
                         />
