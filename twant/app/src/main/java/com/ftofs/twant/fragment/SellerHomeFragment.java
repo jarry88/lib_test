@@ -334,7 +334,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 //        swBusinessState.setBackColorRes(getResources().getColor(R.color.tw_yellow));
 //        swBusinessState.setThumbColorRes(getResources().getColor(R.color.tw_blue));
         // 初始化
-        loadSellerData();
+//        loadSellerData();
 
     }
 
