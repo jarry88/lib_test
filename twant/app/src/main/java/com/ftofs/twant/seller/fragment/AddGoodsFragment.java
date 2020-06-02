@@ -734,6 +734,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
                 break;
             case R.id.btn_view_sku_detail:
+//                start(SellerSkuEditorFragment.newInstance());
                 // 查看SKU詳情
                 start(SellerSkuEditorFragment.newInstance(sellerSelectedSpecList));
                 break;

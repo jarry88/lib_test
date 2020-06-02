@@ -46,6 +46,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         LinearLayout linearLayout = helper.getView(R.id.ll_message_item_container);
         if (chatConversation != null) {
             linearLayout.getLayoutParams().height = Util.dip2px(mContext,80);
+            linearLayout.setVisibility(View.VISIBLE);
         } else {
             linearLayout.getLayoutParams().height = Util.dip2px(mContext, 30);
             linearLayout.setVisibility(View.INVISIBLE);

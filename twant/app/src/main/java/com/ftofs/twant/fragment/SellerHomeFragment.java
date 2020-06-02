@@ -334,7 +334,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 //        swBusinessState.setBackColorRes(getResources().getColor(R.color.tw_yellow));
 //        swBusinessState.setThumbColorRes(getResources().getColor(R.color.tw_blue));
         // 初始化
-        loadSellerData();
+//        loadSellerData();
 
     }
 
@@ -506,9 +506,11 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     }
 
     private void updateSwitchButton() {
-        SLog.info("設置顔色%s",storeState==1?"白":"黑");
+        swBusinessState.setChecked(storeState== Constant.TRUE_INT);
+        swBusinessState.setLinkTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
         swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
-        swBusinessState.setThumbColorRes(R.color.tw_white);
+//        swBusinessState.setThumbColorRes(R.color.tw_white);
+        SLog.info("sb [%s],storestate [%s],coloer [%s]",swBusinessState.isChecked(),storeState,swBusinessState.getCurrentTextColor());
 
     }
 
@@ -566,10 +568,14 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE&&!StringUtil.isArrayEmpty(currGalleryImageList)) {
-                    currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                    SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
-                    int position = currGalleryPosition % currGalleryImageList.size();
-                    pageIndicatorView.setSelection(position);
+                    try{
+                        currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                        SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
+                        int position = currGalleryPosition % currGalleryImageList.size();
+                        pageIndicatorView.setSelection(position);
+                    }catch (Exception e) {
+                       SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
                 }
             }
 
@@ -595,7 +601,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             try{
                 Message message = new Message();
                 int position = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                SLog.info("position [%d],sum[%d]",position,currGalleryImageList.size());
+//                SLog.info("position [%d],sum[%d]",position,currGalleryImageList.size());
                 int size = currGalleryImageList.size();
                 if (size > 0) {
                     currGalleryPosition = (position+1) % currGalleryImageList.size();

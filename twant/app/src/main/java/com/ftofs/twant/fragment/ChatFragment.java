@@ -1015,6 +1015,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                             "goodsName", friendInfo.goodsInfo.goodsName,
                             "commonId", friendInfo.goodsInfo.commonId,
                             "goodsImage", friendInfo.goodsInfo.imageSrc);
+                    adapter.remove(position);
                     sendTextMessage("",CUSTOM_MESSAGE_TYPE_GOODS,goodsInfo);
                 } else if (id == R.id.ll_goods_message_container) {
                     ChatMessage chatMessage = chatMessageList.get(position);
