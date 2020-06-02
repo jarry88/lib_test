@@ -810,6 +810,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         app:icon_src="@drawable/expand_button"
+                        android:layout_marginStart="@dimen/dp_4"
                         />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -817,6 +818,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="15dp"
+                        android:layout_marginEnd="@dimen/margin8"
                         android:layout_marginBottom="@dimen/margin12"
                         android:layout_toEndOf="@id/tv_shop_friend"
                         android:layout_toStartOf="@id/btn_show_all_store_friends">

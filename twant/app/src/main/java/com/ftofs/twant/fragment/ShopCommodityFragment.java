@@ -797,6 +797,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                     int goodsCountTotal = 0;
                     EasyJSONArray storeCategoryList = responseObj.getSafeArray("datas.storeCategoryList");
                     for (Object object : storeCategoryList) {
+
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                         storeLabel = new StoreLabel();
                         storeLabel.setStoreLabelId(easyJSONObject.getInt("storeLabelId"));
@@ -808,16 +809,18 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
                         storeLabel.setIsFold(Constant.TRUE_INT);
 
                         EasyJSONArray storeLabelList = easyJSONObject.getSafeArray("storeLabelList");
-                            storeLabel.parseStoreLabelList(storeLabelList,1);
-                        }
+                        storeLabel.parseStoreLabelList(storeLabelList,1);
+                        shopStoreLabelList.add(storeLabel);
+
+                    }
 
                         if (storeLabel.getStoreLabelList() == null) { // 保證不為null
                             storeLabel.setStoreLabelList(new ArrayList<>());
                         }
 
 //                        goodsCountTotal += goodsCount;
-                        shopStoreLabelList.add(storeLabel);
-                    goodsCountTotal = responseObj.getInt("datas.storeGoodsCount");
+                        goodsCountTotal = responseObj.getInt("datas.storeGoodsCount");
+//                    shopStoreLabelList.add(0,new StoreLabel());
                     shopStoreLabelList.get(0).setGoodsCount(goodsCountTotal);  // 添加【全部產品】的項數
                     title = String.format("%s(%d)", shopStoreLabelList.get(0).getStoreLabelName(), goodsCountTotal);
                     if (goodsPairList != null && goodsPairList.size() > 0) {
