@@ -65,6 +65,7 @@ public class StoreLabel implements Serializable {
         StoreLabel storeLabel = new StoreLabel();
         storeLabel.setIsFold(label.getInt("isFold"));
         storeLabel.setStoreLabelId(label.getInt("storeLabelId"));
+        storeLabel.setParentId(label.getInt("parentId"));
         storeLabel.setImage(label.getSafeString("image"));
         storeLabel.setImageSrc(label.getSafeString("imageSrc"));
         storeLabel.parseStoreLabelList(label.getArray("storeLabelList"),storeLabel.depth+1);

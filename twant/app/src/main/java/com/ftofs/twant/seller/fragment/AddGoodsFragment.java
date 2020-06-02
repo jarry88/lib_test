@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -815,6 +816,10 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         if (etVideos.getText() != null) {
             detailVideo = etVideos.getText().toString();
         }
+        if (storeLabelId < 0) {
+            ToastUtil.error(_mActivity,"請選擇店内分類");
+            return false;
+        }
         try{
             publishGoodsInfo.set("storeLabelId", storeLabelId);
             publishGoodsInfo.set("detailVideo", detailVideo);
@@ -1013,11 +1018,18 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     selectCategoryName.append(category.getCategoryName()).append(" -- ");
                 }
                 if (!StringUtil.isEmpty(selectCategoryName.toString())) {
-                    selectCategoryName.delete(selectCategoryName.length() - 4, selectCategoryName.length() - 1);
-                    ((TextView) (mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_category_id))).setText(selectCategoryName.toString());
-                    categoryId = categoryLast.getCategoryId();
+
+                    if (vpAddGood.getCurrentItem() == PRIMARY_INDEX) {
+                        selectCategoryName.delete(selectCategoryName.length() - 4, selectCategoryName.length() - 1);
+                        ((TextView) (mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_category_id))).setText(selectCategoryName.toString());
+                        categoryId = categoryLast.getCategoryId();
+                        updateLogoInfo();
+                    } else if (vpAddGood.getCurrentItem() == DETAIL_INDEX) {
+                        ((TextView) (mViews.get(DETAIL_INDEX).findViewById(R.id.tv_select_store_category))).setText(selectCategoryName.toString());
+                        storeLabelId = categoryLast.getCategoryId();
+                    }
                 }
-                updateLogoInfo();
+
             } else if (type == PopupType.GOODS_UNITY) {
                 TextView tvUnit = mViews.get(BASIC_INDEX).findViewById(R.id.tv_add_good_unit);
                 unityIndex = id;

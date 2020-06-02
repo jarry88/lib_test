@@ -173,6 +173,7 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
     }
 
     private void setSelectLabelId(Category category) {
+        SLog.info("category.toString(%s),[%s]",category.toString(),selectedAreaList.size());
         if (selectedAreaList.size() >= category.getDeep()) {
             selectedAreaList.set(category.getDeep()-1, category);
         } else {
@@ -258,6 +259,8 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
                 Category category = new Category();
                 category.setCategoryId(label.getStoreLabelId());
                 category.setCategoryName(label.getStoreLabelName());
+                category.setDeep(label.getAreaDeep());
+                category.setParentId(label.getParentId());
                 categoryData.get(depth).add(category);
             }
         }else {
