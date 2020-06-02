@@ -14,10 +14,14 @@ import java.util.List;
 
 public class SellerSkuImageListAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     Context context;
-    public SellerSkuImageListAdapter(Context context, int layoutResId, @Nullable List<String> data) {
+    int adapterIndex;
+
+
+    public SellerSkuImageListAdapter(Context context, int layoutResId, int adapterIndex, @Nullable List<String> data) {
         super(layoutResId, data);
 
         this.context = context;
+        this.adapterIndex = adapterIndex;
     }
 
     @Override
@@ -26,5 +30,9 @@ public class SellerSkuImageListAdapter extends BaseQuickAdapter<String, BaseView
 
         ImageView imageView = helper.getView(R.id.image_view);
         Glide.with(context).load(item).centerCrop().into(imageView);
+    }
+
+    public int getAdapterIndex() {
+        return adapterIndex;
     }
 }

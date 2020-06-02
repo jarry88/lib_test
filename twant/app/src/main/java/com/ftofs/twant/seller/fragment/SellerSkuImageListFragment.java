@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.donkingliang.imageselector.utils.ImageSelector;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.RequestCode;
@@ -73,7 +74,18 @@ public class SellerSkuImageListFragment extends BaseFragment {
 
             recyclerViews[i] = itemView.findViewById(R.id.rv_list);
             recyclerViews[i].setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
-            adapters[i] = new SellerSkuImageListAdapter(_mActivity, R.layout.seller_sku_spec_image_item, imageList);
+            adapters[i] = new SellerSkuImageListAdapter(_mActivity, R.layout.seller_sku_spec_image_item, i, imageList);
+            adapters[i].setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+                @Override
+                public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                    int id = view.getId();
+                    if (id == R.id.btn_remove_image) {
+                        List<String> dataList = adapter.getData();
+                        dataList.remove(position);
+                        adapter.notifyItemRemoved(position);
+                    }
+                }
+            });
             recyclerViews[i].setAdapter(adapters[i]);
             imageListList.add(imageList);
 
@@ -134,6 +146,9 @@ public class SellerSkuImageListFragment extends BaseFragment {
     }
 
     private void addSelectedImage(String path) {
-
+        SellerSkuImageListAdapter adapter = adapters[currIndex];
+        List<String> dataList = adapter.getData();
+        dataList.add(path);
+        adapter.notifyItemInserted(dataList.size() - 1);
     }
 }

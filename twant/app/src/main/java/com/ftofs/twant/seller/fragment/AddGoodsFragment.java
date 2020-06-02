@@ -734,7 +734,11 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
                 break;
             case R.id.btn_view_sku_detail:
-                start(SellerSkuEditorFragment.newInstance());
+                // 查看SKU詳情
+                for (Map.Entry<Integer, SellerSpecMapItem> entry : sellerSelectedSpecMap.entrySet()) {
+
+                }
+                start(SellerSkuEditorFragment.newInstance(null));
                 break;
             case R.id.btn_add_address:
                 ToastUtil.success(_mActivity, "添加商品描述");
