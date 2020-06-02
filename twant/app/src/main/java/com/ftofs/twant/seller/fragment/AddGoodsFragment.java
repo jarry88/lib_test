@@ -734,7 +734,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
                 break;
             case R.id.btn_view_sku_detail:
-                start(SellerSkuEditorFragment.newInstance());
+//                start(SellerSkuEditorFragment.newInstance());
                 break;
             case R.id.btn_add_address:
                 ToastUtil.success(_mActivity, "添加商品描述");
