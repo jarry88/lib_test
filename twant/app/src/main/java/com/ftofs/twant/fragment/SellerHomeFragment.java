@@ -507,9 +507,10 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 
     private void updateSwitchButton() {
         swBusinessState.setChecked(storeState== Constant.TRUE_INT);
-        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.TRUE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
+        swBusinessState.setLinkTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
+        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
 //        swBusinessState.setThumbColorRes(R.color.tw_white);
-        SLog.info("sb [%s],storestate [%s],coloer",swBusinessState.isChecked(),storeState,swBusinessState.getCurrentTextColor());
+        SLog.info("sb [%s],storestate [%s],coloer [%s]",swBusinessState.isChecked(),storeState,swBusinessState.getCurrentTextColor());
 
     }
 
