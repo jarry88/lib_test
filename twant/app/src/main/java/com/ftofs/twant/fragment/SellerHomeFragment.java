@@ -506,10 +506,10 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     }
 
     private void updateSwitchButton() {
-        SLog.info("設置顔色%s",storeState==1?"白":"黑");
-        swBusinessState.setChecked(storeState==1);
-        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.FALSE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
-        swBusinessState.setThumbColorRes(R.color.tw_white);
+        swBusinessState.setChecked(storeState== Constant.TRUE_INT);
+        swBusinessState.setTextColor(getResources().getColor(storeState== Constant.TRUE_INT?R.color.tw_white:R.color.tw_black,getActivity().getTheme()));
+//        swBusinessState.setThumbColorRes(R.color.tw_white);
+        SLog.info("sb [%s],storestate [%s],coloer",swBusinessState.isChecked(),storeState,swBusinessState.getCurrentTextColor());
 
     }
 
@@ -567,10 +567,14 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
                 super.onScrollStateChanged(recyclerView, newState);
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE&&!StringUtil.isArrayEmpty(currGalleryImageList)) {
-                    currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                    SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
-                    int position = currGalleryPosition % currGalleryImageList.size();
-                    pageIndicatorView.setSelection(position);
+                    try{
+                        currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                        SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
+                        int position = currGalleryPosition % currGalleryImageList.size();
+                        pageIndicatorView.setSelection(position);
+                    }catch (Exception e) {
+                       SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
                 }
             }
 
