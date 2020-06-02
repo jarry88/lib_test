@@ -7,16 +7,28 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.seller.adapter.SellerSkuListAdapter;
+import com.ftofs.twant.seller.entity.SellerSpecPermutation;
+
+import java.util.List;
 
 public class SellerSkuGoodsListFragment extends BaseFragment {
-    public static SellerSkuGoodsListFragment newInstance() {
+    List<SellerSpecPermutation> sellerSpecPermutationList;
+    RecyclerView rvList;
+    SellerSkuListAdapter adapter;
+
+    public static SellerSkuGoodsListFragment newInstance(List<SellerSpecPermutation> sellerSpecPermutationList) {
         Bundle args = new Bundle();
 
         SellerSkuGoodsListFragment fragment = new SellerSkuGoodsListFragment();
         fragment.setArguments(args);
+        fragment.sellerSpecPermutationList = sellerSpecPermutationList;
 
         return fragment;
     }
@@ -32,5 +44,18 @@ public class SellerSkuGoodsListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        rvList = view.findViewById(R.id.rv_list);
+        rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
+        adapter = new SellerSkuListAdapter(_mActivity, R.layout.seller_sku_list_item, sellerSpecPermutationList);
+        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int id = view.getId();
+                if (id == R.id.btn_edit) {
+
+                }
+            }
+        });
+        rvList.setAdapter(adapter);
     }
 }

@@ -12,25 +12,35 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
+import com.ftofs.twant.seller.entity.SellerSpecMapItem;
+import com.ftofs.twant.seller.entity.SellerSpecPermutation;
+import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener {
-    List<SellerSpecItem> sellerSpecItemList;
+public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
+    List<SellerSpecMapItem> sellerSelectedSpecList;
+
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
 
+    List<SellerSpecPermutation> permutationList = new ArrayList<>();
 
-    public static SellerSkuEditorFragment newInstance(List<SellerSpecItem> sellerSpecItemList) {
+
+    public static SellerSkuEditorFragment newInstance(List<SellerSpecMapItem> sellerSelectedSpecList) {
         Bundle args = new Bundle();
 
         SellerSkuEditorFragment fragment = new SellerSkuEditorFragment();
         fragment.setArguments(args);
-        fragment.sellerSpecItemList = sellerSpecItemList;
+        fragment.sellerSelectedSpecList = sellerSelectedSpecList;
 
         return fragment;
     }
@@ -47,6 +57,39 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Util.setOnClickListener(view, R.id.btn_back, this);
+
+
+        int TOTAL_SKU_COUNT = 1;
+
+        for (SellerSpecMapItem item : sellerSelectedSpecList) {
+            TOTAL_SKU_COUNT *= item.sellerSpecItemList.size();
+        }
+        SLog.info("TOTAL_SKU_COUNT[%d]", TOTAL_SKU_COUNT);
+
+        for (int i = 0; i < TOTAL_SKU_COUNT; i++) {
+            int n = i;
+            StringBuilder skuDesc = new StringBuilder();  // SKU規格描述
+            SellerSpecPermutation permutation = new SellerSpecPermutation();
+
+            for (int j = 0; j < sellerSelectedSpecList.size(); j++) {
+                SellerSpecMapItem sellerSpecMapItem = sellerSelectedSpecList.get(j);
+
+                int index = n % sellerSpecMapItem.sellerSpecItemList.size();
+                SellerSpecItem specItem = sellerSpecMapItem.sellerSpecItemList.get(index);
+
+                permutation.sellerSpecItemList.add(specItem);
+
+                skuDesc.append(sellerSpecMapItem.sellerSpecItemList.get(index).name).append("/");
+
+                n /= sellerSpecMapItem.sellerSpecItemList.size();
+            }
+
+            SLog.info("skuDesc[%s]", skuDesc.toString());
+            permutation.specValueString = skuDesc.toString();
+            permutationList.add(permutation);
+        }
+
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         ViewPager viewPager = view.findViewById(R.id.viewpager);
 
@@ -55,9 +98,8 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(0)));
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
 
-
-        fragmentList.add(SellerSkuGoodsListFragment.newInstance());
-        fragmentList.add(SellerSkuImageListFragment.newInstance(sellerSpecItemList));
+        fragmentList.add(SellerSkuGoodsListFragment.newInstance(permutationList));
+        fragmentList.add(SellerSkuImageListFragment.newInstance(sellerSelectedSpecList.get(0).sellerSpecItemList, this));
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
@@ -90,6 +132,20 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
 
         if (id == R.id.btn_back) {
             hideSoftInputPop();
+        }
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        if (data instanceof CustomActionData) {
+            CustomActionData customActionData = (CustomActionData) data;
+
+            if (CustomAction.CUSTOM_ACTION_SELLER_UPLOAD_SPEC_IMAGE_FINISH.equals(customActionData.data)) {
+                Bundle bundle = new Bundle();
+                bundle.putString("data", customActionData.toString());
+
+                setFragmentResult(RESULT_OK, bundle);
+            }
         }
     }
 }
