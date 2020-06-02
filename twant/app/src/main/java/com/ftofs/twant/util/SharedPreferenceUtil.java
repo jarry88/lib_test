@@ -37,14 +37,23 @@ public class SharedPreferenceUtil {
             SLog.info("FIELD_USER_ID[%d]", responseObj.getInt("datas.memberId"));
             Hawk.put(SPField.FIELD_TOKEN, responseObj.getSafeString("datas.token"));
             SLog.info("FIELD_TOKEN[%s]", responseObj.getSafeString("datas.token"));
+            String nickName = "";
+            String avatarUrl = "";
+            if (responseObj.exists("datas.nickName")) {
+                nickName = responseObj.getSafeString("datas.nickName");
+            }
+            if (memberVo.exists("avatar")) {
+                avatarUrl = memberVo.getSafeString("avatar");
+            }
+
             if (loginType == LoginType.MOBILE) {
-                Hawk.put(SPField.FIELD_NICKNAME, responseObj.getSafeString("datas.nickName"));
-                Hawk.put(SPField.FIELD_AVATAR, memberVo.getSafeString("avatar"));
+                Hawk.put(SPField.FIELD_NICKNAME, nickName);
+                Hawk.put(SPField.FIELD_AVATAR,avatarUrl );
             } else if (loginType == LoginType.WEIXIN) {
-                Hawk.put(SPField.FIELD_NICKNAME, responseObj.getSafeString("datas.weixinNickName"));
-                Hawk.put(SPField.FIELD_AVATAR, responseObj.getSafeString("datas.weixinAvatarUrl"));
+                Hawk.put(SPField.FIELD_NICKNAME,StringUtil.isEmpty(nickName)? responseObj.getSafeString("datas.weixinNickName"):nickName);
+                Hawk.put(SPField.FIELD_AVATAR, StringUtil.isEmpty(avatarUrl)? responseObj.getSafeString("datas.weixinAvatarUrl"):avatarUrl);
             } else if (loginType == LoginType.FACEBOOK) {
-                Hawk.put(SPField.FIELD_NICKNAME, responseObj.getSafeString("datas.facebookNickName"));
+                Hawk.put(SPField.FIELD_NICKNAME, StringUtil.isEmpty(nickName)? responseObj.getSafeString("datas.facebookNickName"):nickName);
                 String facebookAvatarUrl = responseObj.getSafeString("datas.facebookAvatarUrl");
                 // 去除facebookAvatarUrl前後的引號
                 if (facebookAvatarUrl.startsWith("\"")) {
@@ -55,7 +64,7 @@ public class SharedPreferenceUtil {
                 }
 
                 SLog.info("facebookAvatarUrl[%s]", facebookAvatarUrl);
-                Hawk.put(SPField.FIELD_AVATAR, facebookAvatarUrl);
+                Hawk.put(SPField.FIELD_AVATAR, StringUtil.isEmpty(avatarUrl)? facebookAvatarUrl:avatarUrl);
             }
 
             Hawk.put(SPField.FIELD_MEMBER_NAME, responseObj.getSafeString("datas.memberName"));
