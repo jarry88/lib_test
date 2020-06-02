@@ -928,15 +928,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingEnd="@dimen/toolbar_margin_right"
-        android:paddingStart="@dimen/toolbar_margin_right"
+        android:paddingEnd="8dp"
+        android:paddingStart="10dp"
         >
         <!-- 圓形返回按鈕 -->
         <ImageView
             android:id="@+id/btn_back_round"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="7dp"
             android:layout_marginStart="5dp"
             android:src="@drawable/icon_back_round"
             />
@@ -945,7 +945,7 @@
             android:id="@+id/btn_menu_round"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="7dp"
             android:layout_alignParentEnd="true"
             android:src="@drawable/icon_menu_round"
             />
@@ -954,8 +954,8 @@
             android:id="@+id/btn_search_round"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="6.5dp"
+            android:layout_marginEnd="14dp"
             android:layout_toStartOf="@id/btn_menu_round"
             android:src="@drawable/icon_search_round"
             />
