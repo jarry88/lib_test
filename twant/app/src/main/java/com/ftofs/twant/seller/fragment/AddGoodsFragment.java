@@ -22,6 +22,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.SimpleViewPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.constant.RequestCode;
@@ -195,6 +196,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         super.onViewCreated(view, savedInstanceState);
         initView();
         loadDate();
+
+        Util.setOnClickListener(view, R.id.tv_title, this);
     }
 
     private void initView() {
@@ -690,8 +693,13 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.tv_title:
+                SLog.info("publishGoodsInfo[%s]", publishGoodsInfo.toString());
+                break;
             case R.id.btn_primary_next:
-//                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
+                if (Config.DEVELOPER_MODE) {
+                    vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
+                }
                 if (!savePrimaryInfo()) {
                     break;
                 }
