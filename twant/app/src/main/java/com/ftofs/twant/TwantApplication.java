@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.StrictMode;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -26,6 +27,7 @@ import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.ChatMessage;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.TimeInfo;
+import com.ftofs.twant.fragment.MainFragment;
 import com.ftofs.twant.fragment.MessageFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.orm.Conversation;
@@ -350,7 +352,8 @@ public class TwantApplication extends Application {
              */
             @Override
             public void dealWithNotificationMessage(Context context, UMessage msg) {
-                SLog.info("dealWithNotificationMessage, msg[%s]", dumpUmengMessage(msg));
+                SLog.info("dealWithNotificationMessage, msg[%s][%s]", dumpUmengMessage(msg), msg.msg_id);
+
                 //调用super，会展示通知，不调用super，则不展示通知。
                 super.dealWithNotificationMessage(context, msg);
             }
@@ -368,7 +371,7 @@ public class TwantApplication extends Application {
              */
             @Override
             public Notification getNotification(Context context, UMessage uMessage) {
-                SLog.info("getNotification, msg[%s]", dumpUmengMessage(uMessage));
+                SLog.info("getNotification, msg[%s][%s]", dumpUmengMessage(uMessage), uMessage.msg_id);
                 return super.getNotification(context, uMessage);
             }
         };
@@ -385,21 +388,42 @@ public class TwantApplication extends Application {
             @Override
             public void launchApp(Context context, UMessage msg) {
                 super.launchApp(context, msg);
+                SLog.info("launchApp()");
+
+                String extraDataStr = getUmengExtraData(msg);
+                Hawk.put(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS, extraDataStr);
+                SLog.info("extraDataStr[%s]", extraDataStr);
+
+                MainFragment mainFragment = MainFragment.getInstance();
+                if (mainFragment != null) {
+                    mainFragment.handleUmengCustomAction();
+                }
             }
 
             @Override
             public void openUrl(Context context, UMessage msg) {
                 super.openUrl(context, msg);
+                SLog.info("openUrl()");
             }
 
             @Override
             public void openActivity(Context context, UMessage msg) {
                 super.openActivity(context, msg);
+                SLog.info("openActivity()");
             }
 
             @Override
             public void dealWithCustomAction(Context context, UMessage msg) {
-                SLog.info("dealWithCustomAction, message[%s]", msg.custom);
+                SLog.info("dealWithCustomAction, message[%s][%s]", msg.custom, msg.msg_id);
+
+                String extraDataStr = getUmengExtraData(msg);
+                Hawk.put(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS, extraDataStr);
+                SLog.info("extraDataStr[%s]", extraDataStr);
+
+                MainFragment mainFragment = MainFragment.getInstance();
+                if (mainFragment != null) {
+                    mainFragment.handleUmengCustomAction();
+                }
             }
         };
         //使用自定义的NotificationHandler
@@ -433,16 +457,25 @@ public class TwantApplication extends Application {
      * @return
      */
     private String dumpUmengMessage(UMessage msg) {
+        return String.format("custom[%s], extra[%s]", msg.custom, getUmengExtraData(msg));
+    }
+
+    /**
+     * 獲取友盟推送自定義參數
+     * @param msg
+     * @return
+     */
+    private String getUmengExtraData(UMessage msg) {
         EasyJSONObject extra = EasyJSONObject.generate();
         try {
             for (String key : msg.extra.keySet()) {
                 extra.set(key, msg.extra.get(key));
             }
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
-        return String.format("custom[%s], extra[%s]", msg.custom, extra.toString());
+        return extra.toString();
     }
 
 

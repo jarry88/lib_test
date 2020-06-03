@@ -98,8 +98,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     // 未選中的規格組Id與規格組信息的映射關係
     Map<Integer, SellerSpecMapItem> sellerSpecMap = new HashMap<>();
 
-    // 已選中的規格組Id與規格組信息的映射關係
-    Map<Integer, SellerSpecMapItem> sellerSelectedSpecMap = new HashMap<>();
+    // 已選中的規格組Id與規格組信息的映射關係(因為第1個為主規格，所以要用List)
+    List<SellerSpecMapItem> sellerSelectedSpecList = new ArrayList<>();
 
     // SpecId 與 SpecName的映射
     Map<Integer, String> specMap = new HashMap<>();
@@ -359,9 +359,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         llSelectedSpecContainer.removeAllViews();
 
 
-        for (Map.Entry<Integer, SellerSpecMapItem> entry : sellerSelectedSpecMap.entrySet()) {
+        for (SellerSpecMapItem sellerSpecMapItem : sellerSelectedSpecList) {
             StringBuilder sb = new StringBuilder();
-            SellerSpecMapItem sellerSpecMapItem = entry.getValue();
             sb.append("【").append(sellerSpecMapItem.specName).append("】");
             for (SellerSpecItem sellerSpecItem : sellerSpecMapItem.sellerSpecItemList) {
                 sb.append("    ");
@@ -689,6 +688,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         int id = v.getId();
         switch (id) {
             case R.id.btn_primary_next:
+//                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
                 if (!savePrimaryInfo()) {
                     break;
                 }
@@ -739,12 +739,11 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
                 break;
             case R.id.btn_view_sku_detail:
-//                start(SellerSkuEditorFragment.newInstance());
                 // 查看SKU詳情
-                for (Map.Entry<Integer, SellerSpecMapItem> entry : sellerSelectedSpecMap.entrySet()) {
-
+                if (sellerSelectedSpecList.size() < 1) {
+                    ToastUtil.error(_mActivity, "請先添加規格");
                 }
-                start(SellerSkuEditorFragment.newInstance(null));
+                start(SellerSkuEditorFragment.newInstance(sellerSelectedSpecList));
                 break;
             case R.id.btn_add_address:
                 ToastUtil.success(_mActivity, "添加商品描述");
@@ -1015,7 +1014,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     item.sellerSpecItemList.add(sellerSpecItem);
                 }
 
-                sellerSelectedSpecMap.put(specId, item);
+                sellerSelectedSpecList.add(item);
 
                 updateSelectedSpecView();
             } else if (type == PopupType.STORE_LABEL) {

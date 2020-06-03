@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:padding="30dp"
+    android:background="@drawable/real_name_instruction_popup_bg"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+    <com.ftofs.twant.widget.HwLoadingView
+        android:layout_width="300dp"
+        android:layout_height="300dp">
+    </com.ftofs.twant.widget.HwLoadingView>
+
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/tw_blue"
+        android:textSize="16sp">
+
+    </TextView>
+</LinearLayout>
+

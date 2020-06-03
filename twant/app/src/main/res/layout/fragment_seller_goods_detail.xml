@@ -136,6 +136,14 @@
                                 android:text="2020-05-22">
                             </TextView>
                         </LinearLayout>
+                        <ImageView
+                            android:id="@+id/cross_border_indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:src="@drawable/icon_among_city_with_text"
+                            android:visibility="gone">
+                        </ImageView>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

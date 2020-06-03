@@ -2,6 +2,7 @@ package com.ftofs.twant.seller.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +17,33 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.donkingliang.imageselector.utils.ImageSelector;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.RequestCode;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerSkuImageListAdapter;
+import com.ftofs.twant.seller.entity.MainSpecValueImage;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
+import com.ftofs.twant.util.StringUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * SKU圖片列表
@@ -33,19 +52,26 @@ import java.util.List;
 public class SellerSkuImageListFragment extends BaseFragment {
     LinearLayout llContainer;
     List<SellerSpecItem> sellerSpecItemList;
+    SimpleCallback simpleCallback;
 
-    RecyclerView[] recyclerViews;
     SellerSkuImageListAdapter[] adapters;
     List<List<String>> imageListList = new ArrayList<>();
 
     int currIndex; // 當前添加圖片的Index
+    Map<Integer, MainSpecValueImage> specImageMap = new HashMap<>();
 
-    public static SellerSkuImageListFragment newInstance(List<SellerSpecItem> sellerSpecItemList) {
+    /**
+     * Constructor
+     * @param sellerSpecItemList  主規格列表
+     * @return
+     */
+    public static SellerSkuImageListFragment newInstance(List<SellerSpecItem> sellerSpecItemList, SimpleCallback simpleCallback) {
         Bundle args = new Bundle();
 
         SellerSkuImageListFragment fragment = new SellerSkuImageListFragment();
         fragment.setArguments(args);
         fragment.sellerSpecItemList = sellerSpecItemList;
+        fragment.simpleCallback = simpleCallback;
 
         return fragment;
     }
@@ -62,18 +88,21 @@ public class SellerSkuImageListFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         llContainer = view.findViewById(R.id.ll_container);
-        recyclerViews = new RecyclerView[sellerSpecItemList.size()];
         adapters = new SellerSkuImageListAdapter[sellerSpecItemList.size()];
+        SLog.info("adapters.length[%d]", adapters.length);
         for (int i = 0; i < sellerSpecItemList.size(); i++) {
             SellerSpecItem sellerSpecItem = sellerSpecItemList.get(i);
 
             View itemView = LayoutInflater.from(_mActivity)
                     .inflate(R.layout.seller_sku_image_list_item, llContainer, false);
 
+            SLog.info("itemView[%s]", itemView.toString());
+
+
             List<String> imageList = new ArrayList<>();
 
-            recyclerViews[i] = itemView.findViewById(R.id.rv_list);
-            recyclerViews[i].setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
+            RecyclerView rvList = itemView.findViewById(R.id.rv_list);
+            rvList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
             adapters[i] = new SellerSkuImageListAdapter(_mActivity, R.layout.seller_sku_spec_image_item, i, imageList);
             adapters[i].setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
                 @Override
@@ -86,7 +115,7 @@ public class SellerSkuImageListFragment extends BaseFragment {
                     }
                 }
             });
-            recyclerViews[i].setAdapter(adapters[i]);
+            rvList.setAdapter(adapters[i]);
             imageListList.add(imageList);
 
 
@@ -107,7 +136,11 @@ public class SellerSkuImageListFragment extends BaseFragment {
                     currIndex = index;
                 }
             });
-        }
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            llContainer.addView(itemView, layoutParams);
+        } // END OF for
     }
 
     @Override
@@ -150,5 +183,105 @@ public class SellerSkuImageListFragment extends BaseFragment {
         List<String> dataList = adapter.getData();
         dataList.add(path);
         adapter.notifyItemInserted(dataList.size() - 1);
+    }
+
+    public EasyJSONObject collectSkuImageInfo() {
+
+        try {
+            EasyJSONObject result = EasyJSONObject.generate();
+            int count = 0;
+            for (int i = 0; i < sellerSpecItemList.size(); i++) {
+                SellerSpecItem sellerSpecItem = sellerSpecItemList.get(i);
+                int specValue = sellerSpecItem.id;
+
+                List<String> imageList = imageListList.get(i);
+
+                EasyJSONArray specImageArr = EasyJSONArray.generate();
+                for (int j = 0; j < imageList.size(); j++) {
+                    count++;
+                    String path = imageList.get(i);
+                    SLog.info("正在收集第%d张图片", count);
+
+                    specImageArr.append(path);
+                }
+
+                result.set("spec_value_" + specValue, specImageArr);
+            }
+
+            SLog.info("result[%s]", result.toString());
+            return result;
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+        return null;
+    }
+
+    public void commonPop() {
+        Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                SLog.info("observable.threadId[%s]", Thread.currentThread().getId());
+
+                int count = 0;
+                for (int i = 0; i < sellerSpecItemList.size(); i++) {
+                    SellerSpecItem sellerSpecItem = sellerSpecItemList.get(i);
+                    int specValue = sellerSpecItem.id;
+
+                    List<String> imageList = imageListList.get(i);
+
+                    for (int j = 0; j < imageList.size(); j++) {
+                        count++;
+                        String path = imageList.get(i);
+                        SLog.info("正在上传第%d张图片", count);
+
+                        String url = Api.syncUploadFile(new File(path));
+                        if (!StringUtil.isEmpty(url)) {
+                            MainSpecValueImage mainSpecValueImage = specImageMap.get(specValue);
+                            if (mainSpecValueImage == null) {
+                                mainSpecValueImage = new MainSpecValueImage();
+                                mainSpecValueImage.specValue = specValue;
+                                mainSpecValueImage.imageUrlList = new ArrayList<>();
+
+                                specImageMap.put(specValue, mainSpecValueImage);
+                            }
+
+                            mainSpecValueImage.imageUrlList.add(url);
+                        } else {
+                            SLog.info("Error!上传失败");
+                        }
+                    }
+                }
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                SLog.info("onSubscribe, threadId[%s]", Thread.currentThread().getId());
+            }
+            @Override
+            public void onNext(String s) {
+                SLog.info("onNext[%s], threadId[%s]", s, Thread.currentThread().getId());
+            }
+            @Override
+            public void onError(Throwable e) {
+//                ToastUtil.error();
+                SLog.info("onError[%s], threadId[%s]", e.getMessage(), Thread.currentThread().getId());
+            }
+            @Override
+            public void onComplete() {
+                SLog.info("onComplete, threadId[%s]", Thread.currentThread().getId());
+                if (simpleCallback != null) {
+                    CustomActionData customActionData = new CustomActionData();
+                    customActionData.action = CustomAction.CUSTOM_ACTION_SELLER_UPLOAD_SPEC_IMAGE_FINISH;
+                    customActionData.data = specImageMap;
+                    simpleCallback.onSimpleCall(customActionData);
+                }
+            }
+        };
+
+        observable.subscribe(observer);
     }
 }
