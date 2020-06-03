@@ -357,7 +357,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             }
             int dbCount = (loadFromDB(messageId, pagesize));
             if (dbCount == pagesize) {
-                SLog.info("本地获取成功,获取条数");
+                SLog.info("本地获取成功,获取条数[%s]",dbCount);
                 uiHandler.sendMessage(new Message());
                 return;
             }
@@ -423,10 +423,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
     }
 
     private void updateYourInfo() {
-
-//        if (!TwantApplication.getInstance().getMemberVo().getFromInterface) {
-//            TwantApplication.getInstance().updateCurrMemberInfo();
-//        }
         ApiUtil.getImInfo(_mActivity,yourMemberName,memberVo ->{
             MemberVo yourInfo = (MemberVo)memberVo;
             //指对话框标题
