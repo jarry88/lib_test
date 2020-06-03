@@ -20,6 +20,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
 
@@ -86,7 +87,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
             }
 
             SLog.info("skuDesc[%s]", skuDesc.toString());
-            permutation.specValueString = skuDesc.toString();
+            permutation.specValueString = StringUtil.trim(skuDesc.toString(), new char[] {'/'});
             permutationList.add(permutation);
         }
 

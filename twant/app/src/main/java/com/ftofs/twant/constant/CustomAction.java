@@ -31,6 +31,12 @@ public class CustomAction {
      * 【商家】上传规格图片完成
      */
     public static final String CUSTOM_ACTION_SELLER_UPLOAD_SPEC_IMAGE_FINISH = "seller_upload_spec_image_finish";
+
+
+    /**
+     * 【商家】編輯SKU信息
+     */
+    public static final String CUSTOM_ACTION_SELLER_EDIT_SKU_INFO = "seller_edit_sku_info";
 }
 
 

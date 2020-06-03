@@ -734,8 +734,10 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
                 break;
             case R.id.btn_view_sku_detail:
-//                start(SellerSkuEditorFragment.newInstance());
                 // 查看SKU詳情
+                if (sellerSelectedSpecList.size() < 1) {
+                    ToastUtil.error(_mActivity, "請先添加規格");
+                }
                 start(SellerSkuEditorFragment.newInstance(sellerSelectedSpecList));
                 break;
             case R.id.btn_add_address:

@@ -1,6 +1,7 @@
 package com.ftofs.twant.seller.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
+import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerSkuListAdapter;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
+import com.ftofs.twant.seller.widget.SellerEditSkuInfoPopup;
+import com.lxj.xpopup.XPopup;
 
 import java.util.List;
 
-public class SellerSkuGoodsListFragment extends BaseFragment {
+import cn.snailpad.easyjson.EasyJSONObject;
+
+public class SellerSkuGoodsListFragment extends BaseFragment implements SimpleCallback {
     List<SellerSpecPermutation> sellerSpecPermutationList;
     RecyclerView rvList;
     SellerSkuListAdapter adapter;
@@ -51,11 +60,35 @@ public class SellerSkuGoodsListFragment extends BaseFragment {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 int id = view.getId();
-                if (id == R.id.btn_edit) {
+                SellerSpecPermutation skuInfo = sellerSpecPermutationList.get(position);
 
+                if (id == R.id.btn_edit) {
+                    new XPopup.Builder(_mActivity)
+                            .asCustom(new SellerEditSkuInfoPopup(_mActivity, position, skuInfo, SellerSkuGoodsListFragment.this))
+                            .show();
                 }
             }
         });
         rvList.setAdapter(adapter);
+    }
+
+    @Override
+    public void onSimpleCall(Object data) {
+        try {
+            if (data instanceof CustomActionData) {
+                CustomActionData customActionData = (CustomActionData) data;
+                if (CustomAction.CUSTOM_ACTION_SELLER_EDIT_SKU_INFO.equals(customActionData.action)) {
+                    EasyJSONObject dataObj = (EasyJSONObject) customActionData.data;
+
+                    int position = dataObj.getInt("position");
+                    SellerSpecPermutation permutation = sellerSpecPermutationList.get(position);
+
+                    permutation.price = dataObj.getDouble("price");
+                    adapter.notifyItemChanged(position);
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 }

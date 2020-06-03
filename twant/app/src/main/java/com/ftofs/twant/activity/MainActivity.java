@@ -98,6 +98,7 @@ import com.tmall.wireless.tangram.support.async.AsyncLoader;
 import com.tmall.wireless.tangram.support.async.AsyncPageLoader;
 import com.tmall.wireless.tangram.support.async.CardLoadSupport;
 import com.tmall.wireless.tangram.util.IInnerImageSetter;
+import com.umeng.commonsdk.statistics.common.DeviceConfig;
 import com.yalantis.ucrop.UCrop;
 import com.yanzhenjie.permission.runtime.Permission;
 
@@ -327,6 +328,16 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         // 註冊檢測剪貼板事件
         registerClipEvents();
+
+
+        String[] deviceInfo = new String[2];
+        try {
+            deviceInfo[0] = DeviceConfig.getDeviceIdForGeneral(this);
+            deviceInfo[1] = DeviceConfig.getMac(this);
+            SLog.info("deviceInfo0[%s], deviceInfo1[%s]", deviceInfo[0], deviceInfo[1]);
+        } catch (Exception e){
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
     }
 
     private void updateDeviceToken() {

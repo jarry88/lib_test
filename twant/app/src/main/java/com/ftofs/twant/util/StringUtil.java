@@ -880,4 +880,67 @@ public class StringUtil {
 
         return word;
     }
+
+
+    /**
+     * 仿PHP的trim()方法
+     * @param str
+     * @param characterMask
+     * @return
+     */
+    public static String trim(String str, char[] characterMask) {
+        if (isEmpty(str)) {
+            return str;
+        }
+
+        // 先去除空格
+        str = str.trim();
+
+
+        if (characterMask == null || characterMask.length < 1) {
+            return str;
+        }
+
+        int begin = 0;
+        for (; begin < str.length(); begin++) {
+            char c = str.charAt(begin);
+            boolean found = false;
+            for (int i = 0; i < characterMask.length; i++) {
+                char mask = characterMask[i];
+
+                if (c == mask) {
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                break;
+            }
+        }
+
+
+
+        int end = str.length() - 1;
+        for (; end >= 0; end--) {
+            char c = str.charAt(end);
+            boolean found = false;
+            for (int i = 0; i < characterMask.length; i++) {
+                char mask = characterMask[i];
+
+                if (c == mask) {
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                break;
+            }
+        }
+
+        if (begin > end) {
+            return "";
+        }
+
+        return str.substring(begin, end + 1);
+    }
 }
