@@ -388,16 +388,28 @@ public class TwantApplication extends Application {
             @Override
             public void launchApp(Context context, UMessage msg) {
                 super.launchApp(context, msg);
+                SLog.info("launchApp()");
+
+                String extraDataStr = getUmengExtraData(msg);
+                Hawk.put(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS, extraDataStr);
+                SLog.info("extraDataStr[%s]", extraDataStr);
+
+                MainFragment mainFragment = MainFragment.getInstance();
+                if (mainFragment != null) {
+                    mainFragment.handleUmengCustomAction();
+                }
             }
 
             @Override
             public void openUrl(Context context, UMessage msg) {
                 super.openUrl(context, msg);
+                SLog.info("openUrl()");
             }
 
             @Override
             public void openActivity(Context context, UMessage msg) {
                 super.openActivity(context, msg);
+                SLog.info("openActivity()");
             }
 
             @Override
