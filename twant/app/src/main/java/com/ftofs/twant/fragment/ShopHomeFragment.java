@@ -214,7 +214,21 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
 
 
     }
-
+    /**
+     * 滾動鎮店之寶列表
+     * @param direction -1 向前滾動  1 向後滾動
+     */
+    public void scrollImageList(int direction) {
+        if (direction != -1 && direction != 1) { // 校驗取值是否有效
+            return;
+        }
+        int position = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+        SLog.info("position[%d]", position);
+        if (position == -1) {
+            return;
+        }
+        rvGalleryImageList.smoothScrollToPosition(position + direction);
+    }
     List<StoreAnnouncement> storeAnnouncementList = new ArrayList<>();
     private ArrayList<CharSequence> announcementTextList = new ArrayList<>();
     private AutoVerticalScrollTextViewUtil verticalScrollUtil;
@@ -270,8 +284,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             int currGalleryPosition = msg.arg1;
+            int position = msg.arg2;
+            SLog.info("currGalleryPosition[%s]",currGalleryPosition);
             pageIndicatorView.setSelection(currGalleryPosition);
-            rvGalleryImageList.scrollToPosition(currGalleryPosition);
+            rvGalleryImageList.smoothScrollToPosition(position+1);
         }
     }
 
@@ -520,13 +536,22 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         // SLog.info(String.format("storeInfo[%s]",storeInfo.toString()));
                         setStoreInfo(storeInfo);
                         boolean hasSlider = storeInfo.exists("storeSlider");
-                        SLog.info("hasSlider,%s",hasSlider);
                         if (hasSlider) {
                             EasyJSONArray storeSlider = storeInfo.getSafeArray("storeSlider");
+                             SLog.info(String.format("storeSlider[%s]",storeSlider.toString()));
+
                             currGalleryImageList.clear();
                             for (Object object2 : storeSlider) {
+                                if (object2 == null) {
+                                    continue;
+                                }
+                                if (StringUtil.isEmpty(object2.toString())) {
+                                    continue;
+                                }
                                 currGalleryImageList.add(object2.toString());
                             }
+//                                                        ToastUtil.error(_mActivity, String.valueOf(currGalleryImageList.size()));
+
                         }
                         String shopDay = storeInfo.getString("shopDay");
 //                        int storeView=  responseObj.getInt("datas.storeView");
@@ -1361,9 +1386,10 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                 int position = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
 //                SLog.info("position [%d],sum[%d]",position,currGalleryImageList.size());
                 int size = currGalleryImageList.size();
-                if (size > 0) {
+                if (size > 1) {
                     currGalleryPosition = (position+1) % currGalleryImageList.size();
                     message.arg1 = currGalleryPosition;
+                    message.arg2 = position;
                     if (countDownHandler != null) {
                         countDownHandler.sendMessage(message);
                     }

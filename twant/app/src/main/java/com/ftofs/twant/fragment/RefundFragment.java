@@ -301,6 +301,7 @@ public class RefundFragment extends BaseFragment implements View.OnClickListener
                                 refundItem.orderStatus = item.getSafeString("currentStateText");
                                 refundItem.addTime = item.getSafeString("addTime");
                                 refundItem.enableMemberCancel = item.getInt("enableMemberCancel");
+
                             } else {
                                 refundItem.storeName = item.getSafeString("accusedName");
                                 refundItem.refundId = item.getInt("complainId");

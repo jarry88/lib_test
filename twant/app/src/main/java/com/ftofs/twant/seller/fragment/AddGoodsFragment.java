@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -704,6 +705,10 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌所在地", PopupType.GOODS_LOCATION, spinnerLogoCountryItems, countryIndex, this)).show();
                 break;
             case R.id.tv_add_good_logo:
+                if (spinnerLogoItems.size() == 0) {
+                    ToastUtil.error(_mActivity,"該分類暫時沒有可選品牌");
+                    break;
+                }
                 hideSoftInput();
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "品牌", PopupType.GOODS_LOGO, spinnerLogoItems, logoIndex, this)).show();
                 break;
@@ -814,8 +819,13 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         if (etVideos.getText() != null) {
             detailVideo = etVideos.getText().toString();
         }
+        if (storeLabelId < 0) {
+            ToastUtil.error(_mActivity,"請選擇店内分類");
+            return false;
+        }
         try{
-            publishGoodsInfo.set("storeLabelId", storeLabelId);
+            int[] list = {storeLabelId};
+            publishGoodsInfo.set("storeLabelIdList", list);
             publishGoodsInfo.set("detailVideo", detailVideo);
             if (formatBottom >= 0) {
                 publishGoodsInfo.set("formatBottom", formatBottom);
@@ -909,6 +919,10 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         String goodsName =etName.getText().toString();
         if (StringUtil.isEmpty(goodsName)) {
             ToastUtil.error(_mActivity,"請填寫商品名稱");
+            return false;
+        } else if (goodsName.length()<=3||goodsName.length()>=50) {
+            ToastUtil.error(_mActivity,"商品名稱為3到50個字符");
+            //暫無可選品牌
             return false;
         }
         if (categoryId < 0) {
@@ -1013,10 +1027,16 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 }
                 if (!StringUtil.isEmpty(selectCategoryName.toString())) {
                     selectCategoryName.delete(selectCategoryName.length() - 4, selectCategoryName.length() - 1);
-                    ((TextView) (mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_category_id))).setText(selectCategoryName.toString());
-                    categoryId = categoryLast.getCategoryId();
+                    if (vpAddGood.getCurrentItem() == PRIMARY_INDEX) {
+                        ((TextView) (mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_category_id))).setText(selectCategoryName.toString());
+                        categoryId = categoryLast.getCategoryId();
+                        updateLogoInfo();
+                    } else if (vpAddGood.getCurrentItem() == DETAIL_INDEX) {
+                        ((TextView) (mViews.get(DETAIL_INDEX).findViewById(R.id.tv_select_store_category))).setText(selectCategoryName.toString());
+                        storeLabelId = categoryLast.getCategoryId();
+                    }
                 }
-                updateLogoInfo();
+
             } else if (type == PopupType.GOODS_UNITY) {
                 TextView tvUnit = mViews.get(BASIC_INDEX).findViewById(R.id.tv_add_good_unit);
                 unityIndex = id;
