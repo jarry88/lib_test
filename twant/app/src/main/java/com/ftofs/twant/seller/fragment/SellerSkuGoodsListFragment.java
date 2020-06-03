@@ -84,11 +84,18 @@ public class SellerSkuGoodsListFragment extends BaseFragment implements SimpleCa
                     SellerSpecPermutation permutation = sellerSpecPermutationList.get(position);
 
                     permutation.price = dataObj.getDouble("price");
+                    permutation.storage = dataObj.getInt("stockStorage");
+                    permutation.reserved = dataObj.getInt("reservedStorage");
+                    permutation.goodsSN = dataObj.getSafeString("goodsSN");
                     adapter.notifyItemChanged(position);
                 }
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
+    }
+
+    public List<SellerSpecPermutation> collectSkuGoodsInfo() {
+        return sellerSpecPermutationList;
     }
 }

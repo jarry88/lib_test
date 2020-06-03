@@ -165,9 +165,7 @@
                 android:text="確認提交"
                 android:textColor="@android:color/white"
                 android:background="@color/tw_blue">
-
             </TextView>
         </LinearLayout>
-
     </RelativeLayout>
 </LinearLayout>

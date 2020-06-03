@@ -21,11 +21,16 @@ import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.HwLoadingPopup;
 import com.google.android.material.tabs.TabLayout;
+import com.lxj.xpopup.XPopup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     List<SellerSpecMapItem> sellerSelectedSpecList;
@@ -132,7 +137,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         int id = v.getId();
 
         if (id == R.id.btn_back) {
-            hideSoftInputPop();
+            commonPop();
         }
     }
 
@@ -146,7 +151,32 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
                 bundle.putString("data", customActionData.toString());
 
                 setFragmentResult(RESULT_OK, bundle);
+
+                hideSoftInputPop();
             }
         }
     }
+
+    private void commonPop() {
+        List<SellerSpecPermutation> sellerSpecPermutationList = ((SellerSkuGoodsListFragment) fragmentList.get(0)).collectSkuGoodsInfo();
+        EasyJSONObject skuImageObj = ((SellerSkuImageListFragment) fragmentList.get(1)).collectSkuImageInfo();
+
+        if (skuImageObj == null) {
+            ToastUtil.error(_mActivity, "收集數據錯誤");
+            return;
+        }
+
+        SLog.info("skuImageObj[%s]", skuImageObj.toString());
+
+        HwLoadingPopup loadingPopup = (HwLoadingPopup) new XPopup.Builder(_mActivity)
+                .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
+                .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new HwLoadingPopup(_mActivity, "正在上傳商品圖片，請稍候..."));
+        loadingPopup.show();
+
+
+    }
 }
+

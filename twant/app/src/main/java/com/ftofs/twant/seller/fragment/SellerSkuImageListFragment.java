@@ -2,6 +2,7 @@ package com.ftofs.twant.seller.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -180,6 +183,38 @@ public class SellerSkuImageListFragment extends BaseFragment {
         List<String> dataList = adapter.getData();
         dataList.add(path);
         adapter.notifyItemInserted(dataList.size() - 1);
+    }
+
+    public EasyJSONObject collectSkuImageInfo() {
+
+        try {
+            EasyJSONObject result = EasyJSONObject.generate();
+            int count = 0;
+            for (int i = 0; i < sellerSpecItemList.size(); i++) {
+                SellerSpecItem sellerSpecItem = sellerSpecItemList.get(i);
+                int specValue = sellerSpecItem.id;
+
+                List<String> imageList = imageListList.get(i);
+
+                EasyJSONArray specImageArr = EasyJSONArray.generate();
+                for (int j = 0; j < imageList.size(); j++) {
+                    count++;
+                    String path = imageList.get(i);
+                    SLog.info("正在收集第%d张图片", count);
+
+                    specImageArr.append(path);
+                }
+
+                result.set("spec_value_" + specValue, specImageArr);
+            }
+
+            SLog.info("result[%s]", result.toString());
+            return result;
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+        return null;
     }
 
     public void commonPop() {
