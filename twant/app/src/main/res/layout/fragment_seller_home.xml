@@ -235,6 +235,34 @@
                                 android:layout_gravity="center_horizontal"
                                 android:orientation="horizontal">
 
+
+                                <LinearLayout
+                                    android:id="@+id/ll_goods_list_container"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginEnd="@dimen/margin12"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <ImageView
+                                        android:id="@+id/iv_seller_good"
+                                        android:layout_width="35dp"
+                                        android:layout_height="35dp"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/icon_seller_receive"
+                                        android:textColor="@color/tw_black" />
+
+                                    <TextView
+                                        android:id="@+id/tv_seller_good"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal"
+                                        android:layout_marginTop="8dp"
+                                        android:text="商品"
+                                        android:textColor="@color/tw_black"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
                                 <LinearLayout
                                     android:id="@+id/ll_order_list_container"
                                     android:layout_width="0dp"
