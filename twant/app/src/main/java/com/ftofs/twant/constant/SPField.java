@@ -142,6 +142,13 @@ public class SPField {
      */
     public static final String FIELD_USER_REFUND_WAY = "user_refund_way_%d";
 
+
+    /**
+     * 當前點擊的友盟推送的消息自定義參數
+     */
+    public static final String FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS = "unhandled_umeng_message_params";
+
+
     /**
      * 用戶數據，在退出登錄前需要清空
      */

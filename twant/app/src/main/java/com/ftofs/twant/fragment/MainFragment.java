@@ -1,6 +1,7 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +13,20 @@ import androidx.annotation.Nullable;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.EBMessageType;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.tangram.NewShoppingSpecialFragment;
+import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -239,6 +245,80 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
+
+        // 回到前臺後，看是否有未處理的友盟自定義消息
+        handleUmengCustomAction();
+    }
+
+    @Override
+    public void onSupportInvisible() {
+        super.onSupportInvisible();
+    }
+
+    /**
+     * 處理友盟自定義動作消息
+     */
+    public void handleUmengCustomAction() {
+        // 根據msgId獲取消息數據
+        String extraDataStr = Hawk.get(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS);
+        SLog.info("extraDataStr[%s]", extraDataStr);
+
+        // 讀取完成後，就可以刪除記錄
+        Hawk.delete(SPField.FIELD_UNHANDLED_UMENG_MESSAGE_PARAMS);
+
+        EasyJSONObject extraDataObj = EasyJSONObject.parse(extraDataStr);
+        if (extraDataObj == null) {
+            return;
+        }
+
+        /*
+        描述 key	value	value   樣式
+店鋪詳情頁	store_id    具體的店鋪ID	1
+商品詳情頁	common_id 具體的商品SPU編碼	1234
+主題活動	shoppingzone_id 具體的專場ID	25
+想要圈列表	wantpost wantpost  wantpost
+想要圈貼文	wantpost_id 具體的貼文ID	2290
+店鋪優惠列表	storeDiscounts_id	具體的店鋪ID	23
+個人專頁優惠券頁	mineDiscounts	mineDiscounts mineDiscounts
+         */
+        try {
+            if (extraDataObj.exists("store_id")) { // 店鋪詳情頁
+                String val = extraDataObj.getSafeString("store_id");
+                int storeId = Integer.parseInt(val);
+                start(ShopMainFragment.newInstance(storeId));
+            } else if (extraDataObj.exists("common_id")) { // 商品詳情頁
+                String val = extraDataObj.getSafeString("common_id");
+                int commonId = Integer.parseInt(val);
+                start(GoodsDetailFragment.newInstance(commonId, 0));
+            } else if (extraDataObj.exists("shoppingzone_id")) { // 主題活動
+                String val = extraDataObj.getSafeString("shoppingzone_id");
+                int zoneId = Integer.parseInt(val);
+                start(NewShoppingSpecialFragment.newInstance(zoneId));
+            } else if (extraDataObj.exists("wantpost")) { // 想要圈列表
+                Util.popToMainFragment(_mActivity);
+                showHideFragment(CIRCLE_FRAGMENT);
+            } else if (extraDataObj.exists("wantpost_id")) { // 想要圈貼文
+                String val = extraDataObj.getSafeString("wantpost_id");
+                int postId = Integer.parseInt(val);
+                start(PostDetailFragment.newInstance(postId));
+            } else if (extraDataObj.exists("storeDiscounts_id")) { // 店鋪優惠列表
+                String val = extraDataObj.getSafeString("storeDiscounts_id");
+                int storeId = Integer.parseInt(val);
+                start(ShopMainFragment.newInstance(storeId));
+            } else if (extraDataObj.exists("mineDiscounts")) { // 個人專頁優惠券頁
+                if (User.isLogin()) {
+                    start(CouponFragment.newInstance());
+                } else {
+                    Util.showLoginFragment();
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
 }
 
 
