@@ -89,7 +89,9 @@ public class SellerOrderRefundItem {
         if (jsonObject.exists("refundId")) {
             item.refundId = jsonObject.getInt("refundId");
         }
-
+        item.refundStateText =jsonObject.getSafeString("refundStateText");
+        item.sellerStateText =jsonObject.getSafeString("sellerStateText");
+        item.adminStateText =jsonObject.getSafeString("adminStateText");
         item.stateToText();
         return item;
     }
@@ -102,32 +104,6 @@ public class SellerOrderRefundItem {
         return refundId;
     }
     private void stateToText() {
-        if (sellerState == 1) {
-            sellerStateText = "待審核";
-        } else if (sellerState == 2) {
-            sellerStateText = "同意";
-        } else if (sellerState == 3) {
-            sellerStateText = "不同意";
-        }
-
-        if (adminState == 1) {
-            adminStateText = "待審核";
-        } else if (adminState == 2) {
-            adminStateText = "同意";
-        } else if (adminState == 3) {
-            adminStateText = "不同意";
-        }
-
-        if (refundState == 1) {
-            refundStateText = "处理中";
-        } else if (refundState == 2) {
-            refundStateText = "待管理员处理";
-        } else if (refundState == 3) {
-            refundStateText = "已完成";
-        } else if (refundState == 4) {
-            refundStateText = "會員取消";
-        }
-
         if (showSellerHandle == 1) {
             showSellerHandleText = "處理";
         } else if (showSellerHandle == 0) {
