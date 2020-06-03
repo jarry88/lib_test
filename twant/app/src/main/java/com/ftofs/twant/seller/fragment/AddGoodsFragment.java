@@ -688,7 +688,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         int id = v.getId();
         switch (id) {
             case R.id.btn_primary_next:
-                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
+//                vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
                 if (!savePrimaryInfo()) {
                     break;
                 }
@@ -920,7 +920,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         if (StringUtil.isEmpty(goodsName)) {
             ToastUtil.error(_mActivity,"請填寫商品名稱");
             return false;
-        } else if (goodsName.length()<=3||goodsName.length()>=50) {
+        } else if (goodsName.length()<3||goodsName.length()>=50) {
             ToastUtil.error(_mActivity,"商品名稱為3到50個字符");
             //暫無可選品牌
             return false;

@@ -214,6 +214,10 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     void gotoSellerOrderList() {
         Util.startFragment(SellerOrderListFragment.newInstance());
     }
+    @OnClick(R.id.ll_goods_list_container)
+    void gotoSellerGoodsList() {
+        Util.startFragment(SellerGoodsListFragment.newInstance());
+    }
 
     @OnClick(R.id.ll_seller_order_send)
     void gotoSellerOrderSend() {
