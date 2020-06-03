@@ -82,7 +82,7 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:singleLine="true"
-                    android:background="@drawable/spec_item_unselected_bg"
+                    android:background="@drawable/edit_text_bg"
                     android:hint="只支持youtube視頻鏈接">
 
                 </EditText>

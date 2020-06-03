@@ -331,14 +331,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            // Util.startFragment(AddGoodsFragment.newInstance());
-            HwLoadingPopup loadingPopup = (HwLoadingPopup) new XPopup.Builder(_mActivity)
-                    .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
-                    .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new HwLoadingPopup(_mActivity, "正在上傳圖片，請稍候..."));
-            loadingPopup.show();
+            Util.startFragment(AddGoodsFragment.newInstance());
+//            HwLoadingPopup loadingPopup = (HwLoadingPopup) new XPopup.Builder(_mActivity)
+//                    .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
+//                    .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
+//                    // 如果不加这个，评论弹窗会移动到软键盘上面
+//                    .moveUpToKeyboard(false)
+//                    .asCustom(new HwLoadingPopup(_mActivity, "正在上傳圖片，請稍候..."));
+//            loadingPopup.show();
         }
     }
 

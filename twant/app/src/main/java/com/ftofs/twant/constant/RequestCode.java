@@ -149,4 +149,9 @@ public enum RequestCode {
      * 【賣家】編輯收貨人信息
      */
     SELLER_EDIT_RECEIVER_INFO,
+
+    /**
+     * 【賣家】編輯SKU信息
+     */
+    SELLER_EDIT_SKU_INFO,
 }
