@@ -991,8 +991,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         double goodsFreight = Double.parseDouble(freightText);
         String freightWeightStr = etW.getText()==null?"":etW.getText().toString();
         String freightVolumeStr = etV.getText()==null?"":etV.getText().toString();
-        double freightWeight =Double.parseDouble(etW.getText().toString());
-        double freightVolume=Double.parseDouble(etV.getText().toString());
 
         try{
             if (freightTemplateId >= 0) {

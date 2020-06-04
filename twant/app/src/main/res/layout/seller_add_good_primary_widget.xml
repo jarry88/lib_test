@@ -45,6 +45,9 @@
                             android:textSize="16sp"/>
                     </LinearLayout>
                     <EditText
+
+                        android:paddingStart="@dimen/margin8"
+                        android:paddingEnd="@dimen/margin8"
                         android:id="@+id/et_add_good_name"
                         android:layout_marginTop="@dimen/dp_4"
                         android:background="@drawable/seller_edit_text_bg"
@@ -125,6 +128,9 @@
                     android:hint="請輸入對產品的賣點描述："
                     android:textSize="14sp"
                     android:layout_marginTop="@dimen/dp_4"
+
+                    android:paddingStart="@dimen/margin8"
+                    android:paddingEnd="@dimen/margin8"
                     android:background="@drawable/seller_edit_text_bg"
                     android:layout_width="match_parent"
 
