@@ -132,6 +132,12 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_brand_location)).setText(goodsVo.getSafeString("goodsCountryName"));
                     ((TextView) contentView.findViewById(R.id.tv_unit)).setText(goodsVo.getSafeString("unitName"));
 
+                    double freightWeight = goodsVo.getDouble("freightWeight");
+                    double freightVolume = goodsVo.getDouble("freightVolume");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
+
+
                     LinearLayout llSpecContainer = contentView.findViewById(R.id.ll_spec_container);
                     EasyJSONArray specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
                     for (Object object : specJsonVoList) {
