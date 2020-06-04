@@ -57,8 +57,8 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         if (StringUtil.isEmpty(avatarUrl)) {
             if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
                 Glide.with(mContext).load(R.drawable.icon_twant_loge).centerCrop().into(imgAvatar);
-            } else {
-                Glide.with(mContext).load(R.drawable.icon_default_avatar).centerCrop().into(imgAvatar);
+            } else if(chatConversation.friendInfo.role>0) {
+                Glide.with(mContext).load(chatConversation.friendInfo.storeAvatar).centerCrop().into(imgAvatar);
             }
         } else {
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(chatConversation.friendInfo.avatarUrl)).centerCrop().into(imgAvatar);

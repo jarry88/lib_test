@@ -355,6 +355,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 if (!StringUtil.isEmpty(conversation.nickname)) {
                     friendInfo.nickname = conversation.nickname;
                     friendInfo.avatarUrl = conversation.avatarUrl;
+                    friendInfo.storeAvatar = conversation.storeAvatarUrl;
+                    friendInfo.storeName = conversation.storeName;
                     friendInfo.role = conversation.role;
                     SLog.info("會話框數據從extFied得到");
 //                    friendInfo.storeName = extFieldObj.getSafeString("storeName");
@@ -409,7 +411,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             }
             updateConversationInfo();
             displayUnreadCount();
-            chatConversationList.add(null);
+            if (chatConversationList.size() > 2) {
+                //在結尾添加一個空白item
+                chatConversationList.add(null);
+            }
 
             adapter.setNewData(chatConversationList);
 
@@ -742,7 +747,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             if (chatConversation == null) {
                 continue;
             }
-            SLog.info("unread[%d]", chatConversation.unreadCount);
+//            SLog.info("unread[%d]", chatConversation.unreadCount);
         }
         displayUnreadCount();
     }
@@ -786,7 +791,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             if (messageContent.startsWith("image")) {
                                 messageContent = "[圖片]";
                             }
-                            SLog.info("messageFragment [%s]",messageContent);
+//                            SLog.info("messageFragment [%s]",messageContent);
                             String storeName = conversation.getSafeString("storeName");
                             String sendTime =conversation.getSafeString("sendTime");
                             int role = conversation.getInt("role");
@@ -803,24 +808,17 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             if (!has) {
                                 ChatConversation newChat = new ChatConversation();
                                 String name = role > 0 ? storeName + nickName : nickName;
-                                String avatarUrl = role > 0 ? storeAvatar : avatar;
                                 int time =Jarbon.parse(sendTime).getTimestamp();
-                                newChat.friendInfo = FriendInfo.newInstance(memberName, name, avatarUrl, role);
+                                newChat.friendInfo = FriendInfo.newInstance(memberName, name, avatar, role);
                                 newChat.friendInfo.storeId = storeId;
                                 newChat.friendInfo.storeName = storeName;
+                                newChat.friendInfo.storeAvatar = storeAvatar;
                                 newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 newChat.lastMessage = "txt::"+messageContent+":";
 //                                newChat.timestamp = time;
-                                Conversation conversation1 = Conversation.getByMemberName(memberName);
-                                conversation1.nickname = name;
-                                conversation1.avatarUrl = avatarUrl;
-                                conversation1.lastMessageText = messageContent;
-                                conversation1.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
-                                conversation1.storeId = storeId;
-                                conversation1.role = role;
-                                conversation1.timestamp = time;
-                                conversation1.save();
+
 //                                newChat.timestamp = sendTime;
+                                Conversation.saveNewChat(newChat);
                                 chatConversationList.add(newChat);
                             }
                         }
