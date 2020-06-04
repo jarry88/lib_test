@@ -250,7 +250,7 @@
                                         android:layout_width="35dp"
                                         android:layout_height="35dp"
                                         android:layout_gravity="center_horizontal"
-                                        android:src="@drawable/icon_seller_receive"
+                                        android:src="@drawable/icon_seller_good"
                                         android:textColor="@color/tw_black" />
 
                                     <TextView

@@ -428,4 +428,11 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
         currPage = 0;
         loadData(currPage + 1);
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
+    }
 }

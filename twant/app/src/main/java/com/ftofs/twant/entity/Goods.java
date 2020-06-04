@@ -70,13 +70,12 @@ public class Goods implements MultiItemEntity {
         }
         if (goods.exists("appUsable")) {
             appUsable = goods.getInt("appUsable");
-            if (appUsable > 0) {
-                price =  goods.getDouble("appPriceMin");
-            } else {
-                price =  batchPrice0;
-            }
         } else if (goods.exists("goodsPrice")) {
             price = goods.getDouble("goodsPrice");
+        }
+
+        if (goods.exists("appPriceMin")) {
+            price=goods.getDouble("appPriceMin");
         }
 
 
