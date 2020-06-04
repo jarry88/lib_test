@@ -110,7 +110,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/tw_black"
                         android:text="重量：" />
 
                     <EditText
@@ -142,7 +141,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/tw_black"
                         android:text="體積：" />
 
                     <EditText

@@ -23,7 +23,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="1、選擇商品規格：">
+                    android:text="選擇商品規格：">
 
                 </TextView>
                 <TextView
@@ -77,12 +77,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
                     android:singleLine="true"
-                    android:background="@drawable/spec_item_unselected_bg"
+                    android:textSize="@dimen/sp_14"
+                    android:background="@drawable/edit_text_bg"
+                    android:textColor="@color/tw_black"
                     android:hint="只支持youtube視頻鏈接">
 
                 </EditText>
@@ -91,6 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textSize="@dimen/sp_14"
                     android:text="例如：https://www.youtube.com/watch?v=sv0CE-Vo00g">
                 </TextView>
             </LinearLayout>

@@ -232,7 +232,7 @@ public class RealNameListFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
-        SLog.info("onFragmentResult__");
+        SLog.info("onFragmentResult, requestCode[%d], resultCode[%d]", requestCode, resultCode);
 
         if (resultCode != RESULT_OK) {
             return;

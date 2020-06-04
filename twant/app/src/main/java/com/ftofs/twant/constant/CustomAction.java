@@ -30,7 +30,7 @@ public class CustomAction {
     /**
      * 【商家】上传规格图片完成
      */
-    public static final String CUSTOM_ACTION_SELLER_UPLOAD_SPEC_IMAGE_FINISH = "seller_upload_spec_image_finish";
+    // public static final String CUSTOM_ACTION_SELLER_UPLOAD_SPEC_IMAGE_FINISH = "seller_upload_spec_image_finish";
 
 
     /**

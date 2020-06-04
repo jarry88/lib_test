@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/tw_black"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
 
                     android:hint="請選擇店内分類" />
                 <TextView
@@ -79,17 +79,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:singleLine="true"
+                android:paddingStart="@dimen/margin8"
+                android:paddingEnd="@dimen/margin8"
                 android:background="@drawable/seller_edit_text_bg"
                 android:id="@+id/et_goods_video_url"
                 android:layout_marginTop="@dimen/dp_4"
                 android:hint="只支持youtube視頻鏈接"
-                android:textSize="12sp"/>
+                android:textSize="14sp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:text="例如：https://www.youtube.com/watch?v=TH_oZ2cyDK0" />
 
             <TextView
