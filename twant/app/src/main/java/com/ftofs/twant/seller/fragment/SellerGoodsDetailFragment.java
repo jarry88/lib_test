@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
@@ -114,6 +115,10 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                         Glide.with(_mActivity).load(StringUtil.normalizeImageUrl(goodsImageUrl)).centerCrop().into(goodsImage);
                     }
 
+                    int tariffEnable = goodsVo.getInt("tariffEnable");
+                    SLog.info("tariffEnable__[%d]", tariffEnable);
+                    contentView.findViewById(R.id.cross_border_indicator).setVisibility(tariffEnable == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
+
                     String priceRange = String.format("%s MOP - %s MOP", StringUtil.formatFloat(goodsVo.getDouble("appPriceMin")), StringUtil.formatFloat(goodsVo.getDouble("batchPrice0")));
                     ((TextView) contentView.findViewById(R.id.tv_price_range)).setText(priceRange);
 
@@ -183,3 +188,4 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         return true;
     }
 }
+
