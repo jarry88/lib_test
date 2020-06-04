@@ -140,12 +140,10 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
     }
 
     private void loadWantTheme(BaseCell cell) {
+        Object data = cell.optParam("data");
         if (themeLoaded) {
             return;
         }
-
-        Object data = cell.optParam("data");
-        SLog.info("stickyCellData{%s}",data);
         if (data != null) {
             StickyCellData stickyCellData = (StickyCellData) data;
             int size = stickyCellData.zoneItemList.size();
@@ -154,32 +152,29 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
             ImageView secondImage =llFirstLine.findViewById(R.id.img_zone_second);
             ImageView thirdImage =llSecondLine.findViewById(R.id.img_zone_third);
             ImageView fourthImage =llSecondLine.findViewById(R.id.img_zone_fourth);
+            llContainer.setVisibility(VISIBLE);
+
             try{
                 if (size >= 5) {
                     size = 4;
                 }
                 if (size == 1||size==3||size==5) {
-
+                    SLog.info("slogan 1,3");
                     clSecondLine.setVisibility(View.GONE);
                     Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(0).appLogo)).centerCrop().into(singleImage);
                     singleImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(0).zoneId)));
 
                     clFirstLine.setVisibility(View.GONE);
-                    if (size == 3||size==5) {
+                    if (size == 3) {
                         clFirstLine.setVisibility(View.VISIBLE);
                         Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(1).appLogo)).centerCrop().into(firstImage);
                         firstImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(1).zoneId)));
                         secondImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(2).zoneId)));
                         Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(2).appLogo)).centerCrop().into(secondImage);
                     }
-                    if (size == 5) {
-                        clSecondLine.setVisibility(View.VISIBLE);
-                        Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(3).appLogo)).centerCrop().into(thirdImage);
-                        thirdImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(3).zoneId)));
-                        fourthImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(4).zoneId)));
-                        Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(4).appLogo)).centerCrop().into(fourthImage);
-                    }
-                } if(size==2||size==4) {
+                }else if(size==2||size==4) {
+                    SLog.info("slogan 2,4");
+
                     clFirst.setVisibility(View.GONE);
                     clSecondLine.setVisibility(View.GONE);
                     if (size == 4) {
@@ -195,6 +190,8 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
                     Glide.with(context).load(StringUtil.normalizeImageUrl(stickyCellData.zoneItemList.get(1).appLogo)).centerCrop().into(secondImage);
                     secondImage.setOnClickListener(v -> Util.startFragment(NewShoppingSpecialFragment.newInstance(stickyCellData.zoneItemList.get(1).zoneId)));
                 }else {
+                    SLog.info("slogan 0");
+
                     llContainer.setVisibility(GONE);
                 }
                 themeLoaded = true;
@@ -205,7 +202,6 @@ public class SloganView extends LinearLayout implements ITangramViewLifeCycle {
             for (ShoppingZoneItem item : stickyCellData.zoneItemList) {
                 SLog.info(item.toString());
             }
-            llContainer.setVisibility(VISIBLE);
 
         }else {
             llContainer.setVisibility(View.GONE);
