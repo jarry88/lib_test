@@ -1266,12 +1266,16 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                try{
 
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-                    SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
-                    int position = currGalleryPosition % currGalleryImageList.size();
-                    pageIndicatorView.setSelection(position);
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                        SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
+                        int position = currGalleryPosition % currGalleryImageList.size();
+                        pageIndicatorView.setSelection(position);
+                    }
+                }catch (Exception e) {
+                   SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
 

@@ -690,6 +690,13 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {

@@ -64,6 +64,14 @@ public class SellerRefundDetailFragment extends BaseFragment {
     LinearLayout llAdiminContainer;
     @BindView(R.id.tv_admin_handle_state)
     TextView tvAdminState;
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
+    }
+
     @BindView(R.id.ll_button_cotainer)
     LinearLayout llButtonContainer;
     @BindView(R.id.ll_widget_good_container)
