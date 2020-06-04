@@ -169,8 +169,8 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                     params.set("ordersSn", filterParams.orderSN);
                 }
 
-                params.set("createTimeStart", filterParams.beginDate.toString());
-                params.set("createTimeEnd", filterParams.endDate.toString());
+                params.set("createTimeStart", filterParams.beginDate.toString() + " 00:00:00");
+                params.set("createTimeEnd", filterParams.endDate.toString() + " 23:59:59");
 
                 if (!StringUtil.isEmpty(filterParams.orderSource)) {
                     params.set("ordersFrom", filterParams.orderSource);

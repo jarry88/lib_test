@@ -24,6 +24,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.tangram.SloganView;
 import com.ftofs.twant.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseViewHolder> {
@@ -49,6 +50,9 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
     @Override
     protected void convert(BaseViewHolder helper, StoreLabel item) {
         List<StoreLabel> storeLabelList = item.getStoreLabelList();
+        if (storeLabelList == null) {
+            storeLabelList = new ArrayList<>();
+        }
         int subItemCount = storeLabelList.size(); // 二級分類的項數
         String labelName = item.getStoreLabelName();
 
