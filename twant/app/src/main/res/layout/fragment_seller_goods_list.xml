@@ -39,7 +39,7 @@
             android:layout_marginRight="7dp"
             android:layout_centerVertical="true"
             app:icon_src="@drawable/icon_filter"
-            android:visibility="visible"
+            android:visibility="gone"
             />
         <RelativeLayout
             android:layout_width="match_parent"
