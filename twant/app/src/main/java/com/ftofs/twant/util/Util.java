@@ -68,6 +68,7 @@ import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.widget.TwLoadingPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -80,6 +81,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1378,6 +1380,22 @@ public class Util {
             return 0;
         } else {
             return -1;
+        }
+    }
+
+
+    public String specValueIdStringMapToJSONString(Map<String, SellerSpecPermutation> specValueIdStringMap) {
+        try {
+            EasyJSONObject result = EasyJSONObject.generate();
+
+            for (Map.Entry<String, SellerSpecPermutation> entry : specValueIdStringMap.entrySet()) {
+                result.set(entry.getKey(), entry.getValue().toEasyJSONObject());
+            }
+
+            return result.toString();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            return null;
         }
     }
 }

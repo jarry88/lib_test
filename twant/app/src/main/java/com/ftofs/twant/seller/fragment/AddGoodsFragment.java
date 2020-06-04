@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +37,7 @@ import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
+import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.seller.widget.NoScrollViewPager;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
@@ -102,6 +102,11 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     // 已選中的規格組Id與規格組信息的映射關係(因為第1個為主規格，所以要用List)
     List<SellerSpecMapItem> sellerSelectedSpecList = new ArrayList<>();
 
+    // 規格值Id的字符串拼接(例5,12,8)與SKU信息的映射關係
+    Map<String, SellerSpecPermutation> specValueIdStringMap = new HashMap<>();
+    // 規格值Id的字符串拼接(例5,12,8)的列表
+    List<String> specValueIdStringList = new ArrayList<>();
+
     // SpecId 與 SpecName的映射
     Map<Integer, String> specMap = new HashMap<>();
     // SpecValueId 與 SpecValueName的映射
@@ -138,6 +143,15 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     public static AddGoodsFragment newInstance() {
 
         return new AddGoodsFragment();
+    }
+
+    /**
+     * 接收從Sku編輯器返回的結果
+     * @param specValueIdStringMap
+     */
+    public void setEditorResult(Map<String, SellerSpecPermutation> specValueIdStringMap) {
+        this.specValueIdStringMap = specValueIdStringMap;
+        SLog.info("specValueIdStringMap[%s]", specValueIdStringMap);
     }
 
     @OnClick(R.id.btn_publish)
@@ -496,8 +510,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                             spinnerLogoCountryItems.add(new ListPopupItem(item.getCountryId(),item.getCountryCn(),item));
                         }
                     }
-
-
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -767,7 +779,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     ToastUtil.error(_mActivity, "請先添加規格");
                     return;
                 }
-                startForResult(SellerSkuEditorFragment.newInstance(sellerSelectedSpecList), RequestCode.SELLER_EDIT_SKU_INFO.ordinal());
+                startForResult(SellerSkuEditorFragment.newInstance(this, specValueIdStringList, specValueIdStringMap, sellerSelectedSpecList), RequestCode.SELLER_EDIT_SKU_INFO.ordinal());
                 break;
             case R.id.btn_add_address:
                 ToastUtil.success(_mActivity, "添加商品描述");
@@ -1138,6 +1150,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 sellerSelectedSpecList.add(item);
 
                 updateSelectedSpecView();
+
+                generateSpecPermutation();
             } else if (type == PopupType.STORE_LABEL) {
                 List<Category> selectCategoryList = (List<Category>) extra;
                 Category categoryLast = new Category();
@@ -1238,5 +1252,57 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+    }
+
+
+    /**
+     * 根據當前已選中的Spec值生成SKU枚舉值
+     */
+    private void generateSpecPermutation() {
+        // 先清空列表
+        specValueIdStringList.clear();
+
+        int totalSkuCount = 1;
+
+        for (SellerSpecMapItem item : sellerSelectedSpecList) {
+            totalSkuCount *= item.sellerSpecItemList.size();
+        }
+        SLog.info("totalSkuCount[%d]", totalSkuCount);
+
+        for (int i = 0; i < totalSkuCount; i++) {
+            int n = i;
+            StringBuilder specValueIdStringSB = new StringBuilder();
+            StringBuilder skuDesc = new StringBuilder();  // SKU規格描述
+            List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();  // 規格值列表
+
+            for (int j = 0; j < sellerSelectedSpecList.size(); j++) {
+                SellerSpecMapItem sellerSpecMapItem = sellerSelectedSpecList.get(j);
+
+                int index = n % sellerSpecMapItem.sellerSpecItemList.size();
+                SellerSpecItem specItem = sellerSpecMapItem.sellerSpecItemList.get(index);
+
+                sellerSpecItemList.add(specItem);
+
+                specValueIdStringSB.append(specItem.id).append(",");
+                skuDesc.append(specItem.name).append("/");
+
+                n /= sellerSpecMapItem.sellerSpecItemList.size();
+            }
+
+            SLog.info("skuDesc[%s]", skuDesc.toString());
+            String specValueIdString = StringUtil.trim(specValueIdStringSB.toString(), new char[] {','});
+            specValueIdStringList.add(specValueIdString);
+
+            SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIdString);
+            if (permutation == null) {
+                permutation = new SellerSpecPermutation();
+
+                permutation.specValueIdString = specValueIdString;
+                permutation.specValueNameString = StringUtil.trim(skuDesc.toString(), new char[] {'/'});
+                permutation.sellerSpecItemList = sellerSpecItemList;
+
+                specValueIdStringMap.put(specValueIdString, permutation);
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@ import com.lxj.xpopup.XPopup;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -44,24 +45,35 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
+    AddGoodsFragment addGoodsFragment;
     List<SellerSpecMapItem> sellerSelectedSpecList;
+    List<String> specValueIdStringList;
+    Map<String, SellerSpecPermutation> specValueIdStringMap;
+
+    List<SellerSpecPermutation> permutationList = new ArrayList<>();
 
     EasyJSONArray goodsJsonVoList = EasyJSONArray.generate();
     EasyJSONArray goodsPicVoList = EasyJSONArray.generate();
 
     private List<String> titleList = new ArrayList<>();
     private List<Fragment> fragmentList = new ArrayList<>();
+
     HwLoadingPopup loadingPopup;
 
-    List<SellerSpecPermutation> permutationList = new ArrayList<>();
 
-
-    public static SellerSkuEditorFragment newInstance(List<SellerSpecMapItem> sellerSelectedSpecList) {
+    public static SellerSkuEditorFragment newInstance(
+            AddGoodsFragment addGoodsFragment,
+            List<String> specValueIdStringList,
+            Map<String, SellerSpecPermutation> specValueIdStringMap,
+            List<SellerSpecMapItem> sellerSelectedSpecList) {
         Bundle args = new Bundle();
 
         SellerSkuEditorFragment fragment = new SellerSkuEditorFragment();
         fragment.setArguments(args);
+        fragment.addGoodsFragment = addGoodsFragment;
         fragment.sellerSelectedSpecList = sellerSelectedSpecList;
+        fragment.specValueIdStringList = specValueIdStringList;
+        fragment.specValueIdStringMap = specValueIdStringMap;
 
         return fragment;
     }
@@ -78,38 +90,14 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Util.setOnClickListener(view, R.id.btn_back, this);
-
-
-        int TOTAL_SKU_COUNT = 1;
-
-        for (SellerSpecMapItem item : sellerSelectedSpecList) {
-            TOTAL_SKU_COUNT *= item.sellerSpecItemList.size();
-        }
-        SLog.info("TOTAL_SKU_COUNT[%d]", TOTAL_SKU_COUNT);
-
-        for (int i = 0; i < TOTAL_SKU_COUNT; i++) {
-            int n = i;
-            StringBuilder skuDesc = new StringBuilder();  // SKU規格描述
-            SellerSpecPermutation permutation = new SellerSpecPermutation();
-
-            for (int j = 0; j < sellerSelectedSpecList.size(); j++) {
-                SellerSpecMapItem sellerSpecMapItem = sellerSelectedSpecList.get(j);
-
-                int index = n % sellerSpecMapItem.sellerSpecItemList.size();
-                SellerSpecItem specItem = sellerSpecMapItem.sellerSpecItemList.get(index);
-
-                permutation.sellerSpecItemList.add(specItem);
-
-                skuDesc.append(sellerSpecMapItem.sellerSpecItemList.get(index).name).append("/");
-
-                n /= sellerSpecMapItem.sellerSpecItemList.size();
-            }
-
-            SLog.info("skuDesc[%s]", skuDesc.toString());
-            permutation.specValueString = StringUtil.trim(skuDesc.toString(), new char[] {'/'});
+        // 生成PermutationList
+        for (String specValueIdString : specValueIdStringList) {
+            SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIdString);
             permutationList.add(permutation);
         }
+
+        Util.setOnClickListener(view, R.id.btn_back, this);
+
 
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         ViewPager viewPager = view.findViewById(R.id.viewpager);
@@ -161,6 +149,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
 
     }
 
+
     /**
      * 用戶點擊返回後調用
      */
@@ -173,7 +162,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         );
 
         bundle.putString("result", result.toString());
-
+        addGoodsFragment.setEditorResult(specValueIdStringMap);
         setFragmentResult(RESULT_OK, bundle);
 
         hideSoftInputPop();

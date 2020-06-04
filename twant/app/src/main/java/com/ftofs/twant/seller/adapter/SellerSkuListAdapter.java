@@ -24,14 +24,12 @@ public class SellerSkuListAdapter extends BaseQuickAdapter<SellerSpecPermutation
     @Override
     protected void convert(BaseViewHolder helper, SellerSpecPermutation item) {
         helper.addOnClickListener(R.id.btn_edit);
-        helper.setText(R.id.tv_spec_value_str, item.specValueString)
+        helper.setText(R.id.tv_spec_value_str, item.specValueNameString)
                 .setText(R.id.tv_price, StringUtil.formatPrice(context, item.price, 0) + " MOP")
                 .setText(R.id.tv_goods_storage, "庫存: " + item.storage)
                 .setText(R.id.tv_reserved_storage, "預存庫存: " + item.reserved);
 
-        if (StringUtil.isEmpty(item.goodsSN)) {
-            item.goodsSN = "";
-        }
+
         helper.setText(R.id.tv_goods_sn, "商品編號：" + item.goodsSN);
     }
 }
