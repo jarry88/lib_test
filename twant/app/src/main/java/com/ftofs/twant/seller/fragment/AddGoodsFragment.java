@@ -705,7 +705,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_primary_next:
                 if (Config.DEVELOPER_MODE) {
-                    vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
+                    // vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
                 }
                 if (!savePrimaryInfo()) {
                     break;
@@ -750,7 +750,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_spec_next:
                 String errMsg = saveSpecInfo();
-                if (StringUtil.isEmpty(errMsg)) {
+                if (!StringUtil.isEmpty(errMsg)) {
                     ToastUtil.error(_mActivity, errMsg);
                     break;
                 }
@@ -874,6 +874,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
      */
     private String saveSpecInfo() {
         try {
+            SLog.info("sellerSelectedSpecList.size[%d]", sellerSelectedSpecList.size());
             if (sellerSelectedSpecList.size() < 1) {
                 return "請添加商品規格";
             }
