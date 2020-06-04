@@ -200,9 +200,15 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
              ]
              */
             for (SellerSpecPermutation permutation : sellerSpecPermutationList) {
+                StringBuilder specValueIds = new StringBuilder();
+                for (SellerSpecItem sellerSpecItem : permutation.sellerSpecItemList) {
+                    specValueIds.append(sellerSpecItem.id).append(",");
+                }
+                SLog.info("specValueIds[%s]", specValueIds);
+
                 goodsJsonVoList.append(
                         EasyJSONObject.generate(
-                                "specValueIds", permutation.sellerSpecItemList,
+                                "specValueIds", StringUtil.trim(specValueIds.toString(), new char[] {','}),
                                 "goodsPrice0", permutation.price,
                                 "goodsSerial", permutation.goodsSN,
                                 "goodsStorage", permutation.storage,

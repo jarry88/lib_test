@@ -3,6 +3,8 @@ package com.ftofs.twant.seller.widget;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -30,6 +32,8 @@ public class SellerOperationPopup extends BottomPopupView implements View.OnClic
     int goodsStatus;
     SimpleCallback simpleCallback;
 
+    TextView tvShelfOperation;
+
     public SellerOperationPopup(@NonNull Context context, int commonId, int goodsStatus, SimpleCallback simpleCallback) {
         super(context);
 
@@ -53,6 +57,13 @@ public class SellerOperationPopup extends BottomPopupView implements View.OnClic
         findViewById(R.id.btn_edit).setOnClickListener(this);
         findViewById(R.id.btn_copy).setOnClickListener(this);
         findViewById(R.id.btn_delete).setOnClickListener(this);
+
+        tvShelfOperation = findViewById(R.id.tv_shelf_operation);
+        if (goodsStatus == Constant.GOODS_STATUS_OFF_SHELF) {
+            tvShelfOperation.setText("上架");
+        } else {
+            tvShelfOperation.setText("下架");
+        }
     }
 
     //完全可见执行
