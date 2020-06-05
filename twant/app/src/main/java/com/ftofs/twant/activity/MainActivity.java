@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.vlayout.Range;
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
+import com.donkingliang.imageselector.utils.ImageSelector;
 import com.facebook.CallbackManager;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -664,6 +665,23 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                 parseCouponWord(word);
             }
         }
+
+
+        PermissionUtil.actionWithPermission(this, new String[] {Permission.WRITE_EXTERNAL_STORAGE,
+                Permission.READ_EXTERNAL_STORAGE}, "使用想要城Takewant需要授予", new CommonCallback() {
+
+            @Override
+            public String onSuccess(@Nullable String data) {
+                ImageSelector.preload(MainActivity.this);
+                return null;
+            }
+
+            @Override
+            public String onFailure(@Nullable String data) {
+
+                return null;
+            }
+        });
     }
 
     private void doLaunchApp(String launchAppParams) {

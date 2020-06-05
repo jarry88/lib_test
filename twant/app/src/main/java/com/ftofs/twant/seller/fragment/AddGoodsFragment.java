@@ -705,7 +705,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_primary_next:
                 if (Config.DEVELOPER_MODE) {
-                    // vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
+                    vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
                 }
                 if (!savePrimaryInfo()) {
                     break;
