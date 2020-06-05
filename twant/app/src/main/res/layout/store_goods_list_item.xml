@@ -62,7 +62,7 @@
                             android:id="@+id/left_goods_image"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
-                            android:scaleType="fitCenter"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/test_prev"
                             app:layout_constraintDimensionRatio="1:1"
 
@@ -139,6 +139,7 @@
                             android:id="@+id/right_goods_image"
                             android:background="@drawable/goods_image_3dp_bg"
 
+                            android:scaleType="centerCrop"
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             app:layout_constraintLeft_toLeftOf="parent"

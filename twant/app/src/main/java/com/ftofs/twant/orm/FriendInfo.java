@@ -15,6 +15,7 @@ public class FriendInfo extends LitePalSupport {
     public String memberName;
     public String nickname;
     public String avatarUrl;
+    public String storeAvatarUrl;
     public int role;//這裏的role 是好友非好友的角色，注意不要和會員客服角色混淆
     public int memberRole;//這裏為身份角色 0會員 1 客服 2店主
     public long updateTime;  // 好友資料更新時間
