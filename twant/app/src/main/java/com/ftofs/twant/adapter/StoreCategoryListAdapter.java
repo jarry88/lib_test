@@ -187,8 +187,10 @@ public class StoreCategoryListAdapter extends BaseQuickAdapter<StoreLabel, BaseV
             List<StoreLabel> dataList = getData();
 
             List<StoreLabel> subItemList = dataList.get(prevSelectedItemIndex).getStoreLabelList();
-            for (StoreLabel storeLabel : subItemList) {
-                storeLabel.setIsFold(Constant.TRUE_INT);
+            if (subItemList != null) {
+                for (StoreLabel storeLabel : subItemList) {
+                    storeLabel.setIsFold(Constant.TRUE_INT);
+                }
             }
         }
         prevSelectedItemIndex = index;
