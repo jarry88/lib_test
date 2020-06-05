@@ -342,13 +342,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            loadingPopup.show();
             // Util.startFragment(ShopMainFragment.newInstance(397, ShopMainFragment.ACTIVITY_FRAGMENT));
 
-            new XPopup.Builder(_mActivity)
-                    .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
-                    .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new ReceiveWordCouponResultPopup(_mActivity, ReceiveWordCouponResultPopup.RESULT_RUN_OUT, EasyJSONObject.generate()))
-                    .show();
+//            new XPopup.Builder(_mActivity)
+//                    .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
+//                    .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
+//                    // 如果不加这个，评论弹窗会移动到软键盘上面
+//                    .moveUpToKeyboard(false)
+//                    .asCustom(new ReceiveWordCouponResultPopup(_mActivity, ReceiveWordCouponResultPopup.RESULT_RUN_OUT, EasyJSONObject.generate()))
+//                    .show();
+            Util.startFragment(ShopSearchResultFragment.newInstance(296, null));
         }
     }
 
