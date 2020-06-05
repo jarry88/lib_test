@@ -28,6 +28,7 @@ import com.ftofs.twant.adapter.SellerReturnAdapter;
 import com.ftofs.twant.adapter.SimpleViewPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.entity.SellerOrderRefundItem;
@@ -317,7 +318,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
                     Util.startFragment(SellerOrderInfoFragment.newInstance(item.getRefundId(),true));
 
                 } else if (id == R.id.tv_orders_sn) {
-                    Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId(),0));
+                    Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId(), Constant.SELLER_RETURN));
                 }
             }
         });
@@ -394,7 +395,7 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
 
                 Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId()));
             } else {
-                Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId(),0));
+                Util.startFragment(SellerRefundDetailFragment.newInstance(item.getRefundId(),Constant.SELLER_RETURN));
             }
         }
 //                    ToastUtil.success(_mActivity,"跳轉訂單詳情頁");

@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
+import com.ftofs.twant.adapter.ViewGroupAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.config.Config;
@@ -64,6 +65,8 @@ public class SellerRefundDetailFragment extends BaseFragment {
     LinearLayout llAdiminContainer;
     @BindView(R.id.tv_admin_handle_state)
     TextView tvAdminState;
+    @BindView(R.id.tv_admin_info)
+    TextView tvAdminInfo;
 
     @Override
     public boolean onBackPressedSupport() {
@@ -224,16 +227,18 @@ public class SellerRefundDetailFragment extends BaseFragment {
                                  return;
                              }
                              ToastUtil.success(_mActivity, responseObj.getSafeString("datas.success"));
-//                         }
-                         llSellerHandleContainer.setVisibility(View.GONE);
-                         llSellerHandleInfo.setVisibility(View.VISIBLE);
-                         tvSellerHandleState.setText(sellerAgree?"同意":"不同意");
-                         tvSellerReason.setText(sellerMessage);
-                         llAdiminContainer.setVisibility(View.VISIBLE);
-                         tvAdminState.setText("待審核");
-                         llButtonContainer.setVisibility(View.GONE);
-                         currentStep++;
-                         updateIndicator();
+////                         }
+//                         llSellerHandleContainer.setVisibility(View.GONE);
+//                         llSellerHandleInfo.setVisibility(View.VISIBLE);
+//                         tvSellerHandleState.setText(sellerAgree?"同意":"不同意");
+//                         tvSellerReason.setText(sellerMessage);
+//                         llAdiminContainer.setVisibility(View.VISIBLE);
+//                         tvAdminState.setText("待審核");
+//                         llButtonContainer.setVisibility(View.GONE);
+
+//                         currentStep++;
+//                         updateIndicator();
+                         loadDate();
                      } catch (Exception e) {
                          SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                      }
@@ -268,6 +273,11 @@ public class SellerRefundDetailFragment extends BaseFragment {
         llReturnGoodContainer.setVisibility(FragmentType == Constant.SELLER_REFUND?View.GONE:View.VISIBLE );
         btnReturnGood.performClick();
         btnOk.performClick();
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
         loadDate();
     }
 
@@ -301,7 +311,16 @@ public class SellerRefundDetailFragment extends BaseFragment {
     }
 
     private void updateView(EasyJSONObject refundInfo) throws Exception {
-        currentStep = refundInfo.getInt("refundState");
+        int sellerState = refundInfo.getInt("sellerState");
+        currentStep = 0;
+        if (sellerState > 1) { // 商家已處理
+            currentStep++;
+            int adminState = refundInfo.getInt("adminState");
+            if (adminState > 1) {
+                currentStep++;
+            }
+        }
+//        currentStep = refundInfo.getInt("refundState");
 
         updateIndicator();
         showStoreHandel = refundInfo.getInt("showStoreHandel");
@@ -313,7 +332,8 @@ public class SellerRefundDetailFragment extends BaseFragment {
         tvRefundSn.setText(String.valueOf(refundInfo.getLong("refundSn")));
         tvRefundAmount.setText(StringUtil.formatPrice(_mActivity,refundInfo.getDouble("refundAmount"),1));
         tvRefundAmount.setTextColor(Color.RED);
-        tvRefundState.setText( refundInfo.getSafeString("refundStateTextForSelf"));
+//        tvRefundState.setText( refundInfo.getSafeString("refundStateTextForSelf"));
+        tvRefundState.setText( refundInfo.getSafeString("currentStateText"));
         tvRefundReason.setText(refundInfo.getSafeString("reasonInfo"));
         tvRefundDescribe.setText(refundInfo.getSafeString("buyerMessage"));
         tvBuyer.setText(refundInfo.getSafeString("memberName"));
@@ -339,7 +359,8 @@ public class SellerRefundDetailFragment extends BaseFragment {
             llButtonContainer.setVisibility(View.GONE);
 //            if (currentStep == 3) {
                 llAdiminContainer.setVisibility(View.VISIBLE);
-                tvAdminState.setText("adminStateText");
+                tvAdminState.setText(refundInfo.getSafeString("adminStateText"));
+                tvAdminInfo.setText(refundInfo.getSafeString("adminMessage"));
 //            }
         }
         updateIndicator();
@@ -347,9 +368,14 @@ public class SellerRefundDetailFragment extends BaseFragment {
 
     private void updateIndicator() {
         List<String> progressList = new ArrayList<>();
-        progressList.add("    買家\n申請退款");//1 處理中
-        progressList.add("商家處理\n退款申請");//2、帶管理員處理
-        progressList.add("平臺審核\n退款完成");//3、已完成
-        indicator.setData(progressList,currentStep-1);
+        progressList.add("申請退款");//1 處理中
+        progressList.add("商家處理");//2、帶管理員處理
+
+        if (FragmentType == Constant.SELLER_RETURN) {
+            progressList.add("買家退貨");
+        }
+        progressList.add("完成退款");//3、已完成
+        indicator.setData(progressList,currentStep);
+
     }
 }

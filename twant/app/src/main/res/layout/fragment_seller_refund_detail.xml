@@ -591,6 +591,34 @@
                             />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:paddingBottom="@dimen/dp_4"
+
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="平臺備注："
+                            android:textSize="12sp"
+                            android:textColor="@color/grgray"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_admin_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="12sp"
+                            android:textColor="@color/grgray"
+
+                            />
+                    </LinearLayout>
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
