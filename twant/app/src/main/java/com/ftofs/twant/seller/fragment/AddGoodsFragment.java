@@ -1032,7 +1032,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return false;
         }
         try{
-            publishGoodsInfo.set("unityName", unitName);
+            publishGoodsInfo.set("unitName", unitName);
             publishGoodsInfo.set("goodsModal", goodsModal);
         }catch (Exception e) {
            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
