@@ -34,6 +34,7 @@ import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
@@ -49,8 +50,10 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.FixedEditText;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
@@ -163,7 +166,31 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     NoScrollViewPager vpAddGood;
     @OnClick(R.id.btn_back)
     void back() {
-        hideSoftInputPop();
+        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(_mActivity, "確定要離開商品發佈頁嗎?", null, new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+                hideSoftInputPop();
+
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        }))
+                .show();
     }
 //    @OnClick(R.id.et_add_good_name)
 //    void showKeybord1() {
