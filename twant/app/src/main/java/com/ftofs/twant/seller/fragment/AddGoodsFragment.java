@@ -41,6 +41,7 @@ import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.widget.NoScrollViewPager;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
+import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -54,6 +55,7 @@ import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +96,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     List<ListPopupItem> spinnerLogoItems = new ArrayList<>();
 
     List<ListPopupItem> spinnerLogoCountryItems = new ArrayList<>();
-    private int brandId =-1;
+    private int brandId;
 
     // 未選中的規格組Id與規格組信息的映射關係
     Map<Integer, SellerSpecMapItem> sellerSpecMap = new HashMap<>();
@@ -134,6 +136,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private int formatTop=-1;
 
     TextView etGoodsVideoUrl;
+    private List<Category> selectCategoryList;
+    private EasyJSONArray storeLabelIdList;
 
     public static AddGoodsFragment newInstance() {
 
@@ -143,6 +147,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     @OnClick(R.id.btn_publish)
     void publish() {
         hideAddGuide();
+//        testJson();
+//        savePublishGoodsInfo();
     }
 
     @OnClick(R.id.btn_detail_save)
@@ -201,6 +207,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initView() {
+        storeLabelIdList = new EasyJSONArray();
         publishGoodsInfo = new EasyJSONObject();
         sbNotice.setButtonCheckedBlue();
         sbNotice.setChecked(Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false));
@@ -948,8 +955,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return false;
         }
         try{
-            int[] list = {storeLabelId};
-            publishGoodsInfo.set("storeLabelIdList", list);
+            publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
             publishGoodsInfo.set("detailVideo", detailVideo);
             if (formatBottom >= 0) {
                 publishGoodsInfo.set("formatBottom", formatBottom);
@@ -1065,9 +1071,12 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             publishGoodsInfo.set("goodsName", goodsName);
             publishGoodsInfo.set("categoryId", categoryId);
             publishGoodsInfo.set("jingle", jingle);
-            if (brandId >= 0) {
-                publishGoodsInfo.set("brandId", brandId);
+            int i = 1;
+            for (Category category : selectCategoryList) {
+                String keyName = String.format("categoryId%d", i++);
+                publishGoodsInfo.set(keyName, category.getCategoryId());
             }
+                publishGoodsInfo.set("brandId", brandId);
             publishGoodsInfo.set("goodsCountry", goodsCountry);
             SLog.info("publishInfo [%s]",publishGoodsInfo.toString());
         } catch (Exception e) {
@@ -1083,15 +1092,45 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         savePublishGoodsInfo();
     }
 
+    private void testJson() {
+        String token = User.getToken();
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_SAVE + "?token=" + token;
+        String testJson = "";
+        testJson = AssetsUtil.loadText(_mActivity, "tangram/seller_order.json");
+        testJson = AssetsUtil.loadText(_mActivity, "tangram/test.json");
+        SLog.info("params[%s]",testJson);
+        Api.postJsonUi(url, testJson ,new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+                    ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+        try{
+        }catch (Exception e) {
+           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+    }
     private void savePublishGoodsInfo() {
         String token = User.getToken();
-        try{
-            publishGoodsInfo.set("token", token);
-        }catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
+//        token = "e6b1594f0ce04d7cbf01163121a44fcd";
         SLog.info("params[%s]",publishGoodsInfo.toString());
-          Api.postUI(Api.PATH_SELLER_GOODS_PUBLISH_SAVE, publishGoodsInfo ,new UICallback() {
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_SAVE + "?token=" + token;
+          Api.postJsonUi(url, publishGoodsInfo.toString() ,new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
                  ToastUtil.showNetworkError(_mActivity, e);
@@ -1140,7 +1179,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
                 updateSelectedSpecView();
             } else if (type == PopupType.STORE_LABEL) {
-                List<Category> selectCategoryList = (List<Category>) extra;
+                selectCategoryList = (List<Category>) extra;
                 Category categoryLast = new Category();
                 StringBuilder selectCategoryName = new StringBuilder();
                 for (Category category : selectCategoryList) {
@@ -1156,6 +1195,11 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     } else if (vpAddGood.getCurrentItem() == DETAIL_INDEX) {
                         ((TextView) (mViews.get(DETAIL_INDEX).findViewById(R.id.tv_select_store_category))).setText(selectCategoryName.toString());
                         storeLabelId = categoryLast.getCategoryId();
+                        EasyJSONArray array = new EasyJSONArray();
+                        for (Category category : selectCategoryList) {
+                            array.append(category.getCategoryId());
+                        }
+                        storeLabelIdList = array;
                     }
                 }
 
@@ -1208,7 +1252,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         TextView tvLogo = mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_add_good_logo);
         tvLogo.setText("");
         logoIndex = 0;
-        brandId = -1;
+        brandId = 0;
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "categoryId", categoryId);
         SLog.info("params[%s]", params);
         Api.getUI(Api.PATH_SELLER_QUERY_BIND_BRANDS, params, new UICallback() {

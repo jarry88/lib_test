@@ -387,7 +387,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 }
                 totalIMUnreadCount += chatConversation.unreadCount;
                 SLog.info("here!!storeid%d, platId%d",friendInfo.storeId,PLATFORM_CUSTOM_STORE_ID);
-               if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID) {
+               if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID&&!StringUtil.isEmpty(friendInfo.nickname)) {
                     //過濾平臺客服鏈接
                    chatConversationList.add(chatConversation);
                }else{
