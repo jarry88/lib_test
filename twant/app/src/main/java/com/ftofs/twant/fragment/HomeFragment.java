@@ -339,6 +339,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //                    .moveUpToKeyboard(false)
 //                    .asCustom(new HwLoadingPopup(_mActivity, "正在上傳圖片，請稍候..."));
 //            loadingPopup.show();
+            // Util.startFragment(ShopMainFragment.newInstance(397, ShopMainFragment.ACTIVITY_FRAGMENT));
         }
     }
 
