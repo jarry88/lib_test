@@ -151,10 +151,10 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
                     params.set("refundSN", filterParams.refundSN);
                 }
 
-                params.set("createTimeStart", filterParams.beginDate.toString() +" 01:01:01");
-                params.set("addTimeStart", filterParams.beginDate.toString()+" 01:01:01");
-                params.set("createTimeEnd", filterParams.endDate.toString()+" 01:01:01");
-                params.set("addTimeEnd", filterParams.endDate.toString()+" 01:01:01");
+                params.set("createTimeStart", filterParams.beginDate.toString() +" 00:00:00");
+//                params.set("addTimeStart", filterParams.beginDate.toString()+" 00:00:00");
+                params.set("createTimeEnd", filterParams.endDate.toString()+" 23:59:59");
+//                params.set("addTimeEnd", filterParams.endDate.toString()+" 01:01:01");
                 params.set("searchType", filterParams.searchType+" 01:01:01");
 
             }
