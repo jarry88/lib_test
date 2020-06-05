@@ -955,11 +955,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return false;
         }
         try{
-            int[] list = {storeLabelId};
-            EasyJSONArray l = new EasyJSONArray();
-//            l.append(storeLabelId);
-            l.append("46");
-            l.append("61");
             publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
             publishGoodsInfo.set("detailVideo", detailVideo);
             if (formatBottom >= 0) {
@@ -1257,7 +1252,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         TextView tvLogo = mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_add_good_logo);
         tvLogo.setText("");
         logoIndex = 0;
-        brandId = -1;
+        brandId = 0;
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "categoryId", categoryId);
         SLog.info("params[%s]", params);
         Api.getUI(Api.PATH_SELLER_QUERY_BIND_BRANDS, params, new UICallback() {
