@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="@dimen/margin12">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -45,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:inputType="numberDecimal"
             android:background="@drawable/edit_text_bg">
         </EditText>
     </LinearLayout>
@@ -73,7 +75,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:background="@drawable/edit_text_bg">
+                android:background="@drawable/edit_text_bg"
+                android:inputType="numberDecimal"
+                >
             </EditText>
         </LinearLayout>
     </LinearLayout>
@@ -101,7 +105,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:background="@drawable/edit_text_bg">
+                android:background="@drawable/edit_text_bg"
+                android:inputType="numberDecimal"
+                >
             </EditText>
         </LinearLayout>
     </LinearLayout>
@@ -152,7 +158,7 @@
                 android:gravity="center"
                 android:text="取消"
                 android:textColor="@android:color/white"
-                android:background="@color/tw_warn_yellow">
+                android:background="@drawable/text_yellow_bg">
 
             </TextView>
 
@@ -164,7 +170,7 @@
                 android:gravity="center"
                 android:text="確認提交"
                 android:textColor="@android:color/white"
-                android:background="@color/tw_blue">
+                android:background="@drawable/text_blue_bg">
             </TextView>
         </LinearLayout>
     </RelativeLayout>

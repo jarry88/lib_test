@@ -628,6 +628,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             }
             TextView tvSelect=mViews.get(DETAIL_INDEX).findViewById(R.id.btn_select_store_category_id);
             tvSelect.setOnClickListener(v ->{
+                hideSoftInput();
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
                         new StoreLabelPopup(_mActivity, PopupType.STORE_CATEGORY, list, AddGoodsFragment.this)
                 ).show();
@@ -705,7 +706,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_primary_next:
                 if (Config.DEVELOPER_MODE) {
-                    vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
+                    // vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
                 }
                 if (!savePrimaryInfo()) {
                     break;
@@ -1090,7 +1091,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         SLog.info("params[%s]",publishGoodsInfo.toString());
-          Api.postJsonUi(Api.PATH_SELLER_GOODS_PUBLISH_SAVE, publishGoodsInfo.toString(), new UICallback() {
+          Api.postUI(Api.PATH_SELLER_GOODS_PUBLISH_SAVE, publishGoodsInfo ,new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
                  ToastUtil.showNetworkError(_mActivity, e);
