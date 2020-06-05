@@ -23,24 +23,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="選擇商品規格：">
+                    android:text="1、選擇商品規格：">
 
                 </TextView>
-                <TextView
-                    android:id="@+id/btn_view_sku_detail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:background="@drawable/mini_blue_button"
-                    android:text="查看SKU詳情"
-                    android:textSize="13sp"
-                    android:textColor="@android:color/white">
-                </TextView>
+
             </RelativeLayout>
 
             <LinearLayout
@@ -52,14 +38,41 @@
             </LinearLayout>
             <TextView
                 android:id="@+id/btn_add_spec"
-                android:layout_width="120dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
                 android:gravity="center"
                 android:text="添加規格"
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:background="@color/tw_blue">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="2、編輯SKU商品詳情：">
+            </TextView>
+            <TextView
+                android:id="@+id/btn_view_sku_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:background="@color/tw_blue"
+                android:text="編輯SKU詳情"
+                android:textSize="13sp"
+                android:textColor="@android:color/white">
             </TextView>
 
             <LinearLayout
@@ -70,7 +83,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="商品視頻鏈接：">
+                    android:text="3、設置商品視頻鏈接：">
                 </TextView>
                 <EditText
                     android:id="@+id/et_goods_video_url"
