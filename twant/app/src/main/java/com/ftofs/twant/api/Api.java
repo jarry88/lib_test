@@ -1433,6 +1433,12 @@ public class Api {
     public static final String PATH_RECEIVE_WORD_COUPON = "/member/app/command/receive";
 
 
+    /**
+     * 【賣家】獲取商品Sku列表
+     */
+    public static final String PATH_SELLER_GOODS_SKU_LIST = "/member/seller/goods/sku";
+
+
 
     /**
      * 發送Http請求
