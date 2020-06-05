@@ -311,7 +311,16 @@ public class SellerRefundDetailFragment extends BaseFragment {
     }
 
     private void updateView(EasyJSONObject refundInfo) throws Exception {
-        currentStep = refundInfo.getInt("refundState");
+        int sellerState = refundInfo.getInt("sellerState");
+        currentStep = 0;
+        if (sellerState > 1) { // 商家已處理
+            currentStep++;
+            int adminState = refundInfo.getInt("adminState");
+            if (adminState > 1) {
+                currentStep++;
+            }
+        }
+//        currentStep = refundInfo.getInt("refundState");
 
         updateIndicator();
         showStoreHandel = refundInfo.getInt("showStoreHandel");
@@ -366,11 +375,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
             progressList.add("買家退貨");
         }
         progressList.add("完成退款");//3、已完成
-        int step = currentStep - 1;
-        if (currentStep == 3&&!sellerAgree) {
-            step--;
-        }
-        indicator.setData(progressList,step);
+        indicator.setData(progressList,currentStep);
 
     }
 }

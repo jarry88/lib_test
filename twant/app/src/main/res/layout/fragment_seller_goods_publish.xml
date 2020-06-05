@@ -54,6 +54,7 @@
                 android:background="@drawable/purple_5dp_bg"
                 android:textSize="16sp"/>
             <LinearLayout
+                android:visibility="gone"
                 android:layout_below="@id/tv_notice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
