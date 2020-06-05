@@ -412,7 +412,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
             updateConversationInfo();
             SLog.info("updateSize[%s]",updateConversationList.size());
             displayUnreadCount();
-            chatConversationList.add(null);
+//            chatConversationList.add(null);
 
             adapter.setNewData(chatConversationList);
 
@@ -760,13 +760,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     if (conversationList != null && conversationList.length() > 0) {
                         for (Object object : conversationList) {
                             EasyJSONObject conversation = (EasyJSONObject) object;
-                            String memberName = conversation.getSafeString("memberName");
-                            String nickName = conversation.getSafeString("nickName");
-                            if (StringUtil.isEmpty(nickName)) {
+                            FriendInfo friendInfo = FriendInfo.parse(conversation);
+                            if (friendInfo == null) {
                                 continue;
                             }
-                            String avatar = conversation.getSafeString("avatar");
-                            String storeAvatar = conversation.getSafeString("storeAvatar");
+                            SLog.info(conversation.toString());
                             String messageContent=conversation.getSafeString("messageContent");
                             if (EasyJSONBase.isJSONString(messageContent)) {
                                 messageContent = "[電子名片]";
@@ -775,37 +773,49 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 messageContent = "[圖片]";
                             }
                             SLog.info("messageFragment [%s]",messageContent);
-                            String storeName = conversation.getSafeString("storeName");
                             String sendTime =conversation.getSafeString("sendTime");
-                            int role = conversation.getInt("role");
-                            int storeId = conversation.getInt("storeId");
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
-                                if (chatConversation!=null&&chatConversation.friendInfo != null) {
-                                    if (chatConversation.friendInfo.memberName.equals(memberName)) {
+                                if (chatConversation.friendInfo != null) {
+                                    if (chatConversation.friendInfo.memberName.equals(friendInfo.memberName)) {
                                         has = true;
+                                        int timestamp = Jarbon.parse(sendTime).getTimestamp();
+                                        chatConversation.friendInfo = friendInfo;
+                                        if (StringUtil.isEmpty(chatConversation.lastMessage)) {
+                                            chatConversation.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                                            chatConversation.lastMessage = "txt::" + messageContent + ":";
+                                            chatConversation.timestamp = timestamp;
+                                            SLog.info("db[%s]timestamp[%s]", chatConversation.timestamp, timestamp);
+                                        }
+//                                        else {
+//                                            if (chatConversation.timestamp<timestamp) {
+//                                                chatConversation.timestamp = timestamp;
+//                                            }
                                         break;
                                     }
                                 }
                             }
                             if (!has) {
                                 ChatConversation newChat = new ChatConversation();
-                                String name = role > 0 ? storeName + nickName : nickName;
-                                String avatarUrl = role > 0 ? storeAvatar : avatar;
                                 int time =Jarbon.parse(sendTime).getTimestamp();
-                                newChat.friendInfo = FriendInfo.newInstance(memberName, name, avatarUrl, role);
-                                newChat.friendInfo.storeId = storeId;
-                                newChat.friendInfo.storeName = storeName;
+                                newChat.friendInfo = friendInfo;
+
                                 newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 newChat.lastMessage = "txt::"+messageContent+":";
 //                                newChat.timestamp = time;
-                                Conversation conversation1 = Conversation.getByMemberName(memberName);
-                                conversation1.nickname = name;
-                                conversation1.avatarUrl = avatarUrl;
+                                Conversation conversation1 = Conversation.getByMemberName(friendInfo.memberName);
+                                if (friendInfo.role == 0) {
+                                    conversation1.nickname = friendInfo.nickname;
+                                } else if (friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
+                                    conversation1.nickname = friendInfo.nickname;
+                                } else {
+                                    conversation1.nickname = friendInfo.storeName+" "+friendInfo.nickname;
+                                }
+                                conversation1.avatarUrl = friendInfo.role>0?friendInfo.storeAvatarUrl:friendInfo.avatarUrl;
                                 conversation1.lastMessageText = messageContent;
                                 conversation1.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
-                                conversation1.storeId = storeId;
-                                conversation1.role = role;
+                                conversation1.storeId = friendInfo.storeId;
+                                conversation1.role = friendInfo.role;
                                 conversation1.timestamp = time;
                                 conversation1.save();
 //                                newChat.timestamp = sendTime;
@@ -813,9 +823,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             }
                         }
                     }
-                    if (chatConversationList.size() > oldCount) {
+//                    if (chatConversationList.size() > oldCount) {
                         adapter.notifyDataSetChanged();
-                    }
+//                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
