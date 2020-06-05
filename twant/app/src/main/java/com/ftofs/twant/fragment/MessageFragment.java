@@ -344,7 +344,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 long timestamp = conversation.lastMessageTime;
                 SLog.info("本地保存记录：%s,时间%d",conversation.nickname,timestamp);
                 if (conversation.needUpdate()) {
-                    SLog.info("%s需要更新",memberName);
+//                    SLog.info("%s需要更新",memberName);
                     updateConversationList.add(memberName);
                 }
 
@@ -355,7 +355,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 if (!StringUtil.isEmpty(conversation.nickname)) {
                     friendInfo.nickname = conversation.nickname;
                     friendInfo.avatarUrl = conversation.avatarUrl;
+                    friendInfo.storeAvatarUrl = conversation.storeAvatarUrl;
                     friendInfo.role = conversation.role;
+                    friendInfo.storeName = conversation.storeName;
                     SLog.info("會話框數據從extFied得到");
 //                    friendInfo.storeName = extFieldObj.getSafeString("storeName");
                 } else {
@@ -408,6 +410,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 chatConversationList.add(0,platformCustomer);
             }
             updateConversationInfo();
+            SLog.info("updateSize[%s]",updateConversationList.size());
             displayUnreadCount();
             chatConversationList.add(null);
 
@@ -429,7 +432,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                         if (chatConversation.friendInfo.memberName.equals(memberName)) {
                             chatConversation.friendInfo.role = member.role;
                             chatConversation.friendInfo.nickname = member.role > 0 ? member.storeName + " " + member.getNickName(): member.getNickName();
+                            chatConversation.friendInfo.storeName = member.storeName ;
                             chatConversation.friendInfo.avatarUrl = member.role > 0 ? member.storeAvatar : member.getAvatar();
+                            chatConversation.friendInfo.storeAvatarUrl = member.storeAvatar;
+                            SLog.info("storeavatar[%s]",member.storeAvatar);
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -712,24 +718,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         }
         ((MainActivity) getActivity()).setMessageFragmentsActivity(true);
 
-
-        // 每次顯示時，登錄一下環信
-//        SqliteUtil.imLogin(new SimpleCallback() {
-//            @Override
-//            public void onSimpleCall(Object data) {
-//                if (!isImLogin) {
-//                    loadData();
-//                    isImLogin = true;
-//                    if (isPlatformCustomer) {
-//                        SLog.info("onSupportVisible");
-//                        loadPlatformCustomerData();
-//                    } else {
-//                        loadData();
-//                    }
-//                    displayUnreadCount();
-//                }
-//            }
-//        });
         SqliteUtil.imLogin();
         if (isPlatformCustomer) {
             SLog.info("onSupportVisible");
