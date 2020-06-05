@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.StoreSortCriteriaAdapter;
 import com.ftofs.twant.adapter.ViewGroupAdapter;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.OrderState;
 import com.ftofs.twant.seller.entity.SellerOrderItem;
 import com.ftofs.twant.seller.entity.SellerOrderSkuItem;
@@ -57,8 +58,17 @@ public class SellerOrderAdapter extends BaseQuickAdapter<SellerOrderItem, BaseVi
             .setText(R.id.tv_amount, StringUtil.formatPrice(context, item.ordersAmount, 0))
             .setText(R.id.tv_freight_amount, StringUtil.formatPrice(context, item.freightAmount, 0));
 
-        // 隱藏【確認退款】按鈕
-        helper.setGone(R.id.btn_refund, false);
-        helper.setGone(R.id.btn_ship, item.ordersState == OrderState.TO_BE_SEND);
+
+
+
+        helper.setGone(R.id.btn_refund, false)
+            .setGone(R.id.btn_ship, false);
+        if (item.showRefundWaiting == Constant.TRUE_INT) { // 顯示【訂單退款】按鈕  ，點擊跳到退款/退貨詳情
+            helper.setGone(R.id.btn_refund, true);
+        } else if (item.showMemberTake == Constant.TRUE_INT) { // 顯示【待提貨】,該按鈕沒有操作事件
+
+        } else if (item.showStoreSend == Constant.TRUE_INT) { // 顯示【訂單發貨】按鈕，點擊發貨
+            helper.setGone(R.id.btn_ship, true);
+        }
     }
 }
