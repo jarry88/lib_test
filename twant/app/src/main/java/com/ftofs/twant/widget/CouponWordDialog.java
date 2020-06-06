@@ -54,6 +54,8 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
 
         findViewById(R.id.btn_receive).setOnClickListener(this);
         findViewById(R.id.btn_ok).setOnClickListener(this);
+
+        tvCouponName = findViewById(R.id.tv_coupon_name);
     }
 
     public void setData(String couponWord, EasyJSONObject extraData) {

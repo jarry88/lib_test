@@ -1,11 +1,17 @@
 package com.ftofs.twant.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +27,13 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.entity.GoodsPair;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ApiUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SpecSelectPopup;
+import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
@@ -54,6 +64,34 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
     boolean hasMore;
 
     EditText etKeyword;
+    View btnClearKeyWord;
+
+    TextView tvTextGeneral;
+    TextView tvTextSale;
+    TextView tvTextNewest;
+    TextView tvTextPrice;
+
+    ImageView iconPriceOrder;
+
+    int twBlack;
+    int twBlue;
+
+    public static final int SORT_DEFAULT = 0;
+    public static final int SORT_PRICE_DESC = 1;
+    public static final int SORT_PRICE_ASC = 2;
+    public static final int SORT_SALE_DESC = 3;
+    public static final int SORT_NEW_DESC = 4;
+
+    private int sortCriteriaIndex = SORT_DEFAULT;
+
+    // 排序標準
+    private String[] sortCriteriaArr = new String[] {
+            "default_desc", // 默認
+            "price_desc",   // 價格降序
+            "price_asc",    // 價格升序
+            "sale_desc",    // 销量降序
+            "new_desc",     // 上新時間降序
+    };
 
     public static ShopSearchResultFragment newInstance(int storeId, String keyword) {
         Bundle args = new Bundle();
@@ -80,17 +118,120 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
 
         Util.setOnClickListener(view, R.id.btn_back, this);
 
+        twBlack = getResources().getColor(R.color.tw_black, null);
+        twBlue = getResources().getColor(R.color.tw_blue, null);
+
         rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         shopGoodsGridAdapter = new ShopGoodsGridAdapter(_mActivity, goodsPairList);
+        shopGoodsGridAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                GoodsPair goodsPair = goodsPairList.get(position);
+                // padding忽略點擊
+                if (goodsPair.getItemType() == Constant.ITEM_TYPE_LOAD_END_HINT) {
+                    ApiUtil.addPost(_mActivity,false);
+                    return;
+                }
+
+                Goods goods;
+                int commonId = -1;
+                int id = view.getId();
+                if (id == R.id.img_left_goods || id == R.id.btn_add_to_cart_left) {
+                    goods = goodsPair.leftGoods;
+                    commonId = goods.id;
+                } else if (id == R.id.img_right_goods || id == R.id.btn_add_to_cart_right) {
+                    goods = goodsPair.rightGoods;
+                    commonId = goods.id;
+                }
+
+                int userId = User.getUserId();
+
+                if (id == R.id.btn_add_to_cart_left || id == R.id.btn_add_to_cart_right) {
+                    if (userId > 0) {
+                        showSpecSelectPopup(commonId);
+                    } else {
+                        Util.showLoginFragment();
+                    }
+                    return;
+                }
+                if (commonId != -1) {
+                    Util.startFragment(GoodsDetailFragment.newInstance(commonId, 0));
+                }
+            }
+        });
         shopGoodsGridAdapter.setEnableLoadMore(true);
         shopGoodsGridAdapter.setOnLoadMoreListener(this, rvList);
         rvList.setAdapter(shopGoodsGridAdapter);
 
-        etKeyword = view.findViewById(R.id.et_keyword);
+
+        btnClearKeyWord = view.findViewById(R.id.btn_clear_all);
         if (!StringUtil.isEmpty(keyword)) {
             etKeyword.setText(keyword);
+            btnClearKeyWord.setVisibility(View.VISIBLE);
+        } else {
+            btnClearKeyWord.setVisibility(View.GONE);
         }
+        btnClearKeyWord.setOnClickListener(this);
+
+        etKeyword = view.findViewById(R.id.et_keyword);
+        etKeyword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    btnClearKeyWord.setVisibility(View.VISIBLE);
+                } else {
+                    btnClearKeyWord.setVisibility(View.GONE);
+                }
+            }
+        });
+        etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String text = v.getText().toString().trim();
+                    /*
+                    if (StringUtil.isEmpty(text)) {
+                        ToastUtil.error(_mActivity, getString(R.string.input_search_keyword_hint));
+                        return true;
+                    }
+                     */
+
+                    keyword = text;
+
+                    reloadData();
+                    hideSoftInput();
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        tvTextGeneral = view.findViewById(R.id.tv_text_general);
+        tvTextSale = view.findViewById(R.id.tv_text_sale);
+        tvTextNewest = view.findViewById(R.id.tv_text_newest);
+        tvTextPrice = view.findViewById(R.id.tv_text_price);
+
+        iconPriceOrder = view.findViewById(R.id.icon_price_order);
+
+
+        view.findViewById(R.id.btn_sort_goods_general).setOnClickListener(this);
+        view.findViewById(R.id.btn_sort_goods_sale).setOnClickListener(this);
+        view.findViewById(R.id.btn_sort_newest_goods).setOnClickListener(this);
+        view.findViewById(R.id.btn_sort_goods_price).setOnClickListener(this);
+
+        updateFilterView();
 
         loadStoreGoods(currPage + 1);
     }
@@ -108,6 +249,10 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
 
             if (!StringUtil.isEmpty(keyword)) {
                 params.set("keyword", keyword);
+            }
+
+            if (sortCriteriaIndex != SORT_DEFAULT) { // 如果不是默認排序，則加上排序條件
+                params.set("sort", sortCriteriaArr[sortCriteriaIndex]);
             }
 
             final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
@@ -189,6 +334,14 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
         }
     }
 
+    private void showSpecSelectPopup(int commonId) {
+        new XPopup.Builder(_mActivity)
+                // 如果不加这个，评论弹窗会移动到软键盘上面
+                .moveUpToKeyboard(false)
+                .asCustom(new SpecSelectPopup(_mActivity, Constant.ACTION_ADD_TO_CART, commonId, null, null, null, 1, null, null, 0,2, null))
+                .show();
+    }
+
     /**
      * 上滑加載更多
      */
@@ -208,7 +361,70 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
         int id = v.getId();
         if (id == R.id.btn_back) {
             hideSoftInputPop();
+        } else if (id == R.id.btn_clear_all) {
+            keyword = "";
+            btnClearKeyWord.setVisibility(View.GONE);
+            etKeyword.setText(keyword);
+        } else if (id == R.id.btn_sort_goods_general) {
+            if (sortCriteriaIndex == SORT_DEFAULT) {
+                return;
+            }
+            sortCriteriaIndex = SORT_DEFAULT;
+            reloadData();
+            updateFilterView();
+        } else if (id == R.id.btn_sort_goods_sale) {
+            if (sortCriteriaIndex == SORT_SALE_DESC) {
+                return;
+            }
+            sortCriteriaIndex = SORT_SALE_DESC;
+            reloadData();
+            updateFilterView();
+        } else if (id == R.id.btn_sort_newest_goods) {
+            if (sortCriteriaIndex == SORT_NEW_DESC) {
+                return;
+            }
+            sortCriteriaIndex = SORT_NEW_DESC;
+            reloadData();
+            updateFilterView();
+        } else if (id == R.id.btn_sort_goods_price) {
+            if (sortCriteriaIndex == SORT_PRICE_ASC) {
+                sortCriteriaIndex = SORT_PRICE_DESC;
+            } else {
+                sortCriteriaIndex = SORT_PRICE_ASC;
+            }
+            reloadData();
+            updateFilterView();
         }
+    }
+
+    private void updateFilterView() {
+        tvTextGeneral.setTextColor(twBlack);
+        tvTextSale.setTextColor(twBlack);
+        tvTextNewest.setTextColor(twBlack);
+        tvTextPrice.setTextColor(twBlack);
+
+        iconPriceOrder.setVisibility(View.GONE);
+
+        if (sortCriteriaIndex == SORT_DEFAULT) {
+            tvTextGeneral.setTextColor(twBlue);
+        } else if (sortCriteriaIndex == SORT_SALE_DESC) {
+            tvTextSale.setTextColor(twBlue);
+        } else if (sortCriteriaIndex == SORT_NEW_DESC) {
+            tvTextNewest.setTextColor(twBlue);
+        } else if (sortCriteriaIndex == SORT_PRICE_ASC) {
+            tvTextPrice.setTextColor(twBlue);
+            iconPriceOrder.setImageResource(R.drawable.icon_blue_unfold_good_filter);
+            iconPriceOrder.setVisibility(View.VISIBLE);
+        } else if (sortCriteriaIndex == SORT_PRICE_DESC) {
+            tvTextPrice.setTextColor(twBlue);
+            iconPriceOrder.setImageResource(R.drawable.icon_unfold_good_filter);
+            iconPriceOrder.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void reloadData() {
+        currPage = 0;
+        loadStoreGoods(currPage + 1);
     }
 
     @Override
