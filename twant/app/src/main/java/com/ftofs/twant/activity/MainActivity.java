@@ -1143,7 +1143,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     // 获取复制、剪切的文本内容
                     CharSequence content =
                             mClipboardManager.getPrimaryClip().getItemAt(0).getText();
-                    SLog.info("复制、剪切的内容为：" + content);
+                    SLog.info("复制、剪切的内容为[%s]", content);
 
                     String word = StringUtil.getCouponWord(content.toString());
 
