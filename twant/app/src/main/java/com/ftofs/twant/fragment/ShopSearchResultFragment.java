@@ -116,6 +116,7 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        etKeyword = view.findViewById(R.id.et_keyword);
         Util.setOnClickListener(view, R.id.btn_back, this);
 
         twBlack = getResources().getColor(R.color.tw_black, null);
@@ -174,7 +175,6 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
         }
         btnClearKeyWord.setOnClickListener(this);
 
-        etKeyword = view.findViewById(R.id.et_keyword);
         etKeyword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -284,6 +284,9 @@ public class ShopSearchResultFragment extends BaseFragment implements View.OnCli
                             shopGoodsGridAdapter.setEnableLoadMore(false);
                         }
 
+                        if (page == 1) {
+                            goodsPairList.clear();
+                        }
                         EasyJSONArray goodsArray = responseObj.getSafeArray("datas.goodsCommonList");
                         for (Object object : goodsArray) {
                             EasyJSONObject goodsObject = (EasyJSONObject) object;

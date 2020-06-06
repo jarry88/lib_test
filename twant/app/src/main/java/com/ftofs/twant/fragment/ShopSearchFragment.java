@@ -170,7 +170,8 @@ public class ShopSearchFragment extends BaseFragment implements View.OnClickList
             return;
         }
         hideSoftInput();
-        Util.startFragment(ShopCommodityFragment.newInstance(true, EasyJSONObject.generate("storeId", storeId, "keyword", keyword).toString()));
+        // Util.startFragment(ShopCommodityFragment.newInstance(true, EasyJSONObject.generate("storeId", storeId, "keyword", keyword).toString()));
+        Util.startFragment(ShopSearchResultFragment.newInstance(storeId, keyword));
     }
 
     /**
