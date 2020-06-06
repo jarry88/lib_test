@@ -3,9 +3,14 @@ package com.ftofs.twant.orm;
 import androidx.annotation.NonNull;
 
 import com.ftofs.twant.entity.GoodsInfo;
+import com.ftofs.twant.fragment.MessageFragment;
+import com.ftofs.twant.util.ChatUtil;
+import com.ftofs.twant.util.StringUtil;
 
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
+
+import cn.snailpad.easyjson.EasyJSONObject;
 
 /**
  * 好友資料(包括普通城友和商店客服)
@@ -92,10 +97,49 @@ public class FriendInfo extends LitePalSupport {
         return friendInfo;
     }
 
+    public static FriendInfo parse(EasyJSONObject conversation) throws Exception{
+        FriendInfo friendInfo = new FriendInfo();
+        friendInfo.memberName = conversation.getSafeString("memberName");
+        friendInfo.nickname= conversation.getSafeString("nickName");
+        if (StringUtil.isEmpty(friendInfo.nickname)) {
+            return null;
+        }
+        friendInfo.avatarUrl = conversation.getSafeString("avatar");
+        friendInfo.storeAvatarUrl = conversation.getSafeString("storeAvatar");
+        friendInfo.storeName = conversation.getSafeString("storeName");
+
+        friendInfo.role = conversation.getInt("role");
+        friendInfo.storeId = conversation.getInt("storeId");
+        if (friendInfo.storeId == MessageFragment.PLATFORM_CUSTOM_STORE_ID) {
+            friendInfo.role = ChatUtil.ROLE_CS_PLATFORM;
+        }
+        return friendInfo;
+    }
+
     @NonNull
     @Override
     public String toString() {
-        return String.format("memberName[%s], nickname[%s], avatarUrl[%s], role[%s]",
-                memberName, nickname, avatarUrl, role);
+        return String.format("memberName[%s], nickname[%s],storeName[%s] avatarUrl[%s],storeAvatarUrl[%s], role[%s]",
+                memberName, nickname, storeName,avatarUrl,storeAvatarUrl, role);
+    }
+
+    public String getAvatar() {
+        return role==0||role==3?avatarUrl: storeAvatarUrl;
+    }
+
+    public String getName() {
+        switch (role) {
+            case 0:
+                return nickname;
+            case 2: case 1:
+                if (storeName == null) {
+                    return nickname;
+                }
+                return storeName + " " + nickname;
+            case 3:
+                return nickname;
+            default:
+                return nickname;
+        }
     }
 }
