@@ -415,31 +415,41 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
      * 更新選中的規格列表的顯示
      */
     private void updateSelectedSpecView() {
+        // 先清空所有子View
         llSelectedSpecContainer.removeAllViews();
 
 
         for (SellerSpecMapItem sellerSpecMapItem : sellerSelectedSpecList) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("【").append(sellerSpecMapItem.specName).append("】");
-            for (SellerSpecItem sellerSpecItem : sellerSpecMapItem.sellerSpecItemList) {
-                sb.append("    ");
-                sb.append(sellerSpecItem.name);
-            }
+            ViewGroup selectedSpecItemView = (ViewGroup) LayoutInflater.from(_mActivity)
+                    .inflate(R.layout.seller_selected_spec_value_desc, llSelectedSpecContainer, false);
 
             TextView textView = new TextView(_mActivity);
-            textView.setText(sb.toString());
-            SLog.info("sb[%s]", sb.toString());
+            textView.setTextSize(13);
+            textView.setText("【" + sellerSpecMapItem.specName + "】   ");
+            selectedSpecItemView.addView(textView, 0);
+
+
+            for (SellerSpecItem sellerSpecItem : sellerSpecMapItem.sellerSpecItemList) {
+                textView = new TextView(_mActivity);
+                textView.setTextSize(13);
+                textView.setText(sellerSpecItem.name + "   ");
+                selectedSpecItemView.addView(textView, 1);
+            }
+
+            TextView btnEdit = selectedSpecItemView.findViewById(R.id.btn_edit);
+            btnEdit.setTag(sellerSpecMapItem.specId);
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int specId = (int) v.getTag();
+                    SLog.info("specId[%d]", specId);
+                }
+            });
 
             LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.MarginLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.topMargin = Util.dip2px(_mActivity, 8);
-            llSelectedSpecContainer.addView(textView, layoutParams);
-
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+            llSelectedSpecContainer.addView(selectedSpecItemView, layoutParams);
         }
     }
 
