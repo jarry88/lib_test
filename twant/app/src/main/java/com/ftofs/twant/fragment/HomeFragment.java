@@ -17,6 +17,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
@@ -332,7 +333,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            // Util.startFragment(AddGoodsFragment.newInstance());
+            Config.DEVELOPER_MODE = true;
+            Util.startFragment(AddGoodsFragment.newInstance());
 //            HwLoadingPopup loadingPopup = (HwLoadingPopup) new XPopup.Builder(_mActivity)
 //                    .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
 //                    .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
@@ -349,7 +351,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //                    .moveUpToKeyboard(false)
 //                    .asCustom(new ReceiveWordCouponResultPopup(_mActivity, ReceiveWordCouponResultPopup.RESULT_RUN_OUT, EasyJSONObject.generate()))
 //                    .show();
-            Util.startFragment(ShopSearchResultFragment.newInstance(296, null));
+            // Util.startFragment(ShopSearchResultFragment.newInstance(296, null));
         }
     }
 

@@ -113,6 +113,10 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     // 規格值Id的字符串拼接(例5,12,8)的列表
     List<String> specValueIdStringList = new ArrayList<>();
 
+    // 有選顏色時的圖片列表Map
+
+    // 沒選顏色時的圖片列表Map
+
     // SpecId 與 SpecName的映射
     Map<Integer, String> specMap = new HashMap<>();
     // SpecValueId 與 SpecValueName的映射
@@ -159,7 +163,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
      */
     public void setEditorResult(Map<String, SellerSpecPermutation> specValueIdStringMap) {
         this.specValueIdStringMap = specValueIdStringMap;
-        SLog.info("specValueIdStringMap[%s]", specValueIdStringMap);
+        SLog.info("specValueIdStringMap[%s]", Util.specValueIdStringMapToJSONString(specValueIdStringMap));
     }
 
     @OnClick(R.id.btn_publish)
@@ -521,6 +525,9 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadGoodsCountry(View view) {
+        if (Config.DEVELOPER_MODE) {
+            return;
+        }
         EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
          SLog.info("params[%s]", params);
          Api.getUI(Api.PATH_SELLER_QUERY_COUNTRY_ALL, params, new UICallback() {
@@ -563,14 +570,19 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     private void loadDate() {
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
-        SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_SELLER_GOODS_PUBLISH_PAGE, params, new UICallback() {
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE;
+        if (Config.DEVELOPER_MODE) {
+            url = "https://test.snailpad.cn/tmp/3.json";
+        }
+
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
-            @RequiresApi(api = Build.VERSION_CODES.N)
+
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
@@ -590,7 +602,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     private void updateView(EasyJSONObject data) throws Exception {
         allowTariff = data.getInt("allowTariff");//1是0否允許發佈跨城購商品
         specMax = data.getInt("specMax");//允許添加的最大規格數量
@@ -728,7 +740,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     private void updatePrimaryView(EasyJSONObject data) throws Exception {
         EasyJSONArray storeLabelList = data.getArray("storeLabelList");//店内分類列表
         labelList = new ArrayList<>();
@@ -755,7 +767,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_primary_next:
                 if (Config.DEVELOPER_MODE) {
-                    // vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
+                    vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
                 }
                 if (!savePrimaryInfo()) {
                     break;
@@ -1371,7 +1383,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             specValueIdStringList.add(specValueIdString);
 
             SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIdString);
-            if (permutation == null) {
+            if (permutation == null) {  // 如果不在Map裏面，則新建一個
                 permutation = new SellerSpecPermutation();
 
                 permutation.specValueIdString = specValueIdString;

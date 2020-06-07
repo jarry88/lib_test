@@ -77,6 +77,7 @@ public class SellerSkuGoodsListFragment extends BaseFragment implements SimpleCa
         try {
             if (data instanceof CustomActionData) {
                 CustomActionData customActionData = (CustomActionData) data;
+                // 編輯彈窗保存時調用
                 if (CustomAction.CUSTOM_ACTION_SELLER_EDIT_SKU_INFO.equals(customActionData.action)) {
                     EasyJSONObject dataObj = (EasyJSONObject) customActionData.data;
 

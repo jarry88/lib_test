@@ -165,6 +165,10 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         addGoodsFragment.setEditorResult(specValueIdStringMap);
         setFragmentResult(RESULT_OK, bundle);
 
+        if (addGoodsFragment != null) {
+            addGoodsFragment.setEditorResult(specValueIdStringMap);
+        }
+
         hideSoftInputPop();
     }
 

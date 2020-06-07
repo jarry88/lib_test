@@ -1384,7 +1384,7 @@ public class Util {
     }
 
 
-    public String specValueIdStringMapToJSONString(Map<String, SellerSpecPermutation> specValueIdStringMap) {
+    public static String specValueIdStringMapToJSONString(Map<String, SellerSpecPermutation> specValueIdStringMap) {
         try {
             EasyJSONObject result = EasyJSONObject.generate();
 
