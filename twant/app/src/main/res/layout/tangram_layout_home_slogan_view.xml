@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="26dp"
-        android:layout_marginTop="15dp"
         android:background="@color/tw_blue">
         <View
             android:id="@+id/vw_slogan_highlighter"
