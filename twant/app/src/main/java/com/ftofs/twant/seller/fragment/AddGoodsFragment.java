@@ -105,7 +105,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     // 未選中的規格組Id與規格組信息的映射關係
     Map<Integer, SellerSpecMapItem> sellerSpecMap = new HashMap<>();
 
-    // 已選中的規格組Id與規格組信息的映射關係(因為第1個為主規格，所以要用List)
+    // 已選中的規格組Id與規格組信息的映射關係
     List<SellerSpecMapItem> sellerSelectedSpecList = new ArrayList<>();
 
     // 規格值Id的字符串拼接(例5,12,8)與SKU信息的映射關係
@@ -411,6 +411,23 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         return view;
     }
 
+
+    /**
+     * 根據規格組Id，獲取規格組信息
+     * @param specId
+     * @return
+     */
+    private SellerSpecMapItem getSelectedSpecMapItem(int specId) {
+        for (int i = 0; i < sellerSelectedSpecList.size(); i++) {
+            SellerSpecMapItem item = sellerSelectedSpecList.get(i);
+
+            if (specId == item.specId) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     /**
      * 更新選中的規格列表的顯示
      */
@@ -444,6 +461,19 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 public void onClick(View v) {
                     int specId = (int) v.getTag();
                     SLog.info("specId[%d]", specId);
+
+
+                    SellerSpecMapItem item = sellerSpecMap.get(specId);
+                    if (item == null) {
+                        return;
+                    }
+
+
+                    new XPopup.Builder(_mActivity)
+                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(new SellerSelectSpecPopup(_mActivity, Constant.ACTION_EDIT, specId, item.sellerSpecItemList, null, AddGoodsFragment.this))
+                            .show();
                 }
             });
 
@@ -897,10 +927,16 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     sellerSpecValueMap.put(entry.getKey(), entry.getValue().sellerSpecItemList);
                 }
 
+
+                if (sellerSpecItemList.size() < 1) {
+                    ToastUtil.error(_mActivity, "已添加所有的規格");
+                    return;
+                }
+
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new SellerSelectSpecPopup(_mActivity, sellerSpecItemList, sellerSpecValueMap, this))
+                        .asCustom(new SellerSelectSpecPopup(_mActivity, Constant.ACTION_ADD, 0, sellerSpecItemList, sellerSpecValueMap, this))
                         .show();
                 break;
             default:
@@ -1224,11 +1260,37 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             if (type == PopupType.SELLER_SELECT_SPEC) {
                 EasyJSONObject dataObj = (EasyJSONObject) extra;
                 int specId = dataObj.getInt("specId");
+                int action = dataObj.getInt("action");
                 EasyJSONArray specValueIdList = dataObj.getArray("specValueIdList");
 
-                // 將規格數據從未選中的挪到選中的
-                sellerSpecMap.remove(specId);
-                SellerSpecMapItem item = new SellerSpecMapItem();
+                // 设置选中状态
+                SellerSpecMapItem selectedItem = sellerSpecMap.get(specId);
+                if (selectedItem == null) {
+                    return;
+                }
+
+                selectedItem.selected = true;
+                for (SellerSpecItem elem : selectedItem.sellerSpecItemList) {
+                    elem.selected = false;
+                }
+
+                SellerSpecMapItem item = null;
+                if (action == Constant.ACTION_ADD) {
+                    item = new SellerSpecMapItem();
+                } else {
+                    for (SellerSpecMapItem elem : sellerSelectedSpecList) {
+                        if (elem.specId == specId) {
+                            item = elem;
+                            item.sellerSpecItemList.clear();
+                            break;
+                        }
+                    }
+                }
+
+                if (item == null) {
+                    return;
+                }
+
                 item.specId = specId;
                 item.specName = specMap.get(specId);
                 for (Object object : specValueIdList) {
@@ -1238,9 +1300,18 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     sellerSpecItem.id = specValueId;
                     sellerSpecItem.name = specValueMap.get(specValueId);
                     item.sellerSpecItemList.add(sellerSpecItem);
+
+                    for (SellerSpecItem elem : selectedItem.sellerSpecItemList) {
+                        if (elem.id == specValueId) {
+                            elem.selected = true;
+                            break;
+                        }
+                    }
                 }
 
-                sellerSelectedSpecList.add(item);
+                if (action == Constant.ACTION_ADD) {
+                    sellerSelectedSpecList.add(item);
+                }
 
                 updateSelectedSpecView();
 
