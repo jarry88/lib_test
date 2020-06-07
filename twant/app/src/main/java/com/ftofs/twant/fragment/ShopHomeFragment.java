@@ -287,7 +287,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
             int position = msg.arg2;
             SLog.info("currGalleryPosition[%s]",currGalleryPosition);
             pageIndicatorView.setSelection(currGalleryPosition);
-            rvGalleryImageList.smoothScrollToPosition(position+1);
+            rvGalleryImageList.scrollToPosition(currGalleryPosition+1);
         }
     }
 
@@ -1272,7 +1272,8 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
                         currGalleryPosition = ((LinearLayoutManager) rvGalleryImageList.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
                         SLog.info("currPosition[%d],newState[%d]", currGalleryPosition,newState);
                         int position = currGalleryPosition % currGalleryImageList.size();
-                        pageIndicatorView.setSelection(position);
+//                        pageIndicatorView.setSelection(position);
+                        rvGalleryImageList.smoothScrollToPosition(position+1);
                     }
                 }catch (Exception e) {
                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

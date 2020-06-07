@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.vlayout.Range;
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
+import com.donkingliang.imageselector.utils.ImageSelector;
 import com.facebook.CallbackManager;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -657,13 +658,31 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         // 切換到前臺時，檢測剪貼板中是否有優惠券
         CharSequence clipboardContent = ClipboardUtils.getText(this);
+        SLog.info("clipboardContent[%s]", clipboardContent);
         if (clipboardContent != null) {
             String word = StringUtil.getCouponWord(clipboardContent.toString());
-
+            SLog.info("clipboardContent::word[%s]", word);
             if (word != null) {
                 parseCouponWord(word);
             }
         }
+
+
+        PermissionUtil.actionWithPermission(this, new String[] {Permission.WRITE_EXTERNAL_STORAGE,
+                Permission.READ_EXTERNAL_STORAGE}, "使用想要城Takewant需要授予", new CommonCallback() {
+
+            @Override
+            public String onSuccess(@Nullable String data) {
+                ImageSelector.preload(MainActivity.this);
+                return null;
+            }
+
+            @Override
+            public String onFailure(@Nullable String data) {
+
+                return null;
+            }
+        });
     }
 
     private void doLaunchApp(String launchAppParams) {
@@ -1125,7 +1144,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     // 获取复制、剪切的文本内容
                     CharSequence content =
                             mClipboardManager.getPrimaryClip().getItemAt(0).getText();
-                    SLog.info("复制、剪切的内容为：" + content);
+                    SLog.info("复制、剪切的内容为[%s]", content);
 
                     String word = StringUtil.getCouponWord(content.toString());
 
@@ -1143,9 +1162,15 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             return;
         }
 
+        String url = Api.PATH_PARSE_COUPON_WORD;
+        if (true) {
+            // url = "https://test.snailpad.cn/tmp/2.json";
+        }
+
         EasyJSONObject params = EasyJSONObject.generate("command", word);
-        SLog.info("params%s",params);
-        Api.postUI(Api.PATH_PARSE_COUPON_WORD, params, new UICallback() {
+        SLog.info("url[%s], params[%s]",url, params);
+
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(MainActivity.this, e);
@@ -1154,7 +1179,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 try{
-                    SLog.info("responseStr",responseStr);
+                    SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
                         return;
@@ -1187,7 +1212,12 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         if (couponWordDialog.isShow()) {
             return;
         }
-
-        couponWordDialog.setData(word, extraData);
+        couponWordDialog.show();
+        couponWordDialog.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                couponWordDialog.setData(word, extraData);
+            }
+        }, 500);
     }
 }

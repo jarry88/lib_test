@@ -30,6 +30,7 @@
                     android:textColor="@color/tw_red"
                     android:text="*"/>
                 <TextView
+                    android:textColor="@color/tw_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="店内分類：" />
@@ -68,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="top">
                 <TextView
+                    android:textColor="@color/tw_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="介紹説明鏈接："

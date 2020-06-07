@@ -89,6 +89,7 @@ public class SellerGoodsListPageFragment extends BaseFragment implements View.On
                     switchSellerGoodsStatus(item.commonId);
                 } else if (id == R.id.btn_view_all_sku) {
                     SLog.info("SKU商品列表");
+                    Util.startFragment(SellerGoodsSkuListFragment.newInstance(item.commonId));
                 } else if (id == R.id.btn_more) {
                     SLog.info("查看更多");
                     new XPopup.Builder(_mActivity)

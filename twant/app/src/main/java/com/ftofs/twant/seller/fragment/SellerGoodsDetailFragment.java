@@ -44,6 +44,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     TextView tvGoodsVideoUrl;
     String goodsVideoUrl;
 
+    TextView btnViewGoodsDetail;
+    EasyJSONArray mobileBodyVoList = EasyJSONArray.generate();
+
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
         Bundle args = new Bundle();
 
@@ -68,6 +71,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         super.onViewCreated(view, savedInstanceState);
 
         Util.setOnClickListener(view, R.id.btn_back, this);
+
+        btnViewGoodsDetail = view.findViewById(R.id.btn_view_goods_detail);
+
         twBlack = _mActivity.getColor(R.color.tw_black);
         tvGoodsVideoUrl = view.findViewById(R.id.tv_goods_video_url);
 
@@ -132,6 +138,12 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_brand_location)).setText(goodsVo.getSafeString("goodsCountryName"));
                     ((TextView) contentView.findViewById(R.id.tv_unit)).setText(goodsVo.getSafeString("unitName"));
 
+                    double freightWeight = goodsVo.getDouble("freightWeight");
+                    double freightVolume = goodsVo.getDouble("freightVolume");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
+
+
                     LinearLayout llSpecContainer = contentView.findViewById(R.id.ll_spec_container);
                     EasyJSONArray specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
                     for (Object object : specJsonVoList) {
@@ -159,6 +171,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                         tvGoodsVideoUrl.setText(Html.fromHtml("<u>" + goodsVideoUrl + "</u>"));
                         tvGoodsVideoUrl.setOnClickListener(SellerGoodsDetailFragment.this);
                     }
+
+                    mobileBodyVoList = goodsVo.getArray("mobileBodyVoList");
+                    btnViewGoodsDetail.setOnClickListener(SellerGoodsDetailFragment.this);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -178,6 +193,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
             if (!StringUtil.isEmpty(videoId)) {
                 Util.playYoutubeVideo(_mActivity, videoId);
             }
+        } else if (id == R.id.btn_view_goods_detail) {
+            Util.startFragment(SellerGoodsDetailViewerFragment.newInstance(mobileBodyVoList));
         }
     }
 

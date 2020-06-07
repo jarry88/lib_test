@@ -409,6 +409,10 @@ public class SellerOrderShipFragment extends BaseFragment implements View.OnClic
                             PopupType.SELECT_SELLER_LOGISTICS_COMPANY, itemList, shipCompanyIndex, this))
                     .show();
         } else if (id == R.id.btn_edit_receiver_info) {
+            if (addrItem == null) {
+                ToastUtil.error(_mActivity, "地址信息為空");
+                return;
+            }
             startForResult(SellerEditReceiverInfoFragment.newInstance(Constant.ACTION_EDIT, addrItem), RequestCode.SELLER_EDIT_RECEIVER_INFO.ordinal());
         }
     }

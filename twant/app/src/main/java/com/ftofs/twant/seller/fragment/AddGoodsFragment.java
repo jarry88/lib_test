@@ -33,6 +33,7 @@ import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
@@ -41,6 +42,7 @@ import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.seller.widget.NoScrollViewPager;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
+import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -48,15 +50,19 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.FixedEditText;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,7 +100,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     List<ListPopupItem> spinnerLogoItems = new ArrayList<>();
 
     List<ListPopupItem> spinnerLogoCountryItems = new ArrayList<>();
-    private int brandId =-1;
+    private int brandId;
 
     // 未選中的規格組Id與規格組信息的映射關係
     Map<Integer, SellerSpecMapItem> sellerSpecMap = new HashMap<>();
@@ -139,6 +145,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private int formatTop=-1;
 
     TextView etGoodsVideoUrl;
+    private List<Category> selectCategoryList;
+    private EasyJSONArray storeLabelIdList;
 
     public static AddGoodsFragment newInstance() {
 
@@ -157,6 +165,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     @OnClick(R.id.btn_publish)
     void publish() {
         hideAddGuide();
+//        testJson();
+//        savePublishGoodsInfo();
     }
 
     @OnClick(R.id.btn_detail_save)
@@ -171,7 +181,31 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     NoScrollViewPager vpAddGood;
     @OnClick(R.id.btn_back)
     void back() {
-        hideSoftInputPop();
+        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(_mActivity, "確定要離開商品發佈頁嗎?", null, "離開頁面","繼續編輯",new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+                hideSoftInputPop();
+
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        }))
+                .show();
     }
 //    @OnClick(R.id.et_add_good_name)
 //    void showKeybord1() {
@@ -215,6 +249,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initView() {
+        storeLabelIdList = new EasyJSONArray();
         publishGoodsInfo = new EasyJSONObject();
         sbNotice.setButtonCheckedBlue();
         sbNotice.setChecked(Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false));
@@ -457,6 +492,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+        sbRetail.performClick();
         return view;
     }
 
@@ -562,7 +598,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         EasyJSONArray formatBottomList = data.getArray("formatBottomList");//底部關聯版式列表
         EasyJSONArray formatTopList = data.getArray("formatTopList");//頂部關聯版式列表
         EasyJSONArray countryList = data.getArray("countyrList");//品牌所在地列表
-        EasyJSONArray freightTemplateList = data.getArray("freightTemplateList");//物流模板列表
         EasyJSONArray specListArr = data.getArray("specList");//規格列表
 
         // 處理規格列表
@@ -614,6 +649,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 freightList.add(new ListPopupItem(freightId, title, title));
             }
         }
+
     }
 
     private void updateBasicView(EasyJSONObject data) throws Exception{
@@ -627,6 +663,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 item.data = item.title;
                 unitList.add(item);
             }
+            onSelected(PopupType.GOODS_UNITY,unityIndex,unitList.get(unityIndex));
         }
     }
 
@@ -640,6 +677,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             }
             TextView tvSelect=mViews.get(DETAIL_INDEX).findViewById(R.id.btn_select_store_category_id);
             tvSelect.setOnClickListener(v ->{
+                hideSoftInput();
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
                         new StoreLabelPopup(_mActivity, PopupType.STORE_CATEGORY, list, AddGoodsFragment.this)
                 ).show();
@@ -802,7 +840,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.tv_add_freight_rule:
-                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "物流規則", PopupType.GOODS_FREIGHT_RULE, spinnerLogoItems, freightRuleIndex, this)).show();
+                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "物流規則", PopupType.GOODS_FREIGHT_RULE, freightList, freightRuleIndex, this)).show();
                 break;
             case R.id.btn_freight_prev:
                 vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
@@ -959,8 +997,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return false;
         }
         try{
-            int[] list = {storeLabelId};
-            publishGoodsInfo.set("storeLabelIdList", list);
+            publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
             publishGoodsInfo.set("detailVideo", detailVideo);
             if (formatBottom >= 0) {
                 publishGoodsInfo.set("formatBottom", formatBottom);
@@ -1001,7 +1038,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         }
         EditText etW=view.findViewById(R.id.et_freight_weight);
         EditText etV=view.findViewById(R.id.et_freight_v);
-        double goodsFreight = Double.parseDouble(freightText);
         String freightWeightStr = etW.getText()==null?"":etW.getText().toString();
         String freightVolumeStr = etV.getText()==null?"":etV.getText().toString();
 
@@ -1009,6 +1045,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             if (freightTemplateId >= 0) {
                 publishGoodsInfo.set("freightTemplateId", freightTemplateId);
             } else {
+                double goodsFreight = Double.parseDouble(freightText);
                 publishGoodsInfo.set("goodsFreight", goodsFreight);
             }
             if (!StringUtil.isEmpty(freightWeightStr)) {
@@ -1037,7 +1074,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return false;
         }
         try{
-            publishGoodsInfo.set("unityName", unitName);
+            publishGoodsInfo.set("unitName", unitName);
             publishGoodsInfo.set("goodsModal", goodsModal);
         }catch (Exception e) {
            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1076,9 +1113,12 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             publishGoodsInfo.set("goodsName", goodsName);
             publishGoodsInfo.set("categoryId", categoryId);
             publishGoodsInfo.set("jingle", jingle);
-            if (brandId >= 0) {
-                publishGoodsInfo.set("brandId", brandId);
+            int i = 1;
+            for (Category category : selectCategoryList) {
+                String keyName = String.format("categoryId%d", i++);
+                publishGoodsInfo.set(keyName, category.getCategoryId());
             }
+                publishGoodsInfo.set("brandId", brandId);
             publishGoodsInfo.set("goodsCountry", goodsCountry);
             SLog.info("publishInfo [%s]",publishGoodsInfo.toString());
         } catch (Exception e) {
@@ -1094,15 +1134,45 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         savePublishGoodsInfo();
     }
 
+    private void testJson() {
+        String token = User.getToken();
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_SAVE + "?token=" + token;
+        String testJson = "";
+        testJson = AssetsUtil.loadText(_mActivity, "tangram/seller_order.json");
+        testJson = AssetsUtil.loadText(_mActivity, "tangram/test.json");
+        SLog.info("params[%s]",testJson);
+        Api.postJsonUi(url, testJson ,new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+                    ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+        try{
+        }catch (Exception e) {
+           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+    }
     private void savePublishGoodsInfo() {
         String token = User.getToken();
-        try{
-            publishGoodsInfo.set("token", token);
-        }catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
+//        token = "e6b1594f0ce04d7cbf01163121a44fcd";
         SLog.info("params[%s]",publishGoodsInfo.toString());
-          Api.postJsonUi(Api.PATH_SELLER_GOODS_PUBLISH_SAVE, publishGoodsInfo.toString(), new UICallback() {
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_SAVE + "?token=" + token;
+          Api.postJsonUi(url, publishGoodsInfo.toString() ,new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
                  ToastUtil.showNetworkError(_mActivity, e);
@@ -1117,6 +1187,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                          return;
                      }
                      ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+                     hideSoftInputPop();
                  } catch (Exception e) {
                      SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                  }
@@ -1153,7 +1224,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
                 generateSpecPermutation();
             } else if (type == PopupType.STORE_LABEL) {
-                List<Category> selectCategoryList = (List<Category>) extra;
+                selectCategoryList = (List<Category>) extra;
                 Category categoryLast = new Category();
                 StringBuilder selectCategoryName = new StringBuilder();
                 for (Category category : selectCategoryList) {
@@ -1169,6 +1240,11 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     } else if (vpAddGood.getCurrentItem() == DETAIL_INDEX) {
                         ((TextView) (mViews.get(DETAIL_INDEX).findViewById(R.id.tv_select_store_category))).setText(selectCategoryName.toString());
                         storeLabelId = categoryLast.getCategoryId();
+                        EasyJSONArray array = new EasyJSONArray();
+                        for (Category category : selectCategoryList) {
+                            array.append(category.getCategoryId());
+                        }
+                        storeLabelIdList = array;
                     }
                 }
 
@@ -1194,6 +1270,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             } else if (type == PopupType.GOODS_FREIGHT_RULE) {
                 TextView tvRule = mViews.get(FREIGHT_INDEX).findViewById(R.id.tv_add_freight_rule);
                 freightRuleIndex = id;
+                freightTemplateId = freightList.get(id).id;
                 tvRule.setText(extra.toString());
             } else if (type == PopupType.SELLER_FORMAT_TOP) {
                 TextView tvFormatTop = mViews.get(DETAIL_INDEX).findViewById(R.id.tv_format_top);
@@ -1221,7 +1298,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         TextView tvLogo = mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_add_good_logo);
         tvLogo.setText("");
         logoIndex = 0;
-        brandId = -1;
+        brandId = 0;
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "categoryId", categoryId);
         SLog.info("params[%s]", params);
         Api.getUI(Api.PATH_SELLER_QUERY_BIND_BRANDS, params, new UICallback() {
