@@ -332,4 +332,6 @@ public class Constant {
 
     public static final String WORD_COUPON_TYPE_STORE = "voucher";   // 店鋪口令優惠券
     public static final String WORD_COUPON_TYPE_PLATFORM = "coupon";  // 平臺口令優惠券
+
+    public static final int COLOR_SPEC_ID = 1;  // 【颜色】的规格组Id
 }

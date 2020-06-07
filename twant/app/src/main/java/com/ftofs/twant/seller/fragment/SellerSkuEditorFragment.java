@@ -18,6 +18,7 @@ import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
@@ -46,9 +47,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     AddGoodsFragment addGoodsFragment;
-    List<SellerSpecMapItem> sellerSelectedSpecList;
     List<String> specValueIdStringList;
     Map<String, SellerSpecPermutation> specValueIdStringMap;
+    SellerSpecMapItem colorSpecMapItem;
+    List<SellerGoodsPicVo> sellerGoodsPicVoList;
 
     List<SellerSpecPermutation> permutationList = new ArrayList<>();
 
@@ -65,15 +67,18 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
             AddGoodsFragment addGoodsFragment,
             List<String> specValueIdStringList,
             Map<String, SellerSpecPermutation> specValueIdStringMap,
-            List<SellerSpecMapItem> sellerSelectedSpecList) {
+            SellerSpecMapItem colorSpecMapItem,  // 颜色规格，如果没选颜色时，则为null
+            List<SellerGoodsPicVo> sellerGoodsPicVoList  // 对应的图片对象的列表
+            ) {
         Bundle args = new Bundle();
 
         SellerSkuEditorFragment fragment = new SellerSkuEditorFragment();
         fragment.setArguments(args);
         fragment.addGoodsFragment = addGoodsFragment;
-        fragment.sellerSelectedSpecList = sellerSelectedSpecList;
         fragment.specValueIdStringList = specValueIdStringList;
         fragment.specValueIdStringMap = specValueIdStringMap;
+        fragment.colorSpecMapItem = colorSpecMapItem;
+        fragment.sellerGoodsPicVoList = sellerGoodsPicVoList;
 
         return fragment;
     }
@@ -108,7 +113,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
 
         fragmentList.add(SellerSkuGoodsListFragment.newInstance(permutationList));
-        fragmentList.add(SellerSkuImageListFragment.newInstance(sellerSelectedSpecList.get(0).sellerSpecItemList, this));
+        fragmentList.add(SellerSkuImageListFragment.newInstance(colorSpecMapItem, sellerGoodsPicVoList, this));
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題

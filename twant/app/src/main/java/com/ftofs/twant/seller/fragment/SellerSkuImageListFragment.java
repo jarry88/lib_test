@@ -22,7 +22,9 @@ import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerSkuImageListAdapter;
+import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
+import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,19 +45,21 @@ public class SellerSkuImageListFragment extends BaseFragment {
     SellerSkuImageListAdapter[] adapters;
     List<List<String>> imageListList = new ArrayList<>();
 
+    SellerSpecMapItem colorSpecMapItem;
+    List<SellerGoodsPicVo> sellerGoodsPicVoList;
+
     int currIndex; // 當前添加圖片的Index
 
-    /**
-     * Constructor
-     * @param sellerSpecItemList  主規格列表
-     * @return
-     */
-    public static SellerSkuImageListFragment newInstance(List<SellerSpecItem> sellerSpecItemList, SimpleCallback simpleCallback) {
+
+    public static SellerSkuImageListFragment newInstance(SellerSpecMapItem colorSpecMapItem, // 颜色规格，如果没选颜色时，则为null
+                                                         List<SellerGoodsPicVo> sellerGoodsPicVoList, // 对应的图片对象的列表
+                                                         SimpleCallback simpleCallback) {
         Bundle args = new Bundle();
 
         SellerSkuImageListFragment fragment = new SellerSkuImageListFragment();
         fragment.setArguments(args);
-        fragment.sellerSpecItemList = sellerSpecItemList;
+        fragment.colorSpecMapItem = colorSpecMapItem;
+        fragment.sellerGoodsPicVoList = sellerGoodsPicVoList;
         fragment.simpleCallback = simpleCallback;
 
         return fragment;

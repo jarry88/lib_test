@@ -36,6 +36,7 @@ import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
@@ -113,15 +114,16 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     // 規格值Id的字符串拼接(例5,12,8)的列表
     List<String> specValueIdStringList = new ArrayList<>();
 
-    // 有選顏色時的圖片列表Map
+    // 有選顏色時的圖片列表
+    List<SellerGoodsPicVo> colorImageList = new ArrayList<>();
 
-    // 沒選顏色時的圖片列表Map
+    // 沒選顏色時的圖片列表
+    List<SellerGoodsPicVo> noColorImageList = new ArrayList<>();
 
     // SpecId 與 SpecName的映射
     Map<Integer, String> specMap = new HashMap<>();
     // SpecValueId 與 SpecValueName的映射
     Map<Integer, String> specValueMap = new HashMap<>();
-
 
     LinearLayout llSelectedSpecContainer;
 
@@ -411,22 +413,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         return view;
     }
 
-
-    /**
-     * 根據規格組Id，獲取規格組信息
-     * @param specId
-     * @return
-     */
-    private SellerSpecMapItem getSelectedSpecMapItem(int specId) {
-        for (int i = 0; i < sellerSelectedSpecList.size(); i++) {
-            SellerSpecMapItem item = sellerSelectedSpecList.get(i);
-
-            if (specId == item.specId) {
-                return item;
-            }
-        }
-        return null;
-    }
 
     /**
      * 更新選中的規格列表的顯示
@@ -869,7 +855,13 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     ToastUtil.error(_mActivity, "請先添加規格");
                     return;
                 }
-                startForResult(SellerSkuEditorFragment.newInstance(this, specValueIdStringList, specValueIdStringMap, sellerSelectedSpecList), RequestCode.SELLER_EDIT_SKU_INFO.ordinal());
+
+                // 查看是否有选【颜色】规格
+                SellerSpecMapItem colorSpecMapItem = sellerSpecMap.get(Constant.COLOR_SPEC_ID);
+                startForResult(SellerSkuEditorFragment.newInstance(this,
+                        specValueIdStringList,
+                        specValueIdStringMap, colorSpecMapItem,
+                        colorSpecMapItem == null ? noColorImageList : colorImageList), RequestCode.SELLER_EDIT_SKU_INFO.ordinal());
                 break;
             case R.id.btn_add_address:
                 ToastUtil.success(_mActivity, "添加商品描述");
