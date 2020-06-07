@@ -40,8 +40,24 @@ public class ReceiveWordCouponResultPopup extends CenterPopupView implements Vie
     public static final int RESULT_REMAINING = 3; // 還有剩餘的優惠券
     public static final int RESULT_HAS_RECEIVED = 4; // 已經領過了
 
+    private String[] resultDesc = new String[] {
+            "",
+            "領取成功",
+            "手慢啦\n" + "優惠券已經被領光",
+            "您還有優惠券沒有用完\n" + "使用後再來領取哦",
+            "您還有優惠券沒有用完\n" + "使用後再來領取哦",
+    };
+
+    private String[] buttonText = new String[] {
+            "",
+            "立即使用",
+            "我知道了",
+            "立即使用",
+            "我知道了",
+    };
+
     TextView tvMessage;
-    Button btnOk;
+    TextView btnOk;
 
     public ReceiveWordCouponResultPopup(@NonNull Context context, int result, EasyJSONObject data) {
         super(context);
@@ -66,22 +82,12 @@ public class ReceiveWordCouponResultPopup extends CenterPopupView implements Vie
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
-
-        findViewById(R.id.btn_close).setOnClickListener(this);
-
         tvMessage = findViewById(R.id.tv_message);
+        tvMessage.setText(resultDesc[result]);
+
         btnOk = findViewById(R.id.btn_ok);
+        btnOk.setText(buttonText[result]);
         btnOk.setOnClickListener(this);
-
-        if (result == RESULT_SUCCESS) {
-            btnOk.setVisibility(VISIBLE);
-
-            tvMessage.setText("領取成功");
-        } else {
-            btnOk.setVisibility(GONE);
-
-            tvMessage.setText("領取失敗");
-        }
     }
 
 
@@ -105,9 +111,7 @@ public class ReceiveWordCouponResultPopup extends CenterPopupView implements Vie
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btn_close) {
-            dismiss();
-        } else if (id == R.id.btn_ok) {
+        if (id == R.id.btn_ok) {
             if (result == RESULT_SUCCESS) {
                 try {
                     if (Constant.WORD_COUPON_TYPE_STORE.equals(activityType)) {
@@ -122,6 +126,7 @@ public class ReceiveWordCouponResultPopup extends CenterPopupView implements Vie
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
+            dismiss();
         }
     }
 }

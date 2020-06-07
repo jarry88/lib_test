@@ -34,6 +34,7 @@ import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
@@ -49,8 +50,10 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.FixedEditText;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
@@ -59,6 +62,7 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -163,7 +167,31 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     NoScrollViewPager vpAddGood;
     @OnClick(R.id.btn_back)
     void back() {
-        hideSoftInputPop();
+        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(_mActivity, "確定要離開商品發佈頁嗎?", null, "離開頁面","繼續編輯",new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+                hideSoftInputPop();
+
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        }))
+                .show();
     }
 //    @OnClick(R.id.et_add_good_name)
 //    void showKeybord1() {
@@ -450,6 +478,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+        sbRetail.performClick();
         return view;
     }
 
@@ -557,7 +586,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         EasyJSONArray formatBottomList = data.getArray("formatBottomList");//底部關聯版式列表
         EasyJSONArray formatTopList = data.getArray("formatTopList");//頂部關聯版式列表
         EasyJSONArray countryList = data.getArray("countyrList");//品牌所在地列表
-        EasyJSONArray freightTemplateList = data.getArray("freightTemplateList");//物流模板列表
         EasyJSONArray specListArr = data.getArray("specList");//規格列表
 
         // 處理規格列表
@@ -609,6 +637,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 freightList.add(new ListPopupItem(freightId, title, title));
             }
         }
+
     }
 
     private void updateBasicView(EasyJSONObject data) throws Exception{
@@ -622,6 +651,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 item.data = item.title;
                 unitList.add(item);
             }
+            onSelected(PopupType.GOODS_UNITY,unityIndex,unitList.get(unityIndex));
         }
     }
 
@@ -798,7 +828,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.tv_add_freight_rule:
-                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "物流規則", PopupType.GOODS_FREIGHT_RULE, spinnerLogoItems, freightRuleIndex, this)).show();
+                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "物流規則", PopupType.GOODS_FREIGHT_RULE, freightList, freightRuleIndex, this)).show();
                 break;
             case R.id.btn_freight_prev:
                 vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
@@ -996,7 +1026,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         }
         EditText etW=view.findViewById(R.id.et_freight_weight);
         EditText etV=view.findViewById(R.id.et_freight_v);
-        double goodsFreight = Double.parseDouble(freightText);
         String freightWeightStr = etW.getText()==null?"":etW.getText().toString();
         String freightVolumeStr = etV.getText()==null?"":etV.getText().toString();
 
@@ -1004,6 +1033,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             if (freightTemplateId >= 0) {
                 publishGoodsInfo.set("freightTemplateId", freightTemplateId);
             } else {
+                double goodsFreight = Double.parseDouble(freightText);
                 publishGoodsInfo.set("goodsFreight", goodsFreight);
             }
             if (!StringUtil.isEmpty(freightWeightStr)) {
@@ -1032,7 +1062,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return false;
         }
         try{
-            publishGoodsInfo.set("unityName", unitName);
+            publishGoodsInfo.set("unitName", unitName);
             publishGoodsInfo.set("goodsModal", goodsModal);
         }catch (Exception e) {
            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1145,6 +1175,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                          return;
                      }
                      ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+                     hideSoftInputPop();
                  } catch (Exception e) {
                      SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                  }
@@ -1225,6 +1256,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             } else if (type == PopupType.GOODS_FREIGHT_RULE) {
                 TextView tvRule = mViews.get(FREIGHT_INDEX).findViewById(R.id.tv_add_freight_rule);
                 freightRuleIndex = id;
+                freightTemplateId = freightList.get(id).id;
                 tvRule.setText(extra.toString());
             } else if (type == PopupType.SELLER_FORMAT_TOP) {
                 TextView tvFormatTop = mViews.get(DETAIL_INDEX).findViewById(R.id.tv_format_top);

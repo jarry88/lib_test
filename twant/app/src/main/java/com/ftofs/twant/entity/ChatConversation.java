@@ -24,4 +24,5 @@ public class ChatConversation {
     public boolean isDoNotDisturb;  // 消息防打擾
     public int unreadCount; // 未讀消息條數
     public boolean isPlatformCustomer; // 是否為置頂的平台客服對話總聊天入口
+
 }
