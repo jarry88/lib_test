@@ -6,7 +6,7 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="26dp"
         android:layout_marginTop="15dp"
         android:background="@color/tw_blue">
         <View
@@ -32,28 +32,29 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
                     <ImageView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_width="16dp"
                         android:src="@drawable/icon_slogan_real"
                         />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:orientation="vertical">
+                        android:layout_marginLeft="2dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
                             android:text="真實信息"
-                            android:textSize="14sp"
+                            android:textSize="11sp"
                             android:textColor="#FFF"
                             />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Real Info"
-                            android:textSize="10sp"
+                            android:layout_marginLeft="2dp"
+                            android:text="Real\nInfo"
+                            android:textSize="6sp"
                             android:textColor="#FFF"
                             />
                     </LinearLayout>
@@ -71,28 +72,29 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
                     <ImageView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_width="16dp"
                         android:src="@drawable/icon_slogan_best"
                         />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:orientation="vertical">
+                        android:layout_marginLeft="2dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
                             android:text="真實交易"
-                            android:textSize="14sp"
+                            android:textSize="11sp"
                             android:textColor="#FFF"
                             />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Real Trade"
-                            android:textSize="10sp"
+                            android:layout_marginLeft="2dp"
+                            android:text="Real\nTrade"
+                            android:textSize="6sp"
                             android:textColor="#FFF"
                             />
                     </LinearLayout>
@@ -111,29 +113,29 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
                     <ImageView
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                        android:layout_height="16sp"
+                        android:layout_width="16sp"
                         android:src="@drawable/icon_slogan_social"
                         />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:orientation="vertical">
+                        android:layout_marginLeft="2dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
                             android:text="真實社交"
-                            android:textSize="14sp"
+                            android:textSize="11sp"
                             android:textColor="#FFF"
                             />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Real Social"
-                            android:textSize="10sp"
+                            android:layout_marginLeft="2dp"
+                            android:text="Real\nSocial"
+                            android:textSize="6sp"
                             android:textColor="#FFF"
                             />
                     </LinearLayout>
