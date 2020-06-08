@@ -307,7 +307,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             } else if (extraDataObj.exists("storeDiscounts_id")) { // 店鋪優惠列表
                 String val = extraDataObj.getSafeString("storeDiscounts_id");
                 int storeId = Integer.parseInt(val);
-                start(ShopMainFragment.newInstance(storeId));
+                start(ShopMainFragment.newInstance(storeId, ShopMainFragment.ACTIVITY_FRAGMENT));
             } else if (extraDataObj.exists("mineDiscounts")) { // 個人專頁優惠券頁
                 if (User.isLogin()) {
                     start(CouponFragment.newInstance());

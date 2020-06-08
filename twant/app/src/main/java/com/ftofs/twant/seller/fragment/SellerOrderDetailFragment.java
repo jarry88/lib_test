@@ -208,7 +208,15 @@ public class SellerOrderDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_ship_sn)).setText(ordersVo.getSafeString("shipSn"));
 
                     int showStoreSend = ordersVo.getInt("showStoreSend");
-                    rlBottomBarContainer.setVisibility(showStoreSend == Constant.TRUE_INT ? View.VISIBLE : View.GONE);
+                    int showMemberTake = ordersVo.getInt("showMemberTake");
+
+                    int bottomBarContainerVisibility = View.GONE;
+                    if (showMemberTake == Constant.TRUE_INT) { // 顯示【待提貨】,該按鈕沒有操作事件
+
+                    } else if (showStoreSend == Constant.TRUE_INT) { // 顯示【訂單發貨】按鈕，點擊發貨
+                        bottomBarContainerVisibility = View.VISIBLE;
+                    }
+                    rlBottomBarContainer.setVisibility(bottomBarContainerVisibility);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
