@@ -120,7 +120,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         llMessageItemContainer.setVisibility(View.VISIBLE);
         int itemCount = getItemCount();
         int position = helper.getAdapterPosition();
-        if (position == itemCount - 2) {
+        if (position == itemCount - 1) {
             llMessageItemContainer.setBackground(null);
         }
         else if(chatConversation.isPlatformCustomer){
