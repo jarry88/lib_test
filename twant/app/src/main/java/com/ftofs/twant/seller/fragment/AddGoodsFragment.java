@@ -594,7 +594,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
         String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE;
         if (Config.DEVELOPER_MODE) {
-            url = "https://test.snailpad.cn/tmp/3.json";
+            // url = "https://test.snailpad.cn/tmp/3.json";
         }
 
         SLog.info("url[%s], params[%s]", url, params);
@@ -789,7 +789,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
             case R.id.btn_primary_next:
                 if (Config.DEVELOPER_MODE) {
-                    vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
+                    // vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() + 2);
                 }
                 if (!savePrimaryInfo()) {
                     break;
