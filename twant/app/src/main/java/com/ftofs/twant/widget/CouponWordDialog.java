@@ -16,6 +16,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -170,6 +171,8 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
                             "storeId", storeId
                     );
 
+                    // 點擊領取按鈕，清空剪貼板
+                    ClipboardUtils.copyText(context, "");
 
                     if (ToastUtil.isError(responseObj)) { // 領取錯誤
                         new XPopup.Builder(context)

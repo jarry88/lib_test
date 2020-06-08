@@ -153,5 +153,5 @@ public enum RequestCode {
     /**
      * 【賣家】編輯SKU信息
      */
-    SELLER_EDIT_SKU_INFO,
+    // SELLER_EDIT_SKU_INFO,
 }

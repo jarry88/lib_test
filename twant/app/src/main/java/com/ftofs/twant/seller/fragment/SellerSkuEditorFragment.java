@@ -50,7 +50,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
     List<String> specValueIdStringList;
     Map<String, SellerSpecPermutation> specValueIdStringMap;
     SellerSpecMapItem colorSpecMapItem;
-    List<SellerGoodsPicVo> sellerGoodsPicVoList;
+    Map<Integer, List<SellerGoodsPicVo>> colorImageMap;  // colorId與圖片列表的映射關係
 
     List<SellerSpecPermutation> permutationList = new ArrayList<>();
 
@@ -68,7 +68,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
             List<String> specValueIdStringList,
             Map<String, SellerSpecPermutation> specValueIdStringMap,
             SellerSpecMapItem colorSpecMapItem,  // 颜色规格，如果没选颜色时，则为null
-            List<SellerGoodsPicVo> sellerGoodsPicVoList  // 对应的图片对象的列表
+            Map<Integer, List<SellerGoodsPicVo>> colorImageMap  // 对应的图片对象的列表
             ) {
         Bundle args = new Bundle();
 
@@ -78,7 +78,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         fragment.specValueIdStringList = specValueIdStringList;
         fragment.specValueIdStringMap = specValueIdStringMap;
         fragment.colorSpecMapItem = colorSpecMapItem;
-        fragment.sellerGoodsPicVoList = sellerGoodsPicVoList;
+        fragment.colorImageMap = colorImageMap;
 
         return fragment;
     }
@@ -113,7 +113,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
         tabLayout.addTab(tabLayout.newTab().setText(titleList.get(1)));
 
         fragmentList.add(SellerSkuGoodsListFragment.newInstance(permutationList));
-        fragmentList.add(SellerSkuImageListFragment.newInstance(colorSpecMapItem, sellerGoodsPicVoList, this));
+        fragmentList.add(SellerSkuImageListFragment.newInstance(colorSpecMapItem, colorImageMap));
 
         // 將getSupportFragmentManager()改為getChildFragmentManager(), 解決關閉登錄頁面后，重新打開后，
         // ViewPager中Fragment不回調onCreateView的問題
@@ -159,19 +159,8 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
      * 用戶點擊返回後調用
      */
     private void popAfter() {
-        Bundle bundle = new Bundle();
-
-        EasyJSONObject result = EasyJSONObject.generate(
-                "goodsJsonVoList", goodsJsonVoList,
-                "goodsPicVoList", goodsPicVoList
-        );
-
-        bundle.putString("result", result.toString());
-        addGoodsFragment.setEditorResult(specValueIdStringMap);
-        setFragmentResult(RESULT_OK, bundle);
-
         if (addGoodsFragment != null) {
-            addGoodsFragment.setEditorResult(specValueIdStringMap);
+            addGoodsFragment.setEditorResult(specValueIdStringMap, colorImageMap);
         }
 
         hideSoftInputPop();
@@ -216,16 +205,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
                 );
             }
 
-
-            EasyJSONObject skuImageObj = ((SellerSkuImageListFragment) fragmentList.get(1)).collectSkuImageInfo();
-
-            if (skuImageObj == null) {
-                ToastUtil.error(_mActivity, "收集數據錯誤");
-                return;
-            }
-
-            SLog.info("skuImageObj[%s]", skuImageObj.toString());
-
+            colorImageMap = ((SellerSkuImageListFragment) fragmentList.get(1)).collectSkuImageInfo();
 
             loadingPopup = (HwLoadingPopup) new XPopup.Builder(_mActivity)
                     .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
@@ -235,35 +215,42 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
                     .asCustom(new HwLoadingPopup(_mActivity, "正在上傳商品圖片，請稍候..."));
             loadingPopup.show();
 
-            uploadSkuImage(skuImageObj);
+            uploadSkuImage();
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 
-    private void uploadSkuImage(EasyJSONObject skuImageObj) {
+    private void uploadSkuImage() {
         Observable<String> observable = Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
                 SLog.info("observable.threadId[%s]", Thread.currentThread().getId());
 
                 int count = 0;
-                Set<String> keySet = skuImageObj.getHashMap().keySet();
-                for (String key : keySet) {
-                    int specValue = Integer.parseInt(key.substring(11));
-                    SLog.info("key[%s], specValue[%d]", key, specValue);
+                Set<Integer> keySet = colorImageMap.keySet();
+                for (int colorId : keySet) {
+                    SLog.info("colorId[%d]", colorId);
 
                     int order = 0;
-                    EasyJSONArray skuImageList = skuImageObj.getArray(key);
-                    for (Object object : skuImageList) {
-                        count++;
-                        String absolutePath = (String) object;
-                        SLog.info("正在上传第%d张图片", count);
+                    List<SellerGoodsPicVo> skuImageList = colorImageMap.get(colorId);
+                    for (SellerGoodsPicVo picVo : skuImageList) {
+                        if (StringUtil.isEmpty(picVo.absolutePath)) {
+                            continue;
+                        }
 
-                        String url = Api.syncUploadFile(new File(absolutePath));
+                        count++;
+                        SLog.info("正在上传第%d张图片[%s]", count, picVo.absolutePath);
+                        picVo.imageSort = order;
+                        picVo.isDefault = ((order == 0) ? Constant.TRUE_INT : Constant.FALSE_INT);
+
+                        String url = Api.syncUploadFile(new File(picVo.absolutePath));
                         if (!StringUtil.isEmpty(url)) {
+                            // 上傳成功
+                            picVo.imageName = url;
+                            picVo.absolutePath = null;
                             EasyJSONObject goodsPicVo = EasyJSONObject.generate(
-                                    "colorId", specValue,
+                                    "colorId", colorId,
                                     "imageName", url,
                                     "imageSort", order,
                                     "isDefault", (order == 0 ? Constant.TRUE_INT: Constant.FALSE_INT)

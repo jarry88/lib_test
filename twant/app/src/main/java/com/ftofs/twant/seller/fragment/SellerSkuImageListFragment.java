@@ -19,7 +19,6 @@ import com.donkingliang.imageselector.utils.ImageSelector;
 import com.ftofs.twant.R;
 import com.ftofs.twant.constant.RequestCode;
 import com.ftofs.twant.fragment.BaseFragment;
-import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerSkuImageListAdapter;
 import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
@@ -29,9 +28,7 @@ import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.snailpad.easyjson.EasyJSONArray;
-import cn.snailpad.easyjson.EasyJSONObject;
+import java.util.Map;
 
 /**
  * SKU圖片列表
@@ -39,28 +36,26 @@ import cn.snailpad.easyjson.EasyJSONObject;
  */
 public class SellerSkuImageListFragment extends BaseFragment {
     LinearLayout llContainer;
-    List<SellerSpecItem> sellerSpecItemList;
-    SimpleCallback simpleCallback;
+    List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();
 
     SellerSkuImageListAdapter[] adapters;
-    List<List<String>> imageListList = new ArrayList<>();
+    // List<List<SellerGoodsPicVo>> imageListList = new ArrayList<>();
 
     SellerSpecMapItem colorSpecMapItem;
-    List<SellerGoodsPicVo> sellerGoodsPicVoList;
+    Map<Integer, List<SellerGoodsPicVo>> colorImageMap;
 
     int currIndex; // 當前添加圖片的Index
-
+    // int currColorId;  // 當前添加圖片的colorId
 
     public static SellerSkuImageListFragment newInstance(SellerSpecMapItem colorSpecMapItem, // 颜色规格，如果没选颜色时，则为null
-                                                         List<SellerGoodsPicVo> sellerGoodsPicVoList, // 对应的图片对象的列表
-                                                         SimpleCallback simpleCallback) {
+                                                         Map<Integer, List<SellerGoodsPicVo>> colorImageMap // 对应的图片对象的列表
+                                                         ) {
         Bundle args = new Bundle();
 
         SellerSkuImageListFragment fragment = new SellerSkuImageListFragment();
         fragment.setArguments(args);
         fragment.colorSpecMapItem = colorSpecMapItem;
-        fragment.sellerGoodsPicVoList = sellerGoodsPicVoList;
-        fragment.simpleCallback = simpleCallback;
+        fragment.colorImageMap = colorImageMap;
 
         return fragment;
     }
@@ -76,18 +71,35 @@ public class SellerSkuImageListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (colorSpecMapItem == null) { // 如果没选颜色时，则为null
+            SLog.info("here");
+            SellerSpecItem sellerSpecItem = new SellerSpecItem();
+            sellerSpecItem.id = 0; // colorId為0
+            sellerSpecItem.name = "圖片";
+
+            sellerSpecItemList.add(sellerSpecItem);
+        } else {
+            SLog.info("here");
+            sellerSpecItemList = colorSpecMapItem.sellerSpecItemList;
+        }
+
         llContainer = view.findViewById(R.id.ll_container);
         adapters = new SellerSkuImageListAdapter[sellerSpecItemList.size()];
         SLog.info("adapters.length[%d]", adapters.length);
         for (int i = 0; i < sellerSpecItemList.size(); i++) {
             SellerSpecItem sellerSpecItem = sellerSpecItemList.get(i);
+            int colorId = sellerSpecItem.id;
 
             View itemView = LayoutInflater.from(_mActivity)
                     .inflate(R.layout.seller_sku_image_list_item, llContainer, false);
 
             SLog.info("itemView[%s]", itemView.toString());
 
-            List<String> imageList = new ArrayList<>();
+            List<SellerGoodsPicVo> imageList = colorImageMap.get(colorId);
+            if (imageList == null) {
+                imageList = new ArrayList<>();
+                colorImageMap.put(colorId, imageList);
+            }
 
             RecyclerView rvList = itemView.findViewById(R.id.rv_list);
             rvList.setLayoutManager(new LinearLayoutManager(_mActivity, LinearLayoutManager.HORIZONTAL, false));
@@ -104,8 +116,6 @@ public class SellerSkuImageListFragment extends BaseFragment {
                 }
             });
             rvList.setAdapter(adapters[i]);
-            imageListList.add(imageList);
-
 
             TextView tvSpecValue = itemView.findViewById(R.id.tv_spec_value);
             tvSpecValue.setText(sellerSpecItem.name);
@@ -122,6 +132,7 @@ public class SellerSkuImageListFragment extends BaseFragment {
                             .start(SellerSkuImageListFragment.this, RequestCode.SELECT_MULTI_IMAGE.ordinal()); // 打开相册
 
                     currIndex = index;
+                    SLog.info("currIndex[%d]", currIndex);
                 }
             });
 
@@ -167,41 +178,53 @@ public class SellerSkuImageListFragment extends BaseFragment {
     }
 
     private void addSelectedImage(String path) {
+        SLog.info("currIndex[%d]", currIndex);
         SellerSkuImageListAdapter adapter = adapters[currIndex];
-        List<String> dataList = adapter.getData();
-        dataList.add(path);
+        List<SellerGoodsPicVo> dataList = adapter.getData();
+
+        SellerGoodsPicVo newItem = new SellerGoodsPicVo();
+
+        SellerSpecItem currColor = sellerSpecItemList.get(currIndex);
+        newItem.absolutePath = path;
+        newItem.colorId = currColor.id;
+        newItem.colorName = currColor.name;
+        dataList.add(newItem);
         adapter.notifyItemInserted(dataList.size() - 1);
     }
 
-    public EasyJSONObject collectSkuImageInfo() {
-
-        try {
-            EasyJSONObject result = EasyJSONObject.generate();
-            int count = 0;
-            for (int i = 0; i < sellerSpecItemList.size(); i++) {
-                SellerSpecItem sellerSpecItem = sellerSpecItemList.get(i);
-                int specValue = sellerSpecItem.id;
-
-                List<String> imageList = imageListList.get(i);
-
-                EasyJSONArray specImageArr = EasyJSONArray.generate();
-                for (int j = 0; j < imageList.size(); j++) {
-                    count++;
-                    String path = imageList.get(j);
-                    SLog.info("正在收集第%d张图片", count);
-
-                    specImageArr.append(path);
-                }
-
-                result.set("spec_value_" + specValue, specImageArr);
-            }
-
-            SLog.info("result[%s]", result.toString());
-            return result;
-        } catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
-
-        return null;
+    public Map<Integer, List<SellerGoodsPicVo>> collectSkuImageInfo() {
+        return colorImageMap;
     }
+
+//    public EasyJSONObject collectSkuImageInfo() {
+//
+//        try {
+//            EasyJSONObject result = EasyJSONObject.generate();
+//            int count = 0;
+//            for (int i = 0; i < sellerSpecItemList.size(); i++) {
+//                SellerSpecItem sellerSpecItem = sellerSpecItemList.get(i);
+//                int specValue = sellerSpecItem.id;
+//
+//                List<String> imageList = imageListList.get(i);
+//
+//                EasyJSONArray specImageArr = EasyJSONArray.generate();
+//                for (int j = 0; j < imageList.size(); j++) {
+//                    count++;
+//                    String path = imageList.get(j);
+//                    SLog.info("正在收集第%d张图片", count);
+//
+//                    specImageArr.append(path);
+//                }
+//
+//                result.set("spec_value_" + specValue, specImageArr);
+//            }
+//
+//            SLog.info("result[%s]", result.toString());
+//            return result;
+//        } catch (Exception e) {
+//            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+//        }
+//
+//        return null;
+//    }
 }
