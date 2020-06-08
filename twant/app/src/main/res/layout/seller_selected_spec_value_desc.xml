@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:id="@+id/btn_edit"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="1dp"
@@ -19,4 +19,18 @@
         android:textColor="@android:color/white"
         android:background="@color/tw_blue">
     </TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <view
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_edit"
+            android:src="@drawable/icon_edit"/>
+    </LinearLayout>
+
 </com.nex3z.flowlayout.FlowLayout>
