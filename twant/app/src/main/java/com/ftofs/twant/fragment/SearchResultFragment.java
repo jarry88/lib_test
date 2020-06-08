@@ -1231,17 +1231,20 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                         public void onShow() {
                             SLog.info("显示了");
                             if (currSelId == R.id.btn_sort) {
-                                btnSort.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
-                                tvSort.setTextColor(twBlue);
-                                iconSort.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
+                                sortSelect(true);
+                                loacationSelect(false);
+                                bizCircleSelect(false);
+
+
                             } else if (currSelId == R.id.btn_location) {
-                                btnLocation.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
-                                tvLocation.setTextColor(twBlue);
-                                iconLocation.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
+                                sortSelect(false);
+                                loacationSelect(true);
+                                bizCircleSelect(false);
                             } else if (currSelId == R.id.btn_biz_circle) {
-                                btnBizCircle.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
-                                tvBizCircle.setTextColor(twBlue);
-                                iconBizCircle.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
+
+                                sortSelect(false);
+                                loacationSelect(false);
+                                bizCircleSelect(true);
                             }
                         }
                         @Override
@@ -1249,16 +1252,19 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
                             SLog.info("关闭了");
 
                             btnSort.setBackground(null);
-                            tvSort.setTextColor(twBlack);
-                            iconSort.setImageResource(R.drawable.icon_filter_black_expand);
+//                            tvSort.setTextColor(twBlack);
+//                            iconSort.setImageResource(R.drawable.icon_filter_black_expand);
 
                             btnLocation.setBackground(null);
-                            tvLocation.setTextColor(twBlack);
-                            iconLocation.setImageResource(R.drawable.icon_filter_black_expand);
+//                            tvLocation.setTextColor(twBlack);
+//                            tvLocation.setText("所在地");
+
+//                            iconLocation.setImageResource(R.drawable.icon_filter_black_expand);
 
                             btnBizCircle.setBackground(null);
-                            tvBizCircle.setTextColor(twBlack);
-                            iconBizCircle.setImageResource(R.drawable.icon_filter_black_expand);
+//                            tvBizCircle.setTextColor(twBlack);
+//                            tvBizCircle.setText("商圈");
+//                            iconBizCircle.setImageResource(R.drawable.icon_filter_black_expand);
                         }
                     })
                     .asCustom(new StoreFilterPopup(_mActivity, popupType, generalItemSelectedId,
@@ -1268,6 +1274,34 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
             storeFilterPopup.dismiss();
             storeFilterPopup = null;
         }
+    }
+
+    private void sortSelect(boolean b) {
+        if (b) {
+            btnSort.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
+        } else {
+            btnSort.setBackground(null);
+        }
+        tvSort.setTextColor(b?twBlue:twBlack);
+        iconSort.setImageResource(b?R.drawable.icon_store_filter_unexpand_blue:R.drawable.icon_store_filter_expand_black);
+    }
+    private void loacationSelect(boolean b) {
+        if (b) {
+            btnLocation.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
+        } else {
+            btnLocation.setBackground(null);
+        }
+        tvLocation.setTextColor(b?twBlue:twBlack);
+        iconLocation.setImageResource(b?R.drawable.icon_store_filter_unexpand_blue:R.drawable.icon_store_filter_expand_black);
+    }
+    private void bizCircleSelect(boolean b) {
+        if (b) {
+            btnBizCircle.setBackgroundResource(R.drawable.store_filter_btn_sel_bg);
+        } else {
+            btnBizCircle.setBackground(null);
+        }
+        tvBizCircle.setTextColor(b?twBlue:twBlack);
+        iconBizCircle.setImageResource(b?R.drawable.icon_store_filter_unexpand_blue:R.drawable.icon_store_filter_expand_black);
     }
 
 
@@ -1340,20 +1374,23 @@ public class SearchResultFragment extends BaseFragment implements View.OnClickLi
 
                 doSearch(searchType, currPage + 1, keyword, currFilter);
             } else if (type == PopupType.STORE_FILTER_LOCATION || type == PopupType.STORE_FILTER_BIZ_CIRCLE) {
-                bizCircleId = (BizCircleId) extra;
-
+                BizCircleItem item = (BizCircleItem) extra;
+                bizCircleId = item.bizCircleId;
                 if (type == PopupType.STORE_FILTER_LOCATION) {
                     tvLocation.setTextColor(twBlue);
                     iconLocation.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
 
                     tvBizCircle.setTextColor(twBlack);
                     iconBizCircle.setImageResource(R.drawable.icon_filter_black_expand);
+                    tvLocation.setText(item.name);
                 } else {
                     tvLocation.setTextColor(twBlack);
                     iconLocation.setImageResource(R.drawable.icon_filter_black_expand);
 
                     tvBizCircle.setTextColor(twBlue);
                     iconBizCircle.setImageResource(R.drawable.icon_store_filter_unexpand_blue);
+
+                    tvBizCircle.setText(item.name);
                 }
 
                 currPage = 0;
