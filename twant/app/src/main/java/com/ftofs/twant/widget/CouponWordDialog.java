@@ -160,21 +160,45 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 try{
-                    SLog.info("responseStr",responseStr);
+                    SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
 
                     if (responseObj.exists("datas.storeId")) {
                         storeId = responseObj.getInt("datas.storeId");
                     }
 
+                    int skip = 0;
+                    if (responseObj.exists("datas.skip")) {
+                        skip = responseObj.getInt("datas.skip");
+                    }
+
+                    String activityType = "";
+                    if (responseObj.exists("datas.activityType")) {
+                        activityType = responseObj.getSafeString("datas.activityType");
+                    }
+
+                    String resultMessage = "";
+                    if (responseObj.exists("datas.resultMessage")) {
+                        resultMessage = responseObj.getSafeString("datas.resultMessage");
+                    }
+
+                    if (StringUtil.isEmpty(resultMessage)) {
+                        if (responseObj.exists("datas.error")) {
+                            resultMessage = responseObj.getSafeString("datas.error");
+                        }
+                    }
+
                     EasyJSONObject dataObj = EasyJSONObject.generate(
-                            "storeId", storeId
+                            "storeId", storeId,
+                            "skip", skip,
+                            "activityType", activityType,
+                            "resultMessage", resultMessage
                     );
 
                     // 點擊領取按鈕，清空剪貼板
                     ClipboardUtils.copyText(context, "");
 
-                    if (ToastUtil.isError(responseObj)) { // 領取錯誤
+                    if (!ToastUtil.isError(responseObj)) { // 領取錯誤
                         new XPopup.Builder(context)
                                 .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
                                 .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true

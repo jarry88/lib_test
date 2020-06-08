@@ -24,6 +24,7 @@
             android:layout_width="31dp"
             android:layout_height="31dp"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             app:icon_src="@drawable/btn_close">
 
         </com.ftofs.twant.widget.ScaledButton>
@@ -52,8 +53,7 @@
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/img_store_avatar"
                         android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/cs_avatar_160">
+                        android:layout_height="36dp">
                     </de.hdodenhof.circleimageview.CircleImageView>
                     <TextView
                         android:id="@+id/tv_store_name"
