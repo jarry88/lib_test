@@ -73,6 +73,9 @@ public final class ClipboardUtils {
 
     /**
      * AndroidQ 获取剪贴板的内容
+     * 參考：
+     * Android 10 适配及具体解决办法
+     * https://juejin.im/post/5d5f98a8f265da03986bfafb#heading-3
      */
     @TargetApi(Build.VERSION_CODES.Q)
     private static void getTextFromClipFroAndroidQ(@NonNull final android.app.Activity activity, final Function f) {
