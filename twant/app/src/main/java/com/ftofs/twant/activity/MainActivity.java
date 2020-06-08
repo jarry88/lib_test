@@ -1,18 +1,41 @@
 package com.ftofs.twant.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -24,6 +47,7 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.vlayout.Range;
 import com.alipay.sdk.app.PayTask;
 import com.bumptech.glide.Glide;
+import com.donkingliang.imageselector.utils.ImageSelector;
 import com.facebook.CallbackManager;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
@@ -109,7 +133,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -657,13 +685,44 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         // 切換到前臺時，檢測剪貼板中是否有優惠券
         CharSequence clipboardContent = ClipboardUtils.getText(this);
-        if (clipboardContent != null) {
-            String word = StringUtil.getCouponWord(clipboardContent.toString());
-
-            if (word != null) {
-                parseCouponWord(word);
+        ClipboardUtils.getClipBoardText(this, new ClipboardUtils.Function() {
+            @Override
+            public void invoke(String text) {
+                SLog.info("Clip :[%s]",text);
+                if (!StringUtil.isEmpty(text)) {
+                    String word = StringUtil.getCouponWord(text);
+                    SLog.info("clipboardContent::word[%s]", word);
+                    if (word != null) {
+                        parseCouponWord(word);
+                    }
+                }
             }
-        }
+        });
+//        SLog.info("clipboardContent[%s]", clipboardContent);
+//        if (clipboardContent != null) {
+//            String word = StringUtil.getCouponWord(clipboardContent.toString());
+//            SLog.info("clipboardContent::word[%s]", word);
+//            if (word != null) {
+//                parseCouponWord(word);
+//            }
+//        }
+
+
+        PermissionUtil.actionWithPermission(this, new String[] {Permission.WRITE_EXTERNAL_STORAGE,
+                Permission.READ_EXTERNAL_STORAGE}, "使用想要城Takewant需要授予", new CommonCallback() {
+
+            @Override
+            public String onSuccess(@Nullable String data) {
+                ImageSelector.preload(MainActivity.this);
+                return null;
+            }
+
+            @Override
+            public String onFailure(@Nullable String data) {
+
+                return null;
+            }
+        });
     }
 
     private void doLaunchApp(String launchAppParams) {
@@ -1125,7 +1184,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     // 获取复制、剪切的文本内容
                     CharSequence content =
                             mClipboardManager.getPrimaryClip().getItemAt(0).getText();
-                    SLog.info("复制、剪切的内容为：" + content);
+                    SLog.info("复制、剪切的内容为[%s]", content);
 
                     String word = StringUtil.getCouponWord(content.toString());
 
@@ -1143,9 +1202,15 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             return;
         }
 
+        String url = Api.PATH_PARSE_COUPON_WORD;
+        if (true) {
+            // url = "https://test.snailpad.cn/tmp/2.json";
+        }
+
         EasyJSONObject params = EasyJSONObject.generate("command", word);
-        SLog.info("params%s",params);
-        Api.postUI(Api.PATH_PARSE_COUPON_WORD, params, new UICallback() {
+        SLog.info("url[%s], params[%s]",url, params);
+
+        Api.postUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(MainActivity.this, e);
@@ -1154,7 +1219,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 try{
-                    SLog.info("responseStr",responseStr);
+                    SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.isError(responseObj)) {
                         return;
@@ -1187,7 +1252,12 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
         if (couponWordDialog.isShow()) {
             return;
         }
-
-        couponWordDialog.setData(word, extraData);
+        couponWordDialog.show();
+        couponWordDialog.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                couponWordDialog.setData(word, extraData);
+            }
+        }, 500);
     }
 }

@@ -1,6 +1,7 @@
 package com.ftofs.twant.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ClipboardUtils;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -22,6 +24,7 @@ import com.ftofs.twant.util.Util;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.CenterPopupView;
 import com.lxj.xpopup.util.XPopupUtils;
+import com.sxu.shadowdrawable.ShadowDrawable;
 
 import java.io.IOException;
 
@@ -34,8 +37,16 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
     String couponWord;
     EasyJSONObject extraData;
 
-    TextView tvCouponName;
-    ImageView couponCover;
+
+    ImageView imgStoreAvatar;
+    TextView tvStoreName;
+    TextView tvAmount;
+    TextView tvCouponTypeDesc;
+    TextView tvCouponValidTime;
+
+    View rlCouponBannerContainer;
+
+
     int storeId;
     public CouponWordDialog(@NonNull Context context) {
         super(context);
@@ -52,8 +63,20 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
     protected void onCreate() {
         super.onCreate();
 
+        findViewById(R.id.btn_close).setOnClickListener(this);
         findViewById(R.id.btn_receive).setOnClickListener(this);
-        findViewById(R.id.btn_ok).setOnClickListener(this);
+
+        imgStoreAvatar = findViewById(R.id.img_store_avatar);
+        tvStoreName = findViewById(R.id.tv_store_name);
+        tvAmount = findViewById(R.id.tv_amount);
+        tvCouponTypeDesc = findViewById(R.id.tv_coupon_type_desc);
+        tvCouponValidTime = findViewById(R.id.tv_coupon_valid_time);
+        rlCouponBannerContainer = findViewById(R.id.rl_coupon_banner_container);
+
+        ShadowDrawable.setShadowDrawable(rlCouponBannerContainer, Color.parseColor("#FFFFFF"), Util.dip2px(context, 5),
+                Color.parseColor("#19000000"), Util.dip2px(context, 5), 0, 0);
+
+
     }
 
     public void setData(String couponWord, EasyJSONObject extraData) {
@@ -64,20 +87,24 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
             String activityType = extraData.getSafeString("activityType");
             double price = extraData.getDouble("price");
 
-            String couponName = "";
+            tvAmount.setText(StringUtil.formatFloat(price));
+            String useStartTimeText = extraData.getSafeString("useStartTimeText");
+            String useEndTimeText = extraData.getSafeString("useEndTimeText");
+            tvCouponValidTime.setText(useStartTimeText + "  -  " + useEndTimeText);
 
             if (Constant.WORD_COUPON_TYPE_STORE.equals(activityType)) { // 店鋪券
-                String storeImage = extraData.getSafeString("storeImage");
+                tvCouponTypeDesc.setText("店鋪專用");
+
+                String storeAvatar = extraData.getSafeString("storeAvatar");
                 String storeName = extraData.getSafeString("storeName");
-                Glide.with(context).load(StringUtil.normalizeImageUrl(storeImage)).centerCrop().into(couponCover);
-
-                couponName = String.format("%s   %s   抵用券",
-                        storeName, StringUtil.formatPrice(context, price, 0));
+                tvStoreName.setText(storeName);
+                Glide.with(context).load(StringUtil.normalizeImageUrl(storeAvatar)).centerCrop().into(imgStoreAvatar);
             } else if (Constant.WORD_COUPON_TYPE_PLATFORM.equals(activityType)) { // 平臺券
-                couponName = String.format("想要城   %s   抵用券", StringUtil.formatPrice(context, price, 0));
-            }
+                tvCouponTypeDesc.setText("平台專用");
 
-            tvCouponName.setText(couponName);
+                tvStoreName.setText("全平台適用");
+                Glide.with(context).load(R.drawable.app_logo).centerCrop().into(imgStoreAvatar);
+            }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -120,7 +147,6 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
     }
 
     private void receiveCoupon(String token) {
-
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token,
                 "command", couponWord);
@@ -145,6 +171,8 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
                             "storeId", storeId
                     );
 
+                    // 點擊領取按鈕，清空剪貼板
+                    ClipboardUtils.copyText(context, "");
 
                     if (ToastUtil.isError(responseObj)) { // 領取錯誤
                         new XPopup.Builder(context)

@@ -1,7 +1,6 @@
 package com.ftofs.twant.seller.fragment;
 
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,11 +10,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.viewpager.widget.ViewPager;
 
 import com.ftofs.twant.R;
@@ -34,13 +31,17 @@ import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
+import com.ftofs.twant.seller.entity.SellerSpecPermutation;
 import com.ftofs.twant.seller.widget.NoScrollViewPager;
 import com.ftofs.twant.seller.widget.SellerSelectSpecPopup;
 import com.ftofs.twant.seller.widget.StoreLabelPopup;
+import com.ftofs.twant.util.AssetsUtil;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
@@ -48,8 +49,10 @@ import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.FixedEditText;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.ScaledButton;
+import com.ftofs.twant.widget.TwConfirmPopup;
 import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.orhanobut.hawk.Hawk;
 
 import java.io.IOException;
@@ -78,8 +81,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private List<ListPopupItem> unitList = new ArrayList<>();
     //準備要提交的商品信息json
     private EasyJSONObject publishGoodsInfo;
-    private EasyJSONArray goodsJsonVoList = EasyJSONArray.generate();
-    private EasyJSONArray goodsPicVoList = EasyJSONArray.generate();
+    // private EasyJSONArray goodsJsonVoList = EasyJSONArray.generate();
+    // private EasyJSONArray goodsPicVoList = EasyJSONArray.generate();
 
     private final int PRIMARY_INDEX=0;//基本信息頁
     private final int BASIC_INDEX=1;//交易信息頁
@@ -94,19 +97,26 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     List<ListPopupItem> spinnerLogoItems = new ArrayList<>();
 
     List<ListPopupItem> spinnerLogoCountryItems = new ArrayList<>();
-    private int brandId =-1;
+    private int brandId;
 
     // 未選中的規格組Id與規格組信息的映射關係
     Map<Integer, SellerSpecMapItem> sellerSpecMap = new HashMap<>();
 
-    // 已選中的規格組Id與規格組信息的映射關係(因為第1個為主規格，所以要用List)
+    // 已選中的規格組Id與規格組信息的映射關係
     List<SellerSpecMapItem> sellerSelectedSpecList = new ArrayList<>();
+
+    // 規格值Id的字符串拼接(例5,12,8)與SKU信息的映射關係
+    Map<String, SellerSpecPermutation> specValueIdStringMap = new HashMap<>();
+    // 規格值Id的字符串拼接(例5,12,8)的列表
+    List<String> specValueIdStringList = new ArrayList<>();
+
+    // colorId與圖片列表的映射關係
+    Map<Integer, List<SellerGoodsPicVo>> colorImageMap = new HashMap<>();
 
     // SpecId 與 SpecName的映射
     Map<Integer, String> specMap = new HashMap<>();
     // SpecValueId 與 SpecValueName的映射
     Map<Integer, String> specValueMap = new HashMap<>();
-
 
     LinearLayout llSelectedSpecContainer;
 
@@ -134,15 +144,29 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     private int formatTop=-1;
 
     TextView etGoodsVideoUrl;
+    private List<Category> selectCategoryList;
+    private EasyJSONArray storeLabelIdList;
 
     public static AddGoodsFragment newInstance() {
 
         return new AddGoodsFragment();
     }
 
+    /**
+     * 接收從Sku編輯器返回的結果
+     * @param specValueIdStringMap
+     */
+    public void setEditorResult(Map<String, SellerSpecPermutation> specValueIdStringMap, Map<Integer, List<SellerGoodsPicVo>> colorImageMap) {
+        this.specValueIdStringMap = specValueIdStringMap;
+        this.colorImageMap = colorImageMap;
+        SLog.info("specValueIdStringMap[%s]", Util.specValueIdStringMapToJSONString(specValueIdStringMap));
+    }
+
     @OnClick(R.id.btn_publish)
     void publish() {
         hideAddGuide();
+//        testJson();
+//        savePublishGoodsInfo();
     }
 
     @OnClick(R.id.btn_detail_save)
@@ -157,7 +181,31 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     NoScrollViewPager vpAddGood;
     @OnClick(R.id.btn_back)
     void back() {
-        hideSoftInputPop();
+        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(_mActivity, "確定要離開商品發佈頁嗎?", null, "離開頁面","繼續編輯",new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+                hideSoftInputPop();
+
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        }))
+                .show();
     }
 //    @OnClick(R.id.et_add_good_name)
 //    void showKeybord1() {
@@ -194,6 +242,8 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        colorImageMap.put(0, new ArrayList<>());  // 初始化無顏色的圖片列表
         initView();
         loadDate();
 
@@ -201,6 +251,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void initView() {
+        storeLabelIdList = new EasyJSONArray();
         publishGoodsInfo = new EasyJSONObject();
         sbNotice.setButtonCheckedBlue();
         sbNotice.setChecked(Hawk.get(SPField.SELLER_ADD_GUIDE_HIDE, false));
@@ -358,35 +409,59 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         return view;
     }
 
+
     /**
      * 更新選中的規格列表的顯示
      */
     private void updateSelectedSpecView() {
+        // 先清空所有子View
         llSelectedSpecContainer.removeAllViews();
 
 
         for (SellerSpecMapItem sellerSpecMapItem : sellerSelectedSpecList) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("【").append(sellerSpecMapItem.specName).append("】");
-            for (SellerSpecItem sellerSpecItem : sellerSpecMapItem.sellerSpecItemList) {
-                sb.append("    ");
-                sb.append(sellerSpecItem.name);
-            }
+            ViewGroup selectedSpecItemView = (ViewGroup) LayoutInflater.from(_mActivity)
+                    .inflate(R.layout.seller_selected_spec_value_desc, llSelectedSpecContainer, false);
 
             TextView textView = new TextView(_mActivity);
-            textView.setText(sb.toString());
-            SLog.info("sb[%s]", sb.toString());
+            textView.setTextSize(13);
+            textView.setText("【" + sellerSpecMapItem.specName + "】   ");
+            selectedSpecItemView.addView(textView, 0);
+
+
+            for (SellerSpecItem sellerSpecItem : sellerSpecMapItem.sellerSpecItemList) {
+                textView = new TextView(_mActivity);
+                textView.setTextSize(13);
+                textView.setText(sellerSpecItem.name + "   ");
+                selectedSpecItemView.addView(textView, 1);
+            }
+
+            TextView btnEdit = selectedSpecItemView.findViewById(R.id.btn_edit);
+            btnEdit.setTag(sellerSpecMapItem.specId);
+
+            btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int specId = (int) v.getTag();
+                    SLog.info("specId[%d]", specId);
+
+
+                    SellerSpecMapItem item = sellerSpecMap.get(specId);
+                    if (item == null) {
+                        return;
+                    }
+
+
+                    new XPopup.Builder(_mActivity)
+                            // 如果不加这个，评论弹窗会移动到软键盘上面
+                            .moveUpToKeyboard(false)
+                            .asCustom(new SellerSelectSpecPopup(_mActivity, Constant.ACTION_EDIT, specId, item.sellerSpecItemList, null, AddGoodsFragment.this))
+                            .show();
+                }
+            });
 
             LinearLayout.MarginLayoutParams layoutParams = new LinearLayout.MarginLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.topMargin = Util.dip2px(_mActivity, 8);
-            llSelectedSpecContainer.addView(textView, layoutParams);
-
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+            llSelectedSpecContainer.addView(selectedSpecItemView, layoutParams);
         }
     }
 
@@ -443,6 +518,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+        sbRetail.performClick();
         return view;
     }
 
@@ -471,6 +547,9 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadGoodsCountry(View view) {
+        if (Config.DEVELOPER_MODE) {
+            return;
+        }
         EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
          SLog.info("params[%s]", params);
          Api.getUI(Api.PATH_SELLER_QUERY_COUNTRY_ALL, params, new UICallback() {
@@ -496,8 +575,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                             spinnerLogoCountryItems.add(new ListPopupItem(item.getCountryId(),item.getCountryCn(),item));
                         }
                     }
-
-
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -515,14 +592,19 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     private void loadDate() {
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
-        SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_SELLER_GOODS_PUBLISH_PAGE, params, new UICallback() {
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE;
+        if (Config.DEVELOPER_MODE) {
+            // url = "https://test.snailpad.cn/tmp/3.json";
+        }
+
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
-            @RequiresApi(api = Build.VERSION_CODES.N)
+
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
                 try {
@@ -542,7 +624,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     private void updateView(EasyJSONObject data) throws Exception {
         allowTariff = data.getInt("allowTariff");//1是0否允許發佈跨城購商品
         specMax = data.getInt("specMax");//允許添加的最大規格數量
@@ -550,7 +632,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         EasyJSONArray formatBottomList = data.getArray("formatBottomList");//底部關聯版式列表
         EasyJSONArray formatTopList = data.getArray("formatTopList");//頂部關聯版式列表
         EasyJSONArray countryList = data.getArray("countyrList");//品牌所在地列表
-        EasyJSONArray freightTemplateList = data.getArray("freightTemplateList");//物流模板列表
         EasyJSONArray specListArr = data.getArray("specList");//規格列表
 
         // 處理規格列表
@@ -602,6 +683,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 freightList.add(new ListPopupItem(freightId, title, title));
             }
         }
+
     }
 
     private void updateBasicView(EasyJSONObject data) throws Exception{
@@ -615,6 +697,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 item.data = item.title;
                 unitList.add(item);
             }
+            onSelected(PopupType.GOODS_UNITY,unityIndex,unitList.get(unityIndex));
         }
     }
 
@@ -628,6 +711,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             }
             TextView tvSelect=mViews.get(DETAIL_INDEX).findViewById(R.id.btn_select_store_category_id);
             tvSelect.setOnClickListener(v ->{
+                hideSoftInput();
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
                         new StoreLabelPopup(_mActivity, PopupType.STORE_CATEGORY, list, AddGoodsFragment.this)
                 ).show();
@@ -678,7 +762,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     private void updatePrimaryView(EasyJSONObject data) throws Exception {
         EasyJSONArray storeLabelList = data.getArray("storeLabelList");//店内分類列表
         labelList = new ArrayList<>();
@@ -767,7 +851,28 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     ToastUtil.error(_mActivity, "請先添加規格");
                     return;
                 }
-                startForResult(SellerSkuEditorFragment.newInstance(sellerSelectedSpecList), RequestCode.SELLER_EDIT_SKU_INFO.ordinal());
+
+                // 查看是否有选【颜色】规格
+                SellerSpecMapItem colorItem = sellerSpecMap.get(Constant.COLOR_SPEC_ID);
+                SellerSpecMapItem colorSpecMapItem = null;
+                if (colorItem != null && colorItem.selected) { // 如果有選顏色
+                    colorSpecMapItem = new SellerSpecMapItem();
+
+                    colorSpecMapItem.specId = colorItem.specId;
+                    colorSpecMapItem.specName = colorItem.specName;
+
+                    for (SellerSpecItem elem : colorItem.sellerSpecItemList) {
+                        if (elem.selected) {
+                            colorSpecMapItem.sellerSpecItemList.add(elem);
+                        }
+                    }
+                }
+
+                start(SellerSkuEditorFragment.newInstance(this,
+                        specValueIdStringList,
+                        specValueIdStringMap,
+                        colorSpecMapItem,
+                        colorImageMap));
                 break;
             case R.id.btn_add_address:
                 ToastUtil.success(_mActivity, "添加商品描述");
@@ -790,7 +895,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.tv_add_freight_rule:
-                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "物流規則", PopupType.GOODS_FREIGHT_RULE, spinnerLogoItems, freightRuleIndex, this)).show();
+                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "物流規則", PopupType.GOODS_FREIGHT_RULE, freightList, freightRuleIndex, this)).show();
                 break;
             case R.id.btn_freight_prev:
                 vpAddGood.setCurrentItem(vpAddGood.getCurrentItem() - 1);
@@ -825,10 +930,16 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     sellerSpecValueMap.put(entry.getKey(), entry.getValue().sellerSpecItemList);
                 }
 
+
+                if (sellerSpecItemList.size() < 1) {
+                    ToastUtil.error(_mActivity, "已添加所有的規格");
+                    return;
+                }
+
                 new XPopup.Builder(_mActivity)
                         // 如果不加这个，评论弹窗会移动到软键盘上面
                         .moveUpToKeyboard(false)
-                        .asCustom(new SellerSelectSpecPopup(_mActivity, sellerSpecItemList, sellerSpecValueMap, this))
+                        .asCustom(new SellerSelectSpecPopup(_mActivity, Constant.ACTION_ADD, 0, sellerSpecItemList, sellerSpecValueMap, this))
                         .show();
                 break;
             default:
@@ -847,23 +958,23 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return;
         }
 
-        try {
-            if (requestCode == RequestCode.SELLER_EDIT_SKU_INFO.ordinal()) {
-                SLog.info("data[%s]", data.toString());
-                String result = data.getString("result");
-                if (StringUtil.isEmpty(result)) {
-                    return;
-                }
-                SLog.info("result[%s]", result);
-
-                EasyJSONObject resultObj = EasyJSONBase.parse(result);
-
-                goodsJsonVoList = resultObj.getArray("goodsJsonVoList");
-                goodsPicVoList = resultObj.getArray("goodsPicVoList");
-            }
-        } catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
+//        try {
+//            if (requestCode == RequestCode.SELLER_EDIT_SKU_INFO.ordinal()) {
+//                SLog.info("data[%s]", data.toString());
+//                String result = data.getString("result");
+//                if (StringUtil.isEmpty(result)) {
+//                    return;
+//                }
+//                SLog.info("result[%s]", result);
+//
+//                EasyJSONObject resultObj = EasyJSONBase.parse(result);
+//
+//                goodsJsonVoList = resultObj.getArray("goodsJsonVoList");
+//                goodsPicVoList = resultObj.getArray("goodsPicVoList");
+//            }
+//        } catch (Exception e) {
+//            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+//        }
     }
 
 
@@ -918,7 +1029,53 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             SLog.info("specJsonVoList[%s]", specJsonVoList.toString());
             publishGoodsInfo.set("specJsonVoList", specJsonVoList);
 
+            EasyJSONArray goodsJsonVoList = EasyJSONArray.generate();
+            // 生成PermutationList
+            for (String specValueIdString : specValueIdStringList) {
+                SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIdString);
+                /*
+                "goodsSpecs": "A+B,,,XXS", #規格值 多個用三個英文逗號,,,隔開
+            "goodsFullSpecs": "顔色：A+B；尺碼：XXS", #完整規格
+            "specValueIds": "16,35", #規格值ID，多個用英文逗號隔開
+            "goodsPrice0": 10, #sku價格
+            "goodsSerial": "", #商家編號
+            "goodsStorage": 20, #縂庫存
+            "colorId": 16, #主規格值ID
+            "reserveStorage": #預留庫存
+                 */
+                goodsJsonVoList.append(EasyJSONObject.generate(
+                        "specValueIds", permutation.specValueIdString,
+                        "goodsPrice0", permutation.price,
+                        "goodsSerial", permutation.goodsSN,
+                        "goodsStorage", permutation.storage,
+                        "colorId", permutation.colorId,
+                        "reserveStorage", permutation.reserved
+                ));
+            }
             publishGoodsInfo.set("goodsJsonVoList", goodsJsonVoList);
+
+
+            EasyJSONArray goodsPicVoList = EasyJSONArray.generate();
+            for (Map.Entry<Integer, List<SellerGoodsPicVo>> entry: colorImageMap.entrySet()) {
+                /*
+                {
+                    "colorId": 16, #規格值ID
+                    "imageName": "image/a8/5a/a85a133391e94416decc6668f5334bdf.jpg", #圖片路徑
+                    "imageSort": 0, #圖片排序
+                    "isDefault": 1 #1是0否主圖，同一組(colorId相同)規格只有一張主圖
+                }
+                 */
+                List<SellerGoodsPicVo> picVoList = entry.getValue();
+                for (SellerGoodsPicVo vo : picVoList) {
+                    goodsPicVoList.append(EasyJSONObject.generate(
+                            "colorId", vo.colorId,
+                            "imageName", vo.imageName,
+                            "imageSort", vo.imageSort,
+                            "isDefault", vo.isDefault
+                    ));
+                }
+
+            }
             publishGoodsInfo.set("goodsPicVoList", goodsPicVoList);
 
 
@@ -947,8 +1104,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return false;
         }
         try{
-            int[] list = {storeLabelId};
-            publishGoodsInfo.set("storeLabelIdList", list);
+            publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
             publishGoodsInfo.set("detailVideo", detailVideo);
             if (formatBottom >= 0) {
                 publishGoodsInfo.set("formatBottom", formatBottom);
@@ -989,7 +1145,6 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         }
         EditText etW=view.findViewById(R.id.et_freight_weight);
         EditText etV=view.findViewById(R.id.et_freight_v);
-        double goodsFreight = Double.parseDouble(freightText);
         String freightWeightStr = etW.getText()==null?"":etW.getText().toString();
         String freightVolumeStr = etV.getText()==null?"":etV.getText().toString();
 
@@ -997,6 +1152,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             if (freightTemplateId >= 0) {
                 publishGoodsInfo.set("freightTemplateId", freightTemplateId);
             } else {
+                double goodsFreight = Double.parseDouble(freightText);
                 publishGoodsInfo.set("goodsFreight", goodsFreight);
             }
             if (!StringUtil.isEmpty(freightWeightStr)) {
@@ -1025,7 +1181,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             return false;
         }
         try{
-            publishGoodsInfo.set("unityName", unitName);
+            publishGoodsInfo.set("unitName", unitName);
             publishGoodsInfo.set("goodsModal", goodsModal);
         }catch (Exception e) {
            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -1064,9 +1220,12 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             publishGoodsInfo.set("goodsName", goodsName);
             publishGoodsInfo.set("categoryId", categoryId);
             publishGoodsInfo.set("jingle", jingle);
-            if (brandId >= 0) {
-                publishGoodsInfo.set("brandId", brandId);
+            int i = 1;
+            for (Category category : selectCategoryList) {
+                String keyName = String.format("categoryId%d", i++);
+                publishGoodsInfo.set(keyName, category.getCategoryId());
             }
+                publishGoodsInfo.set("brandId", brandId);
             publishGoodsInfo.set("goodsCountry", goodsCountry);
             SLog.info("publishInfo [%s]",publishGoodsInfo.toString());
         } catch (Exception e) {
@@ -1082,15 +1241,45 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         savePublishGoodsInfo();
     }
 
+    private void testJson() {
+        String token = User.getToken();
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_SAVE + "?token=" + token;
+        String testJson = "";
+        testJson = AssetsUtil.loadText(_mActivity, "tangram/seller_order.json");
+        testJson = AssetsUtil.loadText(_mActivity, "tangram/test.json");
+        SLog.info("params[%s]",testJson);
+        Api.postJsonUi(url, testJson ,new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+                    ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+        try{
+        }catch (Exception e) {
+           SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+    }
     private void savePublishGoodsInfo() {
         String token = User.getToken();
-        try{
-            publishGoodsInfo.set("token", token);
-        }catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
+//        token = "e6b1594f0ce04d7cbf01163121a44fcd";
         SLog.info("params[%s]",publishGoodsInfo.toString());
-          Api.postJsonUi(Api.PATH_SELLER_GOODS_PUBLISH_SAVE, publishGoodsInfo.toString(), new UICallback() {
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_SAVE + "?token=" + token;
+          Api.postJsonUi(url, publishGoodsInfo.toString() ,new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
                  ToastUtil.showNetworkError(_mActivity, e);
@@ -1105,6 +1294,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                          return;
                      }
                      ToastUtil.success(_mActivity,responseObj.getSafeString("datas.success"));
+                     hideSoftInputPop();
                  } catch (Exception e) {
                      SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                  }
@@ -1119,11 +1309,37 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             if (type == PopupType.SELLER_SELECT_SPEC) {
                 EasyJSONObject dataObj = (EasyJSONObject) extra;
                 int specId = dataObj.getInt("specId");
+                int action = dataObj.getInt("action");
                 EasyJSONArray specValueIdList = dataObj.getArray("specValueIdList");
 
-                // 將規格數據從未選中的挪到選中的
-                sellerSpecMap.remove(specId);
-                SellerSpecMapItem item = new SellerSpecMapItem();
+                // 设置选中状态
+                SellerSpecMapItem selectedItem = sellerSpecMap.get(specId);
+                if (selectedItem == null) {
+                    return;
+                }
+
+                selectedItem.selected = true;
+                for (SellerSpecItem elem : selectedItem.sellerSpecItemList) {
+                    elem.selected = false;
+                }
+
+                SellerSpecMapItem item = null;
+                if (action == Constant.ACTION_ADD) {
+                    item = new SellerSpecMapItem();
+                } else {
+                    for (SellerSpecMapItem elem : sellerSelectedSpecList) {
+                        if (elem.specId == specId) {
+                            item = elem;
+                            item.sellerSpecItemList.clear();
+                            break;
+                        }
+                    }
+                }
+
+                if (item == null) {
+                    return;
+                }
+
                 item.specId = specId;
                 item.specName = specMap.get(specId);
                 for (Object object : specValueIdList) {
@@ -1133,13 +1349,24 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     sellerSpecItem.id = specValueId;
                     sellerSpecItem.name = specValueMap.get(specValueId);
                     item.sellerSpecItemList.add(sellerSpecItem);
+
+                    for (SellerSpecItem elem : selectedItem.sellerSpecItemList) {
+                        if (elem.id == specValueId) {
+                            elem.selected = true;
+                            break;
+                        }
+                    }
                 }
 
-                sellerSelectedSpecList.add(item);
+                if (action == Constant.ACTION_ADD) {
+                    sellerSelectedSpecList.add(item);
+                }
 
                 updateSelectedSpecView();
+
+                generateSpecPermutation();
             } else if (type == PopupType.STORE_LABEL) {
-                List<Category> selectCategoryList = (List<Category>) extra;
+                selectCategoryList = (List<Category>) extra;
                 Category categoryLast = new Category();
                 StringBuilder selectCategoryName = new StringBuilder();
                 for (Category category : selectCategoryList) {
@@ -1155,6 +1382,11 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                     } else if (vpAddGood.getCurrentItem() == DETAIL_INDEX) {
                         ((TextView) (mViews.get(DETAIL_INDEX).findViewById(R.id.tv_select_store_category))).setText(selectCategoryName.toString());
                         storeLabelId = categoryLast.getCategoryId();
+                        EasyJSONArray array = new EasyJSONArray();
+                        for (Category category : selectCategoryList) {
+                            array.append(category.getCategoryId());
+                        }
+                        storeLabelIdList = array;
                     }
                 }
 
@@ -1180,6 +1412,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             } else if (type == PopupType.GOODS_FREIGHT_RULE) {
                 TextView tvRule = mViews.get(FREIGHT_INDEX).findViewById(R.id.tv_add_freight_rule);
                 freightRuleIndex = id;
+                freightTemplateId = freightList.get(id).id;
                 tvRule.setText(extra.toString());
             } else if (type == PopupType.SELLER_FORMAT_TOP) {
                 TextView tvFormatTop = mViews.get(DETAIL_INDEX).findViewById(R.id.tv_format_top);
@@ -1207,7 +1440,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
         TextView tvLogo = mViews.get(PRIMARY_INDEX).findViewById(R.id.tv_add_good_logo);
         tvLogo.setText("");
         logoIndex = 0;
-        brandId = -1;
+        brandId = 0;
         EasyJSONObject params = EasyJSONObject.generate("token", User.getToken(), "categoryId", categoryId);
         SLog.info("params[%s]", params);
         Api.getUI(Api.PATH_SELLER_QUERY_BIND_BRANDS, params, new UICallback() {
@@ -1238,5 +1471,62 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 }
             }
         });
+    }
+
+
+    /**
+     * 根據當前已選中的Spec值生成SKU枚舉值
+     */
+    private void generateSpecPermutation() {
+        // 先清空列表
+        specValueIdStringList.clear();
+
+        int totalSkuCount = 1;
+
+        for (SellerSpecMapItem item : sellerSelectedSpecList) {
+            totalSkuCount *= item.sellerSpecItemList.size();
+        }
+        SLog.info("totalSkuCount[%d]", totalSkuCount);
+
+        for (int i = 0; i < totalSkuCount; i++) {
+            int n = i;
+            StringBuilder specValueIdStringSB = new StringBuilder();
+            StringBuilder skuDesc = new StringBuilder();  // SKU規格描述
+            List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();  // 規格值列表
+
+            int colorId = 0;
+            for (int j = 0; j < sellerSelectedSpecList.size(); j++) {
+                SellerSpecMapItem sellerSpecMapItem = sellerSelectedSpecList.get(j);
+
+                int index = n % sellerSpecMapItem.sellerSpecItemList.size();
+                SellerSpecItem specItem = sellerSpecMapItem.sellerSpecItemList.get(index);
+                if (sellerSpecMapItem.specId == Constant.COLOR_SPEC_ID) {
+                    colorId = specItem.id;
+                }
+
+                sellerSpecItemList.add(specItem);
+
+                specValueIdStringSB.append(specItem.id).append(",");
+                skuDesc.append(specItem.name).append("/");
+
+                n /= sellerSpecMapItem.sellerSpecItemList.size();
+            }
+
+            SLog.info("skuDesc[%s]", skuDesc.toString());
+            String specValueIdString = StringUtil.trim(specValueIdStringSB.toString(), new char[] {','});
+            specValueIdStringList.add(specValueIdString);
+
+            SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIdString);
+            if (permutation == null) {  // 如果不在Map裏面，則新建一個
+                permutation = new SellerSpecPermutation();
+
+                permutation.colorId = colorId;
+                permutation.specValueIdString = specValueIdString;
+                permutation.specValueNameString = StringUtil.trim(skuDesc.toString(), new char[] {'/'});
+                permutation.sellerSpecItemList = sellerSpecItemList;
+
+                specValueIdStringMap.put(specValueIdString, permutation);
+            }
+        }
     }
 }

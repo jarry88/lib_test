@@ -162,7 +162,7 @@ public class StoreFilterPopup extends PartShadowPopupView {
                     }
                     if (onSelectedListener != null) {
                         SLog.info("onSelectedListener, idType[%d], id[%d]", bizCircleId.idType, bizCircleId.id);
-                        onSelectedListener.onSelected(popupType, 0,bizCircleId);
+                        onSelectedListener.onSelected(popupType, bizCircleId.id,subItem);
 
                         dismiss();
                     }

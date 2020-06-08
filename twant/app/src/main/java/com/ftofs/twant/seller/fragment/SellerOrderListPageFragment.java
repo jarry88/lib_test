@@ -169,8 +169,8 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                     params.set("ordersSn", filterParams.orderSN);
                 }
 
-                params.set("createTimeStart", filterParams.beginDate.toString());
-                params.set("createTimeEnd", filterParams.endDate.toString());
+                params.set("createTimeStart", filterParams.beginDate.toString() + " 00:00:00");
+                params.set("createTimeEnd", filterParams.endDate.toString() + " 23:59:59");
 
                 if (!StringUtil.isEmpty(filterParams.orderSource)) {
                     params.set("ordersFrom", filterParams.orderSource);
@@ -239,6 +239,10 @@ public class SellerOrderListPageFragment extends BaseFragment implements View.On
                             item.paymentName = orderItem.getSafeString("paymentName");
                             item.ordersAmount = orderItem.getDouble("ordersAmount");
                             item.freightAmount = orderItem.getDouble("freightAmount");
+                            item.showRefundWaiting = orderItem.getInt("showRefundWaiting");
+                            item.showMemberTake = orderItem.getInt("showMemberTake");
+                            item.showStoreSend = orderItem.getInt("showStoreSend");
+
 
                             // 獲取各個商品列表
                             EasyJSONArray goodsList = orderItem.getArray("ordersGoodsList");

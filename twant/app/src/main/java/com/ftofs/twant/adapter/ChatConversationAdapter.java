@@ -52,8 +52,15 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
             linearLayout.setVisibility(View.INVISIBLE);
             return;
         }
+        if (helper.getAdapterPosition() == getData().size() - 1) {
+            helper.getView(R.id.chat_bottom).setVisibility(View.VISIBLE);
+        } else {
+            helper.getView(R.id.chat_bottom).setVisibility(View.GONE);
+
+        }
         ImageView imgAvatar = helper.getView(R.id.img_avatar);
-        String avatarUrl = chatConversation.friendInfo.avatarUrl;
+        String avatarUrl = chatConversation.friendInfo.getAvatar();
+
         if (StringUtil.isEmpty(avatarUrl)) {
             if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
                 Glide.with(mContext).load(R.drawable.icon_twant_loge).centerCrop().into(imgAvatar);
@@ -61,14 +68,14 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
                 Glide.with(mContext).load(chatConversation.friendInfo.storeAvatar).centerCrop().into(imgAvatar);
             }
         } else {
-            Glide.with(mContext).load(StringUtil.normalizeImageUrl(chatConversation.friendInfo.avatarUrl)).centerCrop().into(imgAvatar);
+            Glide.with(mContext).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAvatar);
         }
 
         if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM && !StringUtil.isEmpty(chatConversation.friendInfo.groupName)) {
             helper.setGone(R.id.tv_group_name, true);
             helper.setText(R.id.tv_group_name, chatConversation.friendInfo.groupName);
         }
-        helper.setText(R.id.tv_nickname, chatConversation.friendInfo.nickname);
+            helper.setText(R.id.tv_nickname, chatConversation.friendInfo.getName());
         TextView tvLastMessage = helper.getView(R.id.tv_last_message);
         if (chatConversation.lastMessageType == Constant.CHAT_MESSAGE_TYPE_IMAGE) {
             tvLastMessage.setText(ChatConversation.LAST_MESSAGE_DESC_IMAGE);

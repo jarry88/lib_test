@@ -71,6 +71,8 @@ import okhttp3.Call;
 public class ShopMainFragment extends BaseFragment implements View.OnClickListener, SimpleCallback, NestedScrollingCallback {
     // 商店Id
     int storeId;
+    // 初始打开哪一个Bottom Tab, -1表示默認
+    int initialTab = -1;
     String storeFigure;
     LinearLayout toolbar;
     RelativeLayout preToolbar;
@@ -141,14 +143,25 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
     private ImageView btnComment;
     RelativeLayout tool;
 
-    public static ShopMainFragment newInstance(int shopId) {
+    /**
+     * 打開店鋪首頁，並切換到指定的Tab
+     * @param shopId
+     * @param initialTab
+     * @return
+     */
+    public static ShopMainFragment newInstance(int shopId, int initialTab) {
         Bundle args = new Bundle();
 
         args.putInt("shopId", shopId);
         ShopMainFragment fragment = new ShopMainFragment();
         fragment.setArguments(args);
+        fragment.initialTab = initialTab;
 
         return fragment;
+    }
+
+    public static ShopMainFragment newInstance(int shopId) {
+        return newInstance(shopId, -1);
     }
 
     @Nullable
@@ -183,6 +196,17 @@ public class ShopMainFragment extends BaseFragment implements View.OnClickListen
         imgBottomBarShopAvatar = view.findViewById(R.id.img_bottom_bar_shop_avatar);
 
         llTabButtonContainer = view.findViewById(R.id.ll_tab_button_container);
+        if (initialTab != -1) { // 如果需要切換到指定的Tab, 若幹延遲後才切換
+            llTabButtonContainer.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    View contentView = getView();
+                    View btnActivity = contentView.findViewById(bottomBarButtonIds[initialTab]);
+                    onClick(btnActivity);
+                }
+            }, 500);
+        }
+
         Util.setOnClickListener(view,R.id.btn_menu,this);
         Util.setOnClickListener(view,R.id.btn_menu_round,this);
         Util.setOnClickListener(view,R.id.btn_cart,this);

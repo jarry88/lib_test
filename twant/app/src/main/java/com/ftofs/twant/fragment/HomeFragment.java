@@ -17,6 +17,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.constant.TangramCellType;
@@ -33,6 +34,7 @@ import com.ftofs.twant.widget.ActivityPopup;
 import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.HwLoadingPopup;
 import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.ReceiveWordCouponResultPopup;
 import com.google.gson.JsonObject;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
@@ -331,7 +333,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //            Util.startFragment(AddPostFragment.newInstance(false));
             ApiUtil.addPost(_mActivity,false);
         } else if (id == R.id.btn_test) {
-            Util.startFragment(AddGoodsFragment.newInstance());
+            Util.startFragment(LabFragment.newInstance());
+
+
 //            HwLoadingPopup loadingPopup = (HwLoadingPopup) new XPopup.Builder(_mActivity)
 //                    .dismissOnBackPressed(false) // 按返回键是否关闭弹窗，默认为true
 //                    .dismissOnTouchOutside(false) // 点击外部是否关闭弹窗，默认为true
@@ -339,6 +343,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
 //                    .moveUpToKeyboard(false)
 //                    .asCustom(new HwLoadingPopup(_mActivity, "正在上傳圖片，請稍候..."));
 //            loadingPopup.show();
+            // Util.startFragment(ShopMainFragment.newInstance(397, ShopMainFragment.ACTIVITY_FRAGMENT));
+
+//            new XPopup.Builder(_mActivity)
+//                    .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
+//                    .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
+//                    // 如果不加这个，评论弹窗会移动到软键盘上面
+//                    .moveUpToKeyboard(false)
+//                    .asCustom(new ReceiveWordCouponResultPopup(_mActivity, ReceiveWordCouponResultPopup.RESULT_RUN_OUT, EasyJSONObject.generate()))
+//                    .show();
+            // Util.startFragment(ShopSearchResultFragment.newInstance(296, null));
         }
     }
 

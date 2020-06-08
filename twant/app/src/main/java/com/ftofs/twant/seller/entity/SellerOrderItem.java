@@ -29,5 +29,9 @@ public class SellerOrderItem {
     public double ordersAmount; // 訂單總金額
     public double freightAmount;
 
+    public int showRefundWaiting;
+    public int showMemberTake;
+    public int showStoreSend;
+
     public int operationMask; // 訂單操作的位標誌：如【退款】、【發貨】等
 }

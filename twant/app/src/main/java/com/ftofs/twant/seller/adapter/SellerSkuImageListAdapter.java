@@ -9,15 +9,17 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftofs.twant.R;
+import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
+import com.ftofs.twant.util.StringUtil;
 
 import java.util.List;
 
-public class SellerSkuImageListAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
+public class SellerSkuImageListAdapter extends BaseQuickAdapter<SellerGoodsPicVo, BaseViewHolder> {
     Context context;
     int adapterIndex;
 
 
-    public SellerSkuImageListAdapter(Context context, int layoutResId, int adapterIndex, @Nullable List<String> data) {
+    public SellerSkuImageListAdapter(Context context, int layoutResId, int adapterIndex, @Nullable List<SellerGoodsPicVo> data) {
         super(layoutResId, data);
 
         this.context = context;
@@ -25,11 +27,15 @@ public class SellerSkuImageListAdapter extends BaseQuickAdapter<String, BaseView
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, String item) {
+    protected void convert(BaseViewHolder helper, SellerGoodsPicVo item) {
         helper.addOnClickListener(R.id.btn_remove_image);
 
         ImageView imageView = helper.getView(R.id.image_view);
-        Glide.with(context).load(item).centerCrop().into(imageView);
+        if (!StringUtil.isEmpty(item.absolutePath)) {
+            Glide.with(context).load(item.absolutePath).centerCrop().into(imageView);
+        } else {
+            Glide.with(context).load(StringUtil.normalizeImageUrl(item.imageName)).centerCrop().into(imageView);
+        }
     }
 
     public int getAdapterIndex() {

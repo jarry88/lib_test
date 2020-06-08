@@ -1344,6 +1344,11 @@ public class Api {
     public static final String PATH_SELLER_QUERY_BIND_BRANDS = "/member/seller/query/bind/brands";
     /**
      * 【商家】
+     * 查詢商傢物流模板
+     */
+    public static final String PATH_SELLER_FREIGHT_TEMPLATE = "/member/seller/freight/template";
+    /**
+     * 【商家】
      * 查詢所有品牌所在地
      */
     public static final String PATH_SELLER_QUERY_COUNTRY_ALL = "/member/seller/query/country/all";
@@ -1431,6 +1436,12 @@ public class Api {
      * 口令領取優惠券
      */
     public static final String PATH_RECEIVE_WORD_COUPON = "/member/app/command/receive";
+
+
+    /**
+     * 【賣家】獲取商品Sku列表
+     */
+    public static final String PATH_SELLER_GOODS_SKU_LIST = "/member/seller/goods/sku";
 
 
 

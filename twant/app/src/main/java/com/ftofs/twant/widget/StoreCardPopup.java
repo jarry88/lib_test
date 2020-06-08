@@ -1,10 +1,13 @@
 package com.ftofs.twant.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStructure;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,6 +60,11 @@ class StoreCardPopup extends CenterPopupView implements View.OnClickListener{
     protected void onShow() {
         super.onShow();
         String path = Api.STORE_CARD_DETAIL + "/" + storeId;
+        LinearLayout llWhite = findViewById(R.id.ll_bottom_container);
+        View llTop = findViewById(R.id.ll_top_view);
+        View llBottom = findViewById(R.id.ll_bottom_container);
+        LinearLayout llBlue = findViewById(R.id.top_container);
+        changeViewHeightAnimatorStart(llTop,llTop.getHeight(),Util.dip2px(context,150));
         Api.getUI(path, null, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -159,5 +167,32 @@ class StoreCardPopup extends CenterPopupView implements View.OnClickListener{
             Util.startFragment(ShopMainFragment.newInstance(storeId));
             dismiss();
         }
+    }
+    public static void changeViewHeightAnimatorStart(final View view, final int startHeight, final int endHeight){
+
+        if(view!=null&&startHeight>=0&&endHeight>=0){
+
+            ValueAnimator animator=ValueAnimator.ofInt(startHeight,endHeight);
+
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                @Override
+
+                public void onAnimationUpdate(ValueAnimator animation) {
+
+                    ViewGroup.LayoutParams params=view.getLayoutParams();
+
+                    params.height= (int) animation.getAnimatedValue();
+
+                    view.setLayoutParams(params);
+
+                }
+
+            });
+            animator.setDuration(800);
+            animator.start();
+
+        }
+
     }
 }

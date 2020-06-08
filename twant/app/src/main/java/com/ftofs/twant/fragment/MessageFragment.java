@@ -344,7 +344,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 long timestamp = conversation.lastMessageTime;
                 SLog.info("本地保存记录：%s,时间%d",conversation.nickname,timestamp);
                 if (conversation.needUpdate()) {
-                    SLog.info("%s需要更新",memberName);
+//                    SLog.info("%s需要更新",memberName);
                     updateConversationList.add(memberName);
                 }
 
@@ -357,7 +357,9 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     friendInfo.avatarUrl = conversation.avatarUrl;
                     friendInfo.storeAvatar = conversation.storeAvatarUrl;
                     friendInfo.storeName = conversation.storeName;
+                    friendInfo.storeAvatarUrl = conversation.storeAvatarUrl;
                     friendInfo.role = conversation.role;
+                    friendInfo.storeName = conversation.storeName;
                     SLog.info("會話框數據從extFied得到");
 //                    friendInfo.storeName = extFieldObj.getSafeString("storeName");
                 } else {
@@ -387,7 +389,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 }
                 totalIMUnreadCount += chatConversation.unreadCount;
                 SLog.info("here!!storeid%d, platId%d",friendInfo.storeId,PLATFORM_CUSTOM_STORE_ID);
-               if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID) {
+               if (friendInfo.storeId != PLATFORM_CUSTOM_STORE_ID&&!StringUtil.isEmpty(friendInfo.nickname)) {
                     //過濾平臺客服鏈接
                    chatConversationList.add(chatConversation);
                }else{
@@ -410,11 +412,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                 chatConversationList.add(0,platformCustomer);
             }
             updateConversationInfo();
+            SLog.info("updateSize[%s]",updateConversationList.size());
             displayUnreadCount();
             if (chatConversationList.size() > 2) {
                 //在結尾添加一個空白item
                 chatConversationList.add(null);
             }
+//            chatConversationList.add(null);
 
             adapter.setNewData(chatConversationList);
 
@@ -434,7 +438,10 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                         if (chatConversation.friendInfo.memberName.equals(memberName)) {
                             chatConversation.friendInfo.role = member.role;
                             chatConversation.friendInfo.nickname = member.role > 0 ? member.storeName + " " + member.getNickName(): member.getNickName();
+                            chatConversation.friendInfo.storeName = member.storeName ;
                             chatConversation.friendInfo.avatarUrl = member.role > 0 ? member.storeAvatar : member.getAvatar();
+                            chatConversation.friendInfo.storeAvatarUrl = member.storeAvatar;
+                            SLog.info("storeavatar[%s]",member.storeAvatar);
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -717,24 +724,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         }
         ((MainActivity) getActivity()).setMessageFragmentsActivity(true);
 
-
-        // 每次顯示時，登錄一下環信
-//        SqliteUtil.imLogin(new SimpleCallback() {
-//            @Override
-//            public void onSimpleCall(Object data) {
-//                if (!isImLogin) {
-//                    loadData();
-//                    isImLogin = true;
-//                    if (isPlatformCustomer) {
-//                        SLog.info("onSupportVisible");
-//                        loadPlatformCustomerData();
-//                    } else {
-//                        loadData();
-//                    }
-//                    displayUnreadCount();
-//                }
-//            }
-//        });
         SqliteUtil.imLogin();
         if (isPlatformCustomer) {
             SLog.info("onSupportVisible");
@@ -777,13 +766,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                     if (conversationList != null && conversationList.length() > 0) {
                         for (Object object : conversationList) {
                             EasyJSONObject conversation = (EasyJSONObject) object;
-                            String memberName = conversation.getSafeString("memberName");
-                            String nickName = conversation.getSafeString("nickName");
-                            if (StringUtil.isEmpty(nickName)) {
+                            FriendInfo friendInfo = FriendInfo.parse(conversation);
+                            if (friendInfo == null) {
                                 continue;
                             }
-                            String avatar = conversation.getSafeString("avatar");
-                            String storeAvatar = conversation.getSafeString("storeAvatar");
+                            SLog.info(conversation.toString());
                             String messageContent=conversation.getSafeString("messageContent");
                             if (EasyJSONBase.isJSONString(messageContent)) {
                                 messageContent = "[電子名片]";
@@ -791,22 +778,37 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             if (messageContent.startsWith("image")) {
                                 messageContent = "[圖片]";
                             }
+<<<<<<< HEAD
 //                            SLog.info("messageFragment [%s]",messageContent);
                             String storeName = conversation.getSafeString("storeName");
+=======
+                            SLog.info("messageFragment [%s]",messageContent);
+>>>>>>> master
                             String sendTime =conversation.getSafeString("sendTime");
-                            int role = conversation.getInt("role");
-                            int storeId = conversation.getInt("storeId");
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
-                                if (chatConversation!=null&&chatConversation.friendInfo != null) {
-                                    if (chatConversation.friendInfo.memberName.equals(memberName)) {
+                                if (chatConversation.friendInfo != null) {
+                                    if (chatConversation.friendInfo.memberName.equals(friendInfo.memberName)) {
                                         has = true;
+                                        int timestamp = Jarbon.parse(sendTime).getTimestamp();
+                                        chatConversation.friendInfo = friendInfo;
+                                        if (StringUtil.isEmpty(chatConversation.lastMessage)) {
+                                            chatConversation.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                                            chatConversation.lastMessage = "txt::" + messageContent + ":";
+                                            chatConversation.timestamp = timestamp;
+                                            SLog.info("db[%s]timestamp[%s]", chatConversation.timestamp, timestamp);
+                                        }
+//                                        else {
+//                                            if (chatConversation.timestamp<timestamp) {
+//                                                chatConversation.timestamp = timestamp;
+//                                            }
                                         break;
                                     }
                                 }
                             }
                             if (!has) {
                                 ChatConversation newChat = new ChatConversation();
+<<<<<<< HEAD
                                 String name = role > 0 ? storeName + nickName : nickName;
                                 int time =Jarbon.parse(sendTime).getTimestamp();
                                 newChat.friendInfo = FriendInfo.newInstance(memberName, name, avatar, role);
@@ -817,15 +819,38 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 newChat.lastMessage = "txt::"+messageContent+":";
 //                                newChat.timestamp = time;
 
+=======
+                                int time =Jarbon.parse(sendTime).getTimestamp();
+                                newChat.friendInfo = friendInfo;
+
+                                newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                                newChat.lastMessage = "txt::"+messageContent+":";
+//                                newChat.timestamp = time;
+                                Conversation conversation1 = Conversation.getByMemberName(friendInfo.memberName);
+                                if (friendInfo.role == 0) {
+                                    conversation1.nickname = friendInfo.nickname;
+                                } else if (friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
+                                    conversation1.nickname = friendInfo.nickname;
+                                } else {
+                                    conversation1.nickname = friendInfo.storeName+" "+friendInfo.nickname;
+                                }
+                                conversation1.avatarUrl = friendInfo.role>0?friendInfo.storeAvatarUrl:friendInfo.avatarUrl;
+                                conversation1.lastMessageText = messageContent;
+                                conversation1.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
+                                conversation1.storeId = friendInfo.storeId;
+                                conversation1.role = friendInfo.role;
+                                conversation1.timestamp = time;
+                                conversation1.save();
+>>>>>>> master
 //                                newChat.timestamp = sendTime;
                                 Conversation.saveNewChat(newChat);
                                 chatConversationList.add(newChat);
                             }
                         }
                     }
-                    if (chatConversationList.size() > oldCount) {
+//                    if (chatConversationList.size() > oldCount) {
                         adapter.notifyDataSetChanged();
-                    }
+//                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
