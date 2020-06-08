@@ -40,6 +40,7 @@ public class LogoView extends LinearLayout implements ITangramViewLifeCycle {
     }
 
     private void init() {
+        /*
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
 
@@ -56,6 +57,8 @@ public class LogoView extends LinearLayout implements ITangramViewLifeCycle {
                 }
             }
         });
+
+         */
     }
 
     @Override
