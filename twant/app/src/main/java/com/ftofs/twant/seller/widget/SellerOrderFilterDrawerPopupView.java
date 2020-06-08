@@ -11,12 +11,14 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.HttpHelper;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.seller.entity.SellerOrderFilterParams;
 import com.ftofs.twant.seller.entity.TwDate;
 import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.DrawerPopupView;
@@ -180,6 +182,7 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
         int id = v.getId();
 
         if (id == R.id.btn_select_order_type) {
+            simpleCallback.onSimpleCall(null);
             new XPopup.Builder(context)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
@@ -187,9 +190,11 @@ public class SellerOrderFilterDrawerPopupView extends DrawerPopupView implements
                             PopupType.SELECT_ORDER_TYPE, orderTypeList, orderTypeSelectedIndex, this))
                     .show();
         } else if (id == R.id.btn_select_order_source) {
+            simpleCallback.onSimpleCall(null);
             new XPopup.Builder(context)
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
+                    .autoOpenSoftInput(false)
                     .asCustom(new ListPopup(context, "訂單來源",
                             PopupType.SELECT_ORDER_SOURCE, orderSourceList, orderSourceSelectedIndex, this))
                     .show();
