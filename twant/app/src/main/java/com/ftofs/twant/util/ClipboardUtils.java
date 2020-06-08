@@ -1,10 +1,21 @@
 package com.ftofs.twant.util;
 
+import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.domain.activity.Activity;
 
 /**
  * 剪贴板开发指南  https://developer.android.com/guide/topics/text/copy-paste
@@ -47,7 +58,115 @@ public final class ClipboardUtils {
         }
         return null;
     }
+    public interface Function {
+        /** Invokes the function. */
+        void invoke(String text);
+    }
 
+    public static void getClipBoardText(@Nullable android.app.Activity activity, final Function f) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && activity != null) {
+            getTextFromClipFroAndroidQ(activity, f);
+        } else {
+            f.invoke(getTextFromClip(activity));
+        }
+    }
+
+    /**
+     * AndroidQ 获取剪贴板的内容
+     */
+    @TargetApi(Build.VERSION_CODES.Q)
+    private static void getTextFromClipFroAndroidQ(@NonNull final android.app.Activity activity, final Function f) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ClipboardManager clipboardManager =
+                        (ClipboardManager)activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                if (null == clipboardManager || !clipboardManager.hasPrimaryClip()) {
+                    f.invoke("");
+                    return;
+                }
+                ClipData clipData = clipboardManager.getPrimaryClip();
+                if (null == clipData || clipData.getItemCount() < 1) {
+                    f.invoke("");
+                    return;
+                }
+                ClipData.Item item = clipData.getItemAt(0);
+                if (item == null) {
+                    f.invoke("");
+                    return;
+                }
+                CharSequence clipText = item.getText();
+                if (TextUtils.isEmpty(clipText)){
+                    f.invoke("");
+                }
+                else{
+
+                    f.invoke(clipText.toString());
+                }
+            }
+        };
+        activity.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(@NonNull android.app.Activity activity, @Nullable Bundle savedInstanceState) {
+
+            }
+
+            @Override
+            public void onActivityStarted(@NonNull android.app.Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull android.app.Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull android.app.Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull android.app.Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull android.app.Activity activity, @NonNull Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull android.app.Activity activity) {
+                activity.getWindow().getDecorView().removeCallbacks(runnable);
+            }
+        });
+        activity.getWindow().getDecorView().post(runnable);
+    }
+
+    private static String getTextFromClip(android.app.Activity activity) {
+        ClipboardManager clipboardManager =
+                (ClipboardManager)activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (null == clipboardManager || !clipboardManager.hasPrimaryClip()) {
+            return "";
+        }
+        ClipData clipData = clipboardManager.getPrimaryClip();
+        if (null == clipData || clipData.getItemCount() < 1) {
+            return "";
+        }
+        ClipData.Item item = clipData.getItemAt(0);
+        if (item == null) {
+            return "";
+        }
+        CharSequence clipText = item.getText();
+        if (TextUtils.isEmpty(clipText)){
+            return "";
+        }
+        else{
+            return clipText.toString();
+        }
+
+    }
     /**
      * 复制uri到剪贴板
      *
@@ -99,4 +218,8 @@ public final class ClipboardUtils {
         }
         return null;
     }
+
+
+
+
 }
