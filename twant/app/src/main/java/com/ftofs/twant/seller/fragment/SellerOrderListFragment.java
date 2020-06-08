@@ -186,6 +186,10 @@ public class SellerOrderListFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void onSimpleCall(Object data) {
+        if (data == null) {
+            hideSoftInput();
+            return;
+        }
         SellerOrderFilterParams filterParams = (SellerOrderFilterParams) data;
         SLog.info("filterParams[%s]", filterParams.toString());
         ((SellerOrderListPageFragment) fragmentList.get(currTab)).reloadDataWithFilter(filterParams);
