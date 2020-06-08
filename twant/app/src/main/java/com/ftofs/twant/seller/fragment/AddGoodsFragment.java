@@ -1048,7 +1048,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                         "goodsPrice0", permutation.price,
                         "goodsSerial", permutation.goodsSN,
                         "goodsStorage", permutation.storage,
-                        "colorId", 0,
+                        "colorId", permutation.colorId,
                         "reserveStorage", permutation.reserved
                 ));
             }
@@ -1494,11 +1494,15 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             StringBuilder skuDesc = new StringBuilder();  // SKU規格描述
             List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();  // 規格值列表
 
+            int colorId = 0;
             for (int j = 0; j < sellerSelectedSpecList.size(); j++) {
                 SellerSpecMapItem sellerSpecMapItem = sellerSelectedSpecList.get(j);
 
                 int index = n % sellerSpecMapItem.sellerSpecItemList.size();
                 SellerSpecItem specItem = sellerSpecMapItem.sellerSpecItemList.get(index);
+                if (sellerSpecMapItem.specId == Constant.COLOR_SPEC_ID) {
+                    colorId = specItem.id;
+                }
 
                 sellerSpecItemList.add(specItem);
 
@@ -1516,6 +1520,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             if (permutation == null) {  // 如果不在Map裏面，則新建一個
                 permutation = new SellerSpecPermutation();
 
+                permutation.colorId = colorId;
                 permutation.specValueIdString = specValueIdString;
                 permutation.specValueNameString = StringUtil.trim(skuDesc.toString(), new char[] {'/'});
                 permutation.sellerSpecItemList = sellerSpecItemList;

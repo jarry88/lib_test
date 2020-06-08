@@ -18,6 +18,7 @@ public class SellerSpecPermutation {
     public String goodsSN = "";  // 商品編號
     public int storage; // 庫存
     public int reserved; // 預存庫存
+    public int colorId;  // 主規格Id
 
 
     public EasyJSONObject toEasyJSONObject() {
