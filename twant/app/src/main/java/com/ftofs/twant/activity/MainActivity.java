@@ -683,21 +683,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             TencentLocationTask.doLocation(this);
         }
 
-        // 切換到前臺時，檢測剪貼板中是否有優惠券
-        CharSequence clipboardContent = ClipboardUtils.getText(this);
-        ClipboardUtils.getClipBoardText(this, new ClipboardUtils.Function() {
-            @Override
-            public void invoke(String text) {
-                SLog.info("Clip :[%s]",text);
-                if (!StringUtil.isEmpty(text)) {
-                    String word = StringUtil.getCouponWord(text);
-                    SLog.info("clipboardContent::word[%s]", word);
-                    if (word != null) {
-                        parseCouponWord(word);
-                    }
-                }
-            }
-        });
+        checkWordCoupon();
+
+
 //        SLog.info("clipboardContent[%s]", clipboardContent);
 //        if (clipboardContent != null) {
 //            String word = StringUtil.getCouponWord(clipboardContent.toString());
@@ -721,6 +709,25 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             public String onFailure(@Nullable String data) {
 
                 return null;
+            }
+        });
+    }
+
+    public void checkWordCoupon() {
+        SLog.info("checkWordCoupon___");
+        // 切換到前臺時，檢測剪貼板中是否有優惠券
+        CharSequence clipboardContent = ClipboardUtils.getText(this);
+        ClipboardUtils.getClipBoardText(this, new ClipboardUtils.Function() {
+            @Override
+            public void invoke(String text) {
+                SLog.info("Clip :[%s]",text);
+                if (!StringUtil.isEmpty(text)) {
+                    String word = StringUtil.getCouponWord(text);
+                    SLog.info("clipboardContent::word[%s]", word);
+                    if (word != null) {
+                        parseCouponWord(word);
+                    }
+                }
             }
         });
     }

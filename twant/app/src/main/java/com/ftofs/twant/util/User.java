@@ -1,6 +1,7 @@
 package com.ftofs.twant.util;
 
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.MainActivity;
 import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.EBMessageType;
@@ -133,6 +134,12 @@ public class User {
         TwantApplication.getInstance().setUmengAlias(Constant.ACTION_ADD);
         TwantApplication.getInstance().updateCurrMemberInfo();
         EBMessage.postMessage(EBMessageType.MESSAGE_TYPE_LOGIN_SUCCESS, null);
+
+        MainActivity mainActivity = MainActivity.getInstance();
+        if (mainActivity != null) {
+            mainActivity.checkWordCoupon();
+        }
+
         SqliteUtil.switchUserDB(userId);
         SqliteUtil.imLogin();
     }
