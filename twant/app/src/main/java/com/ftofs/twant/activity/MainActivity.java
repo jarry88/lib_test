@@ -1,18 +1,41 @@
 package com.ftofs.twant.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Application;
+import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -110,7 +133,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -658,14 +685,27 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
         // 切換到前臺時，檢測剪貼板中是否有優惠券
         CharSequence clipboardContent = ClipboardUtils.getText(this);
-        SLog.info("clipboardContent[%s]", clipboardContent);
-        if (clipboardContent != null) {
-            String word = StringUtil.getCouponWord(clipboardContent.toString());
-            SLog.info("clipboardContent::word[%s]", word);
-            if (word != null) {
-                parseCouponWord(word);
+        ClipboardUtils.getClipBoardText(this, new ClipboardUtils.Function() {
+            @Override
+            public void invoke(String text) {
+                SLog.info("Clip :[%s]",text);
+                if (!StringUtil.isEmpty(text)) {
+                    String word = StringUtil.getCouponWord(text);
+                    SLog.info("clipboardContent::word[%s]", word);
+                    if (word != null) {
+                        parseCouponWord(word);
+                    }
+                }
             }
-        }
+        });
+//        SLog.info("clipboardContent[%s]", clipboardContent);
+//        if (clipboardContent != null) {
+//            String word = StringUtil.getCouponWord(clipboardContent.toString());
+//            SLog.info("clipboardContent::word[%s]", word);
+//            if (word != null) {
+//                parseCouponWord(word);
+//            }
+//        }
 
 
         PermissionUtil.actionWithPermission(this, new String[] {Permission.WRITE_EXTERNAL_STORAGE,
