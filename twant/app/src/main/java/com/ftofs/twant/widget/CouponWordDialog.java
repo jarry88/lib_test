@@ -198,7 +198,7 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
                     // 點擊領取按鈕，清空剪貼板
                     ClipboardUtils.copyText(context, "");
 
-                    if (!ToastUtil.isError(responseObj)) { // 領取錯誤
+                    if (!ToastUtil.isError(responseObj)) { // 領取成功
                         new XPopup.Builder(context)
                                 .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
                                 .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true
@@ -206,7 +206,7 @@ public class CouponWordDialog extends CenterPopupView implements View.OnClickLis
                                 .moveUpToKeyboard(false)
                                 .asCustom(new ReceiveWordCouponResultPopup(context, ReceiveWordCouponResultPopup.RESULT_SUCCESS, dataObj))
                                 .show();
-                    } else { // 領取成功
+                    } else { // 領取失敗
                         new XPopup.Builder(context)
                                 .dismissOnBackPressed(true) // 按返回键是否关闭弹窗，默认为true
                                 .dismissOnTouchOutside(true) // 点击外部是否关闭弹窗，默认为true

@@ -19,7 +19,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
 
-        versionCode 144
+        versionCode 146
 
         versionName "1.2.4.00"
 
