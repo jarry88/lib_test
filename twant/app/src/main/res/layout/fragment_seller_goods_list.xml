@@ -73,6 +73,16 @@
 
             </EditText>
         </RelativeLayout>
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_more"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/btn_customer_more"
+            android:visibility="visible"
+            />
     </RelativeLayout>
 
     <!-- Tab欄 -->

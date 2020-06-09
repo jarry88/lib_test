@@ -16,14 +16,18 @@ import androidx.fragment.app.Fragment;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.UnscrollableViewPager;
+import com.lxj.xpopup.XPopup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +75,7 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_publish_goods, this);
+        Util.setOnClickListener(view, R.id.btn_more, this);
 
         etKeyword = view.findViewById(R.id.et_keyword);
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -161,6 +166,16 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
 
         } else if (id == R.id.btn_publish_goods) {
             Util.startFragment(AddGoodsFragment.newInstance());
+        }else if (id == R.id.btn_more) {
+            new XPopup.Builder(_mActivity).moveUpToKeyboard(false)
+                    .offsetX(-Util.dip2px(_mActivity, 11))
+                    .offsetY(-Util.dip2px(_mActivity, 8))
+                    .hasShadowBg(false)
+                    .atView(v)
+                    .asCustom(new BlackDropdownMenu(
+                            _mActivity, this,
+                            BlackDropdownMenu.TYPE_SELLER_GOODS))
+                    .show();
         }
     }
 
