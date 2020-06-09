@@ -435,7 +435,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 selectedSpecItemView.addView(textView, 1);
             }
 
-            TextView btnEdit = selectedSpecItemView.findViewById(R.id.btn_edit);
+            View btnEdit = selectedSpecItemView.findViewById(R.id.btn_edit);
             btnEdit.setTag(sellerSpecMapItem.specId);
 
             btnEdit.setOnClickListener(new View.OnClickListener() {
