@@ -416,7 +416,10 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
 
     @Override
     public void onSimpleCall(Object data) {
-
+        if (data == null) {
+            hideSoftInput();
+            return;
+        }
         SellerOrderFilterParams filterParams = (SellerOrderFilterParams) data;
         SLog.info("filterParams[%s]", filterParams.toString());
         reloadDataWithFilter(filterParams);

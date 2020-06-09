@@ -33,7 +33,11 @@ public class ReceiveWordCouponResultPopup extends CenterPopupView implements Vie
     Context context;
     int result;
     EasyJSONObject data;
+
+    int skip;
     String activityType;
+    int storeId;
+    String resultMessage;
 
     public static final int RESULT_SUCCESS = 1;  // 領取成功
     public static final int RESULT_RUN_OUT = 2;  // 已經領完
@@ -78,15 +82,23 @@ public class ReceiveWordCouponResultPopup extends CenterPopupView implements Vie
 
         try {
             activityType = data.getSafeString("activityType");
+            skip = data.getInt("skip");
+            storeId = data.getInt("storeId");
+            resultMessage = data.getSafeString("resultMessage");
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
         tvMessage = findViewById(R.id.tv_message);
-        tvMessage.setText(resultDesc[result]);
+        tvMessage.setText(resultMessage);
 
         btnOk = findViewById(R.id.btn_ok);
-        btnOk.setText(buttonText[result]);
+        if (skip == 1) {
+            btnOk.setText("立即使用");
+        } else {
+            btnOk.setText("我知道了");
+        }
+
         btnOk.setOnClickListener(this);
     }
 
@@ -112,7 +124,7 @@ public class ReceiveWordCouponResultPopup extends CenterPopupView implements Vie
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_ok) {
-            if (result == RESULT_SUCCESS) {
+            if (skip == Constant.TRUE_INT) {
                 try {
                     if (Constant.WORD_COUPON_TYPE_STORE.equals(activityType)) {
                         int storeId = data.getInt("storeId");

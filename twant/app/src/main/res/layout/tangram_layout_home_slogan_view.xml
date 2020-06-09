@@ -152,7 +152,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
+            android:paddingBottom="0dp"
             android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
@@ -166,7 +166,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:textSize="10sp"
                 android:textColor="@color/tw_black"
                 android:text="SPECIAL THEME"
@@ -176,6 +176,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginStart="@dimen/margin12"
             android:layout_marginEnd="@dimen/margin12"
             android:id="@+id/cl_single_container"
@@ -247,13 +248,13 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginStart="@dimen/margin12"
             android:layout_marginEnd="@dimen/margin12"
             android:id="@+id/cl_second_line">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -296,20 +297,29 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--
         <include layout="@layout/special_theme_desktop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp">
-
         </include>
+        -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/special_theme_desktop_bg">
+
+        </ImageView>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="21.5dp"
+        android:paddingBottom="8dp"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
@@ -323,7 +333,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:textSize="10sp"
             android:textColor="@color/tw_black"
             android:text="NEW   ARRIVALS"

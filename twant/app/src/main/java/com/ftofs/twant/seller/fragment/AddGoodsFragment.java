@@ -547,9 +547,9 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void loadGoodsCountry(View view) {
-        if (Config.DEVELOPER_MODE) {
-            return;
-        }
+//        if (Config.DEVELOPER_MODE) {
+//            return;
+//        }
         EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
          SLog.info("params[%s]", params);
          Api.getUI(Api.PATH_SELLER_QUERY_COUNTRY_ALL, params, new UICallback() {
@@ -895,6 +895,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 break;
 
             case R.id.tv_add_freight_rule:
+                hideSoftInput();
                 new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "物流規則", PopupType.GOODS_FREIGHT_RULE, freightList, freightRuleIndex, this)).show();
                 break;
             case R.id.btn_freight_prev:
@@ -1161,7 +1162,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             }
             if (!StringUtil.isEmpty(freightVolumeStr)) {
 
-                publishGoodsInfo.set("freightWeight", Double.parseDouble(freightVolumeStr));
+                publishGoodsInfo.set("freightVolume", Double.parseDouble(freightVolumeStr));
             }
         }catch (Exception e) {
            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

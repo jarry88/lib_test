@@ -64,7 +64,7 @@
                 android:layout_alignParentBottom="true"
                 android:tint="@color/tw_blue"
                 android:scaleType="fitXY"
-                android:src="@drawable/bottom_navigation_bar_bg"
+                android:src="@drawable/home_navigation_bar_bg"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,10 +90,11 @@
                             android:id="@+id/ll_category_store"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
                             android:layout_gravity="bottom"
                             android:orientation="vertical"
                             android:gravity="center_horizontal"
-                            android:background="@drawable/tw_category_icon_bg">
+                            android:background="@drawable/tw_category_icon_bg_new">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -123,7 +124,7 @@
                             android:text="25555552"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
-                            android:visibility="visible"
+                            android:visibility="gone"
 
                             />
 
@@ -141,10 +142,11 @@
                             android:id="@+id/ll_category_goods"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
                             android:layout_gravity="bottom"
                             android:orientation="vertical"
                             android:gravity="center_horizontal"
-                            android:background="@drawable/tw_category_icon_bg">
+                            android:background="@drawable/tw_category_icon_bg_new">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -174,7 +176,7 @@
                             android:text="185555555"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
-                            android:visibility="visible"
+                            android:visibility="gone"
 
                             />
                     </LinearLayout>
@@ -191,10 +193,11 @@
                             android:id="@+id/ll_category_post"
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
                             android:layout_gravity="bottom"
                             android:orientation="vertical"
                             android:gravity="center_horizontal"
-                            android:background="@drawable/tw_category_icon_bg">
+                            android:background="@drawable/tw_category_icon_bg_new">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -224,7 +227,7 @@
                             android:text="123333"
                             android:textColor="@android:color/white"
                             android:textSize="10sp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             />
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
