@@ -778,12 +778,8 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             if (messageContent.startsWith("image")) {
                                 messageContent = "[圖片]";
                             }
-<<<<<<< HEAD
-//                            SLog.info("messageFragment [%s]",messageContent);
-                            String storeName = conversation.getSafeString("storeName");
-=======
+
                             SLog.info("messageFragment [%s]",messageContent);
->>>>>>> master
                             String sendTime =conversation.getSafeString("sendTime");
                             boolean has = false;
                             for (ChatConversation chatConversation : chatConversationList) {
@@ -808,18 +804,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             }
                             if (!has) {
                                 ChatConversation newChat = new ChatConversation();
-<<<<<<< HEAD
-                                String name = role > 0 ? storeName + nickName : nickName;
-                                int time =Jarbon.parse(sendTime).getTimestamp();
-                                newChat.friendInfo = FriendInfo.newInstance(memberName, name, avatar, role);
-                                newChat.friendInfo.storeId = storeId;
-                                newChat.friendInfo.storeName = storeName;
-                                newChat.friendInfo.storeAvatar = storeAvatar;
-                                newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
-                                newChat.lastMessage = "txt::"+messageContent+":";
-//                                newChat.timestamp = time;
-
-=======
                                 int time =Jarbon.parse(sendTime).getTimestamp();
                                 newChat.friendInfo = friendInfo;
 
@@ -841,7 +825,6 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 conversation1.role = friendInfo.role;
                                 conversation1.timestamp = time;
                                 conversation1.save();
->>>>>>> master
 //                                newChat.timestamp = sendTime;
                                 Conversation.saveNewChat(newChat);
                                 chatConversationList.add(newChat);

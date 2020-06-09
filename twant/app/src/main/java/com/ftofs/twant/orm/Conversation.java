@@ -50,7 +50,6 @@ public class Conversation extends LitePalSupport {
     public List<EMMessage> allEMMessage = new ArrayList<>();
     public int unreadMsgCount;
     public int lastMessageType;
-    public String storeAvatarUrl;
 
     /**
      * 更新会话信息
