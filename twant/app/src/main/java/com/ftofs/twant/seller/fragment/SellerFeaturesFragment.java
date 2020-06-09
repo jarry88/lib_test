@@ -1,5 +1,6 @@
 package com.ftofs.twant.seller.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,22 +10,30 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.adapter.SellerFeaturesGoodsAdapter;
 import com.ftofs.twant.seller.api.SellerApi;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.widget.SimpleTabManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
@@ -34,6 +43,8 @@ import okhttp3.Call;
  */
 public class SellerFeaturesFragment extends BaseFragment {
     private Unbinder unbinder;
+    private List<Goods> goodsCommonList =new ArrayList<>();
+    private SellerFeaturesGoodsAdapter adpter;
 
     @OnClick(R.id.btn_back)
     void back() {
@@ -42,6 +53,8 @@ public class SellerFeaturesFragment extends BaseFragment {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.rv_features_goods_list)
+    RecyclerView rvList;
 
     public static SellerFeaturesFragment newInstance() {
         return new SellerFeaturesFragment();
@@ -63,6 +76,10 @@ public class SellerFeaturesFragment extends BaseFragment {
 
     private void initView() {
         tvTitle.setText("鎮店之寶");
+        adpter = new SellerFeaturesGoodsAdapter(_mActivity,0, R.layout.seller_features_good_layout, goodsCommonList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
+        rvList.setLayoutManager(linearLayoutManager);
+        rvList.setAdapter(adpter);
     }
 
     @Override
@@ -106,7 +123,12 @@ public class SellerFeaturesFragment extends BaseFragment {
     }
 
     private void updateView(EasyJSONObject responseObj) throws Exception{
-
+        EasyJSONArray list = responseObj.getSafeArray("datas.goodsCommonList");
+        goodsCommonList.clear();
+        for (Object object : list) {
+            goodsCommonList.add(Goods.parse((EasyJSONObject) object));
+        }
+        adpter.setNewData(goodsCommonList);
     }
 
     @Override
