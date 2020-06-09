@@ -100,9 +100,6 @@ import java.util.concurrent.TimeUnit;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 import me.yokeyword.fragmentation.Fragmentation;
-import pl.com.salsoft.sqlitestudioremote.SQLiteStudioService;
-
-import static android.app.PendingIntent.getActivities;
 import static android.app.PendingIntent.getActivity;
 import static com.orhanobut.hawk.Hawk.init;
 
@@ -251,8 +248,6 @@ public class TwantApplication extends Application {
         // 初始化ZXing二維碼庫
         ZXingLibrary.initDisplayOpinion(this);
 
-        // 打開SQLiteStudio
-        SQLiteStudioService.instance().start(this);
 
         // MUST use app context to avoid memory leak!
         // or load with glide
@@ -296,8 +291,6 @@ public class TwantApplication extends Application {
     @Override
     public void onTerminate() {
         super.onTerminate();
-
-        SQLiteStudioService.instance().stop();
     }
 
     private void regToWx() {
