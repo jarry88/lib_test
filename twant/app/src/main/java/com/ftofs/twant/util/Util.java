@@ -101,6 +101,27 @@ import okhttp3.Call;
  */
 public class Util {
     /**
+     * 重启整个APP
+     * @param context
+     * @param Delayed 延迟多少毫秒
+     */
+    public  static void restartAPP(Context context, long Delayed){
+
+        /**开启一个新的服务，用来重启本APP*/
+        Intent intent=new Intent(context,KillSelfService.class);
+        intent.putExtra("PackageName",context.getPackageName());
+        intent.putExtra("Delayed",Delayed);
+        context.startService(intent);
+
+        /**杀死整个进程**/
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    /***重启整个APP*/
+    public static void restartAPP(Context context){
+        restartAPP(context,500);//我们传入500毫秒
+    }
+    /**
      * 需要登錄的才能顯示的Fragment列表
      */
     public static List<String> needLoginFragmentName = new ArrayList<>();

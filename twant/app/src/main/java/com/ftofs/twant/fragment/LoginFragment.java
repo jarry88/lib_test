@@ -2,6 +2,7 @@ package com.ftofs.twant.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,11 +34,13 @@ import com.ftofs.twant.constant.UmengAnalyticsPageName;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.util.HawkUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.google.android.material.tabs.TabLayout;
 import com.lxj.xpopup.XPopup;
+import com.orhanobut.hawk.Hawk;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -403,12 +406,24 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
     }
     /**退出程序*/
     protected void exit() {
-        // 这里使用clear + new task的方式清空整个任务栈,只保留新打开的Main页面
-        // 然后Main页面接收到退出的标志位exit=true,finish自己,这样就关闭了全部页面
-
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra("exit", true);
-        startActivity(intent);
+        //使用sp记录下来
+//        SPUtils.getInstance("test", MainActivity.this).put("ip", text);
+        Hawk.put("ip", "sd");
+        //延时1秒重启app,让sp能保存值
+        new Handler().postAtTime(new Runnable() {
+            @Override
+            public void run() {
+                //TODO("如果你用的是Retrofit2,不重启ip地址切换不会生效")
+                //重启app
+                Util.restartAPP(_mActivity);
+            }
+        },1000);
+//        // 这里使用clear + new task的方式清空整个任务栈,只保留新打开的Main页面
+//        // 然后Main页面接收到退出的标志位exit=true,finish自己,这样就关闭了全部页面
+//
+//        Intent intent = new Intent(getActivity(), MainActivity.class);
+//        intent.putExtra("exit", true);
+//        startActivity(intent);
     }
 
 

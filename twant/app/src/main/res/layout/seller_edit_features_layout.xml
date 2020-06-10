@@ -55,8 +55,8 @@
     </RelativeLayout>
     <!--  END OF 工具欄 -->
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_features_goods_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rv_features_goods_list"
-        android:background="@color/tw_grey"/>
+        android:background="@color/colorLightGray" />
 </LinearLayout>
