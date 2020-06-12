@@ -60,7 +60,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:background="@drawable/seller_goods_detail_spu_id_bg"
-                        android:text="1703"
+                        android:text=""
                         android:textSize="12sp"
                         android:textColor="@android:color/white">
 
@@ -71,7 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="Qt 5.9 C++开发指南 QT5.9编程开发指南 提供实例源代码"
+                        android:text=""
                         android:textColor="@color/tw_blue">
 
                     </TextView>
@@ -100,7 +100,7 @@
                                 android:id="@+id/tv_price_range"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1000.00 MOP - 2000.00 MOP"
+                                android:text=""
                                 android:textSize="13sp"
                                 android:textColor="@color/tw_black">
                             </TextView>
@@ -114,7 +114,7 @@
                                 android:id="@+id/tv_total_stock"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="總庫存: 800">
+                                android:text="">
                             </TextView>
 
                             <TextView
@@ -122,7 +122,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="20dp"
-                                android:text="銷量: 1000">
+                                android:text="">
                             </TextView>
                         </LinearLayout>
                         <LinearLayout
@@ -133,7 +133,7 @@
                                 android:id="@+id/tv_create_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2020-05-22">
+                                android:text="">
                             </TextView>
                         </LinearLayout>
                         <ImageView
@@ -208,7 +208,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="母嬰用品 > 童車童床 > 嬰兒推車"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="15sp">
 
@@ -234,7 +234,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="防水不暈妝，可撕~"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="15sp"
                         android:maxLines="2"
@@ -262,7 +262,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="Huawei"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="15sp">
 
@@ -287,7 +287,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="中國大陸"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="15sp">
 
@@ -356,7 +356,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="件"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="15sp">
 
@@ -377,10 +377,11 @@
                         android:textSize="15sp">
                     </TextView>
                     <TextView
+                        android:id="@+id/tv_sale_way"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="零售型"
+                        android:text=""
                         android:textColor="@color/tw_black"
                         android:textSize="15sp">
 

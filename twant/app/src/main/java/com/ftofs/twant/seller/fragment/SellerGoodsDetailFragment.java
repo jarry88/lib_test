@@ -138,6 +138,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_brand_location)).setText(goodsVo.getSafeString("goodsCountryName"));
                     ((TextView) contentView.findViewById(R.id.tv_unit)).setText(goodsVo.getSafeString("unitName"));
 
+                    int isVirtual = goodsVo.getInt("isVirtual");
+                    ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(isVirtual == Constant.TRUE_INT ? "虛擬商品" : "零售商品");
+
                     double freightWeight = goodsVo.getDouble("freightWeight");
                     double freightVolume = goodsVo.getDouble("freightVolume");
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
