@@ -7,7 +7,7 @@
     android:layout_marginTop="15dp"
     android:layout_marginLeft="@dimen/toolbar_margin_left"
     android:layout_marginRight="@dimen/toolbar_margin_right"
-    android:background="@drawable/addr_item_bg"
+    android:background="@drawable/white_r2dp_bg"
     android:orientation="vertical">
     <LinearLayout
         android:id="@+id/btn_use_this_addr"

@@ -14,7 +14,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:gravity="center_vertical"
-        android:background="@drawable/goods_image_bg"
+        android:background="@drawable/white_r10dp_bg"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView

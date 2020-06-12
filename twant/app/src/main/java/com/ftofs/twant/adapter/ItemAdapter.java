@@ -128,7 +128,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 secondHolder.getView(R.id.sw_price).setVisibility( View.GONE);
 //                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
                 ImageView imageView = secondHolder.getView(R.id.img_goods_item);
-                Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goods.imageUrl)).placeholder(R.drawable.goods_image_bg).centerCrop().into(imageView);
+                Glide.with(mContext).load(StringUtil.normalizeImageUrl(item.goods.imageUrl)).placeholder(R.drawable.white_r10dp_bg).centerCrop().into(imageView);
                 secondHolder.getView(R.id.iv_goods_item).setOnClickListener(v -> {
                     if (Config.PROD) {
                         HashMap<String, Object> analyticsDataMap = new HashMap<>();
