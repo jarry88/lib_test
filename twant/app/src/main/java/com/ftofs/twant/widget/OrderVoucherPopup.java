@@ -87,16 +87,22 @@ public class OrderVoucherPopup extends BottomPopupView implements View.OnClickLi
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                SLog.info("HERE");
+                SLog.info("position[%d]", position);
                 StoreVoucherVo storeVoucherVo = storeVoucherVoList.get(position);
                 VoucherUseStatus voucherUseStatus = new VoucherUseStatus();
                 voucherUseStatus.storeId = storeId;
                 voucherUseStatus.voucherId = storeVoucherVo.voucherId;
                 voucherUseStatus.isInUse = !storeVoucherVo.isInUse;
-                if (couponType == Constant.COUPON_TYPE_STORE) {
+                if (couponType == Constant.COUPON_TYPE_STORE) { // 店鋪券
+                    // 目前店鋪券只能單選，所以先清除所有的選中狀態，然後再設置點擊項的選中狀態
+                    for (StoreVoucherVo vo : storeVoucherVoList) { // 清除所有的選中狀態
+                        vo.isInUse = false;
+                    }
+
+                    storeVoucherVo.isInUse = voucherUseStatus.isInUse; // 賦值為最新狀態
+                    SLog.info("storeVoucherVo.isInUse[%s]", storeVoucherVo.isInUse);
                     onSelectedListener.onSelected(PopupType.SELECT_VOUCHER, 0, voucherUseStatus);
-                } else {
-                    SLog.info("position[%d]", position);
+                } else { // 平臺券
                     onSelectedListener.onSelected(PopupType.SELECT_PLATFORM_COUPON, position, null);
                 }
 

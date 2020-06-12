@@ -1695,9 +1695,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             this.selectedMobileZoneIndex = id;
             String areaName = mobileZoneList.get(selectedMobileZoneIndex).areaName;
             tvSelfFetchMobileZone.setText(areaName);
-        } else if (type == PopupType.SELECT_VOUCHER) {
-            SLog.info("HERE");
+        } else if (type == PopupType.SELECT_VOUCHER) { // 選擇店铺券
             VoucherUseStatus voucherUseStatus = (VoucherUseStatus) extra;
+            SLog.info("voucherUseStatus: %s", voucherUseStatus);
             updateStoreVoucherStatus(voucherUseStatus);
 
             calcAmount();
