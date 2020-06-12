@@ -1680,7 +1680,6 @@ public class Api {
                     .url(url)
                     .build();
             Response response = client.newCall(request).execute();
-
             is = response.body().byteStream();
             bitmap = BitmapFactory.decodeStream(is);
         } catch (Exception e) {
@@ -1914,6 +1913,55 @@ public class Api {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
         SLog.info("Here");
+        return null;
+    }
+ /**
+     * 上传文件到测试服务器
+     * @param file
+     */
+    public static String syncTestUploadFile(File file,TaskObserver taskObserver) {
+
+        TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+            @Override
+            public Object doWork() {
+                SLog.info("上傳圖片開始");
+                OkHttpClient client = getOkHttpClient();
+                MultipartBody.Builder builder = new MultipartBody.Builder();
+                builder.setType(MultipartBody.FORM);
+
+                builder.addFormDataPart("c", "File");
+                builder.addFormDataPart("a", "uploadAttachment");
+//        builder.addFormDataPart("access_token", "");
+                // 拼装文件参数
+                builder.addFormDataPart("weshare_file", file.getName(), RequestBody.create(STREAM, file));
+                SLog.info("文件大小[%s]",file.length());
+
+                RequestBody requestBody = builder.build();
+
+                String url = "https://test.weshare.team/api";
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(requestBody)
+                        .build();
+
+                try {
+                    Response response = client.newCall(request).execute();
+
+                    String responseStr = response.body().string();
+                    SLog.info(" responseStr[%s]",responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.isError(responseObj)) {
+                        return null;
+                    }
+
+                    return responseObj.getSafeString("data.file_id");
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+                return null;
+        }
+        });
         return null;
     }
 

@@ -29,6 +29,7 @@ import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.SellerFeaturesFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -134,6 +135,9 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        if (id == R.id.icon_takewant) {
+            Util.startFragment(SellerFeaturesFragment.newInstance());
+        }
         if (id == R.id.btn_goto_activity) {
 //            gotoTestFragment();
             gotoActivity();
