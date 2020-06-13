@@ -1887,15 +1887,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void startCountDown() {
-        SLog.info("___here");
         if (timer == null) {
             timer = new Timer();
         }
-        SLog.info("___here");
+
         if (isCountingDown) {
             return;
         }
-        SLog.info("___here");
+        isCountingDown = true;
+
         // 定时服务
         timer.schedule(new TimerTask() {
             @Override
@@ -1935,11 +1935,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     private void stopCountDown() {
         SLog.info("stopCountDown()");
-        isCountingDown = false;
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
+//        isCountingDown = false;
+//        if (timer != null) {
+//            timer.cancel();
+//            timer = null;
+//        }
     }
 
     /**
