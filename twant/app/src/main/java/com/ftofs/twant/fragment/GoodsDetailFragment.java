@@ -154,6 +154,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     LinearLayout llGroupMemberList;
     TextView tvHasMoreMembersIndicator;
     int twLightGrey;
+    TextView tvGroupBuyCountDownTitle;
+    TextView tvGroupRemainDay;
+    TextView tvGroupRemainHour;
+    TextView tvGroupRemainMinute;
+    TextView tvGroupRemainSecond;
+    TextView tvGroupPrice;
+    TextView tvGroupOriginalPrice;
+    TextView tvGroupDiscountAmount;
 
     /**
      * 限時折扣倒計時是否正在倒數
@@ -351,16 +359,25 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
             if (goodsDetailFragment.discountState == IN_DISCOUNT || goodsDetailFragment.discountState == BEFORE_DISCOUNT) {
                 if (goodsDetailFragment.discountState == IN_DISCOUNT) {
                     goodsDetailFragment.tvCountDownDay.setText(String.format("距結束 %d 天", timeInfo.day));
-                } else if (goodsDetailFragment.discountState == BEFORE_DISCOUNT) {
+                } else {
                     goodsDetailFragment.tvCountDownDay.setText(String.format("距開始 %d 天", timeInfo.day));
                 }
+
                 goodsDetailFragment.tvCountDownHour.setText(String.format("%02d", timeInfo.hour));
                 goodsDetailFragment.tvCountDownMinute.setText(String.format("%02d", timeInfo.minute));
                 goodsDetailFragment.tvCountDownSecond.setText(String.format("%02d", timeInfo.second));
             } else if (goodsDetailFragment.currGroupBuyStatus == GroupBuyStatus.ONGOING || goodsDetailFragment.currGroupBuyStatus == GroupBuyStatus.NOT_STARTED) {
+                if (goodsDetailFragment.currGroupBuyStatus == GroupBuyStatus.ONGOING) {
+                    goodsDetailFragment.tvGroupBuyCountDownTitle.setText("活動倒計時");
+                } else {
+                    goodsDetailFragment.tvGroupBuyCountDownTitle.setText("距離活動開始");
+                }
 
+                goodsDetailFragment.tvGroupRemainDay.setText(String.format("%d天", timeInfo.day));
+                goodsDetailFragment.tvGroupRemainHour.setText(String.format("%02d", timeInfo.hour));
+                goodsDetailFragment.tvGroupRemainMinute.setText(String.format("%02d", timeInfo.minute));
+                goodsDetailFragment.tvGroupRemainSecond.setText(String.format("%02d", timeInfo.second));
             }
-
         }
     }
 
@@ -492,6 +509,15 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         Util.setOnClickListener(view, R.id.btn_join_group, this);
         llGroupMemberList = view.findViewById(R.id.ll_group_member_list);
         tvHasMoreMembersIndicator = view.findViewById(R.id.tv_has_more_members_indicator);
+        tvGroupBuyCountDownTitle = view.findViewById(R.id.tv_group_buy_count_down_title);
+        tvGroupRemainDay = view.findViewById(R.id.tv_group_remain_day);
+        tvGroupRemainHour = view.findViewById(R.id.tv_group_remain_hour);
+        tvGroupRemainMinute = view.findViewById(R.id.tv_group_remain_minute);
+        tvGroupRemainSecond = view.findViewById(R.id.tv_group_remain_second);
+
+        tvGroupPrice = view.findViewById(R.id.tv_group_price);
+        tvGroupOriginalPrice = view.findViewById(R.id.tv_group_original_price);
+        tvGroupDiscountAmount = view.findViewById(R.id.tv_group_discount_amount);
 
         btnArrivalNotice = view.findViewById(R.id.btn_arrival_notice);
         btnArrivalNotice.setOnClickListener(this);
@@ -709,10 +735,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         int userId = User.getUserId();
 
         switch (id) {
-            case R.id.btn_join_group:
-                // 参团
-                SLog.info("参团");
-                break;
             case R.id.btn_back_round:
             case R.id.btn_back:
                 hideSoftInputPop();
@@ -786,6 +808,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                 }
                 break;
             case R.id.btn_select_spec:
+            case R.id.btn_join_group:
                 showSpecSelectPopup(Constant.ACTION_SELECT_SPEC);
                 break;
             case R.id.btn_select_addr:
@@ -1380,6 +1403,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         groupBuyEndTime = Jarbon.parse(groupEndTime).getTimestampMillis();
 
                         if (now < groupBuyEndTime) { // 拼团活动未结束
+                            SLog.info("___here");
                             EasyJSONObject groupsVo = responseObj.getSafeObject("datas.groupsVo");
                             groupRequireNum = groupsVo.getInt("groupRequireNum");
                             tvGroupBuyLabel.setText(groupRequireNum + "人拼團價");
@@ -1387,6 +1411,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             llGroupInfoContainer.setVisibility(VISIBLE);
 
                             if (now > groupBuyStartTime) { // 拼团活动已经开始
+                                SLog.info("___here");
                                 currGroupBuyStatus = GroupBuyStatus.ONGOING;
                                 llGroupStateContainer.setVisibility(VISIBLE);
 
@@ -1426,8 +1451,10 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 currGroupBuyStatus = GroupBuyStatus.NOT_STARTED;
                                 llGroupStateContainer.setVisibility(GONE);
                             }
-                        }
-                    }
+
+                            startCountDown();
+                        } // END OF 拼团活动未结束
+                    } // END OF 有开启拼团活动
 
 
                     // 【贈品】優惠
@@ -1481,6 +1508,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.goodsName = goodsName;
                         goodsInfo.promotionType =goodsInfoVo.getInt("promotionType");
                         goodsInfo.appUsable =goodsInfoVo.getInt("appUsable");
+                        goodsInfo.isGroup = goodsInfoVo.getInt("isGroup");
+                        if (goodsInfo.isGroup == Constant.TRUE_INT) {
+                            goodsInfo.groupPrice = goodsInfoVo.getDouble("groupPrice");
+                            goodsInfo.groupDiscountAmount = goodsInfo.goodsPrice0 - goodsInfo.groupPrice;
+                        }
 
                         goodsInfoMap.put(goodsId, goodsInfo);
 
@@ -1820,7 +1852,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onSupportVisible() {
         super.onSupportVisible();
-
+        SLog.info("onSupportVisible");
         SLog.info("discountState[%d], currGroupBuyStatus[%s]", discountState, currGroupBuyStatus);
         if ((discountState == IN_DISCOUNT || discountState == BEFORE_DISCOUNT) ||
                 (currGroupBuyStatus == GroupBuyStatus.ONGOING || currGroupBuyStatus == GroupBuyStatus.NOT_STARTED)) {
@@ -1840,22 +1872,52 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
         stopCountDown();
     }
 
+    /**
+     * 顯示/隱藏GroupBuyView
+     * @param show
+     */
+    private void showHideGroupBuyView(boolean show) {
+        if (show) {
+            tvGroupBuyLabel.setVisibility(VISIBLE);
+            llGroupInfoContainer.setVisibility(VISIBLE);
+        } else {
+            tvGroupBuyLabel.setVisibility(GONE);
+            llGroupInfoContainer.setVisibility(GONE);
+        }
+    }
+
     private void startCountDown() {
+        SLog.info("___here");
         if (timer == null) {
             timer = new Timer();
         }
-
+        SLog.info("___here");
         if (isCountingDown) {
             return;
         }
+        SLog.info("___here");
         // 定时服务
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 long threadId = Thread.currentThread().getId();
-                // SLog.info("threadId[%d]", threadId);
+                SLog.info("threadId[%d]", threadId);
 
-                TimeInfo timeInfo = Time.diff((int) (System.currentTimeMillis() / 1000), discountState == IN_DISCOUNT ? discountEndTime : discountStartTime);
+                TimeInfo timeInfo;
+
+                int from = (int) (System.currentTimeMillis() / 1000);
+                int to;
+
+                if (discountState == IN_DISCOUNT || discountState == BEFORE_DISCOUNT) {
+                    to = discountState == IN_DISCOUNT ? discountEndTime : discountStartTime;
+                } else if (currGroupBuyStatus == GroupBuyStatus.ONGOING || currGroupBuyStatus == GroupBuyStatus.NOT_STARTED) {
+                    to = currGroupBuyStatus == GroupBuyStatus.ONGOING ? (int) (groupBuyEndTime / 1000) : (int) (groupBuyStartTime / 1000);
+                } else {
+                    // 無效狀態
+                    return;
+                }
+
+                timeInfo = Time.diff(from, to);
                 if (timeInfo == null) {
                     return;
                 }
@@ -1872,6 +1934,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void stopCountDown() {
+        SLog.info("stopCountDown()");
         isCountingDown = false;
         if (timer != null) {
             timer.cancel();
@@ -1946,6 +2009,17 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         SLog.info("goodsPrice0[%f],goodsprice[%f] ", goodsInfo.goodsPrice0, goodsInfo.price);
         showPriceTag(goodsInfo);
+
+        // 更新團購信息
+        if (goodsInfo.isGroup == Constant.TRUE_INT) {
+            tvGroupPrice.setText(StringUtil.formatFloat(goodsInfo.groupPrice));
+            tvGroupOriginalPrice.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
+            tvGroupDiscountAmount.setText("拼團立減 " + StringUtil.formatPrice(_mActivity, goodsInfo.groupDiscountAmount, 0));
+
+            showHideGroupBuyView(true);
+        } else {
+            showHideGroupBuyView(false);
+        }
 
         // 看是否有現貨，如果沒有，則顯示到貨通知
         int finalStorage = goodsInfo.getFinalStorage();

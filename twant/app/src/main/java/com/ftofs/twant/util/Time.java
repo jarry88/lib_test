@@ -93,7 +93,7 @@ public class Time {
      * 計算兩個時間戳之差(開始時間不能晚于結束時間)
      * @param from 開始時間
      * @param to 結束時間
-     * @return
+     * @return 如果開始時間晚於結束時間，返回null
      */
     public static TimeInfo diff(int from, int to) {
         if (from > to) {

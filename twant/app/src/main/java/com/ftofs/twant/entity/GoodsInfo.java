@@ -13,6 +13,8 @@ public class GoodsInfo {
     public String specValueIds;
     public double goodsPrice0; // 原價
     public double price;  // 最終價，如果沒有打折，最終價與原價相同
+    public double groupPrice; // 團購價格
+    public double groupDiscountAmount;  // 團購折扣額
     public String imageSrc;
     public int goodsStorage;  // 產品庫存
     public int reserveStorage;  // 預留庫存
@@ -22,6 +24,7 @@ public class GoodsInfo {
     public Boolean showSendBtn;
     public int promotionType;//活动类型（0-没有参加活动 ，1限时折扣, 2全款预售，3定金预售）
     public int appUsable =0;//1:正在進行折扣活動，
+    public int isGroup; // 該SKU是否參與團購
 
     /**
      * 獲取最終庫存(產品的庫存減去預留庫存)
