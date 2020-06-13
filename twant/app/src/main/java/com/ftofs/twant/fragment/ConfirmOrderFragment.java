@@ -174,6 +174,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         ConfirmOrderFragment fragment = new ConfirmOrderFragment();
         fragment.setArguments(args);
         fragment.isGroup = isGroup;
+        SLog.info("isGroup[%d]", isGroup);
 
         return fragment;
     }

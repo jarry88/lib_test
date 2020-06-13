@@ -132,6 +132,8 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                            int discountState, List<SkuGalleryItem> skuGalleryItemList, boolean groupBuyMode) {
         super(context);
 
+        SLog.info("groupBuyMode[%s]", groupBuyMode);
+
         this.context = context;
         this.action = action;
         this.commonId = commonId;
@@ -469,6 +471,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 "buyNum", abQuantity.getValue(),
                 "goodsId", goodsId));
 
+        SLog.info("groupBuyMode[%s]", groupBuyMode);
         Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString(), groupBuyMode ? Constant.TRUE_INT : Constant.FALSE_INT));
     }
 
