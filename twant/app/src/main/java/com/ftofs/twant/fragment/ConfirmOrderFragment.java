@@ -103,7 +103,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     int selectedPayWayIndex = 0;
 
     AddrItem mAddrItem;
-    int isExistTrys;
 
     TextView tvReceiverName;
     TextView tvMobile;
@@ -384,7 +383,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     // "paymentTypeCode", "online",
                     "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_OFFLINE,
                     "isCart", isFromCart,
-                    "isExistTrys", isExistTrys,
                     "storeList", commitStoreList);
 
             if (platformCouponIndex != -1) { // 如果有選擇平台券
@@ -851,7 +849,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                 EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                 shippingItemList.add(new ListPopupItem(easyJSONObject.getInt("id"), easyJSONObject.getSafeString("name"), null));
             }
-            isExistTrys = responseObj.getInt("datas.isExistTrys");
 
             confirmOrderItemList.clear();
 
@@ -1280,7 +1277,6 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                         EasyJSONObject easyJSONObject = (EasyJSONObject) object;
                         shippingItemList.add(new ListPopupItem(easyJSONObject.getInt("id"), easyJSONObject.getSafeString("name"), null));
                     }
-                    isExistTrys = responseObj.getInt("datas.isExistTrys");
 
                     // 獲取商店券
                     confirmOrderItemList.clear();
