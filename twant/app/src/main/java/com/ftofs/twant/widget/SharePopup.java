@@ -33,6 +33,10 @@ import com.lxj.xpopup.core.BottomPopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.lxj.xpopup.util.XPopupUtils;
 
+import org.urllib.Urls;
+
+import java.io.File;
+
 import cn.snailpad.easyjson.EasyJSONObject;
 
 
@@ -151,29 +155,28 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                     shareToWeixin(scene, filepath);
                 }
             };
-
-//            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
-//                @Override
-//                public Object doWork() {
-//                    String filename = Urls.parse(coverUrl).path().filename();
-//                    String ext = PathUtil.getExtension(filename, true);
-//                    SLog.info("coverUrl[%s], filename[%s]", coverUrl, filename);
-//                    File file = FileUtil.getCacheFile(context, filename);
-//                    if (Api.syncDownloadFile(coverUrl, file)) {
-//                        SLog.info("封面圖片下載成功[%s]", file.getAbsolutePath());
-//                        // 裁剪圖片大小在微信限制范圍內
-//                        String thumbFilename = Guid.getSpUuid() + "." + ext;
-//                        SLog.info("thumbFilename[%s]", thumbFilename);
-//                        File thumb = FileUtil.getCacheFile(context, thumbFilename);
-//                        ImageProcess.with(context).from(file).centerCrop().resize(160, 160).toFile(thumb.getAbsolutePath());
-//                        SLog.info("thumb[%s]", thumb.getAbsolutePath());
-//                        return thumb.getAbsolutePath();
-//                    } else {
-//                        SLog.info("Error!封面圖片下載失敗");
-//                        return null;
-//                    }
-//                }
-//            });
+            TwantApplication.getThreadPool().execute(new TaskObservable(taskObserver) {
+                @Override
+                public Object doWork() {
+                    String filename = Urls.parse(coverUrl).path().filename();
+                    String ext = PathUtil.getExtension(filename, true);
+                    SLog.info("coverUrl[%s], filename[%s]", coverUrl, filename);
+                    File file = FileUtil.getCacheFile(context, filename);
+                    if (Api.syncDownloadFile(coverUrl, file)) {
+                        SLog.info("封面圖片下載成功[%s]", file.getAbsolutePath());
+                        // 裁剪圖片大小在微信限制范圍內
+                        String thumbFilename = Guid.getSpUuid() + "." + ext;
+                        SLog.info("thumbFilename[%s]", thumbFilename);
+                        File thumb = FileUtil.getCacheFile(context, thumbFilename);
+                        ImageProcess.with(context).from(file).centerCrop().resize(160, 160).toFile(thumb.getAbsolutePath());
+                        SLog.info("thumb[%s]", thumb.getAbsolutePath());
+                        return thumb.getAbsolutePath();
+                    } else {
+                        SLog.info("Error!封面圖片下載失敗");
+                        return null;
+                    }
+                }
+            });
         } else if (id == R.id.btn_share_to_facebook) {
             ShareLinkContent content = new ShareLinkContent.Builder()
                     .setContentTitle(title)
