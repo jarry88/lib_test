@@ -100,6 +100,16 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
     private List<String> currGalleryImageList;
 
     boolean canViewSkuImage = false;
+    boolean groupBuyMode;
+
+    public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
+                           Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
+                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy,
+                           int discountState, List<SkuGalleryItem> skuGalleryItemList) {
+        this(context, action, commonId, specList, specValueIdMap, specValueIdList,
+                    quantity, goodsInfoMap, viewPagerFragment, limitBuy,
+                    discountState, skuGalleryItemList, false);
+    }
 
 
     /**
@@ -114,10 +124,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
      * @param viewPagerFragment 圖片瀏覽器
      * @param limitBuy
      * @param skuGalleryItemList sku圖片列表（如果specList為null，skuGalleryItemList也必須為null）
+     * @param groupBuyMode 是否為團購模式
      */
     public SpecSelectPopup(@NonNull Context context, int action, int commonId, List<Spec> specList,
                            Map<String, Integer> specValueIdMap, List<Integer> specValueIdList,
-                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy, int discountState, List<SkuGalleryItem> skuGalleryItemList) {
+                           int quantity, Map<Integer, GoodsInfo> goodsInfoMap, List<String> viewPagerFragment, int limitBuy,
+                           int discountState, List<SkuGalleryItem> skuGalleryItemList, boolean groupBuyMode) {
         super(context);
 
         this.context = context;
@@ -132,6 +144,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
         this.limitBuy = limitBuy;
         this.discountState = discountState;
         this.skuGalleryItemList = skuGalleryItemList;
+        this.groupBuyMode = groupBuyMode;
     }
 
     @Override
@@ -456,7 +469,7 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 "buyNum", abQuantity.getValue(),
                 "goodsId", goodsId));
 
-        Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString()));
+        Util.startFragment(ConfirmOrderFragment.newInstance(0, easyJSONArray.toString(), groupBuyMode ? Constant.TRUE_INT : Constant.FALSE_INT));
     }
 
     private void selectSpecs() {
@@ -566,7 +579,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
 
         int finalStorage = goodsInfo.getFinalStorage();
         SLog.info("goodsInfo.price[%s]", goodsInfo.price);
-        tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
+        if (groupBuyMode && goodsInfo.isGroup == Constant.TRUE_INT) {
+            tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.groupPrice, 0) + " (原價: " + StringUtil.formatPrice(context, goodsInfo.goodsPrice0, 0) + ")");
+        } else {
+            tvPrice.setText(StringUtil.formatPrice(context, goodsInfo.price, 0));
+        }
         tvGoodsStorage.setText("( 庫存: " + finalStorage + goodsInfo.unitName + " )");
 
         // 限定購買的數量
@@ -614,7 +631,11 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
             if (action == Constant.ACTION_ADD_TO_CART) {
                 btnOk.setText(R.string.text_want_to_add_to_cart);
             } else if (action == Constant.ACTION_BUY) {
-                btnOk.setText(R.string.text_want_to_buy);
+                if (groupBuyMode && goodsInfo.isGroup == Constant.TRUE_INT) {
+                    btnOk.setText("想拼團");
+                } else {
+                    btnOk.setText(R.string.text_want_to_buy);
+                }
             } else if (action == Constant.ACTION_SELECT_SPEC) {
                 btnOk.setText(R.string.ok);
             }

@@ -93,6 +93,7 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
     String buyData;
 
     int isFromCart;
+    int isGroup;
 
     List<PayWayItem> payWayItemList = new ArrayList<>();
     List<ListPopupItem> shippingItemList = new ArrayList<>();
@@ -161,9 +162,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
      * 創建確認訂單的實例
      * @param isFromCart 1 -- 來源于購物袋 0 -- 直接購買
      * @param buyData
+     * @param isGroup 是否為團購  1 -- 是   0 -- 否
      * @return
      */
-    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData) {
+    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData, int isGroup) {
         Bundle args = new Bundle();
 
         args.putInt("isFromCart", isFromCart);
@@ -171,9 +173,16 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
         ConfirmOrderFragment fragment = new ConfirmOrderFragment();
         fragment.setArguments(args);
+        fragment.isGroup = isGroup;
 
         return fragment;
     }
+
+
+    public static ConfirmOrderFragment newInstance(int isFromCart, String buyData) {
+        return newInstance(isFromCart, buyData, Constant.FALSE_INT);
+    }
+
 
     @Nullable
     @Override
@@ -384,6 +393,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                     "paymentTypeCode", Constant.PAYMENT_TYPE_CODE_OFFLINE,
                     "isCart", isFromCart,
                     "storeList", commitStoreList);
+
+            if (isGroup == Constant.TRUE_INT) {
+                commitBuyData.set("isGroup", 1);
+            }
 
             if (platformCouponIndex != -1) { // 如果有選擇平台券
                 StoreVoucherVo platformCoupon = platformCouponList.get(platformCouponIndex);

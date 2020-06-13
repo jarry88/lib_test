@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.config.Config;
 import com.ftofs.twant.constant.SearchType;
 import com.ftofs.twant.entity.SearchPostParams;
 import com.ftofs.twant.entity.StickyCellData;
@@ -28,10 +29,14 @@ import com.ftofs.twant.fragment.SearchResultFragment;
 import com.ftofs.twant.fragment.ShopMainFragment;
 import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialFragment;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwConfirmPopup;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tmall.wireless.tangram.structure.BaseCell;
 import com.tmall.wireless.tangram.structure.view.ITangramViewLifeCycle;
 
@@ -44,6 +49,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     TextView tvGoodsCount;
     TextView tvPostCount;
 
+    View iconTakewant;
     ImageView iconActivityEntrance;
     View vwActivityEntrancePlaceholder;
     View btnGotoActivity;
@@ -82,6 +88,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         iconActivityEntrance = contentView.findViewById(R.id.icon_activity_entrance);
         vwActivityEntrancePlaceholder = contentView.findViewById(R.id.vw_activity_entrance_placeholder);
         btnGotoActivity = contentView.findViewById(R.id.btn_goto_activity);
+        iconTakewant = contentView.findViewById(R.id.icon_takewant);
 
         addView(contentView);
     }
@@ -112,6 +119,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
                 btnGotoActivity.setOnClickListener(this);
             }
         }
+        iconTakewant.setOnClickListener(this);
     }
 
     @Override
@@ -149,6 +157,32 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
             SearchPostParams searchPostParams = new SearchPostParams();
             searchPostParams.keyword = "";
             Util.startFragment(CircleFragment.newInstance(true, searchPostParams));
+        } else if (id == R.id.icon_takewant) {
+            if (Config.PROD) {
+                return;
+            }
+            new XPopup.Builder(context)
+//                         .dismissOnTouchOutside(false)
+                    // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                    .setPopupCallback(new XPopupCallback() {
+                        @Override
+                        public void onShow() {
+                        }
+                        @Override
+                        public void onDismiss() {
+                        }
+                    }).asCustom(new TwConfirmPopup(context, "圖片過大是否壓縮后上傳",null   , "確認", "取消",new OnConfirmCallback() {
+                @Override
+                public void onYes() {
+                    SLog.info("onYes");
+                }
+
+                @Override
+                public void onNo() {
+                    SLog.info("onNo");
+                }
+            })).show();
         }
     }
 
