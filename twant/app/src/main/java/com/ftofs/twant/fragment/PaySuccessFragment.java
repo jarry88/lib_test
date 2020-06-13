@@ -28,6 +28,7 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.AmapPopup;
+import com.ftofs.twant.widget.SharePopup;
 import com.lxj.xpopup.XPopup;
 
 import java.io.IOException;
@@ -46,6 +47,17 @@ import okhttp3.Call;
 public class PaySuccessFragment extends BaseFragment implements View.OnClickListener {
     int payId;
     boolean isCashOnDelivery; // 是否是貨到付款
+
+    int isGroup = Constant.FALSE_INT;
+    // 團購分享數據
+    String groupShareTitle;
+    String groupShareImage;
+    String groupShareContent;
+    String groupShareUrl;
+    int groupShareCommonId;
+    int groupShareGoodsId;
+    double groupSharePrice;
+
 
     RecyclerView rvList;
     PaySuccessItemAdapter adapter;
@@ -119,8 +131,19 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
 
 
                     } else if (id == R.id.btn_goto_home) {
-                        MainFragment.getInstance().showHideFragment(MainFragment.HOME_FRAGMENT);
-                        popTo(MainFragment.class, false);
+                        if (isGroup == Constant.TRUE_INT) {
+                            new XPopup.Builder(_mActivity)
+                                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                                    .moveUpToKeyboard(false)
+                                    .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(groupShareCommonId, groupShareGoodsId), groupShareTitle,
+                                            groupShareContent, groupShareImage, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
+                                            "commonId", groupShareCommonId, "goodsName", groupShareTitle,
+                                            "goodsImage", groupShareImage, "goodsPrice", groupSharePrice)))
+                                    .show();
+                        } else {
+                            MainFragment.getInstance().showHideFragment(MainFragment.HOME_FRAGMENT);
+                            popTo(MainFragment.class, false);
+                        }
                     }
                 } else if (itemViewType == Constant.ITEM_VIEW_TYPE_COMMON) {
                     PaySuccessStoreInfoItem paySuccessStoreInfoItem = (PaySuccessStoreInfoItem) itemEntity;
@@ -235,6 +258,37 @@ public class PaySuccessFragment extends BaseFragment implements View.OnClickList
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
                     }
+
+                    isGroup = responseObj.getInt("datas.isGroup");
+                    if (isGroup == Constant.TRUE_INT) {
+                        if (dataList.size() > 0) {
+                            PaySuccessSummaryItem paySuccessSummaryItem = (PaySuccessSummaryItem) dataList.get(0);
+                            paySuccessSummaryItem.isGroupBuy = true;
+                        }
+
+                        if (responseObj.exists("datas.shareVo")) {
+                            EasyJSONObject shareVo = responseObj.getSafeObject("datas.shareVo");
+
+                            /*
+                                "title": "1分錢也是愛",
+                                "image": "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8d/7e/8d7e2879963eb6bfd7f912e52af304d4.png",
+                                "content": "1分錢也是愛的測試商品",
+                                "shareUrl": "http://localhost:8080/web/goods/3508",
+                                "commonId": 3508,
+                                "goodsId": 4742,
+                                "price": 100.00
+                             */
+
+                            groupShareTitle = shareVo.getSafeString("title");
+                            groupShareImage = StringUtil.normalizeImageUrl(shareVo.getSafeString("image"));
+                            groupShareContent = shareVo.getSafeString("content");
+                            groupShareUrl = shareVo.getSafeString("shareUrl");
+                            groupShareCommonId = shareVo.getInt("commonId");
+                            groupShareGoodsId = shareVo.getInt("goodsId");
+                            groupSharePrice = shareVo.getDouble("price");
+                        }
+                    }
+
 
 
                     int storeCouponCount = 0; // 收到的店铺券数量

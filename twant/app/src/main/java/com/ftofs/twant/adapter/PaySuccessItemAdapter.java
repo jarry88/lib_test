@@ -65,6 +65,10 @@ public class PaySuccessItemAdapter extends BaseMultiItemQuickAdapter<MultiItemEn
                 helper.setText(R.id.tv_pay_status_desc, mContext.getString(R.string.text_pay_success));
             }
 
+            if (paySuccessSummaryItem.isGroupBuy) {
+                helper.setText(R.id.btn_goto_home, "邀請好友");
+            }
+
             TextView tvPaySuccessMPayActivityIndicator = helper.getView(R.id.tv_pay_success_mpay_activity_indicator);
             if (paySuccessSummaryItem.isMPayActivity) {
                 tvPaySuccessMPayActivityIndicator.setText(((PaySuccessSummaryItem) item).mpayActivityDesc);
