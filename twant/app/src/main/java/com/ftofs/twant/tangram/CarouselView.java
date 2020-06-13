@@ -120,7 +120,7 @@ public class CarouselView extends LinearLayout implements ITangramViewLifeCycle 
                     }
 
                     EasyJSONArray itemList = responseObj.getSafeArray("datas.webSliderItem");
-                    SLog.info(itemList.toString());
+                    SLog.info("itemList[%s]", itemList.toString());
                     webSliderItemList.clear();
                     for (Object object : itemList) {
                         EasyJSONObject itemObj = (EasyJSONObject) object;

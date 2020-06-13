@@ -784,33 +784,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     return;
                 }
                 if (userId > 0) {
-                    if (currSKUGroupBuy && currGroupBuyStatus == GroupBuyStatus.ONGOING) {
-                        new XPopup.Builder(_mActivity)
-//                         .dismissOnTouchOutside(false)
-                                // 设置弹窗显示和隐藏的回调监听
-//                         .autoDismiss(false)
-                                .setPopupCallback(new XPopupCallback() {
-                                    @Override
-                                    public void onShow() {
-                                    }
-                                    @Override
-                                    public void onDismiss() {
-                                    }
-                                }).asCustom(new TwConfirmPopup(_mActivity, "是否參與團購優惠活動",null   , "是", "否",new OnConfirmCallback() {
-                            @Override
-                            public void onYes() {
-                                SLog.info("onYes");
-                                showSpecSelectPopup(Constant.ACTION_BUY, true);
-                            }
-
-                            @Override
-                            public void onNo() {
-                                SLog.info("onNo");
-                                showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
-                            }
-                        })).show();
-                        return;
-                    }
                     showSpecSelectPopup(Constant.ACTION_ADD_TO_CART);
                 } else {
                     Util.showLoginFragment();
@@ -834,13 +807,41 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         return;
                     }
 
-                    if (currSKUGroupBuy && currGroupBuyStatus == GroupBuyStatus.NOT_STARTED) {
-                        int from = (int) (System.currentTimeMillis() / 1000);
-                        int to = (int) (groupBuyStartTime / 1000);
+                    if (currSKUGroupBuy) {
+                        if (currGroupBuyStatus == GroupBuyStatus.NOT_STARTED) {
+                            int from = (int) (System.currentTimeMillis() / 1000);
+                            int to = (int) (groupBuyStartTime / 1000);
 
-                        TimeInfo timeInfo = Time.diff(from, to);
-                        if (timeInfo != null) {
-                            String title = String.format("距離開團還有%d天%d時%d分，您是否要使用原價進行購買", timeInfo.day, timeInfo.hour, timeInfo.minute);
+                            TimeInfo timeInfo = Time.diff(from, to);
+                            if (timeInfo != null) {
+                                String title = String.format("距離開團還有%d天%d時%d分，您是否要使用原價進行購買", timeInfo.day, timeInfo.hour, timeInfo.minute);
+                                new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                                        // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                                        .setPopupCallback(new XPopupCallback() {
+                                            @Override
+                                            public void onShow() {
+                                            }
+                                            @Override
+                                            public void onDismiss() {
+                                            }
+                                        }).asCustom(new TwConfirmPopup(_mActivity, title,null   , "是的", "等等團購",new OnConfirmCallback() {
+                                    @Override
+                                    public void onYes() {
+                                        SLog.info("onYes");
+                                        showSpecSelectPopup(Constant.ACTION_BUY);
+                                    }
+
+                                    @Override
+                                    public void onNo() {
+                                        SLog.info("onNo");
+                                    }
+                                })).show();
+
+                                return;
+                            }
+                        } else if (currGroupBuyStatus == GroupBuyStatus.ONGOING) {
                             new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
                                     // 设置弹窗显示和隐藏的回调监听
@@ -852,19 +853,19 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                         @Override
                                         public void onDismiss() {
                                         }
-                                    }).asCustom(new TwConfirmPopup(_mActivity, title,null   , "是的", "等等團購",new OnConfirmCallback() {
+                                    }).asCustom(new TwConfirmPopup(_mActivity, "是否參與團購優惠活動",null   , "參與團購", "原價購買",new OnConfirmCallback() {
                                 @Override
                                 public void onYes() {
                                     SLog.info("onYes");
-                                    showSpecSelectPopup(Constant.ACTION_BUY);
+                                    showSpecSelectPopup(Constant.ACTION_BUY, true);
                                 }
 
                                 @Override
                                 public void onNo() {
                                     SLog.info("onNo");
+                                    showSpecSelectPopup(Constant.ACTION_BUY);
                                 }
                             })).show();
-
                             return;
                         }
                     }
@@ -1464,9 +1465,13 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     SLog.info("goodsDetail exists,discount[%s]", goodsDetail.exists("discount"));
 
 
+                    SLog.info("___here");
                     // 团购功能
-                    int groupUsable = goodsDetail.getInt("groupUsable");
-                    if (groupUsable == Constant.TRUE_INT) { // 有开启拼团活动
+                    int groupId = 0;
+                    if (goodsDetail.exists("groupId")) {
+                        groupId = goodsDetail.getInt("groupId");
+                    }
+                    if (groupId > 0) { // 有开启拼团活动
                         String groupStartTime = goodsDetail.getSafeString("groupStartTime");
                         String groupEndTime = goodsDetail.getSafeString("groupEndTime");
 
@@ -1522,10 +1527,16 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                 currGroupBuyStatus = GroupBuyStatus.NOT_STARTED;
                                 llGroupStateContainer.setVisibility(GONE);
                             }
+                            SLog.info("currGroupBuyStatus[%s]", currGroupBuyStatus);
 
                             startCountDown();
                         } // END OF 拼团活动未结束
                     } // END OF 有开启拼团活动
+
+                    SLog.info("currGroupBuyStatus[%s]", currGroupBuyStatus);
+                    if (currGroupBuyStatus == GroupBuyStatus.CLOSED) {
+                        showHideGroupBuyView(false);
+                    }
 
 
                     // 【贈品】優惠
@@ -2083,7 +2094,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
         // 更新團購信息
         currSKUGroupBuy = (goodsInfo.isGroup == Constant.TRUE_INT);
-        if (currSKUGroupBuy) {
+        if (currGroupBuyStatus != GroupBuyStatus.CLOSED && currSKUGroupBuy) {
             tvGroupPrice.setText(StringUtil.formatFloat(goodsInfo.groupPrice));
             tvGroupOriginalPrice.setText("原價 " + StringUtil.formatPrice(_mActivity, goodsInfo.goodsPrice0, 0));
             tvGroupDiscountAmount.setText("拼團立減 " + StringUtil.formatPrice(_mActivity, goodsInfo.groupDiscountAmount, 0));

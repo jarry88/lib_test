@@ -42,6 +42,7 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.SharePopup;
 import com.ftofs.twant.widget.SquareGridLayout;
 import com.ftofs.twant.widget.StoreCustomerServicePopup;
 import com.ftofs.twant.widget.TwConfirmPopup;
@@ -82,6 +83,8 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     int payId;
     double ordersAmount = -1;
 
+    int isGroup = Constant.FALSE_INT;
+
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
 
@@ -120,6 +123,15 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     int ordersState;
     int showRefundWaiting;
+
+    // 團購分享數據
+    String groupShareTitle;
+    String groupShareImage;
+    String groupShareContent;
+    String groupShareUrl;
+    int groupShareCommonId;
+    int groupShareGoodsId;
+    double groupSharePrice;
 
 
     public static final String TEXT_MEMBER_BUY_AGAIN = "showMemberBuyAgain";
@@ -166,16 +178,27 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
 
     @OnClick(R.id.btn_buy_again)
     public void buyAgain(View v) {
-        SLog.info("添加到購物袋%d",ordersId);
-        for (OrderDetailGoodsItem goodsItem:orderDetailGoodsItemList){
-            if (Config.PROD) {
-                HashMap<String, Object> analyticsDataMap = new HashMap<>();
-                analyticsDataMap.put("commonId", goodsItem.commonId);
-                MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
-            }
+        if (isGroup == Constant.TRUE_INT) { // 如果是團購，則為邀請好友
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(groupShareCommonId, groupShareGoodsId), groupShareTitle,
+                            groupShareContent, groupShareImage, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
+                            "commonId", groupShareCommonId, "goodsName", groupShareTitle,
+                            "goodsImage", groupShareImage, "goodsPrice", groupSharePrice)))
+                    .show();
+        } else {
+            SLog.info("添加到購物袋%d",ordersId);
+            for (OrderDetailGoodsItem goodsItem:orderDetailGoodsItemList){
+                if (Config.PROD) {
+                    HashMap<String, Object> analyticsDataMap = new HashMap<>();
+                    analyticsDataMap.put("commonId", goodsItem.commonId);
+                    MobclickAgent.onEventObject(TwantApplication.getInstance(), UmengAnalyticsActionName.GOODS_ADD_TO_CART, analyticsDataMap);
+                }
 
-            Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> {ToastUtil.success(_mActivity, "添加購物袋成功");
-                Util.startFragment(CartFragment.newInstance(true));});
+                Util.changeCartContent(_mActivity, goodsItem.goodsId, 1, data -> {ToastUtil.success(_mActivity, "添加購物袋成功");
+                    Util.startFragment(CartFragment.newInstance(true));});
+            }
         }
     }
     @OnClick(R.id.btn_pay_order)
@@ -601,7 +624,7 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     ToastUtil.success(_mActivity, "確認收貨成功");
                     hideSoftInputPop();
                 } catch (Exception e) {
-
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
             }
         });
@@ -635,6 +658,33 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
                     if (ToastUtil.checkError(_mActivity, responseObj)) {
                         return;
+                    }
+
+                    isGroup = responseObj.getInt("datas.isGroup");
+                    if (isGroup == Constant.TRUE_INT) {
+                        btnBuyAgain.setText("邀請好友");
+
+                        if (responseObj.exists("datas.shareVo")) {
+                            EasyJSONObject shareVo = responseObj.getSafeObject("datas.shareVo");
+
+                            /*
+                                "title": "1分錢也是愛",
+                                "image": "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com/image/8d/7e/8d7e2879963eb6bfd7f912e52af304d4.png",
+                                "content": "1分錢也是愛的測試商品",
+                                "shareUrl": "http://localhost:8080/web/goods/3508",
+                                "commonId": 3508,
+                                "goodsId": 4742,
+                                "price": 100.00
+                             */
+
+                            groupShareTitle = shareVo.getSafeString("title");
+                            groupShareImage = StringUtil.normalizeImageUrl(shareVo.getSafeString("image"));
+                            groupShareContent = shareVo.getSafeString("content");
+                            groupShareUrl = shareVo.getSafeString("shareUrl");
+                            groupShareCommonId = shareVo.getInt("commonId");
+                            groupShareGoodsId = shareVo.getInt("goodsId");
+                            groupSharePrice = shareVo.getDouble("price");
+                        }
                     }
 
                     EasyJSONObject ordersVo = responseObj.getSafeObject("datas.ordersVo");
