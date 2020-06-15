@@ -627,7 +627,12 @@ public class SpecSelectPopup extends BottomPopupView implements View.OnClickList
                 ToastUtil.error(context, outOfMaxValueReason);
             }
         });
-//        abQuantity.
+
+        // 如果有庫存，則將默認的購買數量設置為1
+        if (finalStorage > 0 && maxValue > 0){
+            SLog.info("MINVALUE[%d], MAXVALUE[%d]", abQuantity.minValue, abQuantity.maxValue);
+            abQuantity.setValue(1);
+        }
 
 
         if (finalStorage > 0) {
