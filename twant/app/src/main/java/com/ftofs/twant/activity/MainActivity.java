@@ -99,6 +99,7 @@ import com.ftofs.twant.util.Time;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.util.Vendor;
 import com.ftofs.twant.view.DragFloatActionButton;
 import com.ftofs.twant.widget.ActivityPopup;
 import com.ftofs.twant.widget.AppUpdatePopup;
@@ -370,7 +371,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
     private void updateDeviceToken() {
         // 請求華爲token
-
+        if (Vendor.VENDOR_HUAWEI != Vendor.getVendorType()) {
+            return;
+        }
         TwantApplication.getThreadPool().execute(() -> {
             try{
                 String getToken = HmsInstanceId.getInstance(getBaseContext()).getToken(getString(R.string.huawei_app_id),"HCM");
@@ -1191,8 +1194,10 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     // 获取复制、剪切的文本内容
                     CharSequence content =
                             mClipboardManager.getPrimaryClip().getItemAt(0).getText();
+                    if (content == null) {
+                        return;
+                    }
                     SLog.info("复制、剪切的内容为[%s]", content);
-
                     String word = StringUtil.getCouponWord(content.toString());
 
                     if (word != null) {
