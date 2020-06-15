@@ -1533,7 +1533,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     } else {
                         iconTariff.setVisibility(View.INVISIBLE);
                     }
-//                    loadCouponList();
+                    loadCouponList();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

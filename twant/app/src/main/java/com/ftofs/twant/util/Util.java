@@ -76,6 +76,9 @@ import com.orhanobut.hawk.Hawk;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 
+import org.urllib.Query;
+import org.urllib.Urls;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -745,16 +748,16 @@ public class Util {
         if (StringUtil.isEmpty(youtubeUrl)) {
             return null;
         }
-        // 先處理第3種形式
-//        if (youtubeUrl.startsWith("https://youtu.be/")) {
-//            return Urls.parse(youtubeUrl).path().filename();
-//        }
-//        List<Query.KeyValue> paramList = Urls.parse(youtubeUrl).query().params();
-//        for (Query.KeyValue kv : paramList) {
-//            if (kv.key().equals("v")) {
-//                return kv.value();
-//            }
-//        }
+//         先處理第3種形式
+        if (youtubeUrl.startsWith("https://youtu.be/")) {
+            return Urls.parse(youtubeUrl).path().filename();
+        }
+        List<Query.KeyValue> paramList = Urls.parse(youtubeUrl).query().params();
+        for (Query.KeyValue kv : paramList) {
+            if (kv.key().equals("v")) {
+                return kv.value();
+            }
+        }
         return null;
     }
 

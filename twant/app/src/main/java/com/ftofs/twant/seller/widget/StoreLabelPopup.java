@@ -173,6 +173,9 @@ public class StoreLabelPopup extends BottomPopupView implements View.OnClickList
     }
 
     private void setSelectLabelId(Category category) {
+        if (category == null) {
+            return;
+        }
         SLog.info("category.toString(%s),[%s]",category.toString(),selectedAreaList.size());
         if (selectedAreaList.size() >= category.getDeep()) {
             selectedAreaList.set(category.getDeep()-1, category);

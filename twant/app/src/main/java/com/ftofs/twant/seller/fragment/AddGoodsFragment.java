@@ -435,7 +435,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
                 selectedSpecItemView.addView(textView, 1);
             }
 
-            TextView btnEdit = selectedSpecItemView.findViewById(R.id.btn_edit);
+            View btnEdit = selectedSpecItemView.findViewById(R.id.btn_edit);
             btnEdit.setTag(sellerSpecMapItem.specId);
 
             btnEdit.setOnClickListener(new View.OnClickListener() {
@@ -712,9 +712,14 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
             TextView tvSelect=mViews.get(DETAIL_INDEX).findViewById(R.id.btn_select_store_category_id);
             tvSelect.setOnClickListener(v ->{
                 hideSoftInput();
-                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
-                        new StoreLabelPopup(_mActivity, PopupType.STORE_CATEGORY, list, AddGoodsFragment.this)
-                ).show();
+                if (list != null && list.size() != 0) {
+                    new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
+                            new StoreLabelPopup(_mActivity, PopupType.STORE_CATEGORY, list, AddGoodsFragment.this)
+                    ).show();
+                } else {
+                    ToastUtil.error(_mActivity,"當前店鋪沒有分類數據");
+                    storeLabelId = 0;
+                }
             });
         }
 

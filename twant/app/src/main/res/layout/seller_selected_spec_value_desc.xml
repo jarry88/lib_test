@@ -5,32 +5,18 @@
     android:layout_height="wrap_content"
     app:flRowSpacing="8dp">
 
-
-    <TextView
-        android:visibility="gone"
+    <FrameLayout
+        android:id="@+id/btn_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:text="編輯"
-        android:textSize="12sp"
-        android:textColor="@android:color/white"
-        android:background="@color/tw_blue">
-    </TextView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <view
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1"/>
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_edit"
-            android:src="@drawable/icon_edit"/>
-    </LinearLayout>
+            android:src="@drawable/icon_edit"
+            />
+    </FrameLayout>
+
 
 </com.nex3z.flowlayout.FlowLayout>
