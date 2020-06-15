@@ -308,6 +308,8 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private ImageView iconTariff;
     private View vwSeparator0;
 
+    String goodsSpuImage;
+
 
     static class scrollStateHandler extends Handler {
         ScrollView scrollViewContainer;
@@ -953,14 +955,32 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
 
     public void pullShare() {
         SLog.info("goodsPrice[%s]", goodsPrice);
-        new XPopup.Builder(_mActivity)
-                // 如果不加这个，评论弹窗会移动到软键盘上面
-                .moveUpToKeyboard(false)
-                .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
-                        jingle, currGalleryImageList.get(0), EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
-                        "commonId", commonId, "goodsName", goodsName,
-                        "goodsImage", currGalleryImageList.get(0), "goodsPrice", goodsPrice)))
-                .show();
+        String goodsImageUrl = null;
+
+        try {
+            if (currGalleryImageList.size() > 0) {
+                goodsImageUrl = StringUtil.normalizeImageUrl(currGalleryImageList.get(0));
+            } else {
+
+            }
+
+            if (StringUtil.isEmpty(goodsImageUrl)) {
+                goodsImageUrl = "";
+            }
+
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new SharePopup(_mActivity, SharePopup.generateGoodsShareLink(commonId, currGoodsId), goodsName,
+                            jingle, goodsImageUrl, EasyJSONObject.generate("shareType", SharePopup.SHARE_TYPE_GOODS,
+                            "commonId", commonId, "goodsName", goodsName,
+                            "goodsImage", goodsImageUrl, "goodsPrice", goodsPrice)))
+                    .show();
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+
+
     }
 
     public void showStoreCustomerService() {
@@ -1590,7 +1610,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                         goodsInfo.goodsName = goodsName;
                         goodsInfo.promotionType =goodsInfoVo.getInt("promotionType");
                         goodsInfo.appUsable =goodsInfoVo.getInt("appUsable");
-                        goodsInfo.isGroup = goodsInfoVo.getInt("isGroup");
+                        goodsInfo.isGroup = 0;
+                        Object tmpObj = goodsInfoVo.get("isGroup");
+                        if (!Util.isJsonNull(tmpObj)) {
+                            goodsInfo.isGroup = goodsInfoVo.getInt("isGroup");
+                        }
                         if (goodsInfo.isGroup == Constant.TRUE_INT) {
                             goodsInfo.groupPrice = goodsInfoVo.getDouble("groupPrice");
                             goodsInfo.groupDiscountAmount = goodsInfo.goodsPrice0 - goodsInfo.groupPrice;
@@ -1749,6 +1773,11 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                     } else {
                         iconTariff.setVisibility(View.INVISIBLE);
                     }
+
+                    if (goodsDetail.exists("imageSrc")) {
+                        goodsSpuImage = goodsDetail.getSafeString("imageSrc");
+                    }
+
                     loadCouponList();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
