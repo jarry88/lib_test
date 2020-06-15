@@ -705,27 +705,7 @@ public class Util {
     public static void getMemberToken(Context context) {
         SLog.info("當前禁用了請求membertoken的方法20200220");
         return;
-//        String token = User.getToken();
-//        if (!StringUtil.isEmpty(token)) {
-//            EasyJSONObject params=EasyJSONObject.generate("token", token);
-//            Api.getUI(Api.PATH_GET_MEMBER_TOKEN, params, new UICallback() {
-//                @Override
-//                public void onFailure(Call call, IOException e) {
-//                    ToastUtil.showNetworkError(context, e);
-//                }
-//
-//                @Override
-//                public void onResponse(Call call, String responseStr) throws IOException {
-//                    SLog.info("responseStr[%s]",responseStr);
-//                    EasyJSONBase responseObj = EasyJSONObject.parse(responseStr);
-//                    try {
-//                        Hawk.put(SPField.FIELD_MEMBER_TOKEN, responseObj.get("datas.memberToken"));
-//                    } catch (Exception e) {
-//                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-//                    }
-//                }
-//            });
-//        }
+
     }
 
     /**
