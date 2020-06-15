@@ -1178,7 +1178,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
     private void checkPayWay() {
         // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示；
-        if (mAddrItem != null && mAddrItem.areaIdList.size() > 0 && mAddrItem.areaIdList.get(0) == Constant.DISTRICT_ID_MACAO) {
+        if (mAddrItem != null && mAddrItem.areaIdList!=null
+                && mAddrItem.areaIdList.size() > 0
+                && mAddrItem.areaIdList.get(0) == Constant.DISTRICT_ID_MACAO) {
             SLog.info("顯示貨到付款");
             if (payWayItemList.size() < 3) {
                 payWayItemList.add(specialItem);
