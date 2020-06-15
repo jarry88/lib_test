@@ -23,6 +23,8 @@ import com.ftofs.twant.seller.adapter.SellerFeaturesGoodsAdapter;
 import com.ftofs.twant.seller.api.SellerApi;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
+import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ScaledButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 
 import java.io.IOException;
@@ -53,6 +55,11 @@ public class SellerFeaturesFragment extends BaseFragment {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
+
+    @OnClick(R.id.icon_add_goods)
+    void gotoGoodsList() {
+        Util.startFragment(SetFeatureListFragment.newInstance());
+    }
     @BindView(R.id.rv_features_goods_list)
     RecyclerView rvList;
 
@@ -76,6 +83,7 @@ public class SellerFeaturesFragment extends BaseFragment {
 
     private void initView() {
         tvTitle.setText("鎮店之寶");
+
         adpter = new SellerFeaturesGoodsAdapter(_mActivity,0, R.layout.seller_features_good_layout, goodsCommonList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         rvList.setLayoutManager(linearLayoutManager);
