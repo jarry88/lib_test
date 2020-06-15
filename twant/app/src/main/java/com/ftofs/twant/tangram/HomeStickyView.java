@@ -75,6 +75,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         contentView.findViewById(R.id.btn_category_store).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_goods).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_brand).setOnClickListener(this);
+        contentView.findViewById(R.id.icon_takewant).setOnClickListener(this);
 
         tvStoreCount = contentView.findViewById(R.id.tv_store_count);
         tvGoodsCount = contentView.findViewById(R.id.tv_goods_count);
