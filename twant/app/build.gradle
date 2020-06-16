@@ -19,7 +19,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
 
-        versionCode 155
+        versionCode 156
 
         versionName "1.2.4.02"
 
