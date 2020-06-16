@@ -2,6 +2,7 @@ package com.ftofs.twant.entity;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.log.SLog;
 
 /**
  * 產品總計
@@ -38,11 +39,15 @@ public class ConfirmOrderSummaryItem implements MultiItemEntity {
      */
     public double calcTotalPrice() {
         // 總金額 + 總運費 - 商店折扣 - 平臺折扣
+        SLog.info("totalAmount[%s], storeDiscount[%s], totalTaxAmount[%s]", totalAmount, storeDiscount, totalTaxAmount);
         double result = totalAmount - storeDiscount - platformDiscount+totalTaxAmount;
         //2是門店自提現在
+        SLog.info("payWayIndex[%d]", payWayIndex);
         if (payWayIndex != Constant.PAY_WAY_FETCH) { // 不是門店自提才加上運費
+            SLog.info("here");
             result += totalFreight;
         }
+        SLog.info("result[%s]", result);
         return result;
     }
 }

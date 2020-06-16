@@ -1191,7 +1191,9 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
         // 只有選擇的收貨人信息是澳門地區才會顯示貨到付款這種交易方式，空地址、香港和內地的地址均不顯示；
         if (mAddrItem != null && mAddrItem.areaIdList!=null
                 && mAddrItem.areaIdList.size() > 0
-                && mAddrItem.areaIdList.get(0) == Constant.DISTRICT_ID_MACAO) {
+                && mAddrItem.areaIdList.get(0) == Constant.DISTRICT_ID_MACAO
+                && isGroup == Constant.FALSE_INT // 團購不顯示貨到付款
+        ) {
             SLog.info("顯示貨到付款");
             if (payWayItemList.size() < 3) {
                 payWayItemList.add(specialItem);
@@ -1586,7 +1588,12 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
                             if (item.getItemType() == Constant.ITEM_VIEW_TYPE_COMMON) {
                                 ConfirmOrderStoreItem storeItem = (ConfirmOrderStoreItem) item;
                                 if (storeItem.storeId == storeId) {
-                                    storeItem.taxAmount = tariffTotalAmount;
+                                    if (payWay == Constant.PAY_WAY_ONLINE) {
+                                        storeItem.taxAmount = tariffTotalAmount;
+                                    } else { // 門店自提和貨到付款，稅費設置為0
+                                        storeItem.taxAmount = 0;
+                                    }
+
                                     SLog.info("object[%s]",storeItem.toString());
 
                                 }
@@ -1602,10 +1609,10 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
 
                     ConfirmOrderSummaryItem summaryItem = getSummaryItem();
                     summaryItem.totalItemCount = totalItemCount;
-                    summaryItem.totalAmount = (float) responseObj.getDouble("datas.buyGoodsItemAmount");
-                    summaryItem.storeDiscount = (float) responseObj.getDouble("datas.storeTotalDiscountAmount");
-                    summaryItem.platformDiscount = (float) responseObj.getDouble("datas.platTotalDiscountAmount");
-                    summaryItem.totalTaxAmount = (float) responseObj.getDouble("datas.taxAmount");
+                    summaryItem.totalAmount = responseObj.getDouble("datas.buyGoodsItemAmount");
+                    summaryItem.storeDiscount = responseObj.getDouble("datas.storeTotalDiscountAmount");
+                    summaryItem.platformDiscount = responseObj.getDouble("datas.platTotalDiscountAmount");
+                    summaryItem.totalTaxAmount = responseObj.getDouble("datas.taxAmount");
                     summaryItem.totalFreight = totalFreightAmount;
                     SLog.info("summaryItem, summaryItem.totalFreight【%s】totalItemCount[%d], totalAmount[%s], storeDiscount[%s]",
                             summaryItem.totalFreight,summaryItem.totalItemCount, summaryItem.totalAmount, summaryItem.storeDiscount);
@@ -1692,7 +1699,11 @@ public class ConfirmOrderFragment extends BaseFragment implements View.OnClickLi
             adapter.setPayWayIndex(payWay);
             adapter.notifyDataSetChanged();
 //            loadOrderData();
-            updateFreightTotalAmount();
+            if (payWay != Constant.PAY_WAY_FETCH) { // 【門店自提】不用計算運費
+                updateFreightTotalAmount();
+            } else {
+                calcAmount();
+            }
         } else if (type == PopupType.SHIPPING_TIME) {
             int position = (int) extra;
             ConfirmOrderSummaryItem summaryItem = (ConfirmOrderSummaryItem) confirmOrderItemList.get(position);
