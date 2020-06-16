@@ -187,6 +187,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     ClipboardManager mClipboardManager;
     ClipboardManager.OnPrimaryClipChangedListener mOnPrimaryClipChangedListener;
     CouponWordDialog couponWordDialog;
+    boolean isResumed = false;
 
     // TODO: 2019/8/19 處理HandlerLeak
     @SuppressLint("HandlerLeak")
@@ -270,6 +271,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     @Override
     protected void onPause() {
         super.onPause();
+        isResumed = false;
         Hawk.put(SPField.MAINACTIVITY_RESUME, false);
     }
 
@@ -641,6 +643,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
     @Override
     protected void onResume() {
         super.onResume();
+        isResumed = true;
+
         Hawk.put(SPField.MAINACTIVITY_RESUME, true);
         resumeTimestamp = System.currentTimeMillis();
 
@@ -715,6 +719,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
             }
         });
     }
+
+
 
     public void checkWordCoupon() {
         SLog.info("checkWordCoupon___");
@@ -1200,7 +1206,8 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     SLog.info("复制、剪切的内容为[%s]", content);
                     String word = StringUtil.getCouponWord(content.toString());
 
-                    if (word != null) {
+                    if (word != null && isResumed) { // 在前端顯示才處理剪貼板的內容
+                        SLog.info("HERE");
                         parseCouponWord(word);
                     }
                 }
@@ -1260,11 +1267,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     .moveUpToKeyboard(false)
                     .asCustom(new CouponWordDialog(MainActivity.this));
         }
-
+        SLog.info("HERE");
         if (couponWordDialog.isShow()) {
             return;
         }
+        SLog.info("HERE");
         couponWordDialog.show();
+        SLog.info("HERE");
         couponWordDialog.postDelayed(new Runnable() {
             @Override
             public void run() {
