@@ -47,6 +47,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     TextView btnViewGoodsDetail;
     EasyJSONArray mobileBodyVoList = EasyJSONArray.generate();
 
+    LinearLayout llSpecContainer;
+    EasyJSONArray specJsonVoList;
+
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
         Bundle args = new Bundle();
 
@@ -76,6 +79,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
 
         twBlack = _mActivity.getColor(R.color.tw_black);
         tvGoodsVideoUrl = view.findViewById(R.id.tv_goods_video_url);
+
+        Util.setOnClickListener(view, R.id.btn_edit_spec, this);
+        llSpecContainer = view.findViewById(R.id.ll_spec_container);
 
         loadData();
     }
@@ -146,28 +152,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
 
-
-                    LinearLayout llSpecContainer = contentView.findViewById(R.id.ll_spec_container);
-                    EasyJSONArray specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
-                    for (Object object : specJsonVoList) {
-                        EasyJSONObject specJsonVo = (EasyJSONObject) object;
-                        StringBuilder specInfo = new StringBuilder();
-                        specInfo.append("【" + specJsonVo.getSafeString("specName") + "】");
-
-                        EasyJSONArray specValueList = specJsonVo.getSafeArray("specValueList");
-                        for (Object object2 : specValueList) {
-                            EasyJSONObject specValue = (EasyJSONObject) object2;
-                            specInfo.append("   " + specValue.getSafeString("specValueName"));
-                        }
-
-                        TextView tvSpecInfo = new TextView(_mActivity);
-                        tvSpecInfo.setText(specInfo.toString());
-                        tvSpecInfo.setTextSize(13);
-                        tvSpecInfo.setTextColor(twBlack);
-                        ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        layoutParams.topMargin = Util.dip2px(_mActivity, 10);
-                        llSpecContainer.addView(tvSpecInfo, layoutParams);
-                    }
+                    specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
+                    updateGoodsSpecView();
 
                     goodsVideoUrl = goodsVo.getSafeString("goodsVideo");
                     if (!StringUtil.isEmpty(goodsVideoUrl)) {
@@ -184,6 +170,32 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         });
     }
 
+    private void updateGoodsSpecView() {
+        try {
+            for (Object object : specJsonVoList) {
+                EasyJSONObject specJsonVo = (EasyJSONObject) object;
+                StringBuilder specInfo = new StringBuilder();
+                specInfo.append("【" + specJsonVo.getSafeString("specName") + "】");
+
+                EasyJSONArray specValueList = specJsonVo.getSafeArray("specValueList");
+                for (Object object2 : specValueList) {
+                    EasyJSONObject specValue = (EasyJSONObject) object2;
+                    specInfo.append("   " + specValue.getSafeString("specValueName"));
+                }
+
+                TextView tvSpecInfo = new TextView(_mActivity);
+                tvSpecInfo.setText(specInfo.toString());
+                tvSpecInfo.setTextSize(13);
+                tvSpecInfo.setTextColor(twBlack);
+                ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.topMargin = Util.dip2px(_mActivity, 10);
+                llSpecContainer.addView(tvSpecInfo, layoutParams);
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -198,6 +210,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
             }
         } else if (id == R.id.btn_view_goods_detail) {
             Util.startFragment(SellerGoodsDetailViewerFragment.newInstance(mobileBodyVoList));
+        } else if (id == R.id.btn_edit_spec) {
+            start(SellerEditSpecFragment.newInstance(commonId, specJsonVoList));
         }
     }
 

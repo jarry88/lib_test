@@ -170,7 +170,7 @@
                     android:paddingLeft="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
@@ -318,7 +318,7 @@
                     android:paddingLeft="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
@@ -405,13 +405,14 @@
                 </TextView>
 
                 <LinearLayout
+                    android:id="@+id/btn_edit_spec"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:paddingLeft="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
@@ -502,7 +503,7 @@
                     android:paddingLeft="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
@@ -658,7 +659,7 @@
                     android:paddingLeft="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
@@ -759,7 +760,7 @@
                     android:paddingLeft="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <ImageView
                         android:layout_width="18dp"
                         android:layout_height="18dp"
