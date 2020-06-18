@@ -548,6 +548,31 @@ public class Util {
         }
     }
 
+    // 跳轉到華為應用市場
+    public static void gotoHuawei(Activity activity) {
+        String packageName = activity.getPackageName();
+        SLog.info("packageName[%s]", packageName);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=" + packageName));
+            intent.setPackage("com.huawei.appmarket");
+            if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                activity.startActivity(intent);
+            } else {//没有应用市场，通过浏览器跳转
+                Intent intent2 = new Intent(Intent.ACTION_VIEW);
+                intent2.setData(Uri.parse("https://appgallery.cloud.huawei.com/uowap/index.html#/detailApp/C10219077" + packageName));
+                if (intent2.resolveActivity(activity.getPackageManager()) != null) {
+                    activity.startActivity(intent2);
+                } else {
+                    //没有華為應用市場 也没有浏览器
+                }
+            }
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
+
     /**
      * 數組倒序
      * @param arr

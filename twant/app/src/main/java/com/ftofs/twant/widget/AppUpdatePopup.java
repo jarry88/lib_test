@@ -116,6 +116,9 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
             } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_TENCENT)) {
                 // 跳轉到應用寶
                 Util.gotoQqDownloader(activity);
+            } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_HUAWEI)) {
+                // 跳轉到應用寶
+                Util.gotoQqDownloader(activity);
             } else if (BuildConfig.FLAVOR.equals(Constant.FLAVOR_OFFICIAL)) {
                 PermissionUtil.actionWithPermission(getContext(), new String[] {Permission.WRITE_EXTERNAL_STORAGE,
                         Permission.READ_EXTERNAL_STORAGE}, "下載升級包需要授予", new CommonCallback() {

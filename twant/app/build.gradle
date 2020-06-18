@@ -42,6 +42,9 @@ android {
         // 應用寶渠道
         tencent {
         }
+        // 華為渠道
+        huawei {
+        }
     }
     buildTypes {
         release {
