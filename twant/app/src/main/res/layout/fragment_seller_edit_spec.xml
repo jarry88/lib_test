@@ -8,8 +8,8 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="4dp">
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@drawable/border_type_d">
         <com.ftofs.twant.widget.ScaledButton
             android:id="@+id/btn_back"
             android:layout_width="31dp"
@@ -46,9 +46,10 @@
             android:background="@color/tw_blue">
         </TextView>
     </RelativeLayout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -161,5 +162,4 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-
 </LinearLayout>

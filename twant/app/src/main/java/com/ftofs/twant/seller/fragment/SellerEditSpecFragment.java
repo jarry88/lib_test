@@ -96,6 +96,7 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
         llSelectedSpecContainer = view.findViewById(R.id.ll_selected_spec_container);
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_save, this);
+        Util.setOnClickListener(view, R.id.btn_add_spec, this);
 
         try {
             for (Object object : specJsonVoList) {
@@ -215,8 +216,6 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                         return;
                     }
 
-
-
                     EasyJSONArray specAndValueList = responseObj.getSafeArray("datas.specAndValueList");
                     for (Object object : specAndValueList) {
                         EasyJSONObject specObj = (EasyJSONObject) object;
@@ -225,8 +224,17 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                         int specId = specObj.getInt("specId");
                         String specName = specObj.getSafeString("specName");
 
+                        specMap.put(specId, specName);
+
                         sellerSpecMapItem.specId = specId;
                         sellerSpecMapItem.specName = specName;
+                        // 判斷這個規格組是否已選擇
+                        for (SellerSpecMapItem selectedSpec : sellerSelectedSpecList) {
+                            if (selectedSpec.specId == specId) {
+                                sellerSpecMapItem.selected = selectedSpec.selected;
+                                break;
+                            }
+                        }
 
                         EasyJSONArray specValueList = specObj.getSafeArray("specValueList");
                         for (Object object2 : specValueList) {
@@ -293,6 +301,39 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                     }
                 }
             });
+        } else if (id == R.id.btn_add_spec) {
+            if (sellerSpecMap.size() < 1) {
+                ToastUtil.error(_mActivity, "沒有可用的規格");
+                return;
+            }
+
+            List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();
+            Map<Integer, List<SellerSpecItem>> sellerSpecValueMap = new HashMap<>();
+
+            for (Map.Entry<Integer, SellerSpecMapItem> entry : sellerSpecMap.entrySet()) {
+                if (entry.getValue().selected) {
+                    continue;
+                }
+
+                SellerSpecItem sellerSpecItem = new SellerSpecItem();
+                sellerSpecItem.id = entry.getKey();
+                sellerSpecItem.name = entry.getValue().specName;
+
+                sellerSpecItemList.add(sellerSpecItem);
+                sellerSpecValueMap.put(entry.getKey(), entry.getValue().sellerSpecItemList);
+            }
+
+
+            if (sellerSpecItemList.size() < 1) {
+                ToastUtil.error(_mActivity, "已添加所有的規格");
+                return;
+            }
+
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new SellerSelectSpecPopup(_mActivity, Constant.ACTION_ADD, 0, sellerSpecItemList, sellerSpecValueMap, this))
+                    .show();
         }
     }
 
