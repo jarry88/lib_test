@@ -134,12 +134,12 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @BindView(R.id.tv_like_count)
     TextView tvLikeCount;
     @BindView(R.id.tv_store_view)
-    TextView tvStoreView;
+    TextView tvStoreView ;
     int likeCount;
     TextView tvFavoriteCount;
     int favoriteCount;
     int isFavorite;
-    ImageView btnStoreFavorite;
+    ImageView btnStoreFavorite ;
 
     int isLike;
     ImageView btnStoreThumb;

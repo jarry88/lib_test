@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+
 
 android {
     signingConfigs {
@@ -85,6 +87,9 @@ android {
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
+    }
+    buildFeatures{
+        dataBinding = true
     }
 }
 
@@ -249,6 +254,26 @@ dependencies {
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     implementation 'com.github.donkingliang:ImageSelector:1.9.2'
+
+
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.8.1"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.8.1"
+
+    // rxandroid
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
+
+//添加HttpLoggingInterceptor进行调试
+//3.9.0版本是使用Java写的，从4.0.0后改用的Kotlin写的
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
+    def lifecycle_version = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
+    implementation 'io.github.iamyours:router-api:1.0.1'
+
 }
 repositories {
     mavenCentral()

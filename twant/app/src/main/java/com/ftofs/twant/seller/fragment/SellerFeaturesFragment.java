@@ -43,7 +43,7 @@ import okhttp3.Call;
  * 商家鎮店之寶添加編輯頁面 需求913
  * @author gzp
  */
-public class SellerFeaturesFragment extends BaseFragment {
+public class SellerFeaturesFragment extends BaseFragment implements View.OnClickListener{
     private Unbinder unbinder;
     private List<Goods> goodsCommonList =new ArrayList<>();
     private SellerFeaturesGoodsAdapter adpter;
@@ -58,7 +58,7 @@ public class SellerFeaturesFragment extends BaseFragment {
 
     @OnClick(R.id.icon_add_goods)
     void gotoGoodsList() {
-        Util.startFragment(SetFeatureListFragment.newInstance());
+//        Util.startFragment(SetFeatureListFragment.newInstance());
     }
     @BindView(R.id.rv_features_goods_list)
     RecyclerView rvList;
@@ -78,12 +78,16 @@ public class SellerFeaturesFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//        Util.setOnClickListener(view,R.id.icon_add_goods,this);
         initView();
     }
 
     private void initView() {
-        tvTitle.setText("鎮店之寶");
-
+//        tvTitle.setText("鎮店之寶");
+        TextView view = getView().findViewById(R.id.tv_title);
+        view.setText("镇店之宝");
+        getView().findViewById(R.id.icon_add_goods).setOnClickListener(this);
+        rvList = getView().findViewById(R.id.rv_features_goods_list);
         adpter = new SellerFeaturesGoodsAdapter(_mActivity,0, R.layout.seller_features_good_layout, goodsCommonList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         rvList.setLayoutManager(linearLayoutManager);
@@ -144,6 +148,14 @@ public class SellerFeaturesFragment extends BaseFragment {
     SLog.info("onBackPressedSupport");
     hideSoftInputPop();
     return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.icon_add_goods) {
+            Util.startFragment(FeatureGoodSelectFragment.Companion.newInstance());
+        }
     }
 }
 
