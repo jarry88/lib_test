@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <import type="com.ftofs.twant.kotlin.util.ConverterUtil"/>
         <variable
             name="vo"
             type="com.ftofs.twant.kotlin.vo.SellerGoodsVO"/>
@@ -22,13 +22,13 @@
                 android:id="@+id/goods_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/cs_avatar_160">
+                imgUrl="@{vo.imageName}">
 
             </ImageView>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tv_goods_name"
@@ -38,7 +38,7 @@
                     android:textSize="15sp"
                     android:maxLines="2"
                     android:ellipsize="end"
-                    android:text="惠普（HP）战99 商用办公台式电脑主机（九代酷睿i5 8G 1TB+256GSSD 2G独显 WiFi蓝牙 四年上门）23.8英寸">
+                    android:text="@{vo.goodsName}">
 
                 </TextView>
                 <RelativeLayout
@@ -50,7 +50,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="產品SPU: 1704"
+                        android:text="@{vo.goodsSpecNames}"
                         android:textColor="@color/tw_text_dark"
                         android:textSize="13sp">
                     </TextView>
@@ -60,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:orientation="horizontal">
                         <TextView
                             android:id="@+id/tv_virtual_indicator"
@@ -71,6 +71,7 @@
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
                             android:text="零售"
+                            android:visibility="@{1-vo.isVirtual}"
                             android:textColor="#5AA1D8"
                             android:textSize="12sp"
                             android:background="@drawable/seller_goods_type_indicator_bg">
@@ -79,11 +80,12 @@
                             android:id="@+id/tv_cross_border_indicator"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
+                            android:visibility="@{1-vo.isCommend}"
                             android:text="跨城購"
                             android:textColor="#5AA1D8"
                             android:textSize="12sp"
@@ -99,7 +101,7 @@
                         android:id="@+id/tv_price_range"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1000.00 MOP - 2000.00 MOP"
+                        android:text="@{ConverterUtil.rangePrice(vo.appPriceMin,vo.batchPrice0)}"
                         android:textSize="13sp"
                         android:textColor="@color/tw_red">
                     </TextView>
@@ -113,15 +115,14 @@
                         android:id="@+id/tv_total_stock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="總庫存: 800">
-                    </TextView>
+                        android:text='@{@string/total_stock_m+vo.goodsStorage}'/>
 
                     <TextView
                         android:id="@+id/tv_total_sale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="銷量: 1000">
+                        android:layout_marginStart="20dp"
+                        android:text='@{"销量："+vo.goodsSaleNum}'>
                     </TextView>
                 </LinearLayout>
                 <RelativeLayout

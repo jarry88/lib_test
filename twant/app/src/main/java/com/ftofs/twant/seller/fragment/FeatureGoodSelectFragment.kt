@@ -50,6 +50,7 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
 
         vm.goodsItems.observe(this, Observer {
             if (it != null) {
+                SLog.info("${it.goodsList[0]}")
                 adapter.addAll(it.goodsList, it.pageEntity.curPage == 1)
             }
         })

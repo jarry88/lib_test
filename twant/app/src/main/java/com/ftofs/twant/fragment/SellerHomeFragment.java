@@ -48,8 +48,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
+
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
@@ -69,11 +69,11 @@ import static android.view.View.VISIBLE;
 
 public class SellerHomeFragment extends BaseFragment implements AutoVerticalScrollTextViewUtil.OnMyClickListener {
 
-    @BindView(R.id.img_seller_avatar)
+
     CircleImageView imgSellerAvatar;
-    @BindView(R.id.tv_orders_wait_send_count)
+
     TextView tvOrderWaitSendCount;
-    @BindView(R.id.tv_orders_wait_send)
+
     TextView tvOrderWaitSendInfoCount;
 
 //    @OnClick(R.id.ll_add_goods)
@@ -81,56 +81,56 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
 //        Util.startFragment(AddGoodsFragment.newInstance());
 //    }
 
-    @OnClick(R.id.ll_seller_goods_list)
+
     void goToSellerGoodsList() {
         Util.startFragment(SellerGoodsListFragment.newInstance());
     }
 
-    @BindView(R.id.vf_vertical_scroll)
+
     ViewFlipper viewFlipper;
 
-    @BindView(R.id.tv_refund_waiting_count)
+
     TextView tvRefundWaitingCount;
-    @BindView(R.id.tv_goods_common_fail_count)
+
     TextView tvGoodsCommonFailCount;
-    @BindView(R.id.tv_bill_count)
+
     TextView tvBillCount;
-    @BindView(R.id.tv_seller_member_name)
+
     TextView tvMemberNickName;
     private AutoVerticalScrollTextViewUtil verticalScrollUtil;
     private List<StoreAnnouncement> storeAnnouncementList;
     private ArrayList<CharSequence> announcementTextList=new ArrayList<>();
-    @BindView(R.id.ll_shop_announcement_container)
+
     LinearLayout llShopAnnouncementContainer;
-    @BindView(R.id.tv_orders_wait_pay_count)
+
     TextView tvOrderWaitPayCount;
-    @BindView(R.id.tv_goods_common_wait_count)
+
     TextView tvGoodsCommonWaitCount;
 
-    @BindView(R.id.tv_goods_common_ban_count)
+
     TextView tvGoodsCommonBanCount;
-    @BindView(R.id.tv_goods_stock_online_alarm_count)
+
     TextView tvGoodsStockOnlineAlarmCount;
-    @BindView(R.id.tv_return_waiting_count)
+
     TextView tvReturnWaitingCount;
-    @BindView(R.id.tv_goods_stock_alarm_count)
+
     TextView tvGoodsStockAlarmCount;
 
-    @BindView(R.id.tv_complain_access_count)
+
     TextView tvComplainAccessCount;
 
-    @BindView(R.id.tv_complain_talk_count)
+
     TextView tvComplainTalkCount;
-    @BindView(R.id.tv_discount_goods_count)
+
     TextView tvDiscountGoogsCount;
     private GoodsGalleryAdapter goodsGalleryAdapter;
     private int currGalleryPosition;
     //店鋪營業狀態
     private int storeState;
-    @BindView(R.id.btn_play)
+
     ImageView btnPlay;
 
-    @OnClick(R.id.btn_play)
+
     void playVideo() {
         String videoId = Util.getYoutubeVideoId(storeVideoUrl);
 
@@ -138,7 +138,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
             Util.playYoutubeVideo(_mActivity, videoId);
         }
     }
-    @OnClick(R.id.ll_shop_announcement_container)
+
     void showPopup(){
         SLog.info("click");
         new XPopup.Builder(_mActivity)
@@ -149,39 +149,39 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     }
     private String storeVideoUrl;
 
-    @OnClick(R.id.btn_goto_member)
+
     void popBack() {
         pop();
     }
 
-    @BindView(R.id.sw_seller_business_state)
+
     SwitchButton swBusinessState;
-    @BindView(R.id.img_seller_home_background)
+
     ImageView sellerHomeBackground;
-    @BindView(R.id.tv_store_name)
+
     TextView tvStoreName;
-    @BindView(R.id.tv_goods_offline_and_pass_count)
+
     TextView tvGoodsCommonOfflineAndPassCount;
 
-    @BindView(R.id.img_avatar)
+
     CircleImageView imgStoreAvatar;
-    @BindView(R.id.tv_store_signature)
+
     TextView tvStoreSignature;
-    @BindView(R.id.tv_vertical_scroll)
+
     AutoVerticalScrollTextView tvVerticalScroll;
-    @BindView(R.id.tv_today_amount)
+
     TextView tvTodayAmount;
 
-    @BindView(R.id.tv_today_order_count)
+
     TextView tvTodayOrderCount;
-    @BindView(R.id.tv_today_view_count)
+
     TextView tvTodayViewCount;
-    @BindView(R.id.tv_message_count)
+
     TextView tvMessageCount;
-    @BindView(R.id.tv_new_comment_count)
+
     TextView tvTodayCommentedCount;
 
-    @OnClick(R.id.btn_goods_info)
+
     void showGoodsInfo() {
         TextView textGoods = getView().findViewById(R.id.btn_goods_info);
         TextView textOrders = getView().findViewById(R.id.btn_orders_info);
@@ -193,7 +193,7 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         getView().findViewById(R.id.ll_container_orders_info).setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.btn_orders_info)
+
     void showOrdersInfo() {
         TextView textGoods = getView().findViewById(R.id.btn_goods_info);
         TextView textOrders = getView().findViewById(R.id.btn_orders_info);
@@ -205,31 +205,31 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         getView().findViewById(R.id.ll_container_orders_info).setVisibility(View.VISIBLE);
     }
 
-    @OnClick(R.id.btn_goto_seller_refund)
+
     void gotoSellerRefund() {
         Util.startFragment(SellerRefundFragment.newInstance());
         return;//暫時屏蔽該功能
     }
-    @OnClick(R.id.ll_order_list_container)
+
     void gotoSellerOrderList() {
         Util.startFragment(SellerOrderListFragment.newInstance());
     }
-    @OnClick(R.id.ll_goods_list_container)
+
     void gotoSellerGoodsList() {
         Util.startFragment(SellerGoodsListFragment.newInstance());
     }
 
-    @OnClick(R.id.ll_seller_order_send)
+
     void gotoSellerOrderSend() {
         Util.startFragment(SellerOrderListFragment.newInstance(Constant.ORDER_STATUS_TO_BE_SHIPPED));
     }
 
-    @BindView(R.id.tv_goods_common_onsale_count)
+
     TextView tvOnSaleCount;
 
-    @BindView(R.id.pageIndicatorView)
+
     PageIndicatorView pageIndicatorView;
-    @BindView(R.id.rv_gallery_image_list)
+
     CustomRecyclerView rvGalleryImageList;
     public static SellerHomeFragment newInstance() {
 
@@ -288,7 +288,100 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_home, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        imgSellerAvatar = (CircleImageView) view.findViewById(R.id.img_seller_avatar);
+        tvOrderWaitSendCount = (TextView) view.findViewById(R.id.tv_orders_wait_send_count);
+        tvOrderWaitSendInfoCount = (TextView) view.findViewById(R.id.tv_orders_wait_send);
+        viewFlipper = (ViewFlipper) view.findViewById(R.id.vf_vertical_scroll);
+        tvRefundWaitingCount = (TextView) view.findViewById(R.id.tv_refund_waiting_count);
+        tvGoodsCommonFailCount = (TextView) view.findViewById(R.id.tv_goods_common_fail_count);
+        tvBillCount = (TextView) view.findViewById(R.id.tv_bill_count);
+        tvMemberNickName = (TextView) view.findViewById(R.id.tv_seller_member_name);
+        llShopAnnouncementContainer = (LinearLayout) view.findViewById(R.id.ll_shop_announcement_container);
+        tvOrderWaitPayCount = (TextView) view.findViewById(R.id.tv_orders_wait_pay_count);
+        tvGoodsCommonWaitCount = (TextView) view.findViewById(R.id.tv_goods_common_wait_count);
+        tvGoodsCommonBanCount = (TextView) view.findViewById(R.id.tv_goods_common_ban_count);
+        tvGoodsStockOnlineAlarmCount = (TextView) view.findViewById(R.id.tv_goods_stock_online_alarm_count);
+        tvReturnWaitingCount = (TextView) view.findViewById(R.id.tv_return_waiting_count);
+        tvGoodsStockAlarmCount = (TextView) view.findViewById(R.id.tv_goods_stock_alarm_count);
+        tvComplainAccessCount = (TextView) view.findViewById(R.id.tv_complain_access_count);
+        tvComplainTalkCount = (TextView) view.findViewById(R.id.tv_complain_talk_count);
+        tvDiscountGoogsCount = (TextView) view.findViewById(R.id.tv_discount_goods_count);
+        btnPlay = (ImageView) view.findViewById(R.id.btn_play);
+        swBusinessState = (SwitchButton) view.findViewById(R.id.sw_seller_business_state);
+        sellerHomeBackground = (ImageView) view.findViewById(R.id.img_seller_home_background);
+        tvStoreName = (TextView) view.findViewById(R.id.tv_store_name);
+        tvGoodsCommonOfflineAndPassCount = (TextView) view.findViewById(R.id.tv_goods_offline_and_pass_count);
+        imgStoreAvatar = (CircleImageView) view.findViewById(R.id.img_avatar);
+        tvStoreSignature = (TextView) view.findViewById(R.id.tv_store_signature);
+        tvVerticalScroll = (AutoVerticalScrollTextView) view.findViewById(R.id.tv_vertical_scroll);
+        tvTodayAmount = (TextView) view.findViewById(R.id.tv_today_amount);
+        tvTodayOrderCount = (TextView) view.findViewById(R.id.tv_today_order_count);
+        tvTodayViewCount = (TextView) view.findViewById(R.id.tv_today_view_count);
+        tvMessageCount = (TextView) view.findViewById(R.id.tv_message_count);
+        tvTodayCommentedCount = (TextView) view.findViewById(R.id.tv_new_comment_count);
+        tvOnSaleCount = (TextView) view.findViewById(R.id.tv_goods_common_onsale_count);
+        pageIndicatorView = (PageIndicatorView) view.findViewById(R.id.pageIndicatorView);
+        rvGalleryImageList = (CustomRecyclerView) view.findViewById(R.id.rv_gallery_image_list);
+        view.findViewById(R.id.ll_seller_order_send).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoSellerOrderSend();
+            }
+        });
+        view.findViewById(R.id.ll_goods_list_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoSellerGoodsList();
+            }
+        });
+        view.findViewById(R.id.ll_order_list_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoSellerOrderList();
+            }
+        });
+        view.findViewById(R.id.btn_goto_seller_refund).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoSellerRefund();
+            }
+        });
+        view.findViewById(R.id.btn_orders_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOrdersInfo();
+            }
+        });
+        view.findViewById(R.id.btn_goods_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showGoodsInfo();
+            }
+        });
+        view.findViewById(R.id.btn_goto_member).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popBack();
+            }
+        });
+        view.findViewById(R.id.ll_shop_announcement_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopup();
+            }
+        });
+        view.findViewById(R.id.btn_play).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playVideo();
+            }
+        });
+        view.findViewById(R.id.ll_seller_goods_list).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToSellerGoodsList();
+            }
+        });
         return view;
     }
 

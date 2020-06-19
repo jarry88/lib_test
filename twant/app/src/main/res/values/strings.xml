@@ -811,6 +811,8 @@
     <string name="text_refund_goods">退款商品</string>
     <string name="text_apply_time">申請時間</string>
 
+    <string name="total_stock_m">总销量：</string>
+
     <!-- 用u标签添加下划线 -->
     <string name="text_sku_goods_list"><u>SKU商品列表</u></string>
     <string name="text_select">選擇</string>

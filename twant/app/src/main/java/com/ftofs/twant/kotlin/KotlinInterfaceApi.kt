@@ -28,7 +28,7 @@ interface KotlinInterfaceApi {
                 val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
                     SLog.info("下一页网络日志", "Message:$message")
                 })
-                loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
+                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
                 clientBuilder.addInterceptor(loggingInterceptor)
 ////            }
             return Retrofit.Builder()

@@ -12,7 +12,6 @@ class HomeVM : BaseViewModel() {
 //    var content: ObservableFiled<String> = ObservableFiled()
     private val _goodsItems = Transformations.switchMap(page) {
         //当refreshTrigger的值被设置时，bannerList
-    SLog.info("$it,请求数据")
         api.sellerGoodsList(User.getToken(),it)
     }
 

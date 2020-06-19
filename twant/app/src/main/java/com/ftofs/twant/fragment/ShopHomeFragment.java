@@ -83,8 +83,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
+
 import butterknife.Unbinder;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
@@ -103,37 +103,37 @@ import static android.view.View.VISIBLE;
  */
 public class ShopHomeFragment extends BaseFragment implements View.OnClickListener, AutoVerticalScrollTextViewUtil.OnMyClickListener {
     ShopMainFragment parentFragment;
-    @BindView(R.id.img_store_status)
+
     ImageView imgStoreStatus;
-    @BindView(R.id.img_store_figure)
+
     ImageView imgShopLogo;
-    @BindView(R.id.tv_store_name)
+
     TextView tvStoreName;
-    @BindView(R.id.btn_shop_signature)
+
     LinearLayout btnShopSignature;
-    @BindView(R.id.tv_shop_signature)
+
     TextView tvShopSignature;
-    @BindView(R.id.tv_store_open_days)
+
     TextView tvShopOpenDay;
-    @BindView(R.id.tv_shop_open_day)
+
     TextView tvOpenDay;
-    @BindView(R.id.viewpager)
+
     ViewPager viewpager;
 
-    @BindView(R.id.smartTabLayout)
+
     SmartTabLayout smartTabLayout;
-    @BindView(R.id.ll_sns_container)
+
     LinearLayout llSnsContainer;
 
-    @BindView(R.id.pageIndicatorView)
+
     PageIndicatorView pageIndicatorView;
     private int currGalleryPosition;
-    @BindView(R.id.rv_gallery_image_list)
+
     RecyclerView rvGalleryImageList;
 
-    @BindView(R.id.tv_like_count)
+
     TextView tvLikeCount;
-    @BindView(R.id.tv_store_view)
+
     TextView tvStoreView ;
     int likeCount;
     TextView tvFavoriteCount;
@@ -173,7 +173,7 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     private TextView tvPhoneNumber;
     private TextView tvShopAddress;
 
-    @BindView(R.id.container_view)
+
     NestedScrollView containerView;
     int containerViewHeight;
     private scrollStateHandler mHandler;
@@ -304,7 +304,21 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store_home, container, false);
-        unbinder= ButterKnife.bind(this, view);
+        imgStoreStatus = (ImageView) view.findViewById(R.id.img_store_status);
+        imgShopLogo = (ImageView) view.findViewById(R.id.img_store_figure);
+        tvStoreName = (TextView) view.findViewById(R.id.tv_store_name);
+        btnShopSignature = (LinearLayout) view.findViewById(R.id.btn_shop_signature);
+        tvShopSignature = (TextView) view.findViewById(R.id.tv_shop_signature);
+        tvShopOpenDay = (TextView)view.findViewById(R.id.tv_store_open_days);
+        tvOpenDay = (TextView) view.findViewById(R.id.tv_shop_open_day);
+        viewpager = (ViewPager) view.findViewById(R.id.viewpager);
+        smartTabLayout = (SmartTabLayout) view.findViewById(R.id.smartTabLayout);
+        llSnsContainer = (LinearLayout) view.findViewById(R.id.ll_sns_container);
+        pageIndicatorView = (PageIndicatorView) view.findViewById(R.id.pageIndicatorView);
+        rvGalleryImageList = (RecyclerView) view.findViewById(R.id.rv_gallery_image_list);
+        tvLikeCount = (TextView) view.findViewById(R.id.tv_like_count);
+        tvStoreView = (TextView) view.findViewById(R.id.tv_store_view);
+        containerView = (NestedScrollView) view.findViewById(R.id.container_view);
         return view;
     }
 
