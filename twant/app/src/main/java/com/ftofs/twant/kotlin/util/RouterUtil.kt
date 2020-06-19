@@ -4,12 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.provider.SyncStateContract
 import com.ftofs.twant.entity.SellerGoodsItem
+import com.ftofs.twant.kotlin.vo.SellerGoodsVO
 import io.github.iamyours.router.ARouter
 
 object RouterUtil {
     @JvmOverloads
     fun navWeb(
-        item: SellerGoodsItem,
+        item: SellerGoodsVO,
         context: Context,
         callback: ((Boolean) -> Unit)? = null //回调
     ) {

@@ -41,10 +41,6 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
                 hideSoftInputPop()
             }
         })
-        val bannerList = KotlinInterfaceApi.get().bannerList()
-        bannerList.observe(this, Observer {
-            SLog.info("${it?.datas?.appIndexNavigationLinkType},${it?.datas.toString()}")
-        })
     }
     private fun initRecyclerView() {
         binding.rvFeaturesGoodsList.also {
@@ -54,7 +50,6 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
 
         vm.goodsItems.observe(this, Observer {
             if (it != null) {
-                SLog.info("${it.goodsList}")
                 adapter.addAll(it.goodsList, it.pageEntity.curPage == 1)
             }
         })
