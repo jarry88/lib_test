@@ -233,4 +233,8 @@ public enum PopupType {
      */
     SELLER_REFUND_FILTER,
 
+    /**
+     * 彈出Menu菜單
+     */
+    MENU
 }

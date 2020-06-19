@@ -73,6 +73,16 @@
 
             </EditText>
         </RelativeLayout>
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_more_menu"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginRight="7dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/ic_baseline_more_vert_24">
+
+        </com.ftofs.twant.widget.ScaledButton>
     </RelativeLayout>
 
     <!-- Tab欄 -->

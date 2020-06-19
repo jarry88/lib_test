@@ -17,20 +17,26 @@ import androidx.fragment.app.Fragment;
 import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.constant.PopupType;
+import com.ftofs.twant.entity.ListPopupItem;
+import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
 import com.ftofs.twant.widget.UnscrollableViewPager;
+import com.lxj.xpopup.XPopup;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONObject;
 
-public class SellerGoodsListFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
+public class SellerGoodsListFragment extends BaseFragment implements View.OnClickListener, SimpleCallback, OnSelectedListener {
     SimpleTabButton[] tabButtons;
 
     UnscrollableViewPager viewPager;
@@ -71,6 +77,7 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
 
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_publish_goods, this);
+        Util.setOnClickListener(view, R.id.btn_more_menu, this);
 
         etKeyword = view.findViewById(R.id.et_keyword);
         etKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -161,6 +168,20 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
 
         } else if (id == R.id.btn_publish_goods) {
             Util.startFragment(AddGoodsFragment.newInstance());
+        } else if (id == R.id.btn_more_menu) {
+            List<ListPopupItem> itemList = new ArrayList<>();
+            itemList.add(new ListPopupItem(0, "商品管理", null));
+            itemList.add(new ListPopupItem(1, "商品發布", null));
+            itemList.add(new ListPopupItem(2, "商品規格", null));
+            itemList.add(new ListPopupItem(3, "鎮店之寶", null));
+
+            hideSoftInput();
+            new XPopup.Builder(_mActivity)
+                    // 如果不加这个，评论弹窗会移动到软键盘上面
+                    .moveUpToKeyboard(false)
+                    .asCustom(new ListPopup(_mActivity, "請選擇操作",
+                            PopupType.MENU, itemList, -1, this))
+                    .show();
         }
     }
 
@@ -178,6 +199,16 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+        }
+    }
+
+    @Override
+    public void onSelected(PopupType type, int id, Object extra) {
+        SLog.info("onSelected, type[%s], id[%d], extra[%s]", type, id, extra);
+        if (type == PopupType.MENU) {
+            if (id == 2) { // 商品規格
+                start(SellerSpecFragment.newInstance());
+            }
         }
     }
 }

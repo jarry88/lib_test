@@ -211,7 +211,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         } else if (id == R.id.btn_view_goods_detail) {
             Util.startFragment(SellerGoodsDetailViewerFragment.newInstance(mobileBodyVoList));
         } else if (id == R.id.btn_edit_spec) {
-            start(SellerEditSpecFragment.newInstance(commonId, specJsonVoList));
+            start(SellerEditGoodsSpecFragment.newInstance(commonId, specJsonVoList));
         }
     }
 

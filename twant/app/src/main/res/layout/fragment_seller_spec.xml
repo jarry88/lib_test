@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#fff">
+    android:background="@android:color/white">
     <!-- 工具欄 -->
     <RelativeLayout
         android:id="@+id/tool_bar"
@@ -29,19 +29,19 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="18sp"
-            android:text=""
+            android:text="商品規格"
             android:textColor="@color/tw_black"
             />
 
         <TextView
-            android:id="@+id/btn_ok"
+            android:id="@+id/btn_add_spec"
             android:layout_width="51dp"
             android:layout_height="25dp"
             android:layout_marginEnd="@dimen/toolbar_margin_right"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:text="@string/text_finish"
+            android:text="添加"
             android:textSize="14sp"
             android:textColor="@android:color/white"
             android:background="@drawable/micro_blue_button"
@@ -53,49 +53,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:text="每個規格最多只能添加35個規格值"
+        android:text="1、產品規格只能添加3個（包括平臺預設規則），每個規格只能添加35個規格值。
+\n2、平臺設置的規格不能編輯，但可以在產品發布時設置別名。平臺的顏色規格可以設置不同顏色的產品圖片。"
         android:background="#ffa">
+
     </TextView>
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/toolbar_margin_left"
-        android:layout_marginRight="@dimen/toolbar_margin_right"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="規格名稱："
-            android:textColor="@color/tw_black">
-
-        </TextView>
-        <EditText
-            android:id="@+id/et_spec_name"
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:background="@drawable/edit_text_bg">
-
-        </EditText>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="規格值："
-            android:textColor="@color/tw_black">
-        </TextView>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp">
-
-        </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+        android:background="@color/tw_slight_grey">
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>
+
+
