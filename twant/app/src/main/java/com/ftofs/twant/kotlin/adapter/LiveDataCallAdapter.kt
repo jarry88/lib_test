@@ -19,8 +19,7 @@ class LiveDataCallAdapter<T>(private val responseType: Type):CallAdapter<T,LiveD
                     //确保执行一次
                     call.enqueue(object : Callback<T> {
                         override fun onFailure(call: Call<T>, t: Throwable) {
-                            val value = ApiResponse<T>(null, -1, t.message
-                                    ?: "") as T
+                            val value = ApiResponse<T>(null, 200) as T
                             postValue(value)
                         }
 

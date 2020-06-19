@@ -43,8 +43,9 @@ open class BaseViewModel : ViewModel() {
         return Transformations.map(source) {
             refreshing.value = false
             moreLoading.value = false
-            hasMore.value = !(it?.data?.over ?: false)
-            it.data
+            hasMore.value = !(it?.datas?.over ?: false)
+
+            it?.datas
         }
     }
 

@@ -49,7 +49,9 @@
             android:paddingStart="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
             android:layout_toStartOf="@+id/btn_menu"
+
             android:id="@+id/icon_add_goods"
+            android:onClick="@{()->vm.test()}"
             app:icon_src="@drawable/icon_circle_add"
             android:layout_centerVertical="true"/>
         <com.ftofs.twant.widget.ScaledButton

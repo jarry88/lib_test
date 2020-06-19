@@ -1,10 +1,10 @@
 package com.ftofs.twant.kotlin
 
 import androidx.lifecycle.LiveData
-import com.ftofs.twant.BuildConfig
 import com.ftofs.twant.config.Config
 import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.adapter.LiveDataCallAdapterFactory
+import com.ftofs.twant.kotlin.vo.BannerVO
 import com.ftofs.twant.kotlin.vo.PageVO
 import com.ftofs.twant.log.SLog
 import okhttp3.OkHttpClient
@@ -14,6 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 interface KotlinInterfaceApi {
@@ -25,11 +26,13 @@ interface KotlinInterfaceApi {
                 val loggingInterceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
                     SLog.info("下一页网络日志", "Message:$message")
                 })
-                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                loggingInterceptor.level = HttpLoggingInterceptor.Level.BASIC
                 clientBuilder.addInterceptor(loggingInterceptor)
-//            }
+////            }
             return Retrofit.Builder()
                     .baseUrl(Config.API_BASE_URL+"/")
+//                    .baseUrl("https://www.wanandroid.com/")
+
                     .client(clientBuilder.build())
                     .addCallAdapterFactory(LiveDataCallAdapterFactory())
                     .addConverterFactory(GsonConverterFactory.create())
@@ -48,9 +51,13 @@ interface KotlinInterfaceApi {
     /**
      * 商家商家列表选择页
      */
-    @GET("member/seller/isSeller?token={token}")
+    @GET("member/seller/isSeller")
     fun isSeller(
-            @Path("token")token:String
-    ): LiveData<ApiResponse<PageVO<String>>>
-
+            @Query("token")token:String
+    ): LiveData<ApiResponse<Objects>>
+    /**
+     * 首页banner
+     */
+    @GET("app/home/index")
+    fun bannerList(): LiveData<ApiResponse<BannerVO>>
 }

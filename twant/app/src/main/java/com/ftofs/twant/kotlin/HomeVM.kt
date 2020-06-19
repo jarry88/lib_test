@@ -12,7 +12,7 @@ class HomeVM : BaseViewModel() {
 //    var content: ObservableFiled<String> = ObservableFiled()
     private val _goodsItems = Transformations.switchMap(page) {
         //当refreshTrigger的值被设置时，bannerList
-    SLog.info("$page,请求数据")
+    SLog.info("$it,请求数据")
         api.sellerGoodsList(User.getToken(),it)
     }
 
@@ -21,6 +21,9 @@ class HomeVM : BaseViewModel() {
     var back=MutableLiveData<Boolean>()
     fun backAction() {
         back.value =true
+    }
+    fun test() {
+        api.isSeller(User.getToken())
     }
 
 }
