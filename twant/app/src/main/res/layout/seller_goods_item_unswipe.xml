@@ -71,7 +71,7 @@
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
                             android:text="零售"
-                            android:visibility="@{1-vo.isVirtual}"
+                            android:visibility="@{vo.isVirtual==1?}"
                             android:textColor="#5AA1D8"
                             android:textSize="12sp"
                             android:background="@drawable/seller_goods_type_indicator_bg">
@@ -122,7 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:text='@{"销量："+vo.goodsSaleNum}'>
+                        android:text='@{@string/goods_sale_num_m+vo.goodsSaleNum}'>
                     </TextView>
                 </LinearLayout>
                 <RelativeLayout

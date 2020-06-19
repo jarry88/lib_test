@@ -47,14 +47,14 @@ fun bindListener(
     smartLayout.setOnLoadMoreListener(loadMoreListener)
 }
 
-//绑定软键盘搜索
-@BindingAdapter(value = ["searchAction"])
-fun bindSearch(et: EditText, callback: () -> Unit) {
-    et.setOnEditorActionListener { v, actionId, event ->
-        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            callback()
-            et.hideKeyboard()
-        }
-        true
-    }
-}
+////绑定软键盘搜索
+//@BindingAdapter(value = ["searchAction"])
+//fun bindSearch(et: EditText, callback: () -> Unit) {
+//    et.setOnEditorActionListener { v, actionId, event ->
+//        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+//            callback()
+//            et.hideKeyboard()
+//        }
+//        true
+//    }
+//}

@@ -83,9 +83,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-
-import butterknife.Unbinder;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -260,7 +257,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     public static final int NOTICE_FRAGMENT = 3;
 
     List<InStorePersonItem> inStorePersonItemList = new ArrayList<>();
-    private Unbinder unbinder;
     private GoodsGalleryAdapter goodsGalleryAdapter;
     private List<String> currGalleryImageList=new ArrayList<>();
     private Timer timer;
@@ -432,9 +428,6 @@ public class ShopHomeFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
     private void broadcastNestedScrollingEnabled(boolean enable) {

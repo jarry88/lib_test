@@ -51,7 +51,6 @@ import java.util.TimerTask;
 
 
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -242,9 +241,6 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
         if(verticalScrollUtil != null) {
             verticalScrollUtil.stop();
         }
@@ -276,7 +272,6 @@ public class SellerHomeFragment extends BaseFragment implements AutoVerticalScro
         }
     }
 
-    private Unbinder unbinder;
 
     @Override
     public void onSupportVisible() {
