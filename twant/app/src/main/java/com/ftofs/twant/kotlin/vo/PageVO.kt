@@ -1,11 +1,13 @@
 package com.ftofs.twant.kotlin.vo
 
-data class PageVO<T>(
+data class PageVO(
     var curPage: Int,
-    var datas: List<T>,
     var offset: Int,
     var over: Boolean,
     var pageCount: Int,
     var size: Int,
-    var total: Int
+
+    var total: Int,
+    var totalPage: Int,
+    var hasMore: Boolean
 )

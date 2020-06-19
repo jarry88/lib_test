@@ -6,6 +6,7 @@ import com.ftofs.twant.entity.SellerGoodsItem
 import com.ftofs.twant.kotlin.adapter.LiveDataCallAdapterFactory
 import com.ftofs.twant.kotlin.vo.BannerVO
 import com.ftofs.twant.kotlin.vo.PageVO
+import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.ftofs.twant.log.SLog
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -47,7 +48,7 @@ interface KotlinInterfaceApi {
     fun sellerGoodsList(
             @Query("token")token:String,
             @Query("page")page:Int
-    ): LiveData<ApiResponse<PageVO<SellerGoodsItem>>>
+    ): LiveData<ApiResponse<SellerPageVO<SellerGoodsItem>>>
     /**
      * 商家商家列表选择页
      */

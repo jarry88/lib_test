@@ -11,7 +11,7 @@ class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsItem, SellerGoodsItemUnsw
 //    var username = SP.getString(SP.KEY_USER_NAME)
 
     override val layoutId: Int
-        get() = R.layout.seller_goods_item
+        get() = R.layout.seller_goods_item_unswipe
 
     override fun initView(binding: SellerGoodsItemUnswipeBinding, item: SellerGoodsItem) {
         binding.vo = item

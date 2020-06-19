@@ -54,7 +54,8 @@ class FeatureGoodSelectFragment: BaseKotlinFragment<SellerEditFeaturesLayoutBind
 
         vm.goodsItems.observe(this, Observer {
             if (it != null) {
-                adapter.addAll(it.datas, it.curPage == 1)
+                SLog.info("${it.goodsList}")
+                adapter.addAll(it.goodsList, it.pageEntity.curPage == 1)
             }
         })
     }

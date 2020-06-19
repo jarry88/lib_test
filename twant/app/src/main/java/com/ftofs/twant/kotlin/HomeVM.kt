@@ -16,7 +16,7 @@ class HomeVM : BaseViewModel() {
         api.sellerGoodsList(User.getToken(),it)
     }
 
-    val goodsItems =mapPage(_goodsItems)
+    val goodsItems =mapPageT(_goodsItems)
 
     var back=MutableLiveData<Boolean>()
     fun backAction() {
