@@ -6,12 +6,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -20,8 +22,10 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.EditorResultInterface;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecMapItem;
 import com.ftofs.twant.seller.entity.SellerSpecPermutation;
@@ -35,8 +39,10 @@ import com.lxj.xpopup.XPopup;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -46,8 +52,11 @@ import okhttp3.Call;
  * 【賣家】編輯規格與圖片
  * @author zwm
  */
-public class SellerEditSpecFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class SellerEditSpecFragment extends BaseFragment
+        implements View.OnClickListener, OnSelectedListener, EditorResultInterface {
     int commonId;
+
+    EditText etGoodsVideoUrl;
 
     // 當前選中的規格列表
     EasyJSONArray specJsonVoList;
@@ -68,7 +77,14 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
     // 規格值Id的字符串拼接(例5,12,8)的列表
     List<String> specValueIdStringList = new ArrayList<>();
 
+    // colorId與圖片列表的映射關係
+    Map<Integer, List<SellerGoodsPicVo>> colorImageMap = new HashMap<>();
+
     LinearLayout llSelectedSpecContainer;
+
+    // 原先已經添加的specValue集合
+    Set<Integer> initSpecValueSet = new HashSet<>();
+
 
     public static SellerEditSpecFragment newInstance(int commonId, EasyJSONArray specJsonVoList) {
         Bundle args = new Bundle();
@@ -93,10 +109,12 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        etGoodsVideoUrl = view.findViewById(R.id.et_goods_video_url);
         llSelectedSpecContainer = view.findViewById(R.id.ll_selected_spec_container);
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_save, this);
         Util.setOnClickListener(view, R.id.btn_add_spec, this);
+        Util.setOnClickListener(view, R.id.btn_view_sku_detail, this);
 
         try {
             for (Object object : specJsonVoList) {
@@ -111,10 +129,13 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                     EasyJSONObject specValue = (EasyJSONObject) object2;
 
                     SellerSpecItem sellerSpecItem = new SellerSpecItem();
-                    sellerSpecItem.id = specValue.getInt("specValueId");
+                    int specValueId = specValue.getInt("specValueId");
+                    sellerSpecItem.id = specValueId;
                     sellerSpecItem.name = specValue.getSafeString("specValueName");
                     sellerSpecItem.selected = true;
                     sellerSpecItem.type = SellerSpecItem.TYPE_SPEC_VALUE;
+
+                    initSpecValueSet.add(specValueId); // 初始選中的specValueId
 
                     item.sellerSpecItemList.add(sellerSpecItem);
                 }
@@ -248,12 +269,17 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                             sellerSpecItem.type = SellerSpecItem.TYPE_SPEC_VALUE;
                             sellerSpecItem.id = specValueId;
                             sellerSpecItem.name = specValueName;
+                            if (initSpecValueSet.contains(specValueId)) {
+                                sellerSpecItem.selected = true;
+                            }
 
                             sellerSpecMapItem.sellerSpecItemList.add(sellerSpecItem);
                         }
 
                         sellerSpecMap.put(specId, sellerSpecMapItem);
                     }
+
+                    generateSpecPermutation();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -273,13 +299,36 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                 return;
             }
 
-            String path = Api.PATH_SELLER_EDIT_GOODS_DETAIL + Api.makeQueryString(EasyJSONObject.generate(
+            String goodsVideoUrl = etGoodsVideoUrl.getText().toString().trim();
+            if (!StringUtil.isEmpty(goodsVideoUrl) && !StringUtil.isYoutubeUrl(goodsVideoUrl)) {
+                ToastUtil.error(_mActivity, "商品視頻鏈接不合規");
+                return;
+            }
+
+            String url = Api.PATH_SELLER_EDIT_GOODS_DETAIL + Api.makeQueryString(EasyJSONObject.generate(
                  "token", token
             ));
 
 
-            EasyJSONObject params = EasyJSONObject.generate();
-            Api.postJsonUi(path, params.toString(), new UICallback() {
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "commonId", commonId,
+                    "editType", 3,
+                    "goodsVideo", goodsVideoUrl
+            );
+
+            Pair<Boolean, String> result = saveSpecInfo(params);
+            if (!result.first) {
+                ToastUtil.error(_mActivity, result.second);
+                return;
+            }
+
+            SLog.info("url[%s], params[%s]", url, params);
+
+            if (false) {
+                return;
+            }
+
+            Api.postJsonUi(url, params.toString(), new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
@@ -334,47 +383,39 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                     .moveUpToKeyboard(false)
                     .asCustom(new SellerSelectSpecPopup(_mActivity, Constant.ACTION_ADD, 0, sellerSpecItemList, sellerSpecValueMap, this))
                     .show();
+        } else if (id == R.id.btn_view_sku_detail) {
+            // 查看SKU詳情
+            if (sellerSelectedSpecList.size() < 1) {
+                ToastUtil.error(_mActivity, "請先添加規格");
+                return;
+            }
+
+            // 查看是否有选【颜色】规格
+            SellerSpecMapItem colorItem = sellerSpecMap.get(Constant.COLOR_SPEC_ID);
+            SellerSpecMapItem colorSpecMapItem = null;
+            if (colorItem != null && colorItem.selected) { // 如果有選顏色
+                colorSpecMapItem = new SellerSpecMapItem();
+
+                colorSpecMapItem.specId = colorItem.specId;
+                colorSpecMapItem.specName = colorItem.specName;
+
+                for (SellerSpecItem elem : colorItem.sellerSpecItemList) {
+                    if (elem.selected) {
+                        colorSpecMapItem.sellerSpecItemList.add(elem);
+                    }
+                }
+            }
+
+            start(SellerSkuEditorFragment.newInstance(this,
+                    specValueIdStringList,
+                    specValueIdStringMap,
+                    colorSpecMapItem,
+                    colorImageMap));
         }
     }
 
     private void popWithResult() {
         hideSoftInputPop();
-    }
-
-
-    private void addSpec() {
-        if (sellerSpecMap.size() < 1) {
-            ToastUtil.error(_mActivity, "沒有可用的規格");
-            return;
-        }
-
-        List<SellerSpecItem> sellerSpecItemList = new ArrayList<>();
-        Map<Integer, List<SellerSpecItem>> sellerSpecValueMap = new HashMap<>();
-
-        for (Map.Entry<Integer, SellerSpecMapItem> entry : sellerSpecMap.entrySet()) {
-            if (entry.getValue().selected) {
-                continue;
-            }
-
-            SellerSpecItem sellerSpecItem = new SellerSpecItem();
-            sellerSpecItem.id = entry.getKey();
-            sellerSpecItem.name = entry.getValue().specName;
-
-            sellerSpecItemList.add(sellerSpecItem);
-            sellerSpecValueMap.put(entry.getKey(), entry.getValue().sellerSpecItemList);
-        }
-
-
-        if (sellerSpecItemList.size() < 1) {
-            ToastUtil.error(_mActivity, "已添加所有的規格");
-            return;
-        }
-
-        new XPopup.Builder(_mActivity)
-                // 如果不加这个，评论弹窗会移动到软键盘上面
-                .moveUpToKeyboard(false)
-                .asCustom(new SellerSelectSpecPopup(_mActivity, Constant.ACTION_ADD, 0, sellerSpecItemList, sellerSpecValueMap, this))
-                .show();
     }
 
 
@@ -507,6 +548,141 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
 
                 specValueIdStringMap.put(specValueIdString, permutation);
             }
+        }
+    }
+
+    @Override
+    public void setEditorResult(Map<String, SellerSpecPermutation> specValueIdStringMap, Map<Integer, List<SellerGoodsPicVo>> colorImageMap) {
+        this.specValueIdStringMap = specValueIdStringMap;
+        this.colorImageMap = colorImageMap;
+        SLog.info("specValueIdStringMap[%s]", Util.specValueIdStringMapToJSONString(specValueIdStringMap));
+    }
+
+    /**
+     * 保存规格信息
+     * @return  错误消息： 如果成功，返回null
+     *                   如果失败，返回具体的错误消息
+     */
+
+    /**
+     * 保存规格信息到params參數
+     * @param params
+     * @return 結構對 first -- true：保存成功  false：保存失敗
+     *               second -- 錯誤消息
+     */
+    private Pair<Boolean, String> saveSpecInfo(EasyJSONObject params) {
+        try {
+            SLog.info("sellerSelectedSpecList.size[%d]", sellerSelectedSpecList.size());
+            if (sellerSelectedSpecList.size() < 1) {
+                return new Pair<>(false, "請添加商品規格");
+            }
+
+            /*
+            "specJsonVoList": [
+                {
+                    "specId": 1,
+                    "specName": "顔色",
+                    "specValueList": [
+                        {
+                            "specValueId": 16,
+                            "specValueName": "白色",
+                            "imageSrc": ""
+                        },
+                        {
+                            "specValueId": 18,
+                            "specValueName": "粉色",
+                            "imageSrc": ""
+                        }
+                    ]
+                },
+                {
+                    "specId": 2,
+                    "specName": "尺碼",
+                    "specValueList": [
+                        {
+                            "specValueId": 35,
+                            "specValueName": "XXS",
+                            "imageSrc": ""
+                        }
+                    ]
+                }
+            ]
+             */
+
+            EasyJSONArray specJsonVoList = EasyJSONArray.generate();
+            for (SellerSpecMapItem item : sellerSelectedSpecList) {
+                EasyJSONArray specValueArr = EasyJSONArray.generate();
+                for (SellerSpecItem specItem : item.sellerSpecItemList) {
+                    specValueArr.append(
+                            EasyJSONObject.generate(
+                                    "specValueId", specItem.id,
+                                    "specValueName", specItem.name
+                            )
+                    );
+                }
+
+                specJsonVoList.append(EasyJSONObject.generate(
+                        "specId", item.specId,
+                        "specName", item.specName,
+                        "specValueList", specValueArr));
+            }
+            SLog.info("specJsonVoList[%s]", specJsonVoList.toString());
+            params.set("specJsonVoList", specJsonVoList);
+
+            EasyJSONArray goodsJsonVoList = EasyJSONArray.generate();
+            // 生成PermutationList
+            for (String specValueIdString : specValueIdStringList) {
+                SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIdString);
+                /*
+                "goodsSpecs": "A+B,,,XXS", #規格值 多個用三個英文逗號,,,隔開
+            "goodsFullSpecs": "顔色：A+B；尺碼：XXS", #完整規格
+            "specValueIds": "16,35", #規格值ID，多個用英文逗號隔開
+            "goodsPrice0": 10, #sku價格
+            "goodsSerial": "", #商家編號
+            "goodsStorage": 20, #縂庫存
+            "colorId": 16, #主規格值ID
+            "reserveStorage": #預留庫存
+                 */
+                goodsJsonVoList.append(EasyJSONObject.generate(
+                        "specValueIds", permutation.specValueIdString,
+                        "goodsPrice0", permutation.price,
+                        "goodsSerial", permutation.goodsSN,
+                        "goodsStorage", permutation.storage,
+                        "colorId", permutation.colorId,
+                        "reserveStorage", permutation.reserved
+                ));
+            }
+            params.set("goodsJsonVoList", goodsJsonVoList);
+
+
+            EasyJSONArray goodsPicVoList = EasyJSONArray.generate();
+            for (Map.Entry<Integer, List<SellerGoodsPicVo>> entry: colorImageMap.entrySet()) {
+                /*
+                {
+                    "colorId": 16, #規格值ID
+                    "imageName": "image/a8/5a/a85a133391e94416decc6668f5334bdf.jpg", #圖片路徑
+                    "imageSort": 0, #圖片排序
+                    "isDefault": 1 #1是0否主圖，同一組(colorId相同)規格只有一張主圖
+                }
+                 */
+                List<SellerGoodsPicVo> picVoList = entry.getValue();
+                for (SellerGoodsPicVo vo : picVoList) {
+                    goodsPicVoList.append(EasyJSONObject.generate(
+                            "colorId", vo.colorId,
+                            "imageName", vo.imageName,
+                            "imageSort", vo.imageSort,
+                            "isDefault", vo.isDefault
+                    ));
+                }
+
+            }
+            params.set("goodsPicVoList", goodsPicVoList);
+
+            return new Pair<>(true, null);
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+
+            return new Pair<>(false, "保存規格數據失敗");
         }
     }
 }
