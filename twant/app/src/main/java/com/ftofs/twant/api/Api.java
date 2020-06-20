@@ -1444,6 +1444,18 @@ public class Api {
     public static final String PATH_SELLER_GOODS_SKU_LIST = "/member/seller/goods/sku";
 
 
+    /**
+     * 【賣家】編輯商品詳情
+     */
+    public static final String PATH_SELLER_EDIT_GOODS_DETAIL = "/member/seller/goods/edit";
+
+
+    /**
+     * 【賣家】規格列表
+     */
+    public static final String PATH_SELLER_SPEC_LIST = "/member/seller/spec/list";
+
+
 
     /**
      * 發送Http請求

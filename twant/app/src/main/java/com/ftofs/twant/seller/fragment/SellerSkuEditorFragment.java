@@ -16,6 +16,7 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.EditorResultInterface;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.entity.SellerGoodsPicVo;
@@ -46,7 +47,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
-    AddGoodsFragment addGoodsFragment;
+    EditorResultInterface editorResultInterface;
     List<String> specValueIdStringList;
     Map<String, SellerSpecPermutation> specValueIdStringMap;
     SellerSpecMapItem colorSpecMapItem;
@@ -64,7 +65,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
 
 
     public static SellerSkuEditorFragment newInstance(
-            AddGoodsFragment addGoodsFragment,
+            EditorResultInterface editorResultInterface,
             List<String> specValueIdStringList,
             Map<String, SellerSpecPermutation> specValueIdStringMap,
             SellerSpecMapItem colorSpecMapItem,  // 颜色规格，如果没选颜色时，则为null
@@ -74,7 +75,7 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
 
         SellerSkuEditorFragment fragment = new SellerSkuEditorFragment();
         fragment.setArguments(args);
-        fragment.addGoodsFragment = addGoodsFragment;
+        fragment.editorResultInterface = editorResultInterface;
         fragment.specValueIdStringList = specValueIdStringList;
         fragment.specValueIdStringMap = specValueIdStringMap;
         fragment.colorSpecMapItem = colorSpecMapItem;
@@ -159,8 +160,8 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
      * 用戶點擊返回後調用
      */
     private void popAfter() {
-        if (addGoodsFragment != null) {
-            addGoodsFragment.setEditorResult(specValueIdStringMap, colorImageMap);
+        if (editorResultInterface != null) {
+            editorResultInterface.setEditorResult(specValueIdStringMap, colorImageMap);
         }
 
         hideSoftInputPop();
@@ -232,17 +233,18 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
                 for (int colorId : keySet) {
                     SLog.info("colorId[%d]", colorId);
 
-                    int order = 0;
+                    int order = 0;  // 表示第幾張圖片，從1開始
                     List<SellerGoodsPicVo> skuImageList = colorImageMap.get(colorId);
                     for (SellerGoodsPicVo picVo : skuImageList) {
+                        order++;
                         if (StringUtil.isEmpty(picVo.absolutePath)) {
                             continue;
                         }
 
                         count++;
                         SLog.info("正在上传第%d张图片[%s]", count, picVo.absolutePath);
-                        picVo.imageSort = order;
-                        picVo.isDefault = ((order == 0) ? Constant.TRUE_INT : Constant.FALSE_INT);
+                        picVo.imageSort = order - 1;
+                        picVo.isDefault = ((order == 1) ? Constant.TRUE_INT : Constant.FALSE_INT);
 
                         String url = Api.syncUploadFile(new File(picVo.absolutePath));
                         if (!StringUtil.isEmpty(url)) {
@@ -252,12 +254,10 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
                             EasyJSONObject goodsPicVo = EasyJSONObject.generate(
                                     "colorId", colorId,
                                     "imageName", url,
-                                    "imageSort", order,
-                                    "isDefault", (order == 0 ? Constant.TRUE_INT: Constant.FALSE_INT)
+                                    "imageSort", order - 1,  // imageSort從零開始
+                                    "isDefault", (order == 1 ? Constant.TRUE_INT: Constant.FALSE_INT)
                             );
                             goodsPicVoList.append(goodsPicVo);
-
-                            order++;
                         } else {
                             SLog.info("Error!上传失败");
                             emitter.onError(new Exception("Error!上传失败"));

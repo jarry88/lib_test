@@ -31,6 +31,7 @@ import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.EditorResultInterface;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.log.SLog;
@@ -70,7 +71,8 @@ import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class AddGoodsFragment extends BaseFragment implements View.OnClickListener , OnSelectedListener {
+public class AddGoodsFragment extends BaseFragment
+        implements View.OnClickListener, OnSelectedListener, EditorResultInterface {
     private Unbinder unbinder;
     private SimpleViewPagerAdapter mPagerAdapter;
     private List<View> mViews = new ArrayList<>();
@@ -156,6 +158,7 @@ public class AddGoodsFragment extends BaseFragment implements View.OnClickListen
      * 接收從Sku編輯器返回的結果
      * @param specValueIdStringMap
      */
+    @Override
     public void setEditorResult(Map<String, SellerSpecPermutation> specValueIdStringMap, Map<Integer, List<SellerGoodsPicVo>> colorImageMap) {
         this.specValueIdStringMap = specValueIdStringMap;
         this.colorImageMap = colorImageMap;

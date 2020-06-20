@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@drawable/border_type_d">
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:text="商品規格"
+            android:textColor="@color/tw_black"
+            />
+
+        <TextView
+            android:id="@+id/btn_add_spec"
+            android:layout_width="51dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="@dimen/toolbar_margin_right"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="添加"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/micro_blue_button"
+            android:visibility="visible"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="1、產品規格只能添加3個（包括平臺預設規則），每個規格只能添加35個規格值。
+\n2、平臺設置的規格不能編輯，但可以在產品發布時設置別名。平臺的顏色規格可以設置不同顏色的產品圖片。"
+        android:background="#ffa">
+
+    </TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tw_slight_grey">
+    </androidx.recyclerview.widget.RecyclerView>
+</LinearLayout>
+
+

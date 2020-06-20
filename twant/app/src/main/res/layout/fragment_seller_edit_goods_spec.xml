@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@drawable/border_type_d">
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="7dp"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:text="編輯規格與圖片"
+            android:textColor="@color/tw_black"
+            />
+
+        <TextView
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/toolbar_margin_right"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="保存"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:background="@color/tw_blue">
+        </TextView>
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/ll_seller_handle_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/white_6dp_radius_bg"
+                android:paddingBottom="@dimen/margin12"
+                android:paddingTop="@dimen/margin12"
+                android:paddingStart="@dimen/margin12"
+                android:paddingEnd="@dimen/margin12"
+                android:visibility="visible">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/tw_black"
+                        android:text="1、選擇商品規格：">
+
+                    </TextView>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_selected_spec_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/btn_add_spec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:gravity="center"
+                    android:text="添加規格"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:background="@drawable/seller_grey_bg">
+                </TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/tw_black"
+                    android:text="2、編輯SKU商品詳情：">
+                </TextView>
+                <TextView
+                    android:id="@+id/btn_view_sku_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:background="@drawable/gren_5dp_bg"
+                    android:text="編輯SKU詳情"
+                    android:textSize="13sp"
+                    android:textColor="@android:color/white">
+                </TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tw_black"
+                        android:text="3、設置商品視頻鏈接：">
+                    </TextView>
+                    
+                    <EditText
+                        android:id="@+id/et_goods_video_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:singleLine="true"
+                        android:textSize="@dimen/sp_14"
+                        android:background="@drawable/edit_text_bg"
+                        android:textColor="@color/tw_black"
+                        android:hint="只支持youtube視頻鏈接">
+
+                    </EditText>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="@dimen/sp_14"
+                        android:text="例如：https://www.youtube.com/watch?v=sv0CE-Vo00g">
+                    </TextView>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>
