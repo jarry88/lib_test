@@ -117,13 +117,15 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 tvPrice.setTypeface(typeFace);
                 UiUtil.toPriceUI(tvPrice,12);
 
+                TextView tvOriginalPrice=secondHolder.getView(R.id.tv_goods_original_price);
                 if (item.goods.showDiscount) {
-                    TextView tvOriginalPrice=secondHolder.getView(R.id.tv_goods_original_price);
                     tvOriginalPrice.setVisibility(View.VISIBLE);
                     tvOriginalPrice.setText(StringUtil.formatPrice(mContext, item.goods.getOriginal(), 0, true));
                     tvOriginalPrice.setTypeface(typeFace);
                     // 原價顯示刪除線
                     tvOriginalPrice.setPaintFlags(tvOriginalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                } else {
+                    tvOriginalPrice.setVisibility(View.GONE);
                 }
                 secondHolder.getView(R.id.sw_price).setVisibility( View.GONE);
 //                ((SlantedWidget) holder.getView(R.id.sw_price)).setDiscountInfo(mContext, item.info.getDiscount(), item.info.getOriginal());
