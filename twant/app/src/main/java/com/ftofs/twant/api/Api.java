@@ -878,7 +878,7 @@ public class Api {
     /**
      * 檢測更新
      */
-    public static final String PATH_CHECK_UPDATE = "/app/android";
+    // public static final String PATH_CHECK_UPDATE = "/app/android";
 
     /**
      * 訂單數量查詢
@@ -1442,6 +1442,12 @@ public class Api {
      * 【賣家】獲取商品Sku列表
      */
     public static final String PATH_SELLER_GOODS_SKU_LIST = "/member/seller/goods/sku";
+
+
+    /**
+     * 安卓版本渠道更新
+     */
+    public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
 
 
