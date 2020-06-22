@@ -828,7 +828,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                             @Override
                                             public void onDismiss() {
                                             }
-                                        }).asCustom(new TwConfirmPopup(_mActivity, title,null   , "是的", "等等團購",new OnConfirmCallback() {
+                                        }).asCustom(new TwConfirmPopup(_mActivity, title,null   , "立即購買", "等等團購",new OnConfirmCallback() {
                                     @Override
                                     public void onYes() {
                                         SLog.info("onYes");
