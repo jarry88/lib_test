@@ -31,8 +31,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
+
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
@@ -44,23 +44,22 @@ import okhttp3.Call;
  * @author gzp
  */
 public class SellerFeaturesFragment extends BaseFragment implements View.OnClickListener{
-    private Unbinder unbinder;
     private List<Goods> goodsCommonList =new ArrayList<>();
     private SellerFeaturesGoodsAdapter adpter;
 
-    @OnClick(R.id.btn_back)
+
     void back() {
         hideSoftInputPop();
     }
 
-    @BindView(R.id.tv_title)
+
     TextView tvTitle;
 
-    @OnClick(R.id.icon_add_goods)
+
     void gotoGoodsList() {
 //        Util.startFragment(SetFeatureListFragment.newInstance());
     }
-    @BindView(R.id.rv_features_goods_list)
+
     RecyclerView rvList;
 
     public static SellerFeaturesFragment newInstance() {
@@ -71,7 +70,20 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.seller_edit_features_layout, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        rvList = (RecyclerView) view.findViewById(R.id.rv_features_goods_list);
+        view.findViewById(R.id.icon_add_goods).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoGoodsList();
+            }
+        });
+        view.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
         return view;
     }
 
@@ -98,14 +110,6 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
     public void onSupportVisible() {
         super.onSupportVisible();
         loadDate();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
     private void loadDate() {

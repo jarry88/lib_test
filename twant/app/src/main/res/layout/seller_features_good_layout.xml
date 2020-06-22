@@ -150,23 +150,26 @@
                     android:layout_height="wrap_content"
                     android:text="@string/text_sku_detail"
                     android:textColor="#2776D3"
-                    android:textSize="13sp"></TextView>
+                    android:textSize="13sp"
+                    underline="">
+                </TextView>
 
                 <TextView
                     android:id="@+id/btn_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:gravity="center"
                     android:textSize="13sp"
-                    android:text="···"
+                    android:text=""
                     android:textColor="@color/tw_text_dark"
-                    android:background="@drawable/seller_goods_view_more_bg">
+                    android:background="@drawable/ic_minus">
 
                 </TextView>
+
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
