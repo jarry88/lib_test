@@ -19,9 +19,9 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
 
-        versionCode 156
+        versionCode 158
 
-        versionName "1.2.4.02"
+        versionName "1.2.4.03"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
@@ -42,7 +42,8 @@ android {
         // 應用寶渠道
         tencent {
         }
-        // 華為渠道
+
+        // 華為應用商店渠道
         huawei {
         }
     }
