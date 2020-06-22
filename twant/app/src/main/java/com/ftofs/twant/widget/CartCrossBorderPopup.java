@@ -143,7 +143,14 @@ public class CartCrossBorderPopup extends CenterPopupView implements View.OnClic
 
             SLog.info("cartCrossBorderAdapter.selectedPosition[%d]", cartCrossBorderAdapter.selectedPosition);
             CartCrossBorderItem cartCrossBorderItem = cartCrossBorderItemList.get(cartCrossBorderAdapter.selectedPosition);
-            CrossBorderStoreInfo crossBorderStoreInfo = crossBorderStoreMap.get(cartCrossBorderItem.storeId);
+
+            int storeId = cartCrossBorderItem.storeId;
+            if (!cartCrossBorderItem.isCrossBorder) {  // 如果不是跨境購商品，不區分店鋪，用0表示
+                storeId = 0;
+            }
+            SLog.info("cartCrossBorderItem.storeId[%d], storeId[%d]", cartCrossBorderItem.storeId, storeId);
+
+            CrossBorderStoreInfo crossBorderStoreInfo = crossBorderStoreMap.get(storeId);
             SLog.info("crossBorderStoreInfo[%s]", crossBorderStoreInfo);
             if (crossBorderStoreInfo != null && crossBorderStoreInfo.buyData != null) {
                 SLog.info("crossBorderStoreInfo.buyData[%s]", crossBorderStoreInfo.buyData);
