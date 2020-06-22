@@ -140,6 +140,10 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                 return;
             }
 
+            if (isFastClick()) {
+                return;
+            }
+
             int scene;
             if (id == R.id.btn_share_to_friend) {
                 scene = WeixinUtil.WX_SCENE_SESSION;
@@ -183,6 +187,10 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                 }
             });
         } else if (id == R.id.btn_share_to_facebook) {
+            if (isFastClick()) {
+                return;
+            }
+
             ShareLinkContent content = new ShareLinkContent.Builder()
                     .setContentTitle(title)
                     .setContentDescription(description)
@@ -217,6 +225,10 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
             }))
                     .show();
         } else if (id == R.id.btn_share_to_takewant_circle) { // 分享到想要圈
+            if (isFastClick()) {
+                return;
+            }
+
             EasyJSONObject dataObj = (EasyJSONObject) data;
             ApiUtil.addPost(getContext(),false,dataObj);
 //            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
