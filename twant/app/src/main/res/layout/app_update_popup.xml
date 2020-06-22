@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:text="V1.2.27"
+        android:text=""
         android:textColor="@color/tw_black"
         android:textSize="14sp"
         />
@@ -35,7 +35,7 @@
         android:layout_marginRight="34dp"
         android:textColor="@color/tw_black"
         android:textSize="14sp"
-        android:text="1、在這次的更新中我們優化了會話功能，你可以更快更有效的和對方進行溝通交流；\n2、在這次的更新中我們優化了一些功能、修復了一些BUG，你可以更便捷的使用Takewant商城；"
+        android:text=""
         />
     
     <LinearLayout

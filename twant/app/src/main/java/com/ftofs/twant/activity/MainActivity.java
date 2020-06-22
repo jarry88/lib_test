@@ -796,9 +796,14 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
      * @param showResult 是否顯示結果信息
      */
     public void checkUpdate(boolean showResult) {
-        EasyJSONObject params = EasyJSONObject.generate("version", BuildConfig.VERSION_NAME);
+        EasyJSONObject params = EasyJSONObject.generate("channel", BuildConfig.FLAVOR);
         SLog.info("params[%s]", params);
-        Api.getUI(Api.PATH_CHECK_UPDATE, params, new UICallback() {
+
+        String url = Api.PATH_CHANNEL_UPDATE;
+        if (Config.DEVELOPER_MODE) {
+            // url = "https://zhouweiming.cn/tmp/3.json";
+        }
+        Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 ToastUtil.showNetworkError(MainActivity.this, e);
@@ -814,8 +819,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                         return;
                     }
 
-                    if (!responseObj.exists("datas.version") && !responseObj.exists("datas.currentVersion")) {
-                        SLog.info("currentVersion");
+                    EasyJSONObject datas = responseObj.getSafeObject("datas");
+                    if (Util.isJsonObjectEmpty(datas)) { // 如果對應的渠道【沒有】版本或者沒有這個渠道
+                        SLog.info("datas為空");
                         // 如果服務器端沒有返回版本信息，也當作是最新版本
                         if (showResult) {
                             ToastUtil.info(MainActivity.this, getString(R.string.text_latest_version_message));
@@ -826,13 +832,9 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     // 當前版本
                     String currentVersion = BuildConfig.VERSION_NAME;
                     // 最新版本
-                    String newestVersion = null;
-                    if (responseObj.exists("datas.version")) {
-                        newestVersion = responseObj.getSafeString("datas.version");
-                    }
-
+                    String newestVersion = datas.getSafeString("version");
                     if (StringUtil.isEmpty(newestVersion)) {
-                        newestVersion = responseObj.getSafeString("datas.currentVersion");
+                        return;
                     }
 
 
@@ -852,26 +854,13 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                     boolean isDismissOnBackPressed = true;
                     boolean isDismissOnTouchOutside = true;
                     boolean isForceUpdate = false;
-                    if (responseObj.exists("datas.isForceUpdate")) {
-                        isForceUpdate = (responseObj.getInt("datas.isForceUpdate") != 0);
+                    if (datas.exists("isForceUpdate")) {
+                        isForceUpdate = (datas.getInt("isForceUpdate") != Constant.FALSE_INT);
                     }
 
-                    String version = "";
-                    if (responseObj.exists("datas.version")) {
-                        version = responseObj.getSafeString("datas.version");
-                    }
-
-                    String versionDesc = "";
-                    if (responseObj.exists("datas.remarks")) {
-                        versionDesc = responseObj.getSafeString("datas.remarks");
-                    }
-
-                    String appUrl = null;
-                    if (responseObj.exists("datas.appUrl")) {
-                        appUrl = responseObj.getSafeString("datas.appUrl");
-                    }
-
-                    SLog.info("datas.appUrl[%s]", appUrl);
+                    String versionDesc = datas.getSafeString("remarks");
+                    String appUrl = datas.getSafeString("appUrl");
+                    SLog.info("versionDesc[%s], appUrl[%s], isForceUpdate[%s]", versionDesc, appUrl, isForceUpdate);
 
                     // 如果是強制升級，點擊對話框外的區域或按下返回鍵，也不能關閉對話框
                     if (isForceUpdate) {
@@ -892,7 +881,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
                                 .dismissOnTouchOutside(isDismissOnTouchOutside) // 点击外部是否关闭弹窗，默认为true
                                 // 如果不加这个，评论弹窗会移动到软键盘上面
                                 .moveUpToKeyboard(false)
-                                .asCustom(new AppUpdatePopup(MainActivity.this, version, versionDesc, isForceUpdate, appUrl));
+                                .asCustom(new AppUpdatePopup(MainActivity.this, newestVersion, versionDesc, isForceUpdate, appUrl));
                     }
                     SLog.info("isDismiss[%s]", appUpdatePopup.isDismiss());
                     if (appUpdatePopup.isDismiss()) {
@@ -1024,7 +1013,7 @@ public class MainActivity extends BaseActivity implements MPaySdkInterfaces {
 
                                 SLog.info("MPay支付成功，通知服務器成功");
                             } catch (Exception e) {
-
+                                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                             }
                         }
                     });

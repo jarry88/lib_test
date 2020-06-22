@@ -137,7 +137,10 @@ public class AppUpdatePopup extends CenterPopupView implements View.OnClickListe
                 });
             }
         }
-        dismiss();
+
+        if (id != R.id.btn_app_update_now) { // 如果不是強制升級，才關閉彈窗
+            dismiss();
+        }
     }
 
     private void downloadApk() {
