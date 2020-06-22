@@ -13,10 +13,7 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+
 
 /**
  * 选择出售中商品设置为镇店之宝列表页 
@@ -24,14 +21,13 @@ import butterknife.Unbinder;
  * @author gzp
  */
 public class SetFeatureListFragment extends BaseFragment {
-    private Unbinder unbinder;
 
-    @OnClick(R.id.btn_back)
+
     void back() {
         hideSoftInputPop();
     }
 
-    @BindView(R.id.tv_title)
+
     TextView tvTitle;
 
     public static SetFeatureListFragment newInstance() {
@@ -42,7 +38,13 @@ public class SetFeatureListFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.set_feature_fragment, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        view.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
         return view;
     }
 
@@ -60,14 +62,6 @@ public class SetFeatureListFragment extends BaseFragment {
     public void onSupportVisible() {
         super.onSupportVisible();
         loadDate();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
     private void loadDate() {

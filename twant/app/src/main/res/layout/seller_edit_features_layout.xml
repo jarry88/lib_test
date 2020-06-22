@@ -44,8 +44,8 @@
             android:textColor="@color/tw_black"
             />
         <com.ftofs.twant.widget.ScaledButton
-            android:layout_width="wrap_content"
-            android:layout_height="31dp"
+            android:layout_width="32dp"
+            android:layout_height="24dp"
             android:paddingStart="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
             android:layout_toStartOf="@+id/btn_menu"

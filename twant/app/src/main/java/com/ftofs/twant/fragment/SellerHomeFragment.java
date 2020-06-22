@@ -50,7 +50,6 @@ import java.util.TimerTask;
 
 
 
-import butterknife.OnClick;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextView;
 import cc.ibooker.ztextviewlib.AutoVerticalScrollTextViewUtil;
 import cn.snailpad.easyjson.EasyJSONArray;

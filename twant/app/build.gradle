@@ -227,9 +227,7 @@ dependencies {
 
     //smartTabLayout
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
-    implementation 'com.jakewharton:butterknife:10.0.0'
     implementation 'com.kunminx.linkage:linkage-recyclerview:1.9.2'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
 
     // implementation(name: 'taifung-release-v20180615', ext: 'aar')
 

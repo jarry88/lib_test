@@ -13,11 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.entity.Goods;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.kotlin.ApiResponse;
+import com.ftofs.twant.kotlin.KotlinInterfaceApi;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerFeaturesGoodsAdapter;
 import com.ftofs.twant.seller.api.SellerApi;
@@ -30,14 +33,14 @@ import com.ftofs.twant.widget.SimpleTabManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
-
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 商家鎮店之寶添加編輯頁面 需求913
@@ -104,6 +107,40 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         rvList.setLayoutManager(linearLayoutManager);
         rvList.setAdapter(adpter);
+        adpter.setOnItemChildClickListener((adapter, view1, position) -> {
+            int id =view1.getId();
+            if (id == R.id.btn_view_all_sku) {
+                //添加跳转商品详情页逻辑
+                ToastUtil.success(_mActivity,"跳转至商品详情页");
+            } else if (id == R.id.btn_more) {
+                Integer[] arrayList = new Integer[]{((Goods)adapter.getItem(position)).id};
+                retrofit2.Call<ApiResponse<Objects>> uiCall =KotlinInterfaceApi.Companion.get().cancelFeatureCall(User.getToken(), arrayList);
+                // 发送同步请求
+                try {
+                    uiCall.execute();
+                    uiCall.enqueue(new Callback<ApiResponse<Objects>>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<ApiResponse<Objects>> call, Response<ApiResponse<Objects>> response) {
+
+                            // 主线程
+                            String responseStr = response.body().toString();
+                            SLog.info("result", responseStr);
+                        }
+
+                        @Override
+                        public void onFailure(retrofit2.Call<ApiResponse<Objects>> call, Throwable t) {
+
+                            // 主线程
+                            SLog.info("result", t.getMessage());
+                        }
+
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+// 发送异步请求
+            }
+        });
     }
 
     @Override

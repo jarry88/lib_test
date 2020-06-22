@@ -96,8 +96,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -118,7 +116,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     private static final int BEFORE_DISCOUNT=1;
     private static final int IN_DISCOUNT=2;
     private static final int OUT_DISCOUNT=3;
-    Unbinder unbinder;
     // 產品Id
     int commonId;
     // 當前選中的goodsId
@@ -362,7 +359,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_goods_detail, container, false);
-        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -1586,9 +1582,6 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
         SLog.info("onDestroyView");
         EventBus.getDefault().unregister(this);
 

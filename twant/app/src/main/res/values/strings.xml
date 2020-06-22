@@ -817,5 +817,5 @@
     <!-- 用u标签添加下划线 -->
     <string name="text_sku_goods_list"><u>SKU商品列表</u></string>
     <string name="text_select">選擇</string>
-    <string name="text_sku_detail">sku详情</string>
+    <string name="text_sku_detail"><u>sku详情</u></string>
 </resources>

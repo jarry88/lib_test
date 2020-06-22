@@ -40,10 +40,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -61,11 +58,11 @@ public class SellerRefundDetailFragment extends BaseFragment {
     private int refundId;
     private int FragmentType=Constant.SELLER_REFUND;//Constant.SELLER_REFUND表示refund 其它表示return
     private int showStoreHandel;//1是0否可處理
-    @BindView(R.id.ll_admin_container)
+
     LinearLayout llAdiminContainer;
-    @BindView(R.id.tv_admin_handle_state)
+
     TextView tvAdminState;
-    @BindView(R.id.tv_admin_info)
+
     TextView tvAdminInfo;
 
     @Override
@@ -75,22 +72,22 @@ public class SellerRefundDetailFragment extends BaseFragment {
         return true;
     }
 
-    @BindView(R.id.ll_button_cotainer)
+
     LinearLayout llButtonContainer;
-    @BindView(R.id.ll_widget_good_container)
+
     LinearLayout llReturnGoodContainer;
-    @BindView(R.id.btn_return_good)
+
     ScaledButton btnReturnGood;
-    @BindView(R.id.btn_return_without_good)
+
     ScaledButton btnReturnWithoutGood;
 
-    @OnClick(R.id.btn_return_good)
+
     void setReturn() {
         returnType = 2;
         btnReturnGood.setChecked(true);
         btnReturnWithoutGood.setChecked(false);
     }
-    @OnClick(R.id.btn_return_without_good)
+
     void setReturnNo() {
         returnType = 1;
         btnReturnGood.setChecked(false);
@@ -113,55 +110,55 @@ public class SellerRefundDetailFragment extends BaseFragment {
 
     }
 
-    @OnClick(R.id.btn_back)
+
     void back() {
         hideSoftInputPop();
     }
 
-    @OnClick(R.id.btn_return)
+
     void goBack() {
         hideSoftInputPop();
     }
-    @OnClick(R.id.btn_commit)
+
     void commitForm(){
         collectFormInfo();
     }
-    @OnClick(R.id.btn_menu)
+
     void toOrderInfo(){
         Util.startFragment(SellerOrderInfoFragment.newInstance(refundId,FragmentType!=Constant.SELLER_REFUND));
     }
 
-    @BindView(R.id.btn_check_ok)
+
     ScaledButton btnOk;
-    @BindView(R.id.btn_check_no)
+
     ScaledButton btnNo;
-    @BindView(R.id.progress_indicator)
+
     ProcessProgressIndicator indicator;
-    @BindView(R.id.tv_refund_state)
+
     TextView tvRefundState;
-    @BindView(R.id.tv_refund_sn)
+
     TextView tvRefundSn;
-    @BindView(R.id.tv_buyer)
+
     TextView tvBuyer;
-    @BindView(R.id.tv_refund_reason)
+
     TextView tvRefundReason;
-    @BindView(R.id.tv_refund_amount)
+
     TextView tvRefundAmount;
-    @BindView(R.id.tv_refund_describe)
+
     TextView tvRefundDescribe;
-    @BindView(R.id.tv_seller_handle_state)
+
     TextView tvSellerHandleState;
-    @BindView(R.id.tv_seller_reason)
+
     TextView tvSellerReason;
-    @BindView(R.id.ll_seller_refund_info_container)
+
     LinearLayout llSellerHandleInfo;
-    @BindView(R.id.ll_seller_handle_container)
+
     LinearLayout llSellerHandleContainer;
-    @BindView(R.id.refund_content_image_container)
+
     SquareGridLayout refundContentImageContainer;
-    @BindView(R.id.et_refund_seller_note)
+
     EditText etSellerMessage;
-    @OnClick(R.id.btn_check_ok)
+
     void checkOk() {
         sellerAgree = true;
         btnOk.setChecked(true);
@@ -172,7 +169,7 @@ public class SellerRefundDetailFragment extends BaseFragment {
         }
     }
 
-    @OnClick(R.id.btn_check_no)
+
     void checkNo(){
         btnNo.setChecked(true);
         btnNo.setIconResource(R.drawable.icon_checked);
@@ -247,20 +244,82 @@ public class SellerRefundDetailFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-    }
 
-    private Unbinder unbinder;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_refund_detail, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        llAdiminContainer = (LinearLayout) view.findViewById(R.id.ll_admin_container);
+        tvAdminState = (TextView) view.findViewById(R.id.tv_admin_handle_state);
+        tvAdminInfo = (TextView) view.findViewById(R.id.tv_admin_info);
+        llButtonContainer = (LinearLayout) view.findViewById(R.id.ll_button_cotainer);
+        llReturnGoodContainer = (LinearLayout) view.findViewById(R.id.ll_widget_good_container);
+        btnReturnGood = (ScaledButton) view.findViewById(R.id.btn_return_good);
+        btnReturnWithoutGood = (ScaledButton) view.findViewById(R.id.btn_return_without_good);
+        btnOk = (ScaledButton) view.findViewById(R.id.btn_check_ok);
+        btnNo = (ScaledButton) view.findViewById(R.id.btn_check_no);
+        indicator = (ProcessProgressIndicator) view.findViewById(R.id.progress_indicator);
+        tvRefundState = (TextView) view.findViewById(R.id.tv_refund_state);
+        tvRefundSn = (TextView) view.findViewById(R.id.tv_refund_sn);
+        tvBuyer = (TextView) view.findViewById(R.id.tv_buyer);
+        tvRefundReason = (TextView) view.findViewById(R.id.tv_refund_reason);
+        tvRefundAmount = (TextView) view.findViewById(R.id.tv_refund_amount);
+        tvRefundDescribe = (TextView) view.findViewById(R.id.tv_refund_describe);
+        tvSellerHandleState = (TextView) view.findViewById(R.id.tv_seller_handle_state);
+        tvSellerReason = (TextView) view.findViewById(R.id.tv_seller_reason);
+        llSellerHandleInfo = (LinearLayout) view.findViewById(R.id.ll_seller_refund_info_container);
+        llSellerHandleContainer = (LinearLayout) view.findViewById(R.id.ll_seller_handle_container);
+        refundContentImageContainer = (SquareGridLayout) view.findViewById(R.id.refund_content_image_container);
+        etSellerMessage = (EditText) view.findViewById(R.id.et_refund_seller_note);
+        view.findViewById(R.id.btn_check_no).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkNo();
+            }
+        });
+        view.findViewById(R.id.btn_check_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkOk();
+            }
+        });
+        view.findViewById(R.id.btn_menu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toOrderInfo();
+            }
+        });
+        view.findViewById(R.id.btn_commit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                commitForm();
+            }
+        });
+        view.findViewById(R.id.btn_return).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goBack();
+            }
+        });
+        view.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
+        view.findViewById(R.id.btn_return_without_good).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setReturnNo();
+            }
+        });
+        view.findViewById(R.id.btn_return_good).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setReturn();
+            }
+        });
         return view;
     }
 

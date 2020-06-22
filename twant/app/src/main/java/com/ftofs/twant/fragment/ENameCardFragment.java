@@ -31,9 +31,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -43,44 +42,44 @@ public class ENameCardFragment extends BaseFragment implements View.OnClickListe
     private String memberName;
     private boolean isMyself=false;
 
-    @BindView(R.id.img_avatar)
+
     ImageView avatar;
-    @BindView(R.id.tv_name)
+
     TextView tvName;
 
-    @BindView(R.id.icon_follow)
+
     ImageView iconFollow;
-    @BindView(R.id.tv_follow)
+
     TextView tvFollow;
-    @BindView(R.id.icon_add_or_chat)
+
     ImageView iconAddOrChat;
-    @BindView(R.id.tv_add_or_chat)
+
     TextView tvAddOrChat;
-    @BindView(R.id.tv_phone_number)
+
     TextView tvPhoneNumeber;
-    @BindView(R.id.tv_wechat)
+
     TextView tvWechatId;
-    @BindView(R.id.tv_facebook_id)
+
     TextView tvFaceBookId;
-    @BindView(R.id.tv_address)
+
     TextView tvAddress;
-    @BindView(R.id.tv_email)
+
     TextView tvEmail;
-    @BindView(R.id.tv_company)
+
     TextView tvCompany;
-    @BindView(R.id.tv_personal_bio)
+
     TextView tvPersonalBio;
-    @BindView(R.id.icon_sex_mini)
+
     ImageView iconSex;
-    @BindView(R.id.img_enc_background)
+
     ImageView imgBackground;
-    @BindView(R.id.btn_follow)
+
     RelativeLayout btnFollow;
-    @BindView(R.id.btn_add_friend)
+
     RelativeLayout btnAddFriend;
-    @BindView(R.id.btn_goto_home)
+
     RelativeLayout btnGotoHome;
-    @BindView(R.id.tv_edit)
+
     TextView btnEdit;
     private int isFollow;
     private int memberSex;
@@ -92,15 +91,6 @@ public class ENameCardFragment extends BaseFragment implements View.OnClickListe
     private EasyJSONArray educationList;
     private EasyJSONArray certificateList;
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-    }
-
-    private Unbinder unbinder;
 
     public static ENameCardFragment newInstance(String memberName) {
         Bundle args = new Bundle();
@@ -124,7 +114,25 @@ public class ENameCardFragment extends BaseFragment implements View.OnClickListe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_e_name_card, container, false);
-        unbinder = ButterKnife.bind( this,view);
+        avatar = (ImageView) view.findViewById(R.id.img_avatar);
+        tvName = (TextView) view.findViewById(R.id.tv_name);
+        iconFollow = (ImageView)view. findViewById(R.id.icon_follow);
+        tvFollow = (TextView) view.findViewById(R.id.tv_follow);
+        iconAddOrChat = (ImageView) view.findViewById(R.id.icon_add_or_chat);
+        tvAddOrChat = (TextView) view.findViewById(R.id.tv_add_or_chat);
+        tvPhoneNumeber = (TextView) view.findViewById(R.id.tv_phone_number);
+        tvWechatId = (TextView) view.findViewById(R.id.tv_wechat);
+        tvFaceBookId = (TextView) view.findViewById(R.id.tv_facebook_id);
+        tvAddress = (TextView) view.findViewById(R.id.tv_address);
+        tvEmail = (TextView) view.findViewById(R.id.tv_email);
+        tvCompany = (TextView) view.findViewById(R.id.tv_company);
+        tvPersonalBio = (TextView) view.findViewById(R.id.tv_personal_bio);
+        iconSex = (ImageView) view.findViewById(R.id.icon_sex_mini);
+        imgBackground = (ImageView) view.findViewById(R.id.img_enc_background);
+        btnFollow = (RelativeLayout) view.findViewById(R.id.btn_follow);
+        btnAddFriend = (RelativeLayout) view.findViewById(R.id.btn_add_friend);
+        btnGotoHome = (RelativeLayout) view.findViewById(R.id.btn_goto_home);
+        btnEdit = (TextView) view.findViewById(R.id.tv_edit);
         return view;
     }
 

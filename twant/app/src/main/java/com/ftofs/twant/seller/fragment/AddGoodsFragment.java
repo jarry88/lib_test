@@ -62,9 +62,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;

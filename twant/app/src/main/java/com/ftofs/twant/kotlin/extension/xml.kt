@@ -11,8 +11,3 @@ import com.ftofs.twant.util.StringUtil
 fun setImgUrl(view: ImageView, url: String) {
     Glide.with(view).load(StringUtil.normalizeImageUrl(url)).centerCrop().into(view)
 }
-@BindingAdapter("underline")
-fun setUnderLine(view: TextView,text:String) {
-    view.paint.flags=Paint.UNDERLINE_TEXT_FLAG
-    view.paint.isAntiAlias=true
-}

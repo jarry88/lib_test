@@ -11,6 +11,7 @@ import com.ftofs.twant.kotlin.vo.SellerPageVO
 import com.ftofs.twant.log.SLog
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -66,7 +67,14 @@ interface KotlinInterfaceApi {
     fun cancelFeature(
             @Query("token")token: String,
             @Query("commonId")commonId:Array<Int>
-    ):LiveData<ApiResponse<Objects>>
+    ):LiveData<ApiResponse<Objects>> /**
+     * 取消镇店之宝
+     */
+    @POST("member/seller/goods/cancel_features.json")
+    fun cancelFeatureCall(
+            @Query("token")token: String,
+            @Query("commonId")commonId:Array<Int>
+    ): Call<ApiResponse<Objects>>
     /**
      * 首页banner
      */

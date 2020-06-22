@@ -139,7 +139,7 @@
                         android:text="@string/text_sku_goods_list"
                         android:textSize="13sp"
                         android:textColor="#2776D3"
-                        underline=""/>
+                        />
 
                     <ImageView
                         android:id="@+id/btn_more"
