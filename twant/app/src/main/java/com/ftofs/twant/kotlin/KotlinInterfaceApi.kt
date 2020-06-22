@@ -14,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.*
@@ -57,6 +58,15 @@ interface KotlinInterfaceApi {
     fun isSeller(
             @Query("token")token:String
     ): LiveData<ApiResponse<Objects>>
+
+    /**
+     * 取消镇店之宝
+     */
+    @POST("member/seller/goods/cancel_features.json")
+    fun cancelFeature(
+            @Query("token")token: String,
+            @Query("commonId")commonId:Array<Int>
+    ):LiveData<ApiResponse<Objects>>
     /**
      * 首页banner
      */

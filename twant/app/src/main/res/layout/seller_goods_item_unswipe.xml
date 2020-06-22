@@ -18,13 +18,15 @@
             android:padding="12dp"
             android:orientation="horizontal"
             android:background="@android:color/white">
+
             <ImageView
                 android:id="@+id/goods_image"
+                imgUrl="@{vo.imageName}"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                imgUrl="@{vo.imageName}">
+                android:layout_height="100dp">
 
             </ImageView>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +73,7 @@
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
                             android:text="零售"
-                            android:visibility="@{vo.isVirtual==1?}"
+                            android:visibility="@{vo.isVirtual==1?0:2}"
                             android:textColor="#5AA1D8"
                             android:textSize="12sp"
                             android:background="@drawable/seller_goods_type_indicator_bg">
@@ -85,7 +87,7 @@
                             android:paddingRight="8dp"
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
-                            android:visibility="@{1-vo.isCommend}"
+                            android:visibility="@{vo.isCommend==1?0:2}"
                             android:text="跨城購"
                             android:textColor="#5AA1D8"
                             android:textSize="12sp"
@@ -136,24 +138,23 @@
                         android:layout_centerVertical="true"
                         android:text="@string/text_sku_goods_list"
                         android:textSize="13sp"
-                        android:textColor="#2776D3">
-                    </TextView>
+                        android:textColor="#2776D3"
+                        underline=""/>
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/btn_more"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:gravity="center"
                         android:textSize="13sp"
-                        android:text="···"
                         android:textColor="@color/tw_text_dark"
-                        android:background="@drawable/seller_goods_view_more_bg">
+                        android:src="@drawable/icon_add_blue">
 
-                    </TextView>
+                    </ImageView>
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
