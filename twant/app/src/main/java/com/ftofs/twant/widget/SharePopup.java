@@ -48,6 +48,10 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
     public static final int SHARE_TYPE_STORE = 1;
     public static final int SHARE_TYPE_GOODS = 2;
 
+    // 記錄上次點擊的時間，防止點擊過快
+    long lastClickTime = 0;
+    // 過快點擊的時間間隔，500毫秒
+    public static final int FAST_CLICK_INTERVAL = 500;
 
     /**
      * 分享商店的鏈接格式(1234為商店Id)
@@ -135,6 +139,7 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
                 ToastUtil.error(context, context.getString(R.string.weixin_not_installed_hint));
                 return;
             }
+
             int scene;
             if (id == R.id.btn_share_to_friend) {
                 scene = WeixinUtil.WX_SCENE_SESSION;
@@ -217,6 +222,21 @@ public class SharePopup extends BottomPopupView implements View.OnClickListener 
 //            Util.startFragment(AddPostFragment.newInstance(dataObj, false));
             dismiss();
         }
+    }
+
+
+    /**
+     * 判斷是否點擊過快，如果不是，則記錄最近點擊的時間
+     * @return
+     */
+    private boolean isFastClick() {
+        long now = System.currentTimeMillis();
+        if (now - lastClickTime < FAST_CLICK_INTERVAL) {
+            SLog.info("點擊過快");
+            return true;
+        }
+        lastClickTime = now;
+        return false;
     }
 
     /**
