@@ -68,7 +68,11 @@ import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class AddGoodsFragment extends BaseFragment implements View.OnClickListener , OnSelectedListener {
+
+public class AddGoodsFragment extends BaseFragment
+        implements View.OnClickListener, OnSelectedListener, EditorResultInterface {
+
+
     private SimpleViewPagerAdapter mPagerAdapter;
     private List<View> mViews = new ArrayList<>();
     //    1是0否允許發佈跨城購商品

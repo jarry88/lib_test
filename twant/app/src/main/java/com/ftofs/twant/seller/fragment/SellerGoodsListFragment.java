@@ -215,8 +215,12 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
     public void onSelected(PopupType type, int id, Object extra) {
         SLog.info("onSelected, type[%s], id[%d], extra[%s]", type, id, extra);
         if (type == PopupType.MENU) {
-            if (id == 2) { // 商品規格
+            if (id == 1) {
+                start(AddGoodsFragment.newInstance());
+            } else if (id == 2) { // 商品規格
                 start(SellerSpecFragment.newInstance());
+            } else if (id == 3) {//鎮店之寶
+                start(SellerFeaturesFragment.newInstance());
             }
         }
     }

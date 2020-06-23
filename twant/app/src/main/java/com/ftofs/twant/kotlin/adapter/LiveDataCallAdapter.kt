@@ -9,6 +9,7 @@ import retrofit2.Response
 import java.lang.reflect.Type
 import java.util.concurrent.atomic.AtomicBoolean
 
+@Suppress("UNCHECKED_CAST")
 class LiveDataCallAdapter<T>(private val responseType: Type):CallAdapter<T,LiveData<T>>{
     override fun adapt(call: Call<T>): LiveData<T> {
         return object :LiveData<T>(){
