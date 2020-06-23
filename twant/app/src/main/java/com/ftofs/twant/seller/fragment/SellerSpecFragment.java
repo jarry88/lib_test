@@ -153,6 +153,22 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
                     }
 
                     ToastUtil.success(_mActivity, "刪除成功");
+
+                    // 根据specId查找位置
+                    int index = 0;
+                    for (; index < sellerSpecList.size(); index++) {
+                        SellerSpecListItem item = sellerSpecList.get(index);
+                        if (item.specId == specId) {
+                            break;
+                        }
+                    }
+
+                    if (index == sellerSpecList.size()) { // NOT FOUND
+                        return;
+                    }
+
+                    sellerSpecList.remove(index);
+                    adapter.notifyItemRemoved(index);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -262,6 +278,10 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
                 if (sellerSpecList.get(index).specId == specId) {
                     break;
                 }
+            }
+
+            if (index == sellerSpecList.size()) { // NOT FOUND
+                return;
             }
 
             sellerSpecList.set(index, item);

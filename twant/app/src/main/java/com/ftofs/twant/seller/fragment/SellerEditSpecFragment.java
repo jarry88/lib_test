@@ -164,6 +164,13 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_ok) {
+            saveSpec();
+        }
+    }
+
+
+    private void saveSpec() {
+        try {
             String token = User.getToken();
             if (StringUtil.isEmpty(token)) {
                 return;
@@ -198,7 +205,6 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                 return;
             }
 
-
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
                     "specName", specName,
@@ -209,13 +215,7 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                 url = Api.PATH_SELLER_ADD_SPEC;
             } else {
                 url = Api.PATH_SELLER_EDIT_SPEC;
-
-                try {
-                    params.set("specId", specId);
-                } catch (Exception e) {
-                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-                }
-
+                params.set("specId", specId);
             }
             SLog.info("params[%s]", params.toString());
 
@@ -263,21 +263,9 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                     }
                 }
             });
-        }
-    }
-
-
-    private void saveSpec() {
-        try {
-
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 }
-
-
-
-
-
 
