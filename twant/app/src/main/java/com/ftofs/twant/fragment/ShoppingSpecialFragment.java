@@ -69,10 +69,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -83,18 +81,17 @@ import okhttp3.Call;
  */
 public class ShoppingSpecialFragment extends BaseFragment implements View.OnClickListener , NestedScrollingCallback {
 
-    private Unbinder unbinder;
-    @BindView(R.id.tv_zone_name)
+
     TextView tvZoneName;
-    @BindView(R.id.btn_goods)
+
     SimpleTabButton stbTagGoods;
-    @BindView(R.id.btn_store)
+
     SimpleTabButton stbTagStore;
-    @BindView(R.id.shopping_tab_layout)
+
     TabLayout tabLayout;
-    @BindView(R.id.shopping_viewpager)
+
     ViewPager viewPager;
-    @BindView(R.id.linkage)
+
     LinkageRecyclerView linkage;
     private List<String> titleList;
     private List<Fragment> fragmentList= new ArrayList<>();
@@ -115,36 +112,36 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     public boolean linkageShow =false;
 
 
-    @OnClick(R.id.btn_goods)
+
     void showGoodsListInfo() {
         SLog.info("showGoodsListInfo");
     }
-    @OnClick(R.id.btn_store)
+
     void showStoresListInfo() {
         SLog.info("showStoresListInfo");
     }
-    @BindView(R.id.tool_bar)
+
     RelativeLayout rlToolBar;
-    @BindView(R.id.ll_tab_button_container)
+
     LinearLayout llTabContainer;
-    @BindView(R.id.cl_banner_container)
+
     ConstraintLayout clBannerContainer;
 
-    @BindView(R.id.scrollView)
+
     NestedScrollView scrollView;
-    @BindView(R.id.ll_filter_bar)
+
     LinearLayout llFilterBar;
-    @BindView(R.id.ll_banner_container)
+
     LinearLayout llBanner;
 
 
     List<ElemeGroupedItem> storeItems = new ArrayList<>();
-    @BindView(R.id.banner_view)
+
     MZBannerView bannerView;
-    @BindView(R.id.ll_container)
+
     LinearLayout llContainer;
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
-    @BindView(R.id.ll_float_button_container)
+
     LinearLayout llFloatButtonContainer;
     private int zoneId =20;
     private int zoneState;
@@ -152,11 +149,11 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     int hasGoodsCategory;
 
 
-    @OnClick(R.id.btn_back)
+
     void back() {
         hideSoftInputPop();
     }
-    @OnClick(R.id.btn_goto_cart)
+
     void gotoCart() {
         int userId = User.getUserId();
         if (userId > 0) {
@@ -165,7 +162,7 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             Util.showLoginFragment();
         }
     }
-    @OnClick(R.id.btn_goto_top)
+
     void gotoTop(){
         scrollView.scrollTo(0,0);
         if (linkage.getVisibility() == View.VISIBLE) {
@@ -225,7 +222,51 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shopping_special,container,false);
-        unbinder = ButterKnife.bind(this, view);
+        tvZoneName = (TextView) view.findViewById(R.id.tv_zone_name);
+        stbTagGoods = (SimpleTabButton) view.findViewById(R.id.btn_goods);
+        stbTagStore = (SimpleTabButton) view.findViewById(R.id.btn_store);
+        tabLayout = (TabLayout) view.findViewById(R.id.shopping_tab_layout);
+        viewPager = (ViewPager) view.findViewById(R.id.shopping_viewpager);
+        linkage = (LinkageRecyclerView) view.findViewById(R.id.linkage);
+        rlToolBar = (RelativeLayout) view.findViewById(R.id.tool_bar);
+        llTabContainer = (LinearLayout) view.findViewById(R.id.ll_tab_button_container);
+        clBannerContainer = (ConstraintLayout) view.findViewById(R.id.cl_banner_container);
+        scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
+        llFilterBar = (LinearLayout) view.findViewById(R.id.ll_filter_bar);
+        llBanner = (LinearLayout) view.findViewById(R.id.ll_banner_container);
+        bannerView = (MZBannerView) view.findViewById(R.id.banner_view);
+        llContainer = (LinearLayout) view.findViewById(R.id.ll_container);
+        llFloatButtonContainer = (LinearLayout) view.findViewById(R.id.ll_float_button_container);
+        view.findViewById(R.id.btn_goto_top).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoTop();
+            }
+        });
+        view.findViewById(R.id.btn_goto_cart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoCart();
+            }
+        });
+        view.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
+        view.findViewById(R.id.btn_store).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showStoresListInfo();
+            }
+        });
+        view.findViewById(R.id.btn_goods).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showGoodsListInfo();
+            }
+        });
         return view;
     }
 
@@ -829,13 +870,6 @@ public class ShoppingSpecialFragment extends BaseFragment implements View.OnClic
             }
         } catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
         }
     }
     @Override

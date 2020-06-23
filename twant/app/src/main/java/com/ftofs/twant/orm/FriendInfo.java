@@ -28,6 +28,7 @@ public class FriendInfo extends LitePalSupport {
     public GoodsInfo goodsInfo;
     public String storeName;
     public int storeId;
+    public String storeAvatar;
 
     public static FriendInfo getFriendInfoByMemberName(String memberName) {
         FriendInfo friendInfo =LitePal.where("memberName = ?", memberName).findFirst(FriendInfo.class);

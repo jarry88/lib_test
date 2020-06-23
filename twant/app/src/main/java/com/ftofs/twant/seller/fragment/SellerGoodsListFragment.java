@@ -19,12 +19,12 @@ import com.ftofs.twant.adapter.CommonFragmentPagerAdapter;
 import com.ftofs.twant.constant.CustomAction;
 import com.ftofs.twant.constant.PopupType;
 import com.ftofs.twant.entity.ListPopupItem;
-import com.ftofs.twant.entity.MobileZone;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
 import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.BlackDropdownMenu;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.SimpleTabButton;
 import com.ftofs.twant.widget.SimpleTabManager;
@@ -180,7 +180,16 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
                     // 如果不加这个，评论弹窗会移动到软键盘上面
                     .moveUpToKeyboard(false)
                     .asCustom(new ListPopup(_mActivity, "請選擇操作",
-                            PopupType.MENU, itemList, -1, this))
+                            PopupType.MENU, itemList, -1, this)).show();
+        }else if (id == R.id.btn_more) {
+            new XPopup.Builder(_mActivity).moveUpToKeyboard(false)
+                    .offsetX(-Util.dip2px(_mActivity, 11))
+                    .offsetY(-Util.dip2px(_mActivity, 8))
+                    .hasShadowBg(false)
+                    .atView(v)
+                    .asCustom(new BlackDropdownMenu(
+                            _mActivity, this,
+                            BlackDropdownMenu.TYPE_SELLER_GOODS))
                     .show();
         }
     }

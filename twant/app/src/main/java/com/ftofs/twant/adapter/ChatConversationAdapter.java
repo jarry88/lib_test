@@ -47,7 +47,7 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         if (chatConversation != null) {
             linearLayout.getLayoutParams().height = Util.dip2px(mContext,80);
             linearLayout.setVisibility(View.VISIBLE);
-        } else {
+        } else {//本意是在列表的結尾加一條空白數據 避免底部條遮擋
             linearLayout.getLayoutParams().height = Util.dip2px(mContext, 30);
             linearLayout.setVisibility(View.INVISIBLE);
             return;
@@ -64,8 +64,8 @@ public class ChatConversationAdapter extends BaseQuickAdapter<ChatConversation, 
         if (StringUtil.isEmpty(avatarUrl)) {
             if (chatConversation.friendInfo.role == ChatUtil.ROLE_CS_PLATFORM) {
                 Glide.with(mContext).load(R.drawable.icon_twant_loge).centerCrop().into(imgAvatar);
-            } else {
-                Glide.with(mContext).load(R.drawable.icon_default_avatar).centerCrop().into(imgAvatar);
+            } else if(chatConversation.friendInfo.role>0) {
+                Glide.with(mContext).load(chatConversation.friendInfo.storeAvatar).centerCrop().into(imgAvatar);
             }
         } else {
             Glide.with(mContext).load(StringUtil.normalizeImageUrl(avatarUrl)).centerCrop().into(imgAvatar);

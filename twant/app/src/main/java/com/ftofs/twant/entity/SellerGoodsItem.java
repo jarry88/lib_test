@@ -16,4 +16,5 @@ public class SellerGoodsItem {
     public int appUsable;
     public int goodsState;
     public int tariffEnable;
+    public int isCommend;
 }

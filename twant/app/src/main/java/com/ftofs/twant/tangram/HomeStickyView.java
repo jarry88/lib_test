@@ -31,6 +31,7 @@ import com.ftofs.twant.fragment.ShoppingSessionFragment;
 import com.ftofs.twant.fragment.ShoppingSpecialFragment;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
+import com.ftofs.twant.seller.fragment.SellerFeaturesFragment;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.Util;
@@ -80,6 +81,7 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
         contentView.findViewById(R.id.btn_category_store).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_goods).setOnClickListener(this);
         contentView.findViewById(R.id.btn_category_brand).setOnClickListener(this);
+        contentView.findViewById(R.id.icon_takewant).setOnClickListener(this);
 
         tvStoreCount = contentView.findViewById(R.id.tv_store_count);
         tvGoodsCount = contentView.findViewById(R.id.tv_goods_count);
@@ -142,6 +144,9 @@ public class HomeStickyView extends LinearLayout implements ITangramViewLifeCycl
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        if (id == R.id.icon_takewant) {
+            Util.startFragment(SellerFeaturesFragment.newInstance());
+        }
         if (id == R.id.btn_goto_activity) {
 //            gotoTestFragment();
             gotoActivity();
