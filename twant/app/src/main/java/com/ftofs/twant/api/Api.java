@@ -1460,6 +1460,11 @@ public class Api {
      */
     public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
+    /**
+     * 【賣家】編輯保存規格信息
+     */
+    public static final String PATH_SELLER_EDIT_SPEC_SAVE = "/member/seller/spec/edit/save.json";
+
 
 
 
@@ -1710,6 +1715,7 @@ public class Api {
                 }
             }
             catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
             }
 
             if (bitmap == null || captchaKey == null) {
@@ -2065,7 +2071,7 @@ public class Api {
                 messageBody.set("ordersSn", ordersSn);
             }
         } catch (Exception e) {
-
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
 
 

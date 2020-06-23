@@ -46,6 +46,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_spec_operation_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -62,8 +63,6 @@
                     android:src="@drawable/icon_edit">
                 </ImageView>
             </FrameLayout>
-
-
             <FrameLayout
                 android:id="@+id/btn_delete"
                 android:layout_width="wrap_content"
@@ -76,7 +75,6 @@
                     android:src="@drawable/ic_baseline_delete_forever_24">
                 </ImageView>
             </FrameLayout>
-
         </LinearLayout>
     </RelativeLayout>
     <com.nex3z.flowlayout.FlowLayout

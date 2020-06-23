@@ -3,6 +3,8 @@ package com.ftofs.twant.fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +103,7 @@ public class AddFriendVerifyFragment extends BaseFragment implements View.OnClic
                         ToastUtil.success(_mActivity, "發送成功");
                         hideSoftInputPop();
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });

@@ -2,6 +2,8 @@ package com.ftofs.twant.widget;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -100,7 +102,7 @@ public class InviteAddFriendPopup extends BottomPopupView implements View.OnClic
                         ToastUtil.success(context, "發送成功");
                         dismiss();
                     } catch (Exception e) {
-
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });

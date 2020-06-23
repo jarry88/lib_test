@@ -1,5 +1,7 @@
 package com.ftofs.twant.seller.adapter;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
@@ -26,12 +28,30 @@ public class SellerSpecValueListAdapter extends BaseMultiItemQuickAdapter<Seller
 
     @Override
     protected void convert(BaseViewHolder helper, SellerSpecValueListItem item) {
-        SLog.info("HRREEEEEEEEEEEEEEE");
         if (item.getItemType() == SellerSpecValueListItem.ITEM_TYPE_NORMAL) {
             helper.addOnClickListener(R.id.btn_remove);
 
+            int position = helper.getAdapterPosition();
             EditText etSpecValue = helper.getView(R.id.et_spec_value);
             etSpecValue.setText(item.specValueName);
+            etSpecValue.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    List<SellerSpecValueListItem> data = getData();
+                    SellerSpecValueListItem item = data.get(position);
+                    item.specValueName = s.toString();
+                }
+            });
             SLog.info("specValueName[%s]", item.specValueName);
         } else {
             helper.addOnClickListener(R.id.btn_add_spec_value);

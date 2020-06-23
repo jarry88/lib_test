@@ -38,10 +38,12 @@ public class SellerSpecListAdapter extends BaseQuickAdapter<SellerSpecListItem, 
             tvSpecName.setBackgroundResource(R.color.tw_red);
 
             helper.setText(R.id.tv_spec_type, "平臺預設規格");
+            helper.setGone(R.id.ll_spec_operation_container, false);
         } else {
             tvSpecName.setBackgroundResource(R.color.tw_blue);
 
             helper.setText(R.id.tv_spec_type, "自定義規格");
+            helper.setGone(R.id.ll_spec_operation_container, true);
         }
 
         FlowLayout flSpecValueContainer = helper.getView(R.id.fl_spec_value_container);

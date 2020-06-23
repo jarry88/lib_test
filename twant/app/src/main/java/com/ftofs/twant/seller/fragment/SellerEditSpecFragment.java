@@ -1,6 +1,7 @@
 package com.ftofs.twant.seller.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftofs.twant.R;
+import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerSpecValueListAdapter;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
 import com.ftofs.twant.seller.entity.SellerSpecListItem;
 import com.ftofs.twant.seller.entity.SellerSpecValueListItem;
 import com.ftofs.twant.util.StringUtil;
+import com.ftofs.twant.util.ToastUtil;
+import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.TwConfirmPopup;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 
 /**
@@ -97,8 +110,7 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                 int id = view.getId();
 
                 if (id == R.id.btn_remove) { // 刪除規格值
-                    specValueList.remove(position);
-                    adapter.notifyItemRemoved(position);
+                    removeItem(position);
                 } else if (id == R.id.btn_add_spec_value) { // 添加規格值
                     int targetIndex = specValueList.size() - 1;
                     specValueList.add(targetIndex, new SellerSpecValueListItem(SellerSpecValueListItem.ITEM_TYPE_NORMAL, 0, ""));
@@ -109,6 +121,34 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
         rvList.setAdapter(adapter);
     }
 
+    private void removeItem(int position) {
+        new XPopup.Builder(_mActivity)
+//                         .dismissOnTouchOutside(false)
+                // 设置弹窗显示和隐藏的回调监听
+//                         .autoDismiss(false)
+                .setPopupCallback(new XPopupCallback() {
+                    @Override
+                    public void onShow() {
+                    }
+                    @Override
+                    public void onDismiss() {
+                    }
+                }).asCustom(new TwConfirmPopup(_mActivity, "確定要刪除嗎?", null, new OnConfirmCallback() {
+            @Override
+            public void onYes() {
+                SLog.info("onYes");
+                specValueList.remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public void onNo() {
+                SLog.info("onNo");
+            }
+        }))
+                .show();
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -116,7 +156,69 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_ok) {
+            String token = User.getToken();
+            if (StringUtil.isEmpty(token)) {
+                return;
+            }
 
+            String specName = etSpecName.getText().toString().trim();
+            if (StringUtil.isEmpty(specName)) {
+                ToastUtil.error(_mActivity, "請填寫【規格名稱】");
+                return;
+            }
+
+            boolean first = true;
+            StringBuilder specValueNamesSB = new StringBuilder();
+            for (SellerSpecValueListItem item : specValueList) {
+                if (item.getItemType() == SellerSpecValueListItem.ITEM_TYPE_NORMAL && !StringUtil.isEmpty(item.specValueName)) {
+                    if (!first) {
+                        specValueNamesSB.append(",");
+                    }
+                    first = false;
+
+                    specValueNamesSB.append(item.specValueName);
+                }
+            }
+
+            String specValueNames = specValueNamesSB.toString();
+            SLog.info("specValueNames[%s]", specValueNames);
+            if (StringUtil.isEmpty(specValueNames)) {
+                ToastUtil.error(_mActivity, "請添加規格");
+                return;
+            }
+
+
+            EasyJSONObject params = EasyJSONObject.generate(
+                    "token", token,
+                    "specId", specId,
+                    "specName", specName,
+                    "specValueNames", specValueNames
+            );
+            SLog.info("params[%s]", params.toString());
+
+            Api.postUI(Api.PATH_SELLER_EDIT_SPEC_SAVE, params, new UICallback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastUtil.showNetworkError(_mActivity, e);
+                }
+
+                @Override
+                public void onResponse(Call call, String responseStr) throws IOException {
+                    try {
+                        SLog.info("responseStr[%s]", responseStr);
+
+                        EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                        if (ToastUtil.checkError(_mActivity, responseObj)) {
+                            return;
+                        }
+
+                        ToastUtil.success(_mActivity, "保存成功");
+                        hideSoftInputPop();
+                    } catch (Exception e) {
+                        SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                    }
+                }
+            });
         }
     }
 }

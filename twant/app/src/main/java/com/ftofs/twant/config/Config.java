@@ -45,7 +45,7 @@ public class Config {
      * 日誌開關
      */
 
-    public static boolean SLOGENABLE = false;
+    public static boolean SLOGENABLE = true;
 
 
     public static  String OSS_BASE_URL = DEVELOPER_MODE ?
