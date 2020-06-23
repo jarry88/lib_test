@@ -20,7 +20,7 @@ public class SellerOrderRefundItem {
      * ordersSn : 5820000000631600
      * ordersSnText : 5820000000631600
      * memberName : u_001315344758
-     * nickName : 鎯宠鍩庣悊鎯�
+     * nickName : 你的昵称
      * refundType : 1
      * returnType : 1
      * goodsState : 1
