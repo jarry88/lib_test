@@ -37,6 +37,18 @@ public class CustomAction {
      * 【商家】編輯SKU信息
      */
     public static final String CUSTOM_ACTION_SELLER_EDIT_SKU_INFO = "seller_edit_sku_info";
+
+
+    /**
+     * 【商家】添加規格
+     */
+    public static final String CUSTOM_ACTION_SELLER_ADD_SPEC = "seller_edit_spec";
+
+
+    /**
+     * 【商家】編輯規格
+     */
+    public static final String CUSTOM_ACTION_SELLER_EDIT_SPEC = "seller_add_spec";
 }
 
 

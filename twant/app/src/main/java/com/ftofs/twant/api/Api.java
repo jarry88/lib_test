@@ -1461,11 +1461,21 @@ public class Api {
     public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
     /**
-     * 【賣家】編輯保存規格信息
+     * 【賣家】添加規格信息
      */
-    public static final String PATH_SELLER_EDIT_SPEC_SAVE = "/member/seller/spec/edit/save.json";
+    public static final String PATH_SELLER_ADD_SPEC = "/member/seller/spec/save.json";
 
 
+    /**
+     * 【賣家】編輯規格信息
+     */
+    public static final String PATH_SELLER_EDIT_SPEC = "/member/seller/spec/edit/save.json";
+
+
+    /**
+     * 【賣家】刪除規格及規格值
+     */
+    public static final String PATH_SELLER_DELETE_SPEC = "/member/seller/spec/delete";
 
 
     /**

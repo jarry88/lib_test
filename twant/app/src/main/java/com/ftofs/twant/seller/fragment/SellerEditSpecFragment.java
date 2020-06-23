@@ -196,7 +196,7 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
             );
             SLog.info("params[%s]", params.toString());
 
-            Api.postUI(Api.PATH_SELLER_EDIT_SPEC_SAVE, params, new UICallback() {
+            Api.postUI(Api.PATH_SELLER_EDIT_SPEC, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
