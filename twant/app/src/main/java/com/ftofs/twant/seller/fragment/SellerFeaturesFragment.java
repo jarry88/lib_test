@@ -111,30 +111,57 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
             int id =view1.getId();
             if (id == R.id.btn_view_all_sku) {
                 //添加跳转商品详情页逻辑
-                ToastUtil.success(_mActivity,"跳转至商品详情页");
+                SLog.info("跳转至商品详情页");
+                Util.startFragment(SellerGoodsSkuListFragment.newInstance(((Goods)adapter.getItem(position)).id));
             } else if (id == R.id.btn_more) {
-                Integer[] arrayList = new Integer[]{((Goods)adapter.getItem(position)).id};
-                retrofit2.Call<ApiResponse<Objects>> uiCall =KotlinInterfaceApi.Companion.get().cancelFeatureCall(User.getToken(), arrayList);
+//                Integer[] arrayList = new Integer[]{((Goods)adapter.getItem(position)).id};
+                EasyJSONArray array = new EasyJSONArray();
+                array.append(((Goods) adapter.getItem(position)).id);
                 // 发送同步请求
                 try {
-                    uiCall.execute();
-                    uiCall.enqueue(new Callback<ApiResponse<Objects>>() {
-                        @Override
-                        public void onResponse(retrofit2.Call<ApiResponse<Objects>> call, Response<ApiResponse<Objects>> response) {
+                     EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
+                    params.set("commonId", array);
+                      SLog.info("params[%s]", params);
+                      Api.postUI(Api.REMOVE_FEATURES_GOODS, params, new UICallback() {
+                         @Override
+                         public void onFailure(Call call, IOException e) {
+                             ToastUtil.showNetworkError(_mActivity, e);
+                         }
 
-                            // 主线程
-                            String responseStr = response.body().toString();
-                            SLog.info("result", responseStr);
-                        }
+                         @Override
+                         public void onResponse(Call call, String responseStr) throws IOException {
+                             try {
+                                 SLog.info("responseStr[%s]", responseStr);
 
-                        @Override
-                        public void onFailure(retrofit2.Call<ApiResponse<Objects>> call, Throwable t) {
-
-                            // 主线程
-                            SLog.info("result", t.getMessage());
-                        }
-
-                    });
+                                 EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                                 if (ToastUtil.checkError(_mActivity, responseObj)) {
+                                     return;
+                                 }
+                                 goodsCommonList.remove(position);
+                                 adapter.notifyDataSetChanged();
+                             } catch (Exception e) {
+                                 SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                             }
+                         }
+                      });
+//                    uiCall.execute();
+//                    uiCall.enqueue(new Callback<ApiResponse<Objects>>() {
+//                        @Override
+//                        public void onResponse(retrofit2.Call<ApiResponse<Objects>> call, Response<ApiResponse<Objects>> response) {
+//
+//                            // 主线程
+//                            String responseStr = response.body().toString();
+//                            SLog.info("result", responseStr);
+//                        }
+//
+//                        @Override
+//                        public void onFailure(retrofit2.Call<ApiResponse<Objects>> call, Throwable t) {
+//
+//                            // 主线程
+//                            SLog.info("result", t.getMessage());
+//                        }
+//
+//                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -1366,7 +1366,9 @@ public class Api {
      * 【商家】
      * 退款訂單信息(產品交易信息)
      */
-    public static final String PATH_SELLER_ORDERS_INFO = "/member/seller/orders/info";
+    public static final String PATH_SELLER_ORDERS_INFO = "/member/seller/orders/info"
+            ;
+    public static final String REMOVE_FEATURES_GOODS = "/member/seller/goods/cancel_features.json";
     /**
      * 【商家】
      * 退貨訂單列表
