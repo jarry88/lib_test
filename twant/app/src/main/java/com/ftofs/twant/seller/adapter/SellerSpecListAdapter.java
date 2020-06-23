@@ -47,6 +47,7 @@ public class SellerSpecListAdapter extends BaseQuickAdapter<SellerSpecListItem, 
         }
 
         FlowLayout flSpecValueContainer = helper.getView(R.id.fl_spec_value_container);
+        flSpecValueContainer.removeAllViews();
         for (SellerSpecItem sellerSpecItem : item.sellerSpecItemList) {
 
             TextView button = new TextView(context);

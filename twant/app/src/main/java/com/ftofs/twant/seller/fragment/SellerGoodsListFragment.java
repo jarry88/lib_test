@@ -190,8 +190,8 @@ public class SellerGoodsListFragment extends BaseFragment implements View.OnClic
         EasyJSONObject dataObj = (EasyJSONObject) data;
 
         try {
-            String action = dataObj.getSafeString("action");
-            if (CustomAction.CUSTOM_ACTION_RELOAD_DATA.equals(action)) {
+            int action = dataObj.getInt("action");
+            if (CustomAction.CUSTOM_ACTION_RELOAD_DATA.ordinal() == action) {
                 for (Fragment fragment : fragmentList) {
                     SellerGoodsListPageFragment sellerGoodsListPageFragment = (SellerGoodsListPageFragment) fragment;
                     sellerGoodsListPageFragment.reloadData();

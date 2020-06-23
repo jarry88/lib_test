@@ -128,7 +128,7 @@ public class SearchHistoryPopup extends PartShadowPopupView implements View.OnCl
             SearchHistoryUtil.clearSearchHistory(searchType.ordinal());
 
             if (callback != null) {
-                EasyJSONObject data = EasyJSONObject.generate("action", CustomAction.CUSTOM_ACTION_CLEAR_ALL_HISTORY);
+                EasyJSONObject data = EasyJSONObject.generate("action", CustomAction.CUSTOM_ACTION_CLEAR_ALL_HISTORY.ordinal());
                 callback.onSimpleCall(data.toString());
             }
 

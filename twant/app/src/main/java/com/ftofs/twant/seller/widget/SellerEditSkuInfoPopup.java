@@ -97,7 +97,7 @@ public class SellerEditSkuInfoPopup extends CenterPopupView implements View.OnCl
 
                 if (simpleCallback != null) {
                     CustomActionData customActionData = new CustomActionData();
-                    customActionData.action = CustomAction.CUSTOM_ACTION_SELLER_EDIT_SKU_INFO;
+                    customActionData.action = CustomAction.CUSTOM_ACTION_SELLER_EDIT_SKU_INFO.ordinal();
                     customActionData.data = EasyJSONObject.generate(
                             "position", position,
                             "price", price,

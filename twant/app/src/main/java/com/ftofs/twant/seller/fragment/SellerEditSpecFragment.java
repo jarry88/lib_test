@@ -18,7 +18,10 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.CustomActionCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerSpecValueListAdapter;
@@ -50,18 +53,24 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
 
     RecyclerView rvList;
     SellerSpecValueListAdapter adapter;
-    EditText etSpecName;
+    EditText etSpecName;  // 規格名稱
+
+    CustomActionCallback customActionCallback;
 
     int specId;
     String specName;
     List<SellerSpecValueListItem> specValueList = new ArrayList<>();
 
-    public static SellerEditSpecFragment newInstance(int action, SellerSpecListItem sellerSpecListItem) {
+    List<String> specValueNameList = new ArrayList<>();
+
+    public static SellerEditSpecFragment newInstance(int action, SellerSpecListItem sellerSpecListItem, CustomActionCallback customActionCallback) {
         Bundle args = new Bundle();
 
         SellerEditSpecFragment fragment = new SellerEditSpecFragment();
         fragment.setArguments(args);
         fragment.action = action;
+        fragment.customActionCallback = customActionCallback;
+
         if (action == Constant.ACTION_EDIT) {
             fragment.specId = sellerSpecListItem.specId;
             fragment.specName = sellerSpecListItem.specName;
@@ -145,8 +154,7 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
             public void onNo() {
                 SLog.info("onNo");
             }
-        }))
-                .show();
+        })).show();
     }
 
     @Override
@@ -167,6 +175,8 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                 return;
             }
 
+            specValueNameList.clear();
+
             boolean first = true;
             StringBuilder specValueNamesSB = new StringBuilder();
             for (SellerSpecValueListItem item : specValueList) {
@@ -176,6 +186,7 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                     }
                     first = false;
 
+                    specValueNameList.add(item.specValueName);
                     specValueNamesSB.append(item.specValueName);
                 }
             }
@@ -190,13 +201,25 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
 
             EasyJSONObject params = EasyJSONObject.generate(
                     "token", token,
-                    "specId", specId,
                     "specName", specName,
                     "specValueNames", specValueNames
             );
+            String url;
+            if (action == Constant.ACTION_ADD) {
+                url = Api.PATH_SELLER_ADD_SPEC;
+            } else {
+                url = Api.PATH_SELLER_EDIT_SPEC;
+
+                try {
+                    params.set("specId", specId);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+
+            }
             SLog.info("params[%s]", params.toString());
 
-            Api.postUI(Api.PATH_SELLER_EDIT_SPEC, params, new UICallback() {
+            Api.postUI(url, params, new UICallback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     ToastUtil.showNetworkError(_mActivity, e);
@@ -213,12 +236,42 @@ public class SellerEditSpecFragment extends BaseFragment implements View.OnClick
                         }
 
                         ToastUtil.success(_mActivity, "保存成功");
+
+                        if (action == Constant.ACTION_ADD) { // 添加规格
+                            specId = responseObj.getInt("datas.specAndValueVo.specId");
+                        }
+
+
+                        SellerSpecListItem result = new SellerSpecListItem(SellerSpecListItem.SPEC_TYPE_CUSTOM, specId, specName);
+                        for (String specValueName : specValueNameList) {
+                            SellerSpecItem sellerSpecItem = new SellerSpecItem();
+                            sellerSpecItem.type = SellerSpecItem.TYPE_SPEC_VALUE;
+                            sellerSpecItem.name = specValueName;
+                            result.sellerSpecItemList.add(sellerSpecItem);
+                        }
+
+                        if (customActionCallback != null) {
+                            CustomActionData data = new CustomActionData(
+                                    action == Constant.ACTION_ADD ? CustomAction.CUSTOM_ACTION_SELLER_ADD_SPEC.ordinal() : CustomAction.CUSTOM_ACTION_SELLER_EDIT_SPEC.ordinal(),
+                                    result);
+                            customActionCallback.onCustomActionCall(data);
+                        }
+
                         hideSoftInputPop();
                     } catch (Exception e) {
                         SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                     }
                 }
             });
+        }
+    }
+
+
+    private void saveSpec() {
+        try {
+
+        } catch (Exception e) {
+            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
     }
 }
