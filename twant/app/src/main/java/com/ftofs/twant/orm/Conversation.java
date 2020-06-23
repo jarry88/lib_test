@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.ftofs.twant.entity.ChatConversation;
 import com.ftofs.twant.entity.EBMessage;
 import com.ftofs.twant.entity.GoodsInfo;
 import com.ftofs.twant.log.SLog;
@@ -87,15 +88,30 @@ public class Conversation extends LitePalSupport {
         Conversation conversation = Conversation.getByMemberName(member.getMemberName());
         conversation.role = member.role;
 
-        if (member.role > 0) {
-            conversation.nickname = member.storeName + " " + member.getNickName();
-            conversation.storeId = member.getStoreId();
-            conversation.avatarUrl = member.storeAvatar;
-        } else {
-            conversation.nickname = member.getNickName();
-            conversation.avatarUrl = member.getAvatar();
-        }
+        conversation.storeName = member.storeName;
+        conversation.storeId = member.getStoreId();
+        conversation.avatarUrl = member.getAvatar();
+        conversation.nickname = member.getNickName();
+        conversation.avatarUrl = member.getAvatar();
+        conversation.storeAvatarUrl = member.storeAvatar;
         conversation.save();
+    }
+
+    public static void saveNewChat(ChatConversation newChat) {
+        if (newChat == null) {
+            return;
+        }
+        Conversation conversation1 = Conversation.getByMemberName(newChat.friendInfo.memberName);
+        conversation1.nickname = newChat.friendInfo.nickname;
+        conversation1.storeName = newChat.friendInfo.nickname;
+        conversation1.avatarUrl = newChat.friendInfo.avatarUrl;
+        conversation1.storeAvatarUrl = newChat.friendInfo.storeAvatar;
+        conversation1.lastMessageText = newChat.lastMessage;
+        conversation1.lastMessageType = newChat.lastMessageType;
+        conversation1.storeId = newChat.friendInfo.storeId;
+        conversation1.role = newChat.friendInfo.role;
+        conversation1.timestamp = newChat.timestamp;
+        conversation1.save();
     }
 
     public void explainLastMessage() {

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.ftofs.twant.kotlin.HomeVM" />
+
+    </data>
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- 工具欄 -->
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@drawable/border_type_d"
+        >
+
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_back"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="7dp"
+            android:layout_centerVertical="true"
+            android:onClick="@{()->vm.backAction()}"
+            app:icon_src="@drawable/icon_back"
+            />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_40"
+            android:singleLine="true"
+            android:textSize="18sp"
+            android:textColor="@color/tw_black"
+            />
+        <com.ftofs.twant.widget.ScaledButton
+            android:layout_width="32dp"
+            android:layout_height="24dp"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_4"
+            android:layout_toStartOf="@+id/btn_menu"
+
+            android:id="@+id/icon_add_goods"
+            android:onClick="@{()->vm.test()}"
+            app:icon_src="@drawable/icon_circle_add"
+            android:layout_centerVertical="true"/>
+        <com.ftofs.twant.widget.ScaledButton
+            android:id="@+id/btn_menu"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_marginEnd="7dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:icon_src="@drawable/icon_shop_menu"
+            android:visibility="visible">
+
+        </com.ftofs.twant.widget.ScaledButton>
+    </RelativeLayout>
+    <!--  END OF 工具欄 -->
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        app:onRefreshListener="@{()->vm.refresh()}"
+        app:refreshing="@{vm.refreshing}"
+        app:moreLoading="@{vm.moreLoading}"
+        app:hasMore="@{vm.hasMore}"
+        app:onLoadMoreListener="@{()->vm.loadMore()}"
+        android:id="@+id/refreshLayout">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_features_goods_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/seller_goods_item_unswipe"
+            android:background="@color/colorLightGray"
+            />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+</LinearLayout>
+</layout>

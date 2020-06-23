@@ -62,18 +62,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONBase;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-public class AddGoodsFragment extends BaseFragment
-        implements View.OnClickListener, OnSelectedListener, EditorResultInterface {
-    private Unbinder unbinder;
+public class AddGoodsFragment extends BaseFragment implements View.OnClickListener , OnSelectedListener {
     private SimpleViewPagerAdapter mPagerAdapter;
     private List<View> mViews = new ArrayList<>();
     //    1是0否允許發佈跨城購商品
@@ -136,9 +131,9 @@ public class AddGoodsFragment extends BaseFragment
     private SwitchButton sbJoinActivity;
     private int storeLabelId =-1;
 
-    @BindView(R.id.ll_detail_body)
+
     LinearLayout llDetailBody;
-    @BindView(R.id.rl_detail_body)
+
     RelativeLayout rlDetailBody;
     private int formatBottomIndex;
     private int formatTopIndex;
@@ -165,24 +160,24 @@ public class AddGoodsFragment extends BaseFragment
         SLog.info("specValueIdStringMap[%s]", Util.specValueIdStringMapToJSONString(specValueIdStringMap));
     }
 
-    @OnClick(R.id.btn_publish)
+
     void publish() {
         hideAddGuide();
 //        testJson();
 //        savePublishGoodsInfo();
     }
 
-    @OnClick(R.id.btn_detail_save)
+
     void save() {
         ToastUtil.success(_mActivity,String.valueOf(llDetailBody.getChildCount()));
     }
-    @BindView(R.id.tv_title)
+
     TextView tvTitle;
-    @BindView(R.id.sb_check_notice)
+
     ScaledButton sbNotice;
-    @BindView(R.id.vp_seller_good_add)
+
     NoScrollViewPager vpAddGood;
-    @OnClick(R.id.btn_back)
+
     void back() {
         new XPopup.Builder(_mActivity)
 //                         .dismissOnTouchOutside(false)
@@ -228,7 +223,7 @@ public class AddGoodsFragment extends BaseFragment
         vpAddGood.setCurrentItem(0);
     }
 
-    @OnClick(R.id.sb_check_notice)
+
     void checkNotice() {
         sbNotice.setChecked(!sbNotice.isChecked());
     }
@@ -238,7 +233,35 @@ public class AddGoodsFragment extends BaseFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_seller_goods_publish, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        llDetailBody = (LinearLayout) view.findViewById(R.id.ll_detail_body);
+        rlDetailBody = (RelativeLayout) view.findViewById(R.id.rl_detail_body);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        sbNotice = (ScaledButton) view.findViewById(R.id.sb_check_notice);
+        vpAddGood = (NoScrollViewPager) view.findViewById(R.id.vp_seller_good_add);
+        view.findViewById(R.id.sb_check_notice).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkNotice();
+            }
+        });
+        view.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
+        view.findViewById(R.id.btn_detail_save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+            }
+        });
+        view.findViewById(R.id.btn_publish).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publish();
+            }
+        });
         return view;
     }
 
@@ -588,9 +611,6 @@ public class AddGoodsFragment extends BaseFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
     private void loadDate() {
@@ -1206,7 +1226,7 @@ public class AddGoodsFragment extends BaseFragment
         if (StringUtil.isEmpty(goodsName)) {
             ToastUtil.error(_mActivity,"請填寫商品名稱");
             return false;
-        } else if (goodsName.length()<3||goodsName.length()>=50) {
+        } else if (goodsName.length()<3||goodsName.length()>50) {
             ToastUtil.error(_mActivity,"商品名稱為3到50個字符");
             //暫無可選品牌
             return false;

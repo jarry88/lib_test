@@ -55,9 +55,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -65,28 +64,27 @@ import okhttp3.Call;
 import static com.ftofs.twant.R.drawable.white_4dp_right_radius_bg;
 
 public class ShoppingSessionFragment extends BaseFragment implements View.OnClickListener, NestedScrollingCallback {
-    Unbinder unbinder;
     //雙列表數據源
     String from; // 来自哪个fragment调用
     private static final int SPAN_COUNT_FOR_GRID_MODE = 2;
     private static final int MARQUEE_REPEAT_LOOP_MODE = -1;
     private static final int MARQUEE_REPEAT_NONE_MODE = 0;
 
-    @BindView(R.id.linkage)
+
     LinkageRecyclerView linkage;
-    @BindView(R.id.scrollView)
+
     NestedScrollView scrollView;
-    @BindView(R.id.ll_filter_bar)
+
     LinearLayout llFilterBar;
-    @BindView(R.id.et_keyword)
+
     EditText etKeyword;
     List<ElemeGroupedItem> items = new ArrayList<>();
-    @BindView(R.id.banner_view)
+
     MZBannerView bannerView;
-    @BindView(R.id.ll_container)
+
     LinearLayout llContainer;
     List<WebSliderItem> webSliderItemList = new ArrayList<>();
-    @BindView(R.id.ll_float_button_container)
+
     LinearLayout llFloatButtonContainer;
     private boolean carouselLoaded;
     private String backgroundColor;
@@ -117,17 +115,16 @@ public class ShoppingSessionFragment extends BaseFragment implements View.OnClic
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shopping_session, container, false);
-        unbinder = ButterKnife.bind(this,view);
+        linkage = (LinkageRecyclerView) view.findViewById(R.id.linkage);
+        scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
+        llFilterBar = (LinearLayout) view.findViewById(R.id.ll_filter_bar);
+        etKeyword = (EditText) view.findViewById(R.id.et_keyword);
+        bannerView = (MZBannerView) view.findViewById(R.id.banner_view);
+        llContainer = (LinearLayout) view.findViewById(R.id.ll_container);
+        llFloatButtonContainer = (LinearLayout) view.findViewById(R.id.ll_float_button_container);
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

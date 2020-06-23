@@ -61,10 +61,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
+
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -88,34 +85,34 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     OrderDetailGoodsAdapter adapter;
     List<OrderDetailGoodsItem> orderDetailGoodsItemList = new ArrayList<>();
 
-    @BindView(R.id.hsv_bottom_toolbar)
+
     HorizontalScrollView hsvBottomToolbar;
-    @BindView(R.id.tv_receiver_name)
+
     TextView tvReceiverName;
-    @BindView(R.id.tv_mobile)
+
     TextView tvMobile;
-    @BindView(R.id.tv_address)
+
     TextView tvAddress;
-    @BindView(R.id.tv_store_name)
+
     TextView tvStoreName;
-    @BindView(R.id.tv_freight_amount)
+
     TextView tvFreightAmount;
-    @BindView(R.id.tv_orders_amount)
+
     TextView tvOrdersAmount;
-    @BindView(R.id.tv_orders_state_name)
+
     TextView tvOrdersStateName;
-    @BindView(R.id.tv_ship_time)
+
     TextView tvShipTime;
 
-    @BindView(R.id.tv_send_time)
+
     TextView tvSendTime;
-    @BindView(R.id.tv_leave_message)
+
     TextView tvLeaveMessage;
-    @BindView(R.id.ll_leave_message_container)
+
     LinearLayout llLeaveMessageContainer;
-    @BindView(R.id.rl_tax_container)
+
     RelativeLayout rlTaxContainer;
-    @BindView(R.id.tv_tax_amount)
+
     TextView tvTaxAmount;
     String storePhone;
 
@@ -149,34 +146,34 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             TEXT_EVALUATION, TEXT_SHIP_SEARCH, TEXT_MEMBER_CANCEL, TEXT_MEMBER_DELETE, TEXT_MEMBER_PAY};
 
     Map<String, String> orderButtonNameMap = new HashMap<>();
-    @BindView(R.id.swipe_refresh_container)
+
     SwipeRefreshLayout swipeRefreshContainer;
-    @BindView(R.id.tv_order_status)
+
     TextView tvOrderStatus;
-    @BindView(R.id.tv_order_status_desc)
+
     TextView tvOrderStatusDesc;
-    @BindView(R.id.icon_order_status)
+
     ImageView iconOrderStatus;
-    @BindView(R.id.tv_goods_amount)
+
     TextView tvGoodsAmount;
-    @BindView(R.id.ll_ship_type)
+
     LinearLayout llShipType;
-    @BindView(R.id.btn_buy_again)
+
     TextView btnBuyAgain;
-    @BindView(R.id.btn_pay_order)
+
     TextView btnPayOrder;
 
-    @OnClick(R.id.btn_back)
+
     public void back() {
         hideSoftInputPop();
     }
 
-    @BindView(R.id.tv_fragment_title)
+
     TextView tvFragmentTitle;
-    @BindView(R.id.tool_bar)
+
     RelativeLayout toolBar;
 
-    @OnClick(R.id.btn_buy_again)
+
     public void buyAgain(View v) {
         if (isGroup == Constant.TRUE_INT) { // 如果是團購，則為邀請好友
             new XPopup.Builder(_mActivity)
@@ -201,66 +198,65 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
             }
         }
     }
-    @OnClick(R.id.btn_pay_order)
+
     public void payOrder(View v) {
         SLog.info("添加到購物袋%d",ordersId);
         Util.startFragment(PayVendorFragment.newInstance(payId, ordersAmount, 0));
     }
 
-    @BindView(R.id.btn_goto_store)
+
     LinearLayout btnGotoStore;
-    @BindView(R.id.ll_order_detail_goods_list)
+
     LinearLayout llOrderDetailGoodsList;
-    @BindView(R.id.btn_advisory_service)
+
     LinearLayout btnAdvisoryService;
-    @BindView(R.id.btn_dial_store_phone)
+
     LinearLayout btnDialStorePhone;
-    @BindView(R.id.tv_take_code)
+
     TextView tvTakeCode;
-    @BindView(R.id.rl_take_code_container)
+
     RelativeLayout rlTakeCodeContainer;
-    @BindView(R.id.tv_orders_sn)
+
     TextView tvOrdersSn;
-    @BindView(R.id.tv_create_time)
+
     TextView tvCreateTime;
-    @BindView(R.id.ll_order_create_time_container)
+
     LinearLayout llOrderCreateTimeContainer;
-    @BindView(R.id.ll_order_send_time_container)
+
     LinearLayout llOrderSendTimeContainer;
-    @BindView(R.id.tv_pay_type)
+
     TextView tvPayType;
-    @BindView(R.id.ll_order_pay_type)
+
     LinearLayout llOrderPayType;
-    @BindView(R.id.tv_pay_sn)
+
     TextView tvPaySn;
-    @BindView(R.id.ll_order_pay_sn_container)
+
     LinearLayout llOrderPaySnContainer;
-    @BindView(R.id.tv_payment_time)
+
     TextView tvPaymentTime;
-    @BindView(R.id.ll_order_payment_time_container)
+
     LinearLayout llOrderPaymentTimeContainer;
-    @BindView(R.id.tv_ship_type)
+
     TextView tvShipType;
-    @BindView(R.id.tv_ship_date)
+
     TextView tvShipDate;
-    @BindView(R.id.ll_ship_info)
+
     LinearLayout llShipInfo;
-    @BindView(R.id.tv_store_send_info)
+
     TextView tvStoreSendInfo;
-    @BindView(R.id.sgl_image_container)
+
     SquareGridLayout sglImageContainer;
-    @BindView(R.id.ll_store_send_info_container)
+
     LinearLayout llStoreSendInfoContainer;
-    @BindView(R.id.tv_store_welfare)
+
     TextView tvStoreWelfare;
-    @BindView(R.id.tv_platform_welfare)
+
     TextView tvPlatformWelfare;
-    @BindView(R.id.ll_order_button_container)
+
     LinearLayout llOrderButtonContainer;
-    @BindView(R.id.rl_send_container)
+
     RelativeLayout rlSendContainer;
 
-    private Unbinder unbinder;
 
     public static OrderDetailFragment newInstance(int ordersId) {
         Bundle args = new Bundle();
@@ -278,7 +274,74 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_detail, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        hsvBottomToolbar = (HorizontalScrollView) view.findViewById(R.id.hsv_bottom_toolbar);
+        tvReceiverName = (TextView) view.findViewById(R.id.tv_receiver_name);
+        tvMobile = (TextView) view.findViewById(R.id.tv_mobile);
+        tvAddress = (TextView) view.findViewById(R.id.tv_address);
+        tvStoreName = (TextView) view.findViewById(R.id.tv_store_name);
+        tvFreightAmount = (TextView) view.findViewById(R.id.tv_freight_amount);
+        tvOrdersAmount = (TextView) view.findViewById(R.id.tv_orders_amount);
+        tvOrdersStateName = (TextView) view.findViewById(R.id.tv_orders_state_name);
+        tvShipTime = (TextView) view.findViewById(R.id.tv_ship_time);
+        tvSendTime = (TextView) view.findViewById(R.id.tv_send_time);
+        tvLeaveMessage = (TextView)view. findViewById(R.id.tv_leave_message);
+        llLeaveMessageContainer = (LinearLayout) view.findViewById(R.id.ll_leave_message_container);
+        rlTaxContainer = (RelativeLayout) view.findViewById(R.id.rl_tax_container);
+        tvTaxAmount = (TextView) view.findViewById(R.id.tv_tax_amount);
+        swipeRefreshContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_container);
+        tvOrderStatus = (TextView) view.findViewById(R.id.tv_order_status);
+        tvOrderStatusDesc = (TextView) view.findViewById(R.id.tv_order_status_desc);
+        iconOrderStatus = (ImageView) view.findViewById(R.id.icon_order_status);
+        tvGoodsAmount = (TextView) view.findViewById(R.id.tv_goods_amount);
+        llShipType = (LinearLayout) view.findViewById(R.id.ll_ship_type);
+        btnBuyAgain = (TextView) view.findViewById(R.id.btn_buy_again);
+        btnPayOrder = (TextView) view.findViewById(R.id.btn_pay_order);
+        tvFragmentTitle = (TextView) view.findViewById(R.id.tv_fragment_title);
+        toolBar = (RelativeLayout) view.findViewById(R.id.tool_bar);
+        btnGotoStore = (LinearLayout) view.findViewById(R.id.btn_goto_store);
+        llOrderDetailGoodsList = (LinearLayout) view.findViewById(R.id.ll_order_detail_goods_list);
+        btnAdvisoryService = (LinearLayout) view.findViewById(R.id.btn_advisory_service);
+        btnDialStorePhone = (LinearLayout) view.findViewById(R.id.btn_dial_store_phone);
+        tvTakeCode = (TextView) view.findViewById(R.id.tv_take_code);
+        rlTakeCodeContainer = (RelativeLayout) view.findViewById(R.id.rl_take_code_container);
+        tvOrdersSn = (TextView) view.findViewById(R.id.tv_orders_sn);
+        tvCreateTime = (TextView) view.findViewById(R.id.tv_create_time);
+        llOrderCreateTimeContainer = (LinearLayout) view.findViewById(R.id.ll_order_create_time_container);
+        llOrderSendTimeContainer = (LinearLayout) view.findViewById(R.id.ll_order_send_time_container);
+        tvPayType = (TextView) view.findViewById(R.id.tv_pay_type);
+        llOrderPayType = (LinearLayout) view.findViewById(R.id.ll_order_pay_type);
+        tvPaySn = (TextView) view.findViewById(R.id.tv_pay_sn);
+        llOrderPaySnContainer = (LinearLayout) view.findViewById(R.id.ll_order_pay_sn_container);
+        tvPaymentTime = (TextView) view.findViewById(R.id.tv_payment_time);
+        llOrderPaymentTimeContainer = (LinearLayout) view.findViewById(R.id.ll_order_payment_time_container);
+        tvShipType = (TextView) view.findViewById(R.id.tv_ship_type);
+        tvShipDate = (TextView) view.findViewById(R.id.tv_ship_date);
+        llShipInfo = (LinearLayout) view.findViewById(R.id.ll_ship_info);
+        tvStoreSendInfo = (TextView) view.findViewById(R.id.tv_store_send_info);
+        sglImageContainer = (SquareGridLayout) view.findViewById(R.id.sgl_image_container);
+        llStoreSendInfoContainer = (LinearLayout) view.findViewById(R.id.ll_store_send_info_container);
+        tvStoreWelfare = (TextView) view.findViewById(R.id.tv_store_welfare);
+        tvPlatformWelfare = (TextView) view.findViewById(R.id.tv_platform_welfare);
+        llOrderButtonContainer = (LinearLayout) view.findViewById(R.id.ll_order_button_container);
+        rlSendContainer = (RelativeLayout) view.findViewById(R.id.rl_send_container);
+        view.findViewById(R.id.btn_pay_order).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payOrder((View) v);
+            }
+        });
+        view.findViewById(R.id.btn_buy_again).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buyAgain((View) v);
+            }
+        });
+        view.findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back();
+            }
+        });
         return view;
     }
 
@@ -363,9 +426,6 @@ public class OrderDetailFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
         EventBus.getDefault().unregister(this);
     }
 

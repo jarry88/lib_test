@@ -4,6 +4,9 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.ftofs.twant.kotlin.KotlinInterfaceApi;
+
+import org.jetbrains.annotations.TestOnly;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -19,8 +22,12 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        assertEquals("com.ftofs.twant", appContext.getPackageName());
+//        Context appContext = InstrumentationRegistry.getTargetContext();
+//
+//        assertEquals("com.ftofs.twant", appContext.getPackageName());
+    }
+    @Test
+    public void useRetrofit(){
+        KotlinInterfaceApi api = KotlinInterfaceApi.Companion.get();
     }
 }

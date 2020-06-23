@@ -50,10 +50,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.Unbinder;
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
@@ -62,31 +58,13 @@ import okhttp3.Call;
  * 商家退单列表页
  * @author gzp
  */
-public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapter.RequestLoadMoreListener, SimpleCallback {
-    @BindView(R.id.vp_page_list)
+public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapter.RequestLoadMoreListener, SimpleCallback , View.OnClickListener {
     ViewPager viewPager;
-    @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     private SellerOrderFilterDrawerPopupView sellerOrderFilterDrawerPopupView;
 
-    @OnClick(R.id.btn_filter)
-    void showSearchOrderInfo() {
 
-        if (sellerOrderFilterDrawerPopupView == null) {
-            sellerOrderFilterDrawerPopupView = (SellerOrderFilterDrawerPopupView) new XPopup.Builder(_mActivity)
-                    //右边
-                    .popupPosition(PopupPosition.Right)
-                    //启用状态栏阴影
-                    .hasStatusBarShadow(true)
-                    .asCustom(new SellerOrderFilterDrawerPopupView(_mActivity, PopupType.SELLER_REFUND_FILTER,this));
-        }
-        sellerOrderFilterDrawerPopupView.show();
-    }
 
-    @OnClick(R.id.btn_back)
-    void back() {
-        hideSoftInputPop();
-    }
     private List<View> mViews;
     private PagerAdapter mPagerAdapter;
     private SellerReturnAdapter sellerReturnAdapter;
@@ -106,27 +84,23 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
         return fragment;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-    }
 
-    private Unbinder unbinder;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_return_info, container, false);
-        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Util.setOnClickListener(view,R.id.btn_back,this);
+        Util.setOnClickListener(view,R.id.btn_filter,this);
+        tabLayout = view.findViewById(R.id.tab_layout);
+        viewPager = view.findViewById(R.id.vp_page_list);
         initTabView(view);
         initView(view);
     }
@@ -438,5 +412,24 @@ public class SellerRefundFragment extends BaseFragment implements BaseQuickAdapt
         SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btn_back) {
+            hideSoftInputPop();
+        } else if (id == R.id.btn_filter) {
+
+            if (sellerOrderFilterDrawerPopupView == null) {
+                sellerOrderFilterDrawerPopupView = (SellerOrderFilterDrawerPopupView) new XPopup.Builder(_mActivity)
+                        //右边
+                        .popupPosition(PopupPosition.Right)
+                        //启用状态栏阴影
+                        .hasStatusBarShadow(true)
+                        .asCustom(new SellerOrderFilterDrawerPopupView(_mActivity, PopupType.SELLER_REFUND_FILTER,this));
+            }
+            sellerOrderFilterDrawerPopupView.show();
+        }
     }
 }

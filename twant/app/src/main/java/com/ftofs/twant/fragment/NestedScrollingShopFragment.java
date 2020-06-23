@@ -13,8 +13,8 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.adapter.TestAdapter;
 import com.ftofs.twant.interfaces.ScrollableContainer;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
+
 
 /**
  * @author linmeizhen
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
  */
 public class NestedScrollingShopFragment extends BaseFragment implements ScrollableContainer {
 
-    @BindView(R.id.recyclerview)
+
     RecyclerView recyclerview;
     private int index;
     private GridLayoutManager gridLayoutManager;
@@ -34,7 +34,8 @@ public class NestedScrollingShopFragment extends BaseFragment implements Scrolla
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shop_nested_scroll,null);
-        ButterKnife.bind(this,view);
+        recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview);
+
         initView();
         return view;
     }

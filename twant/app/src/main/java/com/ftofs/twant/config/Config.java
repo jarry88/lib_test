@@ -7,6 +7,7 @@ import com.orhanobut.hawk.Hawk;
 
 /**
  * 配置類
+ *
  * @author zwm
  */
 public class Config {
@@ -33,13 +34,12 @@ public class Config {
     public static final int ENV_229 = 6;
 
 
+    public static boolean PROD = true;//true不能進入調試頁面，false，可以進入調試頁面切換環境
+    public static boolean DEVELOPER_MODE = false;//線上模式：false,調試模式true
 
-    public static  boolean PROD = true;//true不能進入調試頁面，false，可以進入調試頁面切換環境
-    public static  boolean DEVELOPER_MODE = false;//線上模式：false,調試模式true
-
-    public static  boolean USE_28 = false;   // 開發模式下: true -- 使用28服務器  false -- 使用29服務器
+    public static boolean USE_28 = false;   // 開發模式下: true -- 使用28服務器  false -- 使用29服務器
     public static final boolean USE_F2 = true;  // 生產模式下: true -- 使用F2服務器  false -- 使用www服務器
-    public static  boolean USE_F1 = false;  // 生產模式下: true -- 使用F1服務器  false -- 使用www服務器
+    public static boolean USE_F1 = false;  // 生產模式下: true -- 使用F1服務器  false -- 使用www服務器
 
     /**
      * 日誌開關
@@ -47,21 +47,20 @@ public class Config {
 
     public static boolean SLOGENABLE = true;
 
-
-    public static  String OSS_BASE_URL = DEVELOPER_MODE ?
+    public static String OSS_BASE_URL = DEVELOPER_MODE ?
             "https://ftofs-editor.oss-cn-shenzhen.aliyuncs.com"
             : "https://img.twant.com";
 
-    public static  String API_BASE_URL = DEVELOPER_MODE ?
+    public static String API_BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28/api" : "https://192.168.5.29/api")
-            : (USE_F2 ?(USE_F1?"https://f1.twant.com/api":"https://f2.twant.com/api")  : "https://www.twant.com/api");
+            : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/api");
 
-    public static  String WEB_BASE_URL = DEVELOPER_MODE ?
+    public static String WEB_BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28/web" : "https://192.168.5.29/web")
-            : (USE_F2 ? (USE_F1?"https://f1.twant.com/api":"https://f2.twant.com/api")  : "https://www.twant.com/web");
-    public static  String BASE_URL = DEVELOPER_MODE ?
+            : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/web");
+    public static String BASE_URL = DEVELOPER_MODE ?
             (USE_28 ? "http://192.168.5.28" : "https://192.168.5.29")
-            : (USE_F2 ? (USE_F1?"https://f1.twant.com/api":"https://f2.twant.com/api")  : "https://www.twant.com");
+            : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com");
 
 
     /**
@@ -105,31 +104,31 @@ public class Config {
 
 
     public static void changeEnvironment(int env) {
-        currEnv=env;
+        currEnv = env;
         Hawk.put(SPField.FIELD_CURRENT_ENV, currEnv);
-        if (env == ENV_28 || env==ENV_229|| env == ENV_29) {
-            PROD=false;
+        if (env == ENV_28 || env == ENV_229 || env == ENV_29) {
+            PROD = false;
             DEVELOPER_MODE = true;
             USE_28 = env == ENV_28;
             SLOGENABLE = true;
 
         } else {
             //User.logout();
-            PROD= true;
+            PROD = true;
             DEVELOPER_MODE = false;
             USE_F1 = env == ENV_F1;
         }
         // 設置MPay SDK環境, 默認 UAT 環境 // 0 ：生產，1：測試環境，2 :UAT
         ConstantBase.setMPayPackageName(Config.DEVELOPER_MODE ?
                 ConstantBase.ConnectUrl_UAT
-                :ConstantBase.ConnectUrl_PRD);
+                : ConstantBase.ConnectUrl_PRD);
         MPaySdk.setEnvironmentType(Config.DEVELOPER_MODE ?
                 ConstantBase.ConnectUrl_UAT
-                :ConstantBase.ConnectUrl_PRD);
+                : ConstantBase.ConnectUrl_PRD);
 
 
         BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28" : env==ENV_29?"https://192.168.5.29/api":"https://192.168.5.229/api")
+                (USE_28 ? "http://192.168.5.28" : env == ENV_29 ? "https://192.168.5.29/api" : "https://192.168.5.229/api")
                 : (USE_F2 ? "https://www.twant.com" : "https://www.twant.com");
 //        BASE_URL = DEVELOPER_MODE ?
 //                (USE_28 ? "http://192.168.5.28" : "http://120.196.113.116:8001/api")
@@ -139,14 +138,14 @@ public class Config {
                 : "https://img.twant.com";
 
         API_BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28/api" : env==ENV_29?"https://192.168.5.29/api":"https://192.168.5.229/api")
-                : (USE_F2 ? (USE_F1?"https://f1.twant.com/api":"https://f2.twant.com/api") : "https://www.twant.com/api");
+                (USE_28 ? "http://192.168.5.28/api" : env == ENV_29 ? "https://192.168.5.29/api" : "https://192.168.5.229/api")
+                : (USE_F2 ? (USE_F1 ? "https://f1.twant.com/api" : "https://f2.twant.com/api") : "https://www.twant.com/api");
 //        API_BASE_URL = DEVELOPER_MODE ?
 //               (USE_28 ? "http://192.168.5.28/api" : "http://120.196.113.116:8001/api")
 //                : (USE_F2 ? "https://f2.twant.com/api" : "https://www.twant.com/api");
 
         WEB_BASE_URL = DEVELOPER_MODE ?
-                (USE_28 ? "http://192.168.5.28/web" : env==ENV_29?"https://192.168.5.29/web":"https://192.168.5.229/web")
+                (USE_28 ? "http://192.168.5.28/web" : env == ENV_29 ? "https://192.168.5.29/web" : "https://192.168.5.229/web")
                 : (USE_F2 ? "https://www.twant.com/web" : "https://www.twant.com/web");
 
 
