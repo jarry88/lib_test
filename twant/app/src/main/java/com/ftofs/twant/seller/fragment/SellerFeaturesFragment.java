@@ -109,6 +109,9 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
         rvList.setAdapter(adpter);
         adpter.setOnItemChildClickListener((adapter, view1, position) -> {
             int id =view1.getId();
+            int commonId = ((Goods) adapter.getItem(position)).id;
+            String commonName = ((Goods) adapter.getItem(position)).imageUrl;
+
             if (id == R.id.btn_view_all_sku) {
                 //添加跳转商品详情页逻辑
                 SLog.info("跳转至商品详情页");
@@ -119,8 +122,10 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
                 array.append(((Goods) adapter.getItem(position)).id);
                 // 发送同步请求
                 try {
-                     EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
-                    params.set("commonId", array);
+                     EasyJSONObject params =EasyJSONObject.generate(
+                             "token", User.getToken(),
+                                "commonId", commonId);
+//                    params.set("commonId[]", commonId);
                       SLog.info("params[%s]", params);
                       Api.postUI(Api.REMOVE_FEATURES_GOODS, params, new UICallback() {
                          @Override
@@ -166,6 +171,8 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
                     e.printStackTrace();
                 }
 // 发送异步请求
+            }else if(id== R.id.ll_swipe_content){
+                Util.startFragment(SellerGoodsDetailFragment.newInstance(commonId, commonName));
             }
         });
     }
@@ -225,5 +232,6 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
             Util.startFragment(FeatureGoodSelectFragment.Companion.newInstance());
         }
     }
+
 }
 

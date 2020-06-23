@@ -66,7 +66,7 @@ interface KotlinInterfaceApi {
     @POST("member/seller/goods/cancel_features.json")
     fun cancelFeature(
             @Query("token")token: String,
-            @Query("commonId")commonId:Array<Int>
+            @Query("commonId")commonId:Int
     ):LiveData<ApiResponse<Objects>> /**
      * 取消镇店之宝
      */

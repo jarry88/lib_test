@@ -25,6 +25,8 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -1444,7 +1446,10 @@ public class Api {
      * 【賣家】獲取商品Sku列表
      */
     public static final String PATH_SELLER_GOODS_SKU_LIST = "/member/seller/goods/sku";
-
+    @Nullable
+    public static final String SELLER_GOODS_FEATURES ="/member/seller/goods/features.json";
+    @Nullable
+    public static final String SELLER_CANCEL_FEATURES ="/member/seller/goods/cancel_features.json";
 
 
     /**

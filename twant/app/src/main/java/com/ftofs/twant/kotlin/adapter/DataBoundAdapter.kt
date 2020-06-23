@@ -1,5 +1,6 @@
 package com.ftofs.twant.kotlin.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -11,10 +12,13 @@ abstract class DataBoundAdapter<T, V : ViewDataBinding> :
     RecyclerView.Adapter<DataBoundViewHolder<V>>() {
     abstract val layoutId: Int
     protected val mData = ArrayList<T>()
+    lateinit var context:Context
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             DataBoundViewHolder<V> {
+        context = parent.context
+
         return DataBoundViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),

@@ -143,16 +143,17 @@
 
                     <ImageView
                         android:id="@+id/btn_more"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
+                        android:layout_width="@dimen/dp_40"
+                        android:layout_height="@dimen/dp_40"
                         android:layout_alignParentEnd="true"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
+                        android:layout_centerVertical="true"
                         android:gravity="center"
-                        android:textSize="13sp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:scaleType="centerInside"
+                        android:src="@{vo.isCommend!=2?@drawable/icon_add_blue:@drawable/ic_minus}"
                         android:textColor="@color/tw_text_dark"
-                        android:src="@drawable/icon_add_blue">
+                        android:textSize="13sp">
 
                     </ImageView>
                 </RelativeLayout>

@@ -13,7 +13,7 @@ import com.ftofs.twant.kotlin.util.EmptyCornerDrawable
 fun ImageView.displayWithUrl(url: String?) {
     Glide.with(this).load(url)
             .apply(
-                    RequestOptions().transforms(CenterCrop())
+                    RequestOptions().transform(CenterCrop())
             )
             .into(this)
 }
@@ -23,7 +23,7 @@ fun ImageView.displayWithUrl(url: String?, radius: Float) {
     val empty = EmptyCornerDrawable(0xff969696.toInt(), radiusPx.toFloat())
     Glide.with(this).load(url)
             .apply(
-                    RequestOptions().transforms(
+                    RequestOptions().transform(
                             CenterCrop(),
                             RoundedCorners(radiusPx)
                     )
