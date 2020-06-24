@@ -72,9 +72,9 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
     // SpecValueId 與 SpecValueName的映射
     Map<Integer, String> specValueMap = new HashMap<>();
 
-    // 規格值Id的字符串拼接(例5,12,8)與SKU信息的映射關係
+    // 規格值Id的字符串拼接(例5,8,12)與SKU信息的映射關係，規格值Id按升序排列
     Map<String, SellerSpecPermutation> specValueIdStringMap = new HashMap<>();
-    // 規格值Id的字符串拼接(例5,12,8)的列表
+    // 規格值Id的字符串拼接(例5,8,12)的列表，規格值Id按升序排列
     List<String> specValueIdStringList = new ArrayList<>();
 
     // colorId與圖片列表的映射關係
@@ -240,6 +240,21 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                     for (Object object : goodsJsonVoList) {
                         EasyJSONObject goodsJsonVo = (EasyJSONObject) object;
 
+                        String specValueIds = goodsJsonVo.getSafeString("specValueIds");
+                        specValueIds = StringUtil.sortSpecValueIdString(specValueIds);
+                        SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIds);
+                        if (permutation != null) {
+                            /*
+                                public double price;
+                                public String goodsSN = "";  // 商品編號
+                                public int storage; // 庫存
+                                public int reserved; // 預存庫存
+                             */
+                            permutation.price = goodsJsonVo.getDouble("goodsPrice0");
+                            permutation.goodsSN = goodsJsonVo.getSafeString("goodsSerial");
+                            permutation.storage = goodsJsonVo.getInt("goodsStorage");
+                            permutation.reserved = goodsJsonVo.getInt("reserveStorage");
+                        }
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -323,6 +338,8 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                     }
 
                     generateSpecPermutation();
+
+                    loadSkuData();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }

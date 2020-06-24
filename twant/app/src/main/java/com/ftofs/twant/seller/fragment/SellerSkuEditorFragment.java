@@ -46,6 +46,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * 【賣家】SKU信息頁
+ * @author zwm
+ */
 public class SellerSkuEditorFragment extends BaseFragment implements View.OnClickListener, SimpleCallback {
     EditorResultInterface editorResultInterface;
     List<String> specValueIdStringList;
