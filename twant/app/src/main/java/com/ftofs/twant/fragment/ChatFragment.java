@@ -254,7 +254,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 }
             });
         }
-
+        if (conversation == null) {
+            //Bugly 62103 异常空指针闪退
+            hideSoftInputPop();
+            return;
+        }
         // 指定会话消息未读数清零(進入會話處)
         conversation.markAllMessagesAsRead();
         Conversation.clearUnreadMsgCount(conversation.conversationId());
