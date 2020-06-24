@@ -85,6 +85,9 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
     // 原先已經添加的specValue集合
     Set<Integer> initSpecValueSet = new HashSet<>();
 
+    // 标记SKU数据是否已经加载
+    boolean isSkuDataLoaded = false;
+
 
     public static SellerEditGoodsSpecFragment newInstance(int commonId, EasyJSONArray specJsonVoList) {
         Bundle args = new Bundle();
@@ -203,6 +206,46 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
             layoutParams.topMargin = Util.dip2px(_mActivity, 8);
             llSelectedSpecContainer.addView(selectedSpecItemView, layoutParams);
         }
+    }
+
+    private void loadSkuData() {
+        String token = User.getToken();
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+
+        EasyJSONObject params = EasyJSONObject.generate(
+                "token", token,
+                "commonId", commonId
+        );
+
+        SLog.info("url[%s], params[%s]", Api.PATH_SELLER_GET_SKU_INFO, params);
+        Api.postUI(Api.PATH_SELLER_GET_SKU_INFO, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    EasyJSONArray goodsJsonVoList = responseObj.getSafeArray("datas.goodsJsonVoList");
+                    for (Object object : goodsJsonVoList) {
+                        EasyJSONObject goodsJsonVo = (EasyJSONObject) object;
+
+                    }
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
     }
 
     private void loadSellerSpecList() {
@@ -535,6 +578,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
 
             SLog.info("skuDesc[%s]", skuDesc.toString());
             String specValueIdString = StringUtil.trim(specValueIdStringSB.toString(), new char[] {','});
+            specValueIdString = StringUtil.sortSpecValueIdString(specValueIdString);
             specValueIdStringList.add(specValueIdString);
 
             SellerSpecPermutation permutation = specValueIdStringMap.get(specValueIdString);
