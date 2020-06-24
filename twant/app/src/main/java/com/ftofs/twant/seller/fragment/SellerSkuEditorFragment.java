@@ -304,5 +304,12 @@ public class SellerSkuEditorFragment extends BaseFragment implements View.OnClic
 
         observable.subscribe(observer);
     }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        SLog.info("onBackPressedSupport");
+        hideSoftInputPop();
+        return true;
+    }
 }
 

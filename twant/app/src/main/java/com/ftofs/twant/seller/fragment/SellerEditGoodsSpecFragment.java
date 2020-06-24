@@ -193,7 +193,6 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                         return;
                     }
 
-
                     new XPopup.Builder(_mActivity)
                             // 如果不加这个，评论弹窗会移动到软键盘上面
                             .moveUpToKeyboard(false)
@@ -236,6 +235,7 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                         return;
                     }
 
+                    // 處理規格信息
                     EasyJSONArray goodsJsonVoList = responseObj.getSafeArray("datas.goodsJsonVoList");
                     for (Object object : goodsJsonVoList) {
                         EasyJSONObject goodsJsonVo = (EasyJSONObject) object;
@@ -255,6 +255,36 @@ public class SellerEditGoodsSpecFragment extends BaseFragment
                             permutation.storage = goodsJsonVo.getInt("goodsStorage");
                             permutation.reserved = goodsJsonVo.getInt("reserveStorage");
                         }
+                    }
+
+                    // 處理圖片信息
+                    EasyJSONArray goodsPicVoList = responseObj.getSafeArray("datas.goodsPicVoList");
+                    for (Object object : goodsPicVoList) {
+                        EasyJSONObject goodsPicVo = (EasyJSONObject) object;
+
+                        int colorId = goodsPicVo.getInt("colorId");
+                        List<SellerGoodsPicVo> sellerGoodsPicVoList = colorImageMap.get(colorId);
+                        if (sellerGoodsPicVoList == null) {
+                            sellerGoodsPicVoList = new ArrayList<>();
+                            colorImageMap.put(colorId, sellerGoodsPicVoList);
+                        }
+
+                        SellerGoodsPicVo sellerGoodsPicVo = new SellerGoodsPicVo();
+                        /*
+                        public int colorId;
+                        public String colorName;
+                        public String imageName;  // 遠端圖片路徑（相對路徑）
+                        public String absolutePath;  // 本地圖片路徑（值不為空,表示待上傳）
+                        public int imageSort;
+                        public int isDefault;
+                         */
+                        sellerGoodsPicVo.colorId = colorId;
+                        sellerGoodsPicVo.colorName = specValueMap.get(colorId);
+                        sellerGoodsPicVo.imageName = goodsPicVo.getSafeString("imageName");
+                        sellerGoodsPicVo.imageSort = goodsPicVo.getInt("imageSort");
+                        sellerGoodsPicVo.isDefault = goodsPicVo.getInt("isDefault");
+
+                        sellerGoodsPicVoList.add(sellerGoodsPicVo);
                     }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
