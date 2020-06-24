@@ -1,6 +1,7 @@
 package com.ftofs.twant.seller.fragment;
 
 import android.os.Bundle;
+import android.support.v4.media.MediaBrowserCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +17,12 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.CustomAction;
+import com.ftofs.twant.entity.CustomActionData;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.CustomActionCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.seller.adapter.SellerSpecListAdapter;
 import com.ftofs.twant.seller.entity.SellerSpecItem;
@@ -42,8 +47,9 @@ import okhttp3.Call;
  * 【賣家】規格組列表
  * @author zwm
  */
-public class SellerSpecFragment extends BaseFragment implements View.OnClickListener {
+public class SellerSpecFragment extends BaseFragment implements View.OnClickListener, CustomActionCallback {
     List<SellerSpecListItem> sellerSpecList = new ArrayList<>();
+    RecyclerView rvList;
     SellerSpecListAdapter adapter;
 
     public static SellerSpecFragment newInstance() {
@@ -69,7 +75,7 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
         Util.setOnClickListener(view, R.id.btn_back, this);
         Util.setOnClickListener(view, R.id.btn_add_spec, this);
 
-        RecyclerView rvList = view.findViewById(R.id.rv_list);
+        rvList = view.findViewById(R.id.rv_list);
         rvList.setLayoutManager(new LinearLayoutManager(_mActivity));
         adapter = new SellerSpecListAdapter(_mActivity, R.layout.seller_spec_list_item, sellerSpecList);
         adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -82,7 +88,7 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
                 if (id == R.id.btn_delete) {
                     showDeleteSpecConfirm(item.specId);
                 } else if (id == R.id.btn_edit) {
-                    start(SellerEditSpecFragment.newInstance(Constant.ACTION_EDIT, item));
+                    start(SellerEditSpecFragment.newInstance(Constant.ACTION_EDIT, item, SellerSpecFragment.this));
                 }
             }
         });
@@ -147,6 +153,22 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
                     }
 
                     ToastUtil.success(_mActivity, "刪除成功");
+
+                    // 根据specId查找位置
+                    int index = 0;
+                    for (; index < sellerSpecList.size(); index++) {
+                        SellerSpecListItem item = sellerSpecList.get(index);
+                        if (item.specId == specId) {
+                            break;
+                        }
+                    }
+
+                    if (index == sellerSpecList.size()) { // NOT FOUND
+                        return;
+                    }
+
+                    sellerSpecList.remove(index);
+                    adapter.notifyItemRemoved(index);
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -233,7 +255,7 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
         if (id == R.id.btn_back) {
             hideSoftInputPop();
         } else if (id == R.id.btn_add_spec) {
-            start(SellerEditSpecFragment.newInstance(Constant.ACTION_ADD, null));
+            start(SellerEditSpecFragment.newInstance(Constant.ACTION_ADD, null, this));
         }
     }
 
@@ -242,6 +264,34 @@ public class SellerSpecFragment extends BaseFragment implements View.OnClickList
         SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
+    }
+
+    @Override
+    public void onCustomActionCall(CustomActionData customActionData) {
+        int action = customActionData.action;
+        if (action == CustomAction.CUSTOM_ACTION_SELLER_EDIT_SPEC.ordinal()) {
+            // 根据specId定出位置
+            SellerSpecListItem item = (SellerSpecListItem) customActionData.data;
+            int specId = item.specId;
+            int index = 0;
+            for (; index < sellerSpecList.size(); index++) {
+                if (sellerSpecList.get(index).specId == specId) {
+                    break;
+                }
+            }
+
+            if (index == sellerSpecList.size()) { // NOT FOUND
+                return;
+            }
+
+            sellerSpecList.set(index, item);
+            adapter.notifyItemChanged(index);
+        } else if (action == CustomAction.CUSTOM_ACTION_SELLER_ADD_SPEC.ordinal()) {
+            SellerSpecListItem item = (SellerSpecListItem) customActionData.data;
+            sellerSpecList.add(item);
+            adapter.notifyItemInserted(sellerSpecList.size() - 1);
+            rvList.scrollToPosition(sellerSpecList.size() - 1);  // 滑动到最后
+        }
     }
 }
 

@@ -1486,6 +1486,13 @@ public class Api {
 
 
     /**
+     * 【賣家】獲取SKU信息
+     * 查詢商品規格、SKU、圖片信息（編輯商品SKU頁需用到）
+     */
+    public static final String PATH_SELLER_GET_SKU_INFO = "/member/seller/goods/skuAndSpec";
+
+
+    /**
      * 發送Http請求
      * 如果ioCallback和uiCallback同時為null，表示同步方式執行
      * @param method GET或者POST

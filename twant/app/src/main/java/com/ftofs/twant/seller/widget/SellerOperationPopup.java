@@ -120,7 +120,7 @@ public class SellerOperationPopup extends BottomPopupView implements View.OnClic
 
                         ToastUtil.success(context, goodsStatus == Constant.GOODS_STATUS_ON_SHELF ? "下架成功" : "上架成功");
                         simpleCallback.onSimpleCall(EasyJSONObject.generate(
-                                "action", CustomAction.CUSTOM_ACTION_SELLER_SWITCH_GOODS_SHELF_STATUS
+                                "action", CustomAction.CUSTOM_ACTION_SELLER_SWITCH_GOODS_SHELF_STATUS.ordinal()
                         ));
 
                         dismiss();
@@ -168,7 +168,7 @@ public class SellerOperationPopup extends BottomPopupView implements View.OnClic
 
             if (simpleCallback != null) {
                 simpleCallback.onSimpleCall(EasyJSONObject.generate(
-                        "action", CustomAction.CUSTOM_ACTION_SELLER_DELETE_GOODS,
+                        "action", CustomAction.CUSTOM_ACTION_SELLER_DELETE_GOODS.ordinal(),
                         "commonId", commonId));
             }
 
