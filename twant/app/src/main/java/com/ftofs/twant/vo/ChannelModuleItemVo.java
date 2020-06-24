@@ -1,5 +1,5 @@
 package com.ftofs.twant.vo;
-;
+
 import com.ftofs.twant.domain.goods.Brand;
 import com.ftofs.twant.domain.goods.GoodsCommon;
 
