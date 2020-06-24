@@ -194,6 +194,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
 
     private void updateGoodsSpecView() {
         try {
+            llSpecContainer.removeAllViews();
+
             for (Object object : specJsonVoList) {
                 EasyJSONObject specJsonVo = (EasyJSONObject) object;
                 StringBuilder specInfo = new StringBuilder();
