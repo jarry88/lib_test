@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.ArraySet;
 
 import com.bumptech.glide.Glide;
 import com.ftofs.twant.R;
@@ -20,6 +21,7 @@ import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
+import com.ftofs.twant.interfaces.SimpleCallback;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
@@ -43,6 +45,8 @@ import okhttp3.Call;
  */
 public class SellerGoodsDetailFragment extends BaseFragment implements View.OnClickListener {
     public EasyJSONArray unitList;
+    List<ListPopupItem> spinnerLogoItems = new ArrayList<>();
+
     int commonId;
     String goodsImageUrl;
     int twBlack;
@@ -234,8 +238,16 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
             Util.startFragment(SellerGoodsDetailViewerFragment.newInstance(mobileBodyVoList));
         }  else if (id == R.id.btn_edit_basic_info) {
             Util.startFragment(SellerEditBasicFragment.newInstance(this));
+        }  else if (id == R.id.btn_edit_transaction_info) {
+            Util.startFragment(SellerEditTransactionFragment.newInstance(this));
         } else if (id == R.id.btn_edit_spec) {
             start(SellerEditGoodsSpecFragment.newInstance(commonId, specJsonVoList));
+        }  else if (id == R.id.btn_seller_goods_freight_edit) {
+            ToastUtil.success(_mActivity,"jj");
+//            Util.startFragment(SellerEditFreightFragment.newInstance(this));
+        }  else if (id == R.id.btn_seller_goods_other_edit) {
+            ToastUtil.success(_mActivity,"ja");
+//            Util.startFragment(SellerEditOtherFragment.newInstance(this));
         }
     }
 
@@ -246,10 +258,10 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         return true;
     }
 
-    public void saveGoodsInfo(EasyJSONObject publishGoodsInfo) {
+    public void saveGoodsInfo(EasyJSONObject publishGoodsInfo, SimpleCallback ui) {
          EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
           SLog.info("params[%s]", params);
-          Api.getUI(Api.SELLER_GOODS_FEATURES, params, new UICallback() {
+          Api.getUI(Api.SELLER_GOODS_EDIT, params, new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
                  ToastUtil.showNetworkError(_mActivity, e);
@@ -264,6 +276,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                      if (ToastUtil.checkError(_mActivity, responseObj)) {
                          return;
                      }
+                     ui.onSimpleCall(null);
                  } catch (Exception e) {
                      SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                  }

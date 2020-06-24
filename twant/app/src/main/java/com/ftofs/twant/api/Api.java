@@ -1370,7 +1370,14 @@ public class Api {
      */
     public static final String PATH_SELLER_ORDERS_INFO = "/member/seller/orders/info"
             ;
+    /**
+     * 取消镇店之宝
+     */
     public static final String REMOVE_FEATURES_GOODS = "/member/seller/goods/cancel_features.json";
+    /**
+     * 编辑商品
+     */
+    public static final String SELLER_GOODS_EDIT = "/member/seller/goods/edit";
     /**
      * 【商家】
      * 退貨訂單列表
