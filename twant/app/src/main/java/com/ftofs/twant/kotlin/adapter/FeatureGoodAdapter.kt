@@ -34,6 +34,7 @@ class FeatureGoodAdapter : DataBoundAdapter<SellerGoodsVO, SellerGoodsItemUnswip
                     val loadingPopup = Util.createLoadingPopup(context).show()
             var path=Api.SELLER_GOODS_FEATURES
             if (item.isCommend==2) path=Api.SELLER_CANCEL_FEATURES
+            SLog.info("params[%s]", params)
 
             Api.postUI(path, params, object : UICallback() {
                 override fun onFailure(call: Call, e: IOException) {

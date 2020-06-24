@@ -18,14 +18,19 @@ import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
 import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.impl.LoadingPopupView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -37,6 +42,7 @@ import okhttp3.Call;
  * @author zwm
  */
 public class SellerGoodsDetailFragment extends BaseFragment implements View.OnClickListener {
+    public EasyJSONArray unitList;
     int commonId;
     String goodsImageUrl;
     int twBlack;
@@ -48,7 +54,12 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     EasyJSONArray mobileBodyVoList = EasyJSONArray.generate();
 
     LinearLayout llSpecContainer;
+    LinearLayout btnEditBasicInfo;
     EasyJSONArray specJsonVoList;
+
+    List<ListPopupItem> spinnerLogoCountryItems = new ArrayList<>();
+    public EasyJSONObject goodsVo;
+
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
         Bundle args = new Bundle();
@@ -76,13 +87,18 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         Util.setOnClickListener(view, R.id.btn_back, this);
 
         btnViewGoodsDetail = view.findViewById(R.id.btn_view_goods_detail);
-
+        btnEditBasicInfo =view.findViewById(R.id.btn_edit_basic_info);
         twBlack = _mActivity.getColor(R.color.tw_black);
         tvGoodsVideoUrl = view.findViewById(R.id.tv_goods_video_url);
 
         Util.setOnClickListener(view, R.id.btn_edit_spec, this);
         llSpecContainer = view.findViewById(R.id.ll_spec_container);
 
+    }
+
+    @Override
+    public void onSupportVisible() {
+        super.onSupportVisible();
         loadData();
     }
 
@@ -96,16 +112,20 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         EasyJSONObject params = EasyJSONObject.generate(
                 "token", token
         );
-
         SLog.info("url[%s], params[%s]", url, params);
+        final BasePopupView loadingPopup = Util.createLoadingPopup(_mActivity).show();
+
+        loadingPopup.show();
         Api.getUI(url, params, new UICallback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                loadingPopup.dismiss();
                 ToastUtil.showNetworkError(_mActivity, e);
             }
 
             @Override
             public void onResponse(Call call, String responseStr) throws IOException {
+                loadingPopup.dismiss();
                 try {
                     SLog.info("responseStr[%s]", responseStr);
                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
@@ -119,7 +139,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                         return;
                     }
 
-                    EasyJSONObject goodsVo = responseObj.getSafeObject("datas.GoodsVo");
+                     goodsVo = responseObj.getSafeObject("datas.GoodsVo");
                     ((TextView) contentView.findViewById(R.id.tv_spu_id)).setText(String.valueOf(commonId));
                     ((TextView) contentView.findViewById(R.id.tv_goods_name)).setText(goodsVo.getSafeString("goodsName"));
                     ImageView goodsImage = contentView.findViewById(R.id.goods_image);
@@ -163,6 +183,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
 
                     mobileBodyVoList = goodsVo.getArray("mobileBodyVoList");
                     btnViewGoodsDetail.setOnClickListener(SellerGoodsDetailFragment.this);
+                    btnEditBasicInfo.setOnClickListener(SellerGoodsDetailFragment.this);
+
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -210,6 +232,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
             }
         } else if (id == R.id.btn_view_goods_detail) {
             Util.startFragment(SellerGoodsDetailViewerFragment.newInstance(mobileBodyVoList));
+        }  else if (id == R.id.btn_edit_basic_info) {
+            Util.startFragment(SellerEditBasicFragment.newInstance(this));
         } else if (id == R.id.btn_edit_spec) {
             start(SellerEditGoodsSpecFragment.newInstance(commonId, specJsonVoList));
         }
@@ -220,6 +244,31 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         SLog.info("onBackPressedSupport");
         hideSoftInputPop();
         return true;
+    }
+
+    public void saveGoodsInfo(EasyJSONObject publishGoodsInfo) {
+         EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
+          SLog.info("params[%s]", params);
+          Api.getUI(Api.SELLER_GOODS_FEATURES, params, new UICallback() {
+             @Override
+             public void onFailure(Call call, IOException e) {
+                 ToastUtil.showNetworkError(_mActivity, e);
+             }
+         
+             @Override
+             public void onResponse(Call call, String responseStr) throws IOException {
+                 try {
+                     SLog.info("responseStr[%s]", responseStr);
+         
+                     EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                     if (ToastUtil.checkError(_mActivity, responseObj)) {
+                         return;
+                     }
+                 } catch (Exception e) {
+                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                 }
+             }
+          });
     }
 }
 

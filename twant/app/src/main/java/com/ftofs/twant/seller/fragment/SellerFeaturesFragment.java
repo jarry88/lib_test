@@ -119,7 +119,7 @@ public class SellerFeaturesFragment extends BaseFragment implements View.OnClick
             } else if (id == R.id.btn_more) {
 //                Integer[] arrayList = new Integer[]{((Goods)adapter.getItem(position)).id};
                 EasyJSONArray array = new EasyJSONArray();
-                array.append(((Goods) adapter.getItem(position)).id);
+                array.append(commonId);
                 // 发送同步请求
                 try {
                      EasyJSONObject params =EasyJSONObject.generate(

@@ -44,3 +44,6 @@ fun View.hideKeyboard() {
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 
 }
+/**
+ * 設置隱藏
+ */
