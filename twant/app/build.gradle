@@ -55,7 +55,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    outputFileName = "twant_${defaultConfig.versionName.replace(".", "")}_${versionCode}.apk"
+                    // 根據渠道來命名文件
+                    def flavorName = variant.flavorName
+                    outputFileName = "twant_${defaultConfig.versionName.replace(".", "")}_build${versionCode}_${flavorName}.apk"
                 }
             }
             zipAlignEnabled true
