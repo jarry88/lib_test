@@ -45,6 +45,9 @@ android {
         // 華為應用商店渠道
         huawei {
         }
+        // 小米應用商店渠道
+        xiaomi {
+        }
     }
     buildTypes {
         release {
