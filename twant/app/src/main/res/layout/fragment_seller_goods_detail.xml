@@ -299,7 +299,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:paddingRight="12dp">
+                android:paddingEnd="12dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -393,7 +393,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:paddingRight="12dp">
+                android:paddingEnd="12dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -497,10 +497,11 @@
                 </TextView>
 
                 <LinearLayout
+                    android:id="@+id/btn_seller_goods_detail_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:paddingLeft="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:paddingStart="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:visibility="visible">
@@ -653,10 +654,11 @@
                 </TextView>
 
                 <LinearLayout
+                    android:id="@+id/btn_seller_goods_freight_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:paddingLeft="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:paddingStart="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:visibility="visible">
@@ -698,7 +700,7 @@
                         android:id="@+id/tv_goods_freight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:textColor="@color/tw_blue"
                         android:textSize="15sp">
                     </TextView>
@@ -742,7 +744,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:paddingRight="12dp">
+                android:paddingEnd="12dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -754,6 +756,8 @@
                 </TextView>
 
                 <LinearLayout
+                    android:id="@+id/btn_seller_goods_other_edit"
+
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
