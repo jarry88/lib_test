@@ -83,10 +83,10 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
         tvTitle = view.findViewById(R.id.tv_title);
 
         tvTitle.setText("基本信息");
-        view.findViewById(R.id.btn_ok).setOnClickListener(this);
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
         Util.setOnClickListener(view, R.id.tv_add_good_unit, this);
+        Util.setOnClickListener(view, R.id.btn_ok, this);
         TextView btnGoodCategory =view.findViewById(R.id.btn_select_category_id);
 //        Util.setOnClickListener(view,R.id.sp_add_good_logo,this);
         EditText etName =view.findViewById(R.id.et_add_good_name);
