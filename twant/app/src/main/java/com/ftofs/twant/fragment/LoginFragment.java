@@ -485,7 +485,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener,
                 //重启app
                 Util.restartAPP(_mActivity);
             }
-        },1000);
+        },500);
 //        // 这里使用clear + new task的方式清空整个任务栈,只保留新打开的Main页面
 //        // 然后Main页面接收到退出的标志位exit=true,finish自己,这样就关闭了全部页面
 //
