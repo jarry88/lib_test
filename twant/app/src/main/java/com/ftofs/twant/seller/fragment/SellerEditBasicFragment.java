@@ -53,11 +53,7 @@ import okhttp3.Call;
  */
 public class SellerEditBasicFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     TextView tvTitle;
-    private int goodsModal=-1;//銷售模式 銷售模式 0零售 1跨城購 2虛擬 【必填】
-    private EasyJSONArray unitList;
     private EasyJSONObject publishGoodsInfo= new EasyJSONObject();
-    private EasyJSONArray specJsonVoList;
-    private String unitName;
     private int commonId;
     SellerGoodsDetailFragment parent;
     private int categoryId=-1;
@@ -78,8 +74,6 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
     public static SellerEditBasicFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditBasicFragment fragment= new SellerEditBasicFragment();
         fragment.parent = parent;
-        fragment.unitList = parent.unitList;
-        fragment.specJsonVoList = parent.specJsonVoList;
         return fragment;
     }
 
@@ -101,7 +95,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
 
-        tvTitle.setText("基本信息");
+        tvTitle.setText("編輯基本信息");
         etName=view.findViewById(R.id.et_add_good_name);
         etJingle=view.findViewById(R.id.et_add_good_description);
         tvAddGoodLogo = view.findViewById(R.id.tv_add_good_logo);
@@ -371,8 +365,8 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
                 parent.saveGoodsInfo(publishGoodsInfo, new SimpleCallback() {
                     @Override
                     public void onSimpleCall(Object data) {
+                        ToastUtil.success(_mActivity,data.toString());
                         hideSoftInputPop();
-                        SLog.info("保存成功");
                     }
                 });
             }
