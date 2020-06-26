@@ -106,7 +106,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
         etJingle=view.findViewById(R.id.et_add_good_description);
         tvAddGoodLogo = view.findViewById(R.id.tv_add_good_logo);
         tvAddGoodLocation = view.findViewById(R.id.tv_add_good_location);
-
+        tvCategoryId = view.findViewById(R.id.tv_category_id);
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
         Util.setOnClickListener(view, R.id.tv_add_good_unit, this);
@@ -138,6 +138,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
                 tvAddGoodLogo.setText(brandName);
             }
             String goodsCountryName=parent.goodsVo.getSafeString("goodsCountryName");
+            goodsCountry=parent.goodsVo.getInt("goodsCountry");
             if (!StringUtil.isEmpty(goodsCountryName)) {
                 tvAddGoodLocation.setText(goodsCountryName);
             }
@@ -279,8 +280,6 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
     }
 
     private boolean checkBasicInfo() {
-
-        View primaryView = getView();
         String goodsName =etName.getText().toString();
         if (StringUtil.isEmpty(goodsName)) {
             ToastUtil.error(_mActivity,"請填寫商品名稱");
@@ -307,10 +306,27 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             publishGoodsInfo.set("goodsName", goodsName);
             publishGoodsInfo.set("categoryId", categoryId);
             publishGoodsInfo.set("jingle", jingle);
-            int i = 1;
-            for (Category category : selectCategoryList) {
-                String keyName = String.format("categoryId%d", i++);
-                publishGoodsInfo.set(keyName, category.getCategoryId());
+            if (selectCategoryList!=null) {
+                int i = 1;
+                for (Category category : selectCategoryList) {
+                    if (i == 1) {
+                        categoryId1 = category.getCategoryId();
+                        publishGoodsInfo.set("categoryId1", category.getCategoryId());
+                        categoryId = categoryId1;
+                    }if (i == 2) {
+                        categoryId2 = category.getCategoryId();
+                        categoryId = categoryId2;
+                        publishGoodsInfo.set("categoryId2", category.getCategoryId());
+
+                    }if (i == 3) {
+                        categoryId3 = category.getCategoryId();
+                        categoryId = categoryId3;
+                        publishGoodsInfo.set("categoryId3", category.getCategoryId());
+
+                    }
+                    publishGoodsInfo.set("categoryId", categoryId);
+                    i++;
+                }
             }
             publishGoodsInfo.set("brandId", brandId);
             publishGoodsInfo.set("goodsCountry", goodsCountry);
@@ -343,6 +359,7 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
                         SLog.info("保存成功");
                     }
                 });
+                SLog.info("保存完成");
             }
                 
         }
@@ -370,7 +387,6 @@ public class SellerEditBasicFragment extends BaseFragment implements View.OnClic
             selectCategoryList = (List<Category>) extra;
             Category categoryLast = new Category();
             StringBuilder selectCategoryName = new StringBuilder();
-            in
             for (Category category : selectCategoryList) {
                 categoryLast = category;
                 selectCategoryName.append(category.getCategoryName()).append(" -- ");

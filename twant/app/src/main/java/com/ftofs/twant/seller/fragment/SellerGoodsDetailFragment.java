@@ -261,9 +261,9 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     }
 
     public void saveGoodsInfo(EasyJSONObject publishGoodsInfo, SimpleCallback ui) {
-         EasyJSONObject params =EasyJSONObject.generate("token", User.getToken());
-          SLog.info("params[%s]", params);
-          Api.getUI(Api.SELLER_GOODS_EDIT, params, new UICallback() {
+        String path = Api.SELLER_GOODS_EDIT + "?token=" + User.getToken();
+          SLog.info("path[%s]", path);
+          Api.getUI(path, publishGoodsInfo, new UICallback() {
              @Override
              public void onFailure(Call call, IOException e) {
                  ToastUtil.showNetworkError(_mActivity, e);
