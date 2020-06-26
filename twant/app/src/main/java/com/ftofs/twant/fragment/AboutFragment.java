@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.util.Util;
 
@@ -91,7 +92,7 @@ public class AboutFragment extends BaseFragment implements View.OnClickListener 
         } else if (id == R.id.btn_check_update) {
             ((MainActivity) _mActivity).checkUpdate(true);
         } else if (id == R.id.btn_goto_rate) {
-            Util.gotoGooglePlay(_mActivity);
+            Util.gotoAppStore(_mActivity, BuildConfig.FLAVOR);
         }
     }
 }

@@ -497,74 +497,53 @@ public class Util {
 
     /**
      * 參考
-     * APP内部跳转Google Play
+     * APP内部跳转到應用商店（比如，Google Play)
      * https://www.jianshu.com/p/050dcda2603d
      * @param activity
      */
-    public static void gotoGooglePlay(Activity activity) {
+    public static void gotoAppStore(Activity activity, String flavor) {
         String packageName = activity.getPackageName();
         SLog.info("packageName[%s]", packageName);
+
+        // 应用商店的包名
+        String appStorePackageName = null;
+        // 应用商店的Url
+        String appStoreUrl = null;
+
+        // 根據不同渠道，確定應用市場的包名及URL
+        if (Constant.FLAVOR_GOOGLE.equals(flavor)) {
+            appStorePackageName = "com.android.vending";
+            appStoreUrl = "https://play.google.com/store/apps/details?id=" + packageName;
+        } else if (Constant.FLAVOR_HUAWEI.equals(flavor)) {
+            appStorePackageName = "com.huawei.appmarket";
+            appStoreUrl = "https://appgallery1.huawei.com/#/app/C101831773";
+        } else if (Constant.FLAVOR_XIAOMI.equals(flavor)) {
+            appStorePackageName = "com.xiaomi.market";
+            appStoreUrl = "http://app.xiaomi.com/details?id=" + packageName;
+        } else if (Constant.FLAVOR_TENCENT.equals(flavor)) {
+            appStorePackageName = "com.tencent.android.qqdownloader";
+            appStoreUrl = "https://a.app.qq.com/o/simple.jsp?pkgname=" + packageName;
+        }
+
+        SLog.info("appStorePackageName[%s], appStoreUrl[%s]", appStorePackageName, appStoreUrl);
+
+        if (StringUtil.isEmpty(appStorePackageName) || StringUtil.isEmpty(appStoreUrl)) {
+            return;
+        }
+
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("market://details?id=" + packageName));
-            intent.setPackage("com.android.vending"); //这里对应的是谷歌商店，跳转别的商店改成对应的即可  (如果不設置package，會調用默認的應用商店，例如 應用寶等？？？)
+            intent.setPackage(appStorePackageName); //这里对应的是应用商店的包名  (如果不設置package，會調用默認的應用商店，例如 應用寶等？？？)
             if (intent.resolveActivity(activity.getPackageManager()) != null) {
                 activity.startActivity(intent);
-            } else {//没有应用市场，通过浏览器跳转到Google Play
+            } else {//没有应用市场，通过浏览器跳转到应用市场
                 Intent intent2 = new Intent(Intent.ACTION_VIEW);
-                intent2.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+                intent2.setData(Uri.parse(appStoreUrl));
                 if (intent2.resolveActivity(activity.getPackageManager()) != null) {
                     activity.startActivity(intent2);
                 } else {
                     //没有Google Play 也没有浏览器
-                }
-            }
-        } catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
-    }
-
-    // 跳轉到應用寶
-    public static void gotoQqDownloader(Activity activity) {
-        String packageName = activity.getPackageName();
-        SLog.info("packageName[%s]", packageName);
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("market://details?id=" + packageName));
-            intent.setPackage("com.tencent.android.qqdownloader");
-            if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                activity.startActivity(intent);
-            } else {//没有应用市场，通过浏览器跳转到應用寶
-                Intent intent2 = new Intent(Intent.ACTION_VIEW);
-                intent2.setData(Uri.parse("https://a.app.qq.com/o/simple.jsp?pkgname=" + packageName));
-                if (intent2.resolveActivity(activity.getPackageManager()) != null) {
-                    activity.startActivity(intent2);
-                } else {
-                    //没有Google Play 也没有浏览器
-                }
-            }
-        } catch (Exception e) {
-            SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
-        }
-    }
-
-    // 跳轉到華為應用市場
-    public static void gotoHuawei(Activity activity) {
-        String packageName = activity.getPackageName();
-        SLog.info("packageName[%s]", packageName);
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("market://details?id=" + packageName));
-            intent.setPackage("com.huawei.appmarket");
-            if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                activity.startActivity(intent);
-            } else {//没有应用市场，通过浏览器跳转
-                Intent intent2 = new Intent(Intent.ACTION_VIEW);
-                intent2.setData(Uri.parse("https://appgallery.cloud.huawei.com/uowap/index.html#/detailApp/C10219077" + packageName));
-                if (intent2.resolveActivity(activity.getPackageManager()) != null) {
-                    activity.startActivity(intent2);
-                } else {
-                    //没有華為應用市場 也没有浏览器
                 }
             }
         } catch (Exception e) {
