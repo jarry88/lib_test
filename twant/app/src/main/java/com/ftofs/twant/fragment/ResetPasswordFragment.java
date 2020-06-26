@@ -113,6 +113,7 @@ public class ResetPasswordFragment extends BaseFragment implements
         Util.setOnClickListener(view, R.id.btn_next, this);
         Util.setOnClickListener(view, R.id.img_check, this);
         Util.setOnClickListener(view, R.id.btn_view_tos, this);
+        Util.setOnClickListener(view, R.id.btn_view_private_terms, this);
         btnNext = view.findViewById(R.id.btn_next);
         imgCheckAgree = view.findViewById(R.id.img_check);
         trueNoticeLoge = view.findViewById(R.id.item_logo);
@@ -216,8 +217,17 @@ public class ResetPasswordFragment extends BaseFragment implements
             checkAgreeState = !checkAgreeState;
             Glide.with(_mActivity).load(checkAgreeState ? R.drawable.icon_checked : R.drawable.icon_unchecked).centerCrop().into(imgCheckAgree);
             updataBtnNext();
-        } else if (id == R.id.btn_view_tos) {
-            Util.startFragment(H5GameFragment.newInstance(Constant.TOS_URL, getString(R.string.text_service_contract)));
+        } else if (id == R.id.btn_view_tos || id == R.id.btn_view_private_terms) {
+            int articleId;
+            String title;
+            if (id == R.id.btn_view_tos) {
+                articleId = H5GameFragment.ARTICLE_ID_TERMS_OF_SERVICE;
+                title = getString(R.string.text_service_contract);
+            } else {
+                articleId = H5GameFragment.ARTICLE_ID_TERMS_OF_PRIVATE;
+                title = "私隱條款";
+            }
+            Util.startFragment(H5GameFragment.newInstance(articleId, title));
         }
     }
 

@@ -1461,6 +1461,10 @@ public class Api {
     public static final String PATH_CHANNEL_UPDATE = "/app/android/channel";
 
 
+    /**
+     * 服務協議和隱私協議
+     */
+    public static final String PATH_ARTICLE_DETAIL = "/article/info_h5";
 
 
     /**

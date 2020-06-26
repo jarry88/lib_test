@@ -19,9 +19,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.ftofs.twant.BuildConfig;
 import com.ftofs.twant.R;
 import com.ftofs.twant.TwantApplication;
+import com.ftofs.twant.activity.AppGuideActivity;
+import com.ftofs.twant.activity.MainActivity;
+import com.ftofs.twant.activity.SplashActivity;
 import com.ftofs.twant.api.Api;
+import com.ftofs.twant.api.UICallback;
+import com.ftofs.twant.constant.Constant;
+import com.ftofs.twant.constant.SPField;
 import com.ftofs.twant.handler.NativeJsBridge;
 import com.ftofs.twant.interfaces.CommonCallback;
 import com.ftofs.twant.interfaces.OnConfirmCallback;
@@ -29,6 +36,7 @@ import com.ftofs.twant.log.SLog;
 import com.ftofs.twant.task.TaskObservable;
 import com.ftofs.twant.task.TaskObserver;
 import com.ftofs.twant.util.FileUtil;
+import com.ftofs.twant.util.Jarbon;
 import com.ftofs.twant.util.PathUtil;
 import com.ftofs.twant.util.PermissionUtil;
 import com.ftofs.twant.util.StringUtil;
@@ -38,12 +46,17 @@ import com.ftofs.twant.widget.TwConfirmPopup;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.interfaces.XPopupCallback;
+import com.orhanobut.hawk.Hawk;
 import com.yanzhenjie.permission.runtime.Permission;
 
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import cn.snailpad.easyjson.EasyJSONArray;
+import cn.snailpad.easyjson.EasyJSONObject;
+import okhttp3.Call;
 
 /**
  * H5游戲頁面
@@ -53,6 +66,13 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
     BasePopupView loadingPopup;
     String url;
     String customTitle; // 显示自定义的标题
+
+    public static final int ARTICLE_ID_INVALID = -1; // -1表示無效的文章Id
+    public static final int ARTICLE_ID_TERMS_OF_SERVICE = 0; // 服務協議
+    public static final int ARTICLE_ID_TERMS_OF_PRIVATE = 3; // 隱私協議
+
+    int articleId = ARTICLE_ID_INVALID;  // 文章Id
+
     private WebView mWebView;
 
     boolean ignoreSslError = true; // 忽略ssl错误
@@ -63,7 +83,7 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
     TextView tvFragmentTitle;
 
 
-    public static H5GameFragment newInstance(String url, boolean ignoreSslError, boolean reloadOnVisible, String title) {
+    public static H5GameFragment newInstance(String url, boolean ignoreSslError, boolean reloadOnVisible, String title, int articleId) {
         Bundle args = new Bundle();
 
         args.putString("url", url);
@@ -73,16 +93,27 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
 
         H5GameFragment fragment = new H5GameFragment();
         fragment.setArguments(args);
+        fragment.articleId = articleId;
 
         return fragment;
     }
 
     public static H5GameFragment newInstance(String url, boolean ignoreSslError) {
-        return newInstance(url, ignoreSslError, false, null);
+        return newInstance(url, ignoreSslError, false, null, ARTICLE_ID_INVALID);
     }
 
     public static H5GameFragment newInstance(String url, String title) {
-        return newInstance(url, true, false, title);
+        return newInstance(url, true, false, title, ARTICLE_ID_INVALID);
+    }
+
+    /**
+     * 加載指定Id的文章
+     * @param articleId
+     * @param title
+     * @return
+     */
+    public static H5GameFragment newInstance(int articleId, String title) {
+        return newInstance(null, true, false, title, articleId);
     }
 
 
@@ -113,7 +144,12 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
         mWebView=view.findViewById(R.id.x5_web_view);
         loadingPopup = Util.createLoadingPopup(_mActivity).show();
         SLog.info("mwebView url[%s]",url);
-        mWebView.loadUrl(url);
+        if (articleId == ARTICLE_ID_INVALID) {
+            mWebView.loadUrl(url);
+        } else {
+            loadPageContent();
+        }
+
         //webView = view.findViewById(R.id.web_view);
         //webView.getSettings().setJavaScriptEnabled(true);
         NativeJsBridge nativeJsBridge = new NativeJsBridge(_mActivity, this);
@@ -241,8 +277,37 @@ public class H5GameFragment extends BaseFragment implements View.OnClickListener
                 return false;
             }
         });
-     }
+    }
 
+    private void loadPageContent() {
+        if (articleId == ARTICLE_ID_INVALID) {
+            return;
+        }
+        String url = Api.PATH_ARTICLE_DETAIL + "/" + articleId;
+        SLog.info("url[%s]", url);
+        Api.getUI(url, null, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        return;
+                    }
+
+                    String htmlContent = responseObj.getSafeString("datas.articleInfo.content");
+                    mWebView.loadData(htmlContent, "text/html", "utf-8");
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {

@@ -114,6 +114,7 @@ public class PasswordLoginFragment extends BaseFragment implements
         Util.setOnClickListener(view, R.id.btn_facebook_login, this);
         Util.setOnClickListener(view, R.id.btn_mobile_zone, this);
         Util.setOnClickListener(view, R.id.btn_view_tos, this);
+        Util.setOnClickListener(view, R.id.btn_view_private_terms, this);
         Util.setOnClickListener(view, R.id.btn_forget_password, this);
         Util.setOnClickListener(view, R.id.img_check,this);
 
@@ -253,8 +254,17 @@ public class PasswordLoginFragment extends BaseFragment implements
                     .asCustom(new ListPopup(_mActivity, getResources().getString(R.string.mobile_zone_text),
                             PopupType.MOBILE_ZONE, itemList, selectedMobileZoneIndex, this))
                     .show();
-        } else if (id == R.id.btn_view_tos) {
-            Util.startFragment(H5GameFragment.newInstance(Constant.TOS_URL, getString(R.string.text_service_contract)));
+        } else if (id == R.id.btn_view_tos || id == R.id.btn_view_private_terms) {
+            int articleId;
+            String title;
+            if (id == R.id.btn_view_tos) {
+                articleId = H5GameFragment.ARTICLE_ID_TERMS_OF_SERVICE;
+                title = getString(R.string.text_service_contract);
+            } else {
+                articleId = H5GameFragment.ARTICLE_ID_TERMS_OF_PRIVATE;
+                title = "私隱條款";
+            }
+            Util.startFragment(H5GameFragment.newInstance(articleId, title));
         } else if (id == R.id.btn_forget_password) {
             Util.startFragment(ResetPasswordFragment.newInstance(Constant.USAGE_RESET_PASSWORD, false));
         } else if (id == R.id.img_check) {
