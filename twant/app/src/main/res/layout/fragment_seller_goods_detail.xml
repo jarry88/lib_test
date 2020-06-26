@@ -314,8 +314,8 @@
                     android:id="@+id/btn_edit_transaction_info"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:paddingLeft="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:paddingStart="20dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:visibility="visible">

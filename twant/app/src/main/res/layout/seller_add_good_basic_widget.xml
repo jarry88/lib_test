@@ -98,7 +98,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
 
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_across_container">
                     <com.ftofs.twant.widget.ScaledButton
                         app:icon_src="@drawable/icon_image_un_select"
 

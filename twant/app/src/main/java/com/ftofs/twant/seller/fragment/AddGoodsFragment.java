@@ -76,7 +76,7 @@ public class AddGoodsFragment extends BaseFragment
     private SimpleViewPagerAdapter mPagerAdapter;
     private List<View> mViews = new ArrayList<>();
     //    1是0否允許發佈跨城購商品
-    private int allowTariff;
+    public int allowTariff;
     //    允許添加的最大規格數量
     private int specMax;
     private List<ListPopupItem> unitList = new ArrayList<>();
