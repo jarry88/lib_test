@@ -764,7 +764,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                             if (friendInfo == null) {
                                 continue;
                             }
-                            SLog.info(conversation.toString());
+//                            SLog.info(conversation.toString());
                             String messageContent=conversation.getSafeString("messageContent");
                             if (EasyJSONBase.isJSONString(messageContent)) {
                                 messageContent = "[電子名片]";
@@ -795,10 +795,13 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                     }
                                 }
                             }
+                            SLog.info("messageFragment [%s]","0");
+
                             if (!has) {
                                 ChatConversation newChat = new ChatConversation();
                                 int time =Jarbon.parse(sendTime).getTimestamp();
                                 newChat.friendInfo = friendInfo;
+                                SLog.info("messageFragment [%s]","1");
 
                                 newChat.lastMessageType = Constant.CHAT_MESSAGE_TYPE_TXT;
                                 newChat.lastMessage = "txt::"+messageContent+":";
@@ -819,12 +822,16 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
                                 conversation1.timestamp = time;
                                 conversation1.save();
 //                                newChat.timestamp = sendTime;
+                                SLog.info("messageFragment [%s]","second");
+
                                 chatConversationList.add(newChat);
                             }
                         }
                     }
 //                    if (chatConversationList.size() > oldCount) {
-                        adapter.notifyDataSetChanged();
+                    SLog.info("messageFragment [%s]","3");
+
+                    adapter.notifyDataSetChanged();
 //                    }
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));

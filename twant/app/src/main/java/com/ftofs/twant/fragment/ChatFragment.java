@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -105,6 +106,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import cn.snailpad.easyjson.EasyJSONException;
 import cn.snailpad.easyjson.EasyJSONObject;
@@ -350,6 +352,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
     private void loadHistoryMessage(int pagesize) {
         try {
+            SLog.info("执行了一次数据刷新");
+
+
             EMClient.getInstance().chatManager().fetchHistoryMessages(
                     yourMemberName,EMConversation.EMConversationType.Chat, pagesize, "");
             final List<EMMessage> msgs = conversation.getAllMessages();
@@ -360,19 +365,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 messageId = chatMessageList.get(0).messageId;
             }
             int dbCount = (loadFromDB(messageId, pagesize));
+            SLog.info("list有%d条",chatMessageList.size());
+
             if (dbCount == pagesize) {
                 SLog.info("本地获取成功,获取条数[%s]",dbCount);
                 uiHandler.sendMessage(new Message());
                 return;
             }
-//            EMClient.getInstance().chatManager().f
+            SLog.info("list有%d条",chatMessageList.size());
+
             EMClient.getInstance().chatManager().asyncFetchHistoryMessage(conversation.conversationId(), conversation.getType(), pagesize-dbCount,messageId, new EMValueCallBack<EMCursorResult<EMMessage>>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onSuccess(EMCursorResult<EMMessage> emMessageEMCursorResult) {
 
-                    SLog.info("异步获取成功,获取条数 %d",conversation.getAllMessages().size());
+//                    SLog.info("异步获取成功,获取条数 %d",conversation.getAllMessages().size());
                     List<EMMessage> messages = emMessageEMCursorResult.getData();
                     if (messages != null&&messages.size()>0) {
+                        SLog.info("异步获取成功,获取条数 %d",messages.size());
                         int i=0;
                         Conversation dbItem=Conversation.getByMemberName(yourMemberName);
                         if (dbItem == null) {
@@ -387,10 +397,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                             if (ChatUtil.getIntMessageType(emMessage)==0) {
                                 continue;
                             }
-                            chatMessageList.add(i,emMessageToChatMessage(emMessage));
-                            dbItem.allEMMessage.add(i++, emMessage);
+                            SLog.info("messageId[%s] messageBody[%s],messageTime[%s]",emMessage.getMsgId(),emMessage.getBody(),emMessage.getMsgTime());
+                            if (chatMessageList.stream().filter(item -> item.messageId == emMessage.getMsgId()
+                            ).collect(Collectors.toList()).size() == 0) {
+//                                chatMessageList.add(i,emMessageToChatMessage(emMessage));
+                                SLog.info("添加了一条 %s",emMessage.getBody());
+                                dbItem.allEMMessage.add(i++, emMessage);
+                            }
                         }
+
                         dbItem.save();
+                        SLog.info("dbItem有%d条",dbItem.allEMMessage.size());
+
                     } else {
                         SLog.info("没有更多记录了");
                     }
@@ -624,8 +642,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         });
     }
     private void loadChatData() {
-        SLog.info("trueName%s",yourTrueName);
-
         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(yourMemberName);
         if (conversation == null) {
             return;
@@ -637,8 +653,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
         SLog.info("消息條數[%d]", messages.size());
 
         EMMessage lastMessage = null;
+        int pagesize = 20;
 
         if (messages.size() == 0) {
+            int dbCount=loadFromDB(startMsgId,pagesize);
+//            if (dbCount == 0) {
+//                swipeRefreshLayout.setRefreshing(true);
+//                loadHistoryMessage(pagesize);
+//                new Handler().postDelayed(() -> {
+//                    swipeRefreshLayout.setRefreshing(false);
+//
+//                },1000);
+//            }
             return;
         }
 
@@ -651,14 +677,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
 
             chatMessageList.add(emMessageToChatMessage(lastMessage));
         }
-        if (messages != null) {
+        if (messages != null&&messages.size()>0) {
             startMsgId = messages.get(0).getMsgId();
         }
         //SDK初始化加载的聊天记录为20条，到顶时需要去DB里获取更多
         //获取startMsgId之前的pagesize条消息，此方法获取的messages SDK会自动存入到此会话中，APP中无需再次把获取到的messages添加到会话中
-        int pagesize = 20;
 
-        int dbCount=loadFromDB(startMsgId,pagesize);
+
         /*
         if (lastMessage != null) {
             SLog.info("lastMessage[%s]", lastMessage.toString());
@@ -681,6 +706,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
                 continue;
             }
             chatMessageList.add(i++,emMessageToChatMessage(emMessage));
+            SLog.info("添加了%s条",emMessage.getBody());
         }
         if (messages == null) {
             return 0;
@@ -1708,6 +1734,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener,
             super.handleMessage(msg);
 
             ChatFragment chatFragment = weakReference.get();
+            chatFragment.setShowTimestamp(chatFragment.chatMessageList);
             chatFragment.chatMessageAdapter.notifyDataSetChanged();
             chatFragment.swipeRefreshLayout.setRefreshing(false);
         }
