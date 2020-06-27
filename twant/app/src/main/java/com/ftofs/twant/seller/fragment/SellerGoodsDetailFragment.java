@@ -69,6 +69,8 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     private LinearLayout btnEditFreightInfo;
     private LinearLayout btnEditOtherInfo;
     public int allowTariff;
+    public int joinBigSale;
+    public double goodsFreight;
 
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
@@ -188,8 +190,11 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
 
                     double freightWeight = goodsVo.getDouble("freightWeight");
                     double freightVolume = goodsVo.getDouble("freightVolume");
+                    goodsFreight = goodsVo.getDouble("goodsFreight");
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
+                    joinBigSale = goodsVo.getInt("joinBigSale");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_participate_bargain)).setText(joinBigSale==1?"是":"否");
 
                     specJsonVoList = goodsVo.getSafeArray("specJsonVoList");
                     updateGoodsSpecView();

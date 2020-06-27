@@ -803,7 +803,7 @@
                         android:id="@+id/tv_goods_publish_way"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:textColor="@color/tw_black"
                         android:textSize="15sp"
                         android:text="立即發布">
@@ -830,7 +830,7 @@
                         android:id="@+id/tv_goods_participate_bargain"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:textColor="@color/tw_black"
                         android:textSize="15sp"
                         android:text="是">

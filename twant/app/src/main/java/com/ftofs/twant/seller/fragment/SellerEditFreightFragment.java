@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,11 +14,7 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.config.Config;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.domain.AdminCountry;
-import com.ftofs.twant.domain.goods.Category;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -30,24 +25,33 @@ import com.ftofs.twant.util.StringUtil;
 import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
+import com.ftofs.twant.widget.FixedEditText;
+import com.ftofs.twant.widget.ListPopup;
+import com.ftofs.twant.widget.ScaledButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-class SellerEditFreightFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+/**
+ * @author gzp
+ */
+public class SellerEditFreightFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     TextView tvTitle;
-    private int goodsModal=-1;//銷售模式 銷售模式 0零售 1跨城購 2虛擬 【必填】
-    private EasyJSONArray unitList;
     private EasyJSONObject publishGoodsInfo= new EasyJSONObject();
-    private EasyJSONArray specJsonVoList;
-    private String unitName;
-    private int commonId;
     SellerGoodsDetailFragment parent;
+    private int freightTemplateId;
+    private boolean useFixedFreight;
+    private int freightRuleIndex;
+    private List<ListPopupItem> freightList=new ArrayList<>();
+    private String freightTitle;
+    private double goodsFreight;
 
     public static SellerEditFreightFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditFreightFragment fragment= new SellerEditFreightFragment();
@@ -74,21 +78,37 @@ class SellerEditFreightFragment extends BaseFragment implements View.OnClickList
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
 
-        tvTitle.setText("基本物流信息");
+        tvTitle.setText("编辑物流信息");
 
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
-        Util.setOnClickListener(view, R.id.tv_add_good_unit, this);
         Util.setOnClickListener(view, R.id.btn_ok, this);
-        TextView btnGoodCategory =view.findViewById(R.id.btn_select_category_id);
-        btnGoodCategory.setOnClickListener(v -> {
-            hideSoftInput();
-            new XPopup.Builder(_mActivity)
-                    // 如果不加这个，评论弹窗会移动到软键盘上面
-                    .moveUpToKeyboard(false)
-                    .asCustom(new StoreLabelPopup(_mActivity, PopupType.STORE_LABEL,this))
-                    .show();
+        Util.setOnClickListener(view, R.id.tv_add_freight_rule, this);
+        FixedEditText fetFreight = view.findViewById(R.id.et_add_fixed_freight);
+        fetFreight.setFixedText("$ ");
+//        ScaledButton sbFixedFreight
+
+        ScaledButton sbFreightTemple = view.findViewById(R.id.sb_freight_temple);
+
+        ScaledButton sbFixedTemple = view.findViewById(R.id.sb_freight_solid);
+        sbFixedTemple.setButtonCheckedBlue();
+        sbFreightTemple.setButtonCheckedBlue();
+        sbFixedTemple.setOnClickListener(v ->  {
+            if (!sbFixedTemple.isChecked()) {
+                sbFixedTemple.setChecked(true);
+                freightTemplateId = -1;
+            }
+            sbFreightTemple.setChecked(false);
+            useFixedFreight = sbFixedTemple.isChecked();
         });
+        sbFreightTemple.setOnClickListener(v -> {
+            if (!sbFreightTemple.isChecked()) {
+                sbFreightTemple.setChecked(true);
+            }
+            sbFixedTemple.setChecked(false);
+            useFixedFreight = !sbFreightTemple.isChecked();
+        });
+        sbFixedTemple.performClick();
     }
 
     @Override
@@ -99,14 +119,63 @@ class SellerEditFreightFragment extends BaseFragment implements View.OnClickList
         } else {
             explainData();
         }
+        loadFreightListDate();
     }
 
     private void explainData() {
-        if (parent.unitList.isEmpty()) {
-//            loadUnitListDate();
-        }
+        goodsFreight = parent.goodsFreight;
     }
+    private void loadFreightListDate() {
+        if (!freightList.isEmpty()) {
+            for (ListPopupItem item : freightList) {
+                item.title.equals(freightTitle);
+                freightRuleIndex = item.id;
+            }
+//            onSelected(PopupType.GOODS_UNITY,unityIndex,parent.unitList.get(unityIndex));
+            return;
+        }
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE;
 
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.getUI(url, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    EasyJSONObject data = responseObj.getObject("datas");
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        hideSoftInput();
+                        return;
+                    }
+                    updateFreightView(data);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
+    private void updateFreightView(EasyJSONObject data)throws Exception {
+        EasyJSONArray freightTemplateList = data.getArray("freightTemplateList");
+        if(freightTemplateList!=null){
+            freightList.clear();
+
+            for (Object object : freightTemplateList) {
+                int freightId =((EasyJSONObject)object).getInt("freightId");
+                String title = ((EasyJSONObject) object).getSafeString("title");
+                freightList.add(new ListPopupItem(freightId, title, title));
+            }
+        }
+
+    }
     private void loadData() {
         String token = User.getToken();
         if (StringUtil.isEmpty(token)) {
@@ -164,19 +233,49 @@ class SellerEditFreightFragment extends BaseFragment implements View.OnClickList
             }
         });
     }
-    private boolean checkTransactionInfo() {
-
-        if (StringUtil.isEmpty(unitName)) {
-            ToastUtil.error(_mActivity,"請選擇計量單位");
-            return false;
-        }
-        if (goodsModal < 0) {
-            ToastUtil.error(_mActivity,"請選擇銷售模式");
-            return false;
-        }
+    private boolean checkFreightInfo() {
         try{
-            publishGoodsInfo.set("unitName", unitName);
-            publishGoodsInfo.set("goodsModal", goodsModal);
+
+            View view = getView();
+            FixedEditText etFreight = view.findViewById(R.id.et_add_fixed_freight);
+            String freightText = etFreight.getText()==null?"":etFreight.getText().toString();
+            if (useFixedFreight) {
+                if (StringUtil.isEmpty(freightText)) {
+                    ToastUtil.error(_mActivity, "請填寫運費");
+                    return false;
+                }
+            } else {
+                if (freightTemplateId < 0) {
+                    ToastUtil.error(_mActivity, "請選擇運費模板");
+                    return false;
+                }
+            }
+            EditText etW=view.findViewById(R.id.et_freight_weight);
+            EditText etV=view.findViewById(R.id.et_freight_v);
+            String freightWeightStr = etW.getText()==null?"":etW.getText().toString();
+            String freightVolumeStr = etV.getText()==null?"":etV.getText().toString();
+
+            try{
+                publishGoodsInfo.set("commonId", parent.commonId);
+                publishGoodsInfo.set("editType", 5);
+                if (freightTemplateId >= 0) {
+                    publishGoodsInfo.set("freightTemplateId", freightTemplateId);
+                } else {
+                    double goodsFreight = Double.parseDouble(freightText);
+                    publishGoodsInfo.set("goodsFreight", goodsFreight);
+                }
+                if (!StringUtil.isEmpty(freightWeightStr)) {
+
+                    publishGoodsInfo.set("freightWeight", Double.parseDouble(freightWeightStr));
+                }
+                if (!StringUtil.isEmpty(freightVolumeStr)) {
+
+                    publishGoodsInfo.set("freightVolume", Double.parseDouble(freightVolumeStr));
+                }
+            }catch (Exception e) {
+                SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+            }
+
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -199,18 +298,20 @@ class SellerEditFreightFragment extends BaseFragment implements View.OnClickList
             hideSoftInputPop();
         }
         if (id == R.id.btn_ok) {
-            if (checkTransactionInfo()) {
+            if (checkFreightInfo()) {
                 parent.saveGoodsInfo(publishGoodsInfo, new SimpleCallback() {
                     @Override
                     public void onSimpleCall(Object data) {
-                        SLog.info("sdjf");
+                        ToastUtil.success(_mActivity,data.toString());
                     }
                 });
             }
 
         }
-        if (id == R.id.tv_add_good_unit) {
-            SLog.info("添加單位");
+        if (id == R.id.tv_add_freight_rule) {
+
+            hideSoftInput();
+            new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(new ListPopup(_mActivity, "物流規則", PopupType.GOODS_FREIGHT_RULE, freightList, freightRuleIndex, this)).show();
         }
 
     }

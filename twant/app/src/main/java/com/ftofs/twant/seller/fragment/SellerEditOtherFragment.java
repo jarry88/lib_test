@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
 import com.ftofs.twant.widget.ScaledButton;
+import com.kyleduo.switchbutton.SwitchButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -40,21 +42,15 @@ import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-class SellerEditOtherFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class SellerEditOtherFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     TextView tvTitle;
-    private int goodsModal=-1;//銷售模式 銷售模式 0零售 1跨城購 2虛擬 【必填】
     private EasyJSONObject publishGoodsInfo= new EasyJSONObject();
-    private EasyJSONArray specJsonVoList;
-    private String unitName;
-    private int commonId;
     SellerGoodsDetailFragment parent;
-    private int unityIndex;
-    private TextView tvAddGoodUnit;
-    private ScaledButton sbRetail;
-    private ScaledButton sbVirtual;
-    private ScaledButton sbAcross;
-    private int isVirtual;
-    private int tariffEnable;
+    private SwitchButton sbJoinActivity;
+    private int joinBigSale;
+    private int goodsState;
+    private ScaledButton sbInstancePublish;
+    private ScaledButton sbAddHub;
 
     public static SellerEditOtherFragment newInstance(SellerGoodsDetailFragment parent) {
         SellerEditOtherFragment fragment= new SellerEditOtherFragment();
@@ -67,7 +63,6 @@ class SellerEditOtherFragment extends BaseFragment implements View.OnClickListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_seller_goods_other_edit, container, false);
-
         return view;
     }
 
@@ -80,13 +75,36 @@ class SellerEditOtherFragment extends BaseFragment implements View.OnClickListen
     private void initView() {
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
-        tvTitle.setText("基本交易信息");
+        tvTitle.setText("编辑其它信息");
 
-        tvAddGoodUnit = view.findViewById(R.id.tv_add_good_unit);
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
 
         Util.setOnClickListener(view, R.id.btn_ok, this);
+
+        sbInstancePublish = view.findViewById(R.id.sb_instance_publish);
+        sbAddHub = view.findViewById(R.id.sb_add_hub);
+
+        LinearLayout llAddHub =view.findViewById(R.id.ll_add_hub);
+        LinearLayout llInstancePublish =view.findViewById(R.id.ll_instance_publish);
+        sbInstancePublish.setButtonCheckedBlue();
+        sbAddHub.setButtonCheckedBlue();
+        llAddHub.setOnClickListener(v ->{
+            if (!sbAddHub.isChecked()) {
+                sbAddHub.setChecked(true);
+                goodsState = Constant.FALSE_INT;
+                sbInstancePublish.setChecked(false);
+            }
+        });
+        llInstancePublish.setOnClickListener(v ->{
+            if (!sbInstancePublish.isChecked()) {
+                sbInstancePublish.setChecked(true);
+                goodsState = Constant.TRUE_INT;
+                sbAddHub.setChecked(false);
+            }
+        });
+        llInstancePublish.performClick();
+        sbJoinActivity = view.findViewById(R.id.sb_join_activity);
 
     }
 
@@ -102,9 +120,8 @@ class SellerEditOtherFragment extends BaseFragment implements View.OnClickListen
 
     private void explainData() {
         try{
-            tariffEnable = parent.goodsVo.getInt("tariffEnable");
-            isVirtual = parent.goodsVo.getInt("isVirtual");
-            unitName = parent.unitName;
+
+            joinBigSale = parent.joinBigSale;
             updateView();
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -112,29 +129,10 @@ class SellerEditOtherFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void updateView() {
-        tvAddGoodUnit.setText(unitName);
-        if (isVirtual==1) {
-            goodsModal =1;
-        } else if (tariffEnable == 1) {
-            goodsModal = 2;
-        }else {
-            goodsModal = 0;
-        }
+        sbJoinActivity.setChecked(joinBigSale==1);
     }
-    private void updateBasicView(EasyJSONObject data) throws Exception{
+    private void updateOtherView(EasyJSONObject data) throws Exception{
 
-        EasyJSONArray unitListJson =data.getArray("unitList");
-        if (unitListJson != null) {
-            parent.unitList.clear();
-            for (Object object : unitListJson) {
-                ListPopupItem item = new ListPopupItem(0,"",null);
-                item.id = ((EasyJSONObject) object).getInt("id");
-                item.title = ((EasyJSONObject) object).getSafeString("name");
-                item.data = item.title;
-                parent.unitList.add(item);
-            }
-            onSelected(PopupType.GOODS_UNITY,unityIndex,parent.unitList.get(unityIndex));
-        }
     }
 
     private void loadData() {
@@ -175,11 +173,10 @@ class SellerEditOtherFragment extends BaseFragment implements View.OnClickListen
                     }
 
                     EasyJSONObject goodsVo = responseObj.getSafeObject("datas.GoodsVo");
-                    parent.goodsVo=goodsVo;
-                    unitName = goodsVo.getSafeString("unitName");
-                    isVirtual = goodsVo.getInt("isVirtual");
-                    tariffEnable = goodsVo.getInt("tariffEnable");
-                    updateView();
+                    parent.goodsVo = goodsVo;
+                    parent.commonId = goodsVo.getInt("commonId");
+                    parent.joinBigSale = goodsVo.getInt("joinBigSale");
+                    explainData();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -187,21 +184,15 @@ class SellerEditOtherFragment extends BaseFragment implements View.OnClickListen
         });
     }
 
-    private boolean checkTransactionInfo() {
+    private boolean checkOtherInfo() {
+        joinBigSale = sbJoinActivity.isChecked() ? Constant.TRUE_INT : Constant.FALSE_INT;
+        goodsState = sbInstancePublish.isChecked() ? 1 : 0;
 
-        if (StringUtil.isEmpty(unitName)) {
-            ToastUtil.error(_mActivity,"請選擇計量單位");
-            return false;
-        }
-        if (goodsModal < 0) {
-            ToastUtil.error(_mActivity,"請選擇銷售模式");
-            return false;
-        }
-        try{
-            publishGoodsInfo.set("commonId", commonId);
-            publishGoodsInfo.set("editType", 2);
-            publishGoodsInfo.set("unitName", unitName);
-            publishGoodsInfo.set("goodsModal", goodsModal);
+        try {
+            publishGoodsInfo.set("joinBigSale", joinBigSale);
+            publishGoodsInfo.set("goodsState", goodsState);
+            publishGoodsInfo.set("commonId", parent.commonId);
+            publishGoodsInfo.set("editType", 6);
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -222,7 +213,7 @@ class SellerEditOtherFragment extends BaseFragment implements View.OnClickListen
             hideSoftInputPop();
         }
         if (id == R.id.btn_ok) {
-            if (checkTransactionInfo()) {
+            if (checkOtherInfo()) {
                 parent.saveGoodsInfo(publishGoodsInfo, new SimpleCallback() {
                     @Override
                     public void onSimpleCall(Object data) {
@@ -234,13 +225,7 @@ class SellerEditOtherFragment extends BaseFragment implements View.OnClickListen
 
         }
         if (id == R.id.tv_add_good_unit) {
-            SLog.info("添加單位");
 
-            new XPopup.Builder(_mActivity)
-                    .moveUpToKeyboard(false)
-                    .asCustom(new ListPopup(_mActivity,"計量單位",
-                            PopupType.GOODS_UNITY,parent.unitList, unityIndex,this))
-                    .show();
         }
 
     }
