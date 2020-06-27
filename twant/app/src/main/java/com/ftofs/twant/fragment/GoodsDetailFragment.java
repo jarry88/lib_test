@@ -1431,11 +1431,14 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                                     SLog.info("imageUrl[%s],v[%s]", imageUrl,v instanceof DataImageView);
                                     int currImageIndex = (int) ((DataImageView) v).getCustomData();
                                     Util.startFragment(ImageFragment.newInstance(currImageIndex, goodsDetailImageList));
+
                                 }
                             });
                             // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
                             // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
-                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).apply(RequestOptions.bitmapTransform(new RoundedCorners(1))).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
+                            String smallImageUrl = StringUtil.normalizeImageUrl(imageUrl, "?x-oss-process=image/resize,w_800"); // 限定宽度，防止加载图片OOM
+                            SLog.info("smallImageUrl[%s]", smallImageUrl);
+                            Glide.with(llGoodsDetailImageContainer).load(smallImageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
                             llGoodsDetailImageContainer.addView(imageView);
 
                             goodsDetailImageList.add(StringUtil.normalizeImageUrl(imageUrl));
