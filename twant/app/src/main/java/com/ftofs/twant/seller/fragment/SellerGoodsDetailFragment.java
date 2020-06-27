@@ -71,6 +71,14 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
     public int allowTariff;
     public int joinBigSale;
     public double goodsFreight;
+    public double freightWeight;
+    public double freightVolume;
+    public int freightTemplateId;
+    public String storeLabelNames;
+    private TextView tvGoodsDetailVideoUrl;
+    private String goodsDetailVideoUrl;
+    public String formatTopName;
+    public String formatBottomName;
 
 
     public static SellerGoodsDetailFragment newInstance(int commonId, String goodsImageUrl) {
@@ -105,6 +113,7 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
         btnEditOtherInfo =view.findViewById(R.id.btn_seller_goods_other_edit);
         twBlack = _mActivity.getColor(R.color.tw_black);
         tvGoodsVideoUrl = view.findViewById(R.id.tv_goods_video_url);
+        tvGoodsDetailVideoUrl = view.findViewById(R.id.tv_introduction_video_url);
 
         Util.setOnClickListener(view, R.id.btn_edit_basic_info, this);
         Util.setOnClickListener(view, R.id.btn_edit_transaction_info, this);
@@ -182,15 +191,19 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     ((TextView) contentView.findViewById(R.id.tv_goods_jingle)).setText(goodsVo.getSafeString("jingle"));
                     ((TextView) contentView.findViewById(R.id.tv_brand)).setText(goodsVo.getSafeString("brandName"));
                     ((TextView) contentView.findViewById(R.id.tv_brand_location)).setText(goodsVo.getSafeString("goodsCountryName"));
+                    formatTopName=goodsVo.getSafeString("formatTopName");
+                    formatBottomName=goodsVo.getSafeString("formatBottomName");
+                    ((TextView) contentView.findViewById(R.id.tv_top_name)).setText(formatTopName);
+                    ((TextView) contentView.findViewById(R.id.tv_bottom_name)).setText(formatBottomName);
+                    storeLabelNames = goodsVo.getSafeString("storeLabelNames");
+                    ((TextView) contentView.findViewById(R.id.tv_goods_category_in_store)).setText(storeLabelNames);
                     unitName = goodsVo.getSafeString("unitName");
                     ((TextView) contentView.findViewById(R.id.tv_unit)).setText(unitName);
 
                     int isVirtual = goodsVo.getInt("isVirtual");
                     ((TextView) contentView.findViewById(R.id.tv_sale_way)).setText(isVirtual == Constant.TRUE_INT ? "虛擬商品" : "零售商品");
 
-                    double freightWeight = goodsVo.getDouble("freightWeight");
-                    double freightVolume = goodsVo.getDouble("freightVolume");
-                    goodsFreight = goodsVo.getDouble("goodsFreight");
+                    explainFreight();
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("重量：" + StringUtil.formatFloat(freightWeight) + "kg");
                     ((TextView) contentView.findViewById(R.id.tv_goods_weight)).setText("體積：" + StringUtil.formatFloat(freightVolume) + "m3");
                     joinBigSale = goodsVo.getInt("joinBigSale");
@@ -200,9 +213,13 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                     updateGoodsSpecView();
 
                     goodsVideoUrl = goodsVo.getSafeString("goodsVideo");
+                    goodsDetailVideoUrl = goodsVo.getSafeString("detailVideo");
                     if (!StringUtil.isEmpty(goodsVideoUrl)) {
                         tvGoodsVideoUrl.setText(Html.fromHtml("<u>" + goodsVideoUrl + "</u>"));
                         tvGoodsVideoUrl.setOnClickListener(SellerGoodsDetailFragment.this);
+                    }if (!StringUtil.isEmpty(goodsDetailVideoUrl)) {
+                        tvGoodsDetailVideoUrl.setText(Html.fromHtml("<u>" + goodsDetailVideoUrl + "</u>"));
+                        tvGoodsDetailVideoUrl.setOnClickListener(SellerGoodsDetailFragment.this);
                     }
 
                     mobileBodyVoList = goodsVo.getArray("mobileBodyVoList");
@@ -213,6 +230,14 @@ public class SellerGoodsDetailFragment extends BaseFragment implements View.OnCl
                 }
             }
         });
+    }
+
+    public void explainFreight() throws Exception{
+        freightWeight = goodsVo.getDouble("freightWeight");
+        freightVolume = goodsVo.getDouble("freightVolume");
+        goodsFreight = goodsVo.getDouble("goodsFreight");
+        freightTemplateId = goodsVo.getInt("freightTemplateId");
+
     }
 
     private void updateGoodsSpecView() {

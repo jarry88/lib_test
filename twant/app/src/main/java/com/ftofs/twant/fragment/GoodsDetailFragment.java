@@ -1431,7 +1431,7 @@ public class GoodsDetailFragment extends BaseFragment implements View.OnClickLis
                             });
                             // 加上.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)，防止加載長圖模糊的問題
                             // 參考 Glide加载图片模糊问题   https://blog.csdn.net/sinat_26710701/article/details/89384579
-                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).apply(RequestOptions.bitmapTransform(new RoundedCorners(1))).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
+                            Glide.with(llGoodsDetailImageContainer).load(imageUrl).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(imageView);
                             llGoodsDetailImageContainer.addView(imageView);
 
                             goodsDetailImageList.add(StringUtil.normalizeImageUrl(imageUrl));

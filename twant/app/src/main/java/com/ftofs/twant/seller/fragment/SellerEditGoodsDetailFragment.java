@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,10 +15,10 @@ import androidx.annotation.Nullable;
 import com.ftofs.twant.R;
 import com.ftofs.twant.api.Api;
 import com.ftofs.twant.api.UICallback;
-import com.ftofs.twant.constant.Constant;
 import com.ftofs.twant.constant.PopupType;
-import com.ftofs.twant.domain.AdminCountry;
+import com.ftofs.twant.domain.Format;
 import com.ftofs.twant.domain.goods.Category;
+import com.ftofs.twant.domain.store.StoreLabel;
 import com.ftofs.twant.entity.ListPopupItem;
 import com.ftofs.twant.fragment.BaseFragment;
 import com.ftofs.twant.interfaces.OnSelectedListener;
@@ -31,23 +30,35 @@ import com.ftofs.twant.util.ToastUtil;
 import com.ftofs.twant.util.User;
 import com.ftofs.twant.util.Util;
 import com.ftofs.twant.widget.ListPopup;
-import com.ftofs.twant.widget.ScaledButton;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.snailpad.easyjson.EasyJSONArray;
 import cn.snailpad.easyjson.EasyJSONObject;
 import okhttp3.Call;
 
-class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
+public class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClickListener, OnSelectedListener {
     TextView tvTitle;
     private EasyJSONObject publishGoodsInfo= new EasyJSONObject();
-    private EasyJSONArray specJsonVoList;
-    private String unitName;
     private int commonId;
     SellerGoodsDetailFragment parent;
+    private int formatBottomIndex;
+    private int formatTopIndex;
+    private Integer formatTop;
+    private Integer formatBottom;
+    private EditText  etVideos;
+    private int storeLabelId;
+    private List<Category> selectCategoryList=new ArrayList<>();
+    private EasyJSONArray storeLabelIdList=new EasyJSONArray();
+    private String storeLabelNames;
+    private TextView tvCategory;
+    private TextView  tvFormatTop;
+    private TextView  tvFormatBottom;
+    private TextView tvAddGoodsBody;
 
 
     public static SellerEditGoodsDetailFragment newInstance(SellerGoodsDetailFragment parent) {
@@ -74,13 +85,24 @@ class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClick
     private void initView() {
         View view = getView();
         tvTitle = view.findViewById(R.id.tv_title);
-        tvTitle.setText("基本交易信息");
+        tvTitle.setText("编辑详情信息");
 
+        etVideos = view.findViewById(R.id.et_goods_video_url);
+        tvCategory = view.findViewById(R.id.tv_select_store_category);
         view.findViewById(R.id.ll_bottom_container).setVisibility(View.GONE);
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
 
         Util.setOnClickListener(view, R.id.btn_ok, this);
+        Util.setOnClickListener(view, R.id.btn_back, this);
 
+        Util.setOnClickListener(view, R.id.btn_select_store_category_id, this);
+        tvAddGoodsBody =view.findViewById(R.id.btn_add_app_description);
+        tvFormatTop =view.findViewById(R.id.tv_format_top);
+        tvFormatBottom =view.findViewById(R.id.tv_format_bottom);
+//        tvAddGoodsBody.setOnClickListener(v -> {
+//            rlDetailBody.setVisibility(View.VISIBLE);
+//        });
+        loadDetailDate();
     }
 
     @Override
@@ -95,7 +117,14 @@ class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClick
 
     private void explainData() {
         try{
-            unitName = parent.unitName;
+            storeLabelNames = parent.storeLabelNames;
+            if (!StringUtil.isEmpty(parent.formatBottomName)) {
+                tvFormatBottom.setText(parent.formatBottomName);
+            }
+            if (!StringUtil.isEmpty(parent.formatTopName)) {
+                tvFormatTop.setText(parent.formatTopName);
+            }
+//            storeLabelIdList = parent.storeLabelIdList;
             updateView();
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
@@ -103,21 +132,9 @@ class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClick
     }
 
     private void updateView() {
+        tvCategory.setText(storeLabelNames);
     }
-    private void updateBasicView(EasyJSONObject data) throws Exception{
 
-        EasyJSONArray unitListJson =data.getArray("unitList");
-        if (unitListJson != null) {
-            parent.unitList.clear();
-            for (Object object : unitListJson) {
-                ListPopupItem item = new ListPopupItem(0,"",null);
-                item.id = ((EasyJSONObject) object).getInt("id");
-                item.title = ((EasyJSONObject) object).getSafeString("name");
-                item.data = item.title;
-                parent.unitList.add(item);
-            }
-        }
-    }
 
     private void loadData() {
         String token = User.getToken();
@@ -158,8 +175,10 @@ class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClick
 
                     EasyJSONObject goodsVo = responseObj.getSafeObject("datas.GoodsVo");
                     parent.goodsVo=goodsVo;
-                    unitName = goodsVo.getSafeString("unitName");
-                    updateView();
+                    parent.commonId = goodsVo.getInt("commonId");
+                    parent.formatTopName = goodsVo.getSafeString("formatTopName");
+                    parent.formatBottomName = goodsVo.getSafeString("formatBottomName");
+                    explainData();
                 } catch (Exception e) {
                     SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
                 }
@@ -167,12 +186,28 @@ class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClick
         });
     }
 
-    private boolean checkTransactionInfo() {
+    private boolean checkDetailInfo() {
+        String detailVideo = "";
+        if (etVideos.getText() != null) {
+            detailVideo = etVideos.getText().toString();
+        }
+        if (storeLabelId <=0) {
+            ToastUtil.error(_mActivity,"請選擇店内分類");
+            return false;
+        }
 
         try{
-            publishGoodsInfo.set("commonId", commonId);
-            publishGoodsInfo.set("editType", 2);
-            publishGoodsInfo.set("unitName", unitName);
+            publishGoodsInfo.set("commonId", parent.commonId);
+            publishGoodsInfo.set("editType", 4);
+            publishGoodsInfo.set("storeLabelIdList", storeLabelIdList);
+            publishGoodsInfo.set("detailVideo", detailVideo);
+            if (formatBottom > 0) {
+                publishGoodsInfo.set("formatBottom", formatBottom);
+            }
+            if (formatTop > 0) {
+                publishGoodsInfo.set("formatTop", formatTop);
+            }
+//            goodsMobileBodyVoList
         }catch (Exception e) {
             SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
         }
@@ -193,7 +228,7 @@ class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClick
             hideSoftInputPop();
         }
         if (id == R.id.btn_ok) {
-            if (checkTransactionInfo()) {
+            if (checkDetailInfo()) {
                 parent.saveGoodsInfo(publishGoodsInfo, new SimpleCallback() {
                     @Override
                     public void onSimpleCall(Object data) {
@@ -204,14 +239,130 @@ class SellerEditGoodsDetailFragment extends BaseFragment implements View.OnClick
             }
 
         }
-        if (id == R.id.tv_add_good_unit) {
-            SLog.info("添加單位");
-        }
 
     }
 
+    private void loadDetailDate() {
+        EasyJSONObject params = EasyJSONObject.generate("token", User.getToken());
+        String url = Api.PATH_SELLER_GOODS_PUBLISH_PAGE;
+
+        SLog.info("url[%s], params[%s]", url, params);
+        Api.getUI(url, params, new UICallback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                ToastUtil.showNetworkError(_mActivity, e);
+            }
+
+
+            @Override
+            public void onResponse(Call call, String responseStr) throws IOException {
+                try {
+                    SLog.info("responseStr[%s]", responseStr);
+
+                    EasyJSONObject responseObj = EasyJSONObject.parse(responseStr);
+                    EasyJSONObject data = responseObj.getObject("datas");
+                    if (ToastUtil.checkError(_mActivity, responseObj)) {
+                        hideSoftInput();
+                        return;
+                    }
+                    updateDetailView(data);
+                } catch (Exception e) {
+                    SLog.info("Error!message[%s], trace[%s]", e.getMessage(), Log.getStackTraceString(e));
+                }
+            }
+        });
+    }
+    //    更新商品详情页数据
+    private void updateDetailView(EasyJSONObject data) throws Exception{
+        EasyJSONArray storeLabelList = data.getArray("storeLabelList");
+        if (storeLabelList != null) {
+            List<StoreLabel> list = new ArrayList<>();
+            for (Object o : storeLabelList) {
+                list.add(StoreLabel.parse(((EasyJSONObject) o)));
+            }
+            TextView tvSelect=getView().findViewById(R.id.btn_select_store_category_id);
+            tvSelect.setOnClickListener(v ->{
+                hideSoftInput();
+                if (list != null && list.size() != 0) {
+                    new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
+                            new StoreLabelPopup(_mActivity, PopupType.STORE_CATEGORY, list, this)
+                    ).show();
+                } else {
+                    ToastUtil.error(_mActivity,"當前店鋪沒有分類數據");
+                    storeLabelId = 0;
+                }
+            });
+        }
+
+        EasyJSONArray formatBottomList = data.getArray("formatBottomList");
+
+        if (formatBottomList != null) {
+            List<ListPopupItem> list = new ArrayList<>();
+            for (Object o : formatBottomList) {
+                Format format = Format.parse(((EasyJSONObject) o));
+                ListPopupItem item = new ListPopupItem(format.getFormatId(),format.getFormatName(),format);
+                list.add(item);
+            }
+            TextView tvBottom=getView().findViewById(R.id.tv_format_bottom);
+            OnSelectedListener listener = this;
+            tvBottom.setOnClickListener(v ->{
+                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
+                        new ListPopup(_mActivity,"底部版式", PopupType.SELLER_FORMAT_BOTTOM, list, formatBottomIndex, this)
+                ).show();
+            });
+        }
+        EasyJSONArray formatTopList = data.getArray("formatTopList");
+
+
+        if (formatTopList != null) {
+            List<ListPopupItem> list = new ArrayList<>();
+            for (Object o : formatTopList) {
+                Format format = Format.parse(((EasyJSONObject) o));
+                ListPopupItem item = new ListPopupItem(format.getFormatId(),format.getFormatName(),format);
+
+                list.add(item);
+            }
+            TextView tvFormatTop=getView().findViewById(R.id.tv_format_top);
+            OnSelectedListener listener = this;
+            tvFormatTop.setOnClickListener(v ->{
+                new XPopup.Builder(_mActivity).moveUpToKeyboard(false).asCustom(
+                        new ListPopup(_mActivity, "頂部版式",PopupType.SELLER_FORMAT_TOP, list,formatTopIndex,listener)
+                ).show();
+            });
+        }
+    }
     @Override
     public void onSelected(PopupType type, int id, Object extra) {
+        if (type == PopupType.STORE_LABEL) {
+            selectCategoryList = (List<Category>) extra;
+            Category categoryLast = new Category();
+            StringBuilder selectCategoryName = new StringBuilder();
+            for (Category category : selectCategoryList) {
+                categoryLast = category;
+                selectCategoryName.append(category.getCategoryName()).append(" -- ");
+            }
+            if (!StringUtil.isEmpty(selectCategoryName.toString())) {
+                selectCategoryName.delete(selectCategoryName.length() - 4, selectCategoryName.length() - 1);
+                    ((TextView) getView().findViewById(R.id.tv_select_store_category)).setText(selectCategoryName.toString());
+                    storeLabelId = categoryLast.getCategoryId();
+                    EasyJSONArray array = new EasyJSONArray();
+                    for (Category category : selectCategoryList) {
+                        array.append(category.getCategoryId());
+                    }
+                    storeLabelIdList = array;
+            }
 
+        }
+        if (type == PopupType.SELLER_FORMAT_TOP) {
+            TextView tvFormatTop = getView().findViewById(R.id.tv_format_top);
+            tvFormatTop.setText(((Format) extra).getFormatName());
+            formatTopIndex = id;
+            formatTop = ((Format) extra).getFormatId();
+        } else if (type == PopupType.SELLER_FORMAT_BOTTOM) {
+            TextView tvFormatBottom =getView().findViewById(R.id.tv_format_bottom);
+            tvFormatBottom.setText(((Format) extra).getFormatName());
+            formatBottomIndex = id;
+            formatBottom = ((Format) extra).getFormatId();
+        }
     }
 }

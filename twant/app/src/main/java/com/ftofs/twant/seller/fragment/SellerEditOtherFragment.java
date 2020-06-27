@@ -81,6 +81,7 @@ public class SellerEditOtherFragment extends BaseFragment implements View.OnClic
         view.findViewById(R.id.btn_ok).setVisibility(View.VISIBLE);
 
         Util.setOnClickListener(view, R.id.btn_ok, this);
+        Util.setOnClickListener(view, R.id.btn_back, this);
 
         sbInstancePublish = view.findViewById(R.id.sb_instance_publish);
         sbAddHub = view.findViewById(R.id.sb_add_hub);
