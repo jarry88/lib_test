@@ -576,10 +576,14 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
     private void clearAdapter() {
         if (currAnimIndex == VIEW_STYLE_GRID) {
             goodsList.clear();
-            shopGoodsListAdapter.notifyDataSetChanged();
+            if (shopGoodsGridAdapter != null) {
+                shopGoodsListAdapter.notifyDataSetChanged();
+            }
         }else{
             goodsPairList.clear();
-            shopGoodsGridAdapter.notifyDataSetChanged();
+            if (shopGoodsGridAdapter != null) {
+                shopGoodsGridAdapter.notifyDataSetChanged();
+            }
         }
         currPage = 0;
     }
@@ -590,9 +594,7 @@ public class ShopCommodityFragment extends BaseFragment implements View.OnClickL
      */
     private void loadCategoryGoods(int labelId) {
         SLog.info("loadCategoryGoods");
-        goodsList.clear();
-        goodsPairList.clear();
-        currPage = 0;
+        clearAdapter();
 
         mExtra = EasyJSONObject.generate(
                 "storeId", storeId);
